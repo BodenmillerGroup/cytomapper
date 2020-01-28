@@ -1,0 +1,48 @@
+Package: SingleCellMapper
+Version: 0.1.0
+Date: 2020-01-28
+Title: Visualization of multiplexed, spatial single-cell data 
+Description: 
+    In recent years, multiplexed imaging approaches have been developed 
+    to aquire single-cell read-outs (e.g. RNA or proteins) in a spatially 
+    resolved fashion. These information can therefore be visualized across
+    multiple length-scales. First, pixel-level information d isplays the 
+    most resolved features within the images. Second, after segementation
+    the cells' expression values can be visualized on segmented cell areas.
+    Last, these technologies allow the detection and visualization  of 
+    cellular super-structures such as stroma/tumour compartments or 
+    pancreatic islets. These information are stored in image stacks where each
+    individual image contains the pixel-level information of individual channels 
+    (individual protein or RNA species).
+    This package contains functions for the visualization of multiplexed 
+    read-outs of spatially resolved single-cell technologies on images.
+    It requires three data objects for visualization: 1. a SingleCellExperiment
+    object which contains the cells' counts and metadata, 2. an ImageList or 
+    Image object containing the pixel-level information per channel and/or 
+    3. an ImageList or Image object containing the segemntation mask per image.
+    The main functionality of this package includes the individual or multiplexed 
+    visualization of pixel- and cell-level information for all aquired read-outs.
+    Furthermore, it allows the visualization of user-defined metadata.
+Authors@R: 
+    c(person("Nicolas", "Damond", role = c("aut", "cre"), 
+      email = "nicolas.damond@dqbm.uzh.ch"))
+    c(person("Nils", "Eling", role = c("aut", "cre"), 
+      email = "nils.eling@dqbm.uzh.ch"))
+License: GPL (>= 2)
+Depends:
+    R (>= 3.6),
+    SingleCellExperiment
+    EBImage
+Imports:
+Suggests:
+    BiocStyle,
+    knitr,
+    rmarkdown,
+    testthat
+biocViews: ImmunoOncology, Software, SingleCell, Imaging
+VignetteBuilder: knitr
+URL: https://github.com/BodenmillerGroup/SingleCellMapper
+BugReports: https://github.com/BodenmillerGroup/SingleCellMapper/issues
+RoxygenNote: 7.0.1
+Encoding: UTF-8
+
