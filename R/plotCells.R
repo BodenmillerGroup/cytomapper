@@ -1,14 +1,15 @@
-#' @rdname plotCellCounts
+#' @rdname plotCells
 #' @title
 #'
 #' @description
 #'
 #' @param data a \code{\link[SingleCellExperiment]{SingleCellExperiment}}.
-#' @param image
 #' @param mask
-#' @param colour_by
+#' @param colour_by Either rownames (markers) or colnames of the colData(data) data.frame
 #' @param outline_by
 #' @param save_image
+#' @param return_image
+#' @param col
 #'
 #' @return
 #'
@@ -24,13 +25,13 @@
 #' @importFrom reshape2 melt
 #' @export
 
-plotPixels <- function(data,
-                       image,
-                       mask = NULL,
-                       colour_by,
-                       outline_by = NULL,
+plotCells <- function(data,
+                       mask,
+                       colour_by = cell_type,
+                       outline_by = tumour_stroma,
                        save_image = FALSE,
                        return_image = FALSE,
-                       col = NULL) {
+                       col = list(cell_type = c("CD4" = "red", "CD8" = "blue"),
+                                  tumour_stroma = c("tumour" = "white", "stroma" = "black"))) {
   print("Hello, world!")
 }
