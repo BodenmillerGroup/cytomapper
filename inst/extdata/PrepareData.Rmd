@@ -19,8 +19,8 @@ library(S4Vectors)
 - The Cells.csv and Image.csv files are measurements exported from CellProfiler
 - The panel.csv has to be modified manually for each experiment according to the antibody panel that was used.
 ```{r read-in-data}
-cells <- read.csv(file = "./CPoutput/Cells.csv", stringsAsFactors = FALSE)
-image <- read.csv(file = "./CPoutput/Image.csv", stringsAsFactors = FALSE)
+cells <- read.csv(file = "./cpoutput/Cells.csv", stringsAsFactors = FALSE)
+image <- read.csv(file = "./cpoutput/Image.csv", stringsAsFactors = FALSE)
 panel <- read.csv(file = "./panel.csv", stringsAsFactors = FALSE)
 ```
 
@@ -73,7 +73,7 @@ rownames(cell.metadata) <- paste(sub(".tiff", "", cell.metadata$ImageName),
 Make sure that the frame number is the same in the image stack and in the dataset
 ```{r reorder-panel}
 panel <- DataFrame(panel)
-channel.mass <- read.csv("./raw/A02_imc.csv", header = FALSE)
+channel.mass <- read.csv("./images/A02_imc.csv", header = FALSE)
 panel <- panel[match(channel.mass[,1], panel$MetalTag), ]
 ```
 
@@ -97,7 +97,7 @@ scale.factor <- image$Scaling_ImageStack[1]
 counts <- counts * scale.factor
 ```
 
-Reorder the counts channels (based on channel number)
+### Reorder the counts channels (based on channel number)
 ```{r reorder-counts}
 channelNumber <- as.numeric(sub("^.*_c", "", colnames(counts)))
 counts <- counts[, order(channelNumber, decreasing = FALSE)] 
@@ -107,6 +107,14 @@ counts <- counts[, order(channelNumber, decreasing = FALSE)]
 ### Create SCE
 ```{r create-SCE}
 sce <- SingleCellExperiment(assays = list(counts = t(counts)))
+```
+
+### Add transformed counts
+exprs = asinh-transformed
+log = log-transformed
+```{r}
+assay(sce, "exprs") <- asinh(counts(sce)/1)
+assay(sce, "log") <- log(counts(sce))
 ```
 
 ### Set rownames
