@@ -1,14 +1,23 @@
 #' @rdname loadImages
 #' @title
 #'
-#' @description Returns an ImageList of EBImage objects
+#' @description Function to read in single- or multi-channel images
 #'
-#' @param image.path # vector or name of a column that contains the paths to the images
-#' @param image.name # vector or name of a column that contains the names of the images
-#' @param image.id # vector or name of a column that contains image ids
-#' @param image.list # a dataset that contains 
+#' @param x The function takes a variety of possible inputs
+#' \describe{
+#' \item{A character}}{}.
+#' \item{A path}}{}.
+#' \item{A list}}{}.
+#' }
+#' @param pattern character vector of the following form
+#' \describe{
+#' \item{A single character specifying a pattern to search for in the specified path
+#' (regular expressions are supported)}.
+#' \item{A character vector in which unique entries are matched against
+#' file names in the specified path}.
+#' }
 #'
-#' @return image.list
+#' @return An \linkS4class{Image} or \linkS4class{ImageList} object
 #'
 #' @examples
 #' # TODO
@@ -16,9 +25,7 @@
 #' @author Nils Eling \email{nils.eling@@dqbm.uzh.ch},
 #' Nicolas Damond \email{nicolas.damond@@dqbm.uzh.ch}
 #'
-#' @import EBImage
-#' @import S4Vectors
-#' @importFrom SingleCellExperiment colData
+#' @importFrom EBImage Image
 #' @export
 
 
@@ -30,13 +37,11 @@
 ## loadImages("ImagePath", "ImageName", "ImageNb", sce)
 
 
-loadImages <- function(image.path,
-                       image.name,
-                       image.id,
-                       image.list = NULL
-                       ) {
+loadImages <- function(x, pattern = NULL) {
 
-  
+  # Validity checks
+  .valid.loadImage.input(x)
+
   # If an external csv file is provided, import it
   if(!is.null(image.list) & is.character(image.list)){
     image.list <- importCSV(image.list)
@@ -44,10 +49,10 @@ loadImages <- function(image.path,
 
   # Create a SimpleList containing image paths, names and ids
   image.list <- createImageList(path=image.path, name=image.name, id=image.id, image.list=image.list)
-  
+
   # Read the images with EBImage
   images <- readImages(image.list)
-  
+
   return(images)
 }
 
@@ -58,7 +63,7 @@ loadImages <- function(image.path,
 #' @param image.list
 #' @keywords image read
 #' @return images
-#' @import 
+#' @import
 #' @importFrom EBImage readImage
 #' @export
 
@@ -81,7 +86,7 @@ readImages <- function (image.list) {
 #' @param image.list
 #' @keywords image list path
 #' @return image.list
-#' @import 
+#' @import
 #' @importFrom S4Vectors DataFrame
 #' @export
 
@@ -90,7 +95,7 @@ createImageList <- function (path, name, id, image.list=NULL) {
   if(is(image.list, "SingleCellExperiment")){
     image.list <- colData(sce)
   }
-  
+
   if(is.null(image.list)){
     image.list <- DataFrame(imagePath = path,
                             imageName = name,
@@ -111,16 +116,29 @@ createImageList <- function (path, name, id, image.list=NULL) {
 #' @param image.list
 #' @keywords image list csv import
 #' @return image.list
-#' @import 
+#' @import
 #' @importFrom tools file_ext
 #' @export
 
-importCSV <- function (image.list) {
+#importCSV <- function (image.list) {
 
-  if (file.exists(image.list) & tools::file_ext(image.list) == "csv")
-    image.list <- read.csv(image.list, header = T, stringsAsFactors = F)
+#  if (file.exists(image.list) & tools::file_ext(image.list) == "csv")
+#    image.list <- read.csv(image.list, header = T, stringsAsFactors = F)
+#
+#  return(image.list)
+#}
 
-  return(image.list)
+.valid.loadImage.input <- function(x){
+
+  if(length(x) == 1){
+
+  } else {
+
+  }
+
+  if(!file.exists(x)){
+
+  }
 }
 
 
