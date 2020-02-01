@@ -29,7 +29,11 @@ setClass(
 setValidity(Class="ImageList",
             method=function(object) {
 
-              # Check if all images
+              # Check if all entries are Image class objects
+
+              # Check if all images have the same number of channels
+
+              # Check
 
               return(TRUE)
             }
