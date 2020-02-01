@@ -6,3 +6,9 @@
 
 2020-01-31: Added example data
 - Created inst/extdata folder with example images and data
+
+2020-02-01: ImageList class and preparation for install
+- Moved scripts to prepare data to own repository
+- Build the ImageList class
+- Created first unit tests for ImageList constructor
+

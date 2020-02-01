@@ -1,19 +1,9 @@
-#' @name ImageList
-#' @aliases ImageList-class
-#'
-#' @title S4 class for list of images
-#' @description This class allows the handling of multiple one- or multi-channel images.
-#' The class inherits from the \linkS4class{SimpleList} object class storing \linkS4class{Image} objects in each slot.
-#' Furthermore, the class contains an \code{elementMetadata} slot that stores image-level meta information.
-#'
-#' @details
-#' Objects of class \code{dbFrame} hold all data required for debarcoding:
-#'
-#' @slot images
-#'
-#' @author Nils Eling \email{nils.eling@dqbm.uzh.ch}
-#' @importFrom methods new
 #' @export
+#' @rdname ImageList
+#' @importFrom utils packageVersion
+#' @importFrom S4Vectors SimpleList
+#' @importClassesFrom EBImage Image
+#' @importClassesFrom S4Vectors SimpleList
 setClass(
   Class="ImageList",
   package="SingleCellMapper",
