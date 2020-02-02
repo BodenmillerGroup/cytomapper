@@ -21,7 +21,18 @@
 #' @return An \linkS4class{Image} or \linkS4class{ImageList} object
 #'
 #' @examples
-#' # TODO
+#' # Providing a single file
+#' single.image <- system.file("extdata/A02_mask.tiff", package = "SingleCellMapper")
+#' single.image <- loadImages(single.image)
+#'
+#' # Providing a path and pattern
+#' path.to.images <- system.file("extdata", package = "SingleCellMapper")
+#' image.list <- loadImages(path.to.images, pattern = "mask.tiff")
+#'
+#' # Providing multiple patterns
+#' sce <- readRDS(system.file("extdata/sce.rds", package = "SingleCellMapper"))
+#' path.to.images <- system.file("extdata", package = "SingleCellMapper")
+#' image.list <- loadImages(path.to.images, pattern = sce$MaskName)
 #'
 #' @seealso
 #' \code{\link{readImage}}, for reading in individual images.
@@ -32,16 +43,6 @@
 #' @importFrom EBImage Image
 #' @importFrom tools file_ext
 #' @export
-
-
-### Example of inputs
-## loadImages("ImagePath", "ImageName", "ImageId", '/home/nicolasd/Git/SingleCellMapper/inst/extdata/image_list.csv')
-##
-## sce <- readRDS('/home/nicolasd/Git/SingleCellMapper/inst/extdata/sce.rds')
-## loadImages(colData(sce)$ImagePath, colData(sce)$ImageName, colData(sce)$ImageNb)
-## loadImages("ImagePath", "ImageName", "ImageNb", sce)
-
-
 loadImages <- function(x, pattern = NULL, ...) {
 
   # Validity checks
