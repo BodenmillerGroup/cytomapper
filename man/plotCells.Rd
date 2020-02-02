@@ -2,17 +2,16 @@
 % Please edit documentation in R/plotCells.R
 \name{plotCells}
 \alias{plotCells}
-\title{}
+\title{Plotting function to visualize cell-level information}
 \usage{
 plotCells(
   data,
   mask,
-  colour_by = cell_type,
-  outline_by = tumour_stroma,
+  colour_by = NULL,
+  outline_by = NULL,
   save_image = FALSE,
   return_image = FALSE,
-  col = list(cell_type = c(CD4 = "red", CD8 = "blue"), tumour_stroma = c(tumour =
-    "white", stroma = "black"))
+  col = NULL
 )
 }
 \arguments{
@@ -31,13 +30,14 @@ plotCells(
 \item{col}{TODO}
 }
 \value{
-
+TODO
 }
 \description{
-
+TODO
 }
 \examples{
 # TODO
+# col = list(cell_type = c("CD4" = "red", "CD8" = "blue"),
 
 }
 \author{

@@ -41,13 +41,13 @@
       # Since more than regular expressions can be given to pattern,
       # we need to perform selection manually
       if(length(pattern) == 1){
-        out <- out[,grepl(pattern, out)]
+        out <- out[grepl(pattern, out)]
 
       } else {
         # Build pattern for grep function
         pattern <- unique(pattern)
 
-        out <- out[,grepl(paste(pattern, collapse = "|"), out)]
+        out <- out[grepl(paste(pattern, collapse = "|"), out)]
       }
 
       # Check if any of the files contain the pattern
@@ -56,7 +56,7 @@
       }
 
       # Check if all of the files are of the supported format
-      exten <- sapply(list.files(x), tools::file_ext)
+      exten <- sapply(out, tools::file_ext)
 
       if(sum(!(unique(exten) %in% c("jpeg", "png", "tiff"))) > 0){
         stop("The provided path contains file-types other than 'jpeg', 'tiff' or 'png'.\n",

@@ -1,7 +1,7 @@
-#' @rdname plotCellCounts
-#' @title
+#' @rdname plotPixels
+#' @title Plotting function to visualize pixel-level information
 #'
-#' @description
+#' @description TODO
 #'
 #' @param data a \code{\link[SingleCellExperiment]{SingleCellExperiment}}.
 #' @param image TODO
@@ -9,8 +9,10 @@
 #' @param colour_by TODO
 #' @param outline_by TODO
 #' @param save_image TODO
+#' @param return_image TODO
+#' @param col TODO
 #'
-#' @return
+#' @return TODO
 #'
 #' @examples
 #' # TODO
@@ -18,12 +20,7 @@
 #' @author Nils Eling \email{nils.eling@@dqbm.uzh.ch},
 #' Nicolas Damond \email{nicolas.damond@@dqbm.uzh.ch}
 #'
-#' @import ggplot2
-#' @import dplyr
-#' @importFrom SingleCellExperiment colData
-#' @importFrom reshape2 melt
 #' @export
-
 plotPixels <- function(data,
                        image,
                        mask = NULL,
@@ -32,5 +29,5 @@ plotPixels <- function(data,
                        save_image = FALSE,
                        return_image = FALSE,
                        col = NULL) {
-  print("Hello, world!")
+
 }

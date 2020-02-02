@@ -1,7 +1,6 @@
 #' @export
 #' @rdname ImageList
 #' @importFrom utils packageVersion
-#' @importFrom S4Vectors SimpleList
 #' @importClassesFrom EBImage Image
 #' @importClassesFrom S4Vectors SimpleList
 setClass(

@@ -12,10 +12,12 @@
 #'
 #' @docType class
 #'
+#' @importFrom methods new
+#'
 #' @author
 #' Nils Eling \email{nils.eling@dqbm.uzh.ch}
 #' Nicolas Damond \email{nicolas.damond@dqbm.uzh.ch}
 #' @export
 ImageList <- function(..., elementMetadata=NULL){
-  new("ImageList", ..., elementMetadata=elementMetadata)
+  methods::new("ImageList", ..., elementMetadata=elementMetadata)
 }

@@ -31,9 +31,11 @@ Authors@R:
 License: GPL (>= 2)
 Depends:
     R (>= 3.6),
-    SingleCellExperiment,
     EBImage
 Imports:
+    S4Vectors,
+    utils,
+    methods
 Suggests:
     BiocStyle,
     knitr,

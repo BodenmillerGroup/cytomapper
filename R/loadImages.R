@@ -1,5 +1,5 @@
 #' @rdname loadImages
-#' @title
+#' @title Function to read in images
 #'
 #' @description Function to read in single- or multi-channel images
 #'
@@ -12,9 +12,9 @@
 #' @param pattern character vector of the following form
 #' \describe{
 #' \item{A single character specifying a pattern to search for in the specified path
-#' (regular expressions are supported)}.
+#' (regular expressions are supported)}{}.
 #' \item{A character vector in which unique entries are matched against
-#' file names in the specified path}.
+#' file names in the specified path}{}.
 #' }
 #' @param ... arguments passed to the \code{\link{readImage}} function
 #'

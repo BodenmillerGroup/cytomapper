@@ -2,7 +2,7 @@
 % Please edit documentation in R/plotPixels.R
 \name{plotPixels}
 \alias{plotPixels}
-\title{}
+\title{Plotting function to visualize pixel-level information}
 \usage{
 plotPixels(
   data,
@@ -27,12 +27,16 @@ plotPixels(
 \item{outline_by}{TODO}
 
 \item{save_image}{TODO}
+
+\item{return_image}{TODO}
+
+\item{col}{TODO}
 }
 \value{
-
+TODO
 }
 \description{
-
+TODO
 }
 \examples{
 # TODO
