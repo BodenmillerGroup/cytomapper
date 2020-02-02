@@ -7,8 +7,8 @@
 #' @details
 #' In this class ...
 #'
-#' @param ...
-#' @param elementMetadata
+#' @param ... TODO
+#' @param elementMetadata TODO
 #'
 #' @docType class
 #'

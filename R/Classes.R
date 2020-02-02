@@ -34,7 +34,7 @@ setValidity(Class="ImageList",
                 dim(x)[3]
               }))
               if(length(unique(dims)) > 1){
-                stop("The images contain different number of channels.\n")library()
+                stop("The images contain different number of channels.\n")
               }
 
               return(TRUE)

@@ -4,11 +4,11 @@
 #' @description
 #'
 #' @param data a \code{\link[SingleCellExperiment]{SingleCellExperiment}}.
-#' @param image
-#' @param mask
-#' @param colour_by
-#' @param outline_by
-#' @param save_image
+#' @param image TODO
+#' @param mask TODO
+#' @param colour_by TODO
+#' @param outline_by TODO
+#' @param save_image TODO
 #'
 #' @return
 #'

@@ -5,9 +5,9 @@
 #'
 #' @param x The function takes a variety of possible character inputs
 #' \describe{
-#' \item{A single file}}{}.
-#' \item{A path}}{}.
-#' \item{A list of files}}{}.
+#' \item{A single file}{}.
+#' \item{A path}{}.
+#' \item{A list of files}{}.
 #' }
 #' @param pattern character vector of the following form
 #' \describe{
@@ -16,7 +16,7 @@
 #' \item{A character vector in which unique entries are matched against
 #' file names in the specified path}.
 #' }
-#'  @param ... arguments passed to the \code{\link{readImage}} function
+#' @param ... arguments passed to the \code{\link{readImage}} function
 #'
 #' @return An \linkS4class{Image} or \linkS4class{ImageList} object
 #'

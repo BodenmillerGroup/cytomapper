@@ -43,6 +43,5 @@ biocViews: ImmunoOncology, Software, SingleCell, Imaging
 VignetteBuilder: knitr
 URL: https://github.com/BodenmillerGroup/SingleCellMapper
 BugReports: https://github.com/BodenmillerGroup/SingleCellMapper/issues
-RoxygenNote: 7.0.1
+RoxygenNote: 7.0.2
 Encoding: UTF-8
-

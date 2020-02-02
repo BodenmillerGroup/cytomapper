@@ -4,12 +4,12 @@
 #' @description
 #'
 #' @param data a \code{\link[SingleCellExperiment]{SingleCellExperiment}}.
-#' @param mask
+#' @param mask TODO
 #' @param colour_by Either rownames (markers) or colnames of the colData(data) data.frame
-#' @param outline_by
-#' @param save_image
-#' @param return_image
-#' @param col
+#' @param outline_by TODO
+#' @param save_image TODO
+#' @param return_image TODO
+#' @param col TODO
 #'
 #' @return
 #'
