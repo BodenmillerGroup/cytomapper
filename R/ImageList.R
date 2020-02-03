@@ -9,6 +9,7 @@
 #'
 #' @param ... TODO
 #' @param elementMetadata TODO
+#' @param elementMetadata TODO
 #'
 #' @docType class
 #'
@@ -18,6 +19,9 @@
 #' Nils Eling \email{nils.eling@dqbm.uzh.ch}
 #' Nicolas Damond \email{nicolas.damond@dqbm.uzh.ch}
 #' @export
-ImageList <- function(..., elementMetadata=NULL){
-  methods::new("ImageList", ..., elementMetadata=elementMetadata)
+ImageList <- function(..., elementMetadata=NULL, channelNames=NULL){
+  x <- methods::new("ImageList", ...,
+               elementMetadata=elementMetadata)
+  channelNames(x) <- channelNames
+  return(x)
 }

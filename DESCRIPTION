@@ -35,6 +35,7 @@ Depends:
 Imports:
     S4Vectors,
     utils,
+    tools,
     methods
 Suggests:
     BiocStyle,
