@@ -18,3 +18,7 @@
 - Simplified structure of loadImages function
 - Created validity checks for path and file inputs
 - Fixed bugs to pass 'R CMD check'
+
+2020-02-03: channelNames function
+- version bump 0.1.2
+- channelNames generic function for Image and ImageList object

@@ -1,6 +1,6 @@
 Package: SingleCellMapper
-Version: 0.1.1
-Date: 2020-02-02
+Version: 0.1.2
+Date: 2020-02-03
 Title: Visualization of multiplexed, spatial single-cell data 
 Description: 
     In recent years, multiplexed imaging approaches have been developed 
