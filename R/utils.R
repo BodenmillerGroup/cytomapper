@@ -24,17 +24,32 @@ setReplaceMethod("channelNames",
 
 setMethod("channelNames",
           signature = signature(x="ImageList"),
-          definition = function(x){dimnames(x[[1]])[[3]]})
+          definition =  function(x){
+            if(length(dim(x[[1]])) == 2){
+              return(NULL)
+            } else {
+              return(dimnames(x[[1]])[[3]])
+            }
+          })
 
 setReplaceMethod("channelNames",
                  signature = signature(x="ImageList"),
                  definition = function(x, value){
-                   # Add checks for names
+                   # Image needs to be expanded to store channel names
+                   if(length(dim(x[[1]])) == 2){
+                     x <- endoapply(x, function(y){
+                       y <- Image(y, dim = c(dim(y)[1], dim(y)[2], 1))
+                     })
+                   }
+                   x <- endoapply(x, function(y){
+                     dimnames(y)[[3]] <- value
+                   })
+                   return(x)
                  })
 
-setMethod("getChannels",
-          signature = signature(x="ImageList"),
-          definition = function(x){dimnames(x[[1]])[[3]]})
+#setMethod("getChannels",
+#          signature = signature(x="ImageList"),
+#          definition = function(x){dimnames(x[[1]])[[3]]})
 
 
 

@@ -13,4 +13,7 @@ test_that("Images can be loaded into ImageList object.", {
 
   cur_list[[1]] <- cur_list[[1]][,,-1]
   expect_error(ImageList(cur_list))
+
+  # Check if validity checks are working
+  # cur_ImageList[[1]] <- cur_ImageList[[1]][,,1] must fail
 })

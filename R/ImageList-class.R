@@ -16,8 +16,8 @@ setClass(
     ),
   )
 
-# Validity checks
-setValidity(Class="ImageList",
+# Validity checks unsing the S4Vectors package
+S4Vectors:::setValidity2(Class="ImageList",
             method=function(object) {
 
               # Check if all entries are Image class objects
@@ -50,6 +50,13 @@ setValidity(Class="ImageList",
               return(TRUE)
             }
 )
+
+
+#setMethod("show")
+
+#setMethod("plot")
+
+
 
 
 

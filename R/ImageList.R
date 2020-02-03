@@ -25,3 +25,4 @@ ImageList <- function(..., elementMetadata=NULL, channelNames=NULL){
   channelNames(x) <- channelNames
   return(x)
 }
+
