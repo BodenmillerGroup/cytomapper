@@ -2,21 +2,23 @@
 
 setMethod("channelNames",
           signature = signature(x="Image"),
-          definition = function(x){dimnames(x)[[3]]})
+          definition = function(x){
+            if(length(dim(x)) == 2){
+              return(NULL)
+            } else {
+              return(dimnames(x)[[3]])
+            }
+            })
 
 setReplaceMethod("channelNames",
           signature = signature(x="Image"),
           definition = function(x, value){
-            # Add checks for names
-            if(!is.character(value)){
-              stop("Only character entris allowed as channel names.")
-            }
-            if(length(value) != dim(x)[3]){
-              stop("Only character entris allowed as channel names.")
+            # Image needs to be expanded to store channel names
+            if(length(dim(x)) == 2){
+              x <- Image(x, dim = c(dim(x)[1], dim(x)[2], 1))
             }
 
-
-            dimnames(x)[[3]] <- as.character(value)
+            dimnames(x)[[3]] <- value
             return(x)
           })
 
