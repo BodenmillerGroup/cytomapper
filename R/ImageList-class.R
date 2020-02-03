@@ -1,6 +1,7 @@
 #' @export
 #' @rdname ImageList
 #' @importFrom utils packageVersion
+#' @importFrom S4Vectors setValidity2
 #' @importClassesFrom EBImage Image
 #' @importClassesFrom S4Vectors SimpleList
 setClass(
@@ -20,15 +21,6 @@ setClass(
 S4Vectors:::setValidity2(Class="ImageList",
             method=function(object) {
 
-              # Check if all entries are Image class objects
-              errors <- unlist(lapply(object, function(x){
-                !is(x, "Image")
-              }))
-              if(sum(errors) > 0){
-                stop("Not all entries are Image objects.\n",
-                    "The ImageList object requires a list of Image objects.")
-              }
-
               # Check if all images have the same number of channels
               dims <- unlist(lapply(object, function(x){
                 dim(x)[3]
@@ -43,11 +35,9 @@ S4Vectors:::setValidity2(Class="ImageList",
                 !identical(cur_names, dimnames(x)[[3]])
               }))
               if(sum(errors) > 0){
-                stop("Not all entries are Image objects.\n",
-                     "The ImageList object requires a list of Image objects.")
+                stop("Not all channels have the same names.\n",
+                     "Please use the 'channelNames' function to alter channel names.")
               }
-
-              return(TRUE)
             }
 )
 

@@ -9,18 +9,22 @@
 #'
 #' @param ... TODO
 #' @param elementMetadata TODO
-#' @param elementMetadata TODO
+#' @param channelNames TODO
 #'
 #' @docType class
 #'
-#' @importFrom methods new
+#' @importFrom methods extends
+#' @importFrom S4Vectors new2
 #'
 #' @author
 #' Nils Eling \email{nils.eling@dqbm.uzh.ch}
 #' Nicolas Damond \email{nicolas.damond@dqbm.uzh.ch}
 #' @export
 ImageList <- function(..., elementMetadata=NULL, channelNames=NULL){
-  x <- methods::new("ImageList", ...,
+  args <- list(...)
+  if (length(args) == 1L && methods::extends(class(args[[1L]]), "list"))
+    args <- args[[1L]]
+  x <- S4Vectors::new2("ImageList", listData=args,
                elementMetadata=elementMetadata)
   channelNames(x) <- channelNames
   return(x)
