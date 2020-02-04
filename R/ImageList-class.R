@@ -17,7 +17,7 @@ setClass(
     ),
   )
 
-# Validity checks unsing the S4Vectors package
+# Validity checks
 S4Vectors:::setValidity2(Class="ImageList",
             method=function(object) {
 
@@ -37,6 +37,12 @@ S4Vectors:::setValidity2(Class="ImageList",
               if(sum(errors) > 0){
                 stop("Not all channels have the same names.\n",
                      "Please use the 'channelNames' function to alter channel names.")
+              }
+
+              # Check if colourmode of each Image is "Grayscale"
+              colour.modes <- unlist(lapply(object, colormodel))
+              if("Color" %in% colour.modes){
+                stop("Only Grayscale images are supported for ImageList objects.")
               }
             }
 )

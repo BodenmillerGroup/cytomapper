@@ -18,7 +18,8 @@
 #' # col = list(cell_type = c("CD4" = "red", "CD8" = "blue"),
 #` # tumour_stroma = c("tumour" = "white", "stroma" = "black"))
 #'
-#' @author Nils Eling \email{nils.eling@@dqbm.uzh.ch},
+#' @author
+#' Nils Eling \email{nils.eling@@dqbm.uzh.ch},
 #' Nicolas Damond \email{nicolas.damond@@dqbm.uzh.ch}
 #'
 #' @export
