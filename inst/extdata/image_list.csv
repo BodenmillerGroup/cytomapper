@@ -1,4 +1,0 @@
-ImageId,ImagePath,ImageName,MaskPath,MaskName
-1,/home/nicolasd/Git/SingleCellMapper/inst/extdata/images,A02_imc.tiff,/home/nicolasd/Git/SingleCellMapper/inst/extdata/images,A02_mask.tiff
-2,/home/nicolasd/Git/SingleCellMapper/inst/extdata/images,D01_imc.tiff,/home/nicolasd/Git/SingleCellMapper/inst/extdata/images,D01_mask.tiff
-3,/home/nicolasd/Git/SingleCellMapper/inst/extdata/images,F01_imc.tiff,/home/nicolasd/Git/SingleCellMapper/inst/extdata/images,F01_mask.tiff
