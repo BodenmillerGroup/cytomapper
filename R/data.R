@@ -20,7 +20,7 @@
 #'   \item{...}{...}
 #'   ...
 #' }
-"pancreasImage"
+"pancreasImages"
 
 #' Example ImageList object of segmentation masks
 #'

@@ -40,7 +40,8 @@
 #'
 #' @return An ImageList object
 #'
-#' @examples Example
+#' @examples
+#' # Example
 #'
 #' @seealso \code{\linkS4class{Image}}, for ..
 #' @seealso \code{\linkS4class{SimpleList}}, for ..

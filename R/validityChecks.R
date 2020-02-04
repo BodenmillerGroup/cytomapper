@@ -21,8 +21,8 @@
       # Check if path only contains images
       exten <- sapply(list.files(x), tools::file_ext)
 
-      if(sum(!(unique(exten) %in% c("jpeg", "png", "tiff"))) > 0){
-        stop("The provided path contains file-types other than 'jpeg', 'tiff' or 'png'.\n",
+      if(sum(!(unique(exten) %in% c("jpeg", "png", "tiff", "tif", "jpg"))) > 0){
+        stop("The provided path contains file-types other than 'jpeg', 'tiff', or 'png'.\n",
              "Please provide a correct regular expression in the 'pattern' argument to select correct images.")
       }
 
@@ -58,13 +58,13 @@
       # Check if all of the files are of the supported format
       exten <- sapply(out, tools::file_ext)
 
-      if(sum(!(unique(exten) %in% c("jpeg", "png", "tiff"))) > 0){
+      if(sum(!(unique(exten) %in% c("jpeg", "png", "tiff", "tif", "jpg"))) > 0){
         stop("The provided path contains file-types other than 'jpeg', 'tiff' or 'png'.\n",
              "Please provide a correct regular expression in the 'pattern' argument to select correct images.")
       }
 
     } else {
-      if(!tools::file_ext(x) %in% c("jpeg", "png", "tiff")){
+      if(!tools::file_ext(x) %in% c("jpeg", "png", "tiff", "tif", "jpg")){
         stop("The provided file is not of type 'jpeg', 'tiff' or 'png'.\n",
              "Other image types are not supported.")
       }
@@ -80,7 +80,7 @@
 
     # Check if files are os supported format
     exten <- sapply(x, tools::file_ext)
-    if(sum(!(unique(exten) %in% c("jpeg", "png", "tiff"))) > 0){
+    if(sum(!(unique(exten) %in% c("jpeg", "png", "tiff", "tif", "jpg"))) > 0){
       stop("The files are of type other than 'jpeg', 'tiff' or 'png'.\n",
            "Please only provide files of the supported file-type..")
     }

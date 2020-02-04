@@ -30,9 +30,9 @@
 #' image.list <- loadImages(path.to.images, pattern = "mask.tiff")
 #'
 #' # Providing multiple patterns
-#' sce <- readRDS(system.file("extdata/sce.rds", package = "SingleCellMapper"))
+#' data(pancreasSCE)
 #' path.to.images <- system.file("extdata", package = "SingleCellMapper")
-#' image.list <- loadImages(path.to.images, pattern = sce$MaskName)
+#' image.list <- loadImages(path.to.images, pattern = pancreasSCE$MaskName)
 #'
 #' @seealso
 #' \code{\link{readImage}}, for reading in individual images.

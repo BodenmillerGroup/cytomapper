@@ -40,7 +40,7 @@ S4Vectors:::setValidity2(Class="ImageList",
               }
 
               # Check if colourmode of each Image is "Grayscale"
-              colour.modes <- unlist(lapply(object, colormodel))
+              colour.modes <- unlist(lapply(object, colorMode))
               if("Color" %in% colour.modes){
                 stop("Only Grayscale images are supported for ImageList objects.")
               }

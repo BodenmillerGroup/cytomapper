@@ -9,21 +9,69 @@
 ImageList(..., elementMetadata = NULL, channelNames = NULL)
 }
 \arguments{
-\item{...}{TODO}
+\item{...}{Named Image objects or a list of Image objects.}
 
-\item{elementMetadata}{TODO}
+\item{elementMetadata}{A data frame where each row indicates an image and
+each column stores image-specific meta-information.}
 
-\item{channelNames}{TODO}
+\item{channelNames}{A vector od string specifying the names of individual
+channels.}
+}
+\value{
+An ImageList object
 }
 \description{
-This class allows the handling of multiple one- or multi-channel images.
-The class inherits from the \linkS4class{SimpleList} object class storing \linkS4class{Image} objects in each slot.
-Furthermore, the class contains an \code{elementMetadata} slot that stores image-level meta information.
+This class allows the handling of multiple one- or multi-channel images. The
+class inherits from \linkS4class{SimpleList} setting
+\code{elementType="Image"}. Each slot contains an either one- or
+multi-dimensional array in form of an \linkS4class{Image} object.
 }
 \details{
+Similar to the \linkS4class{Image} class, the first two dimensions of each
+entry indicate the spatial dimension of the image. These can be different for
+each entry. However, the third dimension indicates the number of channels per
+Image. The ImageList class only supports a Grayscale colormode (see
+\link{colormode}) representation of each individual image.
+
+Furthermore, each entry in the ImageList class object must contain the same
+number of channels. Here, each channel represents pixel values indicating
+measurement intensities or in case of segementation masks the cells' ID.
+
+The class further contains an \link{elementMetadata} slot that stores
+image-level meta information.
+
 In this class ...
+}
+\section{Accessors}{
+
+channelNames
+mcols
+}
+
+\section{Coercion}{
+
+}
+
+\section{Subsetting}{
+
+getFrames
+}
+
+\section{Looping}{
+
+endoapply
+}
+
+\examples{
+# Example
+
+}
+\seealso{
+\code{\linkS4class{Image}}, for ..
+
+\code{\linkS4class{SimpleList}}, for ..
 }
 \author{
 Nils Eling \email{nils.eling@dqbm.uzh.ch}
-Nicolas Damond \email{nicolas.damond@dqbm.uzh.ch}
+Nicolas Damond \email{nicolas.damond@dqbm.uzh.ch}.
 }
