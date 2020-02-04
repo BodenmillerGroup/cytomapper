@@ -10,7 +10,7 @@
 #' }
 "pancreasSCE"
 
-#' Example ImageList object
+#' Example ImageList object of image files
 #'
 #' TODO
 #'
@@ -21,4 +21,16 @@
 #'   ...
 #' }
 "pancreasImage"
+
+#' Example ImageList object of segmentation masks
+#'
+#' TODO
+#'
+#' @format An ImageList object containing ...
+#' \describe{
+#'   \item{...}{...}
+#'   \item{...}{...}
+#'   ...
+#' }
+"pancreasMasks"
 
