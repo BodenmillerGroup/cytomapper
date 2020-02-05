@@ -17,8 +17,8 @@
 #'     \item cell number/identifier (CellNB),
 #'     \item spatial position on the image (Pos_X, Pos_Y),
 #'     \item shape information (MajorAxisLength, MinorAxisLength),
-#'     \item the associated image name (ImageName, see \code{?"\link{pancreasImages}"}),
-#'     \item the associated mask name (MaskName, see \code{?"\link{pancreasMasks}"}),
+#'     \item the associated image name (ImageName, see \code{?"\link[SingleCellMapper]{pancreasImages}"}),
+#'     \item the associated mask name (MaskName, see \code{?"\link[SingleCellMapper]{pancreasMasks}"}),
 #'     \item a randomized cell-type label (CellType)
 #'   }
 #'   }
@@ -41,8 +41,8 @@
 #'   }
 #'   }
 #'
-#' @references Damond, N. et al., A Map of Human Type 1 Diabetes Progression by
-#' Imaging Mass Cytometry, Cell Metabolism 29:3, 2019
+#' @references \href{https://www.sciencedirect.com/science/article/pii/S1550413118306910}{Damond, N. et al., A Map of Human Type 1 Diabetes Progression by
+#' Imaging Mass Cytometry, Cell Metabolism 29:3, 2019}
 "pancreasSCE"
 
 #' Example ImageList object of image files
@@ -53,10 +53,10 @@
 #' study on the progression of Type 1 diabetes and contains pancreas cells.
 #'
 #' @format An ImageList object containing 3 \code{\linkS4class{Image}} objects
-#' with 5 channels each. Channel names can be accessed via \code{?"\link{channelNames}"}.
+#' with 5 channels each. Channel names can be accessed via \code{?"\link[SingleCellMapper]{channelNames}"}.
 #'
-#' @references Damond, N. et al., A Map of Human Type 1 Diabetes Progression by
-#' Imaging Mass Cytometry, Cell Metabolism 29:3, 2019
+#' @references \href{https://www.sciencedirect.com/science/article/pii/S1550413118306910}{Damond, N. et al., A Map of Human Type 1 Diabetes Progression by
+#' Imaging Mass Cytometry, Cell Metabolism 29:3, 2019}
 "pancreasImages"
 
 #' Example ImageList object of segmentation masks
@@ -68,11 +68,11 @@
 #'
 #' @format An ImageList object containing 3 \code{\linkS4class{Image}} objects
 #' with 1 channel each. These images are the result to segmentation and associated
-#' to the images stored in the \code{\link{pancreasImages}} object.
+#' to the images stored in the \code{\link[SingleCellMapper]{pancreasImages}} object.
 #' Pixel values indicate the numeric cell identifier while a value of 0 represents the
 #' image background.
 #'
-#' @references Damond, N. et al., A Map of Human Type 1 Diabetes Progression by
-#' Imaging Mass Cytometry, Cell Metabolism 29:3, 2019
+#' @references \href{https://www.sciencedirect.com/science/article/pii/S1550413118306910}{Damond, N. et al., A Map of Human Type 1 Diabetes Progression by
+#' Imaging Mass Cytometry, Cell Metabolism 29:3, 2019}
 "pancreasMasks"
 

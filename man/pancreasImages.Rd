@@ -4,16 +4,19 @@
 \name{pancreasImages}
 \alias{pancreasImages}
 \title{Example ImageList object of image files}
-\format{An ImageList object containing ...
-\describe{
-  \item{...}{...}
-  \item{...}{...}
-  ...
-}}
+\format{An ImageList object containing 3 \code{\linkS4class{Image}} objects
+with 5 channels each. Channel names can be accessed via \code{?"\link[SingleCellMapper]{channelNames}"}.}
 \usage{
 pancreasImages
 }
 \description{
-TODO
+This \linkS4class{ImageList} object contains multi-channel stacks of three images
+acquired by imaging mass cytometry. Each channel represents the pixel-intensities
+of each of the 5 measured proteins. The data is part of a imaging mass cytometry
+study on the progression of Type 1 diabetes and contains pancreas cells.
+}
+\references{
+\href{https://www.sciencedirect.com/science/article/pii/S1550413118306910}{Damond, N. et al., A Map of Human Type 1 Diabetes Progression by
+Imaging Mass Cytometry, Cell Metabolism 29:3, 2019}
 }
 \keyword{datasets}

@@ -4,16 +4,22 @@
 \name{pancreasMasks}
 \alias{pancreasMasks}
 \title{Example ImageList object of segmentation masks}
-\format{An ImageList object containing ...
-\describe{
-  \item{...}{...}
-  \item{...}{...}
-  ...
-}}
+\format{An ImageList object containing 3 \code{\linkS4class{Image}} objects
+with 1 channel each. These images are the result to segmentation and associated
+to the images stored in the \code{\link[SingleCellMapper]{pancreasImages}} object.
+Pixel values indicate the numeric cell identifier while a value of 0 represents the
+image background.}
 \usage{
 pancreasMasks
 }
 \description{
-TODO
+This \linkS4class{ImageList} object contains single-channel images representing
+the segmentation masks after preprocessing of imaging mass cytometry data.
+The data is part of a imaging mass cytometry
+study on the progression of Type 1 diabetes and contains pancreas cells.
+}
+\references{
+\href{https://www.sciencedirect.com/science/article/pii/S1550413118306910}{Damond, N. et al., A Map of Human Type 1 Diabetes Progression by
+Imaging Mass Cytometry, Cell Metabolism 29:3, 2019}
 }
 \keyword{datasets}
