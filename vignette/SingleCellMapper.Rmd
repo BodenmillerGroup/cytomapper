@@ -1,12 +1,12 @@
 ---
 title: "SingleCellMapper for spatial data visualization"
 author:
-- name: Nicolas Damond
-  affiliation: Department for Quantitative Biomedicine, University of Zurich
-  email: nicolas.damond@dqbm.uzh.ch.com
 - name: Nils Eling
   affiliation: Department for Quantitative Biomedicine, University of Zurich
   email: nils.eling@dqbm.uzh.ch.com
+- name: Nicolas Damond
+  affiliation: Department for Quantitative Biomedicine, University of Zurich
+  email: nicolas.damond@dqbm.uzh.ch.com
 package: SingleCellMapper
 output:
   BiocStyle::html_document
@@ -20,6 +20,43 @@ vignette: |
   %\VignetteEngine{knitr::rmarkdown}
   %\VignetteEncoding{UTF-8}
 ---
+
+# Introduction
+
+# Quick start
+
+Here, we will highlight the most simple use of the package
+
+# Reading in data
+
+# The ImageList object
+
+## Accessors
+
+## Coercion
+
+## Subsetting
+
+## Looping
+
+# Plotting pixel-level information
+
+# Plotting Cell-level information
+
+# Acknowledgements
+
+# Contributions
+
+Nicolas created SingleCellMapper - Nicolas and Nils implemented the package ...
+
+# References
+
+# Session info {.unnumbered}
+
+```{r sessionInfo, echo=FALSE}
+sessionInfo()
+```
+
 
 # Getting started
 
@@ -90,9 +127,3 @@ Apart from referencing figures (Section \@ref(figures)), tables (Section \@ref(t
 
 Footnotes are displayed as side notes on the right margin^[this is a side note entered as a footnote], which has the advantage that they appear close to the place where they are defined.
 
-
-# Session info {.unnumbered}
-
-```{r sessionInfo, echo=FALSE}
-sessionInfo()
-```
