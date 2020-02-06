@@ -47,6 +47,12 @@ S4Vectors:::setValidity2(Class="ImageList",
             }
 )
 
+# Coercion from list
+setAs("list", "ImageList", function(from) {
+  # Use constructor function
+  ImageList(from)
+})
+
 
 #setMethod("show")
 
