@@ -53,6 +53,13 @@ setAs("list", "ImageList", function(from) {
   ImageList(from)
 })
 
+# Coercion from ANY
+setAs("ANY", "ImageList", function(from) {
+  # Use constructor function
+  ImageList(from)
+})
+
+
 
 #setMethod("show")
 
