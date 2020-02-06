@@ -59,6 +59,7 @@ setAs("ANY", "ImageList", function(from) {
   ImageList(from)
 })
 
+# Make sure the channel names are kept in place
 
 
 #setMethod("show")
