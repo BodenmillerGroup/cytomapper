@@ -47,6 +47,9 @@ loadImages <- function(x, pattern = NULL, ...) {
   # Validity checks
   x <- .valid.loadImage.input(x, pattern)
 
+  # TODO
+  # Name images by default based on image name
+
   # Read in images
   if(length(x) == 1){
     out <- EBImage::readImage(x, ...)

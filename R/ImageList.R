@@ -21,7 +21,7 @@
 #' @param ... Named Image objects or a list of Image objects.
 #' @param elementMetadata A data frame where each row indicates an image and
 #'   each column stores image-specific meta-information.
-#' @param channelNames A vector od string specifying the names of individual
+#' @param channelNames A character vector or string specifying the names of individual
 #'   channels.
 #'
 #' @details In this class ...
@@ -41,7 +41,15 @@
 #' @return An ImageList object
 #'
 #' @examples
-#' # Example
+#' # Creation of ImageList
+#'
+#' # Accessors
+#'
+#' # Coercion
+#'
+#' # Subsetting
+#'
+#' # Looping
 #'
 #' @seealso \code{\linkS4class{Image}}, for ..
 #' @seealso \code{\linkS4class{SimpleList}}, for ..
