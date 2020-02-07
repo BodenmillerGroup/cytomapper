@@ -62,6 +62,9 @@ test_that("Coercion, accessors, looping, subsetting works on ImageList object.",
 
   mcols
 
+  expect_equal(names(pancreasImages), c("A02", "D01", "F01"))
+  expect_equal(rownames(mcols(pancreasImages)), c("A02", "D01", "F01"))
+
   ## Setters
   cur_Images <- pancreasImages
   expect_silent(cur_Images[1] <- pancreasImages[1])
@@ -78,6 +81,11 @@ test_that("Coercion, accessors, looping, subsetting works on ImageList object.",
 
   expect_error(cur_Images[1] <- "test")
   expect_error(cur_Images[[1]] <- "test")
+
+  expect_error(names(cur_Images) <- c("test1", "test2"))
+  names(cur_Images) <- c("test1", "test2", "test3")
+  expect_equal(names(cur_Images), c("test1", "test2", "test3"))
+  expect_equal(rownames(mcols(cur_Images)), c("test1", "test2", "test3"))
 
   ### Make sure the metadata and names are stored correctly
   cur_Images <- pancreasImages
