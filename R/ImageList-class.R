@@ -66,6 +66,8 @@ setAs("ANY", "ImageList", function(from) {
 
 #setMethod("plot")
 
+#setMethod("names")
+
 
 
 

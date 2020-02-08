@@ -110,26 +110,16 @@ setMethod("getImages",
             ans.mcols <- mcols(x)
 
             # Initial checks
-            if(is.null || (!is.numeric && !is.character)){
+            if(is.null(value) || (!is.numeric(value)  &&
+                                  !is.character(value) )){
               stop("Invalid argument for 'value'")
             }
 
-            if(is.numeric(value)){
-              cur_list <- ans.list[value]
-              if(is.null(ans.mcols)){
-                cur_mcols <- NULL
-              } else {
-                cur_mcols <- ans.mcols[value,]
-              }
-            }
-
-            if(is.character(value)){
-              cur_list <- ans.list[value]
-              if(is.null(ans.mcols)){
-                cur_mcols <- NULL
-              } else {
-                cur_mcols <- ans.mcols[value,]
-              }
+            cur_list <- ans.list[value]
+            if(is.null(ans.mcols)){
+              cur_mcols <- NULL
+            } else {
+              cur_mcols <- ans.mcols[value,]
             }
 
             cur_ImageList <- ImageList(cur_list,
@@ -151,7 +141,21 @@ setReplaceMethod("setImages",
 setMethod("getChannels",
           signature = signature(x="ImageList"),
           definition = function(x, value){
+            # Initial checks
+            if(is.null(value) || (!is.numeric(value) &&
+                                  !is.character(value) )){
+              stop("Invalid argument for 'value'")
+            }
+            if(is.character(value) &&
+               sum(!(value %in% channelNames(x))) > 0){
+              stop("'value' not in channelNames(x)")
+            }
 
+            ans <- S4Vectors::endoapply(x, function(y){
+              y[,,value]
+            })
+
+            return(ans)
           })
 
 #' @export
