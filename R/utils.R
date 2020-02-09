@@ -92,6 +92,7 @@ setReplaceMethod("channelNames",
 #'
 #' @param x TODO
 #' @param value TODO
+#' @param i
 #'
 #' @return An ImageList object
 #'
@@ -104,15 +105,15 @@ NULL
 #' @rdname ImageList-subsetting
 setMethod("getImages",
           signature = signature(x="ImageList"),
-          definition = function(x, value){
+          definition = function(x, i){
 
             ans.list <- as.list(x)
             ans.mcols <- mcols(x)
 
             # Initial checks
-            if(is.null(value) || (!is.numeric(value)  &&
-                                  !is.character(value) )){
-              stop("Invalid argument for 'value'")
+            if(is.null(i) || (!is.numeric(i)  &&
+                                  !is.character(i) )){
+              stop("Invalid argument for 'i'")
             }
 
             cur_list <- ans.list[value]
@@ -132,7 +133,21 @@ setMethod("getImages",
 #' @rdname ImageList-subsetting
 setReplaceMethod("setImages",
           signature = signature(x="ImageList"),
-          definition = function(x, value){
+          definition = function(x, i){
+
+            ans.list <- as.list(x)
+            ans.mcols <- mcols(x)
+
+            if(is.null(i) || (!is.numeric(i)  &&
+                                  !is.character(i) )){
+              stop("Invalid argument for 'value'")
+            }
+
+            # If value is numeric, make sure that names are correctly replaced
+            if(is.numeric(i) && is.null(names(x)) && is.null()){
+
+            }
+
 
           })
 
@@ -140,19 +155,19 @@ setReplaceMethod("setImages",
 #' @rdname ImageList-subsetting
 setMethod("getChannels",
           signature = signature(x="ImageList"),
-          definition = function(x, value){
+          definition = function(x, i, drop=FALSE){
             # Initial checks
-            if(is.null(value) || (!is.numeric(value) &&
-                                  !is.character(value) )){
+            if(is.null(i) || (!is.numeric(i) &&
+                                  !is.character(i) )){
               stop("Invalid argument for 'value'")
             }
-            if(is.character(value) &&
-               sum(!(value %in% channelNames(x))) > 0){
+            if(is.character(i) &&
+               sum(!(i %in% channelNames(x))) > 0){
               stop("'value' not in channelNames(x)")
             }
 
             ans <- S4Vectors::endoapply(x, function(y){
-              y[,,value]
+              y[,,i]
             })
 
             return(ans)
@@ -162,7 +177,7 @@ setMethod("getChannels",
 #' @rdname ImageList-subsetting
 setReplaceMethod("setChannels",
           signature = signature(x="ImageList"),
-          definition = function(x, value){
+          definition = function(x, i){
 
           })
 
