@@ -17,9 +17,11 @@
 #' The `[<-` or `[[<-` functions for the \code{\linkS4class{ImageList}} object
 #' have been adjusted to call getImages and setImages.
 #'
+#' It is only allowed to replace explicitily named entried in named ImageList
+#'
 #' @param x TODO
+#' @param i TODO
 #' @param value TODO
-#' @param i
 #'
 #' @return An ImageList object
 #'
@@ -43,9 +45,17 @@ setMethod("[", "ImageList",
             return(ans)
             })
 
+# The point here is to make sure that names
+# are correctly replaced
+# Furthermore, we want to avoid storing unnamed
+# objects in a named ImageList
 setReplaceMethod("[", "ImageList",
           function(x, i, j, ..., value){
+            if (!missing(j) || length(list(...)) > 0L)
+              stop("invalid subsetting")
 
+            # Replace element
+            setImages(x, i) <- value
 })
 
 setMethod("[[", "ImageList",
@@ -119,21 +129,41 @@ setMethod("getImages",
 #' @rdname ImageList-subsetting
 setReplaceMethod("setImages",
                  signature = signature(x="ImageList"),
-                 definition = function(x, i){
+                 definition = function(x, i, value){
 
-                   ans.list <- as.list(x)
-                   ans.mcols <- mcols(x)
+                   if(missing(i) || is.null(x)){
+                     return(x)
+                   }
 
                    if(is.null(i) || (!is.numeric(i)  &&
                                      !is.character(i) )){
-                     stop("Invalid argument for 'value'")
+                     stop("Invalid subsetting. \n",
+                          "Only strings, integers, integer vectors and character vectors are supported")
                    }
 
-                   # If value is numeric, make sure that names are correctly replaced
-                   if(is.numeric(i) && is.null(names(x)) && is.null()){
-
+                   if(is.character(i) && sum(!(is.character(i) %in% names(x))) > 0){
+                     stop("Invalid subsetting. 'i' not in 'names(x)'.")
                    }
 
+                   # Further checks
+                   i <- .valid.Image.setting(x, i, value)
+
+                   ans.SimpleList <- as(x, "SimpleList")
+                   ans.SimpleList[i] <- value
+                   ans.ImageList <- as(ans.List, "ImageList")
+
+                   # Further modifications
+                   ## This aims at carrying over names from value to x
+                   if(is(value, "ImageList") &&
+                      !is.null(names(x)) &&
+                      !is.null(names(value))){
+                     cur_names <- names(ans.ImageList)
+                     names(cur_names) <- cur_names
+                     cur_names[i] <- names(value)
+                     names(ans.ImageList) <- as.character(ans.ImageList)
+                   }
+
+                   return(ans.ImageList)
 
                  })
 

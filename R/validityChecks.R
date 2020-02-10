@@ -92,5 +92,26 @@
 }
 
 
+# Function to check if ImageList elements can be correctly replaced
+
+.valid.Image.setting <- function(x, i, value){
+  # Check if value is Image or ImageList
+  if(!is.null(value) && !(is(value, "Image") || is(value, "ImageList"))){
+    stop("Invalid replacement. Only 'Image' or 'ImageList' objects allowed.")
+  }
+
+  # Avoid saving non-named object in named ImageList
+  if(!is.null(names(x)) && is.integer(i) && !is.null(value)){
+    stop("Invalid replacement operation: \n",
+         "When replacing entries of a named 'ImageList' object, \n",
+         "please specify a character indicating which element to replace or add. \n",
+         "See '?setImages' for further explanations.")
+  }
+
+  # Check length of x, i, value
+
+}
+
+
 
 
