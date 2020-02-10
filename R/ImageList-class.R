@@ -40,8 +40,15 @@ S4Vectors:::setValidity2(Class="ImageList",
               }
 
               # Check if entry names are unique
-              if(length(unique(names(object))) < length(names(object))){
+              if(!is.null(names(object)) &&
+                 length(unique(names(object))) < length(names(object))){
                 stop("Only unique entries allowed in an ImageList object.")
+              }
+
+              # Check if names contain NA or empties
+              if(!is.null(names(object)) && (sum(is.na(names(object))) > 0 ||
+                                             sum(names(object) %in% "") > 0)){
+                stop("Empty or NA names not supported.")
               }
 
               # Check if colourmode of each Image is "Grayscale"
