@@ -39,6 +39,11 @@ S4Vectors:::setValidity2(Class="ImageList",
                      "Please use the 'channelNames' function to alter channel names.")
               }
 
+              # Check if entry names are unique
+              if(length(unique(names(object))) < length(names(object))){
+                stop("Only unique entries allowed in an ImageList object.")
+              }
+
               # Check if colourmode of each Image is "Grayscale"
               colour.modes <- unlist(lapply(object, colorMode))
               if("Color" %in% colour.modes){
