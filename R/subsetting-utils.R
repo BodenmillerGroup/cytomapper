@@ -28,26 +28,73 @@
 #' Nicolas Damond \email{nicolas.damond@@dqbm.uzh.ch}
 NULL
 
+# In these subsetting functions, we will keep as close to
+# the implementation of the List class as possible
+setMethod("[", "ImageList",
+          function(x, i, j, ...)){
+  if (length(list(...)) > 0L)
+    stop("invalid subsetting")
+
+  ans <- getImages(x, i, drop=drop)
+
+  if (!missing(j)){
+    mcols(ans) <- mcols(ans, use.names=TRUE)[ , j, drop=FALSE]
+  }
+
+  return(ans)
+}
+
+setReplaceMethod("[", "ImageList",
+          function(x, i, j, ..., value)){
+
+}
+
+setMethod("[[", "ImageList",
+          function(x, i, j, ...)){
+      i <- S4Vectors::normalizeDoubleBracketSubscript(i, x)
+
+}
+
+setReplaceMethod("[[", "ImageList",
+                 function(x, i, j, ..., value)){
+
+}
+
+setMethod("$", "ImageList",
+          function(x, name)){
+
+}
+
+setReplaceMethod("$", "ImageList",
+          function(x, name, value)){
+
+}
+
 #' @export
 #' @rdname ImageList-subsetting
 setMethod("getImages",
           signature = signature(x="ImageList"),
           definition = function(x, i){
 
-            ans.list <- as.list(x)
-            ans.mcols <- mcols(x)
-
-            # Initial checks
-            if(is.null(i) || (!is.numeric(i)  &&
-                              !is.character(i) )){
-              stop("Invalid argument for 'i'")
+            if(missing(i) || is.null(x)){
+              return(x)
             }
 
-            cur_list <- ans.list[value]
+            ans.list <- as.list(x)
+            ans.mcols <- mcols(x, use.names = TRUE)
+
+            # Initial checks
+            if(is.null(i) || (!is.integer(i)  &&
+                              !is.character(i) )){
+              stop("Invalid subsetting. \n",
+                   "Only strings, integers, integer vectors and character vectors are supported")
+            }
+
+            cur_list <- ans.list[i]
             if(is.null(ans.mcols)){
               cur_mcols <- NULL
             } else {
-              cur_mcols <- ans.mcols[value,]
+              cur_mcols <- ans.mcols[i,]
             }
 
             cur_ImageList <- ImageList(cur_list,
