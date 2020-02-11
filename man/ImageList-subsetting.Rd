@@ -16,7 +16,7 @@ getImages(x, i)
 
 setImages(x, i) <- value
 
-getChannels(x, i, drop)
+getChannels(x, i, drop = FALSE)
 
 setChannels(x, i) <- value
 

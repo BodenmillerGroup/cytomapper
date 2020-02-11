@@ -103,7 +103,7 @@
 
   # If i is not character, both x and value need to be named,
   # or both x and value need to be unnamed
-  errors <- c()
+  error <- c()
   if(!is.character(i)){
     if(is.null(names(x))){
       if(is(value, "ImageList") && !is.null(names(value))){
@@ -123,7 +123,7 @@
     }
   }
 
-  if(length(errors > 0)){
+  if(length(error > 0)){
     stop("Invalid replacement operation: \n",
          error)
   }

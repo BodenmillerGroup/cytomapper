@@ -7,10 +7,6 @@
 #'
 #'
 #' @param ... Named Image objects or a list of Image objects.
-#' @param elementMetadata A data frame in which each row indicates an image and
-#'   each column stores image-specific meta-information.
-#' @param channelNames A character vector or string specifying the names of individual
-#'   channels.
 #'
 #' @details Similar to the \code{\linkS4class{Image}} class, the first two dimensions of each
 #' entry indicate the spatial dimension of the image. These can be different for
@@ -70,15 +66,13 @@
 #' @importFrom S4Vectors new2
 #'
 #' @export
-ImageList <- function(..., elementMetadata=NULL, channelNames=NULL){
+ImageList <- function(...){
   args <- list(...)
   if (length(args) == 1L && methods::extends(class(args[[1L]]), "list"))
     args <- args[[1L]]
   if (length(args) == 1L && methods::extends(class(args[[1L]]), "SimpleList"))
     args <- as.list(args[[1L]])
-  x <- S4Vectors::new2("ImageList", listData=args,
-               elementMetadata=elementMetadata)
-  channelNames(x) <- channelNames
+  x <- S4Vectors::new2("ImageList", listData=args)
   return(x)
 }
 

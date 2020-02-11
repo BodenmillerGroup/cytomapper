@@ -39,7 +39,7 @@ setMethod("getImages",
             }
 
             # Initial checks
-            if(is.null(i) || (!is.integer(i)  &&
+            if(is.null(i) || (!is.numeric(i)  &&
                               !is.character(i) &&
                               !is.logical(i))){
               stop("Invalid subsetting. \n",
@@ -59,7 +59,7 @@ setReplaceMethod("setImages",
                      return(x)
                    }
 
-                   if(is.null(i) || (!is.integer(i)  &&
+                   if(is.null(i) || (!is.numeric(i)  &&
                                      !is.character(i) &&
                                      !is.logical(i))){
                      stop("Invalid subsetting. \n",
@@ -70,15 +70,16 @@ setReplaceMethod("setImages",
                    .valid.Image.setting(x, i, value)
 
                    # Set correct names
+                   cor_names <- NULL
                    if(!is.character(i)){
                      cor_names <- names(x)
                      names(cor_names) <- cor_names
-                     cor_names[names(value)] <- names(value)
+                     cor_names[i] <- names(value)
                    }
 
                    # Subset ImageList
                    x[i] <- value
-                   if(!missing(cor_names)){
+                   if(!is.null(cor_names)){
                      names(x) <- as.character(cor_names)
                    }
 
@@ -90,9 +91,9 @@ setReplaceMethod("setImages",
 #' @importFrom S4Vectors endoapply
 setMethod("getChannels",
           signature = signature(x="ImageList"),
-          definition = function(x, i, drop=FALSE){
+          definition = function(x, i){
             # Initial checks
-            if(is.null(i) || (!is.integer(i)  &&
+            if(is.null(i) || (!is.numeric(i)  &&
                               !is.character(i) &&
                               !is.logical(i))){
               stop("Invalid subsetting. \n",
@@ -104,11 +105,13 @@ setMethod("getChannels",
               stop("'i' not in channelNames(x)")
             }
 
-            ans <- S4Vectors::endoapply(x, function(y){
-              y[,,i,drop=drop]
+            x <- S4Vectors::endoapply(x, function(y){
+              y[,,i,drop=FALSE]
             })
 
-            return(ans)
+            validObject(x)
+
+            return(x)
           })
 
 #' @export
@@ -122,7 +125,7 @@ setReplaceMethod("setChannels",
                      return(x)
                    }
 
-                   if(is.null(i) || (!is.integer(i)  &&
+                   if(is.null(i) || (!is.numeric(i)  &&
                                      !is.character(i) &&
                                      !is.logical(i))){
                      stop("Invalid subsetting. \n",
@@ -135,6 +138,8 @@ setReplaceMethod("setChannels",
                    x <- S4Vectors::mendoapply(function(k, u){
                      k[,,i] <- u
                    }, x, value)
+
+                   validObject(x)
 
                    return(x)
                  })

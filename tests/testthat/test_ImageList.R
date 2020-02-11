@@ -94,10 +94,61 @@ test_that("Coercion, accessors, looping, subsetting works on ImageList object.",
 
   # Accessors
   ## getImages
+  ### Should work
+  expect_s4_class(getImages(pancreasImages, "A02"), "ImageList")
+  expect_s4_class(getImages(pancreasImages, "A02")[[1]], "Image")
+  expect_s4_class(getImages(pancreasImages, 1), "ImageList")
+  expect_s4_class(getImages(pancreasImages, 1)[[1]], "Image")
+  expect_s4_class(getImages(pancreasImages, c(TRUE, FALSE, FALSE)), "ImageList")
+  expect_s4_class(getImages(pancreasImages, c(TRUE, FALSE, FALSE))[[1]], "Image")
+  expect_s4_class(getImages(pancreasImages, c("A02", "D01")), "ImageList")
+  expect_s4_class(getImages(pancreasImages, c(1,2)), "ImageList")
+
+  ### Should not work
+  expect_error(getImages(pancreasImages, "A"))
+  expect_error(getImages(pancreasImages, "A02", "test"))
+  expect_error(getImages(pancreasImages, c("A02", "test")))
+  expect_error(getImages(pancreasImages, 4))
 
   ## setImages
+  cur_Images1 <- pancreasImages
+  cur_Images2 <- pancreasImages
+  names(cur_Images2) <- c("test1", "test2", "test3")
+  mcols(cur_Images2)$ImageNumber <- mcols(cur_Images2)$ImageNb
+
+  expect_silent(setImages(cur_Images1, "A02") <- cur_Images2[1])
+  expect_equal(names(cur_Images1), c("A02", "D01", "F01"))
+  expect_equal(channelNames(cur_Images1), c("H3", "SMA", "INS", "CD38", "CD44"))
+  expect_silent(setImages(cur_Images1, "G02") <- cur_Images2[1])
+  expect_equal(names(cur_Images1), c("A02", "D01", "F01", "G02"))
+  expect_equal(channelNames(cur_Images1), c("H3", "SMA", "INS", "CD38", "CD44"))
+  expect_silent(setImages(cur_Images1, 1) <- cur_Images2[2])
+  expect_equal(names(cur_Images1), c("test2", "D01", "F01", "G02"))
+  expect_equal(channelNames(cur_Images1), c("H3", "SMA", "INS", "CD38", "CD44"))
+  expect_error(setImages(cur_Images1, 1:2) <- cur_Images2[2])
+  expect_silent(setImages(cur_Images1, 1:2) <- cur_Images2[2:3])
+  expect_equal(names(cur_Images1), c("test2", "test3", "F01", "G02"))
+  expect_equal(channelNames(cur_Images1), c("H3", "SMA", "INS", "CD38", "CD44"))
+
+  names(cur_Images2) <- NULL
+  expect_error(setImages(cur_Images1, 1) <- cur_Images2[2])
+  expect_error(setImages(cur_Images2, 1) <- pancreasImages[2])
+  expect_silent(setImages(cur_Images2, 1) <- cur_Images2[2])
+  expect_equal(channelNames(cur_Images1), c("H3", "SMA", "INS", "CD38", "CD44"))
+  expect_error(setImages(cur_Images2, "test") <- cur_Images2[2])
 
   ## getChannels
+  ### Should work
+  expect_s4_class(getChannels(pancreasImages, 1), "ImageList")
+  expect_s4_class(getChannels(pancreasImages, 1:2), "ImageList")
+  expect_s4_class(getChannels(pancreasImages, "H3"), "ImageList")
+
+  ### Should not work
+  expect_error(getChannels(pancreasImages, 10))
+  expect_error(getImages(pancreasImages, "A02", "test"))
+  expect_error(getImages(pancreasImages, c("A02", "test")))
+  expect_error(getImages(pancreasImages, 4))
+
 
   ## setChannels
 

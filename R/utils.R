@@ -20,7 +20,7 @@ NULL
 setMethod("channelNames",
           signature = signature(x="Image"),
           definition = function(x){
-            if(length(dim(x)) == 2){
+            if(length(dim(x)) == 2L){
               return(NULL)
             } else {
               return(dimnames(x)[[3]])
@@ -34,7 +34,7 @@ setReplaceMethod("channelNames",
           signature = signature(x="Image"),
           definition = function(x, value){
             # Image needs to be expanded to store channel names
-            if(length(dim(x)) == 2){
+            if(length(dim(x)) == 2L){
               x <- Image(x, dim = c(dim(x)[1], dim(x)[2], 1))
             }
 
@@ -47,7 +47,7 @@ setReplaceMethod("channelNames",
 setMethod("channelNames",
           signature = signature(x="ImageList"),
           definition =  function(x){
-            if(length(dim(x[[1]])) == 2){
+            if(length(dim(x[[1]])) == 2L){
               return(NULL)
             } else {
               return(dimnames(x[[1]])[[3]])
@@ -62,7 +62,7 @@ setReplaceMethod("channelNames",
                  signature = signature(x="ImageList"),
                  definition = function(x, value){
                    # Image needs to be expanded to store channel names
-                   if(length(dim(x[[1]])) == 2){
+                   if(length(dim(x[[1]])) == 2L){
                      x <- S4Vectors::endoapply(x, function(y){
                        y <- Image(y, dim = c(dim(y)[1], dim(y)[2], 1))
                      })
