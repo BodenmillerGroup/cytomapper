@@ -97,19 +97,36 @@
 .valid.Image.setting <- function(x, i, value){
   # Check if value is Image or ImageList
   if(!is.null(value) && !(is(value, "Image") || is(value, "ImageList"))){
-    stop("Invalid replacement. Only 'Image' or 'ImageList' objects allowed.")
-  }
-
-  # Avoid saving non-named object in named ImageList
-  if(!is.null(names(x)) && is.integer(i) && !is.null(value)){
     stop("Invalid replacement operation: \n",
-         "When replacing entries of a named 'ImageList' object, \n",
-         "please specify a character indicating which element to replace or add. \n",
-         "See '?setImages' for further explanations.")
+         "Only 'Image' or 'ImageList' objects allowed.")
   }
 
-  # Check length of x, i, value
+  # If i is not character, both x and value need to be named,
+  # or both x and value need to be unnamed
+  errors <- c()
+  if(!is.character(i)){
+    if(is.null(names(x))){
+      if(is(value, "ImageList") && !is.null(names(value))){
+        error <- "Cannot merge named and unnamed ImageList object."
+      }
+    } else {
+      if(is(value, "Image")){
+        error <- "Cannot set Image object to named ImageList."
+      } else if(is.null(names(value))){
+        error <- "Cannot merge named and unnamed ImageList object."
+      }
+    }
+  } else {
+    if(is.null(names(x))){
+      error <- paste("'i' is of type character. \n",
+      "This setting is only allowed for named ImageList objects")
+    }
+  }
 
+  if(length(errors > 0)){
+    stop("Invalid replacement operation: \n",
+         error)
+  }
 }
 
 

@@ -14,9 +14,6 @@
 #' These methods are preferred over subsetting via `[<-` or `[[<-`, which by default
 #' does not replace the entry names.
 #'
-#' The `[<-` or `[[<-` functions for the \code{\linkS4class{ImageList}} object
-#' have been adjusted to call getImages and setImages.
-#'
 #' It is only allowed to replace explicitily named entried in named ImageList
 #'
 #' @param x TODO
@@ -40,27 +37,15 @@ setMethod("getImages",
               return(x)
             }
 
-            ans.list <- as.list(x)
-            ans.mcols <- mcols(x, use.names = TRUE)
-
             # Initial checks
             if(is.null(i) || (!is.integer(i)  &&
-                              !is.character(i) )){
+                              !is.character(i) &&
+                              !is.logical(i))){
               stop("Invalid subsetting. \n",
-                   "Only strings, integers, integer vectors and character vectors are supported")
+                   "Only logicals, characters and integers are supported")
             }
 
-            cur_list <- ans.list[i]
-            if(is.null(ans.mcols)){
-              cur_mcols <- NULL
-            } else {
-              cur_mcols <- ans.mcols[i,]
-            }
-
-            cur_ImageList <- ImageList(cur_list,
-                                       elementMetadata = cur_mcols,
-                                       channelNames = channelNames(x))
-            return(cur_ImageList)
+            return(x[i])
           })
 
 #' @export
@@ -73,36 +58,30 @@ setReplaceMethod("setImages",
                      return(x)
                    }
 
-                   if(is.null(i) || (!is.numeric(i)  &&
-                                     !is.character(i) )){
+                   if(is.null(i) || (!is.integer(i)  &&
+                                     !is.character(i) &&
+                                     !is.logical(i))){
                      stop("Invalid subsetting. \n",
-                          "Only strings, integers, integer vectors and character vectors are supported")
-                   }
-
-                   if(is.character(i) && sum(!(is.character(i) %in% names(x))) > 0){
-                     stop("Invalid subsetting. 'i' not in 'names(x)'.")
+                          "Only logicals, characters and integers are supported")
                    }
 
                    # Further checks
                    i <- .valid.Image.setting(x, i, value)
 
-                   ans.SimpleList <- as(x, "SimpleList")
-                   ans.SimpleList[i] <- value
-                   ans.ImageList <- as(ans.List, "ImageList")
-
-                   # Further modifications
-                   ## This aims at carrying over names from value to x
-                   if(is(value, "ImageList") &&
-                      !is.null(names(x)) &&
-                      !is.null(names(value))){
-                     cur_names <- names(ans.ImageList)
-                     names(cur_names) <- cur_names
-                     cur_names[i] <- names(value)
-                     names(ans.ImageList) <- as.character(ans.ImageList)
+                   # Set correct names
+                   if(!is.character(i)){
+                     cor_names <- names(x)
+                     names(cor_names) <- cor_names
+                     cor_names[names(value)] <- names(value)
                    }
 
-                   return(ans.ImageList)
+                   # Subset ImageList
+                   x[i] <- value
+                   if(!is.missing(cor_names)){
+                     names(x) <- as.chaarcter(cor_names)
+                   }
 
+                   return(x)
                  })
 
 #' @export
@@ -111,17 +90,20 @@ setMethod("getChannels",
           signature = signature(x="ImageList"),
           definition = function(x, i, drop=FALSE){
             # Initial checks
-            if(is.null(i) || (!is.numeric(i) &&
-                              !is.character(i) )){
-              stop("Invalid argument for 'value'")
+            if(is.null(i) || (!is.integer(i)  &&
+                              !is.character(i) &&
+                              !is.logical(i))){
+              stop("Invalid subsetting. \n",
+                   "Only logicals, characters and integers are supported")
             }
+
             if(is.character(i) &&
                sum(!(i %in% channelNames(x))) > 0){
               stop("'value' not in channelNames(x)")
             }
 
             ans <- S4Vectors::endoapply(x, function(y){
-              y[,,i]
+              y[,,i,drop=drop]
             })
 
             return(ans)
