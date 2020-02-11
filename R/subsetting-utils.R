@@ -19,6 +19,7 @@
 #' @param x TODO
 #' @param i TODO
 #' @param value TODO
+#' @param drop TODO
 #'
 #' @return An ImageList object
 #'
@@ -77,8 +78,8 @@ setReplaceMethod("setImages",
 
                    # Subset ImageList
                    x[i] <- value
-                   if(!is.missing(cor_names)){
-                     names(x) <- as.chaarcter(cor_names)
+                   if(!missing(cor_names)){
+                     names(x) <- as.character(cor_names)
                    }
 
                    return(x)
@@ -86,6 +87,7 @@ setReplaceMethod("setImages",
 
 #' @export
 #' @rdname ImageList-subsetting
+#' @importFrom S4Vectors endoapply
 setMethod("getChannels",
           signature = signature(x="ImageList"),
           definition = function(x, i, drop=FALSE){
@@ -111,6 +113,7 @@ setMethod("getChannels",
 
 #' @export
 #' @rdname ImageList-subsetting
+#' @importFrom S4Vectors mendoapply
 setReplaceMethod("setChannels",
                  signature = signature(x="ImageList"),
                  definition = function(x, i, value){
@@ -129,12 +132,9 @@ setReplaceMethod("setChannels",
                    # Further checks
                    .valid.Channel.setting(x, i, value)
 
-                   x <- mendoapply(function(k, u){
+                   x <- S4Vectors::mendoapply(function(k, u){
                      k[,,i] <- u
                    }, x, value)
 
                    return(x)
                  })
-
-
-

@@ -93,7 +93,7 @@
 
 
 # Function to check if ImageList elements can be correctly replaced
-
+#' @importFrom methods is
 .valid.Image.setting <- function(x, i, value){
   # Check if value is Image or ImageList
   if(!is.null(value) && !(is(value, "Image") || is(value, "ImageList"))){
@@ -130,6 +130,7 @@
 }
 
 # Chcks if channels can be replaced
+#' @importFrom methods is
 .valid.Channel.setting <- function(x, i, value){
   # Only ImageList objects are supported
   if(!is.null(value) && !is(value, "ImageList")){

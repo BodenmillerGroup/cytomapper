@@ -49,8 +49,7 @@
 #' # Accessors
 #'
 #' # Coercion
-#' as("ImageList", list)
-#' as("ImageList", list)
+#' # as("ImageList", list)
 #'
 #' # Subsetting
 #'

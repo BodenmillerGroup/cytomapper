@@ -28,17 +28,19 @@ S4Vectors:::setValidity2(Class="ImageList", .ImageList_validity)
               dims <- unlist(lapply(object, function(x){
                 dim(x)[3]
               }))
-              if(length(unique(dims)) > 1){
+              if(length(unique(dims)) > 1L){
                 msg <- c(msg, "The images contain different number of channels.\n")
               }
 
               # Check if all channels have the same names
-              cur_names <- dimnames(object[[1]])[[3]]
-              errors <- unlist(lapply(object, function(x){
-                !identical(cur_names, dimnames(x)[[3]])
-              }))
-              if(sum(errors) > 0){
-                msg <- c(msg, "Not all channels have the same names.")
+              if(length(dim(object[[1]])) == 3L){
+                cur_names <- dimnames(object[[1]])[[3]]
+                errors <- unlist(lapply(object, function(x){
+                  !identical(cur_names, dimnames(x)[[3]])
+                }))
+                if(sum(errors) > 0){
+                  msg <- c(msg, "Not all channels have the same names.")
+                }
               }
 
               # Check if entry names are unique

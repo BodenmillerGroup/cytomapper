@@ -14,22 +14,22 @@ setGeneric("channelNames<-",
 #' @export
 #' @rdname ImageList-subsetting
 setGeneric("getImages",
-           function(x, value) standardGeneric("getImages"))
+           function(x, i) standardGeneric("getImages"))
 
 #' @export
 #' @rdname ImageList-subsetting
 setGeneric("setImages<-",
-           function(x, value) standardGeneric("setImages"))
+           function(x, i, value) standardGeneric("setImages<-"))
 
 #' @export
 #' @rdname ImageList-subsetting
 setGeneric("getChannels",
-           function(x, value) standardGeneric("getChannels"))
+           function(x, i, drop) standardGeneric("getChannels"))
 
 #' @export
 #' @rdname ImageList-subsetting
 setGeneric("setChannels<-",
-           function(x, value) standardGeneric("setChannels"))
+           function(x, i, value) standardGeneric("setChannels<-"))
 
 
 
