@@ -129,6 +129,37 @@
   }
 }
 
+# Chcks if channels can be replaced
+.valid.Channel.setting <- function(x, i, value){
+  # Only ImageList objects are supported
+  if(!is.null(value) && !is(value, "ImageList")){
+    stop("Invalid replacement operation: \n",
+         "Only 'ImageList' objects allowed.",
+         "To alter Image objects, see ?Image.")
+  }
+
+  # Check if replacement has the same length
+  if(length(x) != length(value)){
+    stop("Invalid replacement operation: \n",
+         "Replacement needs to have same length as 'x'")
+  }
+
+  # Check if names of x and value match
+  if(!is.null(names(x)) && !is.null(names(value))){
+    if(!identical(names(x), names(value))){
+      stop("Invalid replacement operation: \n",
+           "Names of 'x' and 'value' do not match.")
+    }
+  }
+
+  # Check if number of channels is same as length(i)
+  if(length(i) != dim(value[[1]])[3]){
+    stop("Invalid replacement operation: \n",
+         "Number of replacement channels is not the same as \n",
+         "number of channels to replace.")
+  }
+}
+
 
 
 

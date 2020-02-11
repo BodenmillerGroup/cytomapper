@@ -66,7 +66,7 @@ setReplaceMethod("setImages",
                    }
 
                    # Further checks
-                   i <- .valid.Image.setting(x, i, value)
+                   .valid.Image.setting(x, i, value)
 
                    # Set correct names
                    if(!is.character(i)){
@@ -99,7 +99,7 @@ setMethod("getChannels",
 
             if(is.character(i) &&
                sum(!(i %in% channelNames(x))) > 0){
-              stop("'value' not in channelNames(x)")
+              stop("'i' not in channelNames(x)")
             }
 
             ans <- S4Vectors::endoapply(x, function(y){
@@ -113,8 +113,27 @@ setMethod("getChannels",
 #' @rdname ImageList-subsetting
 setReplaceMethod("setChannels",
                  signature = signature(x="ImageList"),
-                 definition = function(x, i){
+                 definition = function(x, i, value){
 
+                   if(missing(i) || is.null(x)){
+                     return(x)
+                   }
+
+                   if(is.null(i) || (!is.integer(i)  &&
+                                     !is.character(i) &&
+                                     !is.logical(i))){
+                     stop("Invalid subsetting. \n",
+                          "Only logicals, characters and integers are supported")
+                   }
+
+                   # Further checks
+                   .valid.Channel.setting(x, i, value)
+
+                   x <- mendoapply(function(k, u){
+                     k[,,i] <- u
+                   }, x, value)
+
+                   return(x)
                  })
 
 
