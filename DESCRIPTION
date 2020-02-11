@@ -31,7 +31,8 @@ Authors@R:
 License: GPL (>= 2)
 Depends:
     R (>= 3.6),
-    EBImage
+    EBImage,
+    SingleCellExperiment
 Imports:
     S4Vectors,
     utils,
