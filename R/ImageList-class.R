@@ -13,7 +13,7 @@ setClass(
     int_metadata=list(
       version=utils::packageVersion("SingleCellMapper")),
     elementType="Image"
-    ),
+    )
   )
 
 # Validity checks
@@ -77,12 +77,28 @@ setAs("ANY", "ImageList", function(from) {
   ImageList(from)
 })
 
-# Make sure the channel names are kept in place
-
-
-#setMethod("show")
+# Expanded show method
+setMethod("show", signature = signature(x="ImageList"),
+          definition = function(object){
+            lo <- length(object)
+            cat(class(pancreasImages)[1], " containing ", lo,
+                " images\n", sep = "")
+            if (!is.null(names(object)))
+              cat("names(", lo, "):", names(object), "\n", sep = "")
+            if(length(dim(object[[1]])) > 2){
+              cat("Each image contains ", dim(object[[1]])[3],
+                  " channel(s)\n", sep = "")
+            } else {
+              cat("Each image contains 1 channel\n", sep = "")
+            }
+            if(!is.null(channelNames(object))){
+              cat("channelNames(", length(channelNames(object)),
+                  "):", channelNames(object), "\n", sep = "")
+            }
+          })
 
 #setMethod("plot")
+# Calls plotCells or plotCounts by default
 
 # Expand bracket functions to check if valid object is returned
 setReplaceMethod("[",
