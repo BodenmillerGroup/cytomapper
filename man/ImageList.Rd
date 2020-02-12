@@ -6,16 +6,10 @@
 \alias{ImageList}
 \title{S4 class for list of images}
 \usage{
-ImageList(..., elementMetadata = NULL, channelNames = NULL)
+ImageList(...)
 }
 \arguments{
 \item{...}{Named Image objects or a list of Image objects.}
-
-\item{elementMetadata}{A data frame in which each row indicates an image and
-each column stores image-specific meta-information.}
-
-\item{channelNames}{A character vector or string specifying the names of individual
-channels.}
 }
 \value{
 An ImageList object
@@ -40,6 +34,11 @@ The class further contains an \code{\link{elementMetadata}} slot that stores
 image-level meta information. This slot should be accessed using the
 \code{\link[S4Vectors]{mcols}} accessor function.
 }
+\section{Restrictions on entries}{
+
+Discuss named list - not empty names, no NA, not duplicated names
+}
+
 \section{Accessors}{
 
 channelNames
@@ -55,13 +54,14 @@ An \code{ImageList} object can be coerced from \code{list()},
 
 \section{Subsetting}{
 
-
-getFrames
+getImages
+setImages
+mergeChannels
 }
 
 \section{Looping}{
 
-endoapply
+endoapply, mendoapply
 }
 
 \examples{

@@ -21,6 +21,9 @@
 #' image-level meta information. This slot should be accessed using the
 #' \code{\link[S4Vectors]{mcols}} accessor function.
 #'
+#' @section Restrictions on entries:
+#' Discuss named list - not empty names, no NA, not duplicated names
+#'
 #' @section Accessors:
 #' channelNames
 #' mcols
@@ -31,11 +34,12 @@
 #' \code{SimpleList} and \code{List} objects can be coerced to \code{ImageList}.
 #'
 #' @section Subsetting:
-#'
-#' getFrames
+#' getImages
+#' setImages
+#' mergeChannels
 #'
 #' @section Looping:
-#' endoapply
+#' endoapply, mendoapply
 #'
 #' @return An ImageList object
 #'

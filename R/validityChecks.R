@@ -140,7 +140,7 @@
   }
 
   # Check if replacement has the same length
-  if(length(x) != length(value)){
+  if(!is.null(value) && length(x) != length(value)){
     stop("Invalid replacement operation: \n",
          "Replacement needs to have same length as 'x'")
   }
@@ -158,6 +158,12 @@
     stop("Invalid replacement operation: \n",
          "Number of replacement channels is not the same as \n",
          "number of channels to replace.")
+  }
+
+  # Check if channelNames are set if is.character(i)
+  if(is.character(i) && is.null(channelNames(x))){
+    stop("Invalid replacement operation: \n",
+         "Trying to set a named channel in an unnamed ImageList.")
   }
 }
 

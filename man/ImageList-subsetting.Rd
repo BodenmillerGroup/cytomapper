@@ -16,7 +16,7 @@ getImages(x, i)
 
 setImages(x, i) <- value
 
-getChannels(x, i, drop = FALSE)
+getChannels(x, i)
 
 setChannels(x, i) <- value
 
@@ -24,7 +24,7 @@ setChannels(x, i) <- value
 
 \S4method{setImages}{ImageList}(x, i) <- value
 
-\S4method{getChannels}{ImageList}(x, i, drop = FALSE)
+\S4method{getChannels}{ImageList}(x, i)
 
 \S4method{setChannels}{ImageList}(x, i) <- value
 }
@@ -34,8 +34,6 @@ setChannels(x, i) <- value
 \item{i}{TODO}
 
 \item{value}{TODO}
-
-\item{drop}{TODO}
 }
 \value{
 An ImageList object
@@ -50,6 +48,17 @@ does not replace the entry names.
 
 It is only allowed to replace explicitily named entried in named ImageList
 }
+\section{Getting and setting images}{
+
+TODO
+}
+
+\section{Getting and setting channels}{
+
+TODO
+Discuss adding channels to list
+}
+
 \author{
 Nils Eling \email{nils.eling@dqbm.uzh.ch}
 Nicolas Damond \email{nicolas.damond@dqbm.uzh.ch}

@@ -16,10 +16,16 @@
 #'
 #' It is only allowed to replace explicitily named entried in named ImageList
 #'
+#' @section Getting and setting images:
+#' TODO
+#'
+#' @section Getting and setting channels:
+#' TODO
+#' Discuss adding channels to list
+#'
 #' @param x TODO
 #' @param i TODO
 #' @param value TODO
-#' @param drop TODO
 #'
 #' @return An ImageList object
 #'
@@ -77,7 +83,12 @@ setReplaceMethod("setImages",
                      cor_names[i] <- names(value)
                    }
 
-                   # Subset ImageList
+                   # Coerce Image to ImageList
+                   if(is(value, "Image")){
+                     value <- ImageList(value)
+                   }
+
+                   # Set ImageList
                    x[i] <- value
                    if(!is.null(cor_names)){
                      names(x) <- as.character(cor_names)
@@ -135,9 +146,32 @@ setReplaceMethod("setChannels",
                    # Further checks
                    .valid.Channel.setting(x, i, value)
 
-                   x <- S4Vectors::mendoapply(function(k, u){
-                     k[,,i] <- u
-                   }, x, value)
+                   # Use getChannels function if value is NULL
+                   if(is.null(value) && is.numeric(i)){
+                     cur_ind <- seq_len(length.out = dim(x[[1]])[3])
+                     cur_ind <- cur_ind[-i]
+                     x <- getChannels(x, cur_ind)
+                   } else if(is.null(value) && is.character(i)){
+                     x <- getChannels(x, !(i %in% channelNames(x)))
+                   } else {
+                     # Set correct names
+                     cor_names <- NULL
+                     if(!is.character(i)){
+                       cor_names <- channelNames(x)
+                       cor_names[i] <- channelNames(value)
+                     }
+
+                     x <- S4Vectors::mendoapply(function(k, u){
+                         k[,,i] <- u
+                         return(k)
+                       }, x, value)
+
+                     if(!is.null(cor_names)){
+                       channelNames(x) <- as.character(cor_names)
+                     }
+                   }
+
+
 
                    validObject(x)
 

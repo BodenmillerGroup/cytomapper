@@ -64,13 +64,13 @@ test_that("Coercion, accessors, looping, subsetting works on ImageList object.",
   names(cur_Images) <- NULL
 
   ### Should fail
-  expect_error(cur_Images[1] <- as(pancreasImages[[2]], "ImageList"))
   expect_error(cur_Images["test"] <- pancreasImages[1])
-
   expect_error(names(cur_Images) <- c("test1", "test2"))
+  expect_error(cur_Images[1] <- pancreasImages[[1]])
 
   ### Should work
   expect_silent(cur_Images[1] <- pancreasImages[1])
+  expect_silent(cur_Images[1] <- as(pancreasImages[[2]], "ImageList"))
 
   names(cur_Images) <- c("test1", "test2", "test3")
   expect_equal(names(cur_Images), c("test1", "test2", "test3"))
@@ -119,6 +119,8 @@ test_that("Coercion, accessors, looping, subsetting works on ImageList object.",
   expect_silent(setImages(cur_Images1, "A02") <- cur_Images2[1])
   expect_equal(names(cur_Images1), c("A02", "D01", "F01"))
   expect_equal(channelNames(cur_Images1), c("H3", "SMA", "INS", "CD38", "CD44"))
+  expect_silent(setImages(cur_Images1, "A02") <- cur_Images2[[1]])
+  expect_error(setImages(cur_Images1, 1) <- cur_Images2[[1]])
   expect_silent(setImages(cur_Images1, "G02") <- cur_Images2[1])
   expect_equal(names(cur_Images1), c("A02", "D01", "F01", "G02"))
   expect_equal(channelNames(cur_Images1), c("H3", "SMA", "INS", "CD38", "CD44"))
@@ -143,24 +145,94 @@ test_that("Coercion, accessors, looping, subsetting works on ImageList object.",
   expect_s4_class(getChannels(pancreasImages, 1:2), "ImageList")
   expect_s4_class(getChannels(pancreasImages, "H3"), "ImageList")
 
+  expect_silent(test <- getChannels(pancreasImages, 1))
+  expect_equal(channelNames(test), "H3")
+  expect_equal(length(test), 3)
+  expect_equal(names(test), c("A02", "D01", "F01"))
+
+  expect_silent(test <- getChannels(pancreasImages, "H3"))
+  expect_equal(channelNames(test), "H3")
+  expect_equal(length(test), 3)
+  expect_equal(names(test), c("A02", "D01", "F01"))
+
   ### Should not work
   expect_error(getChannels(pancreasImages, 10))
-  expect_error(getImages(pancreasImages, "A02", "test"))
-  expect_error(getImages(pancreasImages, c("A02", "test")))
-  expect_error(getImages(pancreasImages, 4))
-
+  expect_error(getChannels(pancreasImages, "test"))
+  expect_error(getChannels(pancreasImages, c("H3", "test")))
 
   ## setChannels
+  cur_Images1 <- pancreasImages
+  cur_Images2 <- getChannels(pancreasImages, 2)
+
+  ### Should work
+  expect_silent(setChannels(cur_Images1, 1) <- cur_Images2)
+  expect_equal(channelNames(cur_Images1), c("SMA", "SMA", "INS", "CD38", "CD44"))
+  expect_equal(cur_Images1[[1]][,,1], cur_Images1[[1]][,,2])
+
+  expect_silent(setChannels(cur_Images1, "INS") <- cur_Images2)
+  expect_equal(channelNames(cur_Images1), c("SMA", "SMA", "INS", "CD38", "CD44"))
+  expect_equal(cur_Images1[[1]][,,2], cur_Images1[[1]][,,3])
+
+  expect_silent(setChannels(cur_Images1, "test") <- cur_Images2)
+  expect_equal(channelNames(cur_Images1), c("SMA", "SMA", "INS", "CD38", "CD44"))
+  expect_equal(cur_Images1[[1]][,,2], cur_Images1[[1]][,,3])
+
+  cur_Images1 <- pancreasImages
+  cur_Images2 <- getChannels(pancreasImages, 2:3)
+
+  expect_silent(setChannels(cur_Images1, 1:2) <- cur_Images2)
+  expect_equal(channelNames(cur_Images1), c("SMA", "INS", "INS", "CD38", "CD44"))
+  expect_equal(cur_Images1[[1]][,,2], cur_Images1[[1]][,,3])
+
+  expect_silent(setChannels(cur_Images1, 1:2) <- NULL)
+  expect_equal(channelNames(cur_Images1), c("INS", "CD38", "CD44"))
+
+  ### Should not work
+  expect_error(setChannels(cur_Images1, 6) <- cur_Images2)
+  expect_error(setChannels(cur_Images1, 6) <- cur_Images2)
+
+  names(cur_Images2) <- c("test1", "test2", "test3")
+  mcols(cur_Images2)$ImageNumber <- mcols(cur_Images2)$ImageNb
+
+  expect_silent(setImages(cur_Images1, "A02") <- cur_Images2[1])
+  expect_equal(names(cur_Images1), c("A02", "D01", "F01"))
+  expect_equal(channelNames(cur_Images1), c("H3", "SMA", "INS", "CD38", "CD44"))
+  expect_silent(setImages(cur_Images1, "G02") <- cur_Images2[1])
+  expect_equal(names(cur_Images1), c("A02", "D01", "F01", "G02"))
+  expect_equal(channelNames(cur_Images1), c("H3", "SMA", "INS", "CD38", "CD44"))
+  expect_silent(setImages(cur_Images1, 1) <- cur_Images2[2])
+  expect_equal(names(cur_Images1), c("test2", "D01", "F01", "G02"))
+  expect_equal(channelNames(cur_Images1), c("H3", "SMA", "INS", "CD38", "CD44"))
+  expect_error(setImages(cur_Images1, 1:2) <- cur_Images2[2])
+  expect_silent(setImages(cur_Images1, 1:2) <- cur_Images2[2:3])
+  expect_equal(names(cur_Images1), c("test2", "test3", "F01", "G02"))
+  expect_equal(channelNames(cur_Images1), c("H3", "SMA", "INS", "CD38", "CD44"))
+
+  names(cur_Images2) <- NULL
+  expect_error(setImages(cur_Images1, 1) <- cur_Images2[2])
+  expect_error(setImages(cur_Images2, 1) <- pancreasImages[2])
+  expect_silent(setImages(cur_Images2, 1) <- cur_Images2[2])
+  expect_equal(channelNames(cur_Images1), c("H3", "SMA", "INS", "CD38", "CD44"))
+  expect_error(setImages(cur_Images2, "test") <- cur_Images2[2])
 
   ## Looping
 
   ## Vector functions
   expect_equal(length(pancreasImages), 3)
+  expect_null(dim(pancreasImages))
 
 })
 
-test_that("channelNames can be set.", {
+test_that("channelNames can be extracted and set.", {
   data("pancreasImages")
 
   # Subset to one channel per image
+
+  # Check if expansion works
   })
+
+test_that("ImageLists can be merged.", {
+  data("pancreasImages")
+
+  # Check mergeChannels function
+})
