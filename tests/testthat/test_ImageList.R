@@ -194,11 +194,20 @@ test_that("Coercion, accessors, looping, subsetting works on ImageList object.",
   expect_error(setChannels(cur_Images1, 1) <- "test")
 
   ## Looping
+  ### Should work
+  expect_silent(cur_list <- lapply(pancreasImages, dim))
+  expect_true(is.list(cur_list))
+  expect_silent(cur_list <- endoapply(pancreasImages, function(x){
+    channelNames(x) <- NULL
+    return(x)}))
+  expect_true(is(cur_list, "ImageList"))
+
+  ### Should not work
+  expect_error(cur_list <- endoapply(pancreasImages, dim))
 
   ## Vector functions
   expect_equal(length(pancreasImages), 3)
   expect_null(dim(pancreasImages))
-
 })
 
 test_that("channelNames can be extracted and set.", {
@@ -207,6 +216,8 @@ test_that("channelNames can be extracted and set.", {
   # Subset to one channel per image
 
   # Check if expansion works
+
+  # Set null
   })
 
 test_that("ImageLists can be merged.", {
