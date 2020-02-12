@@ -115,29 +115,32 @@ test_that("Coercion, accessors, looping, subsetting works on ImageList object.",
   cur_Images2 <- pancreasImages
   names(cur_Images2) <- c("test1", "test2", "test3")
   mcols(cur_Images2)$ImageNumber <- mcols(cur_Images2)$ImageNb
+  cur_Images3 <- cur_Images2
+  names(cur_Images3) <- NULL
 
+  ### Should work
   expect_silent(setImages(cur_Images1, "A02") <- cur_Images2[1])
   expect_equal(names(cur_Images1), c("A02", "D01", "F01"))
   expect_equal(channelNames(cur_Images1), c("H3", "SMA", "INS", "CD38", "CD44"))
   expect_silent(setImages(cur_Images1, "A02") <- cur_Images2[[1]])
-  expect_error(setImages(cur_Images1, 1) <- cur_Images2[[1]])
   expect_silent(setImages(cur_Images1, "G02") <- cur_Images2[1])
   expect_equal(names(cur_Images1), c("A02", "D01", "F01", "G02"))
   expect_equal(channelNames(cur_Images1), c("H3", "SMA", "INS", "CD38", "CD44"))
   expect_silent(setImages(cur_Images1, 1) <- cur_Images2[2])
   expect_equal(names(cur_Images1), c("test2", "D01", "F01", "G02"))
   expect_equal(channelNames(cur_Images1), c("H3", "SMA", "INS", "CD38", "CD44"))
-  expect_error(setImages(cur_Images1, 1:2) <- cur_Images2[2])
   expect_silent(setImages(cur_Images1, 1:2) <- cur_Images2[2:3])
   expect_equal(names(cur_Images1), c("test2", "test3", "F01", "G02"))
   expect_equal(channelNames(cur_Images1), c("H3", "SMA", "INS", "CD38", "CD44"))
+  expect_silent(setImages(cur_Images3, 1) <- cur_Images3[2])
+  expect_equal(channelNames(cur_Images3), c("H3", "SMA", "INS", "CD38", "CD44"))
 
-  names(cur_Images2) <- NULL
-  expect_error(setImages(cur_Images1, 1) <- cur_Images2[2])
-  expect_error(setImages(cur_Images2, 1) <- pancreasImages[2])
-  expect_silent(setImages(cur_Images2, 1) <- cur_Images2[2])
-  expect_equal(channelNames(cur_Images1), c("H3", "SMA", "INS", "CD38", "CD44"))
-  expect_error(setImages(cur_Images2, "test") <- cur_Images2[2])
+  ### Should not work
+  expect_error(setImages(cur_Images1, 1) <- cur_Images2[[1]])
+  expect_error(setImages(cur_Images1, 1:2) <- cur_Images2[2])
+  expect_error(setImages(cur_Images1, 1) <- cur_Images3[2])
+  expect_error(setImages(cur_Images3, 1) <- pancreasImages[2])
+  expect_error(setImages(cur_Images3, "test") <- cur_Images3[2])
 
   ## getChannels
   ### Should work
@@ -173,10 +176,6 @@ test_that("Coercion, accessors, looping, subsetting works on ImageList object.",
   expect_equal(channelNames(cur_Images1), c("SMA", "SMA", "INS", "CD38", "CD44"))
   expect_equal(cur_Images1[[1]][,,2], cur_Images1[[1]][,,3])
 
-  expect_silent(setChannels(cur_Images1, "test") <- cur_Images2)
-  expect_equal(channelNames(cur_Images1), c("SMA", "SMA", "INS", "CD38", "CD44"))
-  expect_equal(cur_Images1[[1]][,,2], cur_Images1[[1]][,,3])
-
   cur_Images1 <- pancreasImages
   cur_Images2 <- getChannels(pancreasImages, 2:3)
 
@@ -188,32 +187,11 @@ test_that("Coercion, accessors, looping, subsetting works on ImageList object.",
   expect_equal(channelNames(cur_Images1), c("INS", "CD38", "CD44"))
 
   ### Should not work
+  cur_Images1 <- pancreasImages
+  cur_Images2 <- getChannels(pancreasImages, 2)
   expect_error(setChannels(cur_Images1, 6) <- cur_Images2)
-  expect_error(setChannels(cur_Images1, 6) <- cur_Images2)
-
-  names(cur_Images2) <- c("test1", "test2", "test3")
-  mcols(cur_Images2)$ImageNumber <- mcols(cur_Images2)$ImageNb
-
-  expect_silent(setImages(cur_Images1, "A02") <- cur_Images2[1])
-  expect_equal(names(cur_Images1), c("A02", "D01", "F01"))
-  expect_equal(channelNames(cur_Images1), c("H3", "SMA", "INS", "CD38", "CD44"))
-  expect_silent(setImages(cur_Images1, "G02") <- cur_Images2[1])
-  expect_equal(names(cur_Images1), c("A02", "D01", "F01", "G02"))
-  expect_equal(channelNames(cur_Images1), c("H3", "SMA", "INS", "CD38", "CD44"))
-  expect_silent(setImages(cur_Images1, 1) <- cur_Images2[2])
-  expect_equal(names(cur_Images1), c("test2", "D01", "F01", "G02"))
-  expect_equal(channelNames(cur_Images1), c("H3", "SMA", "INS", "CD38", "CD44"))
-  expect_error(setImages(cur_Images1, 1:2) <- cur_Images2[2])
-  expect_silent(setImages(cur_Images1, 1:2) <- cur_Images2[2:3])
-  expect_equal(names(cur_Images1), c("test2", "test3", "F01", "G02"))
-  expect_equal(channelNames(cur_Images1), c("H3", "SMA", "INS", "CD38", "CD44"))
-
-  names(cur_Images2) <- NULL
-  expect_error(setImages(cur_Images1, 1) <- cur_Images2[2])
-  expect_error(setImages(cur_Images2, 1) <- pancreasImages[2])
-  expect_silent(setImages(cur_Images2, 1) <- cur_Images2[2])
-  expect_equal(channelNames(cur_Images1), c("H3", "SMA", "INS", "CD38", "CD44"))
-  expect_error(setImages(cur_Images2, "test") <- cur_Images2[2])
+  expect_error(setChannels(cur_Images1, "test") <- cur_Images2)
+  expect_error(setChannels(cur_Images1, 1) <- "test")
 
   ## Looping
 

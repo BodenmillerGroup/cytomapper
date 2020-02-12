@@ -146,7 +146,7 @@
   }
 
   # Check if names of x and value match
-  if(!is.null(names(x)) && !is.null(names(value))){
+  if(!is.null(value) && !is.null(names(x)) && !is.null(names(value))){
     if(!identical(names(x), names(value))){
       stop("Invalid replacement operation: \n",
            "Names of 'x' and 'value' do not match.")
@@ -154,7 +154,7 @@
   }
 
   # Check if number of channels is same as length(i)
-  if(length(i) != dim(value[[1]])[3]){
+  if(!is.null(value) && length(i) != dim(value[[1]])[3]){
     stop("Invalid replacement operation: \n",
          "Number of replacement channels is not the same as \n",
          "number of channels to replace.")
