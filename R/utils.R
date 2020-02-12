@@ -38,7 +38,7 @@ setReplaceMethod("channelNames",
               x <- Image(x, dim = c(dim(x)[1], dim(x)[2], 1))
             }
 
-            dimnames(x)[[3]] <- value
+            dimnames(x)[[3]] <- as.character(value)
             return(x)
           })
 
@@ -69,9 +69,53 @@ setReplaceMethod("channelNames",
                    }
 
                    x <- S4Vectors::endoapply(x, function(y){
-                     dimnames(y)[[3]] <- value
+                     dimnames(y)[[3]] <- as.character(value)
                      y
                    })
+
+                   validObject(x)
+
                    return(x)
                  })
+
+#' @title Merging channels of two ImageList objects
+#' @name mergeChannels
+#' @description TODO
+#'
+#' @details
+#' # TODO
+#'
+#' @param x TODO
+#' @param y TODO
+#'
+#' @author
+#' Nils Eling \email{nils.eling@@dqbm.uzh.ch}
+#' Nicolas Damond \email{nicolas.damond@@dqbm.uzh.ch}
+#' @export
+#'
+#' @importFrom S4Vectors mendoapply
+mergeChannels <- function(x, y){
+                   if(missing(i) || is.null(x)){
+                     return(x)
+                   }
+
+                   if(!is(x, "ImageList") || !is(x, "ImageList")){
+                     stop("'x' and 'y' must be ImageList objects")
+                   }
+
+                   # Further checks
+                   if(length(x) != length(y)){
+                     stop("Invalid merge operation: \n",
+                          "'y' needs to have same length as 'x'")
+                   }
+
+                    x <- S4Vectors::mendoapply(function(k, u){
+                       k <- abind(k,u)
+                       return(k)
+                    }, x, y)
+
+                   validObject(x)
+
+                   return(x)
+                 }
 
