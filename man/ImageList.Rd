@@ -4,12 +4,19 @@
 \name{ImageList-class}
 \alias{ImageList-class}
 \alias{ImageList}
+\alias{coerce,ANY,ImageList-method}
+\alias{coerce,list,ImageList-method}
+\alias{show,ImageList-method}
 \title{S4 class for list of images}
 \usage{
 ImageList(...)
 }
 \arguments{
 \item{...}{Named Image objects or a list of Image objects.}
+
+\item{x}{TODO}
+
+\item{value}{TODO}
 }
 \value{
 An ImageList object

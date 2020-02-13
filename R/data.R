@@ -43,8 +43,6 @@
 #'
 #' @references \href{https://www.sciencedirect.com/science/article/pii/S1550413118306910}{Damond, N. et al., A Map of Human Type 1 Diabetes Progression by
 #' Imaging Mass Cytometry, Cell Metabolism 29:3, 2019}
-#'
-#' @import SingleCellExperiment
 "pancreasSCE"
 
 #' Example ImageList object of image files

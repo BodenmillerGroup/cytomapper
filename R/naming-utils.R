@@ -82,42 +82,15 @@ setReplaceMethod("channelNames",
                    return(x)
                  })
 
-#' @title Merging channels of two ImageList objects
-#' @name mergeChannels
-#' @description TODO
-#'
-#' @details
-#' # TODO
-#'
-#' @param x TODO
-#' @param y TODO
-#'
-#' @author
-#' Nils Eling \email{nils.eling@@dqbm.uzh.ch}
-#' Nicolas Damond \email{nicolas.damond@@dqbm.uzh.ch}
+#' @rdname ImageList-naming
 #' @export
-#'
-#' @importFrom S4Vectors mendoapply
-#' @importFrom methods is validObject
-#' @importFrom EBImage abind
-mergeChannels <- function(x, y){
-                  if(!is(x, "ImageList") || !is(x, "ImageList")){
-                     stop("'x' and 'y' must be ImageList objects")
-                   }
-
-                   # Further checks
-                   if(length(x) != length(y)){
-                     stop("Invalid merge operation: \n",
-                          "'y' needs to have same length as 'x'")
-                   }
-
-                    x <- S4Vectors::mendoapply(function(k, u){
-                       k <- abind(k,u)
-                       return(k)
-                    }, x, y)
-
-                   validObject(x)
-
-                   return(x)
-                 }
+#' @importFrom methods callNextMethod as validObject
+setReplaceMethod("names",
+                 signature = signature(x="ImageList"),
+                 definition = function(x, value){
+                   .Object <- callNextMethod()
+                   .Object <- as(.Object, "ImageList")
+                   validObject(.Object)
+                   return(.Object)
+                 })
 

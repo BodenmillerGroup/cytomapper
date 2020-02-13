@@ -7,6 +7,8 @@
 #'
 #'
 #' @param ... Named Image objects or a list of Image objects.
+#' @param x TODO
+#' @param value TODO
 #'
 #' @details Similar to the \code{\linkS4class{Image}} class, the first two dimensions of each
 #' entry indicate the spatial dimension of the image. These can be different for
@@ -58,7 +60,11 @@
 #' @seealso \code{\linkS4class{Image}}, for ..
 #' @seealso \code{\linkS4class{SimpleList}}, for ..
 #'
-#' @aliases ImageList-class
+#' @aliases
+#' ImageList-class
+#' coerce,ANY,ImageList-method
+#' coerce,list,ImageList-method
+#' show,ImageList-method
 #'
 #' @author
 #' Nils Eling \email{nils.eling@@dqbm.uzh.ch}
@@ -66,7 +72,6 @@
 #'
 #' @docType class
 #'
-#' @importFrom methods extends
 #' @importFrom S4Vectors new2
 #'
 #' @export
@@ -79,4 +84,39 @@ ImageList <- function(...){
   x <- S4Vectors::new2("ImageList", listData=args)
   return(x)
 }
+
+# Coercion from list
+#' @exportMethod coerce
+setAs("list", "ImageList", function(from) {
+  # Use constructor function
+  ImageList(from)
+})
+
+# Coercion from ANY
+#' @exportMethod coerce
+setAs("ANY", "ImageList", function(from) {
+  # Use constructor function
+  ImageList(from)
+})
+
+# Expanded show method
+#' @exportMethod show
+setMethod("show", signature = signature(object="ImageList"),
+          definition = function(object){
+            lo <- length(object)
+            cat(class(object)[1], " containing ", lo,
+                " images\n", sep = "")
+            if (!is.null(names(object)))
+              cat("names(", lo, "):", names(object), "\n", sep = "")
+            if(length(dim(object[[1]])) > 2){
+              cat("Each image contains ", dim(object[[1]])[3],
+                  " channel(s)\n", sep = "")
+            } else {
+              cat("Each image contains 1 channel\n", sep = "")
+            }
+            if(!is.null(channelNames(object))){
+              cat("channelNames(", length(channelNames(object)),
+                  "):", channelNames(object), "\n", sep = "")
+            }
+          })
 

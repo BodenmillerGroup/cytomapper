@@ -24,7 +24,8 @@
 #' Discuss adding channels to list
 #'
 #' @param x TODO
-#' @param i TODO
+#' @param i,j TODO
+#' @param .. TODO
 #' @param value TODO
 #'
 #' @return An ImageList object
@@ -100,6 +101,7 @@ setReplaceMethod("setImages",
 #' @export
 #' @rdname ImageList-subsetting
 #' @importFrom S4Vectors endoapply
+#' @importFrom methods validObject
 setMethod("getChannels",
           signature = signature(x="ImageList"),
           definition = function(x, i){
@@ -128,6 +130,7 @@ setMethod("getChannels",
 #' @export
 #' @rdname ImageList-subsetting
 #' @importFrom S4Vectors mendoapply
+#' @importFrom methods is validObject
 setReplaceMethod("setChannels",
                  signature = signature(x="ImageList"),
                  definition = function(x, i, value){
@@ -171,9 +174,71 @@ setReplaceMethod("setChannels",
                      }
                    }
 
-
-
                    validObject(x)
 
                    return(x)
                  })
+
+# Expand bracket functions to check if valid object is returned
+#' @rdname ImageList-subsetting
+#' @export
+#' @importFrom methods callNextMethod as validObject
+setReplaceMethod("[",
+                 signature = signature(x="ImageList"),
+                 definition = function(x, i, j, ..., value){
+                   .Object <- callNextMethod()
+                   .Object <- as(.Object, "ImageList")
+                   validObject(.Object)
+                   return(.Object)
+                 })
+
+#' @rdname ImageList-subsetting
+#' @export
+#' @importFrom methods callNextMethod as validObject
+setReplaceMethod("[[",
+                 signature = signature(x="ImageList"),
+                 definition = function(x, i, j, ..., value){
+                   .Object <- callNextMethod()
+                   .Object <- as(.Object, "ImageList")
+                   validObject(.Object)
+                   return(.Object)
+                 })
+
+#' @title Merging channels of two ImageList objects
+#' @name mergeChannels
+#' @description TODO
+#'
+#' @details
+#' # TODO
+#'
+#' @param x TODO
+#' @param y TODO
+#'
+#' @author
+#' Nils Eling \email{nils.eling@@dqbm.uzh.ch}
+#' Nicolas Damond \email{nicolas.damond@@dqbm.uzh.ch}
+#' @export
+#'
+#' @importFrom S4Vectors mendoapply
+#' @importFrom methods is validObject
+#' @importFrom EBImage abind
+mergeChannels <- function(x, y){
+  if(!is(x, "ImageList") || !is(x, "ImageList")){
+    stop("'x' and 'y' must be ImageList objects")
+  }
+
+  # Further checks
+  if(length(x) != length(y)){
+    stop("Invalid merge operation: \n",
+         "'y' needs to have same length as 'x'")
+  }
+
+  x <- S4Vectors::mendoapply(function(k, u){
+    k <- abind(k,u)
+    return(k)
+  }, x, y)
+
+  validObject(x)
+
+  return(x)
+}

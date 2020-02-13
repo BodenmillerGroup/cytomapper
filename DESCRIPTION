@@ -32,12 +32,12 @@ License: GPL (>= 2)
 Depends:
     R (>= 3.6),
     EBImage,
-    SingleCellExperiment
+    SingleCellExperiment,
+    methods
 Imports:
     S4Vectors,
     utils,
-    tools,
-    methods
+    tools
 Suggests:
     BiocStyle,
     knitr,

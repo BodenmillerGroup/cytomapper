@@ -2,7 +2,6 @@
 #' @rdname ImageList
 #' @importFrom utils packageVersion
 #' @importFrom S4Vectors setValidity2
-#' @importClassesFrom EBImage Image
 #' @importClassesFrom S4Vectors SimpleList
 setClass(
   Class="ImageList",
@@ -18,6 +17,7 @@ setClass(
 
 # Validity checks
 #' @importFrom S4Vectors setValidity2
+#' @importFrom EBImage colorMode
 S4Vectors:::setValidity2(Class="ImageList", .ImageList_validity)
 
 .ImageList_validity <- function(object) {
@@ -65,68 +65,8 @@ S4Vectors:::setValidity2(Class="ImageList", .ImageList_validity)
               return(TRUE)
             }
 
-# Coercion from list
-setAs("list", "ImageList", function(from) {
-  # Use constructor function
-  ImageList(from)
-})
-
-# Coercion from ANY
-setAs("ANY", "ImageList", function(from) {
-  # Use constructor function
-  ImageList(from)
-})
-
-# Expanded show method
-setMethod("show", signature = signature(x="ImageList"),
-          definition = function(object){
-            lo <- length(object)
-            cat(class(pancreasImages)[1], " containing ", lo,
-                " images\n", sep = "")
-            if (!is.null(names(object)))
-              cat("names(", lo, "):", names(object), "\n", sep = "")
-            if(length(dim(object[[1]])) > 2){
-              cat("Each image contains ", dim(object[[1]])[3],
-                  " channel(s)\n", sep = "")
-            } else {
-              cat("Each image contains 1 channel\n", sep = "")
-            }
-            if(!is.null(channelNames(object))){
-              cat("channelNames(", length(channelNames(object)),
-                  "):", channelNames(object), "\n", sep = "")
-            }
-          })
-
 #setMethod("plot")
 # Calls plotCells or plotCounts by default
-
-# Expand bracket functions to check if valid object is returned
-setReplaceMethod("[",
-                 signature = signature(x="ImageList"),
-                 definition = function(x, i, j, ..., value){
-                   .Object <- callNextMethod()
-                   .Object <- as(.Object, "ImageList")
-                   methods::validObject(.Object)
-                   return(.Object)
-                 })
-
-setReplaceMethod("[[",
-                 signature = signature(x="ImageList"),
-                 definition = function(x, i, j, ..., value){
-                 .Object <- callNextMethod()
-                 .Object <- as(.Object, "ImageList")
-                 methods::validObject(.Object)
-                 return(.Object)
-                 })
-
-setReplaceMethod("names",
-                 signature = signature(x="ImageList"),
-                 definition = function(x, value){
-                 .Object <- callNextMethod()
-                 .Object <- as(.Object, "ImageList")
-                 methods::validObject(.Object)
-                 return(.Object)
-                 })
 
 
 

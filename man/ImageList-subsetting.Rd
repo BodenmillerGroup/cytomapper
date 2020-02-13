@@ -10,6 +10,8 @@
 \alias{setImages<-,ImageList-method}
 \alias{getChannels,ImageList-method}
 \alias{setChannels<-,ImageList-method}
+\alias{[<-,ImageList,ANY,ANY,ANY-method}
+\alias{[[<-,ImageList,ANY,ANY-method}
 \title{Getting and setting individual channels and images}
 \usage{
 getImages(x, i)
@@ -27,13 +29,19 @@ setChannels(x, i) <- value
 \S4method{getChannels}{ImageList}(x, i)
 
 \S4method{setChannels}{ImageList}(x, i) <- value
+
+\S4method{[}{ImageList,ANY,ANY,ANY}(x, i, j, ...) <- value
+
+\S4method{[[}{ImageList,ANY,ANY}(x, i, j, ...) <- value
 }
 \arguments{
 \item{x}{TODO}
 
-\item{i}{TODO}
+\item{i, j}{TODO}
 
 \item{value}{TODO}
+
+\item{..}{TODO}
 }
 \value{
 An ImageList object
