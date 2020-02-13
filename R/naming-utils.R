@@ -3,15 +3,31 @@
 #' @title Getting and setting the channel and image names
 #' @name ImageList-naming
 #'
-#' @description TODO
+#' @description TODO # Mention Image and ImageList
 #'
-#' @details
-#' # TODO
+#' @section Getters:
+#' \describe{
+#' \item{\code{channelNames(x)}:}{Returns the names of all channels stored in
+#' the Image or ImageList object \code{x}}
+#' \item{\code{channelNames(x) <- value}:}{Replaces the channel names of the Image or ImageList object
+#' \code{x} with \code{values}. For this, \code{value} needs to have the same
+#' length as the number of channels in \code{x}}
+#' \item{\code{names(x)}:}{Returns the names of all images stored in
+#' the ImageList object \code{x}}
+#' \item{\code{names(x) <- value}:}{Replaces the image names of
+#' \code{x} with \code{values}. For this, \code{value} needs to have the same
+#' length as the ImageList object \code{x}}
+#' }
 #'
-#' @param x TODO
-#' @param value TODO
+#' @aliases
+#' channelNames,ImageList-method
+#' channelNames<-,ImageList-method
+#' channelNames,Image-method
+#' channelNames<-,Image-method
+#' names,ImageList-method
+#' names<-,ImageList-method
 #'
-#' @aliases channelNames names
+#' @docType methods
 #'
 #' @author
 #' Nils Eling \email{nils.eling@@dqbm.uzh.ch}
@@ -19,7 +35,6 @@
 NULL
 
 #' @export
-#' @rdname ImageList-naming
 setMethod("channelNames",
           signature = signature(x="Image"),
           definition = function(x){
@@ -31,7 +46,6 @@ setMethod("channelNames",
             })
 
 #' @export
-#' @rdname ImageList-naming
 #' @importFrom EBImage Image
 setReplaceMethod("channelNames",
           signature = signature(x="Image"),
@@ -46,7 +60,6 @@ setReplaceMethod("channelNames",
           })
 
 #' @export
-#' @rdname ImageList-naming
 setMethod("channelNames",
           signature = signature(x="ImageList"),
           definition =  function(x){
@@ -58,7 +71,6 @@ setMethod("channelNames",
           })
 
 #' @export
-#' @rdname ImageList-naming
 #' @importFrom S4Vectors endoapply
 #' @importFrom EBImage Image
 #' @importFrom methods validObject
@@ -82,7 +94,14 @@ setReplaceMethod("channelNames",
                    return(x)
                  })
 
-#' @rdname ImageList-naming
+#' @export
+#' @importFrom methods callNextMethod
+setMethod("names",
+          signature = signature(x="ImageList"),
+          definition = function(x){
+            callNextMethod()
+          })
+
 #' @export
 #' @importFrom methods callNextMethod as validObject
 setReplaceMethod("names",
