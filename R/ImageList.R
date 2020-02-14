@@ -43,6 +43,12 @@
 #' @section Looping:
 #' endoapply, mendoapply
 #'
+#' @seealso
+#' \code{\linkS4class{Image}}, for ..
+#' \code{\linkS4class{SimpleList}}, for ..
+#' \code{?"\link{ImageList-naming}"}, for ...
+#' \code{?"\link{ImageList-subsetting}"}, for ...
+#'
 #' @return An ImageList object
 #'
 #' @examples
@@ -57,8 +63,6 @@
 #'
 #' # Looping
 #'
-#' @seealso \code{\linkS4class{Image}}, for ..
-#' @seealso \code{\linkS4class{SimpleList}}, for ..
 #'
 #' @aliases
 #' ImageList-class

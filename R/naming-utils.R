@@ -3,20 +3,33 @@
 #' @title Getting and setting the channel and image names
 #' @name ImageList-naming
 #'
-#' @description TODO # Mention Image and ImageList
+#' @description
+#' Methods to get and set the names of individual channels or the names of
+#' individual images.
 #'
-#' @section Getters:
+#' @section Setting and getting the channel names:
+#' In the following code, \code{x} is either an \linkS4class{ImageList} or
+#' \linkS4class{Image} object containing one or multiple channels.
+#' The channel names can be replaced by \code{value}, which contains a character
+#' vector of the same length as the number of channels in the image(s).
 #' \describe{
 #' \item{\code{channelNames(x)}:}{Returns the names of all channels stored in
-#' the Image or ImageList object \code{x}}
-#' \item{\code{channelNames(x) <- value}:}{Replaces the channel names of the Image or ImageList object
+#' \code{x}}
+#' \item{\code{channelNames(x) <- value}:}{Replaces the channel names of
 #' \code{x} with \code{values}. For this, \code{value} needs to have the same
 #' length as the number of channels in \code{x}}
-#' \item{\code{names(x)}:}{Returns the names of all images stored in
-#' the ImageList object \code{x}}
+#' }
+#'
+#' @section Setting and getting the image names:
+#' Here, \code{x} is either a \linkS4class{ImageList} object. The element names
+#' can be replaced by \code{value}, which contains a character vector of the
+#' same length as the number of images. In case of the ImageList object,
+#' elements are always images.
+#' \describe{
+#' \item{\code{names(x)}:}{Returns the names of all images stored in \code{x}}
 #' \item{\code{names(x) <- value}:}{Replaces the image names of
 #' \code{x} with \code{values}. For this, \code{value} needs to have the same
-#' length as the ImageList object \code{x}}
+#' length as \code{x}}
 #' }
 #'
 #' @aliases
@@ -31,7 +44,6 @@
 #'
 #' @author
 #' Nils Eling \email{nils.eling@@dqbm.uzh.ch}
-#' Nicolas Damond \email{nicolas.damond@@dqbm.uzh.ch}
 NULL
 
 #' @export
