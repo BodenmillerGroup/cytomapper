@@ -111,7 +111,7 @@ setMethod("show", signature = signature(object="ImageList"),
             cat(class(object)[1], " containing ", lo,
                 " images\n", sep = "")
             if (!is.null(names(object)))
-              cat("names(", lo, "):", names(object), "\n", sep = "")
+              cat(paste0("names(", lo, "):"), names(object), "\n", sep = " ")
             if(length(dim(object[[1]])) > 2){
               cat("Each image contains ", dim(object[[1]])[3],
                   " channel(s)\n", sep = "")
@@ -119,8 +119,8 @@ setMethod("show", signature = signature(object="ImageList"),
               cat("Each image contains 1 channel\n", sep = "")
             }
             if(!is.null(channelNames(object))){
-              cat("channelNames(", length(channelNames(object)),
-                  "):", channelNames(object), "\n", sep = "")
+              cat(paste0("channelNames(", length(channelNames(object)),
+                  "):"), channelNames(object), "\n", sep = " ")
             }
           })
 

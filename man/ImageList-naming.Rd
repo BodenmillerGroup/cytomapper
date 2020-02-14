@@ -3,33 +3,60 @@
 \docType{methods}
 \name{ImageList-naming}
 \alias{ImageList-naming}
+\alias{channelNames}
+\alias{names}
 \alias{channelNames,ImageList-method}
 \alias{channelNames<-,ImageList-method}
+\alias{channelNames,Image-method}
+\alias{channelNames<-,Image-method}
 \alias{names,ImageList-method}
 \alias{names<-,ImageList-method}
 \title{Getting and setting the channel and image names}
 \description{
-TODO
+Methods to get and set the names of individual channels or the names of
+individual images.
 }
-\section{Getters}{
+\section{Setting and getting the channel names}{
 
-In the following section, \code{x} is an \linkS4class{ImageList} object and
-\code{value} represents the names of either individual channels or images.
+In the following code, \code{x} is either an \linkS4class{ImageList} or
+\linkS4class{Image} object containing one or multiple channels.
+The channel names can be replaced by \code{value}, which contains a character
+vector of the same length as the number of channels in the image(s).
 \describe{
 \item{\code{channelNames(x)}:}{Returns the names of all channels stored in
 \code{x}}
 \item{\code{channelNames(x) <- value}:}{Replaces the channel names of
 \code{x} with \code{values}. For this, \code{value} needs to have the same
 length as the number of channels in \code{x}}
-\item{\code{names(x)}:}{Returns the names of all images stored in
-\code{x}}
+}
+}
+
+\section{Setting and getting the image names}{
+
+Here, \code{x} is either a \linkS4class{ImageList} object. The element names
+can be replaced by \code{value}, which contains a character vector of the
+same length as the number of images. In case of the ImageList object,
+elements are always images.
+\describe{
+\item{\code{names(x)}:}{Returns the names of all images stored in \code{x}}
 \item{\code{names(x) <- value}:}{Replaces the image names of
 \code{x} with \code{values}. For this, \code{value} needs to have the same
 length as \code{x}}
 }
 }
 
+\examples{
+data("pancreasImages")
+
+# Get channel and image names
+channelNames(pancreasImages)
+names(pancreasImages)
+
+# Set channel and image names
+channelNames(pancreasImages) <- paste0("marker", 1:5)
+names(pancreasImages) <- paste0("image", 1:3)
+
+}
 \author{
 Nils Eling \email{nils.eling@dqbm.uzh.ch}
-Nicolas Damond \email{nicolas.damond@dqbm.uzh.ch}
 }

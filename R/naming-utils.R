@@ -32,7 +32,19 @@
 #' length as \code{x}}
 #' }
 #'
+#' @examples
+#' data("pancreasImages")
+#'
+#' # Get channel and image names
+#' channelNames(pancreasImages)
+#' names(pancreasImages)
+#'
+#' # Set channel and image names
+#' channelNames(pancreasImages) <- paste0("marker", 1:5)
+#' names(pancreasImages) <- paste0("image", 1:3)
+#'
 #' @aliases
+#' channelNames names
 #' channelNames,ImageList-method
 #' channelNames<-,ImageList-method
 #' channelNames,Image-method
@@ -64,7 +76,9 @@ setReplaceMethod("channelNames",
           definition = function(x, value){
             # Image needs to be expanded to store channel names
             if(length(dim(x)) == 2L){
-              x <- Image(x, dim = c(dim(x)[1], dim(x)[2], 1))
+              cur_Image <- Image(x, dim = c(dim(x)[1], dim(x)[2], 1))
+              dimnames(cur_Image) <- c(dimnames(x), NULL)
+              x <- cur_Image
             }
 
             dimnames(x)[[3]] <- as.character(value)
@@ -92,13 +106,15 @@ setReplaceMethod("channelNames",
                    # Image needs to be expanded to store channel names
                    if(length(dim(x[[1]])) == 2L){
                      x <- S4Vectors::endoapply(x, function(y){
-                       y <- Image(y, dim = c(dim(y)[1], dim(y)[2], 1))
+                       cur_Image <- Image(y, dim = c(dim(y)[1], dim(y)[2], 1))
+                       dimnames(cur_Image) <- c(dimnames(y), NULL)
+                       return(cur_Image)
                      })
                    }
 
                    x <- S4Vectors::endoapply(x, function(y){
                      dimnames(y)[[3]] <- as.character(value)
-                     y
+                     return(y)
                    })
 
                    validObject(x)

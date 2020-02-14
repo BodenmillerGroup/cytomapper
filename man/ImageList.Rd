@@ -83,11 +83,13 @@ endoapply, mendoapply
 
 # Looping
 
+
 }
 \seealso{
 \code{\linkS4class{Image}}, for ..
-
 \code{\linkS4class{SimpleList}}, for ..
+\code{?"\link{ImageList-naming}"}, for ...
+\code{?"\link{ImageList-subsetting}"}, for ...
 }
 \author{
 Nils Eling \email{nils.eling@dqbm.uzh.ch}
