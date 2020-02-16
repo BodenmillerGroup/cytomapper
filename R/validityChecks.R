@@ -96,7 +96,8 @@
 #' @importFrom methods is
 .valid.Image.setting <- function(x, i, value){
   # Check if value is Image or ImageList
-  if(!is.null(value) && !(is(value, "Image") || is(value, "ImageList"))){
+  if(!is.null(value) && !(is(value, "Image") ||
+                          is(value, "ImageList"))){
     stop("Invalid replacement operation: \n",
          "Only 'Image' or 'ImageList' objects allowed.")
   }
@@ -104,22 +105,24 @@
   # If i is not character, both x and value need to be named,
   # or both x and value need to be unnamed
   error <- c()
-  if(!is.character(i)){
-    if(is.null(names(x))){
-      if(is(value, "ImageList") && !is.null(names(value))){
-        error <- "Cannot merge named and unnamed ImageList object."
+  if(!is.null(value)){
+    if(!is.character(i)){
+      if(is.null(names(x))){
+        if(is(value, "ImageList") && !is.null(names(value))){
+          error <- "Cannot merge named and unnamed ImageList object."
+        }
+      } else {
+        if(is(value, "Image")){
+          error <- "Cannot set Image object to named ImageList."
+        } else if(is.null(names(value))){
+          error <- "Cannot merge named and unnamed ImageList object."
+        }
       }
     } else {
-      if(is(value, "Image")){
-        error <- "Cannot set Image object to named ImageList."
-      } else if(is.null(names(value))){
-        error <- "Cannot merge named and unnamed ImageList object."
+      if(is.null(names(x))){
+        error <- paste("'i' is of type character. \n",
+        "This setting is only allowed for named ImageList objects")
       }
-    }
-  } else {
-    if(is.null(names(x))){
-      error <- paste("'i' is of type character. \n",
-      "This setting is only allowed for named ImageList objects")
     }
   }
 

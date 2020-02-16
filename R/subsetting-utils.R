@@ -172,7 +172,7 @@ setReplaceMethod("setImages",
 
                    # Set correct names
                    cor_names <- NULL
-                   if(!is.character(i)){
+                   if(!is.character(i) && !is.null(value)){
                      cor_names <- names(x)
                      names(cor_names) <- cor_names
                      cor_names[i] <- names(value)
