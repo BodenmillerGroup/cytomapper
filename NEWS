@@ -26,3 +26,8 @@
 2020-02-04: Correction of example data
 - Reduced the size of example data
 - Wrote docs on data
+
+2020-02-16: Full docs and tests on:
+- ImageList-naming
+- ImageList-subsetting
+- version bump 0.1.3
