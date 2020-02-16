@@ -55,6 +55,12 @@ S4Vectors:::setValidity2(Class="ImageList", .ImageList_validity)
                 msg <- c(msg, "Empty or NA names not supported.")
               }
 
+              # Check if channelNames are unique
+              if(!is.null(channelNames(object)) &&
+                 length(unique(channelNames(object))) < length(channelNames(object))){
+                msg <- c(msg, "Only unique channels allowed in an ImageList object.")
+              }
+
               # Check if colourmode of each Image is "Grayscale"
               colour.modes <- unlist(lapply(object, colorMode))
               if("Color" %in% colour.modes){
