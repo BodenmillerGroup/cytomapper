@@ -37,6 +37,25 @@ test_that("Merging works on ImageList object.", {
   expect_error(test.list <- c(pancreasImages, pancreasImages))
 
   # Merge channels
+  channels1 <- getChannels(pancreasImages, 1:2)
+  channels2 <- getChannels(pancreasImages, 3:4)
+
+  ## Should work
+  expect_silent(channels3 <- mergeChannels(channels1, channels2))
+  expect_equal(channelNames(channels3), c("H3", "SMA", "INS", "CD38"))
+  expect_equal(names(channels3), c("A02", "D01", "F01"))
+
+  ## Should not work
+  channels1 <- getChannels(pancreasImages, 1:2)
+  channels2 <- getChannels(pancreasImages, 3:4)
+  expect_error(mergeChannels(channels1, as(channels2, "SimpleList")))
+
+  channels2 <- channels2[1:2]
+  expect_error(mergeChannels(channels1, channels2))
+  expect_error(mergeChannels(channels1, channels2[[1]]))
+  expect_error(mergeChannels(channels1, as(channels2)))
+
+  expect_error(mergeChannels(channels1, channels1))
 })
 
 test_that("General operations work on ImageList object.", {
@@ -100,6 +119,7 @@ test_that("General operations work on ImageList object.", {
 })
 
 test_that("Custom accessors work on ImageList object.", {
+  data("pancreasImages")
   # Accessors
   ## getImages
   ### Should work
@@ -150,8 +170,13 @@ test_that("Custom accessors work on ImageList object.", {
   expect_error(setImages(cur_Images3, 1) <- pancreasImages[2])
   expect_error(setImages(cur_Images3, "test") <- cur_Images3[2])
 
+  ### Remove images
+  expect_silent(setImages(cur_Images1, 1) <- NULL)
+  expect_equal(names(cur_Images1), c("test3", "F01", "G02"))
+  expect_silent(setImages(cur_Images1, "test3") <- NULL)
+  expect_equal(names(cur_Images1), c("F01", "G02"))
+
   ## getChannels
-  # Build check that only unique channels are allowed
   ### Should work
   expect_s4_class(getChannels(pancreasImages, 1), "ImageList")
   expect_s4_class(getChannels(pancreasImages, 1:2), "ImageList")
@@ -175,27 +200,29 @@ test_that("Custom accessors work on ImageList object.", {
   ## setChannels
   cur_Images1 <- pancreasImages
   cur_Images2 <- getChannels(pancreasImages, 2)
+  channelNames(cur_Images2) <- "test"
 
   ### Should work
   expect_silent(setChannels(cur_Images1, 1) <- cur_Images2)
-  expect_equal(channelNames(cur_Images1), c("SMA", "SMA", "INS", "CD38", "CD44"))
+  expect_equal(channelNames(cur_Images1), c("test", "SMA", "INS", "CD38", "CD44"))
   expect_equal(cur_Images1[[1]][,,1], cur_Images1[[1]][,,2])
 
   expect_silent(setChannels(cur_Images1, "INS") <- cur_Images2)
-  expect_equal(channelNames(cur_Images1), c("SMA", "SMA", "INS", "CD38", "CD44"))
+  expect_equal(channelNames(cur_Images1), c("test", "SMA", "INS", "CD38", "CD44"))
   expect_equal(cur_Images1[[1]][,,2], cur_Images1[[1]][,,3])
 
   cur_Images1 <- pancreasImages
   cur_Images2 <- getChannels(pancreasImages, 2:3)
+  channelNames(cur_Images2) <- c("test1", "test2")
 
   expect_silent(setChannels(cur_Images1, 1:2) <- cur_Images2)
-  expect_equal(channelNames(cur_Images1), c("SMA", "INS", "INS", "CD38", "CD44"))
+  expect_equal(channelNames(cur_Images1), c("test1", "test2", "INS", "CD38", "CD44"))
   expect_equal(cur_Images1[[1]][,,2], cur_Images1[[1]][,,3])
 
   expect_silent(setChannels(cur_Images1, 1:2) <- NULL)
   expect_equal(channelNames(cur_Images1), c("INS", "CD38", "CD44"))
-
-  # Check that setting NULL works
+  expect_silent(setChannels(cur_Images1, "INS") <- NULL)
+  expect_equal(channelNames(cur_Images1), c("CD38", "CD44"))
 
   ### Should not work
   cur_Images1 <- pancreasImages
@@ -203,5 +230,6 @@ test_that("Custom accessors work on ImageList object.", {
   expect_error(setChannels(cur_Images1, 6) <- cur_Images2)
   expect_error(setChannels(cur_Images1, "test") <- cur_Images2)
   expect_error(setChannels(cur_Images1, 1) <- "test")
+  expect_error(setChannels(cur_Images1, 1) <- cur_Images2)
 })
 
