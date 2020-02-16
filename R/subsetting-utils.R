@@ -247,7 +247,7 @@ setReplaceMethod("setChannels",
                      cur_ind <- cur_ind[-i]
                      x <- getChannels(x, cur_ind)
                    } else if(is.null(value) && is.character(i)){
-                     x <- getChannels(x, !(i %in% channelNames(x)))
+                     x <- getChannels(x, !(channelNames(x) %in% i))
                    } else {
                      # Set correct names
                      cor_names <- NULL
