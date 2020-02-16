@@ -34,8 +34,8 @@
 #' }
 #'
 #' These setter and getter functions are the recommended way of extracting and replacing
-#' images in an ImageList object. Alternatively, the standard operations via `[`, `[[`,
-#' `[<-` and `[[<-` can be performed (see \code{?\link{List}} for S4Vectors subsetting
+#' images in an ImageList object. Alternatively, the standard operations via \code{`[`}, \code{`[[`},
+#' \code{`[<-`} and \code{`[[<-`} can be performed (see \code{?\link{List}} for S4Vectors subsetting
 #' functionality). However, these operations do not change element names during replacment
 #' calls. The \code{setImages()} function makes sure that element names are replaced if
 #' \code{value} is named or of \code{i} is a character or vector of characters.
@@ -119,16 +119,19 @@
 #' mergeChannels(channel12, channel34)
 #'
 #' @aliases
-#' getImages setImages getChannels setChannels mergeChannels
+#' getImages getChannels mergeChannels
+#' setImages<- setChannels<-
 #' getImages,ImageList-method
 #' setImages<-,ImageList-method
 #' getChannels,ImageList-method
 #' setChannels<-,ImageList-method
+#' [<-,ImageList,ANY,ANY,ImageList-method
+#' [[<-,ImageList,ANY,ANY-method
 #'
 #' @docType methods
 #'
 #' @author
-#' Nils Eling \email{nils.eling@@dqbm.uzh.ch}
+#' Nils Eling (\email{nils.eling@@dqbm.uzh.ch})
 NULL
 
 #' @export
@@ -275,18 +278,17 @@ setReplaceMethod("setChannels",
 #' @export
 #' @importFrom methods callNextMethod as validObject
 setReplaceMethod("[",
-                 signature = signature(x="ImageList"),
+                 signature = c("ImageList", "ANY", "ANY", "ImageList"),
                  definition = function(x, i, j, ..., value){
                    .Object <- callNextMethod()
                    .Object <- as(.Object, "ImageList")
                    validObject(.Object)
                    return(.Object)
                  })
-
 #' @export
 #' @importFrom methods callNextMethod as validObject
 setReplaceMethod("[[",
-                 signature = signature(x="ImageList"),
+                 signature = c("ImageList", "ANY", "ANY"),
                  definition = function(x, i, j, ..., value){
                    .Object <- callNextMethod()
                    .Object <- as(.Object, "ImageList")

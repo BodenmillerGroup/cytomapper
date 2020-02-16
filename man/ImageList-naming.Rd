@@ -4,7 +4,7 @@
 \name{ImageList-naming}
 \alias{ImageList-naming}
 \alias{channelNames}
-\alias{names}
+\alias{channelNames<-}
 \alias{channelNames,ImageList-method}
 \alias{channelNames<-,ImageList-method}
 \alias{channelNames,Image-method}

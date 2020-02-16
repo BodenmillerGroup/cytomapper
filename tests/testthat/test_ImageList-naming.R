@@ -59,9 +59,3 @@ test_that("Image and channel names can be extracted and set.", {
   expect_silent(names(pancreasImages) <- NULL)
   expect_null(names(pancreasImages))
   })
-
-test_that("ImageLists can be merged.", {
-  data("pancreasImages")
-
-  # Check mergeChannels function
-})

@@ -44,7 +44,7 @@
 #' names(pancreasImages) <- paste0("image", 1:3)
 #'
 #' @aliases
-#' channelNames names
+#' channelNames channelNames<-
 #' channelNames,ImageList-method
 #' channelNames<-,ImageList-method
 #' channelNames,Image-method

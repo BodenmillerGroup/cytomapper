@@ -4,14 +4,16 @@
 \name{ImageList-subsetting}
 \alias{ImageList-subsetting}
 \alias{getImages}
-\alias{setImages}
 \alias{getChannels}
-\alias{setChannels}
 \alias{mergeChannels}
+\alias{setImages<-}
+\alias{setChannels<-}
 \alias{getImages,ImageList-method}
 \alias{setImages<-,ImageList-method}
 \alias{getChannels,ImageList-method}
 \alias{setChannels<-,ImageList-method}
+\alias{[<-,ImageList,ANY,ANY,ImageList-method}
+\alias{[[<-,ImageList,ANY,ANY-method}
 \title{General subsetting methods for ImageList objects}
 \arguments{
 \item{x, y}{\code{ImageList} objects}
@@ -49,8 +51,8 @@ the ImageList object \code{x}}
 }
 
 These setter and getter functions are the recommended way of extracting and replacing
-images in an ImageList object. Alternatively, the standard operations via `[`, `[[`,
-`[<-` and `[[<-` can be performed (see \code{?\link{List}} for S4Vectors subsetting
+images in an ImageList object. Alternatively, the standard operations via \code{`[`}, \code{`[[`},
+\code{`[<-`} and \code{`[[<-`} can be performed (see \code{?\link{List}} for S4Vectors subsetting
 functionality). However, these operations do not change element names during replacment
 calls. The \code{setImages()} function makes sure that element names are replaced if
 \code{value} is named or of \code{i} is a character or vector of characters.
@@ -140,5 +142,5 @@ mergeChannels(channel12, channel34)
 
 }
 \author{
-Nils Eling \email{nils.eling@dqbm.uzh.ch}
+Nils Eling (\email{nils.eling@dqbm.uzh.ch})
 }
