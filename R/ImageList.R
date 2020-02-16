@@ -109,7 +109,7 @@ setMethod("show", signature = signature(object="ImageList"),
           definition = function(object){
             lo <- length(object)
             cat(class(object)[1], " containing ", lo,
-                " images\n", sep = "")
+                " image(s)\n", sep = "")
             if (!is.null(names(object)))
               cat(paste0("names(", lo, "):"), names(object), "\n", sep = " ")
             if(length(dim(object[[1]])) > 2){

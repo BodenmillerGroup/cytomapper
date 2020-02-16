@@ -299,7 +299,7 @@ setReplaceMethod("[[",
 #' @importFrom methods is validObject
 #' @importFrom EBImage abind
 mergeChannels <- function(x, y){
-  if(!is(x, "ImageList") || !is(x, "ImageList")){
+  if(!is(x, "ImageList") || !is(y, "ImageList")){
     stop("'x' and 'y' must be ImageList objects")
   }
 
