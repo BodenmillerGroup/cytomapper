@@ -69,7 +69,8 @@ loadImages <- function(x, pattern = NULL, ...) {
     out <- EBImage::readImage(x, ...)
 
   } else {
-    cur_list <- lapply(x, function(y){EBImage::readImage(y, ...)})
+    cur_list <- lapply(x, function(y){EBImage::readImage(y, ...,
+                                      names = NULL)})
     out <- ImageList(cur_list)
     names(out) <- sub("\\.[^.]*$", "", basename(x))
   }
