@@ -2,33 +2,38 @@
 % Please edit documentation in R/loadImages.R
 \name{loadImages}
 \alias{loadImages}
-\title{Function to read in images}
+\title{Read images into ImageList object}
 \usage{
 loadImages(x, pattern = NULL, ...)
 }
 \arguments{
-\item{x}{The function takes a variety of possible character inputs
+\item{x}{The function takes a variety of possible character inputs:
 \describe{
-\item{A single file}{}.
-\item{A path}{}.
-\item{A list of files}{}.
+\item{A single file}{Full path and file name of an individual image file.}.
+\item{A path}{A path to where image files are located}.
+\item{A list of files}{A character vector where each entry represents an individual file}.
 }}
 
-\item{pattern}{character vector of the following form
+\item{pattern}{character vector of the following form:
 \describe{
-\item{A single character specifying a pattern to search for in the specified path
-(regular expressions are supported)}{}.
-\item{A character vector in which unique entries are matched against
-file names in the specified path}{}.
+\item{A single character}{A pattern to search for in the specified path
+(regular expressions are supported)}.
+\item{A character vector}{Unique entries are matched against
+file names in the specified path}.
 }}
 
-\item{...}{arguments passed to the \code{\link{readImage}} function}
+\item{...}{arguments passed to the \code{\link{readImage}} function.}
 }
 \value{
 An \linkS4class{Image} or \linkS4class{ImageList} object
+
+Loading specific images:
+TODO
 }
 \description{
-Function to read in single- or multi-channel images
+Function to read in single- or multi-channel images from a specified path or file.
+The function returns an \linkS4class{ImageList} object containing one image per slot.
+Supported file extensions are: '.tiff', '.tif', '.png', '.jpeg', '.jpg'.
 }
 \examples{
 # Providing a single file
@@ -44,11 +49,16 @@ data(pancreasSCE)
 path.to.images <- system.file("extdata", package = "SingleCellMapper")
 image.list <- loadImages(path.to.images, pattern = pancreasSCE$MaskName)
 
+# Providing multiple files
+list.images <- list.files(system.file("extdata", package = "SingleCellMapper"),
+                          pattern = "_mask.tiff", full.names = TRUE)
+image.list <- loadImages(list.images)
+
 }
 \seealso{
 \code{\link{readImage}}, for reading in individual images.
 }
 \author{
-Nils Eling \email{nils.eling@dqbm.uzh.ch},
-Nicolas Damond \email{nicolas.damond@dqbm.uzh.ch}
+Nils Eling (\email{nils.eling@dqbm.uzh.ch})
+Nicolas Damond (\email{nicolas.damond@dqbm.uzh.ch})
 }
