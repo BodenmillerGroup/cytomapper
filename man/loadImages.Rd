@@ -9,32 +9,41 @@ loadImages(x, pattern = NULL, ...)
 \arguments{
 \item{x}{The function takes a variety of possible character inputs:
 \describe{
-\item{A single file}{Full path and file name of an individual image file.}.
-\item{A path}{A path to where image files are located}.
-\item{A list of files}{A character vector where each entry represents an individual file}.
+\item{A single file}{Full path and file name of an individual image file.}
+\item{A path}{A path to where image files are located.}
+\item{A list of files}{A character vector where each entry represents an individual file.}
 }}
 
 \item{pattern}{character vector of the following form:
 \describe{
 \item{A single character}{A pattern to search for in the specified path
-(regular expressions are supported)}.
+(regular expressions are supported).}
 \item{A character vector}{Unique entries are matched against
-file names in the specified path}.
+file names in the specified path.}
 }}
 
 \item{...}{arguments passed to the \code{\link{readImage}} function.}
 }
 \value{
 An \linkS4class{Image} or \linkS4class{ImageList} object
-
-Loading specific images:
-TODO
 }
 \description{
 Function to read in single- or multi-channel images from a specified path or file.
 The function returns an \linkS4class{ImageList} object containing one image per slot.
 Supported file extensions are: '.tiff', '.tif', '.png', '.jpeg', '.jpg'.
 }
+\section{Loading specific images}{
+
+This function loads images via the \code{\link{readImage}} function and
+stores them in an ImageList object. In the simplest case, \code{x} is an
+image file name. If \code{x} is a path, the \code{pattern} argument can be
+used to select image names with certain patterns. For convenience, pattern
+also takes a vector of characters (e.g. a colData entry in a
+\linkS4class{SingleCellExperiment} object) to select by unique image names.
+Furthermore, a vecotr of image names can be provided to read in multiple
+images.
+}
+
 \examples{
 # Providing a single file
 single.image <- system.file("extdata/A02_mask.tiff", package = "SingleCellMapper")
@@ -59,6 +68,7 @@ image.list <- loadImages(list.images)
 \code{\link{readImage}}, for reading in individual images.
 }
 \author{
-Nils Eling (\email{nils.eling@dqbm.uzh.ch})
+Nils Eling (\email{nils.eling@dqbm.uzh.ch}),
+
 Nicolas Damond (\email{nicolas.damond@dqbm.uzh.ch})
 }

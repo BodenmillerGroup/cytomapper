@@ -8,16 +8,16 @@
 #'
 #' @param x The function takes a variety of possible character inputs:
 #' \describe{
-#' \item{A single file}{Full path and file name of an individual image file.}.
-#' \item{A path}{A path to where image files are located}.
-#' \item{A list of files}{A character vector where each entry represents an individual file}.
+#' \item{A single file}{Full path and file name of an individual image file.}
+#' \item{A path}{A path to where image files are located.}
+#' \item{A list of files}{A character vector where each entry represents an individual file.}
 #' }
-#' @param pattern character vector of the following form:
+#' @param pattern Character inputs of the following form:
 #' \describe{
 #' \item{A single character}{A pattern to search for in the specified path
-#' (regular expressions are supported)}.
+#' (regular expressions are supported).}
 #' \item{A character vector}{Unique entries are matched against
-#' file names in the specified path}.
+#' file names in the specified path.}
 #' }
 #' @param ... arguments passed to the \code{\link{readImage}} function.
 #'
@@ -55,9 +55,8 @@
 #' @seealso
 #' \code{\link{readImage}}, for reading in individual images.
 #'
-#' @author
-#' Nils Eling (\email{nils.eling@@dqbm.uzh.ch})
-#' Nicolas Damond (\email{nicolas.damond@@dqbm.uzh.ch})
+#' @author Nils Eling (\email{nils.eling@@dqbm.uzh.ch}),
+#' @author Nicolas Damond (\email{nicolas.damond@@dqbm.uzh.ch})
 #'
 #' @export
 loadImages <- function(x, pattern = NULL, ...) {
