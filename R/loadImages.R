@@ -24,7 +24,14 @@
 #' @return An \linkS4class{Image} or \linkS4class{ImageList} object
 #'
 #' @section Loading specific images:
-#' TODO
+#' This function loads images via the \code{\link{readImage}} function and
+#' stores them in an ImageList object. In the simplest case, \code{x} is an
+#' image file name. If \code{x} is a path, the \code{pattern} argument can be
+#' used to select image names with certain patterns. For convenience, pattern
+#' also takes a vector of characters (e.g. a colData entry in a
+#' \linkS4class{SingleCellExperiment} object) to select by unique image names.
+#' Furthermore, a vecotr of image names can be provided to read in multiple
+#' images.
 #'
 #' @examples
 #' # Providing a single file
@@ -57,9 +64,6 @@ loadImages <- function(x, pattern = NULL, ...) {
 
   # Validity checks
   x <- .valid.loadImage.input(x, pattern)
-
-  # TODO
-  # Name images by default based on image name
 
   # Read in images
   if(length(x) == 1){
