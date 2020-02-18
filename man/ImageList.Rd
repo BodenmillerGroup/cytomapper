@@ -11,87 +11,89 @@
 \usage{
 ImageList(...)
 }
-\arguments{
-\item{...}{Named Image objects or a list of Image objects.}
-
-\item{x}{TODO}
-
-\item{value}{TODO}
-}
 \value{
 An ImageList object
 }
 \description{
-This class facilitates the handling of multiple one- or multi-channel images. It
-inherits from \code{\linkS4class{SimpleList}} setting
+This class facilitates the handling of multiple one- or multi-channel images.
+It inherits from \code{\linkS4class{SimpleList}} setting
 \code{elementType="Image"}. Therefore, each slot contains an either one- or
 multi-dimensional array in form of an \code{\linkS4class{Image}} object.
 }
 \details{
-Similar to the \code{\linkS4class{Image}} class, the first two dimensions of each
-entry indicate the spatial dimension of the image. These can be different for
-each entry. The third dimension indicates the number of channels per
-Image. Each entry in the ImageList class object must contain the same
-number of channels. Here, each channel represents pixel values indicating
-measurement intensities or in case of segmentation masks the cells' ID.
-The ImageList class therefore only supports a Grayscale colormode (see
-\code{\link[EBImage]{colormode}}) representation of each individual image.
+Similar to the \code{\linkS4class{Image}} class, the first two
+  dimensions of each entry indicate the spatial dimension of the image. These
+  can be different for each entry. The third dimension indicates the number
+  of channels per Image. Each entry in the ImageList class object must
+  contain the same number of channels. Here, each channel represents pixel
+  values indicating measurement intensities or in case of segmentation masks
+  the cells' ID. The ImageList class therefore only supports a Grayscale
+  colormode (see \code{\link[EBImage]{colormode}}) representation of each
+  individual image.
 
-The class further contains an \code{\link{elementMetadata}} slot that stores
-image-level meta information. This slot should be accessed using the
-\code{\link[S4Vectors]{mcols}} accessor function.
+  The class further contains an \code{\link{elementMetadata}} slot that
+  stores image-level meta information. This slot should be accessed using the
+  \code{\link[S4Vectors]{mcols}} accessor function.
 }
-\section{Restrictions on entries}{
+\section{Restrictions on entry names}{
 
-Discuss named list - not empty names, no NA, not duplicated names
+The ImageList class only supports unique entry names to avoid duplicated
+images. Names of an ImageList object can be get and set via \code{names(x)},
+where \code{x} is an ImageList object. Furthermore, only named or unnamed
+ImageList objects are allowed. Partially named objects causing empty or NA
+names return an error.
 }
 
-\section{Accessors}{
+\section{Constructor}{
 
-channelNames
-mcols
+An ImageList object can be created via:
+\describe{
+\item{\code{ImageList(...)}:}{Here, \code{...} is a list (or coercible to a
+list) or individual images}
+}
 }
 
 \section{Coercion}{
 
-An \code{ImageList} object can be coerced from \code{list()},
-\code{SimpleList} and \code{List} objects. Also \code{list},
-\code{SimpleList} and \code{List} objects can be coerced to \code{ImageList}.
-}
-
-\section{Subsetting}{
-
-getImages
-setImages
-mergeChannels
+Coercion to and from list, \code{\linkS4class{SimpleList}} and
+\code{\linkS4class{List}}: \describe{ \item{as.list(x), as(x, "SimpleList"),
+as(x, "SimpleList"):}{Coercion from an ImageList object \code{x}} \item{as(x,
+"ImageList"):}{Coercion from a list, SimpleList or List object \code{x} to an
+ImageList object} }
 }
 
 \section{Looping}{
 
-endoapply, mendoapply
+While \code{\link[base]{lapply}} and \code{\link[base]{mapply}} return
+regular list objects, \code{\link[S4Vectors]{endoapply}} and
+\code{\link[S4Vectors]{mendoapply}} return ImageList objects.
 }
 
 \examples{
 # Creation of ImageList
-
-# Accessors
+u <- matrix(rbinom(100, 10, 0.5), ncol=10, nrow=10)
+v <- matrix(rbinom(100, 10, 0.5), ncol=10, nrow=10)
+IL1 <- ImageList(image1 = Image(u), image2 = Image(v))
 
 # Coercion
-# as("ImageList", list)
-
-# Subsetting
-
-# Looping
-
+as.list(IL1)
+as(IL1, "SimpleList")
+as(list(image1 = Image(u), image2 = Image(v)), "ImageList")
 
 }
 \seealso{
-\code{\linkS4class{Image}}, for ..
-\code{\linkS4class{SimpleList}}, for ..
-\code{?"\link{ImageList-naming}"}, for ...
-\code{?"\link{ImageList-subsetting}"}, for ...
+\code{\linkS4class{Image}}, for further image analysis tools.
+\code{\linkS4class{SimpleList}}, for basics functions to handle SimpleList
+objects
+\code{?\link{loadImages}}, for reading images into an ImageList
+object
+\code{?"\link{ImageList-naming}"}, for setting and getting image and
+channel names
+\code{?"\link{ImageList-subsetting}"}, for subsetting and
+accessor functions
 }
 \author{
-Nils Eling \email{nils.eling@dqbm.uzh.ch}
-Nicolas Damond \email{nicolas.damond@dqbm.uzh.ch}.
+Nils Eling (\email{nils.eling@dqbm.uzh.ch})
+
+Nicolas Damond (\email{nicolas.damond@dqbm.uzh.ch})
 }
