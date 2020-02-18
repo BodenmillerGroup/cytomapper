@@ -14,7 +14,7 @@ loadImages(x, pattern = NULL, ...)
 \item{A list of files}{A character vector where each entry represents an individual file.}
 }}
 
-\item{pattern}{character vector of the following form:
+\item{pattern}{Character inputs of the following form:
 \describe{
 \item{A single character}{A pattern to search for in the specified path
 (regular expressions are supported).}
