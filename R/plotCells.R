@@ -1,5 +1,5 @@
-#' @rdname plotCells
 #' @title Plotting function to visualize cell-level information
+#' @name plotCells
 #'
 #' @description TODO
 #'
@@ -18,17 +18,40 @@
 #' # col = list(cell_type = c("CD4" = "red", "CD8" = "blue"),
 #` # tumour_stroma = c("tumour" = "white", "stroma" = "black"))
 #'
-#' @author
-#' Nils Eling \email{nils.eling@@dqbm.uzh.ch},
-#' Nicolas Damond \email{nicolas.damond@@dqbm.uzh.ch}
+#' @author Nils Eling (\email{nils.eling@@dqbm.uzh.ch})
+#' @author Nicolas Damond (\email{nicolas.damond@@dqbm.uzh.ch})
 #'
+#' @importFrom raster scalebar
 #' @export
-plotCells <- function(data,
-                       mask,
-                       colour_by = NULL,
-                       outline_by = NULL,
-                       save_image = FALSE,
-                       return_image = FALSE,
-                       col = NULL) {
+plotCells <- function(object,
+                      mask,
+                      image_ID,
+                      cell_ID,
+                      colour_by = NULL,
+                      outline_by = NULL,
+                      subset_images = NULL,
+                      save_image = FALSE,
+                      return_image = FALSE,
+                      col = NULL,
+                      scale_bar = list(length = 100,
+                                       label = NULL,
+                                       position = NULL,
+                                       lwd = 2)) {
+
+  # Object checks
+  .valid.sce(object = object, image_ID = image_ID, cell_ID = cell_ID)
+  .valid.mask(mask = mask)
+  .valid.image(image = image)
+  .valid.plotCells.matchObjects(object, mask, image_ID, cell_ID)
+
+  # Argument checks
+  .valid.plotCells.input(object, mask, image_ID,
+                         cell_ID, colour_by, outline_by,
+                         subset_images, save_image,
+                         return_image, col, scale_bar)
+
+  # Add scale bar
+
+  # Add legend
 
 }

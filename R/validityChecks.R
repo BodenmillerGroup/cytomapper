@@ -170,6 +170,52 @@
   }
 }
 
+# Check sce validity
+.valid.sce <- function(object, image_ID, cell_ID){
+  if(!is(object, SingleCellExperiment)){
+    stop("'object' is not of type 'SingleCellExperiment'.")
+  }
+
+  if(is.null(image_ID) || is.null(cell_ID)){
+    stop("Please provide an 'image_ID' and 'cell_ID' argument")
+  }
+
+  if(!is.character(image_ID) || length(image_ID) > 1 ||
+     !is.character(cell_ID) || length(cell_ID) > 1){
+    stop("Invalid argument for 'image_ID' and/or 'cell_ID'.")
+  }
+
+  if(is.null(colData(object))){
+    stop("Please store the image- and cell-level metadata in the 'colData' slot of 'object'.")
+  }
+
+  if(!(image_ID %in% colData(object)) || !(cell_ID %in% colData(object))){
+    stop("'image_ID' or 'cell_ID' not in 'colData(object)'.")
+  }
+}
+
+# Check mask valididty
+.valid.mask <- function(mask, ...){
+
+}
+
+# Check image valididty
+.valid.image <- function(image, ...){
+
+}
+
+# Check if entries in objects are matching
+.valid.plotCells.matchObjects(object, mask,
+                              image_ID, cell_ID)
+
+# Check plotCells input
+.valid.plotCells.input <- function(object, mask, image_ID,
+                                   cell_ID, colour_by, outline_by,
+                                   subset_images, save_image,
+                                   return_image, col, scale_bar){
+
+}
+
 
 
 
