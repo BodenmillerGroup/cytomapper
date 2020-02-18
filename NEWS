@@ -31,3 +31,8 @@
 - ImageList-naming
 - ImageList-subsetting
 - version bump 0.1.3
+
+2020-02-16: Full docs and test on:
+- loadImages
+- ImageList-class
+- version bump 0.1.4
