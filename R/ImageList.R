@@ -5,6 +5,8 @@
 #' \code{elementType="Image"}. Therefore, each slot contains an either one- or
 #' multi-dimensional array in form of an \code{\linkS4class{Image}} object.
 #'
+#' @param ... A list of images (or coercible to a list) or individual images
+#'
 #' @details Similar to the \code{\linkS4class{Image}} class, the first two
 #'   dimensions of each entry indicate the spatial dimension of the image. These
 #'   can be different for each entry. The third dimension indicates the number
@@ -25,13 +27,6 @@
 #' where \code{x} is an ImageList object. Furthermore, only named or unnamed
 #' ImageList objects are allowed. Partially named objects causing empty or NA
 #' names return an error.
-#'
-#' @section Constructor:
-#' An ImageList object can be created via:
-#' \describe{
-#' \item{\code{ImageList(...)}:}{Here, \code{...} is a list (or coercible to a
-#' list) or individual images}
-#' }
 #'
 #' @section Coercion:
 #' Coercion to and from list, \code{\linkS4class{SimpleList}} and
@@ -70,13 +65,11 @@
 #' as(list(image1 = Image(u), image2 = Image(v)), "ImageList")
 #'
 #' @aliases
-#' ImageList-class
 #' coerce,ANY,ImageList-method
 #' coerce,list,ImageList-method
 #' show,ImageList-method
 #'
 #' @author Nils Eling (\email{nils.eling@@dqbm.uzh.ch})
-#' @author Nicolas Damond (\email{nicolas.damond@@dqbm.uzh.ch})
 #'
 #' @docType class
 #'

@@ -11,6 +11,9 @@
 \usage{
 ImageList(...)
 }
+\arguments{
+\item{...}{A list of images (or coercible to a list) or individual images}
+}
 \value{
 An ImageList object
 }
@@ -42,15 +45,6 @@ images. Names of an ImageList object can be get and set via \code{names(x)},
 where \code{x} is an ImageList object. Furthermore, only named or unnamed
 ImageList objects are allowed. Partially named objects causing empty or NA
 names return an error.
-}
-
-\section{Constructor}{
-
-An ImageList object can be created via:
-\describe{
-\item{\code{ImageList(...)}:}{Here, \code{...} is a list (or coercible to a
-list) or individual images}
-}
 }
 
 \section{Coercion}{
