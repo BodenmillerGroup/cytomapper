@@ -41,7 +41,6 @@ plotCells <- function(object,
   # Object checks
   .valid.sce(object = object, image_ID = image_ID, cell_ID = cell_ID)
   .valid.mask(mask = mask)
-  .valid.image(image = image)
   .valid.plotCells.matchObjects(object, mask, image_ID, cell_ID)
 
   # Argument checks

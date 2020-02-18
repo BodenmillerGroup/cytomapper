@@ -195,8 +195,33 @@
 }
 
 # Check mask valididty
-.valid.mask <- function(mask, ...){
+.valid.mask <- function(mask){
+  if(!is(mask, "Image") && !is(mask, "ImageList")){
+    stop("Please provide the segementation mask in form of an 'Image' or 'ImageList' object")
+  }
 
+  # Check number of channels in mask
+  if(is(mask, "Image")){
+    if(numberOffFrames(mask) > 1){
+      stop("Segmentation masks must only contain one channel.")
+    }
+  } else {
+    if(numberOffFrames(mask) > 1){
+      stop("Segmentation masks must only contain one channel.")
+    }
+  }
+
+  # Check if masks only contain integers
+  if(is(mask, "Image")){
+    if(!(all(mask == floor(mask)))){
+      stop("Segmentation masks must only contain integer values.")
+    }
+  } else {
+    cur_out <- lapply(mask, function(x){all(x == floor(x))})
+    if(!all(unlist(cur_out))){
+      stop("Segmentation masks must only contain integer values.")
+    }
+  }
 }
 
 # Check image valididty
