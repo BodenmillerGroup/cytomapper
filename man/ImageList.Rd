@@ -88,6 +88,4 @@ accessor functions
 }
 \author{
 Nils Eling (\email{nils.eling@dqbm.uzh.ch})
-
-Nicolas Damond (\email{nicolas.damond@dqbm.uzh.ch})
 }
