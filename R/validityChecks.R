@@ -189,38 +189,36 @@
     stop("Please store the image- and cell-level metadata in the 'colData' slot of 'object'.")
   }
 
-  if(!(image_ID %in% colData(object)) || !(cell_ID %in% colData(object))){
+  if(!(image_ID %in% colnames(colData(object))) ||
+     !(cell_ID %in% colnames(colData(object)))){
     stop("'image_ID' or 'cell_ID' not in 'colData(object)'.")
+  }
+
+  if(!all(colData(sce)[,cell_ID] == floor(colData(sce)[,cell_ID]))){
+    stop("Cell IDs should only contain integer values.")
   }
 }
 
 # Check mask valididty
-.valid.mask <- function(mask){
-  if(!is(mask, "Image") && !is(mask, "ImageList")){
-    stop("Please provide the segementation mask in form of an 'Image' or 'ImageList' object")
+.valid.mask <- function(mask, image_ID){
+  if(!is(mask, "ImageList")){
+    stop("Please provide the segementation mask(s) in form of an 'ImageList' object")
   }
 
   # Check number of channels in mask
-  if(is(mask, "Image")){
-    if(numberOffFrames(mask) > 1){
-      stop("Segmentation masks must only contain one channel.")
-    }
-  } else {
-    if(numberOffFrames(mask) > 1){
-      stop("Segmentation masks must only contain one channel.")
-    }
+  if(!all(unlist(lapply(mask, numberOfFrames)) == 1L)){
+    stop("Segmentation masks must only contain one channel.")
   }
 
   # Check if masks only contain integers
-  if(is(mask, "Image")){
-    if(!(all(mask == floor(mask)))){
-      stop("Segmentation masks must only contain integer values.")
-    }
-  } else {
-    cur_out <- lapply(mask, function(x){all(x == floor(x))})
-    if(!all(unlist(cur_out))){
-      stop("Segmentation masks must only contain integer values.")
-    }
+  cur_out <- lapply(mask, function(x){all(x == floor(x))})
+  if(!all(unlist(cur_out))){
+    stop("Segmentation masks must only contain integer values.")
+  }
+
+  # Check if Image_ID exists in elementMetadata
+  if(!(image_ID %in% colnames(mcols(mask)))){
+    stop("'image_ID' not in 'mcols(mask)'.")
   }
 }
 
@@ -230,8 +228,17 @@
 }
 
 # Check if entries in objects are matching
-.valid.plotCells.matchObjects(object, mask,
-                              image_ID, cell_ID)
+.valid.matchObjects(object, image,
+                     image_ID, cell_ID){
+
+  # Check if image IDs match
+  sce_images <- unique(colData(object[,image_ID]))
+  image_images <- mcols(image)[,image_ID]
+  if(all(!(image_images %in% sce_images))){
+    stop("None of the images appear in 'object'.\n",
+         "Please make sure to set the image IDs correctly.")
+  }
+}
 
 # Check plotCells input
 .valid.plotCells.input <- function(object, mask, image_ID,

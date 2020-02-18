@@ -5,11 +5,15 @@
 #'
 #' @param data a \code{\link[SingleCellExperiment]{SingleCellExperiment}}.
 #' @param mask TODO
+#' @param image_ID entry in object and mask
 #' @param colour_by Either rownames (markers) or colnames of the colData(data) data.frame
 #' @param outline_by TODO
 #' @param save_image TODO
 #' @param return_image TODO
 #' @param col TODO
+#'
+#' @section Linking image IDs and cell IDs:
+#' TODO
 #'
 #' @return TODO
 #'
@@ -25,29 +29,34 @@
 #' @export
 plotCells <- function(object,
                       mask,
-                      image_ID,
                       cell_ID,
+                      image_ID,
                       colour_by = NULL,
                       outline_by = NULL,
                       subset_images = NULL,
                       save_image = FALSE,
                       return_image = FALSE,
                       col = NULL,
+                      missing_col = "gray",
                       scale_bar = list(length = 100,
                                        label = NULL,
                                        position = NULL,
                                        lwd = 2)) {
 
   # Object checks
-  .valid.sce(object = object, image_ID = image_ID, cell_ID = cell_ID)
-  .valid.mask(mask = mask)
-  .valid.plotCells.matchObjects(object, mask, image_ID, cell_ID)
+  .valid.sce(object, image_ID, cell_ID)
+  .valid.mask(mask, image_ID)
+  .valid.matchObjects(object, mask, image_ID, cell_ID)
 
   # Argument checks
   .valid.plotCells.input(object, mask, image_ID,
                          cell_ID, colour_by, outline_by,
                          subset_images, save_image,
-                         return_image, col, scale_bar)
+                         return_image, col, missing_col,
+                         scale_bar)
+
+  # Select images for plotting
+  mask <- .select_images(object, mask, subset_images)
 
   # Add scale bar
 
