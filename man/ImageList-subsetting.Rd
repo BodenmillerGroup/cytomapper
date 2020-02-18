@@ -110,15 +110,15 @@ data("pancreasImages")
 
 # Get images
 getImages(pancreasImages, 1)
-getImages(pancreasImages, "A02")
+getImages(pancreasImages, "A02_imc")
 getImages(pancreasImages, 1:2)
-getImages(pancreasImages, c("A02", "D01"))
-getImages(pancreasImages, grepl("A02", names(pancreasImages)))
+getImages(pancreasImages, c("A02_imc", "D01_imc"))
+getImages(pancreasImages, grepl("A02_imc", names(pancreasImages)))
 
 # Set images
 setImages(pancreasImages, 1) <- pancreasImages[1]
-setImages(pancreasImages, "F02") <- pancreasImages[1]
-setImages(pancreasImages, "F02") <- NULL
+setImages(pancreasImages, "F02_imc") <- pancreasImages[1]
+setImages(pancreasImages, "F02_imc") <- NULL
 
 # Get channels
 getChannels(pancreasImages, 1)
