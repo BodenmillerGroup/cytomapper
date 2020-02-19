@@ -241,10 +241,122 @@
 }
 
 # Check plotCells input
-.valid.plotCells.input <- function(object, mask, image_ID,
-                                   cell_ID, colour_by, outline_by,
-                                   subset_images, save_image,
-                                   return_image, col, scale_bar){
+.valid.plotCells.input <- function(object, mask, image_ID, colour_by, outline_by,
+                                   subset_images, save_images,
+                                   return_images, col, missing_col,
+                                   scale_bar){
+
+  # colour_by takes either the rownames or colData entries
+  # check if colour_by is either in the rownames
+  # or in the colData slot
+  # Check if all colour_by entries are in either
+  # the rownames or colData slot
+  if(!is.null(colour_by)){
+    if(is.null(colData(object)) || isEmpty(colData(object))){
+      if(!all(colour_by %in% rownames(object))){
+        stop("'colour_by' not in 'rownames(object)' or the 'colData(object)' slot.")
+      }
+    } else {
+      if(sum(colour_by %in% rownames(object)) > 0 &&
+         sum(colour_by %in% colnames(colData(object))) > 0){
+        stop("'colour_by' entries found in 'rownames(object)' and 'colData(object)' slot.\n",
+             "Please select either rownames or colData entries.")
+      }
+      if(!all(colour_by %in% rownames(object)) ||
+         !all(colour_by %in% colnames(colData(object)))){
+        stop("'colour_by' not in 'rownames(object)' and 'colData(object)' slot.")
+      }
+    }
+  }
+
+  # outline_by only takes entries from the colData slot
+  # Check if all outline_by entries are in the colData slot
+  if(!is.null(outline_by)){
+    if(is.null(colData(object)) || isEmpty(colData(object))){
+      stop("'outline_by' not in the 'colData(object)' slot.")
+    } else {
+      if(!all(colour_by %in% colnames(colData(object)))){
+        stop("'colour_by' not in 'colData(object)' slot.")
+      }
+    }
+  }
+
+  # subset_images need to be either numeric, a logical,
+  # a character and part of names(mask) or a character
+  # and part of mcols(mask)$image_ID
+  if(!is.null(subset_images)){
+    if(!is.numeric(subset_images) && !is.character(subset_images) &&
+       !is.logical(subset_images)){
+      stop("'subset_images' has to be numeric, logical or a character")
+    }
+    if(is.logical(subset_images) &&
+       length(subset_images) != length(mask)){
+      stop("Invalid 'subset_images' argument.")
+    }
+    if(is.character(subset_images)){
+      if(is.null(names(mask)) && !(image_ID %in% colnames(mcols(mask)))){
+        stop("'subset_images' not part of names(mask) or mcols(mask)[,image_ID]")
+      }
+      if(!is.null(names(mask)) && sum(subset_images %in% names(mask) == 0)){
+        if(!(image_ID %in% colnames(mcols(mask)))){
+          stop("If 'mask' is unnamed, mask IDs must be provided in the mcols(mask)[,image_ID] slot.")
+        }
+      }
+    }
+  }
+
+  # save_images is either NULL or a character string
+  if(!is.null(save_images)){
+    if(!is.character(save_images) || length(save_images) > 0){
+      stop("'save_images' has to be a single character specifying a path and filename.")
+    }
+  }
+
+  # return_images is either TRUE or FALSE
+  if(!isTRUEorFALSE(return_images)){
+    stop("'return_images' has to be a single logical.")
+  }
+
+  # col
+  if(!is.null(col)){
+    if(!is.list(col)){
+      stop("'col' is a list of entries in which each name specifies\n",
+           "an entry of 'colour_by' and/or 'outline_by'")
+    }
+    if(is.null(names(col))){
+      stop("'col': please specify the entries that should be coloured.")
+    }
+    if(!is.null(colour_by) || !is.null(outline_by)){
+      valid_names <- c(colour_by, outline_by)
+      if(!all(names(col) %in% valid_names)){
+        stop("'names(col)' do not match with 'colour_by' and/or 'outline_by'")
+      }
+    }
+    cur_entries <- lapply(col, is.null)
+    if(sum(cur_entries) > 0){
+      stop("Empty entries not allowed in 'col'")
+    }
+  }
+
+  # missing_col has to be a valid colour
+  if(!is.null(missing_col)){
+    res <- try(col2rgb(missing_col), silent=TRUE)
+    if(class(res) == "try-error"){
+      stop("'missing_col' not a valid colour.")
+    }
+  }
+
+  # scale_bar has to be of the form list(length, label, position, lwd)
+  if(!is.null(scale_bar)){
+    if(!is.list(scale_bar)){
+      stop("Invalid 'scale_bar' entry")
+    }
+    if(is.null(names(scale_bar)) || !all(names(scale_bar) %in%
+                                         c("length", "label", "position", "lwd"))){
+      stop("Invalid entry to the 'scale_bar' list object")
+    }
+  }
+
 
 }
 

@@ -34,8 +34,8 @@ plotCells <- function(object,
                       colour_by = NULL,
                       outline_by = NULL,
                       subset_images = NULL,
-                      save_image = FALSE,
-                      return_image = FALSE,
+                      save_images = NULL,
+                      return_images = FALSE,
                       col = NULL,
                       missing_col = "gray",
                       scale_bar = list(length = 100,
@@ -49,14 +49,15 @@ plotCells <- function(object,
   .valid.matchObjects(object, mask, image_ID, cell_ID)
 
   # Argument checks
-  .valid.plotCells.input(object, mask, image_ID,
-                         cell_ID, colour_by, outline_by,
-                         subset_images, save_image,
-                         return_image, col, missing_col,
+  .valid.plotCells.input(object, mask, image_ID, colour_by, outline_by,
+                         subset_images, save_images,
+                         return_images, col, missing_col,
                          scale_bar)
 
   # Select images for plotting
   mask <- .select_images(object, mask, subset_images)
+
+  # Build default colour scale
 
   # Add scale bar
 
