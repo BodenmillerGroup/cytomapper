@@ -54,6 +54,7 @@
 }
 
 # Colour segmentation masks based on features
+#' @importFrom grDevices colorRampPalette
 .colourMaskByFeature(object, mask, cell_ID, image_ID,
                      colour_by, exprs_values, cur_col){
 
@@ -71,13 +72,20 @@
 
     # Next, colour cells that are present in sce object
     # For this, we will perform a min/max scaling on the provided counts
-
-    cur_image_list <- lapply()
+    # Based on this, we will first merge the colours and colour
+    # the mask based on the colours
     cur_m <- match(cur_mask, as.character(colData(cur_sce)[,cell_ID]))
     cur_ind <- which(!is.na(cur_m))
-    col_ind <- col_ind[cur_m[!is.na(cur_m)]]
+    cur_image_list <- lapply(colour_by, function(x){
+      cur_frame <- cur_mask
+      col_ind <- colorRampPalette(cur_col[[x]])(101)
+      col_ind[round(100*.minMaxScaling(assay(cur_sce, exprs_values)[x,])) + 1]
+      #col_ind <- col_ind[cur_m[!is.na(cur_m)]]
+      # cur_frame <- replace(cur_frame, cur_ind, col_ind)
+      # toRGB(cur_frame)
+    })
 
-    cur_mask <- replace(cur_mask, cur_ind, col_ind)
+    cur_mask <- do.call("+", cur_image_list)
 
     if(!is.null(names(mask))){
       ind <- names(mask)[i]
@@ -141,4 +149,9 @@
   }
 
   return(cur_col)
+}
+
+# Min/max scaling of expression counts
+.minMaxScaling <- function(x){
+    return((x - min(x))/(max(x) - min(x)))
 }
