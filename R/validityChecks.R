@@ -224,7 +224,7 @@
 
 # Check image valididty
 .valid.image <- function(image, ...){
-
+  # TODO
 }
 
 # Check if entries in objects are matching

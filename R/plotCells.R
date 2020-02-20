@@ -55,7 +55,7 @@ plotCells <- function(object,
                          scale_bar)
 
   # Select images for plotting
-  mask <- .select_images(object, mask, subset_images)
+  mask <- .select_images(object, mask, image_ID, subset_images)
 
   # Build default colour scale
 
