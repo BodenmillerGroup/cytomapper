@@ -255,8 +255,8 @@
         stop("'colour_by' not in 'rownames(object)' or the 'colData(object)' slot.")
       }
     } else {
-      if(sum(colour_by %in% rownames(object)) > 0 &&
-         sum(colour_by %in% colnames(colData(object))) > 0){
+      if(sum(colour_by %in% rownames(object)) > 0L &&
+         sum(colour_by %in% colnames(colData(object))) > 0L){
         stop("'colour_by' entries found in 'rownames(object)' and 'colData(object)' slot.\n",
              "Please select either rownames or colData entries.")
       }
@@ -264,8 +264,11 @@
          !all(colour_by %in% colnames(colData(object)))){
         stop("'colour_by' not in 'rownames(object)' and 'colData(object)' slot.")
       }
-      if(all(colour_by %in% colnames(colData(object)))){
+      if(all(colour_by %in% colnames(colData(object))) && length(colour_by) > 1L){
         stop("Only one 'colour_by' entry allowed when selecting a 'colData(object)' slot.")
+      }
+      if(all(colour_by %in% rownames(object)) && length(colour_by) > 6L){
+        stop("Only six 'colour_by' entries allowed when selecting marker expression.")
       }
     }
   }
@@ -357,8 +360,6 @@
       stop("Invalid entry to the 'scale_bar' list object")
     }
   }
-
-
 }
 
 

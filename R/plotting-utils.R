@@ -53,5 +53,49 @@
 
 }
 
-# Colour segmentation masks based on expression
-.colourMaskByFeature <- function()
+# Selecting the colours for plotting
+#' @importFrom grDevices colorRampPalette
+.selectColours <- function(object, colour_by, colour, missing_colour){
+
+  # We seperate this function between colouring based on metadata
+  # or the marker expression (rownames)
+  if(all(colour_by %in% colnames(colData(object)))){
+    # If colour is not specified, we select a number of default colours
+    cur_entries <- unique(colData(object)[,colour_by])
+    if(is.null(colour)){
+      if(length(cur_entries) > 23){
+        cur_col <- viridis(length(cur_entries))
+        names(cur_col) <- cur_entries
+        cur_col <- c(cur_col, missing_colour = missing_colour)
+      } else {
+        cur_col <- c(brewer.pal(12, "Paired"),
+                     brewer.pal(8, "Pastel2")[-c(3,5,8)],
+                     brewer.pal(12, "Set3")[-c(2,3,8,9,11,12)])
+        cur_col <- cur_col[1:length(cur_entries)]
+        names(cur_col) <- cur_entries
+        cur_col <- c(cur_col, missing_colour = missing_colour)
+      }
+    } else {
+      cur_col <- colour[colour_by]
+      cur_col <- c(cur_col, missing_colour = missing_colour)
+    }
+  } else {
+    if(is.null(colour)){
+      col_list <- list(colorRampPalette(c("black", "red"))(100),
+                       colorRampPalette(c("black", "green"))(100),
+                       colorRampPalette(c("black", "blue"))(100),
+                       colorRampPalette(c("black", "cyan"))(100),
+                       colorRampPalette(c("black", "magenta"))(100),
+                       colorRampPalette(c("black", "yellow"))(100))
+      col_list <- col_list[1:length(colour_by)]
+      names(col_list) <- colour_by
+      col_list <- c(col_list, missing_colour = missing_colour)
+      cur_col <- col_list
+    } else {
+      cur_col <- colour[colour_by]
+      cur_col <- c(cur_col, missing_colour = missing_colour)
+    }
+  }
+
+  return(cur_col)
+}

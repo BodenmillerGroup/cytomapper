@@ -62,29 +62,11 @@ plotCells <- function(object,
   # Colour the masks
   if(!is.null(colour_by)){
 
+    # Select the colours
+    cur_col <- .selectColours(object, colour_by, colour, missing_colour)
+
     # Colouring the metadata
     if(all(colour_by %in% colnames(colData(object)))){
-
-      # If colour is not specified, we select a number of default colours
-      cur_entries <- unique(colData(object)[,colour_by])
-      if(is.null(colour)){
-        if(length(cur_entries) > 23){
-          cur_col <- viridis(length(cur_entries))
-          names(cur_col) <- cur_entries
-          cur_col <- c(cur_col, missing_col = missing_col)
-        } else {
-          cur_col <- c(brewer.pal(12, "Paired"),
-                       brewer.pal(8, "Pastel2")[-c(3,5,8)],
-                       brewer.pal(12, "Set3")[-c(2,3,8,9,11,12)])
-          cur_col <- cur_col[1:length(cur_entries)]
-          names(cur_col) <- cur_entries
-          cur_col <- c(cur_col, missing_col = missing_col)
-        }
-      } else {
-        cur_col <- colour[colour_by]
-        cur_col <- c(cur_col, missing_col = missing_col)
-      }
-
       mask <- .colourMaskByMeta(object, mask, cell_ID, image_ID,
                                 colour_by, cur_col)
     } else {
