@@ -5,29 +5,36 @@
 \title{Plotting function to visualize cell-level information}
 \usage{
 plotCells(
-  data,
+  object,
   mask,
+  cell_ID,
+  image_ID,
   colour_by = NULL,
   outline_by = NULL,
-  save_image = FALSE,
-  return_image = FALSE,
-  col = NULL
+  subset_images = NULL,
+  save_images = NULL,
+  return_images = FALSE,
+  col = NULL,
+  missing_col = "gray",
+  scale_bar = list(length = 100, label = NULL, position = NULL, lwd = 2)
 )
 }
 \arguments{
-\item{data}{a \code{\link[SingleCellExperiment]{SingleCellExperiment}}.}
-
 \item{mask}{TODO}
+
+\item{image_ID}{entry in object and mask}
 
 \item{colour_by}{Either rownames (markers) or colnames of the colData(data) data.frame}
 
 \item{outline_by}{TODO}
 
+\item{col}{TODO}
+
+\item{data}{a \code{\link[SingleCellExperiment]{SingleCellExperiment}}.}
+
 \item{save_image}{TODO}
 
 \item{return_image}{TODO}
-
-\item{col}{TODO}
 }
 \value{
 TODO
@@ -35,12 +42,18 @@ TODO
 \description{
 TODO
 }
+\section{Linking image IDs and cell IDs}{
+
+TODO
+}
+
 \examples{
 # TODO
 # col = list(cell_type = c("CD4" = "red", "CD8" = "blue"),
 
 }
 \author{
-Nils Eling \email{nils.eling@dqbm.uzh.ch},
-Nicolas Damond \email{nicolas.damond@dqbm.uzh.ch}
+Nils Eling (\email{nils.eling@dqbm.uzh.ch})
+
+Nicolas Damond (\email{nicolas.damond@dqbm.uzh.ch})
 }

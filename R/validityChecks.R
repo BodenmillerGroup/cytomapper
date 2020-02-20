@@ -228,9 +228,7 @@
 }
 
 # Check if entries in objects are matching
-.valid.matchObjects(object, image,
-                     image_ID, cell_ID){
-
+.valid.matchObjects <- function(object, image, image_ID, cell_ID){
   # Check if image IDs match
   sce_images <- unique(colData(object[,image_ID]))
   image_images <- mcols(image)[,image_ID]
@@ -265,6 +263,9 @@
       if(!all(colour_by %in% rownames(object)) ||
          !all(colour_by %in% colnames(colData(object)))){
         stop("'colour_by' not in 'rownames(object)' and 'colData(object)' slot.")
+      }
+      if(all(colour_by %in% colnames(colData(object)))){
+        stop("Only one 'colour_by' entry allowed when selecting a 'colData(object)' slot.")
       }
     }
   }

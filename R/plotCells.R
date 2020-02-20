@@ -57,7 +57,23 @@ plotCells <- function(object,
   # Select images for plotting
   mask <- .select_images(object, mask, image_ID, subset_images)
 
-  # Build default colour scale
+  # Select colour
+
+
+  # Colour the masks
+  if(!is.null(colour_by)){
+    if(all(colour_by %in% colnames(colData(object)))){
+      mask <- .colourMaskByMeta(object, mask, cell_ID, image_ID,
+                                colour_by, cur_col)
+    } else {
+      mask <- .colourMaskByFeature()
+    }
+  }
+
+  # Add outline
+  if(!is.null(outline_by)){
+    mask <- .outlineMaskByMeta()
+  }
 
   # Add scale bar
 
