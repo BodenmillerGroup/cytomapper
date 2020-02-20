@@ -1,4 +1,8 @@
+# -----------------------------------------------------------------------------
+# Helper functions for plotting cells and pixels
+# -----------------------------------------------------------------------------
 
+# Selection of images based on entries in SCE object or by subset
 .select_images <- function(object, images, image_ID, subset_images){
 
   # If subset_images is not given, images are selected based on the cells
@@ -13,6 +17,7 @@
   return(images)
 }
 
+# Colour segmentation masks based on metadata
 .colourMaskByMeta <- function(object, mask, cell_ID, image_ID,
                               colour_by, cur_col){
 
@@ -47,3 +52,6 @@
   return(mask)
 
 }
+
+# Colour segmentation masks based on expression
+.colourMaskByFeature <- function()

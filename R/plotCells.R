@@ -10,7 +10,7 @@
 #' @param outline_by TODO
 #' @param save_image TODO
 #' @param return_image TODO
-#' @param col TODO
+#' @param colour TODO
 #'
 #' @section Linking image IDs and cell IDs:
 #' TODO
@@ -25,6 +25,8 @@
 #' @author Nils Eling (\email{nils.eling@@dqbm.uzh.ch})
 #' @author Nicolas Damond (\email{nicolas.damond@@dqbm.uzh.ch})
 #'
+#' @importFrom viridis viridis
+#' @importFrom RColourBrewer brewer.pal
 #' @importFrom raster scalebar
 #' @export
 plotCells <- function(object,
@@ -36,8 +38,8 @@ plotCells <- function(object,
                       subset_images = NULL,
                       save_images = NULL,
                       return_images = FALSE,
-                      col = NULL,
-                      missing_col = "gray",
+                      colour = NULL,
+                      missing_colour = "gray",
                       scale_bar = list(length = 100,
                                        label = NULL,
                                        position = NULL,
@@ -51,22 +53,43 @@ plotCells <- function(object,
   # Argument checks
   .valid.plotCells.input(object, mask, image_ID, colour_by, outline_by,
                          subset_images, save_images,
-                         return_images, col, missing_col,
+                         return_images, colour, missing_colour,
                          scale_bar)
 
   # Select images for plotting
   mask <- .select_images(object, mask, image_ID, subset_images)
 
-  # Select colour
-
-
   # Colour the masks
   if(!is.null(colour_by)){
+
+    # Colouring the metadata
     if(all(colour_by %in% colnames(colData(object)))){
+
+      # If colour is not specified, we select a number of default colours
+      cur_entries <- unique(colData(object)[,colour_by])
+      if(is.null(colour)){
+        if(length(cur_entries) > 23){
+          cur_col <- viridis(length(cur_entries))
+          names(cur_col) <- cur_entries
+          cur_col <- c(cur_col, missing_col = missing_col)
+        } else {
+          cur_col <- c(brewer.pal(12, "Paired"),
+                       brewer.pal(8, "Pastel2")[-c(3,5,8)],
+                       brewer.pal(12, "Set3")[-c(2,3,8,9,11,12)])
+          cur_col <- cur_col[1:length(cur_entries)]
+          names(cur_col) <- cur_entries
+          cur_col <- c(cur_col, missing_col = missing_col)
+        }
+      } else {
+        cur_col <- colour[colour_by]
+        cur_col <- c(cur_col, missing_col = missing_col)
+      }
+
       mask <- .colourMaskByMeta(object, mask, cell_ID, image_ID,
                                 colour_by, cur_col)
     } else {
-      mask <- .colourMaskByFeature()
+      mask <- .colourMaskByFeature(object, mask, cell_ID, image_ID,
+                                   colour_by, cur_col)
     }
   }
 
