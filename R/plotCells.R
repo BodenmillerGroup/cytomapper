@@ -35,6 +35,7 @@ plotCells <- function(object,
                       image_ID,
                       colour_by = NULL,
                       outline_by = NULL,
+                      exprs_values = "counts",
                       subset_images = NULL,
                       save_images = NULL,
                       return_images = FALSE,
@@ -46,7 +47,7 @@ plotCells <- function(object,
                                        lwd = 2)) {
 
   # Object checks
-  .valid.sce(object, image_ID, cell_ID)
+  .valid.sce(object, image_ID, cell_ID, exprs_values)
   .valid.mask(mask, image_ID)
   .valid.matchObjects(object, mask, image_ID, cell_ID)
 
@@ -71,7 +72,7 @@ plotCells <- function(object,
                                 colour_by, cur_col)
     } else {
       mask <- .colourMaskByFeature(object, mask, cell_ID, image_ID,
-                                   colour_by, cur_col)
+                                   colour_by, exprs_values, cur_col)
     }
   }
 

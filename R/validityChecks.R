@@ -171,7 +171,8 @@
 }
 
 # Check sce validity
-.valid.sce <- function(object, image_ID, cell_ID){
+#' @importFrom SummarizedExperiment assayNames
+.valid.sce <- function(object, image_ID, cell_ID, exprs_values){
   if(!is(object, SingleCellExperiment)){
     stop("'object' is not of type 'SingleCellExperiment'.")
   }
@@ -196,6 +197,10 @@
 
   if(!all(colData(sce)[,cell_ID] == floor(colData(sce)[,cell_ID]))){
     stop("Cell IDs should only contain integer values.")
+  }
+
+  if(!(exprs_values %in% assayNames(object))){
+    stop("'exprs_values' not an assay entry in 'object'.")
   }
 }
 
