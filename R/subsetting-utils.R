@@ -18,12 +18,13 @@
 #' @section Setting and getting images:
 #' Functions to extract and replace elements (= images) of an
 #' \linkS4class{ImageList} object. In the following code, \code{x} is an
-#' ImageList object. The parameter \code{i} indicates the
-#' element(s) of \code{x} that should be returned or replaced. Replacement is
-#' done by \code{value}, which takes an ImageList or Image object. If
-#' \code{length(i) > 0}, \code{value} has to be an ImageList object of
-#' \code{length(i)}, otherwise \code{value} allows an ImageList object of length
-#' 1 or an Image object.
+#' ImageList object. The parameter \code{i} indicates the element(s) of \code{x}
+#' that should be returned or replaced. Replacement is done by \code{value},
+#' which takes an ImageList or Image object. If \code{length(i) > 0},
+#' \code{value} has to be an ImageList object of \code{length(i)}, otherwise
+#' \code{value} allows an ImageList object of length 1 or an Image object. If an
+#' Image object is provided, only the image entry in the ImageList object is
+#' replaced, not the corresponding elementMetadata entry.
 #'
 #' \describe{
 #' \item{\code{getImages(x, i)}:}{Returns image(s) indicated by \code{i} of
@@ -181,13 +182,13 @@ setReplaceMethod("setImages",
                      cor_names[i] <- names(value)
                    }
 
-                   # Coerce Image to ImageList
+                   # If value is Image, only the image will be replaced
                    if(is(value, "Image")){
-                     value <- ImageList(value)
+                     x[[i]] <- value
+                   } else {
+                     x[i] <- value
                    }
 
-                   # Set ImageList
-                   x[i] <- value
                    if(!is.null(cor_names)){
                      names(x) <- as.character(cor_names)
                    }
