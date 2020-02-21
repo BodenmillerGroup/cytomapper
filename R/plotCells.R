@@ -44,7 +44,8 @@ plotCells <- function(object,
                       scale_bar = list(length = 100,
                                        label = NULL,
                                        position = NULL,
-                                       lwd = 2)) {
+                                       lwd = 2,
+                                       col = "white")) {
 
   # Object checks
   .valid.sce(object, image_ID, cell_ID, exprs_values)
@@ -88,7 +89,14 @@ plotCells <- function(object,
                                outline_by, cur_col)
   }
 
+  # Plot images
+  .displayImages(img)
+
   # Add scale bar
+  if(!is.null(scale_bar)){
+    .addScaleBar(scale_bar)
+  }
+
 
   # Add legend
 

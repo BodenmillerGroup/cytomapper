@@ -115,11 +115,10 @@
       cur_img <- paintObjects(meta_mask, Image(cur_img), col = cur_col[j])
     }
 
-    img[i] <- cur_img
+    img[[i]] <- Image(cur_img)
   }
 
   return(img)
-
 }
 
 # Selecting the colours for plotting
@@ -191,5 +190,26 @@
   cur_mix <- cur_mix
   cur_mix <- rgb(t(cur_mix), maxColorValue = 1)
   return(cur_mix)
+}
+
+# Adds scale bar to images
+.addScaleBar <- function(scale_bar){
+  length <- scale_bar$length
+  label <- scale_bar$label
+  position <- scale_bar$position
+  lwd <- scale_bar$lwd
+  col <- scale_bar$col
+
+  # Get coordinates
+}
+
+# Custom function to display images
+.displayImages <- function(img){
+  # Number of images
+  ni <- length(img)
+
+  # Size of images
+  si <- lapply(img, function(x)dim(x)[1:2])
+
 }
 

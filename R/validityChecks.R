@@ -361,7 +361,7 @@
       stop("Invalid 'scale_bar' entry")
     }
     if(is.null(names(scale_bar)) || !all(names(scale_bar) %in%
-                                         c("length", "label", "position", "lwd"))){
+                                         c("length", "label", "position", "lwd", "col"))){
       stop("Invalid entry to the 'scale_bar' list object")
     }
   }
