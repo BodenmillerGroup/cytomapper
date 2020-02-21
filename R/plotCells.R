@@ -62,6 +62,7 @@ plotCells <- function(object,
 
 
   # Colour the masks
+  # Here, a SimpleList is returned that allows storing colour Images
   if(!is.null(colour_by)){
 
     # Select the colours
@@ -77,13 +78,13 @@ plotCells <- function(object,
                                    colour_by, exprs_values, cur_col)
     }
   } else {
-    img <- mask
+    img <- as(mask, "SimpleList")
   }
 
   # Add outline
   if(!is.null(outline_by)){
     cur_col <- .selectColours(object, outline_by, colour, missing_colour)
-    mask <- .outlineMaskByMeta(object, mask, img, cell_ID, image_ID,
+    img <- .outlineMaskByMeta(object, mask, img, cell_ID, image_ID,
                                outline_by, cur_col)
   }
 

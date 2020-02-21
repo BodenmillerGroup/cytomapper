@@ -49,7 +49,7 @@
     setImages(mask, ind) <- Image(cur_mask)
   }
 
-  return(mask)
+  return(as(mask, "SimpleList"))
 
 }
 
@@ -95,7 +95,7 @@
     setImages(mask, ind) <- Image(cur_mask)
   }
 
-  return(mask)
+  return(as(mask, "SimpleList"))
 }
 
 # Colour segmentation masks based on metadata
@@ -110,35 +110,15 @@
     # Loop through entries in outline_by entry
     for(j in unique(colData(cur_sce)[,outline_by])){
       meta_mask <- cur_mask
-
+      cur_cell_ID <- colData(cur_sce)[colData(cur_sce)[,outline_by] == j,cell_ID]
+      meta_mask[!(meta_mask %in% cur_cell_ID)] <- 0L
+      cur_img <- paintObjects(meta_mask, Image(cur_img), col = cur_col[j])
     }
 
-    col_ind <- cur_col[colData(cur_sce)[,outline_by] ]
-
-    # Colour first the background
-    cur_mask[cur_mask == 0L] <- "#000000"
-
-    # Then colour cells that are not in sce
-    cur_m <- as.vector(cur_mask != "#000000") &
-      !(cur_mask %in% as.character(colData(cur_sce)[,cell_ID]))
-    cur_mask <- replace(cur_mask, which(cur_m), cur_col["missing_col"])
-
-    # Next, colour cells that are present in sce object
-    cur_m <- match(cur_mask, as.character(colData(cur_sce)[,cell_ID]))
-    cur_ind <- which(!is.na(cur_m))
-    col_ind <- col_ind[cur_m[!is.na(cur_m)]]
-
-    cur_mask <- replace(cur_mask, cur_ind, col_ind)
-
-    if(!is.null(names(mask))){
-      ind <- names(mask)[i]
-    } else{
-      ind <- i
-    }
-    setImages(mask, ind) <- Image(cur_mask)
+    img[i] <- cur_img
   }
 
-  return(mask)
+  return(img)
 
 }
 
