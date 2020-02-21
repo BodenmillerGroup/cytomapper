@@ -73,19 +73,19 @@
     # Next, colour cells that are present in sce object
     # For this, we will perform a min/max scaling on the provided counts
     # Based on this, we will first merge the colours and colour
-    # the mask based on the colours
+    # the mask accordingly
     cur_m <- match(cur_mask, as.character(colData(cur_sce)[,cell_ID]))
     cur_ind <- which(!is.na(cur_m))
-    cur_image_list <- lapply(colour_by, function(x){
+    cur_col_list <- lapply(colour_by, function(x){
       cur_frame <- cur_mask
       col_ind <- colorRampPalette(cur_col[[x]])(101)
       col_ind[round(100*.minMaxScaling(assay(cur_sce, exprs_values)[x,])) + 1]
-      #col_ind <- col_ind[cur_m[!is.na(cur_m)]]
-      # cur_frame <- replace(cur_frame, cur_ind, col_ind)
-      # toRGB(cur_frame)
     })
 
-    cur_mask <- do.call("+", cur_image_list)
+    col_ind <- apply(data.frame(cur_col_list), 1, .mixColours)
+    col_ind <- col_ind[cur_m[!is.na(cur_m)]]
+
+    cur_mask <- replace(cur_mask, cur_ind, col_ind)
 
     if(!is.null(names(mask))){
       ind <- names(mask)[i]
@@ -154,4 +154,17 @@
 # Min/max scaling of expression counts
 .minMaxScaling <- function(x){
     return((x - min(x))/(max(x) - min(x)))
+}
+
+# Function to mix colours
+#' @importFrom grDevices col2rgb
+#' @importFrom grDevices rgb
+.mixColours <- function(col_vector){
+  args <- as.list(col_vector)
+  cols <- lapply(args, function(x){col2rgb(x)/255})
+  cur_mix <- Reduce("+", cols)
+  cur_mix[cur_mix > 1] <- 1
+  cur_mix <- cur_mix
+  cur_mix <- rgb(t(cur_mix), maxColorValue = 1)
+  return(cur_mix)
 }
