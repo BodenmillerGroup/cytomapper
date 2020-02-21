@@ -46,7 +46,7 @@
     } else{
       ind <- i
     }
-    setImages(mask, ind) <- cur_mask
+    setImages(mask, ind) <- Image(cur_mask)
   }
 
   return(mask)
@@ -55,7 +55,7 @@
 
 # Colour segmentation masks based on features
 #' @importFrom grDevices colorRampPalette
-.colourMaskByFeature(object, mask, cell_ID, image_ID,
+.colourMaskByFeature <- function(object, mask, cell_ID, image_ID,
                      colour_by, exprs_values, cur_col){
 
   for(i in seq_along(mask)){
@@ -92,10 +92,54 @@
     } else{
       ind <- i
     }
-    setImages(mask, ind) <- cur_mask
+    setImages(mask, ind) <- Image(cur_mask)
   }
 
   return(mask)
+}
+
+# Colour segmentation masks based on metadata
+.outlineMaskByMeta <- function(object, mask, img, cell_ID, image_ID,
+                               outline_by, cur_col){
+
+  for(i in seq_along(mask)){
+    cur_mask <- mask[[i]]
+    cur_img <- img[[i]]
+    cur_sce <- object[,colData(object)[,image_ID] == mcols(mask)[i,image_ID]]
+
+    # Loop through entries in outline_by entry
+    for(j in unique(colData(cur_sce)[,outline_by])){
+      meta_mask <- cur_mask
+
+    }
+
+    col_ind <- cur_col[colData(cur_sce)[,outline_by] ]
+
+    # Colour first the background
+    cur_mask[cur_mask == 0L] <- "#000000"
+
+    # Then colour cells that are not in sce
+    cur_m <- as.vector(cur_mask != "#000000") &
+      !(cur_mask %in% as.character(colData(cur_sce)[,cell_ID]))
+    cur_mask <- replace(cur_mask, which(cur_m), cur_col["missing_col"])
+
+    # Next, colour cells that are present in sce object
+    cur_m <- match(cur_mask, as.character(colData(cur_sce)[,cell_ID]))
+    cur_ind <- which(!is.na(cur_m))
+    col_ind <- col_ind[cur_m[!is.na(cur_m)]]
+
+    cur_mask <- replace(cur_mask, cur_ind, col_ind)
+
+    if(!is.null(names(mask))){
+      ind <- names(mask)[i]
+    } else{
+      ind <- i
+    }
+    setImages(mask, ind) <- Image(cur_mask)
+  }
+
+  return(mask)
+
 }
 
 # Selecting the colours for plotting
@@ -156,7 +200,7 @@
     return((x - min(x))/(max(x) - min(x)))
 }
 
-# Function to mix colours
+# Function to mix colours similar to how EBImage is creating an RGB
 #' @importFrom grDevices col2rgb
 #' @importFrom grDevices rgb
 .mixColours <- function(col_vector){
@@ -168,3 +212,4 @@
   cur_mix <- rgb(t(cur_mix), maxColorValue = 1)
   return(cur_mix)
 }
+

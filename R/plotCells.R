@@ -60,25 +60,31 @@ plotCells <- function(object,
   # Select images for plotting
   mask <- .select_images(object, mask, image_ID, subset_images)
 
+
   # Colour the masks
   if(!is.null(colour_by)){
 
     # Select the colours
     cur_col <- .selectColours(object, colour_by, colour, missing_colour)
 
-    # Colouring the metadata
     if(all(colour_by %in% colnames(colData(object)))){
-      mask <- .colourMaskByMeta(object, mask, cell_ID, image_ID,
+      # Colouring by metadata
+      img <- .colourMaskByMeta(object, mask, cell_ID, image_ID,
                                 colour_by, cur_col)
     } else {
-      mask <- .colourMaskByFeature(object, mask, cell_ID, image_ID,
+      # Colouring by features
+      img <- .colourMaskByFeature(object, mask, cell_ID, image_ID,
                                    colour_by, exprs_values, cur_col)
     }
+  } else {
+    img <- mask
   }
 
   # Add outline
   if(!is.null(outline_by)){
-    mask <- .outlineMaskByMeta()
+    cur_col <- .selectColours(object, outline_by, colour, missing_colour)
+    mask <- .outlineMaskByMeta(object, mask, img, cell_ID, image_ID,
+                               outline_by, cur_col)
   }
 
   # Add scale bar
