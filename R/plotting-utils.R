@@ -225,6 +225,8 @@
   img <- c(SimpleList(Image("#FFFFFF",
                  dim = c(m_height, m_width))),
            img)
+  cur_dims_x <- c(m_width, as.numeric(cur_dims[2,]))
+  cur_dims_y <- c(m_height, as.numeric(cur_dims[1,]))
 
   # Build the grid
   x_len <- c(0, nc * m_width)
@@ -238,12 +240,17 @@
   for(i in seq_len(nr)){
     for(j in seq_len(nc)){
       ind <- (i-1)*nc +j
-      print(ind)
+      dim_x <- cur_dims_x[ind]
+      dim_y <- cur_dims_y[ind]
+      xleft <- (j-1)*m_width + (m_width - dim_x)/2
+      ybottom <- i*m_height - (m_height - dim_y)/2
+      xright <- j*m_width - (m_width - dim_x)/2
+      ytop <- (i-1)*m_height + (m_height - dim_y)/2
       rasterImage(img[[ind]],
-                  (j-1)*m_width,
-                  i*m_height,
-                  j*m_width,
-                  (i-1)*m_height)
+                  xleft,
+                  ybottom,
+                  xright,
+                  ytop)
     }
   }
 }
