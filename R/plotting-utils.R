@@ -206,10 +206,45 @@
 # Custom function to display images
 .displayImages <- function(img){
   # Number of images
-  ni <- length(img)
+  # The first space is used for the figure legend
+  ni <- length(img) + 1
 
   # Size of images
   si <- lapply(img, function(x)dim(x)[1:2])
 
+  # Ncols and nrow
+  nc <- ceiling(sqrt(ni))
+  nr <- ceiling(ni/nc)
+
+  # We will take the largest image and
+  # build the grid based on its size
+  cur_dims <- data.frame(lapply(img, dim))
+  m_height <- max(cur_dims[1,])
+  m_width <- max(cur_dims[2,])
+  # Add empty image to list
+  img <- c(SimpleList(Image("#FFFFFF",
+                 dim = c(m_height, m_width))),
+           img)
+
+  # Build the grid
+  x_len <- c(0, nc * m_width)
+  y_len <- c(0, nr * m_height)
+  par(bty="n", mai=c(0,0,0,0), xaxs="i",
+      yaxs="i", xaxt="n", yaxt="n", col = "white")
+  plot(x_len, y_len, type="n", xlab="", ylab="",
+       asp = 1, ylim = rev(y_len))
+
+  # Plot the images
+  for(i in seq_len(nr)){
+    for(j in seq_len(nc)){
+      ind <- (i-1)*nc +j
+      print(ind)
+      rasterImage(img[[ind]],
+                  (j-1)*m_width,
+                  i*m_height,
+                  j*m_width,
+                  (i-1)*m_height)
+    }
+  }
 }
 
