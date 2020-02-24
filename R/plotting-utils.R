@@ -204,7 +204,8 @@
 }
 
 # Custom function to display images
-.displayImages <- function(img){
+.displayImages <- function(object, outline_by, colour_by, img,
+                           scale_bar){
   # Number of images
   # The first space is used for the figure legend
   ni <- length(img) + 1
@@ -251,7 +252,33 @@
                   ybottom,
                   xright,
                   ytop)
+
+      if(ind == 1L){
+        # Plot legend
+        .plotLegend(object, outline_by, colour_by,
+                    m_width, m_height)
+      }
+
+      if(ind != 1L && !is.null(scale_bar)){
+        # Plot scale bar
+        .plotScaleBar(scale_bar,
+                      cur_dims_x[ind], cur_dims_y[ind],
+                      m_width, m_height)
+      }
     }
   }
+}
+
+
+# Plot legend
+.plotLegend(object, outline_by, colour_by,
+            max_width, max_height){
+
+}
+
+# Plot scale_bar
+.plotLegend(scale_bar, dim_x, dim_y,
+            max_width, max_height){
+
 }
 
