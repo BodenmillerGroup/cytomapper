@@ -7,7 +7,7 @@
 
   # If subset_images is not given, images are selected based on the cells
   # in the SCE object
-  if(is.null(subset_images)){
+  if(!is.null(subset_images)){
     images <- images[subset_images]
   } else {
     cur_image_ids <- unique(colData(object)[,image_ID])
@@ -46,7 +46,7 @@
     } else{
       ind <- i
     }
-    setImages(mask, ind) <- Image(cur_mask)
+    setImages(mask, ind) <- cur_mask
   }
 
   return(as(mask, "SimpleList"))

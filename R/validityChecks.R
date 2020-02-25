@@ -173,7 +173,7 @@
 # Check sce validity
 #' @importFrom SummarizedExperiment assayNames
 .valid.sce <- function(object, image_ID, cell_ID, exprs_values){
-  if(!is(object, SingleCellExperiment)){
+  if(!is(object, "SingleCellExperiment")){
     stop("'object' is not of type 'SingleCellExperiment'.")
   }
 
@@ -195,7 +195,7 @@
     stop("'image_ID' or 'cell_ID' not in 'colData(object)'.")
   }
 
-  if(!all(colData(sce)[,cell_ID] == floor(colData(sce)[,cell_ID]))){
+  if(!all(colData(object)[,cell_ID] == floor(colData(object)[,cell_ID]))){
     stop("Cell IDs should only contain integer values.")
   }
 
@@ -235,7 +235,7 @@
 # Check if entries in objects are matching
 .valid.matchObjects <- function(object, image, image_ID, cell_ID){
   # Check if image IDs match
-  sce_images <- unique(colData(object[,image_ID]))
+  sce_images <- unique(colData(object)[,image_ID])
   image_images <- mcols(image)[,image_ID]
   if(all(!(image_images %in% sce_images))){
     stop("None of the images appear in 'object'.\n",
@@ -265,9 +265,9 @@
         stop("'colour_by' entries found in 'rownames(object)' and 'colData(object)' slot.\n",
              "Please select either rownames or colData entries.")
       }
-      if(!all(colour_by %in% rownames(object)) ||
+      if(!all(colour_by %in% rownames(object)) &&
          !all(colour_by %in% colnames(colData(object)))){
-        stop("'colour_by' not in 'rownames(object)' and 'colData(object)' slot.")
+        stop("'colour_by' not in 'rownames(object)' or the 'colData(object)' slot.")
       }
       if(all(colour_by %in% colnames(colData(object))) && length(colour_by) > 1L){
         stop("Only one 'colour_by' entry allowed when selecting a 'colData(object)' slot.")
