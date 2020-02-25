@@ -68,16 +68,17 @@ plotCells <- function(object,
   if(!is.null(colour_by)){
 
     # Select the colours
-    cur_col <- .selectColours(object, colour_by, colour, missing_colour)
+    cur_col <- list()
+    cur_col$colour_by <- .selectColours(object, colour_by, colour, missing_colour)
 
     if(all(colour_by %in% colnames(colData(object)))){
       # Colouring by metadata
       img <- .colourMaskByMeta(object, mask, cell_ID, image_ID,
-                                colour_by, cur_col)
+                                colour_by, cur_col$colour_by)
     } else {
       # Colouring by features
       img <- .colourMaskByFeature(object, mask, cell_ID, image_ID,
-                                   colour_by, exprs_values, cur_col)
+                                   colour_by, exprs_values, cur_col$colour_by)
     }
   } else {
     img <- as(mask, "SimpleList")
@@ -85,14 +86,14 @@ plotCells <- function(object,
 
   # Add outline
   if(!is.null(outline_by)){
-    cur_col <- .selectColours(object, outline_by, colour, missing_colour)
+    cur_col$outline_by <- .selectColours(object, outline_by, colour, missing_colour)
     img <- .outlineMaskByMeta(object, mask, img, cell_ID, image_ID,
-                               outline_by, cur_col)
+                               outline_by, cur_col$outline_by)
   }
 
   # Plot images
   .displayImages(object, outline_by, colour_by, img,
-                 scale_bar)
+                 scale_bar, cur_col)
 
 
   # Add legend

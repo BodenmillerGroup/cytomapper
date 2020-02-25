@@ -205,7 +205,7 @@
 
 # Custom function to display images
 .displayImages <- function(object, outline_by, colour_by, img,
-                           scale_bar){
+                           scale_bar, cur_col){
   # Number of images
   # The first space is used for the figure legend
   ni <- length(img) + 1
@@ -255,15 +255,15 @@
 
       if(ind == 1L){
         # Plot legend
-        .plotLegend(object, outline_by, colour_by,
-                    m_width, m_height)
+        #.plotLegend(object, outline_by, colour_by,
+         #           m_width, m_height, cur_col)
       }
 
       if(ind != 1L && !is.null(scale_bar)){
         # Plot scale bar
-        .plotScaleBar(scale_bar,
-                      cur_dims_x[ind], cur_dims_y[ind],
-                      m_width, m_height)
+        #.plotScaleBar(scale_bar,
+        #              cur_dims_x[ind], cur_dims_y[ind],
+        #              m_width, m_height,)
       }
     }
   }
@@ -272,12 +272,54 @@
 
 # Plot legend
 .plotLegend(object, outline_by, colour_by,
-            max_width, max_height){
+            m_width, m_height, cur_col){
+  # Build one legend per feature or metadata entry
+  nlegend <- length(outline_by) + length(colour_by)
 
+  # Plot feature legends first
+  if(!is.null(colour_by) && all(colour_by %in% rownames(object))){
+      for(i in seq_along(colour_by)){
+        margin <- 10
+        if(i < 4){
+          cur_x <- ((m_width-(2*margin))/6 * i) + margin
+          cur_y <- (m_height-(2*margin))/4 + margin
+        } else {
+          cur_x <- ((m_width-(2*margin))/6 * (i - 3)) + margin
+          cur_y <- ((m_height-(2*margin))/4 * 3) + margin
+        }
+        cur_space_x <- (m_width-(2*margin))/6
+        cur_space_y <- (m_height-(2*margin))/2
+
+        # Adjust text size based on size of image
+        title_width <- strwidth(colour_by[i], font = 2)
+        title_height <- abs(strheight(colour_by[i], font = 2))
+        label_width <- max(strwidth(rev(seq(0, 1, length.out = 3))))
+
+        cur_legend <- as.raster(matrix(rev(cur_col$colour_by[[colour_by[i]]]), ncol=1))
+        text(x = cur_x, y = cur_y - cur_space_y/2 + title_height,
+             label = colour_by[i], col = "black", font = 2)
+        text(x=cur_x + cur_space_x/4,
+             y = seq(cur_y - cur_space_y/2 + title_height*2,
+                     cur_y + cur_space_y/2- title_height, length.out = 3),
+             labels = rev(seq(0, 1, length.out = 3)), col = "black",
+             adj = 0.5, cex = (cur_space_x/3)/label_width)
+        rasterImage(cur_legend,
+                    cur_x - cur_space_x/2,
+                    cur_y + cur_space_y/2 - title_height,
+                    cur_x,
+                    cur_y - cur_space_y/2 + title_height*2)
+      }
+  }
+
+  # Next metadata legends
+
+
+  legend(x = max_width/2, y = max_height/2,
+         )
 }
 
 # Plot scale_bar
-.plotLegend(scale_bar, dim_x, dim_y,
+.plotScaleBar(scale_bar, dim_x, dim_y,
             max_width, max_height){
 
 }
