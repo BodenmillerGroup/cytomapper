@@ -318,25 +318,29 @@
     cur_x <- m_width/2 + cur_space_x
     cur_y <- margin
     cur_colouring <- cur_col$colour_by[1:(length(cur_col$colour_by) - 1)]
-    legend_w <- legend(x = cur_x, y = cur_y, legend = names(cur_colouring),
+    legend_c <- legend(x = cur_x, y = cur_y, legend = names(cur_colouring),
                        fill = cur_colouring,
                        text.col = "black", plot = FALSE)
-    legend(x = cur_x, y = cur_y, legend = names(cur_colouring),
+    legend_c <- legend(x = cur_x, y = cur_y, legend = names(cur_colouring),
            fill = cur_colouring,
            text.col = "black", cex = (m_width-margin-cur_x)/legend_w$rect$w)
   }
 
   if(!is.null(outline_by)){
+    if(!is.null(colour_by) && all(colour_by %in% colnames(colData(object)))){
+      cur_y <- margin + abs(legend_c$rect$h) + 10
+    } else {
+      cur_y <- margin
+    }
     cur_space_x <- (m_width-(2*margin))/6
     cur_x <- m_width/2 + cur_space_x
-    cur_y <- margin
-    cur_colouring <- cur_col$colour_by[1:(length(cur_col$colour_by) - 1)]
-    legend_w <- legend(x = cur_x, y = cur_y, legend = names(cur_colouring),
+    cur_colouring <- cur_col$outline_by[1:(length(cur_col$outline_by) - 1)]
+    legend_o <- legend(x = cur_x, y = cur_y, legend = names(cur_colouring),
            fill = cur_colouring,
            text.col = "black", plot = FALSE)
     legend(x = cur_x, y = cur_y, legend = names(cur_colouring),
            fill = cur_colouring,
-           text.col = "black", plot = FALSE, cex = (m_width-margin-cur_x)/legend_w$rect$w)
+           text.col = "black", cex = (m_width-margin-cur_x)/legend_o$rect$w)
   }
 }
 
