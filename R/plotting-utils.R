@@ -275,11 +275,11 @@
             m_width, m_height, cur_col){
   # Build one legend per feature or metadata entry
   nlegend <- length(outline_by) + length(colour_by)
+  margin <- 10
 
   # Plot feature legends first
   if(!is.null(colour_by) && all(colour_by %in% rownames(object))){
       for(i in seq_along(colour_by)){
-        margin <- 10
         if(i < 4){
           cur_x <- ((m_width-(2*margin))/6 * i) + margin
           cur_y <- (m_height-(2*margin))/4 + margin
@@ -295,7 +295,8 @@
         title_height <- abs(strheight(colour_by[i], font = 2))
         label_width <- max(strwidth(rev(seq(0, 1, length.out = 3))))
 
-        cur_legend <- as.raster(matrix(rev(cur_col$colour_by[[colour_by[i]]]), ncol=1))
+        cur_legend <- as.raster(matrix(rev(cur_col$colour_by[[colour_by[i]]]),
+                                       ncol=1))
         text(x = cur_x, y = cur_y - cur_space_y/2 + title_height,
              label = colour_by[i], col = "black", font = 2)
         text(x=cur_x + cur_space_x/4,
@@ -312,10 +313,19 @@
   }
 
   # Next metadata legends
+  if(!is.null(colour_by) && all(colour_by %in% colnames(colData(object)))){
+    cur_space_x <- (m_width-(2*margin))/6
+    cur_x <- c(m_width/2 + cur_space_x, m_width/2 + cur_space_x*2)
+    cur_y <- c(margin, m_height - margin)
+    cur_colouring <- cur_col$colour_by[1:(length(cur_col$colour_by) - 1)]
+    legend(x = 10, y = 20, legend = names(cur_colouring),
+           col = test,
+           text.col = "black")
+  }
 
+  if(!is.null(outline_by)){
 
-  legend(x = max_width/2, y = max_height/2,
-         )
+  }
 }
 
 # Plot scale_bar
