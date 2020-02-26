@@ -198,6 +198,7 @@
 
 # Custom function to display images
 #' @importFrom S4Vectors SimpleList
+#' @importFrom EBImage Image
 #' @importFrom graphics par plot rasterImage strheight text
 .displayImages <- function(object, outline_by, colour_by, mask, img,
                            image_ID, scale_bar, cur_col){
@@ -242,7 +243,7 @@
       ybottom <- i*m_height - (m_height - dim_y)/2
       xright <- j*m_width - (m_width - dim_x)/2
       ytop <- (i-1)*m_height + (m_height - dim_y)/2
-      rasterImage(img[[ind]],
+      rasterImage(Image(img[[ind]]),
                   xleft,
                   ybottom,
                   xright,

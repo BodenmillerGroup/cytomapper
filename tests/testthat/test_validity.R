@@ -1,32 +1,32 @@
-test_that("images can be selected.", {
+test_that("loadImage validity check is correct.", {
   # .valid.loadImage.input
 })
 
-test_that("masks can be coloured by metadata.", {
+test_that("Image setting validity check is correct.", {
   # .valid.Image.setting
 })
 
-test_that("masks can be coloured by features.", {
+test_that("Channel setting validity check is correct.", {
   # .valid.Channel.setting
 })
 
-test_that("masks can be outlined by metadata.", {
+test_that("SingleCellExperiment validity check is correct.", {
   # .valid.sce
 })
 
-test_that("colours can be selected.", {
+test_that("Mask validity check is correct.", {
   # .valid.mask
 })
 
-test_that("min/max scaling works.", {
+test_that("Image validity check is correct.", {
   # .valid.image
 })
 
-test_that("colour mixing works.", {
+test_that("Match objects validity check is correct.", {
   # .valid.matchObjects
 })
 
-test_that("images can be displayed.", {
+test_that("plotCells input validity check is correct.", {
   # .valid.plotCells.input
 })
 

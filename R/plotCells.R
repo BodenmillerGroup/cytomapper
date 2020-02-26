@@ -64,13 +64,13 @@ plotCells <- function(object,
 
   # Select images for plotting
   mask <- .select_images(object, mask, image_ID, subset_images)
+  cur_col <- list()
 
   # Colour the masks
   # Here, a SimpleList is returned that allows storing colour Images
   if(!is.null(colour_by)){
 
     # Select the colours
-    cur_col <- list()
     cur_col$colour_by <- .selectColours(object, colour_by, colour, missing_colour)
 
     if(all(colour_by %in% colnames(colData(object)))){
