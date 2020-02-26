@@ -11,12 +11,14 @@ plotCells(
   image_ID,
   colour_by = NULL,
   outline_by = NULL,
+  exprs_values = "counts",
   subset_images = NULL,
   save_images = NULL,
   return_images = FALSE,
-  col = NULL,
-  missing_col = "gray",
-  scale_bar = list(length = 100, label = NULL, position = NULL, lwd = 2)
+  colour = NULL,
+  missing_colour = "gray",
+  scale_bar = list(length = 20, label = NULL, lwd = 2, col = "white", margin = 10),
+  ...
 )
 }
 \arguments{
@@ -28,7 +30,7 @@ plotCells(
 
 \item{outline_by}{TODO}
 
-\item{col}{TODO}
+\item{colour}{TODO}
 
 \item{data}{a \code{\link[SingleCellExperiment]{SingleCellExperiment}}.}
 

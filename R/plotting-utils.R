@@ -3,6 +3,7 @@
 # -----------------------------------------------------------------------------
 
 # Selection of images based on entries in SCE object or by subset
+#' @importFrom S4Vectors mcols
 .select_images <- function(object, images, image_ID, subset_images){
 
   # If subset_images is not given, images are selected based on the cells
@@ -123,6 +124,7 @@
 
 # Selecting the colours for plotting
 #' @importFrom grDevices colorRampPalette
+#' @importFrom RColorBrewer brewer.pal
 .selectColours <- function(object, colour_by, colour, missing_colour){
 
   # We seperate this function between colouring based on metadata
@@ -193,8 +195,8 @@
 }
 
 # Custom function to display images
-.displayImages <- function(object, outline_by, colour_by, img,
-                           scale_bar, cur_col){
+.displayImages <- function(object, outline_by, colour_by, mask, img,
+                           image_ID, scale_bar, cur_col){
   # Number of images
   # The first space is used for the figure legend
   ni <- length(img) + 1
@@ -255,7 +257,14 @@
       }
 
       # Plot title on images
-
+      if(ind != 1L && !is.null(scale_bar)){
+        cur_title <- mcols(mask)[ind - 1,image_ID]
+        label_height <- abs(strheight(cur_title, font = 2))
+        text(x = xleft + dim_x/2,
+             y = ytop + label_height*2,
+             labels = cur_title, col = "white",
+            adj = 0.5, font = 2)
+      }
     }
   }
 }

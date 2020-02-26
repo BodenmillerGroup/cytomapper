@@ -26,7 +26,7 @@
 #' @author Nicolas Damond (\email{nicolas.damond@@dqbm.uzh.ch})
 #'
 #' @importFrom viridis viridis
-#' @importFrom RColourBrewer brewer.pal
+#' @importFrom RColorBrewer brewer.pal
 #' @export
 plotCells <- function(object,
                       mask,
@@ -90,10 +90,6 @@ plotCells <- function(object,
   }
 
   # Plot images
-  .displayImages(object, outline_by, colour_by, img,
+  .displayImages(object, outline_by, colour_by, mask, img, image_ID,
                  scale_bar, cur_col)
-
-
-  # Add legend
-
 }
