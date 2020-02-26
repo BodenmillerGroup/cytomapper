@@ -40,7 +40,6 @@ plotCells <- function(object,
                       outline_by = NULL,
                       exprs_values = "counts",
                       subset_images = NULL,
-                      save_images = NULL,
                       return_images = FALSE,
                       colour = NULL,
                       missing_colour = "gray",
@@ -58,7 +57,7 @@ plotCells <- function(object,
 
   # Argument checks
   .valid.plotCells.input(object, mask, image_ID, colour_by, outline_by,
-                         subset_images, save_images,
+                         subset_images,
                          return_images, colour, missing_colour,
                          scale_bar)
 

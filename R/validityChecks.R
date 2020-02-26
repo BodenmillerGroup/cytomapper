@@ -247,7 +247,7 @@
 # Check plotCells input
 #' @importFrom S4Vectors isEmpty isTRUEorFALSE
 .valid.plotCells.input <- function(object, mask, image_ID, colour_by, outline_by,
-                                   subset_images, save_images,
+                                   subset_images,
                                    return_images, col, missing_col,
                                    scale_bar){
 
@@ -313,13 +313,6 @@
           stop("If 'mask' is unnamed, mask IDs must be provided in the mcols(mask)[,image_ID] slot.")
         }
       }
-    }
-  }
-
-  # save_images is either NULL or a character string
-  if(!is.null(save_images)){
-    if(!is.character(save_images) || length(save_images) > 0){
-      stop("'save_images' has to be a single character specifying a path and filename.")
     }
   }
 
