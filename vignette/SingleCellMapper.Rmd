@@ -43,6 +43,8 @@ Here, we will highlight the most simple use of the package
 
 # Plotting Cell-level information
 
+# Saving images
+
 # Acknowledgements
 
 # Contributions

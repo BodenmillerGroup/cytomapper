@@ -18,6 +18,9 @@
 #' @param scale_bar TODO
 #' @param ... TODO
 #'
+#' Further plotting utilities:
+#' return_images, return_plot
+#'
 #' @section Linking image IDs and cell IDs:
 #' TODO
 #'
@@ -40,7 +43,6 @@ plotCells <- function(object,
                       outline_by = NULL,
                       exprs_values = "counts",
                       subset_images = NULL,
-                      return_images = FALSE,
                       colour = NULL,
                       missing_colour = "gray",
                       scale_bar = list(length = 20,
@@ -58,7 +60,7 @@ plotCells <- function(object,
   # Argument checks
   .valid.plotCells.input(object, mask, image_ID, colour_by, outline_by,
                          subset_images,
-                         return_images, colour, missing_colour,
+                         colour, missing_colour,
                          scale_bar)
 
   # Select images for plotting

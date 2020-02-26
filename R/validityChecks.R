@@ -245,10 +245,10 @@
 }
 
 # Check plotCells input
-#' @importFrom S4Vectors isEmpty isTRUEorFALSE
+#' @importFrom S4Vectors isEmpty
 .valid.plotCells.input <- function(object, mask, image_ID, colour_by, outline_by,
                                    subset_images,
-                                   return_images, col, missing_col,
+                                   col, missing_col,
                                    scale_bar){
 
   # colour_by takes either the rownames or colData entries
@@ -314,11 +314,6 @@
         }
       }
     }
-  }
-
-  # return_images is either TRUE or FALSE
-  if(!isTRUEorFALSE(return_images)){
-    stop("'return_images' has to be a single logical.")
   }
 
   # col
