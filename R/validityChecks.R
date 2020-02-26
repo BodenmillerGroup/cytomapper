@@ -284,8 +284,8 @@
     if(is.null(colData(object)) || isEmpty(colData(object))){
       stop("'outline_by' not in the 'colData(object)' slot.")
     } else {
-      if(!all(colour_by %in% colnames(colData(object)))){
-        stop("'colour_by' not in 'colData(object)' slot.")
+      if(!all(outline_by %in% colnames(colData(object)))){
+        stop("'outline_by' not in 'colData(object)' slot.")
       }
     }
   }
@@ -361,7 +361,7 @@
       stop("Invalid 'scale_bar' entry")
     }
     if(is.null(names(scale_bar)) || !all(names(scale_bar) %in%
-                                         c("length", "label", "position", "lwd", "col"))){
+                                         c("length", "label", "lwd", "col"))){
       stop("Invalid entry to the 'scale_bar' list object")
     }
   }

@@ -27,7 +27,6 @@
 #'
 #' @importFrom viridis viridis
 #' @importFrom RColourBrewer brewer.pal
-#' @importFrom raster scalebar
 #' @export
 plotCells <- function(object,
                       mask,
@@ -41,11 +40,11 @@ plotCells <- function(object,
                       return_images = FALSE,
                       colour = NULL,
                       missing_colour = "gray",
-                      scale_bar = list(length = 100,
+                      scale_bar = list(length = 20,
                                        label = NULL,
-                                       position = NULL,
                                        lwd = 2,
-                                       col = "white"),
+                                       col = "white",
+                                       margin = 10),
                       ...) {
 
   # Object checks

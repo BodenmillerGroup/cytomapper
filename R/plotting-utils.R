@@ -92,7 +92,7 @@
     } else{
       ind <- i
     }
-    setImages(mask, ind) <- Image(cur_mask)
+    setImages(mask, ind) <- cur_mask
   }
 
   return(as(mask, "SimpleList"))
@@ -192,17 +192,6 @@
   return(cur_mix)
 }
 
-# Adds scale bar to images
-.addScaleBar <- function(scale_bar){
-  length <- scale_bar$length
-  label <- scale_bar$label
-  position <- scale_bar$position
-  lwd <- scale_bar$lwd
-  col <- scale_bar$col
-
-  # Get coordinates
-}
-
 # Custom function to display images
 .displayImages <- function(object, outline_by, colour_by, img,
                            scale_bar, cur_col){
@@ -255,24 +244,26 @@
 
       if(ind == 1L){
         # Plot legend
-        #.plotLegend(object, outline_by, colour_by,
-         #           m_width, m_height, cur_col)
+        .plotLegend(object, outline_by, colour_by,
+                    m_width, m_height, cur_col)
       }
 
       if(ind != 1L && !is.null(scale_bar)){
         # Plot scale bar
         #.plotScaleBar(scale_bar,
-        #              cur_dims_x[ind], cur_dims_y[ind],
-        #              m_width, m_height,)
+        #              xright, ybottom)
       }
+
+      # Plot title on images
+
     }
   }
 }
 
 
 # Plot legend
-.plotLegend(object, outline_by, colour_by,
-            m_width, m_height, cur_col){
+.plotLegend <- function(object, outline_by, colour_by,
+                        m_width, m_height, cur_col){
   # Build one legend per feature or metadata entry
   nlegend <- length(outline_by) + length(colour_by)
   margin <- 10
@@ -345,8 +336,30 @@
 }
 
 # Plot scale_bar
-.plotScaleBar(scale_bar, dim_x, dim_y,
-            max_width, max_height){
+#' @importFrom raster scalebar
+.plotScaleBar <- function(scale_bar, x, y){
+    cur_length <- scale_bar$length
+    if(is.null(scale_bar$label)){
+      cur_label <- as.character(cur_length)
+    } else {
+      cur_label <- as.character(scale_bar$label)
+    }
+    cur_lwd <- scale_bar$lwd
+    cur_col <- scale_bar$col
+    cur_margin <- scale_bar$margin
+
+
+    # Plot scale bar
+    segments(x0 = x - cur_length - 10,
+             y0 = y - 10,
+             x1 = x - 10,
+             lwd = cur_lwd,
+             col = cur_col)
+    text(x = x - ,
+         y = seq(cur_y - cur_space_y/2 + title_height*2,
+                 cur_y + cur_space_y/2- title_height, length.out = 3),
+         labels = rev(seq(0, 1, length.out = 3)), col = "black",
+         adj = 0.5, cex = (cur_space_x/3)/label_width)
 
 }
 
