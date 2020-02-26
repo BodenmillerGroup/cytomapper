@@ -250,8 +250,8 @@
 
       if(ind != 1L && !is.null(scale_bar)){
         # Plot scale bar
-        #.plotScaleBar(scale_bar,
-        #              xright, ybottom)
+        .plotScaleBar(scale_bar,
+                      xright, ybottom)
       }
 
       # Plot title on images
@@ -348,18 +348,17 @@
     cur_col <- scale_bar$col
     cur_margin <- scale_bar$margin
 
-
     # Plot scale bar
-    segments(x0 = x - cur_length - 10,
-             y0 = y - 10,
-             x1 = x - 10,
+    segments(x0 = x - cur_length - cur_margin,
+             y0 = y - cur_margin,
+             x1 = x - cur_margin,
              lwd = cur_lwd,
              col = cur_col)
-    text(x = x - ,
-         y = seq(cur_y - cur_space_y/2 + title_height*2,
-                 cur_y + cur_space_y/2- title_height, length.out = 3),
-         labels = rev(seq(0, 1, length.out = 3)), col = "black",
-         adj = 0.5, cex = (cur_space_x/3)/label_width)
+    label_height <- abs(strheight(cur_label))
+    text(x = x - cur_length/2 - cur_margin,
+         y = y - cur_margin - label_height - label_height/4,
+         labels = cur_label, col = cur_col,
+         adj = 0.5, lwd = cur_lwd)
 
 }
 
