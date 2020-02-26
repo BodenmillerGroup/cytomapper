@@ -22,21 +22,33 @@ plotCells(
 )
 }
 \arguments{
+\item{object}{a \code{\link[SingleCellExperiment]{SingleCellExperiment}}.}
+
 \item{mask}{TODO}
 
-\item{image_ID}{entry in object and mask}
+\item{cell_ID}{TODO}
 
-\item{colour_by}{Either rownames (markers) or colnames of the colData(data) data.frame}
+\item{image_ID}{TODO}
+
+\item{colour_by}{TODO}
 
 \item{outline_by}{TODO}
 
+\item{exprs_values}{TODO}
+
+\item{subset_images}{TODO}
+
+\item{save_images}{TODO}
+
+\item{return_images}{TODO}
+
 \item{colour}{TODO}
 
-\item{data}{a \code{\link[SingleCellExperiment]{SingleCellExperiment}}.}
+\item{missing_colour}{TODO}
 
-\item{save_image}{TODO}
+\item{scale_bar}{TODO}
 
-\item{return_image}{TODO}
+\item{...}{TODO}
 }
 \value{
 TODO

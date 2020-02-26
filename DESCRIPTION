@@ -36,8 +36,13 @@ Depends:
     methods
 Imports:
     S4Vectors,
+    RColorBrewer,
+    viridis,
     utils,
-    tools
+    SummarizedExperiment,
+    tools,
+    graphics,
+    raster
 Suggests:
     BiocStyle,
     knitr,

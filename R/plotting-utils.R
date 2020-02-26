@@ -56,6 +56,7 @@
 
 # Colour segmentation masks based on features
 #' @importFrom grDevices colorRampPalette
+#' @importFrom SummarizedExperiment assay
 .colourMaskByFeature <- function(object, mask, cell_ID, image_ID,
                      colour_by, exprs_values, cur_col){
 
@@ -100,6 +101,7 @@
 }
 
 # Colour segmentation masks based on metadata
+#' @importFrom EBImage paintObjects
 .outlineMaskByMeta <- function(object, mask, img, cell_ID, image_ID,
                                outline_by, cur_col){
 
@@ -125,6 +127,7 @@
 # Selecting the colours for plotting
 #' @importFrom grDevices colorRampPalette
 #' @importFrom RColorBrewer brewer.pal
+#' @importFrom viridis viridis
 .selectColours <- function(object, colour_by, colour, missing_colour){
 
   # We seperate this function between colouring based on metadata
@@ -182,8 +185,7 @@
 }
 
 # Function to mix colours similar to how EBImage is creating an RGB
-#' @importFrom grDevices col2rgb
-#' @importFrom grDevices rgb
+#' @importFrom grDevices col2rgb rgb
 .mixColours <- function(col_vector){
   args <- as.list(col_vector)
   cols <- lapply(args, function(x){col2rgb(x)/255})
@@ -195,6 +197,8 @@
 }
 
 # Custom function to display images
+#' @importFrom S4Vectors SimpleList
+#' @importFrom graphics par plot rasterImage strheight text
 .displayImages <- function(object, outline_by, colour_by, mask, img,
                            image_ID, scale_bar, cur_col){
   # Number of images
@@ -271,6 +275,8 @@
 
 
 # Plot legend
+#' @importFrom graphics strwidth strheight text rasterImage legend
+#' @importFrom raster as.raster
 .plotLegend <- function(object, outline_by, colour_by,
                         m_width, m_height, cur_col){
   # Build one legend per feature or metadata entry
@@ -323,7 +329,7 @@
                        text.col = "black", plot = FALSE)
     legend_c <- legend(x = cur_x, y = cur_y, legend = names(cur_colouring),
            fill = cur_colouring,
-           text.col = "black", cex = (m_width-margin-cur_x)/legend_w$rect$w)
+           text.col = "black", cex = (m_width-margin-cur_x)/legend_c$rect$w)
   }
 
   if(!is.null(outline_by)){
@@ -345,7 +351,8 @@
 }
 
 # Plot scale_bar
-#' @importFrom raster scalebar
+#' @importFrom graphics strheight text segments
+#' @importFrom raster as.raster
 .plotScaleBar <- function(scale_bar, x, y){
     cur_length <- scale_bar$length
     if(is.null(scale_bar$label)){

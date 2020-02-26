@@ -3,14 +3,20 @@
 #'
 #' @description TODO
 #'
-#' @param data a \code{\link[SingleCellExperiment]{SingleCellExperiment}}.
+#' @param object a \code{\link[SingleCellExperiment]{SingleCellExperiment}}.
 #' @param mask TODO
-#' @param image_ID entry in object and mask
-#' @param colour_by Either rownames (markers) or colnames of the colData(data) data.frame
+#' @param cell_ID TODO
+#' @param image_ID TODO
+#' @param colour_by TODO
 #' @param outline_by TODO
-#' @param save_image TODO
-#' @param return_image TODO
+#' @param exprs_values TODO
+#' @param subset_images TODO
+#' @param save_images TODO
+#' @param return_images TODO
 #' @param colour TODO
+#' @param missing_colour TODO
+#' @param scale_bar TODO
+#' @param ... TODO
 #'
 #' @section Linking image IDs and cell IDs:
 #' TODO
@@ -25,8 +31,6 @@
 #' @author Nils Eling (\email{nils.eling@@dqbm.uzh.ch})
 #' @author Nicolas Damond (\email{nicolas.damond@@dqbm.uzh.ch})
 #'
-#' @importFrom viridis viridis
-#' @importFrom RColorBrewer brewer.pal
 #' @export
 plotCells <- function(object,
                       mask,

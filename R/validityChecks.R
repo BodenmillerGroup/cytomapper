@@ -205,6 +205,7 @@
 }
 
 # Check mask valididty
+#' @importFrom EBImage numberOfFrames
 .valid.mask <- function(mask, image_ID){
   if(!is(mask, "ImageList")){
     stop("Please provide the segementation mask(s) in form of an 'ImageList' object")
@@ -244,6 +245,7 @@
 }
 
 # Check plotCells input
+#' @importFrom S4Vectors isEmpty isTRUEorFALSE
 .valid.plotCells.input <- function(object, mask, image_ID, colour_by, outline_by,
                                    subset_images, save_images,
                                    return_images, col, missing_col,
