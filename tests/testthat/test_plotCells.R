@@ -77,7 +77,27 @@ test_that("Cell-level information can be correctly displayed.", {
 
   # Change size of images
   cur_images <- pancreasMasks
+  setImages(cur_images, "A02_mask") <- cur_images[[1]][1:50, 1:50,,drop=FALSE]
 
+  plotCells(object = pancreasSCE,
+            mask = cur_images, image_ID = "ImageNb",
+            cell_ID = "CellNb", colour_by = "CellType")
+
+  # Subset cells
+  set.seed(12345)
+  cur_sce <- pancreasSCE[,sample(1:ncol(pancreasSCE), 100)]
+
+  # Fix this!
+  plotCells(object = cur_sce,
+            mask = pancreasMasks, image_ID = "ImageNb",
+            cell_ID = "CellNb", colour_by = "CellType")
+  plotCells(object = cur_sce,
+            mask = pancreasMasks, image_ID = "ImageNb",
+            cell_ID = "CellNb", colour_by = "H3")
+  plotCells(object = cur_sce,
+            mask = pancreasMasks, image_ID = "ImageNb",
+            cell_ID = "CellNb", colour_by = "H3",
+            outline_by = "CellType")
 
 })
 
