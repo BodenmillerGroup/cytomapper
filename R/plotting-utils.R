@@ -20,12 +20,19 @@
 
 # Colour segmentation masks based on metadata
 .colourMaskByMeta <- function(object, mask, cell_ID, image_ID,
-                              colour_by, cur_col){
-
+                              colour_by, cur_colour, missing_colour){
   for(i in seq_along(mask)){
     cur_mask <- mask[[i]]
     cur_sce <- object[,colData(object)[,image_ID] == mcols(mask)[i,image_ID]]
-    col_ind <- cur_col[colData(cur_sce)[,colour_by] ]
+    if(is.null(names(cur_colour))){
+      col_ind <- colorRampPalette(cur_colour)(101)
+      cur_scaling <- .minMaxScaling(colData(cur_sce)[,colour_by],
+                                    min_x = min(colData(object)[,colour_by]),
+                                    max_x = max(colData(object)[,colour_by]))
+      col_ind <- col_ind[round(100*cur_scaling) + 1]
+    } else {
+      col_ind <- cur_colour[colData(cur_sce)[,colour_by] ]
+    }
 
     # Colour first the background
     cur_mask[cur_mask == 0L] <- "#000000"
@@ -33,7 +40,7 @@
     # Then colour cells that are not in sce
     cur_m <- as.vector(cur_mask != "#000000") &
       !(cur_mask %in% as.character(colData(cur_sce)[,cell_ID]))
-    cur_mask <- replace(cur_mask, which(cur_m), cur_col["missing_col"])
+    cur_mask <- replace(cur_mask, which(cur_m), missing_colour)
 
     # Next, colour cells that are present in sce object
     cur_m <- match(cur_mask, as.character(colData(cur_sce)[,cell_ID]))
@@ -58,7 +65,7 @@
 #' @importFrom grDevices colorRampPalette
 #' @importFrom SummarizedExperiment assay
 .colourMaskByFeature <- function(object, mask, cell_ID, image_ID,
-                     colour_by, exprs_values, cur_col){
+                     colour_by, exprs_values, cur_colour, missing_colour){
 
   for(i in seq_along(mask)){
     cur_mask <- mask[[i]]
@@ -70,7 +77,7 @@
     # Then colour cells that are not in sce
     cur_m <- as.vector(cur_mask != "#000000") &
       !(cur_mask %in% as.character(colData(cur_sce)[,cell_ID]))
-    cur_mask <- replace(cur_mask, which(cur_m), cur_col[["missing_colour"]])
+    cur_mask <- replace(cur_mask, which(cur_m), missing_colour)
 
     # Next, colour cells that are present in sce object
     # For this, we will perform a min/max scaling on the provided counts
@@ -82,7 +89,7 @@
     cur_ind <- which(!is.na(cur_m))
     cur_col_list <- lapply(colour_by, function(x){
       cur_frame <- cur_mask
-      col_ind <- colorRampPalette(cur_col[[x]])(101)
+      col_ind <- colorRampPalette(cur_colour[[x]])(101)
       cur_scaling <- .minMaxScaling(assay(cur_sce, exprs_values)[x,],
                                     min_x = min(assay(object, exprs_values)[x,]),
                                     max_x = max(assay(object, exprs_values)[x,]))
@@ -108,7 +115,7 @@
 # Colour segmentation masks based on metadata
 #' @importFrom EBImage paintObjects
 .outlineMaskByMeta <- function(object, mask, img, cell_ID, image_ID,
-                               outline_by, cur_col){
+                               outline_by, cur_colour, missing_colour){
 
   for(i in seq_along(mask)){
     cur_mask <- mask[[i]]
@@ -120,7 +127,7 @@
       meta_mask <- cur_mask
       cur_cell_ID <- colData(cur_sce)[colData(cur_sce)[,outline_by] == j,cell_ID]
       meta_mask[!(meta_mask %in% cur_cell_ID)] <- 0L
-      cur_img <- paintObjects(meta_mask, Image(cur_img), col = cur_col[j])
+      cur_img <- paintObjects(meta_mask, Image(cur_img), col = cur_colour[j])
     }
 
     img[[i]] <- Image(cur_img)
@@ -133,8 +140,7 @@
 #' @importFrom grDevices colorRampPalette
 #' @importFrom RColorBrewer brewer.pal
 #' @importFrom viridis viridis
-.selectColours <- function(object, colour_by, colour, missing_colour){
-
+.selectColours <- function(object, colour_by, colour){
   # We seperate this function between colouring based on metadata
   # or the marker expression (rownames)
   if(all(colour_by %in% colnames(colData(object)))){
@@ -142,20 +148,21 @@
     cur_entries <- unique(colData(object)[,colour_by])
     if(is.null(colour)){
       if(length(cur_entries) > 23){
-        cur_col <- viridis(length(cur_entries))
-        names(cur_col) <- cur_entries
-        cur_col <- c(cur_col, missing_colour = missing_colour)
+        if(is.numeric(cur_entries)){
+          cur_col <- viridis(100)
+        } else {
+          cur_col <- viridis(length(cur_entries))
+          names(cur_col) <- cur_entries
+        }
       } else {
         cur_col <- c(brewer.pal(12, "Paired"),
                      brewer.pal(8, "Pastel2")[-c(3,5,8)],
                      brewer.pal(12, "Set3")[-c(2,3,8,9,11,12)])
         cur_col <- cur_col[1:length(cur_entries)]
         names(cur_col) <- cur_entries
-        cur_col <- c(cur_col, missing_colour = missing_colour)
       }
     } else {
       cur_col <- colour[colour_by]
-      cur_col <- c(cur_col, missing_colour = missing_colour)
     }
   } else {
     if(is.null(colour)){
@@ -168,16 +175,13 @@
                          colorRampPalette(c("black", "yellow"))(100))
         col_list <- col_list[1:length(colour_by)]
         names(col_list) <- colour_by
-        col_list <- c(col_list, missing_colour = missing_colour)
         cur_col <- col_list
       } else {
         cur_col <- list(viridis(100))
         names(cur_col) <- colour_by
-        cur_col <- c(cur_col, missing_colour = missing_colour)
       }
     } else {
       cur_col <- colour[colour_by]
-      cur_col <- c(cur_col, missing_colour = missing_colour)
     }
   }
 
@@ -330,16 +334,46 @@
 
   # Next metadata legends
   if(!is.null(colour_by) && all(colour_by %in% colnames(colData(object)))){
-    cur_space_x <- (m_width-(2*margin))/6
-    cur_x <- m_width/2 + cur_space_x
-    cur_y <- margin
-    cur_colouring <- cur_col$colour_by[1:(length(cur_col$colour_by) - 1)]
-    legend_c <- legend(x = cur_x, y = cur_y, legend = names(cur_colouring),
-                       fill = cur_colouring,
-                       text.col = "black", plot = FALSE)
-    legend_c <- legend(x = cur_x, y = cur_y, legend = names(cur_colouring),
-           fill = cur_colouring,
-           text.col = "black", cex = (m_width-margin-cur_x)/legend_c$rect$w)
+    # Continous scale
+    if(is.null(names(cur_col$colour_by))){
+      cur_space_x <- (m_width-(2*margin))/4
+      cur_space_y <- (m_height-(2*margin))/2
+      cur_x <- m_width/2 + cur_space_x
+      cur_y <- margin
+      cur_min <- min(colData(object)[,colour_by])
+      cur_max <- max(colData(object)[,colour_by])
+      cur_labels <- c(format(round(cur_min, 1), nsmall = 1),
+                      format(round(cur_max/2, 1), nsmall = 1),
+                      format(round(cur_max, 1), nsmall = 1))
+      label_width <- max(strwidth(rev(cur_labels)))
+      title_height <- abs(strheight(colour_by, font = 2))
+
+      cur_legend <- as.raster(matrix(rev(cur_col$colour_by),
+                                     ncol=1))
+      text(x = cur_x + cur_space_x/2, y = cur_y + title_height/2,
+           label = colour_by, col = "black", font = 2)
+      text(x=cur_x + cur_space_x,
+           y = seq(cur_y + title_height*2,
+                   cur_y + cur_space_y - title_height, length.out = 3),
+           labels = rev(cur_labels), col = "black",
+           adj = 0.5, cex = (cur_space_x/2)/label_width)
+      rasterImage(cur_legend,
+                  cur_x,
+                  cur_y + cur_space_y - title_height,
+                  cur_x + cur_space_x/2,
+                  cur_y + title_height*2)
+    } else {
+      cur_space_x <- (m_width-(2*margin))/6
+      cur_x <- m_width/2 + cur_space_x
+      cur_y <- margin
+      cur_colouring <- cur_col$colour_by[1:(length(cur_col$colour_by) - 1)]
+      legend_c <- legend(x = cur_x, y = cur_y, legend = names(cur_colouring),
+                         fill = cur_colouring,
+                         text.col = "black", plot = FALSE)
+      legend_c <- legend(x = cur_x, y = cur_y, legend = names(cur_colouring),
+                         fill = cur_colouring,
+                         text.col = "black", cex = (m_width-margin-cur_x)/legend_c$rect$w)
+    }
   }
 
   if(!is.null(outline_by)){

@@ -34,12 +34,18 @@ test_that("Cell-level information can be correctly displayed.", {
             mask = pancreasMasks, image_ID = "ImageNb",
             cell_ID = "CellNb",
             colour_by = c("H3", "SMA", "INS", "CD38", "CD44"))
-
-  # Fix this!
   plotCells(object = pancreasSCE,
             mask = pancreasMasks, image_ID = "ImageNb",
             cell_ID = "CellNb",
             colour_by = "Area")
+  plotCells(object = pancreasSCE,
+            mask = pancreasMasks, image_ID = "ImageNb",
+            cell_ID = "CellNb",
+            colour_by = "Pos_X")
+  plotCells(object = pancreasSCE,
+            mask = pancreasMasks, image_ID = "ImageNb",
+            cell_ID = "CellNb",
+            colour_by = "Pos_Y")
 
   # Outline by
   plotCells(object = pancreasSCE,
