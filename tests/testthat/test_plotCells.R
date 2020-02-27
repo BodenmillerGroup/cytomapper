@@ -82,21 +82,17 @@ test_that("Cell-level information can be correctly displayed.", {
             cell_ID = "CellNb", exprs_values = "counts",
             colour_by = "SMA", subset_images = 3)
 
-  # return_images
-  plotCells(object = pancreasSCE,
-            mask = pancreasMasks, image_ID = "ImageNb",
-            cell_ID = "CellNb", exprs_values = "counts",
-            colour_by = "SMA", return_images = TRUE)
-
-
 
   # Change size of images
+  # Decreasing the size
   cur_images <- pancreasMasks
   setImages(cur_images, "A02_mask") <- cur_images[[1]][1:50, 1:50,,drop=FALSE]
 
   plotCells(object = pancreasSCE,
             mask = cur_images, image_ID = "ImageNb",
             cell_ID = "CellNb", colour_by = "CellType")
+
+  # Increasing the size
 
   # Subset cells
   set.seed(12345)
