@@ -74,6 +74,8 @@
 
     # Next, colour cells that are present in sce object
     # For this, we will perform a min/max scaling on the provided counts
+    # However, to keep counts comparable across images, we will fix
+    # the scale across all images to the min/max of the whole sce object
     # Based on this, we will first merge the colours and colour
     # the mask accordingly
     cur_m <- match(cur_mask, as.character(colData(cur_sce)[,cell_ID]))
@@ -81,7 +83,10 @@
     cur_col_list <- lapply(colour_by, function(x){
       cur_frame <- cur_mask
       col_ind <- colorRampPalette(cur_col[[x]])(101)
-      col_ind[round(100*.minMaxScaling(assay(cur_sce, exprs_values)[x,])) + 1]
+      cur_scaling <- .minMaxScaling(assay(cur_sce, exprs_values)[x,],
+                                    min_x = min(assay(object, exprs_values)[x,]),
+                                    max_x = max(assay(object, exprs_values)[x,]))
+      col_ind[round(100*cur_scaling) + 1]
     })
 
     col_ind <- apply(data.frame(cur_col_list), 1, .mixColours)
@@ -180,8 +185,8 @@
 }
 
 # Min/max scaling of expression counts
-.minMaxScaling <- function(x){
-    return((x - min(x))/(max(x) - min(x)))
+.minMaxScaling <- function(x, min_x, max_x){
+    return((x - min_x)/(max_x - min_x))
 }
 
 # Function to mix colours similar to how EBImage is creating an RGB

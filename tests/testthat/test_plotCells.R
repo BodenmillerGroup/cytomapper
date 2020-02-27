@@ -14,13 +14,16 @@ test_that("Cell-level information can be correctly displayed.", {
             cell_ID = "CellNb", colour_by = "H3")
   plotCells(object = pancreasSCE,
             mask = pancreasMasks, image_ID = "ImageNb",
-            cell_ID = "CellNb", colour_by = "H3")
+            cell_ID = "CellNb", colour_by = "SMA")
   plotCells(object = pancreasSCE,
             mask = pancreasMasks, image_ID = "ImageNb",
-            cell_ID = "CellNb", colour_by = "H3")
+            cell_ID = "CellNb", colour_by = "INS")
   plotCells(object = pancreasSCE,
             mask = pancreasMasks, image_ID = "ImageNb",
-            cell_ID = "CellNb", colour_by = "H3")
+            cell_ID = "CellNb", colour_by = "CD38")
+  plotCells(object = pancreasSCE,
+            mask = pancreasMasks, image_ID = "ImageNb",
+            cell_ID = "CellNb", colour_by = "CD44")
   plotCells(object = pancreasSCE,
             mask = pancreasMasks, image_ID = "ImageNb",
             cell_ID = "CellNb", colour_by = c("H3", "SMA"))
@@ -61,7 +64,11 @@ test_that("Cell-level information can be correctly displayed.", {
   plotCells(object = pancreasSCE,
             mask = pancreasMasks, image_ID = "ImageNb",
             cell_ID = "CellNb", exprs_values = "counts",
-            colour_by = "SMA")
+            colour_by = "H3")
+  plotCells(object = pancreasSCE,
+            mask = pancreasMasks, image_ID = "ImageNb",
+            cell_ID = "CellNb", exprs_values = "exprs",
+            colour_by = "H3")
 
   # subset_images
   plotCells(object = pancreasSCE,
@@ -74,6 +81,8 @@ test_that("Cell-level information can be correctly displayed.", {
             mask = pancreasMasks, image_ID = "ImageNb",
             cell_ID = "CellNb", exprs_values = "counts",
             colour_by = "SMA", return_images = TRUE)
+
+
 
   # Change size of images
   cur_images <- pancreasMasks
