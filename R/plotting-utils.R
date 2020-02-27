@@ -205,7 +205,7 @@
 #' @importFrom S4Vectors SimpleList
 #' @importFrom EBImage Image
 #' @importFrom graphics par plot rasterImage strheight text
-.displayImages <- function(object, outline_by, colour_by, mask, img,
+.displayImages <- function(object, exprs_values, outline_by, colour_by, mask, img,
                            image_ID, scale_bar, cur_col){
   # Number of images
   # The first space is used for the figure legend
@@ -256,7 +256,7 @@
 
       if(ind == 1L){
         # Plot legend
-        .plotLegend(object, outline_by, colour_by,
+        .plotLegend(object, exprs_values, outline_by, colour_by,
                     m_width, m_height, cur_col)
       }
 
@@ -283,10 +283,9 @@
 # Plot legend
 #' @importFrom graphics strwidth strheight text rasterImage legend
 #' @importFrom raster as.raster
-.plotLegend <- function(object, outline_by, colour_by,
+.plotLegend <- function(object, exprs_values, outline_by, colour_by,
                         m_width, m_height, cur_col){
   # Build one legend per feature or metadata entry
-  nlegend <- length(outline_by) + length(colour_by)
   margin <- 10
 
   # Plot feature legends first
@@ -305,7 +304,12 @@
         # Adjust text size based on size of image
         title_width <- strwidth(colour_by[i], font = 2)
         title_height <- abs(strheight(colour_by[i], font = 2))
-        label_width <- max(strwidth(rev(seq(0, 1, length.out = 3))))
+        cur_min <- min(assay(object, exprs_values)[colour_by[i],])
+        cur_max <- max(assay(object, exprs_values)[colour_by[i],])
+        cur_labels <- c(format(round(cur_min, 1), nsmall = 1),
+                        format(round(cur_max/2, 1), nsmall = 1),
+                        format(round(cur_max, 1), nsmall = 1))
+        label_width <- max(strwidth(rev(cur_labels)))
 
         cur_legend <- as.raster(matrix(rev(cur_col$colour_by[[colour_by[i]]]),
                                        ncol=1))
@@ -314,7 +318,7 @@
         text(x=cur_x + cur_space_x/4,
              y = seq(cur_y - cur_space_y/2 + title_height*2,
                      cur_y + cur_space_y/2- title_height, length.out = 3),
-             labels = rev(seq(0, 1, length.out = 3)), col = "black",
+             labels = rev(cur_labels), col = "black",
              adj = 0.5, cex = (cur_space_x/3)/label_width)
         rasterImage(cur_legend,
                     cur_x - cur_space_x/2,

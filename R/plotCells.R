@@ -95,6 +95,6 @@ plotCells <- function(object,
   }
 
   # Plot images
-  .displayImages(object, outline_by, colour_by, mask, img, image_ID,
+  .displayImages(object, exprs_values, outline_by, colour_by, mask, img, image_ID,
                  scale_bar, cur_col)
 }
