@@ -41,7 +41,13 @@ Here, we will highlight the most simple use of the package
 
 # Plotting pixel-level information
 
+## Scaling
+
+## Normalization
+
 # Plotting Cell-level information
+
+## Normalization
 
 # Saving images
 
