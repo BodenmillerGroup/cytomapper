@@ -85,9 +85,11 @@ plotCells <- function(object,
                                   cur_col$colour_by, missing_colour)
     }
   } else {
-    # TODO
-    # Colour images by missing_colour
-    img <- as(mask, "SimpleList")
+    img <- endoapply(mask, function(x){
+      x[x == 0L] <- "#000000"
+      x <- replace(x, which(x != "#000000"), missing_colour)
+      x
+    })
   }
 
   # Add outline
