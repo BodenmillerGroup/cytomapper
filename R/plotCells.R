@@ -90,6 +90,7 @@ plotCells <- function(object,
       x <- replace(x, which(x != "#000000"), missing_colour)
       x
     })
+    img <- as(img, "SimpleList")
   }
 
   # Add outline

@@ -54,10 +54,8 @@ test_that("Cell-level information can be correctly displayed.", {
             outline_by = "CellType")
   plotCells(object = pancreasSCE,
             mask = pancreasMasks, image_ID = "ImageNb",
-            cell_ID = "CellNb", colour_by = "SMA",
+            cell_ID = "CellNb", colour_by = c("SMA", "INS"),
             outline_by = "CellType")
-
-  # Fix this!
   plotCells(object = pancreasSCE,
             mask = pancreasMasks, image_ID = "ImageNb",
             cell_ID = "CellNb", outline_by = "CellType")
@@ -91,8 +89,6 @@ test_that("Cell-level information can be correctly displayed.", {
   plotCells(object = pancreasSCE,
             mask = cur_images, image_ID = "ImageNb",
             cell_ID = "CellNb", colour_by = "CellType")
-
-  # Increasing the size
 
   # Subset cells
   set.seed(12345)
