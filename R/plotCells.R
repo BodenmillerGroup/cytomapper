@@ -1,11 +1,15 @@
-#' @title Plotting function to visualize cell-level information
+#' Function to visualize cell-level information on segmentation masks
 #' @name plotCells
 #'
-#' @description TODO
+#' This function takes a \code{\linkS4class{SingleCellExperiment}} and
+#' \code{\linkS4class{ImageList}} object to colour cells by marker expression or
+#' metadata.
 #'
-#' @param object a \code{\link[SingleCellExperiment]{SingleCellExperiment}}.
-#' @param mask TODO
-#' @param cell_ID TODO
+#' @param object a \code{\linkS4class{SingleCellExperiment}} object.
+#' @param mask an \code{\linkS4class{ImageList}} object single-channel
+#'   \code{\linkS4class{Image}} objects (see Details)
+#' @param cell_ID character specifying the \code{colData(object)}, in which the
+#'   integer cell IDs are stored
 #' @param image_ID TODO
 #' @param colour_by TODO
 #' @param outline_by TODO
@@ -18,8 +22,8 @@
 #' @param scale_bar TODO
 #' @param ... TODO
 #'
-#' Further plotting utilities:
-#' return_images, return_plot
+#'@section Segmentaion mask object:
+#' TODO
 #'
 #' @section Linking image IDs and cell IDs:
 #' TODO
