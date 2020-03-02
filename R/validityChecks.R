@@ -199,7 +199,7 @@
     stop("Cell IDs should only contain integer values.")
   }
 
-  if(!(exprs_values %in% assayNames(object))){
+  if(!is.null(exprs_values) && !(exprs_values %in% assayNames(object))){
     stop("'exprs_values' not an assay entry in 'object'.")
   }
 }
@@ -229,8 +229,15 @@
 }
 
 # Check image valididty
-.valid.image <- function(image, ...){
-  # TODO
+.valid.image <- function(image, image_ID){
+  if(!is(image, "ImageList")){
+    stop("Please provide the image(s) in form of an 'ImageList' object")
+  }
+
+  # Check if Image_ID exists in elementMetadata
+  if(!(image_ID %in% colnames(mcols(image)))){
+    stop("'image_ID' not in 'mcols(image)'.")
+  }
 }
 
 # Check if entries in objects are matching
@@ -246,7 +253,7 @@
 
 # Check plotCells input
 #' @importFrom S4Vectors isEmpty
-.valid.plotCells.input <- function(object, mask, image_ID, colour_by, outline_by,
+.valid.plot.input <- function(object, mask, image_ID, colour_by, outline_by,
                                    subset_images,
                                    col, missing_col,
                                    scale_bar){

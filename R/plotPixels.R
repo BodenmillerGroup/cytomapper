@@ -48,5 +48,20 @@ plotPixels <- function(image,
                                         col = "white",
                                         margin = 10),
                        ...) {
+  # Object checks
+  if(!is.null(object)){
+    .valid.sce(object, image_ID, cell_ID, exprs_values)
+  }
+  if(!is.null(mask)){
+    .valid.mask(mask, image_ID)
+  }
+  .valid.image(image, image_ID)
+  .valid.matchObjects(object, mask, image, image_ID, cell_ID)
+
+  # Argument checks
+  .valid.plot.input(object, mask, image_ID, colour_by, outline_by,
+                         subset_images,
+                         colour, missing_colour,
+                         scale_bar)
 
 }

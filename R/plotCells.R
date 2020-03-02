@@ -59,7 +59,7 @@ plotCells <- function(object,
   # Object checks
   .valid.sce(object, image_ID, cell_ID, exprs_values)
   .valid.mask(mask, image_ID)
-  .valid.matchObjects(object, mask, image_ID, cell_ID)
+  .valid.matchObjects(object, mask, image = NULL, image_ID, cell_ID)
 
   # Argument checks
   .valid.plotCells.input(object, mask, image_ID, colour_by, outline_by,
