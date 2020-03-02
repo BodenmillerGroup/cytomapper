@@ -1,16 +1,27 @@
-#' @rdname plotPixels
-#' @title Plotting function to visualize pixel-level information
+#' Function to visualize pixel-level information of multi-channel images
+#' @name plotPixels
 #'
-#' @description TODO
+#' This function takes a \code{\linkS4class{ImageList}} object to colour pixels
+#' by marker expression. Additionally, a \code{\linkS4class{SingleCellExperiment}}
+#' object and \code{\linkS4class{ImageList}} object containing segmentation masks
+#' can be provided to outline cells based on metadata.
 #'
-#' @param data a \code{\link[SingleCellExperiment]{SingleCellExperiment}}.
-#' @param image TODO
-#' @param mask TODO
+#' @param image an \code{\linkS4class{ImageList}} object containing single or
+#'   multi-channel \code{\linkS4class{Image}} objects (see Details)
+#' @param object (optional) an \code{\linkS4class{SingleCellExperiment}} object.
+#' @param mask (optional) an \code{\linkS4class{ImageList}} object containing
+#'   single-channel \code{\linkS4class{Image}} objects
+#' @param cell_ID (optional) character specifying the \code{colData(object)}, in which the
+#'   integer cell IDs are stored
+#' @param image_ID (optional)
 #' @param colour_by TODO
-#' @param outline_by TODO
-#' @param save_image TODO
-#' @param return_image TODO
-#' @param col TODO
+#' @param outline_by (optional)
+#' @param subset_images TODO
+#' @param save_images TODO
+#' @param return_images TODO
+#' @param colour TODO
+#' @param scale_bar TODO
+#' @param ... TODO
 #'
 #' @return TODO
 #'
@@ -22,13 +33,20 @@
 #' Nicolas Damond \email{nicolas.damond@@dqbm.uzh.ch}
 #'
 #' @export
-plotPixels <- function(data,
-                       image,
+plotPixels <- function(image,
+                       object = NULL,
                        mask = NULL,
-                       colour_by,
+                       cell_ID = NULL,
+                       image_ID = NULL,
+                       colour_by = NULL,
                        outline_by = NULL,
-                       save_image = FALSE,
-                       return_image = FALSE,
-                       col = NULL) {
+                       subset_images = NULL,
+                       colour = NULL,
+                       scale_bar = list(length = 20,
+                                        label = NULL,
+                                        lwd = 2,
+                                        col = "white",
+                                        margin = 10),
+                       ...) {
 
 }
