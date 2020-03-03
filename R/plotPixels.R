@@ -80,20 +80,20 @@ plotPixels <- function(image,
     cur_col$colour_by <- .selectColours(object, colour_by, colour)
 
     # Colouring by features
-    image <- .colourImageByFeature(image,
+    img <- .colourImageByFeature(image,
                                  colour_by,
                                  cur_col$colour_by)
   } else {
     if(is.null(channelNames(image))){
       colour_by <- 1
       cur_col$colour_by <- .selectColours(object, colour_by, colour)
-      image <- .colourImageByFeature(image,
+      img <- .colourImageByFeature(image,
                                      colour_by,
                                      cur_col$colour_by)
     } else{
       colour_by <- channelNames(image)[1]
       cur_col$colour_by <- .selectColours(object, colour_by, colour)
-      image <- .colourImageByFeature(image,
+      img <- .colourImageByFeature(image,
                                      colour_by,
                                      cur_col$colour_by)
     }
@@ -102,16 +102,19 @@ plotPixels <- function(image,
   # Add outline
   if(!is.null(outline_by)){
     cur_col$outline_by <- .selectColours(object, outline_by, colour)
-    image <- .outlineImageByMeta(object, mask, image, cell_ID, image_ID,
+    img <- .outlineImageByMeta(object, mask, img, cell_ID, image_ID,
                                 outline_by, cur_col$outline_by)
   } else if(!is.null(mask)){
-    image <- mendoapply(function(cur_mask, cur_image){
+    img <- mendoapply(function(cur_mask, cur_image){
       cur_img <- paintObjects(cur_mask, Image(cur_image), col = missing_colour)
       return(cur_img)
-    }, mask, image)
-    image <- as(image, "SimpleList")
+    }, mask, img)
+    img <- as(img, "SimpleList")
   }
 
-  # If !is.null(mask) -> outline by default
+  # Plot images
+  .displayImages(object, image, exprs_values = NULL,
+                 outline_by, colour_by, mask, img, image_ID,
+                 scale_bar, cur_col)
 
 }

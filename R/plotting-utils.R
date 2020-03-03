@@ -257,7 +257,8 @@
 #' @importFrom S4Vectors SimpleList
 #' @importFrom EBImage Image
 #' @importFrom graphics par plot rasterImage strheight text
-.displayImages <- function(object, exprs_values, outline_by, colour_by, mask, img,
+.displayImages <- function(object, image, exprs_values, outline_by,
+                           colour_by, mask, img,
                            image_ID, scale_bar, cur_col){
   # Number of images
   # The first space is used for the figure legend
@@ -308,7 +309,7 @@
 
       if(ind == 1L){
         # Plot legend
-        .plotLegend(object, exprs_values, outline_by, colour_by,
+        .plotLegend(object, image, exprs_values, outline_by, colour_by,
                     m_width, m_height, cur_col)
       }
 
@@ -319,8 +320,15 @@
       }
 
       # Plot title on images
-      if(ind != 1L && !is.null(scale_bar)){
-        cur_title <- mcols(mask)[ind - 1,image_ID]
+      if(ind != 1L){
+        if(!is.null(mask)){
+          cur_title <- mcols(mask)[ind - 1,image_ID]
+        }
+        else if(!is.null(names(img))){
+          cur_title <- names(img)[ind - 1]
+        } else {
+          cur_title <- as.character(ind - 1)
+        }
         label_height <- abs(strheight(cur_title, font = 2))
         text(x = xleft + dim_x/2,
              y = ytop + label_height*2,
@@ -331,11 +339,10 @@
   }
 }
 
-
 # Plot legend
 #' @importFrom graphics strwidth strheight text rasterImage legend
 #' @importFrom raster as.raster
-.plotLegend <- function(object, exprs_values, outline_by, colour_by,
+.plotLegend <- function(object, image, exprs_values, outline_by, colour_by,
                         m_width, m_height, cur_col){
   # Build one legend per feature or metadata entry
   margin <- 10
@@ -356,8 +363,13 @@
         # Adjust text size based on size of image
         title_width <- strwidth(colour_by[i], font = 2)
         title_height <- abs(strheight(colour_by[i], font = 2))
-        cur_min <- min(assay(object, exprs_values)[colour_by[i],])
-        cur_max <- max(assay(object, exprs_values)[colour_by[i],])
+        if(is.null(image)){
+          cur_min <- min(assay(object, exprs_values)[colour_by[i],])
+          cur_max <- max(assay(object, exprs_values)[colour_by[i],])
+        } else {
+          cur_min <- min(getChannels(image, colour_by[i])[[1]])
+          cur_max <- max(getChannels(image, colour_by[i])[[1]])
+        }
         cur_labels <- c(format(round(cur_min, 1), nsmall = 1),
                         format(round(cur_max/2, 1), nsmall = 1),
                         format(round(cur_max, 1), nsmall = 1))
@@ -381,7 +393,9 @@
   }
 
   # Next metadata legends
-  if(!is.null(colour_by) && all(colour_by %in% colnames(colData(object)))){
+  if(!is.null(object) &&
+     !is.null(colour_by) &&
+     all(colour_by %in% colnames(colData(object)))){
     # Continous scale
     if(is.null(names(cur_col$colour_by))){
       cur_space_x <- (m_width-(2*margin))/4
@@ -424,6 +438,7 @@
     }
   }
 
+  # Outline
   if(!is.null(outline_by)){
     if(!is.null(colour_by) && all(colour_by %in% colnames(colData(object)))){
       cur_y <- margin + abs(legend_c$rect$h) + 10
