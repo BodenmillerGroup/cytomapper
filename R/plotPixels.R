@@ -16,9 +16,8 @@
 #' @param colour_by TODO
 #' @param outline_by (optional)
 #' @param subset_images TODO
-#' @param save_images TODO
-#' @param return_images TODO
 #' @param colour TODO
+#' @param missing_colour TODO
 #' @param scale_bar TODO
 #' @param ... TODO
 #'

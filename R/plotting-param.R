@@ -9,6 +9,7 @@
 #' @param title_colour TODO
 #' @param return_plot TODO
 #' @param return_images TODO
+#' @param save_images TODO
 #'
 #'@section Setting further parameters:
 #' TODO
@@ -16,12 +17,10 @@
 #' @return TODO
 #'
 #' @examples
-#' TODO
+#' # TODO
 #'
 #' @author Nils Eling (\email{nils.eling@@dqbm.uzh.ch})
 #' @author Nicolas Damond (\email{nicolas.damond@@dqbm.uzh.ch})
-#'
-#' @export
 NULL
 
 # Plotting parameters checks

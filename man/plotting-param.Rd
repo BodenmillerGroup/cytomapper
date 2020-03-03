@@ -13,6 +13,8 @@
 \item{return_plot}{TODO}
 
 \item{return_images}{TODO}
+
+\item{save_images}{TODO}
 }
 \value{
 TODO
@@ -26,7 +28,7 @@ TODO
 }
 
 \examples{
-TODO
+# TODO
 
 }
 \author{

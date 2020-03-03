@@ -211,6 +211,10 @@
     stop("Please provide the segementation mask(s) in form of an 'ImageList' object")
   }
 
+  if(is.null(img_id)){
+    stop("Please provide a character indicating the 'img_id' slot.")
+  }
+
   # Check number of channels in mask
   if(!all(unlist(lapply(mask, numberOfFrames)) == 1L)){
     stop("Segmentation masks must only contain one channel.")
@@ -257,6 +261,12 @@
     mask_images <- mcols(mask)[,img_id]
     if(!identical(mask_images, image_images)){
       stop("Mask and image ids must be identical.")
+    }
+
+    image_dims <- lapply(image, function(x){dim(x)[1:2]})
+    mask_dims <- lapply(mask, function(x){dim(x)[1:2]})
+    if(!identical(mask_images, image_images)){
+      stop("Mask and image entries must have the same dimensions.")
     }
   }
 
@@ -361,11 +371,11 @@
     }
   }
 
-  # missing_col has to be a valid colour
-  if(!is.null(missing_col)){
-    res <- try(col2rgb(missing_col), silent=TRUE)
+  # missing_colour has to be a valid colour
+  if(!is.null(missing_colour)){
+    res <- try(col2rgb(missing_colour), silent=TRUE)
     if(class(res) == "try-error"){
-      stop("'missing_col' not a valid colour.")
+      stop("'missing_colour' not a valid colour.")
     }
   }
 
@@ -464,7 +474,7 @@
     }
   }
 
-  # missing_col has to be a valid colour
+  # missing_colour has to be a valid colour
   if(!is.null(missing_colour)){
     res <- try(col2rgb(missing_colour), silent=TRUE)
     if(class(res) == "try-error"){

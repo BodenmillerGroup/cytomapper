@@ -45,10 +45,6 @@ integer cell IDs are stored}
 \item{scale_bar}{TODO}
 
 \item{...}{TODO}
-
-\item{save_images}{TODO}
-
-\item{return_images}{TODO}
 }
 \value{
 TODO

@@ -14,8 +14,6 @@
 #' @param outline_by TODO
 #' @param exprs_values TODO
 #' @param subset_images TODO
-#' @param save_images TODO
-#' @param return_images TODO
 #' @param colour TODO
 #' @param missing_colour TODO
 #' @param scale_bar TODO
@@ -61,7 +59,7 @@ plotCells <- function(object,
   .valid.matchObjects.plotCells(object, mask, img_id)
 
   # Argument checks
-  .valid.plotCells.input(object, mask, image = NULL, img_id, colour_by, outline_by,
+  .valid.plotCells.input(object, mask, img_id, colour_by, outline_by,
                          subset_images,
                          colour, missing_colour,
                          scale_bar)
