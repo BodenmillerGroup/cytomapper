@@ -42,10 +42,11 @@ plotPixels <- function(image,
                        outline_by = NULL,
                        subset_images = NULL,
                        colour = NULL,
+                       missing_colour = "gray",
                        scale_bar = list(length = 20,
                                         label = NULL,
                                         lwd = 2,
-                                        col = "white",
+                                        colour = "white",
                                         margin = 10),
                        ...) {
   # Object checks
@@ -59,7 +60,7 @@ plotPixels <- function(image,
   .valid.matchObjects.plotPixels(object, mask, image, image_ID)
 
   # Argument checks
-  .valid.plot.input(object, mask, image_ID, colour_by, outline_by,
+  .valid.plotPixels.input(image, object, mask, image_ID, colour_by, outline_by,
                          subset_images,
                          colour, missing_colour,
                          scale_bar)

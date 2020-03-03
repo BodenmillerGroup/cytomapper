@@ -32,7 +32,7 @@
 #'
 #' @examples
 #' # TODO
-#' # col = list(cell_type = c("CD4" = "red", "CD8" = "blue"),
+#' # colour = list(cell_type = c("CD4" = "red", "CD8" = "blue"),
 #` # tumour_stroma = c("tumour" = "white", "stroma" = "black"))
 #'
 #' @author Nils Eling (\email{nils.eling@@dqbm.uzh.ch})
@@ -52,7 +52,7 @@ plotCells <- function(object,
                       scale_bar = list(length = 20,
                                        label = NULL,
                                        lwd = 2,
-                                       col = "white",
+                                       colour = "white",
                                        margin = 10),
                       ...) {
 
@@ -62,7 +62,7 @@ plotCells <- function(object,
   .valid.matchObjects.plotCells(object, mask, image_ID)
 
   # Argument checks
-  .valid.plot.input(object, mask, image = NULL, image_ID, colour_by, outline_by,
+  .valid.plotCells.input(object, mask, image = NULL, image_ID, colour_by, outline_by,
                          subset_images,
                          colour, missing_colour,
                          scale_bar)

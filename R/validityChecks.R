@@ -255,8 +255,8 @@
   image_images <- mcols(image)[,image_ID]
   if(!is.null(mask)){
     mask_images <- mcols(mask)[,image_ID]
-    if(all(!(mask_images %in% image_images))){
-      stop("Mask and image IDs do not match")
+    if(!identical(mask_images, image_images)){
+      stop("Mask and image IDs must be identical.")
     }
   }
 
@@ -270,9 +270,9 @@
 
 # Check plotCells input
 #' @importFrom S4Vectors isEmpty
-.valid.plot.input <- function(object, mask, image_ID, colour_by, outline_by,
+.valid.plotCells.input <- function(object, mask, image_ID, colour_by, outline_by,
                                    subset_images,
-                                   col, missing_col,
+                                   colour, missing_colour,
                                    scale_bar){
 
   # colour_by takes either the rownames or colData entries
@@ -340,24 +340,24 @@
     }
   }
 
-  # col
-  if(!is.null(col)){
-    if(!is.list(col)){
-      stop("'col' is a list of entries in which each name specifies\n",
+  # colour
+  if(!is.null(colour)){
+    if(!is.list(colour)){
+      stop("'colour' is a list of entries in which each name specifies\n",
            "an entry of 'colour_by' and/or 'outline_by'")
     }
-    if(is.null(names(col))){
-      stop("'col': please specify the entries that should be coloured.")
+    if(is.null(names(colour))){
+      stop("'colour': please specify the entries that should be coloured.")
     }
     if(!is.null(colour_by) || !is.null(outline_by)){
       valid_names <- c(colour_by, outline_by)
-      if(!all(names(col) %in% valid_names)){
-        stop("'names(col)' do not match with 'colour_by' and/or 'outline_by'")
+      if(!all(names(colour) %in% valid_names)){
+        stop("'names(colour)' do not match with 'colour_by' and/or 'outline_by'")
       }
     }
-    cur_entries <- lapply(col, is.null)
+    cur_entries <- lapply(colour, is.null)
     if(sum(cur_entries) > 0){
-      stop("Empty entries not allowed in 'col'")
+      stop("Empty entries not allowed in 'colour'")
     }
   }
 
@@ -369,13 +369,115 @@
     }
   }
 
-  # scale_bar has to be of the form list(length, label, position, lwd)
+  # scale_bar has to be of the form list(length, label, lwd, colour, margin)
   if(!is.null(scale_bar)){
     if(!is.list(scale_bar)){
       stop("Invalid 'scale_bar' entry")
     }
     if(is.null(names(scale_bar)) || !all(names(scale_bar) %in%
-                        c("length", "label", "lwd", "col", "margin"))){
+                        c("length", "label", "lwd", "colour", "margin"))){
+      stop("Invalid entry to the 'scale_bar' list object")
+    }
+  }
+}
+
+
+# Check plotPixels input
+#' @importFrom S4Vectors isEmpty
+.valid.plotPixels.input <- function(image, object, mask, image_ID, colour_by, outline_by,
+                                    subset_images,
+                                    colour, missing_colour,
+                                    scale_bar){
+
+  # Here, colour_by takes only the channelNames entries
+  # check if colour_by is the channelNames slot
+  if(!is.null(colour_by)){
+    if(is.null(channelNames(image))){
+      stop("'channelNames(image)' not set.")
+    }
+    if(!all(colour_by %in% channelNames(image))){
+      stop("'colour_by' not in 'channelNames(image)' slot.")
+    }
+    if(length(colour_by) > 6L){
+      stop("Only six 'colour_by' entries allowed.")
+    }
+  }
+
+  # outline_by only takes entries from the colData slot
+  # Check if all outline_by entries are in the colData slot
+  if(!is.null(outline_by)){
+    if(is.null(object)){
+      stop("When outlining cells, please provide a SingleCellExperiment 'object'.")
+    }
+    if(is.null(colData(object)) || isEmpty(colData(object))){
+      stop("'outline_by' not in the 'colData(object)' slot.")
+    } else {
+      if(!all(outline_by %in% colnames(colData(object)))){
+        stop("'outline_by' not in 'colData(object)' slot.")
+      }
+    }
+  }
+
+  # subset_images need to be either numeric, a logical,
+  # a character and part of names(mask) or a character
+  # and part of mcols(mask)$image_ID
+  if(!is.null(subset_images)){
+    if(!is.numeric(subset_images) && !is.character(subset_images) &&
+       !is.logical(subset_images)){
+      stop("'subset_images' has to be numeric, logical or a character")
+    }
+    if(is.logical(subset_images) &&
+       length(subset_images) != length(image)){
+      stop("Invalid 'subset_images' argument.")
+    }
+    if(is.character(subset_images)){
+      if(is.null(names(image)) && !(image_ID %in% colnames(mcols(image)))){
+        stop("'subset_images' not part of names(mask) or mcols(mask)[,image_ID]")
+      }
+      if(!is.null(names(image)) && sum(subset_images %in% names(image) == 0)){
+        if(!(image_ID %in% colnames(mcols(mask)))){
+          stop("If 'image' is unnamed, image IDs must be provided in the mcols(image)[,image_ID] slot.")
+        }
+      }
+    }
+  }
+
+  # colour
+  if(!is.null(colour)){
+    if(!is.list(colour)){
+      stop("'colour' is a list of entries in which each name specifies\n",
+           "an entry of 'colour_by' and/or 'outline_by'")
+    }
+    if(is.null(names(colour))){
+      stop("'colour': please specify the entries that should be coloured.")
+    }
+    if(!is.null(colour_by) || !is.null(outline_by)){
+      valid_names <- c(colour_by, outline_by)
+      if(!all(names(colour) %in% valid_names)){
+        stop("'names(colour)' do not match with 'colour_by' and/or 'outline_by'")
+      }
+    }
+    cur_entries <- lapply(colour, is.null)
+    if(sum(cur_entries) > 0){
+      stop("Empty entries not allowed in 'colour'")
+    }
+  }
+
+  # missing_col has to be a valid colour
+  if(!is.null(missing_col)){
+    res <- try(col2rgb(missing_col), silent=TRUE)
+    if(class(res) == "try-error"){
+      stop("'missing_col' not a valid colour.")
+    }
+  }
+
+  # scale_bar has to be of the form list(length, label, lwd, colour, margin)
+  if(!is.null(scale_bar)){
+    if(!is.list(scale_bar)){
+      stop("Invalid 'scale_bar' entry")
+    }
+    if(is.null(names(scale_bar)) || !all(names(scale_bar) %in%
+                                         c("length", "label", "lwd", "colour", "margin"))){
       stop("Invalid entry to the 'scale_bar' list object")
     }
   }

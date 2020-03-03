@@ -405,7 +405,7 @@
       cur_label <- as.character(scale_bar$label)
     }
     cur_lwd <- scale_bar$lwd
-    cur_col <- scale_bar$col
+    cur_col <- scale_bar$colour
     cur_margin <- scale_bar$margin
 
     # Plot scale bar
