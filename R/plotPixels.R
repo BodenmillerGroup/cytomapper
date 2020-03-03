@@ -84,7 +84,19 @@ plotPixels <- function(image,
                                  colour_by,
                                  cur_col$colour_by)
   } else {
-    colour_by <-
+    if(is.null(channelNames(image))){
+      colour_by <- 1
+      cur_col$colour_by <- .selectColours(object, colour_by, colour)
+      image <- .colourImageByFeature(image,
+                                     colour_by,
+                                     cur_col$colour_by)
+    } else{
+      colour_by <- channelNames(image)[1]
+      cur_col$colour_by <- .selectColours(object, colour_by, colour)
+      image <- .colourImageByFeature(image,
+                                     colour_by,
+                                     cur_col$colour_by)
+    }
   }
 
   # If !is.null(mask) -> outline by default
