@@ -50,18 +50,20 @@ plotPixels <- function(image,
                        ...) {
   # Object checks
   if(!is.null(object)){
-    .valid.sce(object, image_ID, cell_ID, exprs_values)
+    .valid.sce(object, image_ID, cell_ID, exprs_values = NULL)
   }
   if(!is.null(mask)){
     .valid.mask(mask, image_ID)
   }
   .valid.image(image, image_ID)
-  .valid.matchObjects(object, mask, image, image_ID, cell_ID)
+  .valid.matchObjects.plotPixels(object, mask, image, image_ID)
 
   # Argument checks
   .valid.plot.input(object, mask, image_ID, colour_by, outline_by,
                          subset_images,
                          colour, missing_colour,
                          scale_bar)
+
+  # If !is.null(mask) -> outline by default
 
 }

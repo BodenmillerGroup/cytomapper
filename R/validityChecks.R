@@ -235,19 +235,36 @@
   }
 
   # Check if Image_ID exists in elementMetadata
-  if(!(image_ID %in% colnames(mcols(image)))){
+  if(!is.null(image_ID) && !(image_ID %in% colnames(mcols(image)))){
     stop("'image_ID' not in 'mcols(image)'.")
   }
 }
 
 # Check if entries in objects are matching
-.valid.matchObjects <- function(object, image, image_ID, cell_ID){
+.valid.matchObjects.plotCells <- function(object, mask, image_ID){
   # Check if image IDs match
   sce_images <- unique(colData(object)[,image_ID])
-  image_images <- mcols(image)[,image_ID]
-  if(all(!(image_images %in% sce_images))){
+  mask_images <- mcols(mask)[,image_ID]
+  if(all(!(mask_images %in% sce_images))){
     stop("None of the images appear in 'object'.\n",
          "Please make sure to set the image IDs correctly.")
+  }
+}
+
+.valid.matchObjects.plotPixels <- function(object, mask, image, image_ID){
+  image_images <- mcols(image)[,image_ID]
+  if(!is.null(mask)){
+    mask_images <- mcols(mask)[,image_ID]
+    if(all(!(mask_images %in% image_images))){
+      stop("Mask and image IDs do not match")
+    }
+  }
+
+  if(!is.null(object)){
+    sce_images <- unique(colData(object)[,image_ID])
+    if(all(!(sce_images %in% image_images))){
+      stop("Image IDs in 'mcols(image)' and 'colData(object)' do not match")
+    }
   }
 }
 
