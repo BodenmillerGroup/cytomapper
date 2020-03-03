@@ -36,3 +36,8 @@
 - loadImages
 - ImageList-class
 - version bump 0.1.4
+
+2020-03-03: Working functions:
+- plotCells
+- plotPixels
+- version bump 0.1.5
