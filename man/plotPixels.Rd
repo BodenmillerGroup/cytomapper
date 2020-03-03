@@ -2,41 +2,61 @@
 % Please edit documentation in R/plotPixels.R
 \name{plotPixels}
 \alias{plotPixels}
-\title{Plotting function to visualize pixel-level information}
+\title{Function to visualize pixel-level information of multi-channel images}
 \usage{
 plotPixels(
-  data,
   image,
+  object = NULL,
   mask = NULL,
-  colour_by,
+  cell_id = NULL,
+  img_id = NULL,
+  colour_by = NULL,
   outline_by = NULL,
-  save_image = FALSE,
-  return_image = FALSE,
-  col = NULL
+  subset_images = NULL,
+  colour = NULL,
+  missing_colour = "gray",
+  scale_bar = list(length = 20, label = NULL, lwd = 2, colour = "white", margin = 10),
+  ...
 )
 }
 \arguments{
-\item{data}{a \code{\link[SingleCellExperiment]{SingleCellExperiment}}.}
+\item{image}{an \code{\linkS4class{ImageList}} object containing single or
+multi-channel \code{\linkS4class{Image}} objects (see Details)}
 
-\item{image}{TODO}
+\item{object}{(optional) an \code{\linkS4class{SingleCellExperiment}} object.}
 
-\item{mask}{TODO}
+\item{mask}{(optional) an \code{\linkS4class{ImageList}} object containing
+single-channel \code{\linkS4class{Image}} objects}
+
+\item{cell_id}{(optional) character specifying the \code{colData(object)}, in which the
+integer cell IDs are stored}
+
+\item{img_id}{(optional)}
 
 \item{colour_by}{TODO}
 
-\item{outline_by}{TODO}
+\item{outline_by}{(optional)}
 
-\item{save_image}{TODO}
+\item{subset_images}{TODO}
 
-\item{return_image}{TODO}
+\item{colour}{TODO}
 
-\item{col}{TODO}
+\item{scale_bar}{TODO}
+
+\item{...}{TODO}
+
+\item{save_images}{TODO}
+
+\item{return_images}{TODO}
 }
 \value{
 TODO
 }
 \description{
-TODO
+This function takes a \code{\linkS4class{ImageList}} object to colour pixels
+by marker expression. Additionally, a \code{\linkS4class{SingleCellExperiment}}
+object and \code{\linkS4class{ImageList}} object containing segmentation masks
+can be provided to outline cells based on metadata.
 }
 \examples{
 # TODO

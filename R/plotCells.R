@@ -1,5 +1,4 @@
 #' Function to visualize cell-level information on segmentation masks
-#' @name plotCells
 #'
 #' This function takes a \code{\linkS4class{SingleCellExperiment}} and
 #' \code{\linkS4class{ImageList}} object to colour cells by marker expression or
@@ -8,9 +7,9 @@
 #' @param object a \code{\linkS4class{SingleCellExperiment}} object.
 #' @param mask an \code{\linkS4class{ImageList}} object single-channel
 #'   \code{\linkS4class{Image}} objects (see Details)
-#' @param cell_ID character specifying the \code{colData(object)}, in which the
+#' @param cell_id character specifying the \code{colData(object)}, in which the
 #'   integer cell IDs are stored
-#' @param image_ID TODO
+#' @param img_id TODO
 #' @param colour_by TODO
 #' @param outline_by TODO
 #' @param exprs_values TODO
@@ -41,8 +40,8 @@
 #' @export
 plotCells <- function(object,
                       mask,
-                      cell_ID,
-                      image_ID,
+                      cell_id,
+                      img_id,
                       colour_by = NULL,
                       outline_by = NULL,
                       exprs_values = "counts",
@@ -57,18 +56,18 @@ plotCells <- function(object,
                       ...) {
 
   # Object checks
-  .valid.sce(object, image_ID, cell_ID, exprs_values)
-  .valid.mask(mask, image_ID)
-  .valid.matchObjects.plotCells(object, mask, image_ID)
+  .valid.sce(object, img_id, cell_id, exprs_values)
+  .valid.mask(mask, img_id)
+  .valid.matchObjects.plotCells(object, mask, img_id)
 
   # Argument checks
-  .valid.plotCells.input(object, mask, image = NULL, image_ID, colour_by, outline_by,
+  .valid.plotCells.input(object, mask, image = NULL, img_id, colour_by, outline_by,
                          subset_images,
                          colour, missing_colour,
                          scale_bar)
 
   # Select images for plotting
-  mask <- .select_images(object, mask, image_ID, subset_images)
+  mask <- .select_images(object, mask, img_id, subset_images)
   cur_col <- list()
 
   # Colour the masks
@@ -80,32 +79,32 @@ plotCells <- function(object,
 
     if(all(colour_by %in% colnames(colData(object)))){
       # Colouring by metadata
-      img <- .colourMaskByMeta(object, mask, cell_ID, image_ID,
+      out_img <- .colourMaskByMeta(object, mask, cell_id, img_id,
                                 colour_by, cur_col$colour_by, missing_colour)
     } else {
       # Colouring by features
-      img <- .colourMaskByFeature(object, mask, cell_ID, image_ID,
+      out_img <- .colourMaskByFeature(object, mask, cell_id, img_id,
                                    colour_by, exprs_values,
                                   cur_col$colour_by, missing_colour)
     }
   } else {
-    img <- endoapply(mask, function(x){
+    out_img <- endoapply(mask, function(x){
       x[x == 0L] <- "#000000"
       x <- replace(x, which(x != "#000000"), missing_colour)
       x
     })
-    img <- as(img, "SimpleList")
+    out_img <- as(out_img, "SimpleList")
   }
 
   # Add outline
   if(!is.null(outline_by)){
     cur_col$outline_by <- .selectColours(object, outline_by, colour)
-    img <- .outlineImageByMeta(object, mask, img, cell_ID, image_ID,
+    out_img <- .outlineImageByMeta(object, mask, out_img, cell_id, img_id,
                                outline_by, cur_col$outline_by)
   }
 
   # Plot images
   .displayImages(object, image = NULL, exprs_values, outline_by, colour_by,
-                 mask, img, image_ID,
+                 mask, out_img, img_id,
                  scale_bar, cur_col)
 }

@@ -1,6 +1,7 @@
-#' Further plotting parameters for the SingleCellMapper package
+#' @title Further plotting parameters for the SingleCellMapper package
 #' @name plotting-param
 #'
+#' @description
 #' TODO
 #'
 #' @param legend_size TODO

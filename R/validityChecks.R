@@ -172,31 +172,31 @@
 
 # Check sce validity
 #' @importFrom SummarizedExperiment assayNames
-.valid.sce <- function(object, image_ID, cell_ID, exprs_values){
+.valid.sce <- function(object, img_id, cell_id, exprs_values){
   if(!is(object, "SingleCellExperiment")){
     stop("'object' is not of type 'SingleCellExperiment'.")
   }
 
-  if(is.null(image_ID) || is.null(cell_ID)){
-    stop("Please provide an 'image_ID' and 'cell_ID' argument")
+  if(is.null(img_id) || is.null(cell_id)){
+    stop("Please provide an 'img_id' and 'cell_id' argument")
   }
 
-  if(!is.character(image_ID) || length(image_ID) > 1 ||
-     !is.character(cell_ID) || length(cell_ID) > 1){
-    stop("Invalid argument for 'image_ID' and/or 'cell_ID'.")
+  if(!is.character(img_id) || length(img_id) > 1 ||
+     !is.character(cell_id) || length(cell_id) > 1){
+    stop("Invalid argument for 'img_id' and/or 'cell_id'.")
   }
 
   if(is.null(colData(object))){
     stop("Please store the image- and cell-level metadata in the 'colData' slot of 'object'.")
   }
 
-  if(!(image_ID %in% colnames(colData(object))) ||
-     !(cell_ID %in% colnames(colData(object)))){
-    stop("'image_ID' or 'cell_ID' not in 'colData(object)'.")
+  if(!(img_id %in% colnames(colData(object))) ||
+     !(cell_id %in% colnames(colData(object)))){
+    stop("'img_id' or 'cell_id' not in 'colData(object)'.")
   }
 
-  if(!all(colData(object)[,cell_ID] == floor(colData(object)[,cell_ID]))){
-    stop("Cell IDs should only contain integer values.")
+  if(!all(colData(object)[,cell_id] == floor(colData(object)[,cell_id]))){
+    stop("Cell ids should only contain integer values.")
   }
 
   if(!is.null(exprs_values) && !(exprs_values %in% assayNames(object))){
@@ -206,7 +206,7 @@
 
 # Check mask valididty
 #' @importFrom EBImage numberOfFrames
-.valid.mask <- function(mask, image_ID){
+.valid.mask <- function(mask, img_id){
   if(!is(mask, "ImageList")){
     stop("Please provide the segementation mask(s) in form of an 'ImageList' object")
   }
@@ -222,55 +222,55 @@
     stop("Segmentation masks must only contain integer values.")
   }
 
-  # Check if Image_ID exists in elementMetadata
-  if(!(image_ID %in% colnames(mcols(mask)))){
-    stop("'image_ID' not in 'mcols(mask)'.")
+  # Check if img_id exists in elementMetadata
+  if(!(img_id %in% colnames(mcols(mask)))){
+    stop("'img_id' not in 'mcols(mask)'.")
   }
 }
 
 # Check image valididty
-.valid.image <- function(image, image_ID){
+.valid.image <- function(image, img_id){
   if(!is(image, "ImageList")){
     stop("Please provide the image(s) in form of an 'ImageList' object")
   }
 
-  # Check if Image_ID exists in elementMetadata
-  if(!is.null(image_ID) && !(image_ID %in% colnames(mcols(image)))){
-    stop("'image_ID' not in 'mcols(image)'.")
+  # Check if Image_id exists in elementMetadata
+  if(!is.null(img_id) && !(img_id %in% colnames(mcols(image)))){
+    stop("'img_id' not in 'mcols(image)'.")
   }
 }
 
 # Check if entries in objects are matching
-.valid.matchObjects.plotCells <- function(object, mask, image_ID){
-  # Check if image IDs match
-  sce_images <- unique(colData(object)[,image_ID])
-  mask_images <- mcols(mask)[,image_ID]
+.valid.matchObjects.plotCells <- function(object, mask, img_id){
+  # Check if image ids match
+  sce_images <- unique(colData(object)[,img_id])
+  mask_images <- mcols(mask)[,img_id]
   if(all(!(mask_images %in% sce_images))){
     stop("None of the images appear in 'object'.\n",
-         "Please make sure to set the image IDs correctly.")
+         "Please make sure to set the image ids correctly.")
   }
 }
 
-.valid.matchObjects.plotPixels <- function(object, mask, image, image_ID){
-  image_images <- mcols(image)[,image_ID]
+.valid.matchObjects.plotPixels <- function(object, mask, image, img_id){
+  image_images <- mcols(image)[,img_id]
   if(!is.null(mask)){
-    mask_images <- mcols(mask)[,image_ID]
+    mask_images <- mcols(mask)[,img_id]
     if(!identical(mask_images, image_images)){
-      stop("Mask and image IDs must be identical.")
+      stop("Mask and image ids must be identical.")
     }
   }
 
   if(!is.null(object)){
-    sce_images <- unique(colData(object)[,image_ID])
+    sce_images <- unique(colData(object)[,img_id])
     if(all(!(sce_images %in% image_images))){
-      stop("Image IDs in 'mcols(image)' and 'colData(object)' do not match")
+      stop("Image ids in 'mcols(image)' and 'colData(object)' do not match")
     }
   }
 }
 
 # Check plotCells input
 #' @importFrom S4Vectors isEmpty
-.valid.plotCells.input <- function(object, mask, image_ID, colour_by, outline_by,
+.valid.plotCells.input <- function(object, mask, img_id, colour_by, outline_by,
                                    subset_images,
                                    colour, missing_colour,
                                    scale_bar){
@@ -318,7 +318,7 @@
 
   # subset_images need to be either numeric, a logical,
   # a character and part of names(mask) or a character
-  # and part of mcols(mask)$image_ID
+  # and part of mcols(mask)$img_id
   if(!is.null(subset_images)){
     if(!is.numeric(subset_images) && !is.character(subset_images) &&
        !is.logical(subset_images)){
@@ -329,12 +329,12 @@
       stop("Invalid 'subset_images' argument.")
     }
     if(is.character(subset_images)){
-      if(is.null(names(mask)) && !(image_ID %in% colnames(mcols(mask)))){
-        stop("'subset_images' not part of names(mask) or mcols(mask)[,image_ID]")
+      if(is.null(names(mask)) && !(img_id %in% colnames(mcols(mask)))){
+        stop("'subset_images' not part of names(mask) or mcols(mask)[,img_id]")
       }
       if(!is.null(names(mask)) && sum(subset_images %in% names(mask) == 0)){
-        if(!(image_ID %in% colnames(mcols(mask)))){
-          stop("If 'mask' is unnamed, mask IDs must be provided in the mcols(mask)[,image_ID] slot.")
+        if(!(img_id %in% colnames(mcols(mask)))){
+          stop("If 'mask' is unnamed, mask ids must be provided in the mcols(mask)[,img_id] slot.")
         }
       }
     }
@@ -384,7 +384,7 @@
 
 # Check plotPixels input
 #' @importFrom S4Vectors isEmpty
-.valid.plotPixels.input <- function(image, object, mask, image_ID, colour_by, outline_by,
+.valid.plotPixels.input <- function(image, object, mask, img_id, colour_by, outline_by,
                                     subset_images,
                                     colour, missing_colour,
                                     scale_bar){
@@ -421,7 +421,7 @@
 
   # subset_images need to be either numeric, a logical,
   # a character and part of names(mask) or a character
-  # and part of mcols(mask)$image_ID
+  # and part of mcols(mask)$img_id
   if(!is.null(subset_images)){
     if(!is.numeric(subset_images) && !is.character(subset_images) &&
        !is.logical(subset_images)){
@@ -432,12 +432,12 @@
       stop("Invalid 'subset_images' argument.")
     }
     if(is.character(subset_images)){
-      if(is.null(names(image)) && !(image_ID %in% colnames(mcols(image)))){
-        stop("'subset_images' not part of names(mask) or mcols(mask)[,image_ID]")
+      if(is.null(names(image)) && !(img_id %in% colnames(mcols(image)))){
+        stop("'subset_images' not part of names(mask) or mcols(mask)[,img_id]")
       }
       if(!is.null(names(image)) && sum(subset_images %in% names(image) == 0)){
-        if(!(image_ID %in% colnames(mcols(mask)))){
-          stop("If 'image' is unnamed, image IDs must be provided in the mcols(image)[,image_ID] slot.")
+        if(!(img_id %in% colnames(mcols(mask)))){
+          stop("If 'image' is unnamed, image ids must be provided in the mcols(image)[,img_id] slot.")
         }
       }
     }

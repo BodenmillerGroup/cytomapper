@@ -2,33 +2,33 @@
 % Please edit documentation in R/plotCells.R
 \name{plotCells}
 \alias{plotCells}
-\title{Plotting function to visualize cell-level information}
+\title{Function to visualize cell-level information on segmentation masks}
 \usage{
 plotCells(
   object,
   mask,
-  cell_ID,
-  image_ID,
+  cell_id,
+  img_id,
   colour_by = NULL,
   outline_by = NULL,
   exprs_values = "counts",
   subset_images = NULL,
-  save_images = NULL,
-  return_images = FALSE,
   colour = NULL,
   missing_colour = "gray",
-  scale_bar = list(length = 20, label = NULL, lwd = 2, col = "white", margin = 10),
+  scale_bar = list(length = 20, label = NULL, lwd = 2, colour = "white", margin = 10),
   ...
 )
 }
 \arguments{
-\item{object}{a \code{\link[SingleCellExperiment]{SingleCellExperiment}}.}
+\item{object}{a \code{\linkS4class{SingleCellExperiment}} object.}
 
-\item{mask}{TODO}
+\item{mask}{an \code{\linkS4class{ImageList}} object single-channel
+\code{\linkS4class{Image}} objects (see Details)}
 
-\item{cell_ID}{TODO}
+\item{cell_id}{character specifying the \code{colData(object)}, in which the
+integer cell IDs are stored}
 
-\item{image_ID}{TODO}
+\item{img_id}{TODO}
 
 \item{colour_by}{TODO}
 
@@ -38,10 +38,6 @@ plotCells(
 
 \item{subset_images}{TODO}
 
-\item{save_images}{TODO}
-
-\item{return_images}{TODO}
-
 \item{colour}{TODO}
 
 \item{missing_colour}{TODO}
@@ -49,13 +45,24 @@ plotCells(
 \item{scale_bar}{TODO}
 
 \item{...}{TODO}
+
+\item{save_images}{TODO}
+
+\item{return_images}{TODO}
 }
 \value{
 TODO
 }
 \description{
+This function takes a \code{\linkS4class{SingleCellExperiment}} and
+\code{\linkS4class{ImageList}} object to colour cells by marker expression or
+metadata.
+}
+\section{Segmentaion mask object}{
+
 TODO
 }
+
 \section{Linking image IDs and cell IDs}{
 
 TODO
@@ -63,7 +70,7 @@ TODO
 
 \examples{
 # TODO
-# col = list(cell_type = c("CD4" = "red", "CD8" = "blue"),
+# colour = list(cell_type = c("CD4" = "red", "CD8" = "blue"),
 
 }
 \author{

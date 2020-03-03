@@ -4,7 +4,7 @@
 
 # Selection of images based on entries in SCE object or by subset
 #' @importFrom S4Vectors mcols
-.select_images <- function(object, images, image_ID, subset_images){
+.select_images <- function(object, images, img_id, subset_images){
 
   # If subset_images is not given, images are selected based on the cells
   # in the SCE object
@@ -12,8 +12,8 @@
     images <- images[subset_images]
   } else {
     if(!is.null(object)){
-      cur_image_ids <- unique(colData(object)[,image_ID])
-      images <- images[mcols(images)[,image_ID] %in% cur_image_ids]
+      cur_image_ids <- unique(colData(object)[,img_id])
+      images <- images[mcols(images)[,img_id] %in% cur_image_ids]
     }
   }
 
@@ -21,11 +21,11 @@
 }
 
 # Colour segmentation masks based on metadata
-.colourMaskByMeta <- function(object, mask, cell_ID, image_ID,
+.colourMaskByMeta <- function(object, mask, cell_id, img_id,
                               colour_by, cur_colour, missing_colour){
   for(i in seq_along(mask)){
     cur_mask <- mask[[i]]
-    cur_sce <- object[,colData(object)[,image_ID] == mcols(mask)[i,image_ID]]
+    cur_sce <- object[,colData(object)[,img_id] == mcols(mask)[i,img_id]]
     if(is.null(names(cur_colour))){
       col_ind <- colorRampPalette(cur_colour)(101)
       cur_scaling <- .minMaxScaling(colData(cur_sce)[,colour_by],
@@ -41,11 +41,11 @@
 
     # Then colour cells that are not in sce
     cur_m <- as.vector(cur_mask != "#000000") &
-      !(cur_mask %in% as.character(colData(cur_sce)[,cell_ID]))
+      !(cur_mask %in% as.character(colData(cur_sce)[,cell_id]))
     cur_mask <- replace(cur_mask, which(cur_m), missing_colour)
 
     # Next, colour cells that are present in sce object
-    cur_m <- match(cur_mask, as.character(colData(cur_sce)[,cell_ID]))
+    cur_m <- match(cur_mask, as.character(colData(cur_sce)[,cell_id]))
     cur_ind <- which(!is.na(cur_m))
     col_ind <- col_ind[cur_m[!is.na(cur_m)]]
 
@@ -66,19 +66,19 @@
 # Colour segmentation masks based on features
 #' @importFrom grDevices colorRampPalette
 #' @importFrom SummarizedExperiment assay
-.colourMaskByFeature <- function(object, mask, cell_ID, image_ID,
+.colourMaskByFeature <- function(object, mask, cell_id, img_id,
                      colour_by, exprs_values, cur_colour, missing_colour){
 
   for(i in seq_along(mask)){
     cur_mask <- mask[[i]]
-    cur_sce <- object[,colData(object)[,image_ID] == mcols(mask)[i,image_ID]]
+    cur_sce <- object[,colData(object)[,img_id] == mcols(mask)[i,img_id]]
 
     # Colour first the background
     cur_mask[cur_mask == 0L] <- "#000000"
 
     # Then colour cells that are not in sce
     cur_m <- as.vector(cur_mask != "#000000") &
-      !(cur_mask %in% as.character(colData(cur_sce)[,cell_ID]))
+      !(cur_mask %in% as.character(colData(cur_sce)[,cell_id]))
     cur_mask <- replace(cur_mask, which(cur_m), missing_colour)
 
     # Next, colour cells that are present in sce object
@@ -87,7 +87,7 @@
     # the scale across all images to the min/max of the whole sce object
     # Based on this, we will first merge the colours and colour
     # the mask accordingly
-    cur_m <- match(cur_mask, as.character(colData(cur_sce)[,cell_ID]))
+    cur_m <- match(cur_mask, as.character(colData(cur_sce)[,cell_id]))
     cur_ind <- which(!is.na(cur_m))
     cur_col_list <- lapply(colour_by, function(x){
       cur_frame <- cur_mask
@@ -162,26 +162,26 @@
 
 # Colour segmentation masks based on metadata
 #' @importFrom EBImage paintObjects
-.outlineImageByMeta <- function(object, mask, img, cell_ID, image_ID,
+.outlineImageByMeta <- function(object, mask, out_img, cell_id, img_id,
                                outline_by, cur_colour, missing_colour){
 
   for(i in seq_along(mask)){
     cur_mask <- mask[[i]]
-    cur_img <- img[[i]]
-    cur_sce <- object[,colData(object)[,image_ID] == mcols(mask)[i,image_ID]]
+    cur_img <- out_img[[i]]
+    cur_sce <- object[,colData(object)[,img_id] == mcols(mask)[i,img_id]]
 
     # Loop through entries in outline_by entry
     for(j in unique(colData(cur_sce)[,outline_by])){
       meta_mask <- cur_mask
-      cur_cell_ID <- colData(cur_sce)[colData(cur_sce)[,outline_by] == j,cell_ID]
-      meta_mask[!(meta_mask %in% cur_cell_ID)] <- 0L
+      cur_cell_id <- colData(cur_sce)[colData(cur_sce)[,outline_by] == j,cell_id]
+      meta_mask[!(meta_mask %in% cur_cell_id)] <- 0L
       cur_img <- paintObjects(meta_mask, Image(cur_img), col = cur_colour[j])
     }
 
-    img[[i]] <- Image(cur_img)
+    out_img[[i]] <- Image(cur_img)
   }
 
-  return(img)
+  return(out_img)
 }
 
 # Selecting the colours for plotting
@@ -258,14 +258,14 @@
 #' @importFrom EBImage Image
 #' @importFrom graphics par plot rasterImage strheight text
 .displayImages <- function(object, image, exprs_values, outline_by,
-                           colour_by, mask, img,
-                           image_ID, scale_bar, cur_col){
+                           colour_by, mask, out_img,
+                           img_id, scale_bar, cur_col){
   # Number of images
   # The first space is used for the figure legend
-  ni <- length(img) + 1
+  ni <- length(out_img) + 1
 
   # Size of images
-  si <- lapply(img, function(x)dim(x)[1:2])
+  si <- lapply(out_img, function(x)dim(x)[1:2])
 
   # Ncols and nrow
   nc <- ceiling(sqrt(ni))
@@ -273,13 +273,13 @@
 
   # We will take the largest image and
   # build the grid based on its size
-  cur_dims <- data.frame(lapply(img, dim))
+  cur_dims <- data.frame(lapply(out_img, dim))
   m_height <- max(cur_dims[1,])
   m_width <- max(cur_dims[2,])
   # Add empty image to list
-  img <- c(SimpleList(Image("#FFFFFF",
+  out_img <- c(SimpleList(Image("#FFFFFF",
                  dim = c(m_height, m_width))),
-           img)
+           out_img)
   cur_dims_x <- c(m_width, as.numeric(cur_dims[2,]))
   cur_dims_y <- c(m_height, as.numeric(cur_dims[1,]))
 
@@ -301,7 +301,7 @@
       ybottom <- i*m_height - (m_height - dim_y)/2
       xright <- j*m_width - (m_width - dim_x)/2
       ytop <- (i-1)*m_height + (m_height - dim_y)/2
-      rasterImage(Image(img[[ind]]),
+      rasterImage(Image(out_img[[ind]]),
                   xleft,
                   ybottom,
                   xright,
@@ -322,10 +322,10 @@
       # Plot title on images
       if(ind != 1L){
         if(!is.null(mask)){
-          cur_title <- mcols(mask)[ind - 1,image_ID]
+          cur_title <- mcols(mask)[ind - 1,img_id]
         }
-        else if(!is.null(names(img))){
-          cur_title <- names(img)[ind - 1]
+        else if(!is.null(names(out_img))){
+          cur_title <- names(out_img)[ind - 1]
         } else {
           cur_title <- as.character(ind - 1)
         }
