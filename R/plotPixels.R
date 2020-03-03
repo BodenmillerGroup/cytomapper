@@ -99,6 +99,19 @@ plotPixels <- function(image,
     }
   }
 
+  # Add outline
+  if(!is.null(outline_by)){
+    cur_col$outline_by <- .selectColours(object, outline_by, colour)
+    image <- .outlineImageByMeta(object, mask, image, cell_ID, image_ID,
+                                outline_by, cur_col$outline_by)
+  } else if(!is.null(mask)){
+    image <- mendoapply(function(cur_mask, cur_image){
+      cur_img <- paintObjects(cur_mask, Image(cur_image), col = missing_colour)
+      return(cur_img)
+    }, mask, image)
+    image <- as(image, "SimpleList")
+  }
+
   # If !is.null(mask) -> outline by default
 
 }

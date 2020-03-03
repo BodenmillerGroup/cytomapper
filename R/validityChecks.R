@@ -406,8 +406,9 @@
   # outline_by only takes entries from the colData slot
   # Check if all outline_by entries are in the colData slot
   if(!is.null(outline_by)){
-    if(is.null(object)){
-      stop("When outlining cells, please provide a SingleCellExperiment 'object'.")
+    if(is.null(object) || is.null(mask)){
+      stop("When outlining cells, please provide a SingleCellExperiment 'object' \n",
+           "and segmentation 'mask' object.")
     }
     if(is.null(colData(object)) || isEmpty(colData(object))){
       stop("'outline_by' not in the 'colData(object)' slot.")

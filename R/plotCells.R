@@ -100,7 +100,7 @@ plotCells <- function(object,
   # Add outline
   if(!is.null(outline_by)){
     cur_col$outline_by <- .selectColours(object, outline_by, colour)
-    img <- .outlineMaskByMeta(object, mask, img, cell_ID, image_ID,
+    img <- .outlineImageByMeta(object, mask, img, cell_ID, image_ID,
                                outline_by, cur_col$outline_by)
   }
 

@@ -162,7 +162,7 @@
 
 # Colour segmentation masks based on metadata
 #' @importFrom EBImage paintObjects
-.outlineMaskByMeta <- function(object, mask, img, cell_ID, image_ID,
+.outlineImageByMeta <- function(object, mask, img, cell_ID, image_ID,
                                outline_by, cur_colour, missing_colour){
 
   for(i in seq_along(mask)){
