@@ -464,10 +464,10 @@
   }
 
   # missing_col has to be a valid colour
-  if(!is.null(missing_col)){
-    res <- try(col2rgb(missing_col), silent=TRUE)
+  if(!is.null(missing_colour)){
+    res <- try(col2rgb(missing_colour), silent=TRUE)
     if(class(res) == "try-error"){
-      stop("'missing_col' not a valid colour.")
+      stop("'missing_colour' not a valid colour.")
     }
   }
 

@@ -11,8 +11,10 @@
   if(!is.null(subset_images)){
     images <- images[subset_images]
   } else {
-    cur_image_ids <- unique(colData(object)[,image_ID])
-    images <- images[mcols(images)[,image_ID] %in% cur_image_ids]
+    if(!is.null(object)){
+      cur_image_ids <- unique(colData(object)[,image_ID])
+      images <- images[mcols(images)[,image_ID] %in% cur_image_ids]
+    }
   }
 
   return(images)
@@ -112,6 +114,52 @@
   return(as(mask, "SimpleList"))
 }
 
+# Colour images based on features
+#' @importFrom EBImage normalize
+.colourImageByFeature <- function(image, colour_by, cur_colour){
+
+  max.values <- as.data.frame(lapply(getChannels(image, colour_by), function(x){
+    apply(x, 3, max)
+  }))
+  max.values <- apply(max.values, 1, max)
+
+  min.values <- as.data.frame(lapply(getChannels(image, colour_by), function(x){
+    apply(x, 3, min)
+  }))
+  min.values <- apply(min.values, 1, min)
+  out.list <- as(image, "SimpleList")
+
+  for(i in seq_along(image)){
+    cur_image <- getChannels(image, colour_by)[[i]]
+
+    # Colour pixels
+    # For this, we will perform a min/max scaling on the pixel values per channel
+    # However, to keep pixel values comparable across images, we will fix
+    # the scale across all images to the min/max of alll images per channel
+    # Based on this, we will first merge the colours and colour
+    # the images accordingly
+    cur_frame_list <- lapply(colour_by, function(x){
+      cur_frame <- cur_image[,,x]
+      cur_frame <- normalize(cur_frame, separate=TRUE,
+                             ft = c(0,1), inputRange = c(min.values[x], max.values[x]))
+      col_ind <- colorRampPalette(cur_colour[[x]])(101)
+      cur_frame <- replace(cur_frame, 1:length(cur_frame), col_ind[round(100*cur_frame) + 1])
+      cur_frame
+    })
+
+    cur_image <- Reduce("+", lapply(cur_frame_list, Image))
+
+    if(!is.null(names(image))){
+      ind <- names(image)[i]
+    } else{
+      ind <- i
+    }
+    out.list[[ind]] <- cur_image
+  }
+
+  return(out.list)
+}
+
 # Colour segmentation masks based on metadata
 #' @importFrom EBImage paintObjects
 .outlineMaskByMeta <- function(object, mask, img, cell_ID, image_ID,
@@ -143,7 +191,7 @@
 .selectColours <- function(object, colour_by, colour){
   # We seperate this function between colouring based on metadata
   # or the marker expression (rownames)
-  if(all(colour_by %in% colnames(colData(object)))){
+  if(!is.null(object) && all(colour_by %in% colnames(colData(object)))){
     # If colour is not specified, we select a number of default colours
     cur_entries <- unique(colData(object)[,colour_by])
     if(is.null(colour)){

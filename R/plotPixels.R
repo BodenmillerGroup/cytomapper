@@ -65,6 +65,28 @@ plotPixels <- function(image,
                          colour, missing_colour,
                          scale_bar)
 
+  # Select images for plotting
+  image <- .select_images(object, image, image_ID, subset_images)
+  if(!is.null(mask)){
+    mask <- .select_images(object, mask, image_ID, subset_images)
+  }
+  cur_col <- list()
+
+  # Colour the images
+  # Here, a SimpleList is returned that allows storing colour Images
+  if(!is.null(colour_by)){
+
+    # Select the colours
+    cur_col$colour_by <- .selectColours(object, colour_by, colour)
+
+    # Colouring by features
+    image <- .colourImageByFeature(image,
+                                 colour_by,
+                                 cur_col$colour_by)
+  } else {
+    colour_by <-
+  }
+
   # If !is.null(mask) -> outline by default
 
 }
