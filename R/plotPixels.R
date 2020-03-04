@@ -14,6 +14,7 @@
 #'   integer cell IDs are stored
 #' @param img_id (optional)
 #' @param colour_by TODO
+#' @param bcg brightness/contrast/gamma list("H3" = c(0,1,1))
 #' @param outline_by (optional)
 #' @param subset_images TODO
 #' @param colour TODO
