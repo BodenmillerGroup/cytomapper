@@ -192,7 +192,7 @@
 
   if(!(img_id %in% colnames(colData(object))) ||
      !(cell_id %in% colnames(colData(object)))){
-    stop("'img_id' or 'cell_id' not in 'colData(object)'.")
+    stop("'img_id' and/or 'cell_id' not in 'colData(object)'.")
   }
 
   if(!all(colData(object)[,cell_id] == floor(colData(object)[,cell_id]))){
@@ -208,11 +208,7 @@
 #' @importFrom EBImage numberOfFrames
 .valid.mask <- function(mask, img_id){
   if(!is(mask, "ImageList")){
-    stop("Please provide the segementation mask(s) in form of an 'ImageList' object")
-  }
-
-  if(is.null(img_id)){
-    stop("Please provide a character indicating the 'img_id' slot.")
+    stop("Please provide the segmentation mask(s) in form of an 'ImageList' object")
   }
 
   # Check number of channels in mask
@@ -227,7 +223,7 @@
   }
 
   # Check if img_id exists in elementMetadata
-  if(!(img_id %in% colnames(mcols(mask)))){
+  if(!is.null(img_id) && !(img_id %in% colnames(mcols(mask)))){
     stop("'img_id' not in 'mcols(mask)'.")
   }
 }
@@ -291,6 +287,10 @@
   # Check if all colour_by entries are in either
   # the rownames or colData slot
   if(!is.null(colour_by)){
+    if(is.null(object)){
+      stop("Please provide a SingleCellExperiment 'object'.")
+    }
+
     if(is.null(colData(object)) || isEmpty(colData(object))){
       if(!all(colour_by %in% rownames(object))){
         stop("'colour_by' not in 'rownames(object)' or the 'colData(object)' slot.")
@@ -317,6 +317,14 @@
   # outline_by only takes entries from the colData slot
   # Check if all outline_by entries are in the colData slot
   if(!is.null(outline_by)){
+    if(is.null(object)){
+      stop("Please provide a SingleCellExperiment 'object'.")
+    }
+
+    if(length(outline_by) > 1L){
+      stop("Only one 'outline_by' entry allowed.")
+    }
+
     if(is.null(colData(object)) || isEmpty(colData(object))){
       stop("'outline_by' not in the 'colData(object)' slot.")
     } else {
@@ -420,6 +428,11 @@
       stop("When outlining cells, please provide a SingleCellExperiment 'object' \n",
            "and segmentation 'mask' object.")
     }
+
+    if(length(outline_by) > 1L){
+      stop("Only one 'outline_by' entry allowed.")
+    }
+
     if(is.null(colData(object)) || isEmpty(colData(object))){
       stop("'outline_by' not in the 'colData(object)' slot.")
     } else {

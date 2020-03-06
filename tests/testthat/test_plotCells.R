@@ -2,40 +2,51 @@ test_that("plotCells: Standard input testing works", {
   data("pancreasSCE")
   data("pancreasMasks")
 
+  # Works
+  # Add test if only mask can be displayed
+
+  expect_silent(plotCells(object = pancreasSCE,
+                          mask = pancreasMasks, img_id = "ImageNb",
+                          cell_id = "CellNb"))
+
+  # Error
   expect_error(plotCells(object = "test"),
-               regexp = "'object' is not of type 'SingleCellExperiment'.")
+               regexp = "'object' is not of type 'SingleCellExperiment'.",
+               fix = TRUE)
   expect_error(plotCells(object = pancreasSCE),
-               regexp = 'argument "img_id" is missing, with no default')
+               regexp = 'argument "img_id" is missing, with no default',
+               fix = TRUE)
   expect_error(plotCells(object = pancreasSCE, img_id = "test"),
-               regexp = 'argument "cell_id" is missing, with no default')
+               regexp = 'argument "cell_id" is missing, with no default',
+               fix = TRUE)
   expect_error(plotCells(object = pancreasSCE,
                          img_id = "test", cell_id = "test"),
-               regexp = "'img_id' and/or 'cell_id' not in 'colData(object)'.")
+               regexp = "'img_id' and/or 'cell_id' not in 'colData(object)'.",
+               fix = TRUE)
   expect_error(plotCells(object = pancreasSCE,
                          img_id = "test", cell_id = "CellNb"),
-               regexp = "'img_id' and/or 'cell_id' not in 'colData(object)'.")
+               regexp = "'img_id' and/or 'cell_id' not in 'colData(object)'.",
+               fix = TRUE)
   expect_error(plotCells(object = pancreasSCE,
                          img_id = "ImageNb", cell_id = "test"),
-               regexp = "'img_id' and/or 'cell_id' not in 'colData(object)'.")
+               regexp = "'img_id' and/or 'cell_id' not in 'colData(object)'.",
+               fix = TRUE)
   expect_error(plotCells(object = pancreasSCE,
                          img_id = "ImageNb", cell_id = "CellNb"),
-               regexp = 'argument "mask" is missing, with no default')
+               regexp = 'argument "mask" is missing, with no default',
+               fix = TRUE)
   expect_error(plotCells(object = pancreasSCE,
                          img_id = "ImageNb", cell_id = "CellNb",
                          mask = "test"),
-               regexp = "Please provide the segementation mask(s) in form of an 'ImageList' object")
+               regexp = "Please provide the segementation mask(s) in form of an 'ImageList' object",
+               fix = TRUE)
 })
 
 test_that("plotCells: Features can be displayed.", {
   data("pancreasSCE")
   data("pancreasMasks")
 
-  expect_silent(plotCells(object = pancreasSCE,
-            mask = pancreasMasks, img_id = "ImageNb",
-            cell_id = "CellNb"))
-  expect_silent(plotCells(object = pancreasSCE,
-            mask = pancreasMasks, img_id = "ImageNb",
-            cell_id = "CellNb", colour_by = "CellType"))
+  # Works
   expect_silent(plotCells(object = pancreasSCE,
             mask = pancreasMasks, img_id = "ImageNb",
             cell_id = "CellNb", colour_by = "H3"))
@@ -61,73 +72,97 @@ test_that("plotCells: Features can be displayed.", {
             mask = pancreasMasks, img_id = "ImageNb",
             cell_id = "CellNb",
             colour_by = c("H3", "SMA", "INS", "CD38", "CD44")))
+
+  # Error
+  expect_error(plotCells(object = pancreasSCE,
+                         mask = pancreasMasks, img_id = "ImageNb",
+                         cell_id = "CellNb", colour_by = "test"),
+               regexp = "'colour_by' not in 'rownames(object)' or the 'colData(object)' slot.",
+               fix = TRUE)
+  expect_error(plotCells(object = pancreasSCE,
+                         mask = pancreasMasks, img_id = "ImageNb",
+                         cell_id = "CellNb", colour_by = c("H3", "test")),
+               regexp = "'colour_by' not in 'rownames(object)' or the 'colData(object)' slot.",
+               fix = TRUE)
+  expect_error(plotCells(object = pancreasSCE,
+                         mask = pancreasMasks, img_id = "ImageNb",
+                         cell_id = "CellNb", colour_by = 1),
+               regexp = "'colour_by' not in 'rownames(object)' or the 'colData(object)' slot.",
+               fix = TRUE)
 })
 
 test_that("plotCells: Metadata can be displayed.", {
   data("pancreasSCE")
   data("pancreasMasks")
 
-  # Colour by
-  plotCells(object = pancreasSCE,
+  # Works
+  expect_silent(plotCells(object = pancreasSCE,
             mask = pancreasMasks, img_id = "ImageNb",
-            cell_id = "CellNb")
-  plotCells(object = pancreasSCE,
-            mask = pancreasMasks, img_id = "ImageNb",
-            cell_id = "CellNb", colour_by = "CellType")
-  plotCells(object = pancreasSCE,
-            mask = pancreasMasks, img_id = "ImageNb",
-            cell_id = "CellNb", colour_by = "H3")
-  plotCells(object = pancreasSCE,
-            mask = pancreasMasks, img_id = "ImageNb",
-            cell_id = "CellNb", colour_by = "SMA")
-  plotCells(object = pancreasSCE,
-            mask = pancreasMasks, img_id = "ImageNb",
-            cell_id = "CellNb", colour_by = "INS")
-  plotCells(object = pancreasSCE,
-            mask = pancreasMasks, img_id = "ImageNb",
-            cell_id = "CellNb", colour_by = "CD38")
-  plotCells(object = pancreasSCE,
-            mask = pancreasMasks, img_id = "ImageNb",
-            cell_id = "CellNb", colour_by = "CD44")
-  plotCells(object = pancreasSCE,
-            mask = pancreasMasks, img_id = "ImageNb",
-            cell_id = "CellNb", colour_by = c("H3", "SMA"))
-  plotCells(object = pancreasSCE,
-            mask = pancreasMasks, img_id = "ImageNb",
-            cell_id = "CellNb", colour_by = c("H3", "SMA", "INS"))
-  plotCells(object = pancreasSCE,
+            cell_id = "CellNb", colour_by = "CellType"))
+  expect_silent(plotCells(object = pancreasSCE,
             mask = pancreasMasks, img_id = "ImageNb",
             cell_id = "CellNb",
-            colour_by = c("H3", "SMA", "INS", "CD38", "CD44"))
-  plotCells(object = pancreasSCE,
+            colour_by = "Area"))
+  expect_silent(plotCells(object = pancreasSCE,
             mask = pancreasMasks, img_id = "ImageNb",
             cell_id = "CellNb",
-            colour_by = "Area")
-  plotCells(object = pancreasSCE,
+            colour_by = "Pos_X"))
+  expect_silent(plotCells(object = pancreasSCE,
             mask = pancreasMasks, img_id = "ImageNb",
             cell_id = "CellNb",
-            colour_by = "Pos_X")
-  plotCells(object = pancreasSCE,
-            mask = pancreasMasks, img_id = "ImageNb",
-            cell_id = "CellNb",
-            colour_by = "Pos_Y")
+            colour_by = "Pos_Y"))
 
-  # Outline by
-  plotCells(object = pancreasSCE,
+  # Error
+  expect_error(plotCells(object = pancreasSCE,
+               mask = pancreasMasks, img_id = "ImageNb",
+               cell_id = "CellNb",
+               colour_by = c("CellType", "test")),
+               regexp = "'colour_by' not in 'rownames(object)' or the 'colData(object)' slot.",
+               fix = TRUE)
+  expect_error(plotCells(object = pancreasSCE,
+                         mask = pancreasMasks, img_id = "ImageNb",
+                         cell_id = "CellNb",
+                         colour_by = c("CellType", "Area")),
+               regexp = "Only one 'colour_by' entry allowed when selecting a 'colData(object)' slot.",
+               fix = TRUE)
+
+})
+
+test_that("plotCells: Cells can be outlined correctly.", {
+  data("pancreasSCE")
+  data("pancreasMasks")
+
+  # Works
+  expect_silent(plotCells(object = pancreasSCE,
+            mask = pancreasMasks, img_id = "ImageNb",
+            cell_id = "CellNb",
+            outline_by = "CellType"))
+
+  # Fix this!
+  expect_silent(plotCells(object = pancreasSCE,
             mask = pancreasMasks, img_id = "ImageNb",
             cell_id = "CellNb", colour_by = "SMA",
-            outline_by = "CellType")
-  plotCells(object = pancreasSCE,
-            mask = pancreasMasks, img_id = "ImageNb",
-            cell_id = "CellNb", colour_by = c("SMA", "INS"),
-            outline_by = "CellType")
-  plotCells(object = pancreasSCE,
-            mask = pancreasMasks, img_id = "ImageNb",
-            cell_id = "CellNb", outline_by = "CellType")
+            outline_by = "Area"))
 
-  plotCells(object = pancreasSCE,
-            mask = pancreasMasks, img_id = "ImageNb",
-            cell_id = "CellNb", outline_by = "CellType")
+  # Error
+  expect_error(plotCells(object = pancreasSCE,
+                          mask = pancreasMasks, img_id = "ImageNb",
+                          cell_id = "CellNb", colour_by = "SMA",
+                          outline_by = "test"),
+               regexp = "'outline_by' not in 'colData(object)' slot.",
+               fixed = TRUE)
+
+  # Fix this!
+  expect_error(plotCells(object = pancreasSCE,
+                         mask = pancreasMasks, img_id = "ImageNb",
+                         cell_id = "CellNb", colour_by = "SMA",
+                         outline_by = c("CellType", "Area")),
+               regexp = "Fix this!!!",
+               fixed = TRUE)
+
+
+})
+
 
   # exprs_values
   plotCells(object = pancreasSCE,
