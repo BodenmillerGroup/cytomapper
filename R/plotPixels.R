@@ -20,6 +20,7 @@
 #' @param colour TODO
 #' @param missing_colour TODO
 #' @param scale_bar TODO
+#' @param image_title TODO
 #' @param ... TODO
 #'
 #' @return TODO
@@ -44,11 +45,17 @@ plotPixels <- function(image,
                        missing_colour = "gray",
                        scale_bar = list(length = 20,
                                         label = NULL,
+                                        cex = 1,
                                         lwd = 2,
                                         colour = "white",
                                         position = "bottomright",
-                                        marginx = 10,
-                                        marginy = 10),
+                                        margin = c(10,10)),
+                       image_title = list(text =  NULL,
+                                          position = "top",
+                                          cex = 1,
+                                          colour = "white",
+                                          margin = c(0,0),
+                                          font = 2),
                        ...) {
   # Object checks
   if(!is.null(object)){
@@ -64,7 +71,7 @@ plotPixels <- function(image,
   .valid.plotPixels.input(image, object, mask, img_id, colour_by, outline_by,
                          subset_images,
                          colour, missing_colour,
-                         scale_bar)
+                         scale_bar, image_title)
 
   # Select images for plotting
   image <- .select_images(object, image, img_id, subset_images)
@@ -116,6 +123,5 @@ plotPixels <- function(image,
   # Plot images
   .displayImages(object, image, exprs_values = NULL,
                  outline_by, colour_by, mask, out_img, img_id,
-                 scale_bar, cur_col)
-
+                 scale_bar, image_title, cur_col)
 }

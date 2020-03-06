@@ -1,5 +1,5 @@
 ---
-title: "SingleCellMapper for spatial data visualization"
+title: "SingleCellMapper for spatial data visualization in R"
 author:
 - name: Nils Eling
   affiliation: Department for Quantitative Biomedicine, University of Zurich
@@ -21,13 +21,108 @@ vignette: |
   %\VignetteEncoding{UTF-8}
 ---
 
+```{r, echo=FALSE, results="hide"}
+knitr::opts_chunk$set(error=FALSE, warning=FALSE, message=FALSE)
+library(BiocStyle)
+set.seed(20200101)
+```
+
+
 # Introduction
 
-# Quick start
+This vignette gives an overview of spatial data visualization with the `SingleCellMapper` package.
+This document also introduces the `ImageList` class, which inherits from the [`SimpleList` class](https://rdrr.io/bioc/S4Vectors/man/SimpleList-class.html).
 
+Explain: images, masks, sce
+
+# Quick start
 Here, we will highlight the most simple use of the package
 
+Load the libraries
+```{r libraries, include=F}
+library(SingleCellMapper)
+```
+
+Load the example data: SingleCellExperiment object
+```{r quickstart-load-sce}
+load("../data/pancreasSCE.RData")
+pancreasSCE
+```
+
+Load the example data: List of images
+```{r quickstart-load-imagelist}
+load("../data/pancreasImages.RData")
+pancreasImages
+```
+
+Load the example data: List of masks
+```{r quickstart-load-masklist}
+load("../data/pancreasMasks.RData")
+pancreasMasks
+```
+
+
+## Quick plotting of pixel-level information
+Illustration of the `plotPixel` function
+```{r quickstart-plotpixels, fig.cap="Quick start: plot pixel-level information", fig.small=TRUE, echo=FALSE}
+plotPixels(image=pancreasImages)
+```
+
+Displaying the cell masks.\n
+Here, 'img_id' is used to match images and masks. The 'ImageNb' column is present in both 'mcols(pancreasImages)' and 'mcols(pancreasMasks)'
+```{r quickstart-plotpixels-mask, fig.cap="Quick start: plot cell masks", fig.small=TRUE, echo=FALSE}
+plotPixels(image=pancreasImages, mask=pancreasMasks, img_id = "ImageNb")
+```
+
+Plotting specific channels
+```{r quickstart-plotpixels-twochannels, fig.cap="Quick start: plot specific channels", fig.small=TRUE, echo=FALSE}
+plotPixels(image=pancreasImages, mask=pancreasMasks, img_id = "ImageNb", colour_by=c("H3","SMA"))
+```
+
+
+## Quick plotting of cell-level information
+Illustration of the `plotCells` function
+```{r quickstart-plotcells, fig.cap="Quick start: plot cell-level information", fig.small=TRUE, echo=FALSE}
+plotCells(object=pancreasSCE, mask=pancreasMasks, img_id='ImageNb', cell_id='CellNb')
+```
+
+Colouring cells.\n
+'colour_by' should be a column in 'colData(pancreasSCE)'\n
+'expr_values' should be an assay in 'assays(pancreasSCE)'
+```{r quickstart-plotcells-colourby, fig.cap="Quick start: colour by cell type", fig.small=TRUE, echo=FALSE}
+plotCells(object=pancreasSCE, mask=pancreasMasks, img_id='ImageNb', cell_id='CellNb',
+          colour_by="CellType", expr_values="exprs")
+```
+
+Displaying cell outlines\n
+'outline_by' should be a column in colData(pancreasSCE)
+```{r quickstart-plotcells-outlineby, fig.cap="Quick start: outline by cell type", fig.small=TRUE, echo=FALSE}
+plotCells(object=pancreasSCE, mask=pancreasMasks, img_id='ImageNb', cell_id='CellNb',
+          outline_by="CellType")
+```
+
+
+
 # Reading in data
+
+## Data format
+Images should be stacks, all stacks should have the same number of channels
+Masks should be single-channel images
+Object should be a `SingleCellExperiment`
+
+`img_id` should be in metadata columns
+`cell_id` should be integer values and *correspond to the masks*
+
+## Load images
+Introduction to the `LoadImage` function
+
+## Add metadata
+```{r}
+mcols(pancreasImages)
+mcols(pancreasMasks)
+colData(pancreasSCE)$ImageNb
+```
+
 
 # The ImageList object
 
@@ -36,6 +131,7 @@ Here, we will highlight the most simple use of the package
 ## Coercion
 
 ## Subsetting
+Extract one channel from the ImageList
 
 ## Looping
 
@@ -48,6 +144,14 @@ Here, we will highlight the most simple use of the package
 # Plotting Cell-level information
 
 ## Normalization
+
+# Customization
+
+## Legend
+
+## Scale bar
+
+## Cropping
 
 # Saving images
 

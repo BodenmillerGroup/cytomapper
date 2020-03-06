@@ -41,3 +41,8 @@
 - plotCells
 - plotPixels
 - version bump 0.1.5
+
+2020-03-06: Added options for scale_bar and image_title:
+- Options for further customization of scale_bar
+- Options for image_title customization
+- Started vignette draft
