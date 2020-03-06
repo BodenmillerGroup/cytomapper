@@ -46,7 +46,9 @@ plotPixels <- function(image,
                                         label = NULL,
                                         lwd = 2,
                                         colour = "white",
-                                        margin = 10),
+                                        position = "bottomright",
+                                        marginx = 10,
+                                        marginy = 10),
                        ...) {
   # Object checks
   if(!is.null(object)){

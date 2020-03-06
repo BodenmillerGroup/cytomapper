@@ -50,7 +50,9 @@ plotCells <- function(object,
                                        label = NULL,
                                        lwd = 2,
                                        colour = "white",
-                                       margin = 10),
+                                       position = "bottomright",
+                                       marginx = 10,
+                                       marginy = 10),
                       ...) {
 
   # Object checks
@@ -78,12 +80,12 @@ plotCells <- function(object,
     if(all(colour_by %in% colnames(colData(object)))){
       # Colouring by metadata
       out_img <- .colourMaskByMeta(object, mask, cell_id, img_id,
-                                colour_by, cur_col$colour_by, missing_colour)
+                                   colour_by, cur_col$colour_by, missing_colour)
     } else {
       # Colouring by features
       out_img <- .colourMaskByFeature(object, mask, cell_id, img_id,
-                                   colour_by, exprs_values,
-                                  cur_col$colour_by, missing_colour)
+                                      colour_by, exprs_values,
+                                      cur_col$colour_by, missing_colour)
     }
   } else {
     out_img <- endoapply(mask, function(x){
@@ -98,7 +100,7 @@ plotCells <- function(object,
   if(!is.null(outline_by)){
     cur_col$outline_by <- .selectColours(object, outline_by, colour)
     out_img <- .outlineImageByMeta(object, mask, out_img, cell_id, img_id,
-                               outline_by, cur_col$outline_by)
+                                   outline_by, cur_col$outline_by)
   }
 
   # Plot images

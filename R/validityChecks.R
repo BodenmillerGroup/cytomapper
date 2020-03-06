@@ -132,7 +132,7 @@
   }
 }
 
-# Chcks if channels can be replaced
+# Check if channels can be replaced
 #' @importFrom methods is
 .valid.Channel.setting <- function(x, i, value){
   # Only ImageList objects are supported
@@ -385,8 +385,11 @@
       stop("Invalid 'scale_bar' entry")
     }
     if(is.null(names(scale_bar)) || !all(names(scale_bar) %in%
-                        c("length", "label", "lwd", "colour", "margin"))){
+                                         c("length", "label", "lwd", "colour", "position", "marginx", "marginy"))){
       stop("Invalid entry to the 'scale_bar' list object")
+    }
+    if(!(scale_bar$position %in% c("topleft", "topright", "bottomleft", "bottomright")) && !(is.null(scale_bar$position))){
+      stop("Invalid entry to the 'scale_bar' list object: position should be 'topleft', 'topright', 'bottomleft', or 'bottomright'")
     }
   }
 }
@@ -488,12 +491,14 @@
       stop("Invalid 'scale_bar' entry")
     }
     if(is.null(names(scale_bar)) || !all(names(scale_bar) %in%
-                                         c("length", "label", "lwd", "colour", "margin"))){
+                                         c("length", "label", "lwd", "colour", "position", "marginx", "marginy"))){
       stop("Invalid entry to the 'scale_bar' list object")
+    }
+    if(!(scale_bar$position %in% c("topleft", "topright", "bottomleft", "bottomright")) && !(is.null(scale_bar$position))){
+      stop("Invalid entry to the 'scale_bar' list object: position should be 'topleft', 'topright', 'bottomleft', or 'bottomright'")
     }
   }
 }
-
 
 
 

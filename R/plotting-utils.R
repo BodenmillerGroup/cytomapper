@@ -316,7 +316,7 @@
       if(ind != 1L && !is.null(scale_bar)){
         # Plot scale bar
         .plotScaleBar(scale_bar,
-                      xright, ybottom)
+                      xleft, xright, ytop, ybottom)
       }
 
       # Plot title on images
@@ -461,28 +461,88 @@
 # Plot scale_bar
 #' @importFrom graphics strheight text segments
 #' @importFrom raster as.raster
-.plotScaleBar <- function(scale_bar, x, y){
-    cur_length <- scale_bar$length
-    if(is.null(scale_bar$label)){
-      cur_label <- as.character(cur_length)
-    } else {
-      cur_label <- as.character(scale_bar$label)
-    }
-    cur_lwd <- scale_bar$lwd
-    cur_col <- scale_bar$colour
-    cur_margin <- scale_bar$margin
+.plotScaleBar <- function(scale_bar, xl, xr, yt, yb){
+  default_sb <- list(length = 20, label = NULL, lwd = 2, colour = "white",
+                           position = "bottomright", marginx = 10, marginy = 10)
 
-    # Plot scale bar
-    segments(x0 = x - cur_length - cur_margin,
-             y0 = y - cur_margin,
-             x1 = x - cur_margin,
+  if(is.null(scale_bar$length)){
+    cur_length <- default_sb$length
+  } else {
+    cur_length <- scale_bar$length
+  }
+  if(is.null(scale_bar$label)){
+    cur_label <- as.character(cur_length)
+  } else {
+    cur_label <- as.character(scale_bar$label)
+  }
+  if(is.null(scale_bar$lwd)){
+    cur_lwd <- default_sb$lwd
+  } else {
+    cur_lwd <- scale_bar$lwd
+  }
+  if(is.null(scale_bar$colour)){
+    cur_col <- default_sb$colour
+  } else {
+    cur_col <- scale_bar$colour
+  }
+  if(is.null(scale_bar$position)){
+    cur_position <- default_sb$position
+  } else {
+    cur_position <- scale_bar$position
+  }
+  if(is.null(scale_bar$marginx)){
+    cur_marginx <- default_sb$marginx
+  } else {
+    cur_marginx <- scale_bar$marginx
+  }
+  if(is.null(scale_bar$marginy)){
+    cur_marginy <- default_sb$marginy
+  } else {
+    cur_marginy <- scale_bar$marginy
+  }
+
+  # Plot scale bar
+  label_height <- abs(strheight(cur_label))
+  if(cur_position == "bottomright"){
+    segments(x0 = xr - cur_length - cur_marginx,
+             y0 = yb - cur_marginy,
+             x1 = xr - cur_marginx,
              lwd = cur_lwd,
              col = cur_col)
-    label_height <- abs(strheight(cur_label))
-    text(x = x - cur_length/2 - cur_margin,
-         y = y - cur_margin - label_height - label_height/4,
+    text(x = xr - cur_length/2 - cur_marginx,
+         y = yb - cur_marginy - label_height - label_height/4,
          labels = cur_label, col = cur_col,
          adj = 0.5, lwd = cur_lwd)
-
+  } else if(cur_position == "bottomleft"){
+    segments(x0 = xl + cur_marginx,
+             y0 = yb - cur_marginy,
+             x1 = xl + cur_length + cur_marginx,
+             lwd = cur_lwd,
+             col = cur_col)
+    text(x = xl + cur_length/2 + cur_marginx,
+         y = yb - cur_marginy - label_height - label_height/4,
+         labels = cur_label, col = cur_col,
+         adj = 0.5, lwd = cur_lwd)
+  } else if(cur_position == "topright"){
+    segments(x0 = xr - cur_length - cur_marginx,
+             y0 = yt + cur_marginy,
+             x1 = xr - cur_marginx,
+             lwd = cur_lwd,
+             col = cur_col)
+    text(x = xr - cur_length/2 - cur_marginx,
+         y = yt + cur_marginy - label_height - label_height/4,
+         labels = cur_label, col = cur_col,
+         adj = 0.5, lwd = cur_lwd)
+  } else if(cur_position == "topleft"){
+    segments(x0 = xl + cur_marginx,
+             y0 = yt + cur_marginy,
+             x1 = xl + cur_length + cur_marginx,
+             lwd = cur_lwd,
+             col = cur_col)
+    text(x = xl + cur_length/2 + cur_marginx,
+         y = yt + cur_marginy - label_height - label_height/4,
+         labels = cur_label, col = cur_col,
+         adj = 0.5, lwd = cur_lwd)
+  }
 }
 
