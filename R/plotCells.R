@@ -36,10 +36,10 @@
 #' @author Nicolas Damond (\email{nicolas.damond@@dqbm.uzh.ch})
 #'
 #' @export
-plotCells <- function(object,
-                      mask,
-                      cell_id,
-                      img_id,
+plotCells <- function(mask
+                      object = NULL,
+                      cell_id = NULL,
+                      img_id = NULL,
                       colour_by = NULL,
                       outline_by = NULL,
                       exprs_values = "counts",
@@ -54,9 +54,15 @@ plotCells <- function(object,
                       ...) {
 
   # Object checks
-  .valid.sce(object, img_id, cell_id, exprs_values)
   .valid.mask(mask, img_id)
-  .valid.matchObjects.plotCells(object, mask, img_id)
+  if(!is.null(object)){
+    .valid.sce(object, img_id, cell_id, exprs_values)
+    .valid.matchObjects.plotCells(object, mask, img_id)
+
+    if(is.null(img_id) || is.null(cell_id)){
+      stop("Please provide an 'img_id' and 'cell_id' entry.")
+    }
+  }
 
   # Argument checks
   .valid.plotCells.input(object, mask, img_id, colour_by, outline_by,
