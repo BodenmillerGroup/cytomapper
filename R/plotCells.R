@@ -36,7 +36,7 @@
 #' @author Nicolas Damond (\email{nicolas.damond@@dqbm.uzh.ch})
 #'
 #' @export
-plotCells <- function(mask
+plotCells <- function(mask,
                       object = NULL,
                       cell_id = NULL,
                       img_id = NULL,

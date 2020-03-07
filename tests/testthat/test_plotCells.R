@@ -4,7 +4,7 @@ test_that("plotCells: Standard input testing works", {
 
   # Works
   # Add test if only mask can be displayed
-
+  expect_silent(plotCells(mask = pancreasMasks))
   expect_silent(plotCells(object = pancreasSCE,
                           mask = pancreasMasks, img_id = "ImageNb",
                           cell_id = "CellNb"))

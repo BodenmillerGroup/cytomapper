@@ -321,7 +321,7 @@
 
       # Plot title on images
       if(ind != 1L){
-        if(!is.null(mask)){
+        if(!is.null(mask) && !is.null(img_id)){
           cur_title <- mcols(mask)[ind - 1,img_id]
         }
         else if(!is.null(names(out_img))){
