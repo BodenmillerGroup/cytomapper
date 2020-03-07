@@ -259,7 +259,7 @@
 #' @importFrom graphics par plot rasterImage strheight text
 .displayImages <- function(object, image, exprs_values, outline_by,
                            colour_by, mask, out_img,
-                           img_id, scale_bar, cur_col){
+                           img_id, scale_bar, image_title, cur_col){
   # Number of images
   # The first space is used for the figure legend
   ni <- length(out_img) + 1
@@ -316,24 +316,77 @@
       if(ind != 1L && !is.null(scale_bar)){
         # Plot scale bar
         .plotScaleBar(scale_bar,
-                      xright, ybottom)
+                      xleft, xright, ytop, ybottom)
       }
 
       # Plot title on images
       if(ind != 1L){
-        if(!is.null(mask) && !is.null(img_id)){
+        if(!is.null(image_title$text)){
+          cur_title <- rep(image_title$text, length.out=length(out_img))[ind-1]
+        } else if(!is.null(mask) && !is.null(img_id)){
           cur_title <- mcols(mask)[ind - 1,img_id]
-        }
-        else if(!is.null(names(out_img))){
+        } else if(!is.null(names(out_img))){
           cur_title <- names(out_img)[ind]
         } else {
           cur_title <- as.character(ind - 1)
         }
-        label_height <- abs(strheight(cur_title, font = 2))
-        text(x = xleft + dim_x/2,
-             y = ytop + label_height*2,
-             labels = cur_title, col = "white",
-            adj = 0.5, font = 2)
+
+        default_it <- list(position = "top",  cex = 1, colour = "white", margin = c(0,0), font = 2)
+        if(!is.null(image_title$position)){
+          cur_position <- image_title$position
+        } else {
+          cur_position <- default_it$position
+        }
+        if(!is.null(image_title$cex)){
+          cur_cex <- image_title$cex
+        } else {
+          cur_cex <- default_it$cex
+        }
+        if(!is.null(image_title$colour)){
+          cur_col <- image_title$colour
+        } else {
+          cur_col <- default_it$colour
+        }
+        if(!is.null(image_title$margin)){
+          cur_margin.x <- image_title$margin[1]
+          cur_margin.y <- image_title$margin[2]
+        } else {
+          cur_margin.x <- default_it$margin[1]
+          cur_margin.y <- default_it$margin[2]
+        }
+        if(!is.null(image_title$font)){
+          cur_font <- image_title$font
+        } else {
+          cur_font <- default_it$font
+        }
+        label_height <- abs(strheight(cur_title, cex = cur_cex, font = cur_font))
+        text_params <- list(labels = cur_title, col = cur_col, cex = cur_cex, font = cur_font)
+
+        if(cur_position == "top"){
+          do.call(text, append(list(x = xleft + dim_x/2 + cur_margin.x,
+                                    y = ytop + label_height*2 + cur_margin.y,
+                                    adj = 0.5), text_params))
+        } else if(cur_position == "bottom"){
+          do.call(text, append(list(x = xleft + dim_x/2 + cur_margin.x,
+                                    y = ybottom - label_height*2 - cur_margin.y,
+                                    adj = 0.5), text_params))
+        } else if(cur_position == "topleft"){
+          do.call(text, append(list(x = xleft + cur_margin.x,
+                                    y = ytop + label_height*2 + cur_margin.y,
+                                    adj = 0), text_params))
+        } else if(cur_position == "topright"){
+          do.call(text, append(list(x = xright - cur_margin.x,
+                                    y = ytop + label_height*2 + cur_margin.y,
+                                    adj = 1), text_params))
+        } else if(cur_position == "bottomleft"){
+          do.call(text, append(list(x = xleft + cur_margin.x,
+                                    y = ybottom - label_height*2 - cur_margin.y,
+                                    adj = 0), text_params))
+        } else if(cur_position == "bottomright"){
+          do.call(text, append(list(x = xright - cur_margin.x,
+                                    y = ybottom - label_height*2 - cur_margin.y,
+                                    adj = 1), text_params))
+        }
       }
     }
   }
@@ -461,28 +514,78 @@
 # Plot scale_bar
 #' @importFrom graphics strheight text segments
 #' @importFrom raster as.raster
-.plotScaleBar <- function(scale_bar, x, y){
+.plotScaleBar <- function(scale_bar, xl, xr, yt, yb){
+  default_sb <- list(length = 20, label = NULL, cex = 1,  lwd = 2, colour = "white",
+                           position = "bottomright", margin = c(10, 10))
+
+  if(is.null(scale_bar$length)){
+    cur_length <- default_sb$length
+  } else {
     cur_length <- scale_bar$length
-    if(is.null(scale_bar$label)){
-      cur_label <- as.character(cur_length)
-    } else {
-      cur_label <- as.character(scale_bar$label)
-    }
+  }
+  if(is.null(scale_bar$label)){
+    cur_label <- as.character(cur_length)
+  } else {
+    cur_label <- as.character(scale_bar$label)
+  }
+  if(is.null(scale_bar$cex)){
+    cur_cex <- default_sb$cex
+  } else {
+    cur_cex <- scale_bar$cex
+  }
+  if(is.null(scale_bar$lwd)){
+    cur_lwd <- default_sb$lwd
+  } else {
     cur_lwd <- scale_bar$lwd
+  }
+  if(is.null(scale_bar$colour)){
+    cur_col <- default_sb$colour
+  } else {
     cur_col <- scale_bar$colour
-    cur_margin <- scale_bar$margin
+  }
+  if(is.null(scale_bar$position)){
+    cur_position <- default_sb$position
+  } else {
+    cur_position <- scale_bar$position
+  }
+  if(is.null(scale_bar$margin)){
+    cur_margin.x <- default_sb$margin[1]
+    cur_margin.y <- default_sb$margin[2]
+  } else {
+    cur_margin.x <- scale_bar$margin[1]
+    cur_margin.y <- scale_bar$margin[2]
+  }
 
-    # Plot scale bar
-    segments(x0 = x - cur_length - cur_margin,
-             y0 = y - cur_margin,
-             x1 = x - cur_margin,
-             lwd = cur_lwd,
-             col = cur_col)
-    label_height <- abs(strheight(cur_label))
-    text(x = x - cur_length/2 - cur_margin,
-         y = y - cur_margin - label_height - label_height/4,
-         labels = cur_label, col = cur_col,
-         adj = 0.5, lwd = cur_lwd)
+  # Plot scale bar
+  label_height <- abs(strheight(cur_label, cex = cur_cex))
+  segm_params <- list(lwd = cur_lwd, col = cur_col)
+  text_params <- list(labels = cur_label, cex = cur_cex,
+                      col = cur_col, adj = 0.5, lwd = cur_lwd)
 
+  if(cur_position == "bottomright"){
+    do.call(segments, append(list(x0 = xr - cur_length - cur_margin.x,
+                                  y0 = yb - cur_margin.y,
+                                  x1 = xr - cur_margin.x), segm_params))
+    do.call(text, append(list(x = xr - cur_length/2 - cur_margin.x,
+                              y = yb - cur_margin.y - label_height - label_height/4), text_params))
+  } else if(cur_position == "bottomleft"){
+    do.call(segments, append(list(x0 = xl + cur_margin.x,
+                                  y0 = yb - cur_margin.y,
+                                  x1 = xl + cur_length + cur_margin.x), segm_params))
+    do.call(text, append(list(x = xl + cur_length/2 + cur_margin.x,
+                              y = yb - cur_margin.y - label_height - label_height/4), text_params))
+  } else if(cur_position == "topright"){
+    do.call(segments, append(list(x0 = xr - cur_length - cur_margin.x,
+                                  y0 = yt + cur_margin.y,
+                                  x1 = xr - cur_margin.x), segm_params))
+    do.call(text, append(list(x = xr - cur_length/2 - cur_margin.x,
+                              y = yt + cur_margin.y - label_height - label_height/4), text_params))
+  } else if(cur_position == "topleft"){
+    do.call(segments, append(list(x0 = xl + cur_margin.x,
+                                  y0 = yt + cur_margin.y,
+                                  x1 = xl + cur_length + cur_margin.x), segm_params))
+    do.call(text, append(list(x = xl + cur_length/2 + cur_margin.x,
+                              y = yt + cur_margin.y - label_height - label_height/4), text_params))
+  }
 }
 

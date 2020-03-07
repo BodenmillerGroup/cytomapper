@@ -17,6 +17,7 @@
 #' @param colour TODO
 #' @param missing_colour TODO
 #' @param scale_bar TODO
+#' @param image_title TODO
 #' @param ... TODO
 #'
 #'@section Segmentaion mask object:
@@ -48,9 +49,17 @@ plotCells <- function(mask,
                       missing_colour = "gray",
                       scale_bar = list(length = 20,
                                        label = NULL,
+                                       cex = 1,
                                        lwd = 2,
                                        colour = "white",
-                                       margin = 10),
+                                       position = "bottomright",
+                                       margin = c(10,10)),
+                      image_title = list(text =  NULL,
+                                         position = "top",
+                                         cex = 1,
+                                         colour = "white",
+                                         margin = c(0,0),
+                                         font = 2),
                       ...) {
 
   # Object checks
@@ -68,7 +77,7 @@ plotCells <- function(mask,
   .valid.plotCells.input(object, mask, img_id, colour_by, outline_by,
                          subset_images,
                          colour, missing_colour,
-                         scale_bar)
+                         scale_bar, image_title)
 
   # Select images for plotting
   mask <- .select_images(object, mask, img_id, subset_images)
@@ -84,12 +93,12 @@ plotCells <- function(mask,
     if(all(colour_by %in% colnames(colData(object)))){
       # Colouring by metadata
       out_img <- .colourMaskByMeta(object, mask, cell_id, img_id,
-                                colour_by, cur_col$colour_by, missing_colour)
+                                   colour_by, cur_col$colour_by, missing_colour)
     } else {
       # Colouring by features
       out_img <- .colourMaskByFeature(object, mask, cell_id, img_id,
-                                   colour_by, exprs_values,
-                                  cur_col$colour_by, missing_colour)
+                                      colour_by, exprs_values,
+                                      cur_col$colour_by, missing_colour)
     }
   } else {
     out_img <- endoapply(mask, function(x){
@@ -104,11 +113,11 @@ plotCells <- function(mask,
   if(!is.null(outline_by)){
     cur_col$outline_by <- .selectColours(object, outline_by, colour)
     out_img <- .outlineImageByMeta(object, mask, out_img, cell_id, img_id,
-                               outline_by, cur_col$outline_by)
+                                   outline_by, cur_col$outline_by)
   }
 
   # Plot images
   .displayImages(object, image = NULL, exprs_values, outline_by, colour_by,
                  mask, out_img, img_id,
-                 scale_bar, cur_col)
+                 scale_bar, image_title, cur_col)
 }

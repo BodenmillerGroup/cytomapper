@@ -132,7 +132,7 @@
   }
 }
 
-# Chcks if channels can be replaced
+# Check if channels can be replaced
 #' @importFrom methods is
 .valid.Channel.setting <- function(x, i, value){
   # Only ImageList objects are supported
@@ -279,7 +279,7 @@
 .valid.plotCells.input <- function(object, mask, img_id, colour_by, outline_by,
                                    subset_images,
                                    colour, missing_colour,
-                                   scale_bar){
+                                   scale_bar, image_title){
 
   # colour_by takes either the rownames or colData entries
   # check if colour_by is either in the rownames
@@ -387,16 +387,11 @@
     }
   }
 
-  # scale_bar has to be of the form list(length, label, lwd, colour, margin)
-  if(!is.null(scale_bar)){
-    if(!is.list(scale_bar)){
-      stop("Invalid 'scale_bar' entry")
-    }
-    if(is.null(names(scale_bar)) || !all(names(scale_bar) %in%
-                        c("length", "label", "lwd", "colour", "margin"))){
-      stop("Invalid entry to the 'scale_bar' list object")
-    }
-  }
+  # scale_bar
+  .valid.scalebar(scale_bar)
+
+  # image_title
+  .valid.imagetitle(image_title)
 }
 
 
@@ -405,7 +400,7 @@
 .valid.plotPixels.input <- function(image, object, mask, img_id, colour_by, outline_by,
                                     subset_images,
                                     colour, missing_colour,
-                                    scale_bar){
+                                    scale_bar, image_title){
 
   # Here, colour_by takes only the channelNames entries
   # check if colour_by is the channelNames slot
@@ -495,18 +490,71 @@
     }
   }
 
-  # scale_bar has to be of the form list(length, label, lwd, colour, margin)
-  if(!is.null(scale_bar)){
-    if(!is.list(scale_bar)){
-      stop("Invalid 'scale_bar' entry")
+  # scale_bar
+  .valid.scalebar(scale_bar)
+
+  # image_title
+  .valid.imagetitle(image_title)
+}
+
+# Validity of scale_bar input
+.valid.scalebar <- function(scalebar){
+  error.scalebar <- "Invalid entry to the 'scale_bar' list object"
+  # scale_bar has to be of the form list(length, label, lwd, colour, position, margin)
+  if(!is.null(scalebar)){
+    if(!is.list(scalebar)){
+      stop(error.scalebar)
     }
-    if(is.null(names(scale_bar)) || !all(names(scale_bar) %in%
-                                         c("length", "label", "lwd", "colour", "margin"))){
-      stop("Invalid entry to the 'scale_bar' list object")
+    if(is.null(names(scalebar)) ||
+       !all(names(scalebar) %in% c("length", "label", "cex", "lwd", "colour", "position", "margin"))){
+      stop(error.scalebar)
+    }
+    if(!is.null(scalebar$position) && !scalebar$position %in% c("topleft", "topright", "bottomleft", "bottomright")){
+      stop(paste0(error.scalebar, ": position should be 'topleft', 'topright', 'bottomleft', or 'bottomright'"))
+    }
+    if(!is.null(scalebar$margin) && length(scalebar$margin) != 2){
+      stop(paste0(error.scalebar, ": 'margin' should contain two elements corresponding to x and y margin"))
+    }
+    if(!is.null(scalebar$length) && !is.numeric(scalebar$length)){
+      stop(paste0(error.scalebar, ": 'length' should be numeric"))
+    }
+    if(!is.null(scalebar$margin) && !is.numeric(scalebar$margin)){
+      stop(paste0(error.scalebar, ": 'margin' should be numeric"))
+    }
+    if(!is.null(scalebar$cex) && !is.numeric(scalebar$cex)){
+      stop(paste0(error.scalebar, ": 'cex' should be numeric"))
+    }
+    if(!is.null(scalebar$lwd) && !is.numeric(scalebar$lwd)){
+      stop(paste0(error.scalebar, ": 'lwd' should be numeric"))
     }
   }
 }
 
-
-
-
+# Validity of image_title input
+.valid.imagetitle <- function(imagetitle){
+  error.imagetitle <- "Invalid entry to the 'image_title' list object"
+  # image_title has to be of the form list(text, position, cex, colour, margin, font)
+  if(!is.null(imagetitle)){
+    if(!is.list(imagetitle)){
+      stop(error.imagetitle)
+    }
+    if(is.null(names(imagetitle)) ||
+       !all(names(imagetitle) %in% c("text", "position", "cex", "colour", "margin", "font"))){
+      stop(error.imagetitle)
+    }
+    if(!is.null(imagetitle$position) &&
+       !imagetitle$position %in% c("top", "bottom", "topleft", "bottomleft", "topright", "bottomright")){
+      stop(paste0(error.imagetitle, ": position should be 'top', 'bottom',
+                  'topleft', 'topright', 'bottomleft' or 'bottomright'"))
+    }
+    if(!is.null(imagetitle$cex) && !is.numeric(imagetitle$cex)){
+      stop(paste0(error.imagetitle, ": 'cex' should be numeric"))
+    }
+    if(!is.null(imagetitle$margin) && length(imagetitle$margin) != 2){
+      stop(paste0(error.imagetitle, ": 'margin' should contain two elements corresponding to x and y margin"))
+    }
+    if(!is.null(imagetitle$margin) && !is.numeric(imagetitle$margin)){
+      stop(paste0(error.imagetitle, ": 'margin' should be numeric"))
+    }
+  }
+}

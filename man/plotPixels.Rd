@@ -15,7 +15,8 @@ plotPixels(
   subset_images = NULL,
   colour = NULL,
   missing_colour = "gray",
-  scale_bar = list(length = 20, label = NULL, lwd = 2, colour = "white", margin = 10),
+  scale_bar = list(length = 20, label = NULL, cex = 1, lwd = 2, colour = "white", margin = c(10,10)),
+  image_title = list(text =  NULL, position = "top", cex = 1, colour = "white", margin = 10, font = 2),
   ...
 )
 }
