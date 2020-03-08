@@ -136,8 +136,6 @@ test_that("plotCells: Cells can be outlined correctly.", {
                           mask = pancreasMasks, img_id = "ImageNb",
                           cell_id = "CellNb", colour_by = "SMA",
                           outline_by = "CellType"))
-
-  # Fix this!
   expect_silent(plotCells(object = pancreasSCE,
             mask = pancreasMasks, img_id = "ImageNb",
             cell_id = "CellNb", colour_by = "SMA",
@@ -151,17 +149,13 @@ test_that("plotCells: Cells can be outlined correctly.", {
                           outline_by = "test"),
                regexp = "'outline_by' not in 'colData(object)' slot.",
                fixed = TRUE)
-
-  # Fix this!
   expect_error(plotCells(object = pancreasSCE,
                          mask = pancreasMasks, img_id = "ImageNb",
                          cell_id = "CellNb", colour_by = "SMA",
                          outline_by = c("CellType", "Area")),
-               regexp = "Fix this!!!",
+               regexp = "Only one 'outline_by' entry allowed.",
                fixed = TRUE)
-
-
-})
+  })
 
 
   # exprs_values

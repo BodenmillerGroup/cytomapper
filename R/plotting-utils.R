@@ -492,6 +492,7 @@
                   cur_y + cur_space_y - title_height,
                   cur_x + cur_space_x/2,
                   cur_y + title_height*2)
+      cur_legend_height <- cur_space_y - title_height
     } else {
       cur_space_x <- (m_width-(2*margin))/6
       cur_x <- m_width/2 + cur_space_x
@@ -500,28 +501,59 @@
       legend_c <- legend(x = cur_x, y = cur_y, legend = names(cur_colouring),
                          fill = cur_colouring,
                          text.col = "black", plot = FALSE)
-      legend_c <- legend(x = cur_x, y = cur_y, legend = names(cur_colouring),
+      legendc <- legend(x = cur_x, y = cur_y, legend = names(cur_colouring),
                          fill = cur_colouring,
                          text.col = "black", cex = (m_width-margin-cur_x)/legend_c$rect$w)
+      cur_legend_height <- abs(legend_c$rect$h)
     }
   }
 
   # Outline
   if(!is.null(outline_by)){
     if(!is.null(colour_by) && all(colour_by %in% colnames(colData(object)))){
-      cur_y <- margin + abs(legend_c$rect$h) + 10
+      cur_y <- margin + abs(cur_legend_height) + 10
     } else {
       cur_y <- margin
     }
-    cur_space_x <- (m_width-(2*margin))/6
-    cur_x <- m_width/2 + cur_space_x
-    cur_colouring <- cur_col$outline_by[1:length(cur_col$outline_by)]
-    legend_o <- legend(x = cur_x, y = cur_y, legend = names(cur_colouring),
-           fill = cur_colouring,
-           text.col = "black", plot = FALSE)
-    legend(x = cur_x, y = cur_y, legend = names(cur_colouring),
-           fill = cur_colouring,
-           text.col = "black", cex = (m_width-margin-cur_x)/legend_o$rect$w)
+
+    # Continous scale
+    if(is.null(names(cur_col$outline_by))){
+      cur_space_x <- (m_width-(2*margin))/4
+      cur_space_y <- (m_height-(2*margin))/2
+      cur_x <- m_width/2 + cur_space_x
+      cur_min <- min(colData(object)[,outline_by])
+      cur_max <- max(colData(object)[,outline_by])
+      cur_labels <- c(format(round(cur_min, 1), nsmall = 1),
+                      format(round(cur_max/2, 1), nsmall = 1),
+                      format(round(cur_max, 1), nsmall = 1))
+      label_width <- max(strwidth(rev(cur_labels)))
+      title_height <- abs(strheight(outline_by, font = 2))
+
+      cur_legend <- as.raster(matrix(rev(cur_col$outline_by),
+                                     ncol=1))
+      text(x = cur_x + cur_space_x/2, y = cur_y + title_height/2,
+           label = outline_by, col = "black", font = 2)
+      text(x=cur_x + cur_space_x,
+           y = seq(cur_y + title_height*2,
+                   cur_y + cur_space_y - title_height, length.out = 3),
+           labels = rev(cur_labels), col = "black",
+           adj = 0.5, cex = (cur_space_x/2)/label_width)
+      rasterImage(cur_legend,
+                  cur_x,
+                  cur_y + cur_space_y - title_height,
+                  cur_x + cur_space_x/2,
+                  cur_y + title_height*2)
+    } else {
+      cur_space_x <- (m_width-(2*margin))/6
+      cur_x <- m_width/2 + cur_space_x
+      cur_colouring <- cur_col$outline_by[1:length(cur_col$outline_by)]
+      legend_o <- legend(x = cur_x, y = cur_y, legend = names(cur_colouring),
+                         fill = cur_colouring,
+                         text.col = "black", plot = FALSE)
+      legend(x = cur_x, y = cur_y, legend = names(cur_colouring),
+                         fill = cur_colouring,
+                         text.col = "black", cex = (m_width-margin-cur_x)/legend_o$rect$w)
+    }
   }
 }
 
