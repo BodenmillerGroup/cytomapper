@@ -108,6 +108,10 @@ test_that("plotCells: Metadata can be displayed.", {
             colour_by = "Pos_Y"))
 
   # Error
+  expect_error(plotCells(mask = pancreasMasks,
+                         colour_by = "H3"),
+               regexp = "Please provide a SingleCellExperiment 'object'.",
+               fix = TRUE)
   expect_error(plotCells(object = pancreasSCE,
                mask = pancreasMasks, img_id = "ImageNb",
                cell_id = "CellNb",
@@ -143,6 +147,10 @@ test_that("plotCells: Cells can be outlined correctly.", {
 
 
   # Error
+  expect_error(plotCells(mask = pancreasMasks,
+                         outline_by = "CellType"),
+               regexp = "Please provide a SingleCellExperiment 'object'.",
+               fix = TRUE)
   expect_error(plotCells(object = pancreasSCE,
                           mask = pancreasMasks, img_id = "ImageNb",
                           cell_id = "CellNb", colour_by = "SMA",
@@ -155,18 +163,29 @@ test_that("plotCells: Cells can be outlined correctly.", {
                          outline_by = c("CellType", "Area")),
                regexp = "Only one 'outline_by' entry allowed.",
                fixed = TRUE)
-  })
+})
 
+test_that("plotCells: Exprs values can be correctly set.", {
+  data("pancreasSCE")
+  data("pancreasMasks")
 
-  # exprs_values
-  plotCells(object = pancreasSCE,
+  # Works
+  expect_silent(plotCells(object = pancreasSCE,
             mask = pancreasMasks, img_id = "ImageNb",
             cell_id = "CellNb", exprs_values = "counts",
-            colour_by = "H3")
-  plotCells(object = pancreasSCE,
+            colour_by = "H3"))
+  expect_silent(plotCells(object = pancreasSCE,
             mask = pancreasMasks, img_id = "ImageNb",
             cell_id = "CellNb", exprs_values = "exprs",
-            colour_by = "H3")
+            colour_by = "H3"))
+
+  # Error
+  expect_error(plotCells(object = pancreasSCE,
+                          mask = pancreasMasks, img_id = "ImageNb",
+                          cell_id = "CellNb", exprs_values = "logcounts",
+                          colour_by = "H3"),
+               regexp = "'exprs_values' not an assay entry in 'object'.",
+               fixed = TRUE)
 
   # subset_images
   plotCells(object = pancreasSCE,
