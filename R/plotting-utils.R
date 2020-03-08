@@ -160,7 +160,7 @@
   return(out.list)
 }
 
-# Colour segmentation masks based on metadata
+# Outline image based on metadata
 #' @importFrom EBImage paintObjects
 .outlineImageByMeta <- function(object, mask, out_img, cell_id, img_id,
                                outline_by, cur_colour, missing_colour){
@@ -170,12 +170,26 @@
     cur_img <- out_img[[i]]
     cur_sce <- object[,colData(object)[,img_id] == mcols(mask)[i,img_id]]
 
-    # Loop through entries in outline_by entry
-    for(j in unique(colData(cur_sce)[,outline_by])){
-      meta_mask <- cur_mask
-      cur_cell_id <- colData(cur_sce)[colData(cur_sce)[,outline_by] == j,cell_id]
-      meta_mask[!(meta_mask %in% cur_cell_id)] <- 0L
-      cur_img <- paintObjects(meta_mask, Image(cur_img), col = cur_colour[j])
+    if(is.null(names(cur_colour))){
+      col_ind <- colorRampPalette(cur_colour)(101)
+      cur_scaling <- .minMaxScaling(colData(cur_sce)[,outline_by],
+                                    min_x = min(colData(object)[,outline_by]),
+                                    max_x = max(colData(object)[,outline_by]))
+
+      for(j in seq_along(cur_scaling)){
+        meta_mask <- cur_mask
+        cur_cell_id <- colData(cur_sce)[j,cell_id]
+        meta_mask[!(meta_mask %in% cur_cell_id)] <- 0L
+        cur_img <- paintObjects(meta_mask, Image(cur_img),
+                                col = col_ind[round(100*cur_scaling[j]) + 1])
+      }
+    } else {
+      for(j in unique(colData(cur_sce)[,outline_by])){
+        meta_mask <- cur_mask
+        cur_cell_id <- colData(cur_sce)[colData(cur_sce)[,outline_by] == j,cell_id]
+        meta_mask[!(meta_mask %in% cur_cell_id)] <- 0L
+        cur_img <- paintObjects(meta_mask, Image(cur_img), col = cur_colour[j])
+      }
     }
 
     out_img[[i]] <- Image(cur_img)
