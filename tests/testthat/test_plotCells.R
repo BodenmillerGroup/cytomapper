@@ -10,35 +10,22 @@ test_that("plotCells: Standard input testing works", {
                           cell_id = "CellNb"))
 
   # Error
-  expect_error(plotCells(object = "test"),
+  expect_error(plotCells(mask = "test"),
+               regexp = "Please provide the segmentation mask(s) in form of an 'ImageList' object",
+               fix = TRUE)
+  expect_error(plotCells(mask = pancreasMasks, object = "test"),
                regexp = "'object' is not of type 'SingleCellExperiment'.",
                fix = TRUE)
   expect_error(plotCells(object = pancreasSCE),
-               regexp = 'argument "img_id" is missing, with no default',
-               fix = TRUE)
-  expect_error(plotCells(object = pancreasSCE, img_id = "test"),
-               regexp = 'argument "cell_id" is missing, with no default',
-               fix = TRUE)
-  expect_error(plotCells(object = pancreasSCE,
-                         img_id = "test", cell_id = "test"),
-               regexp = "'img_id' and/or 'cell_id' not in 'colData(object)'.",
-               fix = TRUE)
-  expect_error(plotCells(object = pancreasSCE,
-                         img_id = "test", cell_id = "CellNb"),
-               regexp = "'img_id' and/or 'cell_id' not in 'colData(object)'.",
-               fix = TRUE)
-  expect_error(plotCells(object = pancreasSCE,
-                         img_id = "ImageNb", cell_id = "test"),
-               regexp = "'img_id' and/or 'cell_id' not in 'colData(object)'.",
-               fix = TRUE)
-  expect_error(plotCells(object = pancreasSCE,
-                         img_id = "ImageNb", cell_id = "CellNb"),
                regexp = 'argument "mask" is missing, with no default',
                fix = TRUE)
-  expect_error(plotCells(object = pancreasSCE,
-                         img_id = "ImageNb", cell_id = "CellNb",
-                         mask = "test"),
-               regexp = "Please provide the segementation mask(s) in form of an 'ImageList' object",
+  expect_error(plotCells(object = pancreasSCE, mask = pancreasMasks,
+                         img_id = "test"),
+               regexp = "'img_id' not in 'mcols(mask)'.",
+               fix = TRUE)
+  expect_error(plotCells(object = pancreasSCE, mask = pancreasMasks,
+                         img_id = "ImageNb", cell_id = "test"),
+               regexp = "'img_id' and/or 'cell_id' not in 'colData(object)'.",
                fix = TRUE)
 })
 
@@ -74,6 +61,14 @@ test_that("plotCells: Features can be displayed.", {
             colour_by = c("H3", "SMA", "INS", "CD38", "CD44")))
 
   # Error
+  expect_error(plotCells(mask = pancreasMasks, colour_by = "H3"),
+               regexp = "Please provide a SingleCellExperiment 'object'.",
+               fix = TRUE)
+  expect_error(plotCells(mask = pancreasMasks,
+                         object = pancreasSCE,
+                         colour_by = "H3"),
+               regexp = "Please provide an 'img_id' and 'cell_id' argument",
+               fix = TRUE)
   expect_error(plotCells(object = pancreasSCE,
                          mask = pancreasMasks, img_id = "ImageNb",
                          cell_id = "CellNb", colour_by = "test"),
@@ -137,6 +132,10 @@ test_that("plotCells: Cells can be outlined correctly.", {
             mask = pancreasMasks, img_id = "ImageNb",
             cell_id = "CellNb",
             outline_by = "CellType"))
+  expect_silent(plotCells(object = pancreasSCE,
+                          mask = pancreasMasks, img_id = "ImageNb",
+                          cell_id = "CellNb", colour_by = "SMA",
+                          outline_by = "CellType"))
 
   # Fix this!
   expect_silent(plotCells(object = pancreasSCE,
