@@ -245,23 +245,64 @@ test_that("plotCells: colour can be correctly adjusted.", {
   # Works
   expect_silent(plotCells(object = pancreasSCE,
                           mask = pancreasMasks, img_id = "ImageNb",
-                          cell_id = "CellNb", exprs_values = "counts",
+                          cell_id = "CellNb",
                           colour_by = "SMA",
                           colour = list(SMA = colorRampPalette(c("black", "red"))(100))))
   expect_silent(plotCells(object = pancreasSCE,
                           mask = pancreasMasks, img_id = "ImageNb",
-                          cell_id = "CellNb", exprs_values = "counts",
+                          cell_id = "CellNb",
+                          colour_by = "SMA",
+                          colour = list(SMA = c("black", "red"))))
+  expect_silent(plotCells(object = pancreasSCE,
+                          mask = pancreasMasks, img_id = "ImageNb",
+                          cell_id = "CellNb",
                           colour_by = c("H3", "CD44"),
                           colour = list(H3 = colorRampPalette(c("black", "red"))(100),
                                         CD44 = colorRampPalette(c("black", "green"))(100))))
-  # Fix this!
   expect_silent(plotCells(object = pancreasSCE,
                           mask = pancreasMasks, img_id = "ImageNb",
-                          cell_id = "CellNb", exprs_values = "counts",
+                          cell_id = "CellNb",
                           colour_by = "CellType",
                           colour = list(CellType = c(celltype_B = "green",
                                                      celltype_A = "blue",
                                                      celltype_C = "red"))))
+  expect_silent(plotCells(object = pancreasSCE,
+                          mask = pancreasMasks, img_id = "ImageNb",
+                          cell_id = "CellNb", exprs_values = "counts",
+                          colour_by = "Area",
+                          colour = list(Area = colorRampPalette(c("black", "red"))(100))))
+  expect_silent(plotCells(object = pancreasSCE,
+                          mask = pancreasMasks, img_id = "ImageNb",
+                          cell_id = "CellNb",
+                          colour_by = "Area",
+                          colour = list(Area = c("black", "red"))))
+  expect_silent(plotCells(object = pancreasSCE,
+                          mask = pancreasMasks, img_id = "ImageNb",
+                          cell_id = "CellNb",
+                          colour_by = "H3", outline_by = "CellType",
+                          colour = list(CellType = c(celltype_B = "green",
+                                                     celltype_A = "blue",
+                                                     celltype_C = "red"))))
+  expect_silent(plotCells(object = pancreasSCE,
+                          mask = pancreasMasks, img_id = "ImageNb",
+                          cell_id = "CellNb",
+                          colour_by = "H3", outline_by = "CellType",
+                          colour = list(H3 = c("black", "green"))))
+  expect_silent(plotCells(object = pancreasSCE,
+                          mask = pancreasMasks, img_id = "ImageNb",
+                          cell_id = "CellNb",
+                          colour_by = "CellType", outline_by = "Area",
+                          colour = list(CellType = c(celltype_B = "green",
+                                                     celltype_A = "blue",
+                                                     celltype_C = "red"))))
+  expect_silent(plotCells(object = pancreasSCE,
+                          mask = pancreasMasks, img_id = "ImageNb",
+                          cell_id = "CellNb",
+                          colour_by = "CellType", outline_by = "Area",
+                          colour = list(CellType = c(celltype_B = "green",
+                                                     celltype_A = "blue",
+                                                     celltype_C = "red"),
+                                        Area = c("black", "green"))))
 
 
   # Error

@@ -377,6 +377,13 @@
     if(sum(cur_entries) > 0){
       stop("Empty entries not allowed in 'colour'")
     }
+    # Error if only few markers should be coloured
+    if(all(colour_by %in% rownames(object))){
+      if(sum(colour_by %in% names(colour)) > 1 &&
+         sum(colour_by %in% names(colour)) < length(colour_by)){
+        stop("Please specify colour gradients for all features.")
+      }
+    }
   }
 
   # missing_colour has to be a valid colour

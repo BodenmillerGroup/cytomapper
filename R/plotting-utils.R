@@ -201,7 +201,7 @@
 # Selecting the colours for plotting
 #' @importFrom grDevices colorRampPalette
 #' @importFrom RColorBrewer brewer.pal
-#' @importFrom viridis viridis
+#' @importFrom viridis viridis inferno
 .selectColours <- function(object, colour_by, colour,
                            call.arg = c("colour_by", "outline_by")){
   call.arg <- match.arg(call.arg)
@@ -211,7 +211,7 @@
   if(!is.null(object) && all(colour_by %in% colnames(colData(object)))){
     # If colour is not specified, we select a number of default colours
     cur_entries <- unique(colData(object)[,colour_by])
-    if(is.null(colour)){
+    if(is.null(colour[[colour_by]])){
       if(length(cur_entries) > 23){
         if(is.numeric(cur_entries)){
           if(call.arg == "colour_by"){
@@ -241,13 +241,13 @@
         cur_col <- cur_col[1:length(cur_entries)]
         names(cur_col) <- cur_entries
       }
+      col_out <- list(cur_col)
+      names(col_out) <- colour_by
     } else {
-      cur_col <- colour[colour_by]
+      col_out <- colour[colour_by]
     }
-    col_out <- list(cur_col)
-    names(col_out) <- colour_by
   } else {
-    if(is.null(colour)){
+    if(!all(colour_by %in% names(colour))){
       if(length(colour_by) > 1){
         col_list <- list(colorRampPalette(c("black", "red"))(100),
                          colorRampPalette(c("black", "green"))(100),
@@ -259,7 +259,7 @@
         names(col_list) <- colour_by
         col_out <- col_list
       } else {
-        cur_col <- list(viridis(100))
+        col_out <- list(viridis(100))
         names(col_out) <- colour_by
       }
     } else {
@@ -466,7 +466,7 @@
                         format(round(cur_max, 1), nsmall = 1))
         label_width <- max(strwidth(rev(cur_labels)))
 
-        cur_legend <- as.raster(matrix(rev(cur_col$colour_by[[colour_by[i]]]),
+        cur_legend <- as.raster(matrix(rev(colorRampPalette(cur_col$colour_by[[colour_by[i]]])(101)),
                                        ncol=1))
         text(x = cur_x, y = cur_y - cur_space_y/2 + title_height,
              label = colour_by[i], col = "black", font = 2)
@@ -501,7 +501,7 @@
       label_width <- max(strwidth(rev(cur_labels)))
       title_height <- abs(strheight(colour_by, font = 2))
 
-      cur_legend <- as.raster(matrix(rev(cur_col$colour_by[[1]]),
+      cur_legend <- as.raster(matrix(rev(colorRampPalette(cur_col$colour_by[[1]])(101)),
                                      ncol=1))
       text(x = cur_x + cur_space_x/2, y = cur_y + title_height/2,
            label = colour_by, col = "black", font = 2)
@@ -552,7 +552,7 @@
       label_width <- max(strwidth(rev(cur_labels)))
       title_height <- abs(strheight(outline_by, font = 2))
 
-      cur_legend <- as.raster(matrix(rev(cur_col$outline_by[[1]]),
+      cur_legend <- as.raster(matrix(rev(colorRampPalette(cur_col$outline_by[[1]])(101)),
                                      ncol=1))
       text(x = cur_x + cur_space_x/2, y = cur_y + title_height/2,
            label = outline_by, col = "black", font = 2)
