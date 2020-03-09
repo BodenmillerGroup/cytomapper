@@ -221,7 +221,26 @@ test_that("plotCells: images can be correctly subsetted.", {
                           subset_images = c("A02_mask", "F01_mask")))
 
   # Error
+  expect_error(plotCells(object = pancreasSCE,
+                          mask = pancreasMasks, img_id = "ImageNb",
+                          cell_id = "CellNb", exprs_values = "counts",
+                          colour_by = "SMA",
+                          subset_images = 4),
+               regexp = "Error: subscript contains out-of-bounds indices",
+               fixed = TRUE)
+  expect_error(plotCells(object = pancreasSCE,
+                         mask = pancreasMasks, img_id = "ImageNb",
+                         cell_id = "CellNb", exprs_values = "counts",
+                         colour_by = "SMA",
+                         subset_images = "test"),
+               regexp = "Error: subscript contains invalid names",
+               fixed = TRUE)
 
+})
+
+test_that("plotCells: colour can be correctly adjusted.", {
+  data("pancreasSCE")
+  data("pancreasMasks")
 
   # Change size of images
   # Decreasing the size
