@@ -187,11 +187,40 @@ test_that("plotCells: Exprs values can be correctly set.", {
                regexp = "'exprs_values' not an assay entry in 'object'.",
                fixed = TRUE)
 
-  # subset_images
-  plotCells(object = pancreasSCE,
+})
+
+test_that("plotCells: images can be correctly subsetted.", {
+  data("pancreasSCE")
+  data("pancreasMasks")
+
+  # Works
+  expect_silent(plotCells(object = pancreasSCE,
             mask = pancreasMasks, img_id = "ImageNb",
             cell_id = "CellNb", exprs_values = "counts",
-            colour_by = "SMA", subset_images = 3)
+            colour_by = "SMA", subset_images = 1))
+  expect_silent(plotCells(object = pancreasSCE,
+                          mask = pancreasMasks, img_id = "ImageNb",
+                          cell_id = "CellNb", exprs_values = "counts",
+                          colour_by = "SMA", subset_images = 1:3))
+  expect_silent(plotCells(object = pancreasSCE,
+                          mask = pancreasMasks, img_id = "ImageNb",
+                          cell_id = "CellNb", exprs_values = "counts",
+                          colour_by = "SMA", subset_images = 1:2))
+  expect_silent(plotCells(object = pancreasSCE,
+                          mask = pancreasMasks, img_id = "ImageNb",
+                          cell_id = "CellNb", exprs_values = "counts",
+                          colour_by = "SMA", subset_images = c(1,3)))
+  expect_silent(plotCells(object = pancreasSCE,
+                          mask = pancreasMasks, img_id = "ImageNb",
+                          cell_id = "CellNb", exprs_values = "counts",
+                          colour_by = "SMA", subset_images = "A02_mask"))
+  expect_silent(plotCells(object = pancreasSCE,
+                          mask = pancreasMasks, img_id = "ImageNb",
+                          cell_id = "CellNb", exprs_values = "counts",
+                          colour_by = "SMA",
+                          subset_images = c("A02_mask", "F01_mask")))
+
+  # Error
 
 
   # Change size of images

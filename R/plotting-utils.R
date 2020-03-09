@@ -308,7 +308,10 @@
   # Plot the images
   for(i in seq_len(nr)){
     for(j in seq_len(nc)){
-      ind <- (i-1)*nc +j
+      ind <- (i-1)*nc + j
+
+      if(ind > ni){break}
+
       dim_x <- cur_dims_x[ind]
       dim_y <- cur_dims_y[ind]
       xleft <- (j-1)*m_width + (m_width - dim_x)/2
