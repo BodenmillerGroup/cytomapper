@@ -33,7 +33,7 @@
                                     max_x = max(colData(object)[,colour_by]))
       col_ind <- col_ind[round(100*cur_scaling) + 1]
     } else {
-      col_ind <- cur_colour[colData(cur_sce)[,colour_by] ]
+      col_ind <- cur_colour[colData(cur_sce)[,colour_by]]
     }
 
     # Colour first the background
@@ -488,7 +488,7 @@
      !is.null(colour_by) &&
      all(colour_by %in% colnames(colData(object)))){
     # Continous scale
-    if(is.null(names(cur_col$colour_by))){
+    if(is.null(names(cur_col$colour_by[[1]]))){
       cur_space_x <- (m_width-(2*margin))/4
       cur_space_y <- (m_height-(2*margin))/2
       cur_x <- m_width/2 + cur_space_x
@@ -501,7 +501,7 @@
       label_width <- max(strwidth(rev(cur_labels)))
       title_height <- abs(strheight(colour_by, font = 2))
 
-      cur_legend <- as.raster(matrix(rev(cur_col$colour_by),
+      cur_legend <- as.raster(matrix(rev(cur_col$colour_by[[1]]),
                                      ncol=1))
       text(x = cur_x + cur_space_x/2, y = cur_y + title_height/2,
            label = colour_by, col = "black", font = 2)
@@ -520,12 +520,12 @@
       cur_space_x <- (m_width-(2*margin))/6
       cur_x <- m_width/2 + cur_space_x
       cur_y <- margin
-      cur_colouring <- cur_col$colour_by[1:length(cur_col$colour_by)]
+      cur_colouring <- cur_col$colour_by[[1]]
       legend_c <- legend(x = cur_x, y = cur_y, legend = names(cur_colouring),
-                         fill = cur_colouring,
+                         fill = cur_colouring, title = colour_by,
                          text.col = "black", plot = FALSE)
-      legendc <- legend(x = cur_x, y = cur_y, legend = names(cur_colouring),
-                         fill = cur_colouring,
+      legend_c <- legend(x = cur_x, y = cur_y, legend = names(cur_colouring),
+                         fill = cur_colouring, title = colour_by,
                          text.col = "black", cex = (m_width-margin-cur_x)/legend_c$rect$w)
       cur_legend_height <- abs(legend_c$rect$h)
     }
@@ -540,7 +540,7 @@
     }
 
     # Continous scale
-    if(is.null(names(cur_col$outline_by))){
+    if(is.null(names(cur_col$outline_by[[1]]))){
       cur_space_x <- (m_width-(2*margin))/4
       cur_space_y <- (m_height-(2*margin))/2
       cur_x <- m_width/2 + cur_space_x
@@ -552,7 +552,7 @@
       label_width <- max(strwidth(rev(cur_labels)))
       title_height <- abs(strheight(outline_by, font = 2))
 
-      cur_legend <- as.raster(matrix(rev(cur_col$outline_by),
+      cur_legend <- as.raster(matrix(rev(cur_col$outline_by[[1]]),
                                      ncol=1))
       text(x = cur_x + cur_space_x/2, y = cur_y + title_height/2,
            label = outline_by, col = "black", font = 2)
@@ -569,12 +569,12 @@
     } else {
       cur_space_x <- (m_width-(2*margin))/6
       cur_x <- m_width/2 + cur_space_x
-      cur_colouring <- cur_col$outline_by[1:length(cur_col$outline_by)]
+      cur_colouring <- cur_col$outline_by[[1]]
       legend_o <- legend(x = cur_x, y = cur_y, legend = names(cur_colouring),
-                         fill = cur_colouring,
+                         fill = cur_colouring, title = outline_by,
                          text.col = "black", plot = FALSE)
       legend(x = cur_x, y = cur_y, legend = names(cur_colouring),
-                         fill = cur_colouring,
+                         fill = cur_colouring, title = outline_by,
                          text.col = "black", cex = (m_width-margin-cur_x)/legend_o$rect$w)
     }
   }
