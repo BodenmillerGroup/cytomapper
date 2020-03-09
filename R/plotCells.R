@@ -88,7 +88,8 @@ plotCells <- function(mask,
   if(!is.null(colour_by)){
 
     # Select the colours
-    cur_col$colour_by <- .selectColours(object, colour_by, colour)
+    cur_col$colour_by <- .selectColours(object, colour_by, colour,
+                                        call.arg = "colour_by")
 
     if(all(colour_by %in% colnames(colData(object)))){
       # Colouring by metadata
@@ -111,7 +112,8 @@ plotCells <- function(mask,
 
   # Add outline
   if(!is.null(outline_by)){
-    cur_col$outline_by <- .selectColours(object, outline_by, colour)
+    cur_col$outline_by <- .selectColours(object, outline_by, colour,
+                                         call.arg = "outline_by")
     out_img <- .outlineImageByMeta(object, mask, out_img, cell_id, img_id,
                                    outline_by, cur_col$outline_by)
   }

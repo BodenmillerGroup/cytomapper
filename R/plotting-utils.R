@@ -202,7 +202,10 @@
 #' @importFrom grDevices colorRampPalette
 #' @importFrom RColorBrewer brewer.pal
 #' @importFrom viridis viridis
-.selectColours <- function(object, colour_by, colour){
+.selectColours <- function(object, colour_by, colour,
+                           call.arg = c("colour_by", "outline_by")){
+  call.arg <- match.arg(call.arg)
+
   # We seperate this function between colouring based on metadata
   # or the marker expression (rownames)
   if(!is.null(object) && all(colour_by %in% colnames(colData(object)))){
@@ -211,21 +214,38 @@
     if(is.null(colour)){
       if(length(cur_entries) > 23){
         if(is.numeric(cur_entries)){
-          cur_col <- viridis(100)
+          if(call.arg == "colour_by"){
+            cur_col <- viridis(100)
+          } else {
+            cur_col <- inferno(100)
+          }
         } else {
-          cur_col <- viridis(length(cur_entries))
+          if(call.arg == "colour_by"){
+            cur_col <- viridis(length(cur_entries))
+          } else {
+            cur_col <- inferno(length(cur_entries))
+          }
           names(cur_col) <- cur_entries
         }
       } else {
-        cur_col <- c(brewer.pal(12, "Paired"),
-                     brewer.pal(8, "Pastel2")[-c(3,5,8)],
-                     brewer.pal(12, "Set3")[-c(2,3,8,9,11,12)])
+        if(call.arg == "colour_by"){
+          cur_col <- c(brewer.pal(12, "Paired"),
+                       brewer.pal(8, "Pastel2")[-c(3,5,8)],
+                      brewer.pal(12, "Set3")[-c(2,3,8,9,11,12)])
+        } else {
+          cur_col <- rev(c(brewer.pal(12, "Paired"),
+                           brewer.pal(8, "Pastel2")[-c(3,5,8)],
+                           brewer.pal(12, "Set3")[-c(2,3,7,8,9,11,12)],
+                           "brown3"))
+        }
         cur_col <- cur_col[1:length(cur_entries)]
         names(cur_col) <- cur_entries
       }
     } else {
       cur_col <- colour[colour_by]
     }
+    col_out <- list(cur_col)
+    names(col_out) <- colour_by
   } else {
     if(is.null(colour)){
       if(length(colour_by) > 1){
@@ -237,17 +257,17 @@
                          colorRampPalette(c("black", "yellow"))(100))
         col_list <- col_list[1:length(colour_by)]
         names(col_list) <- colour_by
-        cur_col <- col_list
+        col_out <- col_list
       } else {
         cur_col <- list(viridis(100))
-        names(cur_col) <- colour_by
+        names(col_out) <- colour_by
       }
     } else {
-      cur_col <- colour[colour_by]
+      col_out <- colour[colour_by]
     }
   }
 
-  return(cur_col)
+  return(col_out)
 }
 
 # Min/max scaling of expression counts

@@ -242,6 +242,36 @@ test_that("plotCells: colour can be correctly adjusted.", {
   data("pancreasSCE")
   data("pancreasMasks")
 
+  # Works
+  expect_silent(plotCells(object = pancreasSCE,
+                          mask = pancreasMasks, img_id = "ImageNb",
+                          cell_id = "CellNb", exprs_values = "counts",
+                          colour_by = "SMA",
+                          colour = list(SMA = colorRampPalette(c("black", "red"))(100))))
+  expect_silent(plotCells(object = pancreasSCE,
+                          mask = pancreasMasks, img_id = "ImageNb",
+                          cell_id = "CellNb", exprs_values = "counts",
+                          colour_by = c("H3", "CD44"),
+                          colour = list(H3 = colorRampPalette(c("black", "red"))(100),
+                                        CD44 = colorRampPalette(c("black", "green"))(100))))
+  # Fix this!
+  expect_silent(plotCells(object = pancreasSCE,
+                          mask = pancreasMasks, img_id = "ImageNb",
+                          cell_id = "CellNb", exprs_values = "counts",
+                          colour_by = "CellType",
+                          colour = list(CellType = c(celltype_B = "green",
+                                                     celltype_A = "blue",
+                                                     celltype_C = "red"))))
+
+
+  # Error
+  # Write Error!
+  expect_silent(plotCells(object = pancreasSCE,
+                          mask = pancreasMasks, img_id = "ImageNb",
+                          cell_id = "CellNb", exprs_values = "counts",
+                          colour_by = "SMA",
+                          colour = list(SMA = "green")))
+
   # Change size of images
   # Decreasing the size
   cur_images <- pancreasMasks

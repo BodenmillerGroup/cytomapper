@@ -373,7 +373,7 @@
         stop("'names(colour)' do not match with 'colour_by' and/or 'outline_by'")
       }
     }
-    cur_entries <- lapply(colour, is.null)
+    cur_entries <- unlist(lapply(colour, is.null))
     if(sum(cur_entries) > 0){
       stop("Empty entries not allowed in 'colour'")
     }
