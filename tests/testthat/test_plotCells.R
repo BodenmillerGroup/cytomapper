@@ -306,12 +306,53 @@ test_that("plotCells: colour can be correctly adjusted.", {
 
 
   # Error
-  # Write Error!
-  expect_silent(plotCells(object = pancreasSCE,
+  expect_error(plotCells(object = pancreasSCE,
                           mask = pancreasMasks, img_id = "ImageNb",
                           cell_id = "CellNb", exprs_values = "counts",
                           colour_by = "SMA",
-                          colour = list(SMA = "green")))
+                          colour = list(SMA = "green")),
+               regexp = "Please specify at least two colours when colouring features.",
+               fixed = TRUE)
+  expect_error(plotCells(object = pancreasSCE,
+                         mask = pancreasMasks, img_id = "ImageNb",
+                         cell_id = "CellNb", exprs_values = "counts",
+                         colour_by = "SMA",
+                         colour = list(test = c("black", "green"))),
+               regexp = "'names(colour)' do not match with 'colour_by' and/or 'outline_by'",
+               fixed = TRUE)
+  expect_error(plotCells(object = pancreasSCE,
+                         mask = pancreasMasks, img_id = "ImageNb",
+                         cell_id = "CellNb", exprs_values = "counts",
+                         colour_by = "CellType",
+                         colour = list(CellType = "green")),
+               regexp = "Please specify colours for all 'colour_by' levels.",
+               fixed = TRUE)
+  expect_error(plotCells(object = pancreasSCE,
+                         mask = pancreasMasks, img_id = "ImageNb",
+                         cell_id = "CellNb", exprs_values = "counts",
+                         outline_by = "CellType",
+                         colour = list(CellType = "green")),
+               regexp = "Please specify colours for all 'outline_by' levels.",
+               fixed = TRUE)
+  expect_error(plotCells(object = pancreasSCE,
+                         mask = pancreasMasks, img_id = "ImageNb",
+                         cell_id = "CellNb", exprs_values = "counts",
+                         colour_by = "Area",
+                         colour = list(Area = "green")),
+               regexp = "Please specify at least two colours when colouring continous entries.",
+               fixed = TRUE)
+  expect_error(plotCells(object = pancreasSCE,
+                         mask = pancreasMasks, img_id = "ImageNb",
+                         cell_id = "CellNb", exprs_values = "counts",
+                         outline_by = "Area",
+                         colour = list(Area = "green")),
+               regexp = "Please specify at least two colours when colouring continous entries.",
+               fixed = TRUE)
+})
+
+test_that("plotCells: missing_colour can be correctly adjusted.", {
+  data("pancreasSCE")
+  data("pancreasMasks")
 
   # Change size of images
   # Decreasing the size

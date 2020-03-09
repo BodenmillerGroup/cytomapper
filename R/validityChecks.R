@@ -350,7 +350,7 @@
       if(is.null(names(mask)) && !(img_id %in% colnames(mcols(mask)))){
         stop("'subset_images' not part of names(mask) or mcols(mask)[,img_id]")
       }
-      if(!is.null(names(mask)) && sum(subset_images %in% names(mask) == 0)){
+      if(!is.null(names(mask)) && sum(subset_images %in% names(mask) == 0L)){
         if(!(img_id %in% colnames(mcols(mask)))){
           stop("If 'mask' is unnamed, mask ids must be provided in the mcols(mask)[,img_id] slot.")
         }
@@ -374,14 +374,40 @@
       }
     }
     cur_entries <- unlist(lapply(colour, is.null))
-    if(sum(cur_entries) > 0){
+    if(sum(cur_entries) > 0L){
       stop("Empty entries not allowed in 'colour'")
     }
     # Error if only few markers should be coloured
-    if(all(colour_by %in% rownames(object))){
-      if(sum(colour_by %in% names(colour)) > 1 &&
+    if(!is.null(colour_by) && all(colour_by %in% rownames(object))){
+      if(sum(colour_by %in% names(colour)) > 1L &&
          sum(colour_by %in% names(colour)) < length(colour_by)){
         stop("Please specify colour gradients for all features.")
+      }
+      if(all(colour_by %in% names(colour)) &&
+         sum(unlist(lapply(colour[colour_by], length)) <= 1L)){
+            stop("Please specify at least two colours when colouring features.")
+      }
+    }
+    if(!is.null(colour_by) && all(colour_by %in% colnames(colData(object)))){
+      cur_entries <- unique(colData(object)[,colour_by])
+      if(length(cur_entries) > 23L && is.numeric(cur_entries) &&
+         is.null(names(colour[[colour_by]]))){
+        if(length(colour[[colour_by]]) <= 1){
+          stop("Please specify at least two colours when colouring continous entries.")
+        }
+      } else if(!all(cur_entries %in% names(colour[[colour_by]]))){
+        stop("Please specify colours for all 'colour_by' levels.")
+      }
+    }
+    if(!is.null(outline_by) && all(outline_by %in% colnames(colData(object)))){
+      cur_entries <- unique(colData(object)[,outline_by])
+      if(length(cur_entries) > 23L && is.numeric(cur_entries) &&
+         is.null(names(colour[[outline_by]]))){
+        if(length(colour[[outline_by]]) <= 1){
+          stop("Please specify at least two colours when colouring continous entries.")
+        }
+      } else if(!all(cur_entries %in% names(colour[[outline_by]]))){
+        stop("Please specify colours for all 'outline_by' levels.")
       }
     }
   }
