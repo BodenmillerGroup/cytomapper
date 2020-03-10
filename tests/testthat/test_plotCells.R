@@ -220,6 +220,19 @@ test_that("plotCells: images can be correctly subsetted.", {
                           colour_by = "SMA",
                           subset_images = c("A02_mask", "F01_mask")))
 
+  # Use mcols entry
+  mcols(pancreasMasks)$MaskName <- paste0(names(pancreasMasks), ".tiff")
+  expect_silent(plotCells(object = pancreasSCE,
+                          mask = pancreasMasks, img_id = "MaskName",
+                          cell_id = "CellNb", exprs_values = "counts",
+                          colour_by = "SMA",
+                          subset_images = c("A02_mask.tiff", "F01_mask.tiff")))
+  expect_silent(plotCells(object = pancreasSCE,
+                          mask = pancreasMasks, img_id = "MaskName",
+                          cell_id = "CellNb", exprs_values = "counts",
+                          colour_by = "SMA",
+                          subset_images = 1:2))
+
   # Error
   expect_error(plotCells(object = pancreasSCE,
                           mask = pancreasMasks, img_id = "ImageNb",
@@ -359,36 +372,58 @@ test_that("plotCells: SCE can be subsetted.", {
   data("pancreasSCE")
   data("pancreasMasks")
 
+  # Subset cells
+  set.seed(12345)
+  cur_sce <- pancreasSCE[,sample(1:ncol(pancreasSCE), 100)]
+
+  expect_silent(plotCells(object = cur_sce,
+            mask = pancreasMasks, img_id = "ImageNb",
+            cell_id = "CellNb", colour_by = "CellType"))
+  expect_silent(plotCells(object = cur_sce,
+                          mask = pancreasMasks, img_id = "ImageNb",
+                          cell_id = "CellNb", colour_by = "CellType",
+                colour = list(CellType = c(celltype_B = "green",
+                                           celltype_A = "blue",
+                                           celltype_C = "red"))))
+  expect_silent(plotCells(object = cur_sce,
+            mask = pancreasMasks, img_id = "ImageNb",
+            cell_id = "CellNb", colour_by = "H3"))
+  expect_silent(plotCells(object = cur_sce,
+            mask = pancreasMasks, img_id = "ImageNb",
+            cell_id = "CellNb", colour_by = "H3",
+            outline_by = "CellType"))
+
+  cur_sce <- pancreasSCE[,pancreasSCE$ImageNb == 1]
+  cur_sce <- cur_sce[,1:10]
+  expect_silent(plotCells(object = cur_sce,
+                          mask = pancreasMasks, img_id = "ImageNb",
+                          cell_id = "CellNb", colour_by = "CellType"))
+  expect_silent(plotCells(object = cur_sce,
+                          mask = pancreasMasks, img_id = "ImageNb",
+                          cell_id = "CellNb", colour_by = "CellType",
+                          subset_images = unique(cur_sce$ImageNb)))
+})
+
+test_that("plotCells: Size of images can be changed.", {
+  data("pancreasSCE")
+  data("pancreasMasks")
+
   # Change size of images
   # Decreasing the size
   cur_images <- pancreasMasks
   setImages(cur_images, "A02_mask") <- cur_images[[1]][1:50, 1:50,,drop=FALSE]
 
-  plotCells(object = pancreasSCE,
+  expect_silent(plotCells(object = pancreasSCE,
             mask = cur_images, img_id = "ImageNb",
-            cell_id = "CellNb", colour_by = "CellType")
-
-  # Subset cells
-  set.seed(12345)
-  cur_sce <- pancreasSCE[,sample(1:ncol(pancreasSCE), 100)]
-
-  plotCells(object = cur_sce,
-            mask = pancreasMasks, img_id = "ImageNb",
-            cell_id = "CellNb", colour_by = "CellType")
-  plotCells(object = cur_sce,
-            mask = pancreasMasks, img_id = "ImageNb",
-            cell_id = "CellNb", colour_by = "H3")
-  plotCells(object = cur_sce,
-            mask = pancreasMasks, img_id = "ImageNb",
-            cell_id = "CellNb", colour_by = "H3",
-            outline_by = "CellType")
-
-})
-
-test_that("plotCells: SCE can be subsetted.", {
-  data("pancreasSCE")
-  data("pancreasMasks")
-
+            cell_id = "CellNb", colour_by = "CellType"))
+  expect_silent(plotCells(object = pancreasSCE,
+            mask = cur_images, img_id = "ImageNb",
+            cell_id = "CellNb", colour_by = "CellType",
+            subset_images = 1))
+  expect_silent(plotCells(object = pancreasSCE,
+                          mask = cur_images, img_id = "ImageNb",
+                          cell_id = "CellNb", outline_by = "CellType",
+                          subset_images = 1))
 })
 
 

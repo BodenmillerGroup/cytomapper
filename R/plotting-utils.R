@@ -6,14 +6,11 @@
 #' @importFrom S4Vectors mcols
 .select_images <- function(object, images, img_id, subset_images){
 
-  # If subset_images is not given, images are selected based on the cells
-  # in the SCE object
   if(!is.null(subset_images)){
-    images <- images[subset_images]
-  } else {
-    if(!is.null(object)){
-      cur_image_ids <- unique(colData(object)[,img_id])
-      images <- images[mcols(images)[,img_id] %in% cur_image_ids]
+    if(all(subset_images %in% mcols(images)[,img_id])){
+      images <- images[mcols(images)[,img_id] %in% subset_images]
+    } else {
+      images <- images[subset_images]
     }
   }
 
