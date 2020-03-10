@@ -262,9 +262,9 @@
       stop("Mask and image ids must be identical.")
     }
 
-    image_dims <- lapply(image, function(x){dim(x)[1:2]})
-    mask_dims <- lapply(mask, function(x){dim(x)[1:2]})
-    if(!identical(mask_images, image_images)){
+    image_dims <- as.numeric(unlist(lapply(image, function(x){dim(x)[1:2]})))
+    mask_dims <- as.numeric(unlist(lapply(mask, function(x){dim(x)[1:2]})))
+    if(!identical(image_dims, mask_dims)){
       stop("Mask and image entries must have the same dimensions.")
     }
   }
@@ -376,11 +376,6 @@
     if(is.null(names(image)) && !(img_id %in% colnames(mcols(image)))){
       stop("'subset_images' not part of names(ImageList) or mcols(ImageList)[,img_id]")
     }
-    if(!is.null(names(image)) && sum(subset_images %in% names(image) == 0)){
-      if(!(img_id %in% colnames(mcols(image)))){
-        stop("If 'image' is unnamed, image ids must be provided in the mcols(ImageList)[,img_id] slot.")
-      }
-    }
   }
 }
 
@@ -410,7 +405,7 @@
     cur_logical <- !is.null(colour_by) && all(colour_by %in% rownames(object))
   }
   if(cur_logical){
-    if(sum(colour_by %in% names(colour)) > 1L &&
+    if(sum(colour_by %in% names(colour)) > 0L &&
        sum(colour_by %in% names(colour)) < length(colour_by)){
       stop("Please specify colour gradients for all features.")
     }

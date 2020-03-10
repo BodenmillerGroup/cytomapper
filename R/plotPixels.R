@@ -16,7 +16,7 @@
 #' @param colour_by TODO
 #' @param bcg brightness/contrast/gamma list("H3" = c(0,1,1))
 #' @param outline_by (optional)
-#' @param subset_images TODO
+#' @param subset_images TODO Note that Masks and Images need to have same names or same IDs
 #' @param colour TODO
 #' @param ... Further arguments passed to  \code{?"\link{plotting-param}"}
 #'
@@ -104,12 +104,14 @@ plotPixels <- function(image,
       cur_col$colour_by <- .selectColours(object, colour_by, colour)
       out_img <- .colourImageByFeature(image,
                                      colour_by,
+                                     bcg,
                                      cur_col$colour_by)
     } else{
       colour_by <- channelNames(image)[1]
       cur_col$colour_by <- .selectColours(object, colour_by, colour)
       out_img <- .colourImageByFeature(image,
                                      colour_by,
+                                     bcg,
                                      cur_col$colour_by)
     }
   }
@@ -118,7 +120,7 @@ plotPixels <- function(image,
   if(!is.null(outline_by)){
     cur_col$outline_by <- .selectColours(object, outline_by, colour)
     out_img <- .outlineImageByMeta(object, mask, out_img, cell_id, img_id,
-                                outline_by, cur_col$outline_by)
+                                outline_by, cur_col$outline_by[[1]])
   } else if(!is.null(mask)){
     out_img <- mendoapply(function(cur_mask, cur_image){
       cur_img <- paintObjects(cur_mask, Image(cur_image),

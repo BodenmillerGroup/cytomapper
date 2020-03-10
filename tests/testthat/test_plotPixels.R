@@ -47,8 +47,7 @@ test_that("plotPixels: Standard input testing works", {
 })
 
 test_that("plotPixels: Features can be displayed.", {
-  data("pancreasSCE")
-  data("pancreasMasks")
+  data("pancreasImages")
 
   # Works
   expect_silent(plotPixels(image = pancreasImages,
@@ -76,11 +75,16 @@ test_that("plotPixels: Features can be displayed.", {
                regexp = "'colour_by' not in 'channelNames(image)' slot.",
                fix = TRUE)
 
+  channelNames(pancreasImages) <- NULL
+  expect_error(plotPixels(image = pancreasImages,
+                           colour_by = "H3"),
+               regexp = "'channelNames(image)' not set.",
+               fixed = TRUE)
+
 })
 
 test_that("plotPixels: Channels can be enhanced.", {
-  data("pancreasSCE")
-  data("pancreasMasks")
+  data("pancreasImages")
 
   # Works
   expect_silent(plotPixels(image = pancreasImages,
@@ -137,107 +141,57 @@ test_that("plotPixels: Channels can be enhanced.", {
 
 })
 
-test_that("plotPixels: Metadata can be displayed.", {
-  data("pancreasSCE")
-  data("pancreasMasks")
-
-  # Works
-  expect_silent(plotPixels(object = pancreasSCE,
-            mask = pancreasMasks, img_id = "ImageNb",
-            cell_id = "CellNb", colour_by = "CellType"))
-  expect_silent(plotPixels(object = pancreasSCE,
-            mask = pancreasMasks, img_id = "ImageNb",
-            cell_id = "CellNb",
-            colour_by = "Area"))
-  expect_silent(plotPixels(object = pancreasSCE,
-            mask = pancreasMasks, img_id = "ImageNb",
-            cell_id = "CellNb",
-            colour_by = "Pos_X"))
-  expect_silent(plotPixels(object = pancreasSCE,
-            mask = pancreasMasks, img_id = "ImageNb",
-            cell_id = "CellNb",
-            colour_by = "Pos_Y"))
-
-  # Error
-  expect_error(plotPixels(mask = pancreasMasks,
-                         colour_by = "H3"),
-               regexp = "Please provide a SingleCellExperiment 'object'.",
-               fix = TRUE)
-  expect_error(plotPixels(object = pancreasSCE,
-               mask = pancreasMasks, img_id = "ImageNb",
-               cell_id = "CellNb",
-               colour_by = c("CellType", "test")),
-               regexp = "'colour_by' not in 'rownames(object)' or the 'colData(object)' slot.",
-               fix = TRUE)
-  expect_error(plotPixels(object = pancreasSCE,
-                         mask = pancreasMasks, img_id = "ImageNb",
-                         cell_id = "CellNb",
-                         colour_by = c("CellType", "Area")),
-               regexp = "Only one 'colour_by' entry allowed when selecting a 'colData(object)' slot.",
-               fix = TRUE)
-
-})
-
 test_that("plotPixels: Cells can be outlined correctly.", {
   data("pancreasSCE")
-  data("pancreasMasks")
+  data("pancreasImages")
+  data("pancreasImages")
 
   # Works
   expect_silent(plotPixels(object = pancreasSCE,
-            mask = pancreasMasks, img_id = "ImageNb",
+            mask = pancreasMasks,
+            image = pancreasImages,
+            img_id = "ImageNb",
             cell_id = "CellNb",
             outline_by = "CellType"))
   expect_silent(plotPixels(object = pancreasSCE,
-                          mask = pancreasMasks, img_id = "ImageNb",
+                           mask = pancreasMasks,
+                           image = pancreasImages,
+                           img_id = "ImageNb",
                           cell_id = "CellNb", colour_by = "SMA",
                           outline_by = "CellType"))
   expect_silent(plotPixels(object = pancreasSCE,
-            mask = pancreasMasks, img_id = "ImageNb",
+                           mask = pancreasMasks,
+                           image = pancreasImages,
+                           img_id = "ImageNb",
             cell_id = "CellNb", colour_by = "SMA",
             outline_by = "Area"))
 
-
   # Error
-  expect_error(plotPixels(mask = pancreasMasks,
+  expect_error(plotPixels(image = pancreasImages,
                          outline_by = "CellType"),
-               regexp = "Please provide a SingleCellExperiment 'object'.",
+               regexp = "When outlining cells, please provide a SingleCellExperiment 'object' \nand segmentation 'mask' object.",
                fix = TRUE)
-  expect_error(plotPixels(object = pancreasSCE,
+  expect_error(plotPixels(image = pancreasImages,
+                          object = pancreasSCE,
+                          img_id = "ImageNb",
+                          cell_id = "CellNb",
+                          outline_by = "CellType"),
+               regexp = "When outlining cells, please provide a SingleCellExperiment 'object' \nand segmentation 'mask' object.",
+               fix = TRUE)
+  expect_error(plotPixels(image = pancreasImages,
+                          object = pancreasSCE,
                           mask = pancreasMasks, img_id = "ImageNb",
                           cell_id = "CellNb", colour_by = "SMA",
                           outline_by = "test"),
                regexp = "'outline_by' not in 'colData(object)' slot.",
                fixed = TRUE)
-  expect_error(plotPixels(object = pancreasSCE,
-                         mask = pancreasMasks, img_id = "ImageNb",
+  expect_error(plotPixels(image = pancreasImages,
+                          object = pancreasSCE,
+                          mask = pancreasMasks, img_id = "ImageNb",
                          cell_id = "CellNb", colour_by = "SMA",
                          outline_by = c("CellType", "Area")),
                regexp = "Only one 'outline_by' entry allowed.",
                fixed = TRUE)
-})
-
-test_that("plotPixels: Exprs values can be correctly set.", {
-  data("pancreasSCE")
-  data("pancreasMasks")
-
-  # Works
-  expect_silent(plotPixels(object = pancreasSCE,
-            mask = pancreasMasks, img_id = "ImageNb",
-            cell_id = "CellNb", exprs_values = "counts",
-            colour_by = "H3"))
-  expect_silent(plotPixels(object = pancreasSCE,
-            mask = pancreasMasks, img_id = "ImageNb",
-            cell_id = "CellNb", exprs_values = "exprs",
-            colour_by = "H3"))
-
-  # Error
-  expect_error(plotPixels(object = pancreasSCE,
-                          mask = pancreasMasks, img_id = "ImageNb",
-                          cell_id = "CellNb", exprs_values = "logcounts",
-                          colour_by = "H3"),
-               regexp = "'exprs_values' not an assay entry in 'object'.",
-               fixed = TRUE)
-
 })
 
 test_that("plotPixels: images can be correctly subsetted.", {
@@ -245,59 +199,64 @@ test_that("plotPixels: images can be correctly subsetted.", {
   data("pancreasMasks")
 
   # Works
-  expect_silent(plotPixels(object = pancreasSCE,
-            mask = pancreasMasks, img_id = "ImageNb",
-            cell_id = "CellNb", exprs_values = "counts",
+  expect_silent(plotPixels(image = pancreasImages,
             colour_by = "SMA", subset_images = 1))
-  expect_silent(plotPixels(object = pancreasSCE,
-                          mask = pancreasMasks, img_id = "ImageNb",
-                          cell_id = "CellNb", exprs_values = "counts",
-                          colour_by = "SMA", subset_images = 1:3))
-  expect_silent(plotPixels(object = pancreasSCE,
-                          mask = pancreasMasks, img_id = "ImageNb",
-                          cell_id = "CellNb", exprs_values = "counts",
-                          colour_by = "SMA", subset_images = 1:2))
-  expect_silent(plotPixels(object = pancreasSCE,
-                          mask = pancreasMasks, img_id = "ImageNb",
-                          cell_id = "CellNb", exprs_values = "counts",
-                          colour_by = "SMA", subset_images = c(1,3)))
-  expect_silent(plotPixels(object = pancreasSCE,
-                          mask = pancreasMasks, img_id = "ImageNb",
-                          cell_id = "CellNb", exprs_values = "counts",
-                          colour_by = "SMA", subset_images = "A02_mask"))
-  expect_silent(plotPixels(object = pancreasSCE,
-                          mask = pancreasMasks, img_id = "ImageNb",
-                          cell_id = "CellNb", exprs_values = "counts",
-                          colour_by = "SMA",
-                          subset_images = c("A02_mask", "F01_mask")))
+  expect_silent(plotPixels(image = pancreasImages,
+                           colour_by = "SMA", subset_images = 1:3))
+  expect_silent(plotPixels(image = pancreasImages,
+                           colour_by = "SMA", subset_images = 1:2))
+  expect_silent(plotPixels(image = pancreasImages,
+                           colour_by = "SMA", subset_images = c(1,3)))
+  expect_silent(plotPixels(image = pancreasImages,
+                           colour_by = "SMA",
+                           subset_images = "F01_imc"))
+  expect_silent(plotPixels(image = pancreasImages,
+                           colour_by = "SMA",
+                           subset_images = c("A02_imc", "F01_imc")))
 
   # Use mcols entry
-  mcols(pancreasMasks)$MaskName <- paste0(names(pancreasMasks), ".tiff")
-  expect_silent(plotPixels(object = pancreasSCE,
-                          mask = pancreasMasks, img_id = "MaskName",
-                          cell_id = "CellNb", exprs_values = "counts",
-                          colour_by = "SMA",
-                          subset_images = c("A02_mask.tiff", "F01_mask.tiff")))
-  expect_silent(plotPixels(object = pancreasSCE,
-                          mask = pancreasMasks, img_id = "MaskName",
-                          cell_id = "CellNb", exprs_values = "counts",
+  mcols(pancreasImages)$ImageName <- paste0(names(pancreasImages), ".tiff")
+  expect_silent(plotPixels(image = pancreasImages,
+                           img_id = "ImageName",
+                           colour_by = "SMA",
+                          subset_images = c("A02_imc.tiff", "F01_imc.tiff")))
+  expect_silent(plotPixels(image = pancreasImages,
+                           img_id = "ImageName",
+                          cell_id = "CellNb",
                           colour_by = "SMA",
                           subset_images = 1:2))
 
+  # Image and Mask
+  expect_silent(plotPixels(image = pancreasImages,
+                           mask = pancreasMasks,
+                           object = pancreasSCE,
+                           img_id = "ImageName",
+                           cell_id = "CellNb",
+                           colour_by = "SMA",
+                           outline_by = "CellType",
+                           subset_images = 1:2))
+
   # Error
-  expect_error(plotPixels(object = pancreasSCE,
-                          mask = pancreasMasks, img_id = "ImageNb",
-                          cell_id = "CellNb", exprs_values = "counts",
-                          colour_by = "SMA",
+  expect_error(plotPixels(image = pancreasImages,
                           subset_images = 4),
                regexp = "subscript contains out-of-bounds indices",
                fixed = TRUE)
-  expect_error(plotPixels(object = pancreasSCE,
-                         mask = pancreasMasks, img_id = "ImageNb",
-                         cell_id = "CellNb", exprs_values = "counts",
-                         colour_by = "SMA",
+  expect_error(plotPixels(image = pancreasImages,
+                          colour_by = "SMA",
                          subset_images = "test"),
                regexp = "subscript contains invalid names",
+               fixed = TRUE)
+
+  mcols(pancreasMasks)$ImageNb <- c("test1", "test2", "test3")
+  expect_error(plotPixels(image = pancreasImages,
+                          mask = pancreasMasks,
+                          object = pancreasSCE,
+                          img_id = "ImageNb",
+                          cell_id = "CellNb",
+                          colour_by = "SMA",
+                          outline_by = "CellType",
+                          subset_images = 1:2),
+               regexp = "Mask and image ids must be identical.",
                fixed = TRUE)
 
 })
@@ -305,42 +264,21 @@ test_that("plotPixels: images can be correctly subsetted.", {
 test_that("plotPixels: colour can be correctly adjusted.", {
   data("pancreasSCE")
   data("pancreasMasks")
+  data("pancreasImages")
 
   # Works
-  expect_silent(plotPixels(object = pancreasSCE,
-                          mask = pancreasMasks, img_id = "ImageNb",
-                          cell_id = "CellNb",
+  expect_silent(plotPixels(image = pancreasImages,
                           colour_by = "SMA",
                           colour = list(SMA = colorRampPalette(c("black", "red"))(100))))
-  expect_silent(plotPixels(object = pancreasSCE,
-                          mask = pancreasMasks, img_id = "ImageNb",
-                          cell_id = "CellNb",
+  expect_silent(plotPixels(image = pancreasImages,
                           colour_by = "SMA",
                           colour = list(SMA = c("black", "red"))))
-  expect_silent(plotPixels(object = pancreasSCE,
-                          mask = pancreasMasks, img_id = "ImageNb",
-                          cell_id = "CellNb",
+  expect_silent(plotPixels(image = pancreasImages,
                           colour_by = c("H3", "CD44"),
                           colour = list(H3 = colorRampPalette(c("black", "red"))(100),
                                         CD44 = colorRampPalette(c("black", "green"))(100))))
   expect_silent(plotPixels(object = pancreasSCE,
-                          mask = pancreasMasks, img_id = "ImageNb",
-                          cell_id = "CellNb",
-                          colour_by = "CellType",
-                          colour = list(CellType = c(celltype_B = "green",
-                                                     celltype_A = "blue",
-                                                     celltype_C = "red"))))
-  expect_silent(plotPixels(object = pancreasSCE,
-                          mask = pancreasMasks, img_id = "ImageNb",
-                          cell_id = "CellNb", exprs_values = "counts",
-                          colour_by = "Area",
-                          colour = list(Area = colorRampPalette(c("black", "red"))(100))))
-  expect_silent(plotPixels(object = pancreasSCE,
-                          mask = pancreasMasks, img_id = "ImageNb",
-                          cell_id = "CellNb",
-                          colour_by = "Area",
-                          colour = list(Area = c("black", "red"))))
-  expect_silent(plotPixels(object = pancreasSCE,
+                           image = pancreasImages,
                           mask = pancreasMasks, img_id = "ImageNb",
                           cell_id = "CellNb",
                           colour_by = "H3", outline_by = "CellType",
@@ -348,133 +286,113 @@ test_that("plotPixels: colour can be correctly adjusted.", {
                                                      celltype_A = "blue",
                                                      celltype_C = "red"))))
   expect_silent(plotPixels(object = pancreasSCE,
-                          mask = pancreasMasks, img_id = "ImageNb",
-                          cell_id = "CellNb",
+                           image = pancreasImages,
+                           mask = pancreasMasks, img_id = "ImageNb",
+                           cell_id = "CellNb",
                           colour_by = "H3", outline_by = "CellType",
                           colour = list(H3 = c("black", "green"))))
   expect_silent(plotPixels(object = pancreasSCE,
-                          mask = pancreasMasks, img_id = "ImageNb",
-                          cell_id = "CellNb",
-                          colour_by = "CellType", outline_by = "Area",
-                          colour = list(CellType = c(celltype_B = "green",
-                                                     celltype_A = "blue",
-                                                     celltype_C = "red"))))
-  expect_silent(plotPixels(object = pancreasSCE,
-                          mask = pancreasMasks, img_id = "ImageNb",
-                          cell_id = "CellNb",
-                          colour_by = "CellType", outline_by = "Area",
+                           image = pancreasImages,
+                           mask = pancreasMasks, img_id = "ImageNb",
+                           cell_id = "CellNb",
+                          colour_by = "H3", outline_by = "CellType",
                           colour = list(CellType = c(celltype_B = "green",
                                                      celltype_A = "blue",
                                                      celltype_C = "red"),
-                                        Area = c("black", "green"))))
-  expect_silent(plotPixels(object = pancreasSCE,
-                          mask = pancreasMasks, img_id = "ImageNb",
-                          cell_id = "CellNb",
-                          colour_by = "CellType", outline_by = "Area",
-                          colour = list(Area = c("black", "green"))))
+                                        H3 = c("black", "green"))))
 
 
   # Error
-  expect_error(plotPixels(object = pancreasSCE,
-                          mask = pancreasMasks, img_id = "ImageNb",
-                          cell_id = "CellNb", exprs_values = "counts",
+  expect_error(plotPixels(image = pancreasImages,
                           colour_by = "SMA",
                           colour = list(SMA = "green")),
                regexp = "Please specify at least two colours when colouring features.",
                fixed = TRUE)
-  expect_error(plotPixels(object = pancreasSCE,
-                         mask = pancreasMasks, img_id = "ImageNb",
-                         cell_id = "CellNb", exprs_values = "counts",
+  expect_error(plotPixels(image = pancreasImages,
                          colour_by = "SMA",
                          colour = list(test = c("black", "green"))),
                regexp = "'names(colour)' do not match with 'colour_by' and/or 'outline_by'",
                fixed = TRUE)
-  expect_error(plotPixels(object = pancreasSCE,
-                         mask = pancreasMasks, img_id = "ImageNb",
-                         cell_id = "CellNb", exprs_values = "counts",
-                         colour_by = "CellType",
-                         colour = list(CellType = "green")),
-               regexp = "Please specify colours for all 'colour_by' levels.",
-               fixed = TRUE)
-  expect_error(plotPixels(object = pancreasSCE,
-                         mask = pancreasMasks, img_id = "ImageNb",
-                         cell_id = "CellNb", exprs_values = "counts",
-                         outline_by = "CellType",
-                         colour = list(CellType = "green")),
-               regexp = "Please specify colours for all 'outline_by' levels.",
-               fixed = TRUE)
-  expect_error(plotPixels(object = pancreasSCE,
-                         mask = pancreasMasks, img_id = "ImageNb",
-                         cell_id = "CellNb", exprs_values = "counts",
-                         colour_by = "Area",
-                         colour = list(Area = "green")),
-               regexp = "Please specify at least two colours when colouring continous entries.",
-               fixed = TRUE)
-  expect_error(plotPixels(object = pancreasSCE,
-                         mask = pancreasMasks, img_id = "ImageNb",
-                         cell_id = "CellNb", exprs_values = "counts",
-                         outline_by = "Area",
-                         colour = list(Area = "green")),
-               regexp = "Please specify at least two colours when colouring continous entries.",
+  expect_error(plotPixels(image = pancreasImages,
+                          colour_by = c("H3", "SMA"),
+                          colour = list(H3 = c("black", "green"))),
+               regexp = "Please specify colour gradients for all features.",
                fixed = TRUE)
 })
 
 test_that("plotPixels: SCE can be subsetted.", {
   data("pancreasSCE")
   data("pancreasMasks")
+  data("pancreasImages")
 
   # Subset cells
   set.seed(12345)
   cur_sce <- pancreasSCE[,sample(1:ncol(pancreasSCE), 100)]
 
   expect_silent(plotPixels(object = cur_sce,
-            mask = pancreasMasks, img_id = "ImageNb",
-            cell_id = "CellNb", colour_by = "CellType"))
+                           image = pancreasImages,
+                           mask = pancreasMasks, img_id = "ImageNb",
+                           cell_id = "CellNb",
+                           colour_by = "H3", outline_by = "CellType"))
   expect_silent(plotPixels(object = cur_sce,
-                          mask = pancreasMasks, img_id = "ImageNb",
-                          cell_id = "CellNb", colour_by = "CellType",
+                           image = pancreasImages,
+                           mask = pancreasMasks, img_id = "ImageNb",
+                           cell_id = "CellNb",
+                           colour_by = "H3", outline_by = "CellType",
                 colour = list(CellType = c(celltype_B = "green",
                                            celltype_A = "blue",
                                            celltype_C = "red"))))
-  expect_silent(plotPixels(object = cur_sce,
-            mask = pancreasMasks, img_id = "ImageNb",
-            cell_id = "CellNb", colour_by = "H3"))
-  expect_silent(plotPixels(object = cur_sce,
-            mask = pancreasMasks, img_id = "ImageNb",
-            cell_id = "CellNb", colour_by = "H3",
-            outline_by = "CellType"))
 
   cur_sce <- pancreasSCE[,pancreasSCE$ImageNb == 1]
   cur_sce <- cur_sce[,1:10]
   expect_silent(plotPixels(object = cur_sce,
-                          mask = pancreasMasks, img_id = "ImageNb",
-                          cell_id = "CellNb", colour_by = "CellType"))
+                           image = pancreasImages,
+                           mask = pancreasMasks, img_id = "ImageNb",
+                           cell_id = "CellNb",
+                           colour_by = "H3", outline_by = "CellType"))
   expect_silent(plotPixels(object = cur_sce,
-                          mask = pancreasMasks, img_id = "ImageNb",
-                          cell_id = "CellNb", colour_by = "CellType",
+                           image = pancreasImages,
+                           mask = pancreasMasks, img_id = "ImageNb",
+                           cell_id = "CellNb",
+                           colour_by = "H3", outline_by = "CellType",
                           subset_images = unique(cur_sce$ImageNb)))
 })
 
 test_that("plotPixels: Size of images can be changed.", {
   data("pancreasSCE")
   data("pancreasMasks")
+  data("pancreasImages")
 
   # Change size of images
   # Decreasing the size
-  cur_images <- pancreasMasks
-  setImages(cur_images, "A02_mask") <- cur_images[[1]][1:50, 1:50,,drop=FALSE]
+  cur_masks <- pancreasMasks
+  setImages(cur_masks, "A02_mask") <- cur_masks[[1]][1:50, 1:50,,drop=FALSE]
+  expect_error(plotPixels(object = cur_sce,
+                           image = pancreasImages,
+                           mask = cur_masks, img_id = "ImageNb",
+                           cell_id = "CellNb",
+                           colour_by = "H3", outline_by = "CellType"),
+               regexp = "Mask and image entries must have the same dimensions.",
+               fixed = TRUE)
 
-  expect_silent(plotPixels(object = pancreasSCE,
-            mask = cur_images, img_id = "ImageNb",
-            cell_id = "CellNb", colour_by = "CellType"))
-  expect_silent(plotPixels(object = pancreasSCE,
-            mask = cur_images, img_id = "ImageNb",
-            cell_id = "CellNb", colour_by = "CellType",
+
+  cur_images <- pancreasImages
+  setImages(cur_images, "A02_imc") <- cur_images[[1]][1:50, 1:50,,drop=FALSE]
+
+  expect_silent(plotPixels(object = cur_sce,
+                           image = cur_images,
+                           mask = cur_masks, img_id = "ImageNb",
+                           cell_id = "CellNb",
+                           colour_by = "H3", outline_by = "CellType"))
+  expect_silent(plotPixels(object = cur_sce,
+                           image = cur_images,
+                           mask = cur_masks, img_id = "ImageNb",
+                           cell_id = "CellNb",
+                           colour_by = "H3",
             subset_images = 1))
-  expect_silent(plotPixels(object = pancreasSCE,
-                          mask = cur_images, img_id = "ImageNb",
-                          cell_id = "CellNb", outline_by = "CellType",
-                          subset_images = 1))
+  expect_silent(plotPixels(image = cur_images,
+                           colour_by = "H3",
+                           subset_images = 1))
 })
 
 

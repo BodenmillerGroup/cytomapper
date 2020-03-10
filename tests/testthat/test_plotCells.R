@@ -366,6 +366,13 @@ test_that("plotCells: colour can be correctly adjusted.", {
                          colour = list(Area = "green")),
                regexp = "Please specify at least two colours when colouring continous entries.",
                fixed = TRUE)
+  expect_error(plotCells(object = pancreasSCE,
+                         mask = pancreasMasks, img_id = "ImageNb",
+                         cell_id = "CellNb", exprs_values = "counts",
+                         colour_by = c("H3", "SMA"),
+                         colour = list(H3 = c("black", "blue"))),
+               regexp = "Please specify colour gradients for all features.",
+               fixed = TRUE)
 })
 
 test_that("plotCells: SCE can be subsetted.", {

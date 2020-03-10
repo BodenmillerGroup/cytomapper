@@ -7,7 +7,8 @@
 .select_images <- function(object, images, img_id, subset_images){
 
   if(!is.null(subset_images)){
-    if(all(subset_images %in% mcols(images)[,img_id])){
+    if(!is.null(img_id) &&
+       all(subset_images %in% mcols(images)[,img_id])){
       images <- images[mcols(images)[,img_id] %in% subset_images]
     } else {
       images <- images[subset_images]
@@ -368,6 +369,8 @@
           cur_title <- rep(image_title$text, length.out=length(out_img))[ind-1]
         } else if(!is.null(mask) && !is.null(img_id)){
           cur_title <- mcols(mask)[ind - 1,img_id]
+        } else if(!is.null(image) && !is.null(img_id)){
+          cur_title <- mcols(image)[ind - 1,img_id]
         } else if(!is.null(names(out_img))){
           cur_title <- names(out_img)[ind]
         } else {
