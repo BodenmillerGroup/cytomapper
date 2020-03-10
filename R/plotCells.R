@@ -62,6 +62,11 @@ plotCells <- function(mask,
                          colour, missing_colour,
                          scale_bar, image_title)
 
+  # Set further arguments
+  dotArgs <- list(...)
+  plottingParam <- .plottingParam(dotArgs)
+
+
   # Select images for plotting
   mask <- .select_images(object, mask, img_id, subset_images)
   cur_col <- list()
@@ -77,17 +82,20 @@ plotCells <- function(mask,
     if(all(colour_by %in% colnames(colData(object)))){
       # Colouring by metadata
       out_img <- .colourMaskByMeta(object, mask, cell_id, img_id,
-                                   colour_by, cur_col$colour_by[[1]], missing_colour)
+                                   colour_by, cur_col$colour_by[[1]],
+                                   plottingParam$missing_colour)
     } else {
       # Colouring by features
       out_img <- .colourMaskByFeature(object, mask, cell_id, img_id,
                                       colour_by, exprs_values,
-                                      cur_col$colour_by, missing_colour)
+                                      cur_col$colour_by,
+                                      plottingParam$missing_colour)
     }
   } else {
     out_img <- endoapply(mask, function(x){
       x[x == 0L] <- "#000000"
-      x <- replace(x, which(x != "#000000"), missing_colour)
+      x <- replace(x, which(x != "#000000"),
+                   plottingParam$missing_colour)
       x
     })
     out_img <- as(out_img, "SimpleList")
@@ -104,5 +112,5 @@ plotCells <- function(mask,
   # Plot images
   .displayImages(object, image = NULL, exprs_values, outline_by, colour_by,
                  mask, out_img, img_id,
-                 scale_bar, image_title, cur_col)
+                 cur_col, plottingParam)
 }

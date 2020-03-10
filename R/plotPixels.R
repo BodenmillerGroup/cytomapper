@@ -104,7 +104,8 @@ plotPixels <- function(image,
                                 outline_by, cur_col$outline_by)
   } else if(!is.null(mask)){
     out_img <- mendoapply(function(cur_mask, cur_image){
-      cur_img <- paintObjects(cur_mask, Image(cur_image), col = missing_colour)
+      cur_img <- paintObjects(cur_mask, Image(cur_image),
+                              col = plottingParam$missing_colour)
       return(cur_img)
     }, mask, out_img)
     out_img <- as(out_img, "SimpleList")
@@ -113,5 +114,5 @@ plotPixels <- function(image,
   # Plot images
   .displayImages(object, image, exprs_values = NULL,
                  outline_by, colour_by, mask, out_img, img_id,
-                 plottingParam, cur_col)
+                 cur_col, plottingParam)
 }

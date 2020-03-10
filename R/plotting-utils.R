@@ -293,7 +293,7 @@
 #' @importFrom graphics par plot rasterImage strheight text
 .displayImages <- function(object, image, exprs_values, outline_by,
                            colour_by, mask, out_img,
-                           img_id, scale_bar, image_title, cur_col){
+                           img_id, cur_col, plottingParam){
   # Number of images
   # The first space is used for the figure legend
   ni <- length(out_img) + 1
@@ -352,12 +352,13 @@
 
       if(ind != 1L && !is.null(scale_bar)){
         # Plot scale bar
-        .plotScaleBar(scale_bar,
+        .plotScaleBar(plottingParam$scale_bar,
                       xleft, xright, ytop, ybottom)
       }
 
       # Plot title on images
       if(ind != 1L){
+        image_title <- plottingParam$image_title
         if(!is.null(image_title$text)){
           cur_title <- rep(image_title$text, length.out=length(out_img))[ind-1]
         } else if(!is.null(mask) && !is.null(img_id)){
@@ -584,46 +585,14 @@
 #' @importFrom graphics strheight text segments
 #' @importFrom raster as.raster
 .plotScaleBar <- function(scale_bar, xl, xr, yt, yb){
-  default_sb <- list(length = 20, label = NULL, cex = 1,  lwd = 2, colour = "white",
-                           position = "bottomright", margin = c(10, 10))
-
-  if(is.null(scale_bar$length)){
-    cur_length <- default_sb$length
-  } else {
-    cur_length <- scale_bar$length
-  }
-  if(is.null(scale_bar$label)){
-    cur_label <- as.character(cur_length)
-  } else {
-    cur_label <- as.character(scale_bar$label)
-  }
-  if(is.null(scale_bar$cex)){
-    cur_cex <- default_sb$cex
-  } else {
-    cur_cex <- scale_bar$cex
-  }
-  if(is.null(scale_bar$lwd)){
-    cur_lwd <- default_sb$lwd
-  } else {
-    cur_lwd <- scale_bar$lwd
-  }
-  if(is.null(scale_bar$colour)){
-    cur_col <- default_sb$colour
-  } else {
-    cur_col <- scale_bar$colour
-  }
-  if(is.null(scale_bar$position)){
-    cur_position <- default_sb$position
-  } else {
-    cur_position <- scale_bar$position
-  }
-  if(is.null(scale_bar$margin)){
-    cur_margin.x <- default_sb$margin[1]
-    cur_margin.y <- default_sb$margin[2]
-  } else {
-    cur_margin.x <- scale_bar$margin[1]
-    cur_margin.y <- scale_bar$margin[2]
-  }
+  cur_length <- scale_bar$length
+  cur_label <- as.character(scale_bar$label)
+  cur_cex <- scale_bar$cex
+  cur_lwd <- scale_bar$lwd
+  cur_col <- scale_bar$colour
+  cur_position <- scale_bar$position
+  cur_margin.x <- scale_bar$margin[1]
+  cur_margin.y <- scale_bar$margin[2]
 
   # Plot scale bar
   label_height <- abs(strheight(cur_label, cex = cur_cex))
