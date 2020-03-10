@@ -252,8 +252,11 @@
 }
 
 .valid.matchObjects.plotPixels <- function(object, mask, image, img_id){
-  image_images <- mcols(image)[,img_id]
   if(!is.null(mask)){
+    if(is.null(img_id)){
+      stop("'img_id' is missing.")
+    }
+    image_images <- mcols(image)[,img_id]
     mask_images <- mcols(mask)[,img_id]
     if(!identical(mask_images, image_images)){
       stop("Mask and image ids must be identical.")
@@ -267,6 +270,10 @@
   }
 
   if(!is.null(object)){
+    if(is.null(img_id)){
+      stop("'img_id' is missing.")
+    }
+    image_images <- mcols(image)[,img_id]
     sce_images <- unique(colData(object)[,img_id])
     if(all(!(sce_images %in% image_images))){
       stop("Image ids in 'mcols(image)' and 'colData(object)' do not match")
@@ -437,5 +444,33 @@
     } else if(!all(cur_entries %in% names(colour[[outline_by]]))){
       stop("Please specify colours for all 'outline_by' levels.")
     }
+  }
+}
+
+.valid.bcg <- function(bcg, colour_by){
+  if(!is.list(bcg)){
+    stop("'bcg': please specify a list object")
+  }
+
+  if(is.null(names(bcg))){
+    stop("'bcg': please indicate which channels to modify")
+  }
+
+  if(is.null(colour_by)){
+    stop("'colour_by': please indicate which channels to modify")
+  }
+
+  if(sum(names(bcg) %in% colour_by) == 0L){
+    stop("'bcg': names do not match 'colour_by' argument")
+  }
+
+  cur_length <- unlist(lapply(bcg, length))
+  if(!all(cur_length == 3L)){
+    stop("'bcg': specify in form of c(0,1,1)")
+  }
+
+  cur_logical <- unlist(lapply(bcg, is.numeric))
+  if(!all(cur_logical)){
+    stop("'bcg': specify in form of numeric entries")
   }
 }

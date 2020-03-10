@@ -113,7 +113,7 @@
 
 # Colour images based on features
 #' @importFrom EBImage normalize
-.colourImageByFeature <- function(image, colour_by, cur_colour){
+.colourImageByFeature <- function(image, colour_by, bcg, cur_colour){
 
   max.values <- as.data.frame(lapply(getChannels(image, colour_by), function(x){
     apply(x, 3, max)
@@ -132,11 +132,19 @@
     # Colour pixels
     # For this, we will perform a min/max scaling on the pixel values per channel
     # However, to keep pixel values comparable across images, we will fix
-    # the scale across all images to the min/max of alll images per channel
+    # the scale across all images to the min/max of all images per channel
     # Based on this, we will first merge the colours and colour
     # the images accordingly
+    # We also allow the user to change the scale thresholds using the 'bcg' object
+    # This will allow the user tot change the brightness (b),
     cur_frame_list <- lapply(colour_by, function(x){
+      if(x %in% names(bcg)){
+        cur_bcg <- bcg[[x]]
+      } else {
+        cur_bcg <- c(0, 1, 1)
+      }
       cur_frame <- cur_image[,,x]
+      cur_frame <- ((cur_frame + cur_bcg[1]) * cur_bcg[2]) ^ cur_bcg[3]
       cur_frame <- normalize(cur_frame, separate=TRUE,
                              ft = c(0,1), inputRange = c(min.values[x], max.values[x]))
       col_ind <- colorRampPalette(cur_colour[[x]])(101)

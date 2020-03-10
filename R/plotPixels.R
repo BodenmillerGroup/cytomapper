@@ -18,9 +18,6 @@
 #' @param outline_by (optional)
 #' @param subset_images TODO
 #' @param colour TODO
-#' @param missing_colour TODO
-#' @param scale_bar TODO
-#' @param image_title TODO
 #' @param ... Further arguments passed to  \code{?"\link{plotting-param}"}
 #'
 #' @return TODO
@@ -39,18 +36,19 @@ plotPixels <- function(image,
                        cell_id = NULL,
                        img_id = NULL,
                        colour_by = NULL,
+                       bcg = NULL,
                        outline_by = NULL,
                        subset_images = NULL,
                        colour = NULL,
                        ...) {
   # Object checks
+  .valid.image(image, img_id)
   if(!is.null(object)){
     .valid.sce(object, img_id, cell_id, exprs_values = NULL)
   }
   if(!is.null(mask)){
     .valid.mask(mask, img_id)
   }
-  .valid.image(image, img_id)
   .valid.matchObjects.plotPixels(object, mask, image, img_id)
 
   # Argument checks
@@ -70,6 +68,11 @@ plotPixels <- function(image,
   # Check colour argument
   if(!is.null(colour)){
     .valid.colour(colour, colour_by, outline_by, object, image = image)
+  }
+
+  # Check bcg argument
+  if(!is.null(bcg)){
+    .valid.bcg(bcg, colour_by)
   }
 
   # Set further arguments
@@ -93,6 +96,7 @@ plotPixels <- function(image,
     # Colouring by features
     out_img <- .colourImageByFeature(image,
                                  colour_by,
+                                 bcg,
                                  cur_col$colour_by)
   } else {
     if(is.null(channelNames(image))){
