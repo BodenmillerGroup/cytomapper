@@ -46,3 +46,8 @@
 - Options for further customization of scale_bar
 - Options for image_title customization
 - Started vignette draft
+
+2020-03-10: Unit tests on plotCells and plotPixels
+- Improved setting colours
+- Rewrite to reduce validity checks
+- version bump 0.1.6
