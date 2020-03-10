@@ -57,15 +57,27 @@ plotCells <- function(mask,
   }
 
   # Argument checks
-  .valid.plotCells.input(object, mask, img_id, colour_by, outline_by,
-                         subset_images,
-                         colour, missing_colour,
-                         scale_bar, image_title)
+  # Check colour_by argument
+  if (!is.null(colour_by)){
+    .valid.colour_by(colour_by, object, image = NULL,
+                     call.arg = "plotCells")
+  }
+  # Check outline_by argument
+  if(!is.null(outline_by)){
+    .valid.outline_by(outline_by, object, mask, image = NULL)
+  }
+  # Check subset_images argument
+  if(!is.null(subset_images)){
+    .valid.subset_images(subset_images, image = mask, img_id)
+  }
+  # Check colour argument
+  if(!is.null(colour)){
+    .valid.colour(colour, colour_by, outline_by, object, image = NULL)
+  }
 
   # Set further arguments
   dotArgs <- list(...)
   plottingParam <- .plottingParam(dotArgs)
-
 
   # Select images for plotting
   mask <- .select_images(object, mask, img_id, subset_images)

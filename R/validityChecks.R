@@ -274,67 +274,9 @@
   }
 }
 
-# Check plotCells input
 #' @importFrom S4Vectors isEmpty
-.valid.plotCells.input <- function(object, mask, img_id, colour_by, outline_by,
-                                   subset_images,
-                                   colour, missing_colour,
-                                   scale_bar, image_title){
-
-  # Check colour_by argument
-  if (!is.null(colour_by)){
-    .valid.colour_by(colour_by, object, image = NULL,
-                     call.arg = "plotCells")
-  }
-
-  # Check outline_by argument
-  if(!is.null(outline_by)){
-    .valid.outline_by(outline_by, object, mask, image = NULL)
-  }
-
-  # Check subset_images argument
-  if(!is.null(subset_images)){
-    .valid.subset_images(subset_images, image = mask)
-  }
-
-  # Check colour argument
-  if(!is.null(colour)){
-    .valid.colour(colour, colour_by, outline_by, object, image = NULL)
-  }
-}
-
-
-# Check plotPixels input
-#' @importFrom S4Vectors isEmpty
-.valid.plotPixels.input <- function(image, object, mask, img_id, colour_by, outline_by,
-                                    subset_images,
-                                    colour, missing_colour,
-                                    scale_bar, image_title){
-
-  # Check colour_by argument
-  if (!is.null(colour_by)){
-    .valid.colour_by(colour_by, object, image,
-                     call.arg = "plotPixels")
-  }
-
-  # Check outline_by argument
-  if(!is.null(outline_by)){
-    .valid.outline_by(outline_by, object, mask, image)
-  }
-
-  # Check subset_images argument
-  if(!is.null(subset_images)){
-    .valid.subset_images(subset_images, image = image)
-  }
-
-  # Check colour argument
-  if(!is.null(colour)){
-    .valid.colour(colour, colour_by, outline_by, object, image = image)
-  }
-}
-
 .valid.colour_by <- function(colour_by, object, image,
-                             call.arg = c("plotCells", "plotPixels"){
+                             call.arg = c("plotCells", "plotPixels")){
   call.arg <- match.arg(call.arg)
 
   if (call.arg == "plotCells"){
@@ -385,6 +327,7 @@
   }
 }
 
+#' @importFrom S4Vectors isEmpty
 .valid.outline_by <- function(outline_by, object, mask, image){
   # outline_by only takes entries from the colData slot
   # Check if all outline_by entries are in the colData slot
@@ -410,7 +353,7 @@
   }
 }
 
-.valid.subset_images <- function(subset_images, image){
+.valid.subset_images <- function(subset_images, image, img_id){
   # subset_images need to be either numeric, a logical,
   # a character and part of names(mask) or a character
   # and part of mcols(mask)$img_id
@@ -470,7 +413,8 @@
     }
   }
   if(!is.null(object) && !is.null(colour_by) &&
-     all(colour_by %in% colnames(colData(object)))){
+     all(colour_by %in% colnames(colData(object))) &&
+     !is.null(colour[[colour_by]])){
     cur_entries <- unique(colData(object)[,colour_by])
     if(length(cur_entries) > 23L && is.numeric(cur_entries) &&
        is.null(names(colour[[colour_by]]))){
@@ -481,7 +425,9 @@
       stop("Please specify colours for all 'colour_by' levels.")
     }
   }
-  if(!is.null(outline_by) && all(outline_by %in% colnames(colData(object)))){
+  if(!is.null(outline_by) &&
+     all(outline_by %in% colnames(colData(object))) &&
+     !is.null(colour[[outline_by]])){
     cur_entries <- unique(colData(object)[,outline_by])
     if(length(cur_entries) > 23L && is.numeric(cur_entries) &&
        is.null(names(colour[[outline_by]]))){

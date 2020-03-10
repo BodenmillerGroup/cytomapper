@@ -54,10 +54,23 @@ plotPixels <- function(image,
   .valid.matchObjects.plotPixels(object, mask, image, img_id)
 
   # Argument checks
-  .valid.plotPixels.input(image, object, mask, img_id, colour_by, outline_by,
-                         subset_images,
-                         colour, missing_colour,
-                         scale_bar, image_title)
+  # Check colour_by argument
+  if (!is.null(colour_by)){
+    .valid.colour_by(colour_by, object, image,
+                     call.arg = "plotPixels")
+  }
+  # Check outline_by argument
+  if(!is.null(outline_by)){
+    .valid.outline_by(outline_by, object, mask, image)
+  }
+  # Check subset_images argument
+  if(!is.null(subset_images)){
+    .valid.subset_images(subset_images, image = image, img_id)
+  }
+  # Check colour argument
+  if(!is.null(colour)){
+    .valid.colour(colour, colour_by, outline_by, object, image = image)
+  }
 
   # Set further arguments
   dotArgs <- list(...)

@@ -226,14 +226,14 @@ test_that("plotCells: images can be correctly subsetted.", {
                           cell_id = "CellNb", exprs_values = "counts",
                           colour_by = "SMA",
                           subset_images = 4),
-               regexp = "Error: subscript contains out-of-bounds indices",
+               regexp = "subscript contains out-of-bounds indices",
                fixed = TRUE)
   expect_error(plotCells(object = pancreasSCE,
                          mask = pancreasMasks, img_id = "ImageNb",
                          cell_id = "CellNb", exprs_values = "counts",
                          colour_by = "SMA",
                          subset_images = "test"),
-               regexp = "Error: subscript contains invalid names",
+               regexp = "subscript contains invalid names",
                fixed = TRUE)
 
 })
@@ -303,6 +303,11 @@ test_that("plotCells: colour can be correctly adjusted.", {
                                                      celltype_A = "blue",
                                                      celltype_C = "red"),
                                         Area = c("black", "green"))))
+  expect_silent(plotCells(object = pancreasSCE,
+                          mask = pancreasMasks, img_id = "ImageNb",
+                          cell_id = "CellNb",
+                          colour_by = "CellType", outline_by = "Area",
+                          colour = list(Area = c("black", "green"))))
 
 
   # Error
@@ -350,7 +355,7 @@ test_that("plotCells: colour can be correctly adjusted.", {
                fixed = TRUE)
 })
 
-test_that("plotCells: missing_colour can be correctly adjusted.", {
+test_that("plotCells: SCE can be subsetted.", {
   data("pancreasSCE")
   data("pancreasMasks")
 
@@ -377,6 +382,12 @@ test_that("plotCells: missing_colour can be correctly adjusted.", {
             mask = pancreasMasks, img_id = "ImageNb",
             cell_id = "CellNb", colour_by = "H3",
             outline_by = "CellType")
+
+})
+
+test_that("plotCells: SCE can be subsetted.", {
+  data("pancreasSCE")
+  data("pancreasMasks")
 
 })
 

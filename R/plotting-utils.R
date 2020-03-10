@@ -350,7 +350,7 @@
                     m_width, m_height, cur_col)
       }
 
-      if(ind != 1L && !is.null(scale_bar)){
+      if(ind != 1L && !is.null(plottingParam$scale_bar)){
         # Plot scale bar
         .plotScaleBar(plottingParam$scale_bar,
                       xleft, xright, ytop, ybottom)
