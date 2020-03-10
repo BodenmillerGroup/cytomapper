@@ -15,10 +15,7 @@
 #' @param exprs_values TODO
 #' @param subset_images TODO
 #' @param colour TODO
-#' @param missing_colour TODO
-#' @param scale_bar TODO
-#' @param image_title TODO
-#' @param ... TODO
+#' @param ... Further arguments passed to  \code{?"\link{plotting-param}"}
 #'
 #'@section Segmentaion mask object:
 #' TODO
@@ -46,20 +43,6 @@ plotCells <- function(mask,
                       exprs_values = "counts",
                       subset_images = NULL,
                       colour = NULL,
-                      missing_colour = "gray",
-                      scale_bar = list(length = 20,
-                                       label = NULL,
-                                       cex = 1,
-                                       lwd = 2,
-                                       colour = "white",
-                                       position = "bottomright",
-                                       margin = c(10,10)),
-                      image_title = list(text =  NULL,
-                                         position = "top",
-                                         cex = 1,
-                                         colour = "white",
-                                         margin = c(0,0),
-                                         font = 2),
                       ...) {
 
   # Object checks

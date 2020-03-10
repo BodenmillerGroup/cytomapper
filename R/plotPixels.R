@@ -21,7 +21,7 @@
 #' @param missing_colour TODO
 #' @param scale_bar TODO
 #' @param image_title TODO
-#' @param ... TODO
+#' @param ... Further arguments passed to  \code{?"\link{plotting-param}"}
 #'
 #' @return TODO
 #'
@@ -42,20 +42,6 @@ plotPixels <- function(image,
                        outline_by = NULL,
                        subset_images = NULL,
                        colour = NULL,
-                       missing_colour = "gray",
-                       scale_bar = list(length = 20,
-                                        label = NULL,
-                                        cex = 1,
-                                        lwd = 2,
-                                        colour = "white",
-                                        position = "bottomright",
-                                        margin = c(10,10)),
-                       image_title = list(text =  NULL,
-                                          position = "top",
-                                          cex = 1,
-                                          colour = "white",
-                                          margin = c(0,0),
-                                          font = 2),
                        ...) {
   # Object checks
   if(!is.null(object)){
@@ -72,6 +58,10 @@ plotPixels <- function(image,
                          subset_images,
                          colour, missing_colour,
                          scale_bar, image_title)
+
+  # Set further arguments
+  dotArgs <- list(...)
+  plottingParam <- .plottingParam(dotArgs)
 
   # Select images for plotting
   image <- .select_images(object, image, img_id, subset_images)
@@ -123,5 +113,5 @@ plotPixels <- function(image,
   # Plot images
   .displayImages(object, image, exprs_values = NULL,
                  outline_by, colour_by, mask, out_img, img_id,
-                 scale_bar, image_title, cur_col)
+                 plottingParam, cur_col)
 }

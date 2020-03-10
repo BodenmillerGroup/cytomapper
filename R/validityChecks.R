@@ -281,12 +281,68 @@
                                    colour, missing_colour,
                                    scale_bar, image_title){
 
-  # colour_by takes either the rownames or colData entries
-  # check if colour_by is either in the rownames
-  # or in the colData slot
-  # Check if all colour_by entries are in either
-  # the rownames or colData slot
-  if(!is.null(colour_by)){
+  # Check colour_by argument
+  if (!is.null(colour_by)){
+    .valid.colour_by(colour_by, object, image = NULL,
+                     call.arg = "plotCells")
+  }
+
+  # Check outline_by argument
+  if(!is.null(outline_by)){
+    .valid.outline_by(outline_by, object, mask, image = NULL)
+  }
+
+  # Check subset_images argument
+  if(!is.null(subset_images)){
+    .valid.subset_images(subset_images, image = mask)
+  }
+
+  # Check colour argument
+  if(!is.null(colour)){
+    .valid.colour(colour, colour_by, outline_by, object, image = NULL)
+  }
+}
+
+
+# Check plotPixels input
+#' @importFrom S4Vectors isEmpty
+.valid.plotPixels.input <- function(image, object, mask, img_id, colour_by, outline_by,
+                                    subset_images,
+                                    colour, missing_colour,
+                                    scale_bar, image_title){
+
+  # Check colour_by argument
+  if (!is.null(colour_by)){
+    .valid.colour_by(colour_by, object, image,
+                     call.arg = "plotPixels")
+  }
+
+  # Check outline_by argument
+  if(!is.null(outline_by)){
+    .valid.outline_by(outline_by, object, mask, image)
+  }
+
+  # Check subset_images argument
+  if(!is.null(subset_images)){
+    .valid.subset_images(subset_images, image = image)
+  }
+
+  # Check colour argument
+  if(!is.null(colour)){
+    .valid.colour(colour, colour_by, outline_by, object, image = image)
+  }
+}
+
+.valid.colour_by <- function(colour_by, object, image,
+                             call.arg = c("plotCells", "plotPixels"){
+  call.arg <- match.arg(call.arg)
+
+  if (call.arg == "plotCells"){
+    # colour_by takes either the rownames or colData entries
+    # check if colour_by is either in the rownames
+    # or in the colData slot
+    # Check if all colour_by entries are in either
+    # the rownames or colData slot
     if(is.null(object)){
       stop("Please provide a SingleCellExperiment 'object'.")
     }
@@ -297,12 +353,12 @@
       }
     } else {
       if(sum(colour_by %in% rownames(object)) > 0L &&
-         sum(colour_by %in% colnames(colData(object))) > 0L){
+           sum(colour_by %in% colnames(colData(object))) > 0L){
         stop("'colour_by' entries found in 'rownames(object)' and 'colData(object)' slot.\n",
              "Please select either rownames or colData entries.")
       }
       if(!all(colour_by %in% rownames(object)) &&
-         !all(colour_by %in% colnames(colData(object)))){
+        !all(colour_by %in% colnames(colData(object)))){
         stop("'colour_by' not in 'rownames(object)' or the 'colData(object)' slot.")
       }
       if(all(colour_by %in% colnames(colData(object))) && length(colour_by) > 1L){
@@ -314,130 +370,9 @@
     }
   }
 
-  # outline_by only takes entries from the colData slot
-  # Check if all outline_by entries are in the colData slot
-  if(!is.null(outline_by)){
-    if(is.null(object)){
-      stop("Please provide a SingleCellExperiment 'object'.")
-    }
-
-    if(length(outline_by) > 1L){
-      stop("Only one 'outline_by' entry allowed.")
-    }
-
-    if(is.null(colData(object)) || isEmpty(colData(object))){
-      stop("'outline_by' not in the 'colData(object)' slot.")
-    } else {
-      if(!all(outline_by %in% colnames(colData(object)))){
-        stop("'outline_by' not in 'colData(object)' slot.")
-      }
-    }
-  }
-
-  # subset_images need to be either numeric, a logical,
-  # a character and part of names(mask) or a character
-  # and part of mcols(mask)$img_id
-  if(!is.null(subset_images)){
-    if(!is.numeric(subset_images) && !is.character(subset_images) &&
-       !is.logical(subset_images)){
-      stop("'subset_images' has to be numeric, logical or a character")
-    }
-    if(is.logical(subset_images) &&
-       length(subset_images) != length(mask)){
-      stop("Invalid 'subset_images' argument.")
-    }
-    if(is.character(subset_images)){
-      if(is.null(names(mask)) && !(img_id %in% colnames(mcols(mask)))){
-        stop("'subset_images' not part of names(mask) or mcols(mask)[,img_id]")
-      }
-      if(!is.null(names(mask)) && sum(subset_images %in% names(mask) == 0L)){
-        if(!(img_id %in% colnames(mcols(mask)))){
-          stop("If 'mask' is unnamed, mask ids must be provided in the mcols(mask)[,img_id] slot.")
-        }
-      }
-    }
-  }
-
-  # colour
-  if(!is.null(colour)){
-    if(!is.list(colour)){
-      stop("'colour' is a list of entries in which each name specifies\n",
-           "an entry of 'colour_by' and/or 'outline_by'")
-    }
-    if(is.null(names(colour))){
-      stop("'colour': please specify the entries that should be coloured.")
-    }
-    if(!is.null(colour_by) || !is.null(outline_by)){
-      valid_names <- c(colour_by, outline_by)
-      if(!all(names(colour) %in% valid_names)){
-        stop("'names(colour)' do not match with 'colour_by' and/or 'outline_by'")
-      }
-    }
-    cur_entries <- unlist(lapply(colour, is.null))
-    if(sum(cur_entries) > 0L){
-      stop("Empty entries not allowed in 'colour'")
-    }
-    # Error if only few markers should be coloured
-    if(!is.null(colour_by) && all(colour_by %in% rownames(object))){
-      if(sum(colour_by %in% names(colour)) > 1L &&
-         sum(colour_by %in% names(colour)) < length(colour_by)){
-        stop("Please specify colour gradients for all features.")
-      }
-      if(all(colour_by %in% names(colour)) &&
-         sum(unlist(lapply(colour[colour_by], length)) <= 1L)){
-            stop("Please specify at least two colours when colouring features.")
-      }
-    }
-    if(!is.null(colour_by) && all(colour_by %in% colnames(colData(object)))){
-      cur_entries <- unique(colData(object)[,colour_by])
-      if(length(cur_entries) > 23L && is.numeric(cur_entries) &&
-         is.null(names(colour[[colour_by]]))){
-        if(length(colour[[colour_by]]) <= 1){
-          stop("Please specify at least two colours when colouring continous entries.")
-        }
-      } else if(!all(cur_entries %in% names(colour[[colour_by]]))){
-        stop("Please specify colours for all 'colour_by' levels.")
-      }
-    }
-    if(!is.null(outline_by) && all(outline_by %in% colnames(colData(object)))){
-      cur_entries <- unique(colData(object)[,outline_by])
-      if(length(cur_entries) > 23L && is.numeric(cur_entries) &&
-         is.null(names(colour[[outline_by]]))){
-        if(length(colour[[outline_by]]) <= 1){
-          stop("Please specify at least two colours when colouring continous entries.")
-        }
-      } else if(!all(cur_entries %in% names(colour[[outline_by]]))){
-        stop("Please specify colours for all 'outline_by' levels.")
-      }
-    }
-  }
-
-  # missing_colour has to be a valid colour
-  if(!is.null(missing_colour)){
-    res <- try(col2rgb(missing_colour), silent=TRUE)
-    if(class(res) == "try-error"){
-      stop("'missing_colour' not a valid colour.")
-    }
-  }
-
-  # scale_bar
-  .valid.scalebar(scale_bar)
-
-  # image_title
-  .valid.imagetitle(image_title)
-}
-
-
-# Check plotPixels input
-#' @importFrom S4Vectors isEmpty
-.valid.plotPixels.input <- function(image, object, mask, img_id, colour_by, outline_by,
-                                    subset_images,
-                                    colour, missing_colour,
-                                    scale_bar, image_title){
-
-  # Here, colour_by takes only the channelNames entries
-  # check if colour_by is the channelNames slot
-  if(!is.null(colour_by)){
+  if (call.arg == "plotPixels"){
+    # Here, colour_by takes only the channelNames entries
+    # check if colour_by is the channelNames slot
     if(is.null(channelNames(image))){
       stop("'channelNames(image)' not set.")
     }
@@ -448,146 +383,113 @@
       stop("Only six 'colour_by' entries allowed.")
     }
   }
+}
 
+.valid.outline_by <- function(outline_by, object, mask, image){
   # outline_by only takes entries from the colData slot
   # Check if all outline_by entries are in the colData slot
-  if(!is.null(outline_by)){
-    if(is.null(object) || is.null(mask)){
-      stop("When outlining cells, please provide a SingleCellExperiment 'object' \n",
+  if(!is.null(image) && (is.null(object) || is.null(mask))){
+    stop("When outlining cells, please provide a SingleCellExperiment 'object' \n",
            "and segmentation 'mask' object.")
-    }
-
-    if(length(outline_by) > 1L){
-      stop("Only one 'outline_by' entry allowed.")
-    }
-
-    if(is.null(colData(object)) || isEmpty(colData(object))){
-      stop("'outline_by' not in the 'colData(object)' slot.")
-    } else {
-      if(!all(outline_by %in% colnames(colData(object)))){
-        stop("'outline_by' not in 'colData(object)' slot.")
-      }
-    }
   }
 
+  if(is.null(object)){
+    stop("Please provide a SingleCellExperiment 'object'.")
+  }
+
+  if(length(outline_by) > 1L){
+    stop("Only one 'outline_by' entry allowed.")
+  }
+
+  if(is.null(colData(object)) || isEmpty(colData(object))){
+    stop("'outline_by' not in the 'colData(object)' slot.")
+  } else {
+    if(!all(outline_by %in% colnames(colData(object)))){
+       stop("'outline_by' not in 'colData(object)' slot.")
+    }
+  }
+}
+
+.valid.subset_images <- function(subset_images, image){
   # subset_images need to be either numeric, a logical,
   # a character and part of names(mask) or a character
   # and part of mcols(mask)$img_id
-  if(!is.null(subset_images)){
-    if(!is.numeric(subset_images) && !is.character(subset_images) &&
-       !is.logical(subset_images)){
-      stop("'subset_images' has to be numeric, logical or a character")
-    }
-    if(is.logical(subset_images) &&
-       length(subset_images) != length(image)){
-      stop("Invalid 'subset_images' argument.")
-    }
-    if(is.character(subset_images)){
-      if(is.null(names(image)) && !(img_id %in% colnames(mcols(image)))){
-        stop("'subset_images' not part of names(mask) or mcols(mask)[,img_id]")
-      }
-      if(!is.null(names(image)) && sum(subset_images %in% names(image) == 0)){
-        if(!(img_id %in% colnames(mcols(mask)))){
-          stop("If 'image' is unnamed, image ids must be provided in the mcols(image)[,img_id] slot.")
-        }
-      }
-    }
+  if(!is.numeric(subset_images) && !is.character(subset_images) &&
+      !is.logical(subset_images)){
+    stop("'subset_images' has to be numeric, logical or a character")
   }
-
-  # colour
-  if(!is.null(colour)){
-    if(!is.list(colour)){
-      stop("'colour' is a list of entries in which each name specifies\n",
-           "an entry of 'colour_by' and/or 'outline_by'")
+  if(is.logical(subset_images) &&
+      length(subset_images) != length(image)){
+    stop("Invalid 'subset_images' argument.")
+  }
+  if(is.character(subset_images)){
+    if(is.null(names(image)) && !(img_id %in% colnames(mcols(image)))){
+      stop("'subset_images' not part of names(ImageList) or mcols(ImageList)[,img_id]")
     }
-    if(is.null(names(colour))){
-      stop("'colour': please specify the entries that should be coloured.")
-    }
-    if(!is.null(colour_by) || !is.null(outline_by)){
-      valid_names <- c(colour_by, outline_by)
-      if(!all(names(colour) %in% valid_names)){
-        stop("'names(colour)' do not match with 'colour_by' and/or 'outline_by'")
+    if(!is.null(names(image)) && sum(subset_images %in% names(image) == 0)){
+      if(!(img_id %in% colnames(mcols(image)))){
+        stop("If 'image' is unnamed, image ids must be provided in the mcols(ImageList)[,img_id] slot.")
       }
-    }
-    cur_entries <- lapply(colour, is.null)
-    if(sum(cur_entries) > 0){
-      stop("Empty entries not allowed in 'colour'")
-    }
-  }
-
-  # missing_colour has to be a valid colour
-  if(!is.null(missing_colour)){
-    res <- try(col2rgb(missing_colour), silent=TRUE)
-    if(class(res) == "try-error"){
-      stop("'missing_colour' not a valid colour.")
-    }
-  }
-
-  # scale_bar
-  .valid.scalebar(scale_bar)
-
-  # image_title
-  .valid.imagetitle(image_title)
-}
-
-# Validity of scale_bar input
-.valid.scalebar <- function(scalebar){
-  error.scalebar <- "Invalid entry to the 'scale_bar' list object"
-  # scale_bar has to be of the form list(length, label, lwd, colour, position, margin)
-  if(!is.null(scalebar)){
-    if(!is.list(scalebar)){
-      stop(error.scalebar)
-    }
-    if(is.null(names(scalebar)) ||
-       !all(names(scalebar) %in% c("length", "label", "cex", "lwd", "colour", "position", "margin"))){
-      stop(error.scalebar)
-    }
-    if(!is.null(scalebar$position) && !scalebar$position %in% c("topleft", "topright", "bottomleft", "bottomright")){
-      stop(paste0(error.scalebar, ": position should be 'topleft', 'topright', 'bottomleft', or 'bottomright'"))
-    }
-    if(!is.null(scalebar$margin) && length(scalebar$margin) != 2){
-      stop(paste0(error.scalebar, ": 'margin' should contain two elements corresponding to x and y margin"))
-    }
-    if(!is.null(scalebar$length) && !is.numeric(scalebar$length)){
-      stop(paste0(error.scalebar, ": 'length' should be numeric"))
-    }
-    if(!is.null(scalebar$margin) && !is.numeric(scalebar$margin)){
-      stop(paste0(error.scalebar, ": 'margin' should be numeric"))
-    }
-    if(!is.null(scalebar$cex) && !is.numeric(scalebar$cex)){
-      stop(paste0(error.scalebar, ": 'cex' should be numeric"))
-    }
-    if(!is.null(scalebar$lwd) && !is.numeric(scalebar$lwd)){
-      stop(paste0(error.scalebar, ": 'lwd' should be numeric"))
     }
   }
 }
 
-# Validity of image_title input
-.valid.imagetitle <- function(imagetitle){
-  error.imagetitle <- "Invalid entry to the 'image_title' list object"
-  # image_title has to be of the form list(text, position, cex, colour, margin, font)
-  if(!is.null(imagetitle)){
-    if(!is.list(imagetitle)){
-      stop(error.imagetitle)
+.valid.colour <- function(colour, colour_by, outline_by, object, image){
+  if(!is.list(colour)){
+    stop("'colour' is a list of entries in which each name specifies\n",
+         "an entry of 'colour_by' and/or 'outline_by'")
+  }
+  if(is.null(names(colour))){
+    stop("'colour': please specify the entries that should be coloured.")
+  }
+  if(!is.null(colour_by) || !is.null(outline_by)){
+    valid_names <- c(colour_by, outline_by)
+    if(!all(names(colour) %in% valid_names)){
+      stop("'names(colour)' do not match with 'colour_by' and/or 'outline_by'")
     }
-    if(is.null(names(imagetitle)) ||
-       !all(names(imagetitle) %in% c("text", "position", "cex", "colour", "margin", "font"))){
-      stop(error.imagetitle)
+  }
+  cur_entries <- unlist(lapply(colour, is.null))
+  if(sum(cur_entries) > 0L){
+    stop("Empty entries not allowed in 'colour'")
+  }
+
+  # Error if only few markers should be coloured
+  if(!is.null(image)){
+    cur_logical <- !is.null(colour_by)
+  } else{
+    cur_logical <- !is.null(colour_by) && all(colour_by %in% rownames(object))
+  }
+  if(cur_logical){
+    if(sum(colour_by %in% names(colour)) > 1L &&
+       sum(colour_by %in% names(colour)) < length(colour_by)){
+      stop("Please specify colour gradients for all features.")
     }
-    if(!is.null(imagetitle$position) &&
-       !imagetitle$position %in% c("top", "bottom", "topleft", "bottomleft", "topright", "bottomright")){
-      stop(paste0(error.imagetitle, ": position should be 'top', 'bottom',
-                  'topleft', 'topright', 'bottomleft' or 'bottomright'"))
+    if(all(colour_by %in% names(colour)) &&
+       sum(unlist(lapply(colour[colour_by], length)) <= 1L)){
+      stop("Please specify at least two colours when colouring features.")
     }
-    if(!is.null(imagetitle$cex) && !is.numeric(imagetitle$cex)){
-      stop(paste0(error.imagetitle, ": 'cex' should be numeric"))
+  }
+  if(!is.null(object) && !is.null(colour_by) &&
+     all(colour_by %in% colnames(colData(object)))){
+    cur_entries <- unique(colData(object)[,colour_by])
+    if(length(cur_entries) > 23L && is.numeric(cur_entries) &&
+       is.null(names(colour[[colour_by]]))){
+      if(length(colour[[colour_by]]) <= 1){
+        stop("Please specify at least two colours when colouring continous entries.")
+      }
+    } else if(!all(cur_entries %in% names(colour[[colour_by]]))){
+      stop("Please specify colours for all 'colour_by' levels.")
     }
-    if(!is.null(imagetitle$margin) && length(imagetitle$margin) != 2){
-      stop(paste0(error.imagetitle, ": 'margin' should contain two elements corresponding to x and y margin"))
-    }
-    if(!is.null(imagetitle$margin) && !is.numeric(imagetitle$margin)){
-      stop(paste0(error.imagetitle, ": 'margin' should be numeric"))
+  }
+  if(!is.null(outline_by) && all(outline_by %in% colnames(colData(object)))){
+    cur_entries <- unique(colData(object)[,outline_by])
+    if(length(cur_entries) > 23L && is.numeric(cur_entries) &&
+       is.null(names(colour[[outline_by]]))){
+      if(length(colour[[outline_by]]) <= 1){
+        stop("Please specify at least two colours when colouring continous entries.")
+      }
+    } else if(!all(cur_entries %in% names(colour[[outline_by]]))){
+      stop("Please specify colours for all 'outline_by' levels.")
     }
   }
 }
