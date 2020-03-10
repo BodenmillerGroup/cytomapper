@@ -4,17 +4,11 @@
 \alias{plotting-param}
 \title{Further plotting parameters for the SingleCellMapper package}
 \arguments{
-\item{legend_size}{TODO}
+\item{missing_colour}{TODO}
 
-\item{title_size}{TODO}
+\item{scale_bar}{TODO}
 
-\item{title_colour}{TODO}
-
-\item{return_plot}{TODO}
-
-\item{return_images}{TODO}
-
-\item{save_images}{TODO}
+\item{image_title}{TODO}
 }
 \value{
 TODO
@@ -25,6 +19,10 @@ TODO
 \section{Setting further parameters}{
 
 TODO
+# legend list(title, size) also allow NULL
+# return_plot TODO
+# return_images TODO
+# save_images TODO
 }
 
 \examples{

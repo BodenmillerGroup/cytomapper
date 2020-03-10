@@ -11,12 +11,10 @@ plotPixels(
   cell_id = NULL,
   img_id = NULL,
   colour_by = NULL,
+  bcg = NULL,
   outline_by = NULL,
   subset_images = NULL,
   colour = NULL,
-  missing_colour = "gray",
-  scale_bar = list(length = 20, label = NULL, cex = 1, lwd = 2, colour = "white", margin = c(10,10)),
-  image_title = list(text =  NULL, position = "top", cex = 1, colour = "white", margin = 10, font = 2),
   ...
 )
 }
@@ -36,17 +34,15 @@ integer cell IDs are stored}
 
 \item{colour_by}{TODO}
 
+\item{bcg}{brightness/contrast/gamma list("H3" = c(0,1,1))}
+
 \item{outline_by}{(optional)}
 
-\item{subset_images}{TODO}
+\item{subset_images}{TODO Note that Masks and Images need to have same names or same IDs}
 
 \item{colour}{TODO}
 
-\item{missing_colour}{TODO}
-
-\item{scale_bar}{TODO}
-
-\item{...}{TODO}
+\item{...}{Further arguments passed to  \code{?"\link{plotting-param}"}}
 }
 \value{
 TODO

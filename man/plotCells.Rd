@@ -5,26 +5,23 @@
 \title{Function to visualize cell-level information on segmentation masks}
 \usage{
 plotCells(
-  object,
   mask,
-  cell_id,
-  img_id,
+  object = NULL,
+  cell_id = NULL,
+  img_id = NULL,
   colour_by = NULL,
   outline_by = NULL,
   exprs_values = "counts",
   subset_images = NULL,
   colour = NULL,
-  missing_colour = "gray",
-  scale_bar = list(length = 20, label = NULL, cex = 1, lwd = 2, colour = "white", margin = c(10,10)),
-  image_title = list(text =  NULL, position = "top", cex = 1, colour = "white", margin = 10, font = 2),
   ...
 )
 }
 \arguments{
-\item{object}{a \code{\linkS4class{SingleCellExperiment}} object.}
-
 \item{mask}{an \code{\linkS4class{ImageList}} object single-channel
 \code{\linkS4class{Image}} objects (see Details)}
+
+\item{object}{a \code{\linkS4class{SingleCellExperiment}} object.}
 
 \item{cell_id}{character specifying the \code{colData(object)}, in which the
 integer cell IDs are stored}
@@ -41,11 +38,7 @@ integer cell IDs are stored}
 
 \item{colour}{TODO}
 
-\item{missing_colour}{TODO}
-
-\item{scale_bar}{TODO}
-
-\item{...}{TODO}
+\item{...}{Further arguments passed to  \code{?"\link{plotting-param}"}}
 }
 \value{
 TODO

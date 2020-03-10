@@ -197,6 +197,7 @@ test_that("plotPixels: Cells can be outlined correctly.", {
 test_that("plotPixels: images can be correctly subsetted.", {
   data("pancreasSCE")
   data("pancreasMasks")
+  data("pancreasImages")
 
   # Works
   expect_silent(plotPixels(image = pancreasImages,
@@ -230,7 +231,7 @@ test_that("plotPixels: images can be correctly subsetted.", {
   expect_silent(plotPixels(image = pancreasImages,
                            mask = pancreasMasks,
                            object = pancreasSCE,
-                           img_id = "ImageName",
+                           img_id = "ImageNb",
                            cell_id = "CellNb",
                            colour_by = "SMA",
                            outline_by = "CellType",
@@ -367,7 +368,7 @@ test_that("plotPixels: Size of images can be changed.", {
   # Decreasing the size
   cur_masks <- pancreasMasks
   setImages(cur_masks, "A02_mask") <- cur_masks[[1]][1:50, 1:50,,drop=FALSE]
-  expect_error(plotPixels(object = cur_sce,
+  expect_error(plotPixels(object = pancreasSCE,
                            image = pancreasImages,
                            mask = cur_masks, img_id = "ImageNb",
                            cell_id = "CellNb",
@@ -379,12 +380,12 @@ test_that("plotPixels: Size of images can be changed.", {
   cur_images <- pancreasImages
   setImages(cur_images, "A02_imc") <- cur_images[[1]][1:50, 1:50,,drop=FALSE]
 
-  expect_silent(plotPixels(object = cur_sce,
+  expect_silent(plotPixels(object = pancreasSCE,
                            image = cur_images,
                            mask = cur_masks, img_id = "ImageNb",
                            cell_id = "CellNb",
                            colour_by = "H3", outline_by = "CellType"))
-  expect_silent(plotPixels(object = cur_sce,
+  expect_silent(plotPixels(object = pancreasSCE,
                            image = cur_images,
                            mask = cur_masks, img_id = "ImageNb",
                            cell_id = "CellNb",
