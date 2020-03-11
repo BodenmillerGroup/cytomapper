@@ -145,7 +145,6 @@ test_that("plotCells: Cells can be outlined correctly.", {
             cell_id = "CellNb", colour_by = "SMA",
             outline_by = "Area"))
 
-
   # Error
   expect_error(plotCells(mask = pancreasMasks,
                          outline_by = "CellType"),
