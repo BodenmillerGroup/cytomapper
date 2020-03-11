@@ -25,6 +25,7 @@ vignette: |
 knitr::opts_chunk$set(error=FALSE, warning=FALSE, message=FALSE)
 library(BiocStyle)
 set.seed(20200101)
+library(SingleCellMapper)
 ```
 
 
@@ -36,12 +37,9 @@ This document also introduces the `ImageList` class, which inherits from the [`S
 Explain: images, masks, sce
 
 # Quick start
+
 Here, we will highlight the most simple use of the package
 
-Load the libraries
-```{r libraries, include=F}
-library(SingleCellMapper)
-```
 
 Load the example data: SingleCellExperiment object
 ```{r quickstart-load-sce}
@@ -102,16 +100,24 @@ plotCells(object=pancreasSCE, mask=pancreasMasks, img_id='ImageNb', cell_id='Cel
 ```
 
 
+# Data formats
+
+SingleCellMapper combines objects of the `r Biocpkg("SingleCellExperiment")` class and the `ImageList` class `r Biocpkg("SingleCellMapper")` to visualize cell- and pixel-level information.
+
+In the main functions of the package, `image` refers to an `ImageList` object containing one or multiple multi-channel images where each channel represents the pixel-intensity of one marker (protein, RNA, etc.).
+The enrty `mask` refers to an `ImageList` object containing one or multiple segmentation masks.
+Segmentation masks are defined as one-channel images containing integer values, which represent the cells' ids or 0 (background).
+Finally, the `object` entry refers to a `SingleCellExperiment` class object that contains cell-specific expression values (in the `assay` slots) and cell-specific metadata in the `colData` slot.
+For more information on the `SingleCellExperiment` object and how to create it, please see the `r Biocpkg("SingleCellExperiment")` package and the [Orchestrating Single-Cell Analysis with Bioconductor](https://osca.bioconductor.org/data-infrastructure.html#the-singlecellexperiment-class) workflow.
+
+To link information between the `SingleCellExperiment` and `ImageList` objects, two slots need to be specified:
+
+* `img_id`: a single character indicating the `colData` and `elementMetadata` entry that contains the image identifiers 
+* `cell_id`: a single character indicating the `colData` entry that contains the cell identifiers. These should be integer values corresponing to pixel-values in the segmentation masks
+
+To access the `elementMetadat` slot of an `ImageList` object, please refer to the section [The ImageList object](#ImageList).
 
 # Reading in data
-
-## Data format
-Images should be stacks, all stacks should have the same number of channels
-Masks should be single-channel images
-Object should be a `SingleCellExperiment`
-
-`img_id` should be in metadata columns
-`cell_id` should be integer values and *correspond to the masks*
 
 ## Load images
 Introduction to the `LoadImage` function
@@ -124,7 +130,12 @@ colData(pancreasSCE)$ImageNb
 ```
 
 
-# The ImageList object
+# The ImageList object {#ImageList}
+
+Images should be stacks, all stacks should have the same number of channels
+Masks should be single-channel images
+
+Explain mcols
 
 ## Accessors
 
