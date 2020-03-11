@@ -18,6 +18,8 @@
 #' Nils Eling \email{nils.eling@@dqbm.uzh.ch},
 #'
 #' @export
+#' @import ggplot2
+#' @importFrom ggridges geom_density_ridges2
 launchShiny <- function(object,
                        mask,
                        image = NULL,
@@ -112,7 +114,7 @@ shinyApp(ui=function(request) iSEE_ui, server=iSEE_server)
 .initialize_server <- function(object, mask, image, cell_id, img_id,
                                input, output, session)
 {
-  sample_name <- colData(object)[,img_id]
+  sample_names <- colData(object)[,img_id]
   names(sample_names) <- colnames(object)
 
   updateSelectizeInput(session, 'sample',
@@ -505,9 +507,6 @@ shinyApp(ui=function(request) iSEE_ui, server=iSEE_server)
     # Which samples to display
     sample <- input$sample
 
-    # Which image to display
-    cur_mask <- mask.list[[sample]]
-
     # Select object
     cur_object <- object[,sample_names %in% sample]
 
@@ -539,43 +538,32 @@ shinyApp(ui=function(request) iSEE_ui, server=iSEE_server)
     }
 
     if(is.na(markerB)){
-      marker1_dat <- 1 + round(100*.scaling(assay(object, cur_assay)[markerA,]), digits = 0)
 
-      # Create colour vector
-      if(grepl("scaled", cur_assay)){
-        cur_col <- colorRampPalette(c("dark blue", "white", "dark red"))(101)[marker1_dat]
-        cur_col <- cur_col[sample_names %in% sample]
-      }else{
-        cur_col <- viridis(101)[marker1_dat]
-        cur_col <- cur_col[sample_names %in% sample]
+      if(is.null(image)){
+        plotCells(object = cur_object,
+                  mask = mask,
+                  cell_id = cell_id,
+                  img_id = img_id,
+                  colour_by = markerA,
+                  subset_images = sample,
+                  exprs_values = cur_assay)
+      } else {
+        # TODO
       }
-
-      # plot image
-      cur_mask[cur_mask > 0] <- cur_col[cur_mask[cur_mask > 0]]
-      cur_mask[cur_mask == 0] <- "black"
-      plot(Image(cur_mask))
 
     }
     else{
-      marker1_dat <- assay(object, cur_assay)[markerA,]
-      marker2_dat <- assay(object, cur_assay)[markerB,]
-
-      dat <- expand.grid(green=seq(0, 100, by=1), red=seq(0, 100, by=1))
-      dat <- within(dat, mix <- rgb(green=green, red=red, blue=0, maxColorValue=100))
-      dat$joined <- paste(dat$green, dat$red, sep = "_")
-
-      marker.vec1 <- .scaling(marker1_dat)
-      marker.vec2 <- .scaling(marker2_dat)
-
-      col_final <- dat$mix[match(paste(round(marker.vec1*100, digits = 0),
-                                       round(marker.vec2*100, digits = 0), sep = "_"), dat$joined)]
-
-      col_final <- col_final[sample_names %in% sample]
-
-      # plot image
-      cur_mask[cur_mask > 0] <- col_final[cur_mask[cur_mask > 0]]
-      cur_mask[cur_mask == 0] <- "black"
-      plot(Image(cur_mask))
+      if(is.null(image)){
+        plotCells(object = cur_object,
+                  mask = mask,
+                  cell_id = cell_id,
+                  img_id = img_id,
+                  colour_by = c(markerA, markerB),
+                  subset_images = sample,
+                  exprs_values = cur_assay)
+      } else {
+        # TODO
+      }
     }
 
   })
@@ -594,9 +582,6 @@ shinyApp(ui=function(request) iSEE_ui, server=iSEE_server)
 
     # Which samples to display
     sample <- input$sample
-
-    # Which image to display
-    cur_mask <- mask.list[[sample]]
 
     # Select object
     cur_object <- object[,sample_names %in% sample]
@@ -640,7 +625,7 @@ shinyApp(ui=function(request) iSEE_ui, server=iSEE_server)
                          marker5 = marker5_dat,
                          marker6 = marker6_dat,
                          sample = sample_names_update,
-                         cell_ID = sub(".*_.*_", "", names(marker1_dat)))
+                         cell_ID = colData(cur_object)[,cell_id])
 
     if(is.null(input$plot_brush1)){
       cur_selection <- cur_df
@@ -659,10 +644,21 @@ shinyApp(ui=function(request) iSEE_ui, server=iSEE_server)
       cur_selection <- brushedPoints(cur_selection2, input$plot_brush3, allRows = TRUE)
     }
 
-    cur_mask[cur_mask > 0] <- c("white", "red")[as.integer(cur_mask[cur_mask > 0] %in%
-                                                             cur_selection$cell_ID[cur_selection$selected_]) + 1]
-    cur_mask[cur_mask == 0] <- "black"
-    plot(Image(cur_mask))
+    cur_object$selected <- FALSE
+    colData(cur_object)[colData(cur_object)[,cell_id] %in%
+                                              cur_selection$cell_ID,"selected"] <- as.character(cur_selection$selected_)
+
+    if(is.null(image)){
+      plotCells(object = cur_object,
+                mask = mask,
+                cell_id = cell_id,
+                img_id = img_id,
+                colour_by = "selected",
+                subset_images = sample,
+                colour = list(selected = c("TRUE" = "dark red", "FALSE" = "gray")))
+    } else {
+      # TODO
+    }
   })
 
   datasetInput <- eventReactive(input$goButton, {
@@ -685,7 +681,6 @@ shinyApp(ui=function(request) iSEE_ui, server=iSEE_server)
 
     # Update sample names
     sample_names_update <- sample_names[sample_names %in% sample]
-
 
     # Select expression
     marker1_dat <- assay(object, cur_assay)[marker1, sample_names %in% sample]
@@ -723,10 +718,8 @@ shinyApp(ui=function(request) iSEE_ui, server=iSEE_server)
                          marker5 = marker5_dat,
                          marker6 = marker6_dat,
                          assay = cur_assay,
-                         sample = sample_names_update,
-                         sampleID = sub("_.*_.*", "", names(marker1_dat)),
-                         ROI = sapply(names(marker1_dat), function(x){strsplit(x, "_")[[1]][2]}),
-                         cell_ID = sub(".*_.*_", "", names(marker1_dat)))
+                         sample = sample,
+                         cell_ID = colData(cur_object)[,cell_id])
 
     if(!is.null(input$plot_brush1) & is.null(input$plot_brush2)){
       cur_selection <- brushedPoints(cur_df, input$plot_brush1, allRows = FALSE)
@@ -737,7 +730,6 @@ shinyApp(ui=function(request) iSEE_ui, server=iSEE_server)
         cur_selection[,marker1] <- cur_selection$marker1
         cur_selection[,marker2] <- cur_selection$marker1
       }
-      cur_selection$sample <- NULL
       cur_selection$marker1 <- NULL
       cur_selection$marker2 <- NULL
       cur_selection$marker3 <- NULL
@@ -762,7 +754,6 @@ shinyApp(ui=function(request) iSEE_ui, server=iSEE_server)
         cur_selection[,marker3] <- cur_selection$marker3
         cur_selection[,marker4] <- cur_selection$marker4
       }
-      cur_selection$sample <- NULL
       cur_selection$marker1 <- NULL
       cur_selection$marker2 <- NULL
       cur_selection$marker3 <- NULL
@@ -795,7 +786,6 @@ shinyApp(ui=function(request) iSEE_ui, server=iSEE_server)
         cur_selection[,marker5] <- cur_selection$marker5
         cur_selection[,marker6] <- cur_selection$marker6
       }
-      cur_selection$sample <- NULL
       cur_selection$marker1 <- NULL
       cur_selection$marker2 <- NULL
       cur_selection$marker3 <- NULL
