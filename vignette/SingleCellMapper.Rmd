@@ -43,19 +43,19 @@ Here, we will highlight the most simple use of the package
 
 Load the example data: SingleCellExperiment object
 ```{r quickstart-load-sce}
-load("../data/pancreasSCE.RData")
+data(pancreasSCE)
 pancreasSCE
 ```
 
 Load the example data: List of images
 ```{r quickstart-load-imagelist}
-load("../data/pancreasImages.RData")
+data(pancreasImages)
 pancreasImages
 ```
 
 Load the example data: List of masks
 ```{r quickstart-load-masklist}
-load("../data/pancreasMasks.RData")
+data(pancreasMasks)
 pancreasMasks
 ```
 
@@ -89,7 +89,7 @@ Colouring cells.\n
 'expr_values' should be an assay in 'assays(pancreasSCE)'
 ```{r quickstart-plotcells-colourby, fig.cap="Quick start: colour by cell type", fig.small=TRUE, echo=FALSE}
 plotCells(object=pancreasSCE, mask=pancreasMasks, img_id='ImageNb', cell_id='CellNb',
-          colour_by="CellType", expr_values="exprs")
+          colour_by="CellType", exprs_values="exprs")
 ```
 
 Displaying cell outlines\n
