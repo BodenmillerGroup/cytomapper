@@ -19,13 +19,13 @@
 #'
 #' @export
 #' @import ggplot2
+#' @import shiny
 #' @importFrom ggridges geom_density_ridges2
 launchShiny <- function(object,
                        mask,
                        image = NULL,
                        cell_id = NULL,
-                       img_id = NULL
-                       ...) {
+                       img_id = NULL) {
   # Object checks
   .valid.sce(object, img_id, cell_id, exprs_values = NULL)
   if(!is.null(mask)){
