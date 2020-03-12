@@ -365,7 +365,7 @@
       }
 
       # Plot title on images
-      if(ind != 1L){
+      if(ind != 1L && !is.null(plottingParam$image_title)){
         image_title <- plottingParam$image_title
         if(!is.null(image_title$text)){
           cur_title <- rep(image_title$text, length.out=length(out_img))[ind-1]
@@ -606,7 +606,7 @@
 
   # Plot scale bar
   label_height <- abs(strheight(cur_label, cex = cur_cex))
-  segm_params <- list(lwd = cur_lwd, col = cur_col)
+  segm_params <- list(lwd = cur_lwd, col = cur_col, lend = 1)
   text_params <- list(labels = cur_label, cex = cur_cex,
                       col = cur_col, adj = 0.5, lwd = cur_lwd)
 
