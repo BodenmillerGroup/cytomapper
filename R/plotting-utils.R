@@ -20,7 +20,8 @@
 
 # Colour segmentation masks based on metadata
 .colourMaskByMeta <- function(object, mask, cell_id, img_id,
-                              colour_by, cur_colour, missing_colour){
+                              colour_by, cur_colour, missing_colour,
+                              background_colour){
   for(i in seq_along(mask)){
     cur_mask <- mask[[i]]
     cur_sce <- object[,colData(object)[,img_id] == mcols(mask)[i,img_id]]
@@ -35,10 +36,10 @@
     }
 
     # Colour first the background
-    cur_mask[cur_mask == 0L] <- "#000000"
+    cur_mask[cur_mask == 0L] <- background_colour
 
     # Then colour cells that are not in sce
-    cur_m <- as.vector(cur_mask != "#000000") &
+    cur_m <- as.vector(cur_mask != background_colour) &
       !(cur_mask %in% as.character(colData(cur_sce)[,cell_id]))
     cur_mask <- replace(cur_mask, which(cur_m), missing_colour)
 
@@ -65,17 +66,18 @@
 #' @importFrom grDevices colorRampPalette
 #' @importFrom SummarizedExperiment assay
 .colourMaskByFeature <- function(object, mask, cell_id, img_id,
-                     colour_by, exprs_values, cur_colour, missing_colour){
+                     colour_by, exprs_values, cur_colour, missing_colour,
+                     background_colour){
 
   for(i in seq_along(mask)){
     cur_mask <- mask[[i]]
     cur_sce <- object[,colData(object)[,img_id] == mcols(mask)[i,img_id]]
 
     # Colour first the background
-    cur_mask[cur_mask == 0L] <- "#000000"
+    cur_mask[cur_mask == 0L] <- background_colour
 
     # Then colour cells that are not in sce
-    cur_m <- as.vector(cur_mask != "#000000") &
+    cur_m <- as.vector(cur_mask != background_colour) &
       !(cur_mask %in% as.character(colData(cur_sce)[,cell_id]))
     cur_mask <- replace(cur_mask, which(cur_m), missing_colour)
 

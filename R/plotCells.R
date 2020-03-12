@@ -95,18 +95,20 @@ plotCells <- function(mask,
       # Colouring by metadata
       out_img <- .colourMaskByMeta(object, mask, cell_id, img_id,
                                    colour_by, cur_col$colour_by[[1]],
-                                   plottingParam$missing_colour)
+                                   plottingParam$missing_colour,
+                                   plottingParam$background_colour)
     } else {
       # Colouring by features
       out_img <- .colourMaskByFeature(object, mask, cell_id, img_id,
                                       colour_by, exprs_values,
                                       cur_col$colour_by,
-                                      plottingParam$missing_colour)
+                                      plottingParam$missing_colour,
+                                      plottingParam$background_colour)
     }
   } else {
     out_img <- endoapply(mask, function(x){
-      x[x == 0L] <- "#000000"
-      x <- replace(x, which(x != "#000000"),
+      x[x == 0L] <- plottingParam$background_colour
+      x <- replace(x, which(x != plottingParam$background_colour),
                    plottingParam$missing_colour)
       x
     })

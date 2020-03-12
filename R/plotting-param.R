@@ -5,6 +5,7 @@
 #' TODO
 #'
 #' @param missing_colour TODO
+#' @param background_colour TODO
 #' @param scale_bar TODO
 #' @param image_title TODO
 #'
@@ -29,7 +30,7 @@ NULL
 
   # Check supported names
   cur_entries <- names(dotArgs)
-  supported <- c("scale_bar", "image_title", "missing_colour")
+  supported <- c("scale_bar", "image_title", "missing_colour", "background_colour")
   not_supported <- cur_entries[!(cur_entries %in% supported)]
   if(length(not_supported) > 0L){
     stop("Entries ", paste0("'", not_supported, "'", collapse = ", "), " are not supported")
@@ -43,6 +44,8 @@ NULL
 
   # missing_colour
   dotArgs$missing_colour <- .valid.missingcolour(dotArgs$missing_colour)
+  # missing_colour
+  dotArgs$background_colour <- .valid.background_colour(dotArgs$background_colour)
 
   return(dotArgs)
 }
@@ -226,4 +229,18 @@ NULL
     missingcolour <- "gray"
   }
   return(missingcolour)
+}
+
+# Validity of background_colour input
+#' @importFrom grDevices col2rgb
+.valid.missingcolour <- function(backgroundcolour){
+  if(!is.null(backgroundcolour)){
+    res <- try(col2rgb(backgroundcolour), silent=TRUE)
+    if(class(res) == "try-error"){
+      stop("'background_colour' not a valid colour.")
+    }
+  } else {
+    backgroundcolour <- "#000000"
+  }
+  return(backgroundcolour)
 }
