@@ -45,7 +45,8 @@ NULL
                      lwd = 2,
                      colour = "white",
                      position = "bottomright",
-                     margin = c(10,10))
+                     margin = c(10,10),
+                     frame = "all")
     dotArgs$scale_bar <- scalebar
   } else {
     dotArgs$scale_bar <- .valid.scalebar(dotArgs$scale_bar)
@@ -82,7 +83,8 @@ NULL
     }
 
     if(is.null(names(scalebar)) ||
-       !all(names(scalebar) %in% c("length", "label", "cex", "lwd", "colour", "position", "margin"))){
+       !all(names(scalebar) %in% c("length", "label", "cex", "lwd", "colour",
+                                   "position", "margin", "frame"))){
       stop(error.scalebar)
     }
 
@@ -152,6 +154,16 @@ NULL
     } else {
       scalebar$colour <- "white"
     }
+
+    if("frame" %in% names(scalebar)){
+      if(length(scalebar$frame) != 1L && (!is.numeric(scalebar$frame) ||
+         scalebar$frame != "all")){
+        stop(paste0(error.scalebar, ": \n",
+                    "'frame' should be a single integer or set to 'all'"))
+      }
+    } else {
+      scalebar$frame <- "all"
+    }
   }
   return(scalebar)
 }
@@ -219,6 +231,7 @@ NULL
     } else {
       imagetitle$colour <- "white"
     }
+
   }
   return(imagetitle)
 }

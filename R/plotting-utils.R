@@ -359,10 +359,19 @@
       }
 
       if(ind != 1L && !is.null(plottingParam$scale_bar)){
-        # Plot scale bar
-        .plotScaleBar(plottingParam$scale_bar,
-                      xleft, xright, ytop, ybottom)
-      }
+        if(plottingParam$scale_bar$frame == "all"){
+          # Plot scale bar
+          .plotScaleBar(plottingParam$scale_bar,
+                        xleft, xright, ytop, ybottom)
+        } else {
+          cur_ind <- 1L + as.integer(plottingParam$scale_bar$frame)
+          if(ind == cur_ind && !is.null(plottingParam$scale_bar)){
+            # Plot scale bar
+            .plotScaleBar(plottingParam$scale_bar,
+                          xleft, xright, ytop, ybottom)
+            }
+          }
+        }
 
       # Plot title on images
       if(ind != 1L && !is.null(plottingParam$image_title)){
