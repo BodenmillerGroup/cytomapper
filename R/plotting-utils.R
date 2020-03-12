@@ -375,7 +375,8 @@
 
       # Plot title on images
       if(ind != 1L && !is.null(plottingParam$image_title)){
-        .plotImageTitle(out_img, ind, plottingParam$image_title, dim_x,
+        .plotImageTitle(out_img, mask, image, img_id,
+                        ind, plottingParam$image_title, dim_x,
                       xleft, xright, ytop, ybottom)
       }
     }
@@ -583,15 +584,11 @@
 # Plot legend
 #' @importFrom graphics strwidth strheight text rasterImage legend
 #' @importFrom raster as.raster
-.plotImageTitle <- function(out_img, ind, image_title, dim_x,
+.plotImageTitle <- function(out_img, mask, image, img_id, ind, image_title, dim_x,
                             xleft, xright, ytop, ybottom){
 
   if(!is.null(image_title$text)){
-    if(length(image_title$text) != length(out_img)){
-      stop("Please specify one title per image.")
-    } else {
-      cur_title <- image_title$text[ind - 1]
-    }
+    cur_title <- image_title$text[ind - 1]
   } else if(!is.null(mask) && !is.null(img_id)){
     cur_title <- mcols(mask)[ind - 1,img_id]
   } else if(!is.null(image) && !is.null(img_id)){
@@ -602,60 +599,38 @@
     cur_title <- as.character(ind - 1)
   }
 
-  default_it <- list(position = "top",  cex = 1, colour = "white", margin = c(0,0), font = 2)
-  if(!is.null(image_title$position)){
-    cur_position <- image_title$position
-  } else {
-    cur_position <- default_it$position
-  }
-  if(!is.null(image_title$cex)){
-    cur_cex <- image_title$cex
-  } else {
-    cur_cex <- default_it$cex
-  }
-  if(!is.null(image_title$colour)){
-    cur_col <- image_title$colour
-  } else {
-    cur_col <- default_it$colour
-  }
-  if(!is.null(image_title$margin)){
-    cur_margin.x <- image_title$margin[1]
-    cur_margin.y <- image_title$margin[2]
-  } else {
-    cur_margin.x <- default_it$margin[1]
-    cur_margin.y <- default_it$margin[2]
-  }
-  if(!is.null(image_title$font)){
-    cur_font <- image_title$font
-  } else {
-    cur_font <- default_it$font
-  }
-  label_height <- abs(strheight(cur_title, cex = cur_cex, font = cur_font))
+  cur_position <- image_title$position
+  cur_cex <- image_title$cex
+  cur_col <- image_title$colour
+  cur_margin.x <- image_title$margin[1]
+  cur_margin.y <- image_title$margin[2]
+  cur_font <- image_title$font
+
   text_params <- list(labels = cur_title, col = cur_col, cex = cur_cex, font = cur_font)
 
   if(cur_position == "top"){
-    do.call(text, append(list(x = xleft + dim_x/2 + cur_margin.x,
-                              y = ytop + label_height*2 + cur_margin.y,
+    do.call(text, append(list(x = xleft + dim_x/2,
+                              y = ytop + cur_margin.y,
                               adj = 0.5), text_params))
   } else if(cur_position == "bottom"){
-    do.call(text, append(list(x = xleft + dim_x/2 + cur_margin.x,
-                              y = ybottom - label_height*2 - cur_margin.y,
+    do.call(text, append(list(x = xleft + dim_x/2,
+                              y = ybottom - cur_margin.y,
                               adj = 0.5), text_params))
   } else if(cur_position == "topleft"){
     do.call(text, append(list(x = xleft + cur_margin.x,
-                              y = ytop + label_height*2 + cur_margin.y,
+                              y = ytop + cur_margin.y,
                               adj = 0), text_params))
   } else if(cur_position == "topright"){
     do.call(text, append(list(x = xright - cur_margin.x,
-                              y = ytop + label_height*2 + cur_margin.y,
+                              y = ytop + cur_margin.y,
                               adj = 1), text_params))
   } else if(cur_position == "bottomleft"){
     do.call(text, append(list(x = xleft + cur_margin.x,
-                              y = ybottom - label_height*2 - cur_margin.y,
+                              y = ybottom - cur_margin.y,
                               adj = 0), text_params))
   } else if(cur_position == "bottomright"){
     do.call(text, append(list(x = xright - cur_margin.x,
-                              y = ybottom - label_height*2 - cur_margin.y,
+                              y = ybottom - cur_margin.y,
                               adj = 1), text_params))
   }
 }

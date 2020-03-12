@@ -77,7 +77,7 @@ plotPixels <- function(image,
 
   # Set further arguments
   dotArgs <- list(...)
-  plottingParam <- .plottingParam(dotArgs)
+  plottingParam <- .plottingParam(dotArgs, image = image)
 
   # Select images for plotting
   image <- .select_images(object, image, img_id, subset_images)

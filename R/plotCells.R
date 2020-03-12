@@ -77,7 +77,7 @@ plotCells <- function(mask,
 
   # Set further arguments
   dotArgs <- list(...)
-  plottingParam <- .plottingParam(dotArgs)
+  plottingParam <- .plottingParam(dotArgs, image = mask)
 
   # Select images for plotting
   mask <- .select_images(object, mask, img_id, subset_images)

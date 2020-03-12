@@ -26,7 +26,7 @@
 NULL
 
 # Plotting parameters checks
-.plottingParam <- function(dotArgs){
+.plottingParam <- function(dotArgs, image){
 
   # Check supported names
   cur_entries <- names(dotArgs)
@@ -57,12 +57,12 @@ NULL
     imagetitle <- list(text = NULL,
                        position = "top",
                        colour = "white",
-                       margin = c(0,0),
+                       margin = c(10,10),
                        font = 2,
                        cex = 1)
     dotArgs$image_title <- imagetitle
   } else {
-    dotArgs$image_title <- .valid.imagetitle(dotArgs$image_title)
+    dotArgs$image_title <- .valid.imagetitle(dotArgs$image_title, image)
   }
 
   # missing_colour
@@ -169,7 +169,7 @@ NULL
 }
 
 # Validity of image_title input
-.valid.imagetitle <- function(imagetitle){
+.valid.imagetitle <- function(imagetitle, image){
   error.imagetitle <- "Invalid entry to the 'image_title' list object"
   # image_title has to be of the form list(text, position, cex, colour, margin, font)
   if(!is.null(imagetitle)){
@@ -180,6 +180,15 @@ NULL
     if(is.null(names(imagetitle)) ||
        !all(names(imagetitle) %in% c("text", "position", "cex", "colour", "margin", "font"))){
       stop(error.imagetitle)
+    }
+
+    if("text" %in% names(imagetitle)){
+      if(length(imagetitle$text) != length(image)){
+        stop(paste0(error.imagetitle, ": \n",
+                    "Please specify one title per image."))
+      }
+    } else {
+      imagetitle$text <- NULL
     }
 
     if("position" %in% names(imagetitle)){
@@ -209,7 +218,7 @@ NULL
                     "'cex' should be a single number"))
       }
     } else {
-      imagetitle$cex <- 2
+      imagetitle$cex <- 1
     }
 
     if("margin" %in% names(imagetitle)){
@@ -219,7 +228,7 @@ NULL
                     "'margin' should contain two numeric elements corresponding to x and y margin"))
       }
     } else {
-      imagetitle$margin <- c(0,0)
+      imagetitle$margin <- c(10,10)
     }
 
     if("colour" %in% names(imagetitle)){
