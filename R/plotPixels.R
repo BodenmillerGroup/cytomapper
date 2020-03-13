@@ -131,7 +131,7 @@ plotPixels <- function(image,
   }
 
   # Plot images
-  .displayImages(object, image, exprs_values = NULL,
-                 outline_by, colour_by, mask, out_img, img_id,
-                 cur_col, plottingParam)
+    .displayImages(object, image, exprs_values = NULL,
+                   outline_by, colour_by, mask, out_img, img_id,
+                   cur_col, plottingParam)
 }

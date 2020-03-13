@@ -15,6 +15,7 @@
 #' # legend list(title, size) also allow NULL
 #' # return_plot TODO
 #' # return_images TODO
+#' # margin between images
 #'
 #' @return TODO
 #'
@@ -30,7 +31,8 @@ NULL
 
   # Check supported names
   cur_entries <- names(dotArgs)
-  supported <- c("scale_bar", "image_title", "missing_colour", "background_colour")
+  supported <- c("scale_bar", "image_title", "missing_colour",
+                 "background_colour", "save_image")
   not_supported <- cur_entries[!(cur_entries %in% supported)]
   if(length(not_supported) > 0L){
     stop("Entries ", paste0("'", not_supported, "'", collapse = ", "), " are not supported")
@@ -67,8 +69,7 @@ NULL
 
   # save_image
   if(!("save_image" %in% names(dotArgs))){
-    saveimage <- FALSE
-    dotArgs$save_image <- saveimage
+    dotArgs$save_image <- NULL
   } else {
     dotArgs$save_image <- .valid.saveimage(dotArgs$save_image)
   }
@@ -284,23 +285,46 @@ NULL
 # Validity of save_image input
 #' @importFrom tools file_ext
 .valid.saveimage <- function(saveimage){
-  if(length(saveimage) != 1L && (is.logical(saveimage) ||
-                                 is.character(saveimage))){
-    stop("Invalid entry of 'save_image'")
-  }
 
-  if(is.logical(saveimage) && saveimage){
-    stop("Please specify where to save the image.")
-  }
+  error.saveimage <- "Invalid entry to the 'save_image' list object"
 
-  if(is.character(saveimage)){
-    cur_ext <- file_ext(saveimage)
-    if(cur_ext == ""){
-      stop("Please provide a file extension indicating in format to save the image.")
+  if(!is.null(saveimage)){
+    if(is.null(names(saveimage)) ||
+       !all(names(saveimage) %in% c("filename", "scale"))){
+      stop(error.saveimage)
     }
-    if(!(cur_ext %in% c("tiff", "png", "jpeg"))){
-      stop("'save_image' only supports 'tiff', 'png' and 'jpeg' file types.")
+
+    if("filename" %in% names(saveimage)){
+      if(length(saveimage$filename) != 1L && !is.character(saveimage$filename)){
+        stop(paste0(error.saveimage, ": \n",
+                    "Invalid entry of 'filename'"))
+      }
+
+      if(is.character(saveimage)){
+        cur_ext <- file_ext(saveimage)
+        if(cur_ext == ""){
+          stop(paste0(error.saveimage, ": \n",
+                      "Please provide a file extension indicating in format to save the image."))
+        }
+        if(!(cur_ext %in% c("tiff", "png", "jpeg"))){
+          stop(paste0(error.saveimage, ": \n",
+                      "'filename' only supports 'tiff', 'png' and 'jpeg' file types."))
+        }
+      }
+    } else {
+      stop(paste0(error.saveimage, ": \n",
+                  "'filename' not provided."))
+    }
+
+    if("scale" %in% names(saveimage)){
+      if(length(saveimage$scale) != 1L && !is.numeric(saveimage$scale)){
+        stop(paste0(error.saveimage, ": \n",
+                    "Invalid entry of 'scale'"))
+      }
+    } else {
+      saveimage$scale <- 1
     }
   }
 
+  return(saveimage)
 }

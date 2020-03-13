@@ -165,3 +165,25 @@ test_that("plotting-param: background_colour can be set.", {
                fixed = TRUE)
 })
 
+test_that("plotting-param: save_image can be set.", {
+  data("pancreasSCE")
+  data("pancreasMasks")
+  data("pancreasImages")
+
+  cur_path <- tempfile()
+  on.exit(unlink(cur_path))
+
+  # Works
+  expect_silent(plotPixels(pancreasImages, save_image = NULL))
+  expect_silent(plotPixels(pancreasImages,
+                           scale_bar = list(cex = 0.5),
+                           image_title = list(cex = 0.5),
+                          save_image = list(filename = paste0("~/Desktop/", "test.png"),
+                                            scale = 10)))
+
+  # Error
+  expect_error(plotCells(pancreasMasks, background_colour = "test"),
+               regexp = "'background_colour' not a valid colour.",
+               fixed = TRUE)
+})
+

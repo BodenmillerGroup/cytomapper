@@ -328,6 +328,28 @@
   # Build the grid
   x_len <- c(0, nc * m_width)
   y_len <- c(0, nr * m_height)
+
+  if(!is.null(plottingParam$save_image)){
+    image_location <- plottingParam$save_image$filename
+    image_scale <- plottingParam$save_image$scale
+    cur_ext <- file_ext(image_location)
+    if(cur_ext == "png"){
+      png(image_location, width = image_scale * nc * m_width,
+          height = image_scale * nr * m_height, units = "px",
+          pointsize = 12 * image_scale)
+    } else if(cur_ext == "jpeg"){
+      jpeg(image_location, width = image_scale * nc * m_width,
+          height = image_scale * nr * m_height, units = "px",
+          pointsize = 12 * image_scale)
+    } else if(cur_ext == "tiff"){
+      tiff(image_location, width = image_scale * nc * m_width,
+          height = image_scale * nr * m_height, units = "px",
+          pointsize = 12 * image_scale)
+    }
+  } else {
+    image_scale <- 1
+  }
+
   par(bty="n", mai=c(0,0,0,0), xaxs="i",
       yaxs="i", xaxt="n", yaxt="n", col = "white")
   plot(x_len, y_len, type="n", xlab="", ylab="",
@@ -362,13 +384,13 @@
         if(plottingParam$scale_bar$frame == "all"){
           # Plot scale bar
           .plotScaleBar(plottingParam$scale_bar,
-                        xleft, xright, ytop, ybottom)
+                        xleft, xright, ytop, ybottom, image_scale)
         } else {
           cur_ind <- 1L + as.integer(plottingParam$scale_bar$frame)
           if(ind == cur_ind && !is.null(plottingParam$scale_bar)){
             # Plot scale bar
             .plotScaleBar(plottingParam$scale_bar,
-                          xleft, xright, ytop, ybottom)
+                          xleft, xright, ytop, ybottom, image_scale)
             }
           }
         }
@@ -380,6 +402,10 @@
                       xleft, xright, ytop, ybottom)
       }
     }
+  }
+
+  if(!is.null(plottingParam$save_image)){
+    dev.off()
   }
 }
 
@@ -537,11 +563,11 @@
 # Plot scale_bar
 #' @importFrom graphics strheight text segments
 #' @importFrom raster as.raster
-.plotScaleBar <- function(scale_bar, xl, xr, yt, yb){
+.plotScaleBar <- function(scale_bar, xl, xr, yt, yb, image_scale){
   cur_length <- scale_bar$length
   cur_label <- as.character(scale_bar$label)
   cur_cex <- scale_bar$cex
-  cur_lwd <- scale_bar$lwd
+  cur_lwd <- scale_bar$lwd * image_scale
   cur_col <- scale_bar$colour
   cur_position <- scale_bar$position
   cur_margin.x <- scale_bar$margin[1]
