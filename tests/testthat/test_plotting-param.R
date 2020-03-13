@@ -132,3 +132,36 @@ test_that("plotting-param: image_title can be set.", {
 
 })
 
+test_that("plotting-param: missing_colour can be set.", {
+  data("pancreasSCE")
+  data("pancreasMasks")
+  data("pancreasImages")
+
+  # Works
+  expect_silent(plotCells(pancreasMasks, missing_colour = "red"))
+  expect_silent(plotPixels(image = pancreasImages,
+                           mask = pancreasMasks,
+                           img_id = "ImageNb",
+                           cell_id = "CellNb",
+                           missing_colour = "red"))
+
+  # Error
+  expect_error(plotCells(pancreasMasks, missing_colour = "test"),
+                regexp = "'missing_colour' not a valid colour.",
+               fixed = TRUE)
+})
+
+test_that("plotting-param: background_colour can be set.", {
+  data("pancreasSCE")
+  data("pancreasMasks")
+  data("pancreasImages")
+
+  # Works
+  expect_silent(plotCells(pancreasMasks, background_colour = "white"))
+
+  # Error
+  expect_error(plotCells(pancreasMasks, background_colour = "test"),
+               regexp = "'background_colour' not a valid colour.",
+               fixed = TRUE)
+})
+
