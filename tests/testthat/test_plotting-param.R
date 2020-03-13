@@ -1,5 +1,4 @@
 test_that("plotting-param: scale_bar can be set.", {
-  data("pancreasSCE")
   data("pancreasMasks")
 
   cur_images <- pancreasMasks
@@ -75,7 +74,6 @@ test_that("plotting-param: scale_bar can be set.", {
 })
 
 test_that("plotting-param: image_title can be set.", {
-  data("pancreasSCE")
   data("pancreasMasks")
 
   cur_images <- pancreasMasks
@@ -133,7 +131,6 @@ test_that("plotting-param: image_title can be set.", {
 })
 
 test_that("plotting-param: missing_colour can be set.", {
-  data("pancreasSCE")
   data("pancreasMasks")
   data("pancreasImages")
 
@@ -152,9 +149,7 @@ test_that("plotting-param: missing_colour can be set.", {
 })
 
 test_that("plotting-param: background_colour can be set.", {
-  data("pancreasSCE")
   data("pancreasMasks")
-  data("pancreasImages")
 
   # Works
   expect_silent(plotCells(pancreasMasks, background_colour = "white"))
@@ -166,8 +161,6 @@ test_that("plotting-param: background_colour can be set.", {
 })
 
 test_that("plotting-param: save_image can be set.", {
-  data("pancreasSCE")
-  data("pancreasMasks")
   data("pancreasImages")
 
   cur_path <- tempfile()
@@ -176,14 +169,34 @@ test_that("plotting-param: save_image can be set.", {
   # Works
   expect_silent(plotPixels(pancreasImages, save_image = NULL))
   expect_silent(plotPixels(pancreasImages,
-                           scale_bar = list(cex = 0.5),
-                           image_title = list(cex = 0.5),
-                          save_image = list(filename = paste0("~/Desktop/", "test.png"),
+                          save_image = list(filename = paste0(cur_path, "test.png"),
                                             scale = 10)))
+  expect_true(file.exists(paste0(cur_path, "test.png")))
+  expect_silent(plotPixels(pancreasImages,
+                           save_image = list(filename = paste0(cur_path, "test.jpeg"),
+                                             scale = 10)))
+  expect_true(file.exists(paste0(cur_path, "test.jpeg")))
+  expect_silent(plotPixels(pancreasImages,
+                           save_image = list(filename = paste0(cur_path, "test.tiff"),
+                                             scale = 10)))
+  expect_true(file.exists(paste0(cur_path, "test.tiff")))
 
   # Error
-  expect_error(plotCells(pancreasMasks, background_colour = "test"),
-               regexp = "'background_colour' not a valid colour.",
-               fixed = TRUE)
+  expect_error(plotPixels(pancreasImages,
+                          save_image = list(filename = "test")),
+               regexp = "Invalid entry to the 'save_image' list object")
+  expect_error(plotPixels(pancreasImages,
+                          save_image = list(filename = 1)),
+               regexp = "Invalid entry to the 'save_image' list object")
+  expect_error(plotPixels(pancreasImages,
+                          save_image = list(filename = "test.pdf")),
+               regexp = "Invalid entry to the 'save_image' list object")
+  expect_error(plotPixels(pancreasImages,
+                          save_image = list(scale = 1)),
+               regexp = "Invalid entry to the 'save_image' list object")
+  expect_error(plotPixels(pancreasImages,
+                          save_image = list(filename = "test.png",
+                                            scale = "test")),
+               regexp = "Invalid entry to the 'save_image' list object")
 })
 

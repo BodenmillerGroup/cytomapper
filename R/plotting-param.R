@@ -295,13 +295,13 @@ NULL
     }
 
     if("filename" %in% names(saveimage)){
-      if(length(saveimage$filename) != 1L && !is.character(saveimage$filename)){
+      if(length(saveimage$filename) != 1L || !is.character(saveimage$filename)){
         stop(paste0(error.saveimage, ": \n",
                     "Invalid entry of 'filename'"))
       }
 
-      if(is.character(saveimage)){
-        cur_ext <- file_ext(saveimage)
+      if(is.character(saveimage$filename)){
+        cur_ext <- file_ext(saveimage$filename)
         if(cur_ext == ""){
           stop(paste0(error.saveimage, ": \n",
                       "Please provide a file extension indicating in format to save the image."))
@@ -317,7 +317,7 @@ NULL
     }
 
     if("scale" %in% names(saveimage)){
-      if(length(saveimage$scale) != 1L && !is.numeric(saveimage$scale)){
+      if(length(saveimage$scale) != 1L || !is.numeric(saveimage$scale)){
         stop(paste0(error.saveimage, ": \n",
                     "Invalid entry of 'scale'"))
       }
