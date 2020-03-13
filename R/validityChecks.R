@@ -19,7 +19,7 @@
     if(dir.exists(x) & is.null(pattern)){
 
       # Check if path only contains images
-      exten <- sapply(list.files(x), tools::file_ext)
+      exten <- sapply(list.files(x), file_ext)
 
       if(sum(!(unique(exten) %in% c("jpeg", "png", "tiff", "tif", "jpg"))) > 0){
         stop("The provided path contains file-types other than 'jpeg', 'tiff', or 'png'.\n",

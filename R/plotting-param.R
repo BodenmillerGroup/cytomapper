@@ -8,13 +8,13 @@
 #' @param background_colour TODO
 #' @param scale_bar TODO
 #' @param image_title TODO
+#' @param save_image TODO
 #'
 #'@section Setting further parameters:
 #' TODO
 #' # legend list(title, size) also allow NULL
 #' # return_plot TODO
 #' # return_images TODO
-#' # save_images TODO
 #'
 #' @return TODO
 #'
@@ -63,6 +63,14 @@ NULL
     dotArgs$image_title <- imagetitle
   } else {
     dotArgs$image_title <- .valid.imagetitle(dotArgs$image_title, image)
+  }
+
+  # save_image
+  if(!("save_image" %in% names(dotArgs))){
+    saveimage <- FALSE
+    dotArgs$save_image <- saveimage
+  } else {
+    dotArgs$save_image <- .valid.saveimage(dotArgs$save_image)
   }
 
   # missing_colour
@@ -271,4 +279,28 @@ NULL
     backgroundcolour <- "#000000"
   }
   return(backgroundcolour)
+}
+
+# Validity of save_image input
+#' @importFrom tools file_ext
+.valid.saveimage <- function(saveimage){
+  if(length(saveimage) != 1L && (is.logical(saveimage) ||
+                                 is.character(saveimage))){
+    stop("Invalid entry of 'save_image'")
+  }
+
+  if(is.logical(saveimage) && saveimage){
+    stop("Please specify where to save the image.")
+  }
+
+  if(is.character(saveimage)){
+    cur_ext <- file_ext(saveimage)
+    if(cur_ext == ""){
+      stop("Please provide a file extension indicating in format to save the image.")
+    }
+    if(!(cur_ext %in% c("tiff", "png", "jpeg"))){
+      stop("'save_image' only supports 'tiff', 'png' and 'jpeg' file types.")
+    }
+  }
+
 }
