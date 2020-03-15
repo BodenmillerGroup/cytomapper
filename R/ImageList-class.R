@@ -71,8 +71,17 @@ S4Vectors:::setValidity2(Class="ImageList", .ImageList_validity)
               return(TRUE)
             }
 
-#setMethod("plot")
-# Calls plotCells or plotCounts by default
+#' @export
+setMethod("plot",
+          signature = signature(x="ImageList"),
+          definition = function(x){
+            cur_check <- lapply(x, function(x){all(x == floor(x))})
+            if(all(unlist(cur_check))){
+              plotCells(mask = x)
+            } else {
+              plotPixels(image = x)
+            }
+          })
 
 
 
