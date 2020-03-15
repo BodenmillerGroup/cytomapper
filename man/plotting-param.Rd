@@ -6,9 +6,13 @@
 \arguments{
 \item{missing_colour}{TODO}
 
+\item{background_colour}{TODO}
+
 \item{scale_bar}{TODO}
 
 \item{image_title}{TODO}
+
+\item{save_image}{TODO}
 }
 \value{
 TODO
@@ -22,7 +26,7 @@ TODO
 # legend list(title, size) also allow NULL
 # return_plot TODO
 # return_images TODO
-# save_images TODO
+# margin between images
 }
 
 \examples{

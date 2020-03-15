@@ -141,3 +141,42 @@ setReplaceMethod("names",
                    return(.Object)
                  })
 
+#' @title Manipulating ImageList objects
+#' @name ImageList-manipulation
+#'
+#' @description Methods to change pixel values in ImageList objects
+#'
+#' @section Image scaling:
+#' In the following code, \code{x} is an \linkS4class{ImageList} object
+#' containing one or multiple channels. In some cases, images need to be scaled
+#' by a constant (e.g. 2^16-1 = 65535) \code{value} to revert them back to the
+#' original pixel values after reading them in.
+#' \describe{
+#' \item{\code{scaleImages(x, value)}:}{Scales all images in the
+#' \linkS4class{ImageList} object \code{x} by \code{value}
+#' }
+#'
+#' @section Image normalization:
+#' TODO
+#'
+#' @examples
+#' # TODO
+#'
+#' @aliases scaleImages scaleImages,ImageList-method
+#' normalizeImages normalizeImages,ImageList-method
+#'
+#' @docType methods
+#'
+#' @author Nils Eling \email{nils.eling@@dqbm.uzh.ch}
+NULL
+
+#' @export
+setMethod("scaleImages",
+          signature = signature(x="ImageList"),
+          definition = function(x, value){
+            if(length(value) != 1L || !is.numeric(value)){
+              stop("'value' must be a single numeric.")
+            }
+            cur_out <- endoapply(x, function(y){y * value})
+            return(cur_out)
+          })
