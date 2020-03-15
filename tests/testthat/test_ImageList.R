@@ -20,3 +20,12 @@ test_that("Images can be loaded into ImageList object.", {
   cur_list[[1]] <- cur_list[[1]][,,-1]
   expect_error(ImageList(cur_list))
 })
+
+test_that("Generic plot function works on images.", {
+  data("pancreasImages")
+  data("pancreasMasks")
+
+  # Works
+  expect_silent(plot(pancreasImages))
+  expect_silent(plot(pancreasMasks))
+})

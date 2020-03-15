@@ -32,7 +32,7 @@ setGeneric("scaleImages",
 #' @export
 setGeneric("normalizeImages",
            function(x, separateChannels, separateImages, ft, inputRange, value){
-             standardGeneric("normalizeImages"))}
+             standardGeneric("normalizeImages")})
 
 
 
