@@ -180,3 +180,128 @@ setMethod("scaleImages",
             cur_out <- endoapply(x, function(y){y * value})
             return(cur_out)
           })
+
+#' @export
+#' @importFrom EBImage normalize
+setMethod("normalizeImages",
+          signature = signature(x="ImageList"),
+          definition = .normImages)
+
+.normImages <- function(x, separateChannels = TRUE, separateImages = FALSE,
+                        ft = c(0, 1), percentileRange = c(0, 1), inputRange = NULL){
+
+  if(!is.logical(separateChannels)){
+    stop("'separateChannels' only takes TRUE or FALSE.")
+  }
+  if(!is.logical(separateImages)){
+    stop("'separateImages' only takes TRUE or FALSE.")
+  }
+
+  if(!is.null(percentileRange)){
+    if(!is.numeric(percentileRange) ||
+       length(percentileRange) != 2L ||
+      min(percentileRange) < 0 ||
+      max(percentileRange) > 1){
+      stop("'percentileRange' takes two numeric values indicating \n",
+      "the lower and upper percentile for clipping")
+    }
+    if(diff(percentileRange) <= 0){
+      stop("Invalid input for 'percentileRange'")
+    }
+  }
+
+  if((!is.null(percentileRange) && !is.null(inputRange)) ||
+     (is.null(percentileRange) && is.null(inputRange))){
+    stop("Please specify either 'percentileRange' or 'inputRange'")
+  }
+
+  if(separateImages){
+    if(separateChannels){
+
+      cur_out <- endoapply(x, function(y){
+        if(!is.null(inputRange)){
+          y <- normalize(y, separate = TRUE, ft=ft, inputRange)
+          return(y)
+        } else {
+          for(i in seq_len(dim(y)[3])){
+            cur_min <- quantile(y[,,i], probs = percentileRange[1])
+            cur_max <- quantile(y[,,i], probs = percentileRange[2])
+            y[,,i] <- normalize(y[,,i], separate = TRUE, ft=ft,
+                             inputRange = c(cur_min, cur_max))
+          }
+          return(y)
+        }
+      })
+
+      return(cur_out)
+
+
+    } else {
+
+      cur_out <- endoapply(x, function(y){
+        if(!is.null(inputRange)){
+          y <- normalize(y, separate = FALSE, ft=ft, inputRange)
+          return(y)
+        } else {
+          cur_min <- quantile(y, probs = percentileRange[1])
+          cur_max <- quantile(y, probs = percentileRange[2])
+          y <- normalize(y, separate = FALSE, ft=ft,
+                           inputRange = c(cur_min, cur_max))
+          return(y)
+          })
+        }
+      })
+
+      return(cur_out)
+
+    }
+  } else {
+    if(separateChannels){
+      if(!is.null(percentileRange)){
+        cur_min <- NULL
+        cur_max <- NULL
+        for(i in seq_len(numberOfFrames(x[[1]]))){
+          cur_dist <- unlist(lapply(getChannels(x, i), as.numeric))
+          cur_min <- c(cur_min, quantile(cur_dist, percentileRange[1]))
+          cur_max <- c(cur_min, quantile(cur_dist, percentileRange[2]))
+        }
+      }
+
+      cur_out <- endoapply(x, function(y){
+        if(!is.null(inputRange)){
+          y <- normalize(y, separate = TRUE, ft=ft, inputRange)
+          return(y)
+        } else {
+          for(i in seq_len(dim(y)[3])){
+            y[,,i] <- normalize(y[,,i], separate = TRUE, ft=ft,
+                                inputRange = c(cur_min[i], cur_max[i]))
+          }
+          return(y)
+        }
+      })
+
+      return(cur_out)
+
+
+    } else {
+      if(!is.null(percentileRange)){
+        cur_dist <- unlist(lapply(x, as.numeric))
+        cur_min <- quantile(cur_dist, probs = percentileRange[1])
+        cur_max <- quantile(cur_dist, probs = percentileRange[2])
+      }
+
+      cur_out <- endoapply(x, function(y){
+        if(!is.null(inputRange)){
+          y <- normalize(y, separate = FALSE, ft=ft, inputRange)
+          return(y)
+        } else {
+          y <- normalize(y, separate = FALSE, ft=ft,
+                           inputRange = c(cur_min, cur_max))
+          return(y)
+        })
+      }
+    })
+
+    return(cur_out)
+  }
+}
