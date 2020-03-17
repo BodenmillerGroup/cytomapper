@@ -71,9 +71,6 @@ S4Vectors:::setValidity2(Class="ImageList", .ImageList_validity)
               return(TRUE)
             }
 
-#setMethod("plot")
-# Calls plotCells or plotCounts by default
-
 
 
 

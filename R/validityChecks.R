@@ -19,7 +19,7 @@
     if(dir.exists(x) & is.null(pattern)){
 
       # Check if path only contains images
-      exten <- sapply(list.files(x), tools::file_ext)
+      exten <- sapply(list.files(x), file_ext)
 
       if(sum(!(unique(exten) %in% c("jpeg", "png", "tiff", "tif", "jpg"))) > 0){
         stop("The provided path contains file-types other than 'jpeg', 'tiff', or 'png'.\n",
@@ -237,6 +237,12 @@
   # Check if Image_id exists in elementMetadata
   if(!is.null(img_id) && !(img_id %in% colnames(mcols(image)))){
     stop("'img_id' not in 'mcols(image)'.")
+  }
+
+  cur_out <- lapply(image, function(x){all(x == floor(x))})
+  if(all(unlist(cur_out)) && numberOfFrames(image[[1]]) == 1L){
+    warning("All pixel intensities are integers \n", "
+            make sure to not supply segmentation masks for 'images'")
   }
 }
 

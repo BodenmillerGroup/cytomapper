@@ -11,6 +11,9 @@ test_that("plotPixels: Standard input testing works", {
                           img_id = "ImageNb"))
 
   # Error
+  expect_error(expect_warning(plotPixels(image = pancreasMasks,
+                          mask = pancreasMasks,
+                          img_id = "ImageNb")))
   expect_error(plotPixels(image = pancreasImages,
                            mask = pancreasMasks),
                regexp = "'img_id' is missing.",
@@ -367,7 +370,7 @@ test_that("plotPixels: Size of images can be changed.", {
   # Change size of images
   # Decreasing the size
   cur_masks <- pancreasMasks
-  setImages(cur_masks, "A02_mask") <- cur_masks[[1]][1:50, 1:50,,drop=FALSE]
+  setImages(cur_masks, "A02_mask") <- cur_masks[[1]][1:50, 1:50,drop=FALSE]
   expect_error(plotPixels(object = pancreasSCE,
                            image = pancreasImages,
                            mask = cur_masks, img_id = "ImageNb",

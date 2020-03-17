@@ -215,9 +215,15 @@ setMethod("getChannels",
               stop("'i' not in channelNames(x)")
             }
 
-            x <- S4Vectors::endoapply(x, function(y){
-              y[,,i,drop=FALSE]
-            })
+            if(length(dim(x[[1]])) >= 3){
+              x <- S4Vectors::endoapply(x, function(y){
+                y[,,i,drop=FALSE]
+              })
+            } else {
+              if(i != 1L){
+                stop("For single-channel images, channels must be named or 'i' needs to be 1.")
+              }
+            }
 
             validObject(x)
 

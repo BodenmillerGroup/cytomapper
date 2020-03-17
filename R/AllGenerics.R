@@ -25,6 +25,10 @@ setGeneric("getChannels",
 setGeneric("setChannels<-",
            function(x, i, value) standardGeneric("setChannels<-"))
 
+#' @export
+setGeneric("scaleImages",
+           function(object, value) standardGeneric("scaleImages"))
+
 
 
 

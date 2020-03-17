@@ -77,7 +77,7 @@ plotPixels <- function(image,
 
   # Set further arguments
   dotArgs <- list(...)
-  plottingParam <- .plottingParam(dotArgs)
+  plottingParam <- .plottingParam(dotArgs, image = image)
 
   # Select images for plotting
   image <- .select_images(object, image, img_id, subset_images)
@@ -131,7 +131,7 @@ plotPixels <- function(image,
   }
 
   # Plot images
-  .displayImages(object, image, exprs_values = NULL,
-                 outline_by, colour_by, mask, out_img, img_id,
-                 cur_col, plottingParam)
+    .displayImages(object, image, exprs_values = NULL,
+                   outline_by, colour_by, mask, out_img, img_id,
+                   cur_col, plottingParam)
 }

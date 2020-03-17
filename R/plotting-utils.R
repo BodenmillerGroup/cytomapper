@@ -20,7 +20,8 @@
 
 # Colour segmentation masks based on metadata
 .colourMaskByMeta <- function(object, mask, cell_id, img_id,
-                              colour_by, cur_colour, missing_colour){
+                              colour_by, cur_colour, missing_colour,
+                              background_colour){
   for(i in seq_along(mask)){
     cur_mask <- mask[[i]]
     cur_sce <- object[,colData(object)[,img_id] == mcols(mask)[i,img_id]]
@@ -35,10 +36,10 @@
     }
 
     # Colour first the background
-    cur_mask[cur_mask == 0L] <- "#000000"
+    cur_mask[cur_mask == 0L] <- background_colour
 
     # Then colour cells that are not in sce
-    cur_m <- as.vector(cur_mask != "#000000") &
+    cur_m <- as.vector(cur_mask != background_colour) &
       !(cur_mask %in% as.character(colData(cur_sce)[,cell_id]))
     cur_mask <- replace(cur_mask, which(cur_m), missing_colour)
 
@@ -65,17 +66,18 @@
 #' @importFrom grDevices colorRampPalette
 #' @importFrom SummarizedExperiment assay
 .colourMaskByFeature <- function(object, mask, cell_id, img_id,
-                     colour_by, exprs_values, cur_colour, missing_colour){
+                     colour_by, exprs_values, cur_colour, missing_colour,
+                     background_colour){
 
   for(i in seq_along(mask)){
     cur_mask <- mask[[i]]
     cur_sce <- object[,colData(object)[,img_id] == mcols(mask)[i,img_id]]
 
     # Colour first the background
-    cur_mask[cur_mask == 0L] <- "#000000"
+    cur_mask[cur_mask == 0L] <- background_colour
 
     # Then colour cells that are not in sce
-    cur_m <- as.vector(cur_mask != "#000000") &
+    cur_m <- as.vector(cur_mask != background_colour) &
       !(cur_mask %in% as.character(colData(cur_sce)[,cell_id]))
     cur_mask <- replace(cur_mask, which(cur_m), missing_colour)
 
@@ -297,6 +299,7 @@
 #' @importFrom S4Vectors SimpleList
 #' @importFrom EBImage Image
 #' @importFrom graphics par plot rasterImage strheight text
+#' @importFrom grDevices png jpeg tiff dev.off
 .displayImages <- function(object, image, exprs_values, outline_by,
                            colour_by, mask, out_img,
                            img_id, cur_col, plottingParam){
@@ -326,6 +329,28 @@
   # Build the grid
   x_len <- c(0, nc * m_width)
   y_len <- c(0, nr * m_height)
+
+  if(!is.null(plottingParam$save_image)){
+    image_location <- plottingParam$save_image$filename
+    image_scale <- plottingParam$save_image$scale
+    cur_ext <- file_ext(image_location)
+    if(cur_ext == "png"){
+      png(image_location, width = image_scale * nc * m_width,
+          height = image_scale * nr * m_height, units = "px",
+          pointsize = 12 * image_scale)
+    } else if(cur_ext == "jpeg"){
+      jpeg(image_location, width = image_scale * nc * m_width,
+          height = image_scale * nr * m_height, units = "px",
+          pointsize = 12 * image_scale)
+    } else if(cur_ext == "tiff"){
+      tiff(image_location, width = image_scale * nc * m_width,
+          height = image_scale * nr * m_height, units = "px",
+          pointsize = 12 * image_scale)
+    }
+  } else {
+    image_scale <- 1
+  }
+
   par(bty="n", mai=c(0,0,0,0), xaxs="i",
       yaxs="i", xaxt="n", yaxt="n", col = "white")
   plot(x_len, y_len, type="n", xlab="", ylab="",
@@ -357,84 +382,31 @@
       }
 
       if(ind != 1L && !is.null(plottingParam$scale_bar)){
-        # Plot scale bar
-        .plotScaleBar(plottingParam$scale_bar,
-                      xleft, xright, ytop, ybottom)
-      }
+        if(plottingParam$scale_bar$frame == "all"){
+          # Plot scale bar
+          .plotScaleBar(plottingParam$scale_bar,
+                        xleft, xright, ytop, ybottom, image_scale)
+        } else {
+          cur_ind <- 1L + as.integer(plottingParam$scale_bar$frame)
+          if(ind == cur_ind && !is.null(plottingParam$scale_bar)){
+            # Plot scale bar
+            .plotScaleBar(plottingParam$scale_bar,
+                          xleft, xright, ytop, ybottom, image_scale)
+            }
+          }
+        }
 
       # Plot title on images
-      if(ind != 1L){
-        image_title <- plottingParam$image_title
-        if(!is.null(image_title$text)){
-          cur_title <- rep(image_title$text, length.out=length(out_img))[ind-1]
-        } else if(!is.null(mask) && !is.null(img_id)){
-          cur_title <- mcols(mask)[ind - 1,img_id]
-        } else if(!is.null(image) && !is.null(img_id)){
-          cur_title <- mcols(image)[ind - 1,img_id]
-        } else if(!is.null(names(out_img))){
-          cur_title <- names(out_img)[ind]
-        } else {
-          cur_title <- as.character(ind - 1)
-        }
-
-        default_it <- list(position = "top",  cex = 1, colour = "white", margin = c(0,0), font = 2)
-        if(!is.null(image_title$position)){
-          cur_position <- image_title$position
-        } else {
-          cur_position <- default_it$position
-        }
-        if(!is.null(image_title$cex)){
-          cur_cex <- image_title$cex
-        } else {
-          cur_cex <- default_it$cex
-        }
-        if(!is.null(image_title$colour)){
-          cur_col <- image_title$colour
-        } else {
-          cur_col <- default_it$colour
-        }
-        if(!is.null(image_title$margin)){
-          cur_margin.x <- image_title$margin[1]
-          cur_margin.y <- image_title$margin[2]
-        } else {
-          cur_margin.x <- default_it$margin[1]
-          cur_margin.y <- default_it$margin[2]
-        }
-        if(!is.null(image_title$font)){
-          cur_font <- image_title$font
-        } else {
-          cur_font <- default_it$font
-        }
-        label_height <- abs(strheight(cur_title, cex = cur_cex, font = cur_font))
-        text_params <- list(labels = cur_title, col = cur_col, cex = cur_cex, font = cur_font)
-
-        if(cur_position == "top"){
-          do.call(text, append(list(x = xleft + dim_x/2 + cur_margin.x,
-                                    y = ytop + label_height*2 + cur_margin.y,
-                                    adj = 0.5), text_params))
-        } else if(cur_position == "bottom"){
-          do.call(text, append(list(x = xleft + dim_x/2 + cur_margin.x,
-                                    y = ybottom - label_height*2 - cur_margin.y,
-                                    adj = 0.5), text_params))
-        } else if(cur_position == "topleft"){
-          do.call(text, append(list(x = xleft + cur_margin.x,
-                                    y = ytop + label_height*2 + cur_margin.y,
-                                    adj = 0), text_params))
-        } else if(cur_position == "topright"){
-          do.call(text, append(list(x = xright - cur_margin.x,
-                                    y = ytop + label_height*2 + cur_margin.y,
-                                    adj = 1), text_params))
-        } else if(cur_position == "bottomleft"){
-          do.call(text, append(list(x = xleft + cur_margin.x,
-                                    y = ybottom - label_height*2 - cur_margin.y,
-                                    adj = 0), text_params))
-        } else if(cur_position == "bottomright"){
-          do.call(text, append(list(x = xright - cur_margin.x,
-                                    y = ybottom - label_height*2 - cur_margin.y,
-                                    adj = 1), text_params))
-        }
+      if(ind != 1L && !is.null(plottingParam$image_title)){
+        .plotImageTitle(out_img, mask, image, img_id,
+                        ind, plottingParam$image_title, dim_x,
+                      xleft, xright, ytop, ybottom)
       }
     }
+  }
+
+  if(!is.null(plottingParam$save_image)){
+    dev.off()
   }
 }
 
@@ -592,11 +564,11 @@
 # Plot scale_bar
 #' @importFrom graphics strheight text segments
 #' @importFrom raster as.raster
-.plotScaleBar <- function(scale_bar, xl, xr, yt, yb){
+.plotScaleBar <- function(scale_bar, xl, xr, yt, yb, image_scale){
   cur_length <- scale_bar$length
   cur_label <- as.character(scale_bar$label)
   cur_cex <- scale_bar$cex
-  cur_lwd <- scale_bar$lwd
+  cur_lwd <- scale_bar$lwd * image_scale
   cur_col <- scale_bar$colour
   cur_position <- scale_bar$position
   cur_margin.x <- scale_bar$margin[1]
@@ -604,7 +576,7 @@
 
   # Plot scale bar
   label_height <- abs(strheight(cur_label, cex = cur_cex))
-  segm_params <- list(lwd = cur_lwd, col = cur_col)
+  segm_params <- list(lwd = cur_lwd, col = cur_col, lend = 1)
   text_params <- list(labels = cur_label, cex = cur_cex,
                       col = cur_col, adj = 0.5, lwd = cur_lwd)
 
@@ -632,6 +604,61 @@
                                   x1 = xl + cur_length + cur_margin.x), segm_params))
     do.call(text, append(list(x = xl + cur_length/2 + cur_margin.x,
                               y = yt + cur_margin.y - label_height - label_height/4), text_params))
+  }
+}
+
+
+# Plot legend
+#' @importFrom graphics strwidth strheight text rasterImage legend
+#' @importFrom raster as.raster
+.plotImageTitle <- function(out_img, mask, image, img_id, ind, image_title, dim_x,
+                            xleft, xright, ytop, ybottom){
+
+  if(!is.null(image_title$text)){
+    cur_title <- image_title$text[ind - 1]
+  } else if(!is.null(mask) && !is.null(img_id)){
+    cur_title <- mcols(mask)[ind - 1,img_id]
+  } else if(!is.null(image) && !is.null(img_id)){
+    cur_title <- mcols(image)[ind - 1,img_id]
+  } else if(!is.null(names(out_img))){
+    cur_title <- names(out_img)[ind]
+  } else {
+    cur_title <- as.character(ind - 1)
+  }
+
+  cur_position <- image_title$position
+  cur_cex <- image_title$cex
+  cur_col <- image_title$colour
+  cur_margin.x <- image_title$margin[1]
+  cur_margin.y <- image_title$margin[2]
+  cur_font <- image_title$font
+
+  text_params <- list(labels = cur_title, col = cur_col, cex = cur_cex, font = cur_font)
+
+  if(cur_position == "top"){
+    do.call(text, append(list(x = xleft + dim_x/2,
+                              y = ytop + cur_margin.y,
+                              adj = 0.5), text_params))
+  } else if(cur_position == "bottom"){
+    do.call(text, append(list(x = xleft + dim_x/2,
+                              y = ybottom - cur_margin.y,
+                              adj = 0.5), text_params))
+  } else if(cur_position == "topleft"){
+    do.call(text, append(list(x = xleft + cur_margin.x,
+                              y = ytop + cur_margin.y,
+                              adj = 0), text_params))
+  } else if(cur_position == "topright"){
+    do.call(text, append(list(x = xright - cur_margin.x,
+                              y = ytop + cur_margin.y,
+                              adj = 1), text_params))
+  } else if(cur_position == "bottomleft"){
+    do.call(text, append(list(x = xleft + cur_margin.x,
+                              y = ybottom - cur_margin.y,
+                              adj = 0), text_params))
+  } else if(cur_position == "bottomright"){
+    do.call(text, append(list(x = xright - cur_margin.x,
+                              y = ybottom - cur_margin.y,
+                              adj = 1), text_params))
   }
 }
 

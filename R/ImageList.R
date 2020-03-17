@@ -68,6 +68,8 @@
 #' coerce,ANY,ImageList-method
 #' coerce,list,ImageList-method
 #' show,ImageList-method
+#' plot,ImageList,ANY-method
+#' plot-ImageList-method
 #'
 #' @author Nils Eling (\email{nils.eling@@dqbm.uzh.ch})
 #'
@@ -118,6 +120,19 @@ setMethod("show", signature = signature(object="ImageList"),
             if(!is.null(channelNames(object))){
               cat(paste0("channelNames(", length(channelNames(object)),
                   "):"), channelNames(object), "\n", sep = " ")
+            }
+          })
+
+#' @export
+setMethod("plot",
+          signature = signature(x="ImageList"),
+          definition = function(x){
+
+            cur_check <- lapply(x, function(x){all(x == floor(x))})
+            if(all(unlist(cur_check))){
+              plotCells(mask = x)
+            } else {
+              plotPixels(image = x)
             }
           })
 
