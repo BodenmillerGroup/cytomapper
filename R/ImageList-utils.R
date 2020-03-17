@@ -154,7 +154,7 @@ setReplaceMethod("names",
 #' \describe{
 #' \item{\code{scaleImages(x, value)}:}{Scales all images in the
 #' \linkS4class{ImageList} object \code{x} by \code{value}
-#' }
+#' }}
 #'
 #' @section Image normalization:
 #' TODO
@@ -172,8 +172,8 @@ NULL
 
 #' @export
 setMethod("scaleImages",
-          signature = signature(x="ImageList"),
-          definition = function(x, value){
+          signature = signature(object="ImageList"),
+          definition = function(object, value){
             if(length(value) != 1L || !is.numeric(value)){
               stop("'value' must be a single numeric.")
             }
@@ -181,14 +181,8 @@ setMethod("scaleImages",
             return(cur_out)
           })
 
-#' @export
-#' @importFrom EBImage normalize
-setMethod("normalizeImages",
-          signature = signature(x="ImageList"),
-          definition = .normImages)
-
-.normImages <- function(x, separateChannels = TRUE, separateImages = FALSE,
-                        ft = c(0, 1), percentileRange = c(0, 1), inputRange = NULL){
+normImages <- function(object, separateChannels = TRUE, separateImages = FALSE,
+                       ft = c(0, 1), percentileRange = c(0, 1), inputRange = NULL){
 
   if(!is.logical(separateChannels)){
     stop("'separateChannels' only takes TRUE or FALSE.")
@@ -200,10 +194,10 @@ setMethod("normalizeImages",
   if(!is.null(percentileRange)){
     if(!is.numeric(percentileRange) ||
        length(percentileRange) != 2L ||
-      min(percentileRange) < 0 ||
-      max(percentileRange) > 1){
+       min(percentileRange) < 0 ||
+       max(percentileRange) > 1){
       stop("'percentileRange' takes two numeric values indicating \n",
-      "the lower and upper percentile for clipping")
+           "the lower and upper percentile for clipping")
     }
     if(diff(percentileRange) <= 0){
       stop("Invalid input for 'percentileRange'")
@@ -218,90 +212,83 @@ setMethod("normalizeImages",
   if(separateImages){
     if(separateChannels){
 
-      cur_out <- endoapply(x, function(y){
+      cur_out <- endoapply(object, function(y){
         if(!is.null(inputRange)){
-          y <- normalize(y, separate = TRUE, ft=ft, inputRange)
-          return(y)
+          y <- EBImage::normalize(y, separate = TRUE, ft=ft, inputRange)
         } else {
           for(i in seq_len(dim(y)[3])){
             cur_min <- quantile(y[,,i], probs = percentileRange[1])
             cur_max <- quantile(y[,,i], probs = percentileRange[2])
-            y[,,i] <- normalize(y[,,i], separate = TRUE, ft=ft,
-                             inputRange = c(cur_min, cur_max))
+            y[,,i] <- EBImage::normalize(y[,,i], separate = TRUE, ft=ft,
+                                inputRange = c(cur_min, cur_max))
           }
-          return(y)
         }
+        return(y)
       })
-
-      return(cur_out)
-
 
     } else {
 
-      cur_out <- endoapply(x, function(y){
+      cur_out <- endoapply(object, function(y){
         if(!is.null(inputRange)){
           y <- normalize(y, separate = FALSE, ft=ft, inputRange)
-          return(y)
         } else {
           cur_min <- quantile(y, probs = percentileRange[1])
           cur_max <- quantile(y, probs = percentileRange[2])
-          y <- normalize(y, separate = FALSE, ft=ft,
-                           inputRange = c(cur_min, cur_max))
-          return(y)
-          })
+          y <- EBImage::normalize(y, separate = FALSE, ft=ft,
+                         inputRange = c(cur_min, cur_max))
         }
+
+        return(y)
+
       })
-
-      return(cur_out)
-
     }
   } else {
     if(separateChannels){
       if(!is.null(percentileRange)){
         cur_min <- NULL
         cur_max <- NULL
-        for(i in seq_len(numberOfFrames(x[[1]]))){
-          cur_dist <- unlist(lapply(getChannels(x, i), as.numeric))
+        for(i in seq_len(numberOfFrames(object[[1]]))){
+          cur_dist <- unlist(lapply(getChannels(object, i), as.numeric))
           cur_min <- c(cur_min, quantile(cur_dist, percentileRange[1]))
-          cur_max <- c(cur_min, quantile(cur_dist, percentileRange[2]))
+          cur_max <- c(cur_max, quantile(cur_dist, percentileRange[2]))
         }
       }
 
-      cur_out <- endoapply(x, function(y){
+      cur_out <- endoapply(object, function(y){
         if(!is.null(inputRange)){
           y <- normalize(y, separate = TRUE, ft=ft, inputRange)
-          return(y)
         } else {
           for(i in seq_len(dim(y)[3])){
-            y[,,i] <- normalize(y[,,i], separate = TRUE, ft=ft,
+            y[,,i] <- EBImage::normalize(y[,,i], separate = TRUE, ft=ft,
                                 inputRange = c(cur_min[i], cur_max[i]))
           }
-          return(y)
         }
+        return(y)
       })
-
-      return(cur_out)
-
-
     } else {
       if(!is.null(percentileRange)){
-        cur_dist <- unlist(lapply(x, as.numeric))
+        cur_dist <- unlist(lapply(object, as.numeric))
         cur_min <- quantile(cur_dist, probs = percentileRange[1])
         cur_max <- quantile(cur_dist, probs = percentileRange[2])
       }
 
-      cur_out <- endoapply(x, function(y){
+      cur_out <- endoapply(object, function(y){
         if(!is.null(inputRange)){
-          y <- normalize(y, separate = FALSE, ft=ft, inputRange)
-          return(y)
+          y <- EBImage::normalize(y, separate = FALSE, ft=ft, inputRange)
         } else {
-          y <- normalize(y, separate = FALSE, ft=ft,
-                           inputRange = c(cur_min, cur_max))
-          return(y)
-        })
-      }
-    })
+          y <- EBImage::normalize(y, separate = FALSE, ft=ft,
+                         inputRange = c(cur_min, cur_max))
+        }
+        return(y)
+      })
 
-    return(cur_out)
+    }
   }
+  return(cur_out)
 }
+
+
+#' @export
+setMethod("normalize",
+          signature = signature(object = "ImageList"),
+          definition = normImages)

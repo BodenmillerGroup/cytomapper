@@ -11,9 +11,16 @@
 \description{
 Methods to change pixel values in ImageList objects
 }
-\section{NA}{
+\section{Image scaling}{
 
-TODO
+In the following code, \code{x} is an \linkS4class{ImageList} object
+containing one or multiple channels. In some cases, images need to be scaled
+by a constant (e.g. 2^16-1 = 65535) \code{value} to revert them back to the
+original pixel values after reading them in.
+\describe{
+\item{\code{scaleImages(x, value)}:}{Scales all images in the
+\linkS4class{ImageList} object \code{x} by \code{value}
+}}
 }
 
 \section{Image normalization}{

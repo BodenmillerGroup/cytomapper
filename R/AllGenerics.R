@@ -27,12 +27,7 @@ setGeneric("setChannels<-",
 
 #' @export
 setGeneric("scaleImages",
-           function(x, value) standardGeneric("scaleImages"))
-
-#' @export
-setGeneric("normalizeImages",
-           function(x, separateChannels, separateImages, ft, inputRange){
-             standardGeneric("normalizeImages")})
+           function(object, value) standardGeneric("scaleImages"))
 
 
 
