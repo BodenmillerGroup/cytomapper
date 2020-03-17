@@ -9,28 +9,47 @@
 \alias{normalize,ImageList-method}
 \title{Manipulating ImageList objects}
 \description{
-Methods to change pixel values in ImageList objects
+Methods to change pixel values in ImageList objects. In the
+  following sections, \code{object} is an \linkS4class{ImageList} object
+  containing one or multiple channels.
 }
 \section{Image scaling}{
 
-In the following code, \code{x} is an \linkS4class{ImageList} object
-containing one or multiple channels. In some cases, images need to be scaled
-by a constant (e.g. 2^16-1 = 65535) \code{value} to revert them back to the
-original pixel values after reading them in.
+In some cases, images need to be scaled by a constant
+(e.g. 2^16-1 = 65535) \code{value} to revert them back to the original
+pixel values after reading them in.
 \describe{
-\item{\code{scaleImages(x, value)}:}{Scales all images in the
-\linkS4class{ImageList} object \code{x} by \code{value}
-}}
+  \item{\code{scaleImages(object, value)}:}{Scales all images in the
+  \linkS4class{ImageList} object \code{object} by \code{value}.}
+}
 }
 
 \section{Image normalization}{
 
-TODO
+Linear scaling of the intensity values of each \linkS4class{Image} contained
+in an \linkS4class{ImageList} \code{object} to a specific range. Images can
+either be scaled to the minimum/maximum value per channel or across all
+channels (default \code{separateChannels = TRUE}). Also, Images can be scaled
+to the minimum/maximum value per image or across all images (default
+\code{separateImages = FALSE}).
+\describe{
+  \code{normalizeImages(object, separateChannels = TRUE, separateImages = FALSE,
+ft = c(0, 1), percentileRange = c(0, 1), inputRange = NULL)}:
+\item{\code{object}:}{An ImageList object}
+\item{\code{separateChannels}:}{An ImageList object}
+\item{\code{separateImages}:}{An ImageList object}
+\item{\code{ft}:}{An ImageList object}
+\item{\code{percentileRange}:}{An ImageList object}
+\item{\code{inputRange}:}{An ImageList object}
+}
 }
 
 \examples{
 # TODO
 
+}
+\seealso{
+\code{\link[EBImage]{normalize}} for details on Image normalization
 }
 \author{
 Nils Eling \email{nils.eling@dqbm.uzh.ch}

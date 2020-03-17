@@ -238,6 +238,12 @@
   if(!is.null(img_id) && !(img_id %in% colnames(mcols(image)))){
     stop("'img_id' not in 'mcols(image)'.")
   }
+
+  cur_out <- lapply(image, function(x){all(x == floor(x))})
+  if(all(unlist(cur_out)) && numberOfFrames(image[[1]]) == 1L){
+    warning("All pixel intensities are integers \n", "
+            make sure to not supply segmentation masks for 'images'")
+  }
 }
 
 # Check if entries in objects are matching

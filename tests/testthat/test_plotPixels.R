@@ -11,6 +11,9 @@ test_that("plotPixels: Standard input testing works", {
                           img_id = "ImageNb"))
 
   # Error
+  expect_warning(plotPixels(image = pancreasMasks,
+                          mask = pancreasMasks,
+                          img_id = "ImageNb"))
   expect_error(plotPixels(image = pancreasImages,
                            mask = pancreasMasks),
                regexp = "'img_id' is missing.",
