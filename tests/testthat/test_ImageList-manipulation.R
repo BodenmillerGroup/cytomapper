@@ -171,7 +171,7 @@ test_that("ImageList can be normalized", {
                0.25, tolerance = 1e-06)
 
   expect_silent(cur_images <- normalize(pancreasImages,
-                                        percentileRange = c(0.1, 0.999)))
+                                        percentileRange = c(0.1, 0.99)))
   expect_silent(plotPixels(cur_images))
   expect_silent(plotPixels(cur_images,
                            colour_by = c("H3", "SMA")))

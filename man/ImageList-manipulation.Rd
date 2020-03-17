@@ -31,21 +31,59 @@ in an \linkS4class{ImageList} \code{object} to a specific range. Images can
 either be scaled to the minimum/maximum value per channel or across all
 channels (default \code{separateChannels = TRUE}). Also, Images can be scaled
 to the minimum/maximum value per image or across all images (default
-\code{separateImages = FALSE}).
+\code{separateImages = FALSE}). The later allows the visual comparison of
+intensity values across images.
+
+To clip the images before normalization, the \code{inputRange} or
+\code{percentileRange} paramters can be set. The main difference between
+these two options is a hard (inputRange) or percentile (percentileRange)
+clipping range. \code{percentileRange} allows setting the minimum and maximum
+range of values in terms of percentiles (e.g. \code{c(0, 0.99)} for the 0 and
+99th percentile clipping).
+
+\code{normalizeImages(object, separateChannels = TRUE, separateImages = FALSE,
+  ft = c(0, 1), percentileRange = c(0, 1), inputRange = NULL)}:
+
 \describe{
-  \code{normalizeImages(object, separateChannels = TRUE, separateImages = FALSE,
-ft = c(0, 1), percentileRange = c(0, 1), inputRange = NULL)}:
 \item{\code{object}:}{An ImageList object}
-\item{\code{separateChannels}:}{An ImageList object}
-\item{\code{separateImages}:}{An ImageList object}
-\item{\code{ft}:}{An ImageList object}
-\item{\code{percentileRange}:}{An ImageList object}
-\item{\code{inputRange}:}{An ImageList object}
+\item{\code{separateChannels}:}{Logical if pixel values should be normalized
+per channel (default) or across all channles.}
+\item{\code{separateImages}:}{Logical if pixel values should be normalized
+per image or across all images (default).}
+\item{\code{ft}:}{Numeric vector of 2 values, target minimum and maximum
+intensity values after normalization (see \code{\link[EBImage]{normalize}}).}
+\item{\code{percentileRange}:}{Numeric vector of 2 values between 0 and 1,
+sets the precentile clipping range of the input intensity values.}
+\item{\code{inputRange}:}{Numeric vector of 2 values, sets the absolute
+clipping range of the input intensity values (see
+\code{\link[EBImage]{normalize}}).}
 }
 }
 
 \examples{
-# TODO
+data(pancreasImages)
+
+# Scale images to create segmentaion masks
+cur_files <- list.files(system.file("extdata", package = "SingleCellMapper"),
+                        pattern = "mask.tiff", full.names = TRUE)
+x <- loadImages(cur_files)
+# Error when running plotCells(x)
+# Therefore scale to account for 16 bit encoding
+x <- scaleImages(x, 2^16 - 1)
+plotCells(x)
+
+# Default normalization
+x <- normalize(pancreasImages)
+plotPixels(x, colour_by = c("H3", "SMA"))
+
+# Setting the clipping range
+x <- normalize(pancreasImages, percentileRange = c(0, 0.99))
+plotPixels(x, colour_by = c("H3", "SMA"))
+
+# Normalizing per image
+x <- normalize(pancreasImages, separateImages = TRUE,
+               percentileRange = c(0, 0.99))
+plotPixels(x, colour_by = c("H3", "SMA"))
 
 }
 \seealso{

@@ -51,3 +51,7 @@
 - Improved setting colours
 - Rewrite to reduce validity checks
 - version bump 0.1.6
+
+2020-03-10: Added scaleImages and normalize functions
+- Expanded shared parameters for plotPixels and plotCells
+- version bump 0.1.7

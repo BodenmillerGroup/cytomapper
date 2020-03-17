@@ -7,6 +7,8 @@
 \alias{coerce,ANY,ImageList-method}
 \alias{coerce,list,ImageList-method}
 \alias{show,ImageList-method}
+\alias{plot,ImageList,ANY-method}
+\alias{plot-ImageList-method}
 \title{S4 class for list of images}
 \usage{
 ImageList(...)

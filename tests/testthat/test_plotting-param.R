@@ -2,7 +2,7 @@ test_that("plotting-param: scale_bar can be set.", {
   data("pancreasMasks")
 
   cur_images <- pancreasMasks
-  setImages(cur_images, "A02_mask") <- cur_images[[1]][1:50, 1:50,,drop=FALSE]
+  setImages(cur_images, "A02_mask") <- cur_images[[1]][1:50, 1:50,drop=FALSE]
 
   # Works
   expect_silent(plotCells(cur_images))
@@ -77,7 +77,7 @@ test_that("plotting-param: image_title can be set.", {
   data("pancreasMasks")
 
   cur_images <- pancreasMasks
-  setImages(cur_images, "A02_mask") <- cur_images[[1]][1:50, 1:50,,drop=FALSE]
+  setImages(cur_images, "A02_mask") <- cur_images[[1]][1:50, 1:50,drop=FALSE]
 
   # Works
   expect_silent(plotCells(cur_images))

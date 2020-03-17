@@ -170,12 +170,13 @@ setReplaceMethod("names",
 #' \code{percentileRange} paramters can be set. The main difference between
 #' these two options is a hard (inputRange) or percentile (percentileRange)
 #' clipping range. \code{percentileRange} allows setting the minimum and maximum
-#' range of values in terms of percentiles (e.g. \code{c(0, 0.99)) for the 0 and
+#' range of values in terms of percentiles (e.g. \code{c(0, 0.99)} for the 0 and
 #' 99th percentile clipping).
 #'
-#' \describe{
-#'   \code{normalizeImages(object, separateChannels = TRUE, separateImages = FALSE,
+#' \code{normalizeImages(object, separateChannels = TRUE, separateImages = FALSE,
 #'   ft = c(0, 1), percentileRange = c(0, 1), inputRange = NULL)}:
+#'
+#' \describe{
 #' \item{\code{object}:}{An ImageList object}
 #' \item{\code{separateChannels}:}{Logical if pixel values should be normalized
 #' per channel (default) or across all channles.}
@@ -190,10 +191,12 @@ setReplaceMethod("names",
 #' \code{\link[EBImage]{normalize}}).}
 #' }
 #'
+#' @return An ImageList object containing the manipulated Images
+#'
 #' @examples
 #' data(pancreasImages)
 #'
-#' # Scale images to create segmentaion masks
+#' # Scale images to create segmentation masks
 #' cur_files <- list.files(system.file("extdata", package = "SingleCellMapper"),
 #'                         pattern = "mask.tiff", full.names = TRUE)
 #' x <- loadImages(cur_files)
@@ -236,6 +239,7 @@ setMethod("scaleImages",
             return(cur_out)
           })
 
+#' @importFrom stats quantile
 normImages <- function(object, separateChannels = TRUE, separateImages = FALSE,
                        ft = c(0, 1), percentileRange = c(0, 1), inputRange = NULL){
 

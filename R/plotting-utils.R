@@ -299,6 +299,7 @@
 #' @importFrom S4Vectors SimpleList
 #' @importFrom EBImage Image
 #' @importFrom graphics par plot rasterImage strheight text
+#' @importFrom grDevices png jpeg tiff dev.off
 .displayImages <- function(object, image, exprs_values, outline_by,
                            colour_by, mask, out_img,
                            img_id, cur_col, plottingParam){
