@@ -5,8 +5,8 @@
 \alias{ImageList-manipulation}
 \alias{scaleImages}
 \alias{scaleImages,ImageList-method}
-\alias{normalizeImages}
-\alias{normalizeImages,ImageList-method}
+\alias{normalize}
+\alias{normalize,ImageList-method}
 \title{Manipulating ImageList objects}
 \description{
 Methods to change pixel values in ImageList objects
