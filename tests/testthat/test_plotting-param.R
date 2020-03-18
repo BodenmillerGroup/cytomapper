@@ -200,3 +200,204 @@ test_that("plotting-param: save_image can be set.", {
                regexp = "Invalid entry to the 'save_image' list object")
 })
 
+
+test_that("plotting-param: legend can be set.", {
+  data("pancreasImages")
+  data("pancreasMasks")
+  data("pancreasSCE")
+
+  # Works
+  expect_silent(plotPixels(pancreasImages))
+  expect_silent(plotPixels(pancreasImages,
+                           colour_by = c("H3", "SMA", "INS",
+                                         "CD38", "CD44")))
+  expect_silent(plotPixels(pancreasImages,
+                           colour_by = c("H3", "SMA", "INS",
+                                         "CD38", "CD44"),
+                           legend = NULL))
+  expect_silent(plotPixels(pancreasImages,
+                           colour_by = c("H3", "SMA", "INS",
+                                         "CD38", "CD44"),
+                           legend = list(colour_by.title.font = 4)))
+  expect_silent(plotPixels(pancreasImages,
+                           colour_by = c("H3", "SMA", "INS",
+                                         "CD38", "CD44"),
+                           legend = list(colour_by.title.cex = 0.5)))
+  expect_silent(plotPixels(pancreasImages,
+                           colour_by = c("H3", "SMA", "INS",
+                                         "CD38", "CD44"),
+                           legend = list(colour_by.labels.cex = 0.5)))
+
+
+  expect_silent(plotCells(mask = pancreasMasks,
+                          object = pancreasSCE,
+                          img_id = "ImageNb",
+                          cell_id = "CellNb",
+                          colour_by = c("H3", "SMA", "INS",
+                                        "CD38", "CD44"),
+                          legend = NULL))
+  expect_silent(plotCells(mask = pancreasMasks,
+                          object = pancreasSCE,
+                          img_id = "ImageNb",
+                          cell_id = "CellNb",
+                          colour_by = c("H3", "SMA", "INS",
+                                        "CD38", "CD44")))
+  expect_silent(plotCells(mask = pancreasMasks,
+                          object = pancreasSCE,
+                          img_id = "ImageNb",
+                          cell_id = "CellNb",
+                          colour_by = "CellType",
+                          legend = list(colour_by.legend.cex = 0.5)))
+  expect_silent(plotCells(mask = pancreasMasks,
+                          object = pancreasSCE,
+                          img_id = "ImageNb",
+                          cell_id = "CellNb",
+                          colour_by = "Area",
+                          legend = list(colour_by.title.cex = 3)))
+  expect_silent(plotCells(mask = pancreasMasks,
+                          object = pancreasSCE,
+                          img_id = "ImageNb",
+                          cell_id = "CellNb",
+                          colour_by = "Area",
+                          legend = list(colour_by.title.font = 4)))
+  expect_silent(plotCells(mask = pancreasMasks,
+                          object = pancreasSCE,
+                          img_id = "ImageNb",
+                          cell_id = "CellNb",
+                          colour_by = "Area",
+                          legend = list(colour_by.labels.cex = 1)))
+  expect_silent(plotCells(mask = pancreasMasks,
+                          object = pancreasSCE,
+                          img_id = "ImageNb",
+                          cell_id = "CellNb",
+                          outline_by = "Area",
+                          legend = list(outline_by.title.font = 4)))
+  expect_silent(plotCells(mask = pancreasMasks,
+                          object = pancreasSCE,
+                          img_id = "ImageNb",
+                          cell_id = "CellNb",
+                          outline_by = "Area",
+                          legend = list(outline_by.title.cex = 4)))
+  expect_silent(plotCells(mask = pancreasMasks,
+                          object = pancreasSCE,
+                          img_id = "ImageNb",
+                          cell_id = "CellNb",
+                          outline_by = "Area",
+                          legend = list(outline_by.labels.cex = 4)))
+  expect_silent(plotCells(mask = pancreasMasks,
+                          object = pancreasSCE,
+                          img_id = "ImageNb",
+                          cell_id = "CellNb",
+                          outline_by = "CellType",
+                          legend = list(outline_by.legend.cex = 2)))
+
+  # Margin
+  expect_silent(plotPixels(pancreasImages))
+  expect_silent(plotPixels(pancreasImages,
+                           colour_by = c("H3", "SMA", "INS",
+                                         "CD38", "CD44"),
+                           legend = list(margin = 10)))
+  expect_silent(plotCells(mask = pancreasMasks,
+                          object = pancreasSCE,
+                          img_id = "ImageNb",
+                          cell_id = "CellNb",
+                          outline_by = "CellType",
+                          legend = list(margin = 10)))
+  expect_silent(plotCells(mask = pancreasMasks,
+                          object = pancreasSCE,
+                          img_id = "ImageNb",
+                          cell_id = "CellNb",
+                          colour_by = "CellType",
+                          legend = list(margin = 10)))
+  expect_silent(plotCells(mask = pancreasMasks,
+                          object = pancreasSCE,
+                          img_id = "ImageNb",
+                          cell_id = "CellNb",
+                          outline_by = "Area",
+                          legend = list(margin = 10)))
+  expect_silent(plotCells(mask = pancreasMasks,
+                          object = pancreasSCE,
+                          img_id = "ImageNb",
+                          cell_id = "CellNb",
+                          colour_by = "Area",
+                          legend = list(margin = 10)))
+  expect_silent(plotCells(mask = pancreasMasks,
+                          object = pancreasSCE,
+                          img_id = "ImageNb",
+                          cell_id = "CellNb",
+                          colour_by = "Area",
+                          outline_by = "CellType",
+                          legend = list(margin = 10)))
+  expect_silent(plotCells(mask = pancreasMasks,
+                          object = pancreasSCE,
+                          img_id = "ImageNb",
+                          cell_id = "CellNb",
+                          colour_by = "CellType",
+                          outline_by = "Area",
+                          legend = list(margin = 10)))
+  expect_silent(plotCells(mask = pancreasMasks,
+                          object = pancreasSCE,
+                          img_id = "ImageNb",
+                          cell_id = "CellNb",
+                          colour_by = c("H3", "SMA", "INS",
+                                        "CD38", "CD44"),
+                          outline_by = "Area",
+                          legend = list(margin = 10)))
+  expect_silent(plotCells(mask = pancreasMasks,
+                          object = pancreasSCE,
+                          img_id = "ImageNb",
+                          cell_id = "CellNb",
+                          colour_by = c("H3", "SMA", "INS",
+                                        "CD38", "CD44"),
+                          outline_by = "CellType",
+                          legend = list(margin = 10)))
+
+
+  # Error
+  expect_error(plotPixels(pancreasImages,
+                          colour_by = "H3",
+                          legend = list(test = "test")),
+               regexp = "Invalid entry to the 'legend' list object",
+               fixed = TRUE)
+  expect_error(plotPixels(pancreasImages,
+                          colour_by = "H3",
+                          legend = list(colour_by.title.font = "test")),
+               regexp = "Invalid entry to the 'legend' list object",
+               fixed = TRUE)
+  expect_error(plotPixels(pancreasImages,
+                          colour_by = "H3",
+                          legend = list(colour_by.labels.cex = "test")),
+               regexp = "Invalid entry to the 'legend' list object",
+               fixed = TRUE)
+  expect_error(plotPixels(pancreasImages,
+                          colour_by = "H3",
+                          legend = list(colour_by.legend.cex = "test")),
+               regexp = "Invalid entry to the 'legend' list object",
+               fixed = TRUE)
+  expect_error(plotPixels(pancreasImages,
+                          colour_by = "H3",
+                          legend = list(outline_by.title.font = "test")),
+               regexp = "Invalid entry to the 'legend' list object",
+               fixed = TRUE)
+  expect_error(plotPixels(pancreasImages,
+                          colour_by = "H3",
+                          legend = list(outline_by.title.cex = "test")),
+               regexp = "Invalid entry to the 'legend' list object",
+               fixed = TRUE)
+  expect_error(plotPixels(pancreasImages,
+                          colour_by = "H3",
+                          legend = list(outline_by.labels.cex = "test")),
+               regexp = "Invalid entry to the 'legend' list object",
+               fixed = TRUE)
+  expect_error(plotPixels(pancreasImages,
+                          colour_by = "H3",
+                          legend = list(outline_by.legend.cex = "test")),
+               regexp = "Invalid entry to the 'legend' list object",
+               fixed = TRUE)
+  expect_error(plotPixels(pancreasImages,
+                          colour_by = "H3",
+                          legend = list(margin = "test")),
+               regexp = "Invalid entry to the 'legend' list object",
+               fixed = TRUE)
+})
+
