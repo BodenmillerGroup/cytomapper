@@ -9,6 +9,7 @@
 #' @param scale_bar TODO
 #' @param image_title TODO
 #' @param save_image TODO
+#' @param legend TODO
 #'
 #'@section Setting further parameters:
 #' TODO
@@ -16,6 +17,8 @@
 #' # return_plot TODO
 #' # return_images TODO
 #' # margin between images
+#' # scale TRUE FALSE
+#' # individual_images TRUE FALSE
 #'
 #' @return TODO
 #'
@@ -32,7 +35,7 @@ NULL
   # Check supported names
   cur_entries <- names(dotArgs)
   supported <- c("scale_bar", "image_title", "missing_colour",
-                 "background_colour", "save_image")
+                 "background_colour", "save_image", "legend")
   not_supported <- cur_entries[!(cur_entries %in% supported)]
   if(length(not_supported) > 0L){
     stop("Entries ", paste0("'", not_supported, "'", collapse = ", "), " are not supported")
@@ -65,6 +68,20 @@ NULL
     dotArgs$image_title <- imagetitle
   } else {
     dotArgs$image_title <- .valid.imagetitle(dotArgs$image_title, image)
+  }
+
+  # legend
+  if(!("legend" %in% names(dotArgs))){
+    legendparam <- list(colour_by.title.font = 1,
+                        colour_by.title.cex = 1,
+                        colour_by.labels.cex = NULL,
+                        colour_by.title.font = 1,
+                        outline_by.title.cex = 1,
+                        outline_by.labels.cex = NULL,
+                        position = "topleft")
+    dotArgs$legend_param <- imagetitle
+  } else {
+    dotArgs$legend_param <- .valid.legendparam(dotArgs$legend_param)
   }
 
   # save_image
@@ -252,6 +269,105 @@ NULL
 
   }
   return(imagetitle)
+}
+
+# Validity of legend input
+.valid.legendparam <- function(legendparam){
+  error.legendparam <- "Invalid entry to the 'legend' list object"
+
+  if(!is.null(legendparam)){
+    if(!is.list(legendparam)){
+      stop(error.legendparam)
+    }
+
+    if(is.null(names(legendparam)) ||
+       !all(names(imagetitle) %in% c("colour_by.title.font",
+                                     "colour_by.title.cex",
+                                     "colour_by.labels.cex",
+                                     "colour_by.title.font",
+                                     "outline_by.title.cex",
+                                     "outline_by.labels.cex",
+                                     "position"))){
+      stop(error.legendparam)
+    }
+
+    if("colour_by.title.font" %in% names(legendparam)){
+      cur_param <- legendparam$colour_by.title.font
+      if(length(cur_param) != 1L ||
+         !is.numeric(cur_param)){
+        stop(paste0(error.legendparam, ": \n",
+                    "'colour_by.title.font' should be a single number"))
+      }
+    } else {
+      legendparam$colour_by.title.font <- 1
+    }
+
+    if("colour_by.title.cex" %in% names(legendparam)){
+      cur_param <- legendparam$colour_by.title.cex
+      if(length(cur_param) != 1L ||
+         !is.numeric(cur_param)){
+        stop(paste0(error.legendparam, ": \n",
+                    "'colour_by.title.cex' should be a single number"))
+      }
+    } else {
+      legendparam$colour_by.title.cex <- 1
+    }
+
+    if("colour_by.labels.cex" %in% names(legendparam)){
+      cur_param <- legendparam$colour_by.title.cex
+      if(length(cur_param) != 1L ||
+         !is.numeric(cur_param)){
+        stop(paste0(error.legendparam, ": \n",
+                    "'colour_by.labels.cex' should be a single number"))
+      }
+    } else {
+      legendparam$colour_by.labels.cex <- NULL
+    }
+
+    if("outline_by.title.font" %in% names(legendparam)){
+      cur_param <- legendparam$outline_by.title.font
+      if(length(cur_param) != 1L ||
+         !is.numeric(cur_param)){
+        stop(paste0(error.legendparam, ": \n",
+                    "'outline_by.title.font' should be a single number"))
+      }
+    } else {
+      legendparam$outline_by.title.font <- 1
+    }
+
+    if("outline_by.title.cex" %in% names(legendparam)){
+      cur_param <- legendparam$outline_by.title.cex
+      if(length(cur_param) != 1L ||
+         !is.numeric(cur_param)){
+        stop(paste0(error.legendparam, ": \n",
+                    "'outline_by.title.cex' should be a single number"))
+      }
+    } else {
+      legendparam$outline_by.title.cex <- 1
+    }
+
+    if("outline_by.labels.cex" %in% names(legendparam)){
+      cur_param <- legendparam$outline_by.title.cex
+      if(length(cur_param) != 1L ||
+         !is.numeric(cur_param)){
+        stop(paste0(error.legendparam, ": \n",
+                    "'outline_by.labels.cex' should be a single number"))
+      }
+    } else {
+      legendparam$outline_by.labels.cex <- NULL
+    }
+
+    if("position" %in% names(legendparam)){
+      if(!(legendparam$position %in%
+           c("topleft", "topright", "bottomleft", "bottomright"))){
+        stop(paste0(error.legendparam, ": \n",
+                    "position not correctly specified"))
+      }
+    } else {
+      legendparam$position <- "topleft"
+    }
+
+  return(legendparam)
 }
 
 # Validity of missing_colour input
