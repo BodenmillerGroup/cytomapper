@@ -52,6 +52,11 @@
 - Rewrite to reduce validity checks
 - version bump 0.1.6
 
-2020-03-10: Added scaleImages and normalize functions
+2020-03-17: Added scaleImages and normalize functions
 - Expanded shared parameters for plotPixels and plotCells
 - version bump 0.1.7
+
+2020-03-18: Legend can now be altered
+- Option to remove legend
+- Cleaned up representation of legend on plot
+- version bump 0.1.8
