@@ -75,10 +75,12 @@ NULL
     legendparam <- list(colour_by.title.font = 1,
                         colour_by.title.cex = 1,
                         colour_by.labels.cex = NULL,
+                        colour_by.legend.cex = NULL,
                         colour_by.title.font = 1,
                         outline_by.title.cex = 1,
                         outline_by.labels.cex = NULL,
-                        position = "topleft")
+                        outline_by.legend.cex = NULL,
+                        margin = 10)
     dotArgs$legend_param <- imagetitle
   } else {
     dotArgs$legend_param <- .valid.legendparam(dotArgs$legend_param)
@@ -286,8 +288,7 @@ NULL
                                      "colour_by.labels.cex",
                                      "colour_by.title.font",
                                      "outline_by.title.cex",
-                                     "outline_by.labels.cex",
-                                     "position"))){
+                                     "outline_by.labels.cex"))){
       stop(error.legendparam)
     }
 
@@ -324,6 +325,17 @@ NULL
       legendparam$colour_by.labels.cex <- NULL
     }
 
+    if("colour_by.legend.cex" %in% names(legendparam)){
+      cur_param <- legendparam$colour_by.legend.cex
+      if(length(cur_param) != 1L ||
+         !is.numeric(cur_param)){
+        stop(paste0(error.legendparam, ": \n",
+                    "'colour_by.legend.cex' should be a single number"))
+      }
+    } else {
+      legendparam$colour_by.legend.cex <- NULL
+    }
+
     if("outline_by.title.font" %in% names(legendparam)){
       cur_param <- legendparam$outline_by.title.font
       if(length(cur_param) != 1L ||
@@ -357,14 +369,26 @@ NULL
       legendparam$outline_by.labels.cex <- NULL
     }
 
-    if("position" %in% names(legendparam)){
-      if(!(legendparam$position %in%
-           c("topleft", "topright", "bottomleft", "bottomright"))){
+    if("outline_by.legend.cex" %in% names(legendparam)){
+      cur_param <- legendparam$outline_by.legend.cex
+      if(length(cur_param) != 1L ||
+         !is.numeric(cur_param)){
         stop(paste0(error.legendparam, ": \n",
-                    "position not correctly specified"))
+                    "'outline_by.legend.cex' should be a single number"))
       }
     } else {
-      legendparam$position <- "topleft"
+      legendparam$outline_by.legend.cex <- NULL
+    }
+
+    if("margin" %in% names(legendparam)){
+      cur_param <- legendparam$margin
+      if(length(cur_param) != 1L ||
+         !is.numeric(cur_param)){
+        stop(paste0(error.legendparam, ": \n",
+                    "'margin' should be a single number"))
+      }
+    } else {
+      legendparam$margin <- 10
     }
 
   return(legendparam)
