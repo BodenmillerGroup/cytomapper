@@ -3,7 +3,7 @@ test_that("ImageList can be scaled.", {
 
   # Works
   expect_silent(cur_images <- scaleImages(pancreasImages, 1))
-  expect_identical(cur_images, pancreasImages)
+  expect_identical(imageData(cur_images[[1]]), imageData(pancreasImages[[1]]))
   expect_equal(imageData(cur_images[[1]])[11, 1:2,1],
                c(3.980039, 0.000000), tolerance = 1e-06)
 

@@ -73,17 +73,17 @@ NULL
   # legend
   if(!("legend" %in% names(dotArgs))){
     legendparam <- list(colour_by.title.font = 1,
-                        colour_by.title.cex = 1,
+                        colour_by.title.cex = 0.7,
                         colour_by.labels.cex = NULL,
                         colour_by.legend.cex = NULL,
-                        colour_by.title.font = 1,
-                        outline_by.title.cex = 1,
+                        outline_by.title.font = 1,
+                        outline_by.title.cex = 0.7,
                         outline_by.labels.cex = NULL,
                         outline_by.legend.cex = NULL,
-                        margin = 10)
-    dotArgs$legend_param <- imagetitle
+                        margin = 2)
+    dotArgs$legend <- legendparam
   } else {
-    dotArgs$legend_param <- .valid.legendparam(dotArgs$legend_param)
+    dotArgs$legend <- .valid.legendparam(dotArgs$legend)
   }
 
   # save_image
@@ -283,12 +283,15 @@ NULL
     }
 
     if(is.null(names(legendparam)) ||
-       !all(names(imagetitle) %in% c("colour_by.title.font",
+       !all(names(legendparam) %in% c("colour_by.title.font",
                                      "colour_by.title.cex",
                                      "colour_by.labels.cex",
-                                     "colour_by.title.font",
+                                     "colour_by.legend.cex",
+                                     "outline_by.title.font",
                                      "outline_by.title.cex",
-                                     "outline_by.labels.cex"))){
+                                     "outline_by.labels.cex",
+                                     "outline_by.legend.cex",
+                                     "margin"))){
       stop(error.legendparam)
     }
 
@@ -311,11 +314,11 @@ NULL
                     "'colour_by.title.cex' should be a single number"))
       }
     } else {
-      legendparam$colour_by.title.cex <- 1
+      legendparam$colour_by.title.cex <- 0.7
     }
 
     if("colour_by.labels.cex" %in% names(legendparam)){
-      cur_param <- legendparam$colour_by.title.cex
+      cur_param <- legendparam$colour_by.labels.cex
       if(length(cur_param) != 1L ||
          !is.numeric(cur_param)){
         stop(paste0(error.legendparam, ": \n",
@@ -355,11 +358,11 @@ NULL
                     "'outline_by.title.cex' should be a single number"))
       }
     } else {
-      legendparam$outline_by.title.cex <- 1
+      legendparam$outline_by.title.cex <- 0.7
     }
 
     if("outline_by.labels.cex" %in% names(legendparam)){
-      cur_param <- legendparam$outline_by.title.cex
+      cur_param <- legendparam$outline_by.labels.cex
       if(length(cur_param) != 1L ||
          !is.numeric(cur_param)){
         stop(paste0(error.legendparam, ": \n",
@@ -388,9 +391,9 @@ NULL
                     "'margin' should be a single number"))
       }
     } else {
-      legendparam$margin <- 10
+      legendparam$margin <- 2
     }
-
+  }
   return(legendparam)
 }
 
