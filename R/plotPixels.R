@@ -131,7 +131,17 @@ plotPixels <- function(image,
   }
 
   # Plot images
-    .displayImages(object, image, exprs_values = NULL,
+  .displayImages(object, image, exprs_values = NULL,
                    outline_by, colour_by, mask, out_img, img_id,
                    cur_col, plottingParam)
+
+  return_objects <- NULL
+
+  if(plottingParam$return_plot){
+    return_objects <- as.list(return_objects)
+    cur_plot <- recordPlot()
+    return_objects$plot <- cur_plot
+  }
+
+  return(return_objects)
 }

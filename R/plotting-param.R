@@ -9,11 +9,11 @@
 #' @param scale_bar TODO
 #' @param image_title TODO
 #' @param save_image TODO
+#' @param return_plot TODO
 #' @param legend TODO
 #'
 #'@section Setting further parameters:
 #' TODO
-#' # legend list(title, size) also allow NULL
 #' # return_plot TODO
 #' # return_images TODO
 #' # margin between images
@@ -35,7 +35,8 @@ NULL
   # Check supported names
   cur_entries <- names(dotArgs)
   supported <- c("scale_bar", "image_title", "missing_colour",
-                 "background_colour", "save_image", "legend")
+                 "background_colour", "save_image", "return_plot",
+                 "legend")
   not_supported <- cur_entries[!(cur_entries %in% supported)]
   if(length(not_supported) > 0L){
     stop("Entries ", paste0("'", not_supported, "'", collapse = ", "), " are not supported")
@@ -91,6 +92,16 @@ NULL
     dotArgs$save_image <- NULL
   } else {
     dotArgs$save_image <- .valid.saveimage(dotArgs$save_image)
+  }
+
+  # return_plot
+  if(!("return_plot" %in% names(dotArgs))){
+    dotArgs$return_plot <- FALSE
+  } else {
+    if(!is.logical(dotArgs$return_plot)){
+      stop("Invalid 'return_plot' entry.")
+    }
+    dotArgs$return_plot <- dotArgs$return_plot
   }
 
   # missing_colour
