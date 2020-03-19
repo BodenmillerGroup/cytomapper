@@ -221,6 +221,73 @@ test_that("plotting-param: return_plot can be set.", {
 
 })
 
+test_that("plotting-param: return_images can be set.", {
+  data("pancreasImages")
+  data("pancreasMasks")
+  data("pancreasSCE")
+
+  # Works
+  expect_silent(cur_out <- plotPixels(pancreasImages, return_images = FALSE))
+  expect_null(cur_out)
+  expect_silent(cur_out <- plotPixels(pancreasImages, return_images = TRUE))
+  expect_identical(mcols(cur_out$images), mcols(pancreasImages))
+  expect_identical(names(cur_out$images), names(pancreasImages))
+  expect_silent(plot(cur_out$images[[1]]))
+
+  expect_silent(cur_out <- plotPixels(pancreasImages, mask = pancreasMasks,
+                                      img_id = "ImageNb",
+                                      return_images = TRUE))
+  expect_identical(mcols(cur_out$images), mcols(pancreasImages))
+  expect_identical(names(cur_out$images), names(pancreasImages))
+  expect_silent(plot(cur_out$images[[1]]))
+
+  expect_silent(cur_out <- plotPixels(pancreasImages, mask = pancreasMasks,
+                                      object = pancreasSCE,
+                                      img_id = "ImageNb",
+                                      cell_id = "CellNb",
+                                      outline_by = "CellType",
+                                      return_images = TRUE))
+  expect_identical(mcols(cur_out$images), mcols(pancreasImages))
+  expect_identical(names(cur_out$images), names(pancreasImages))
+  expect_silent(plot(cur_out$images[[1]]))
+
+  expect_silent(cur_out <- plotPixels(pancreasImages, mask = pancreasMasks,
+                                      object = pancreasSCE,
+                                      img_id = "ImageNb",
+                                      cell_id = "CellNb",
+                                      colour_by = c("H3", "SMA"),
+                                      outline_by = "CellType",
+                                      return_images = TRUE))
+  expect_identical(mcols(cur_out$images), mcols(pancreasImages))
+  expect_identical(names(cur_out$images), names(pancreasImages))
+  expect_silent(plot(cur_out$images[[1]]))
+
+  expect_silent(cur_out <- plotCells(pancreasMasks, return_images = TRUE))
+  expect_identical(mcols(cur_out$images), mcols(pancreasMasks))
+  expect_identical(names(cur_out$images), names(pancreasMasks))
+  expect_silent(plot(cur_out$images[[1]]))
+
+  expect_silent(cur_out <- plotCells(pancreasMasks, object = pancreasSCE,
+                                     img_id = "ImageNb", cell_id = "CellNb",
+                                     colour_by = "CellType",
+                                     return_images = TRUE))
+  expect_identical(mcols(cur_out$images), mcols(pancreasMasks))
+  expect_identical(names(cur_out$images), names(pancreasMasks))
+  expect_silent(plot(cur_out$images[[1]]))
+
+  expect_silent(cur_out <- plotCells(pancreasMasks, object = pancreasSCE,
+                                     img_id = "ImageNb", cell_id = "CellNb",
+                                     colour_by = "CellType", outline_by = "Area",
+                                     return_images = TRUE))
+  expect_identical(mcols(cur_out$images), mcols(pancreasMasks))
+  expect_identical(names(cur_out$images), names(pancreasMasks))
+  expect_silent(plot(cur_out$images[[1]]))
+
+  # Error
+  expect_error(plotPixels(pancreasImages, return_images = "test"),
+               regexp = "Invalid 'return_images' entry.")
+
+})
 
 test_that("plotting-param: legend can be set.", {
   data("pancreasImages")

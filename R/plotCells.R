@@ -136,6 +136,12 @@ plotCells <- function(mask,
     return_objects$plot <- cur_plot
   }
 
+  if(plottingParam$return_images){
+    return_objects <- as.list(return_objects)
+    out_img <- endoapply(out_img, Image)
+    return_objects$images <- out_img
+  }
+
   if(!is.null(return_objects)){
     return(return_objects)
   }
