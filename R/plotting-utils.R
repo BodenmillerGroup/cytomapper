@@ -334,9 +334,12 @@
   nc <- ceiling(sqrt(ni))
   nr <- ceiling(ni/nc)
 
+  # Define margin
+  margin <- plottingParam$margin
+
   # Build the grid
-  x_len <- c(0, nc * m_width)
-  y_len <- c(0, nr * m_height)
+  x_len <- c(0, (nc * m_width) + (nc - 1) * margin)
+  y_len <- c(0, (nr * m_height) + (nr - 1) * margin)
 
   if(!is.null(plottingParam$save_image)){
     image_location <- plottingParam$save_image$filename
@@ -375,10 +378,10 @@
 
       dim_x <- cur_dims_x[ind]
       dim_y <- cur_dims_y[ind]
-      xleft <- (j-1)*m_width + (m_width - dim_x)/2
-      ybottom <- i*m_height - (m_height - dim_y)/2
-      xright <- j*m_width - (m_width - dim_x)/2
-      ytop <- (i-1)*m_height + (m_height - dim_y)/2
+      xleft <- (j-1)*m_width + (m_width - dim_x)/2 + (j-1) * margin
+      ybottom <- i*m_height - (m_height - dim_y)/2 + (i-1) * margin
+      xright <- j*m_width - (m_width - dim_x)/2 + (j-1) * margin
+      ytop <- (i-1)*m_height + (m_height - dim_y)/2 + (i-1) * margin
       rasterImage(Image(out_img[[ind]]),
                   xleft,
                   ybottom,
