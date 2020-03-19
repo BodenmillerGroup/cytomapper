@@ -200,6 +200,27 @@ test_that("plotting-param: save_image can be set.", {
                regexp = "Invalid entry to the 'save_image' list object")
 })
 
+test_that("plotting-param: return_plot can be set.", {
+  data("pancreasImages")
+  data("pancreasMasks")
+  data("pancreasSCE")
+
+  # Works
+  expect_silent(cur_out <- plotPixels(pancreasImages, return_plot = FALSE))
+  expect_null(cur_out)
+  expect_silent(cur_out <- plotPixels(pancreasImages, return_plot = TRUE))
+  dev.off()
+  expect_silent(cur_out$plot)
+  expect_silent(cur_out <- plotCells(pancreasMasks, return_plot = TRUE))
+  dev.off()
+  expect_silent(cur_out$plot)
+
+  # Error
+  expect_error(plotPixels(pancreasImages, return_plot = "test"),
+               regexp = "Invalid 'return_plot' entry.")
+
+})
+
 
 test_that("plotting-param: legend can be set.", {
   data("pancreasImages")

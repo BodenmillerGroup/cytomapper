@@ -136,5 +136,7 @@ plotCells <- function(mask,
     return_objects$plot <- cur_plot
   }
 
-  return(return_objects)
+  if(!is.null(return_objects)){
+    return(return_objects)
+  }
 }

@@ -18,7 +18,7 @@
 #' # return_images TODO
 #' # margin between images
 #' # scale TRUE FALSE
-#' # individual_images TRUE FALSE
+#' # individual_images TRUE FALSE make sure return plot works correclty
 #'
 #' @return TODO
 #'
