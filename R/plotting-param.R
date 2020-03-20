@@ -13,11 +13,11 @@
 #' @param return_images TODO
 #' @param legend TODO
 #' @param margin TODO
+#' @param display TODO
 #'
 #'@section Setting further parameters:
 #' TODO
 #' # scale TRUE FALSE
-#' # individual_images TRUE FALSE make sure return plot works correclty
 #'
 #' @return TODO
 #'
@@ -35,7 +35,7 @@ NULL
   cur_entries <- names(dotArgs)
   supported <- c("scale_bar", "image_title", "missing_colour",
                  "background_colour", "save_image", "return_plot",
-                 "return_images", "legend", "margin")
+                 "return_images", "legend", "margin", "display")
   not_supported <- cur_entries[!(cur_entries %in% supported)]
   if(length(not_supported) > 0L){
     stop("Entries ", paste0("'", not_supported, "'", collapse = ", "), " are not supported")
@@ -123,6 +123,17 @@ NULL
       stop("Invalid 'margin' entry.")
     }
     dotArgs$margin <- dotArgs$margin
+  }
+
+  # return_images
+  if(!("display" %in% names(dotArgs))){
+    dotArgs$display <- "all"
+  } else {
+    if(is.character(dotArgs$display) ||
+       !(dotArgs$display %in% c("all", "single"))){
+      stop("Invalid 'display' entry.")
+    }
+    dotArgs$display <- dotArgs$display
   }
 
   # missing_colour

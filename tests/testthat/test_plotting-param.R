@@ -522,3 +522,41 @@ test_that("plotting-param: margin can be set.", {
 
 })
 
+test_that("plotting-param: images can be plotted individually.", {
+  data("pancreasImages")
+  data("pancreasMasks")
+  data("pancreasSCE")
+
+  # Works
+
+  # Check return plot
+  # check scale bar and names
+  # check save_image
+
+  expect_silent(plotPixels(pancreasImages))
+  expect_silent(plotPixels(pancreasImages, margin = 2))
+  expect_silent(plotPixels(pancreasImages, margin = 100))
+
+  expect_silent(plotCells(pancreasMasks, margin = 2))
+  expect_silent(plotCells(pancreasMasks, margin = 100))
+
+  cur_images <- pancreasImages
+  names(cur_images) <- paste(names(cur_images), 2, sep = "_")
+  cur_images <- c(pancreasImages, cur_images)
+  expect_silent(plotPixels(cur_images))
+  expect_silent(plotPixels(cur_images, margin = 2))
+  expect_silent(plotPixels(cur_images, margin = 100))
+
+  # Error
+  expect_error(plotPixels(pancreasImages, margin = "test"),
+               regexp = "Invalid 'margin' entry.",
+               fixed = TRUE)
+  expect_error(plotPixels(pancreasImages, margin = c(1,2)),
+               regexp = "Invalid 'margin' entry.",
+               fixed = TRUE)
+  expect_error(plotPixels(pancreasImages, margin = -1),
+               regexp = "Invalid 'margin' entry.",
+               fixed = TRUE)
+
+})
+

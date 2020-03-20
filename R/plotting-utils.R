@@ -341,6 +341,11 @@
   x_len <- c(0, (nc * m_width) + (nc - 1) * margin)
   y_len <- c(0, (nr * m_height) + (nr - 1) * margin)
 
+  # Initialize list for storing plots
+  if(plottingParam$return_plot && plottingParam$display == "single"){
+    cur_out <- list()
+  }
+
   if(!is.null(plottingParam$save_image)){
     image_location <- plottingParam$save_image$filename
     image_scale <- plottingParam$save_image$scale
@@ -366,8 +371,10 @@
       yaxs="i", xaxt="n", yaxt="n", col = "white")
   on.exit(par(cur_par))
 
-  plot(x_len, y_len, type="n", xlab="", ylab="",
-       asp = 1, ylim = rev(y_len))
+  if(plottingParam$display = "all"){
+    plot(x_len, y_len, type="n", xlab="", ylab="",
+         asp = 1, ylim = rev(y_len))
+  }
 
   # Plot the images
   for(i in seq_len(nr)){
@@ -382,11 +389,19 @@
       ybottom <- i*m_height - (m_height - dim_y)/2 + (i-1) * margin
       xright <- j*m_width - (m_width - dim_x)/2 + (j-1) * margin
       ytop <- (i-1)*m_height + (m_height - dim_y)/2 + (i-1) * margin
-      rasterImage(Image(out_img[[ind]]),
-                  xleft,
-                  ybottom,
-                  xright,
-                  ytop)
+      if(plottingParam$display = "all"){
+        rasterImage(Image(out_img[[ind]]),
+                    xleft,
+                    ybottom,
+                    xright,
+                    ytop)
+      } else {
+        rasterImage(Image(out_img[[ind]]),
+                    xleft = 0,
+                    ybottom = dim_y,
+                    xright = dim_x,
+                    ytop = 0)
+      }
 
       if(ind == 1L && !is.null(plottingParam$legend)){
         # Plot legend
@@ -398,13 +413,17 @@
         if(plottingParam$scale_bar$frame == "all"){
           # Plot scale bar
           .plotScaleBar(plottingParam$scale_bar,
-                        xleft, xright, ytop, ybottom, image_scale)
+                        xleft = 0, xright = dim_x,
+                        ytop = 0, ybottom = dim_y,
+                        image_scale)
         } else {
           cur_ind <- legend_ind + as.integer(plottingParam$scale_bar$frame)
           if(ind == cur_ind && !is.null(plottingParam$scale_bar)){
             # Plot scale bar
             .plotScaleBar(plottingParam$scale_bar,
-                          xleft, xright, ytop, ybottom, image_scale)
+                          xleft = 0, xright = dim_x,
+                          ytop = 0, ybottom = dim_y,
+                          image_scale)
             }
           }
         }
@@ -413,13 +432,44 @@
       if(ind != legend_ind && !is.null(plottingParam$image_title)){
         .plotImageTitle(out_img, mask, image, img_id,
                         ind, legend_ind, plottingParam$image_title, dim_x,
-                      xleft, xright, ytop, ybottom)
+                        xleft = 0, xright = dim_x,
+                        ytop = 0, ybottom = dim_y)
+      }
+
+      if(plottingParam$return_plot && plottingParam$display == "single"){
+        cur_plot <- recordPlot()
+
+        # Set the title correctly
+        image_title <- plottingParam$image_title
+        if(!is.null(image_title$text)){
+          cur_title <- image_title$text[ind - legend_ind]
+        } else if(!is.null(mask) && !is.null(img_id)){
+          cur_title <- mcols(mask)[ind - legend_ind,img_id]
+        } else if(!is.null(image) && !is.null(img_id)){
+          cur_title <- mcols(image)[ind - legend_ind,img_id]
+        } else if(!is.null(names(out_img))){
+          cur_title <- names(out_img)[ind]
+        } else {
+          cur_title <- as.character(ind - legend_ind)
+        }
+
+        cur_out[cur_title] <- cur_plot
       }
     }
   }
 
+  if(plottingParam$return_plot && plottingParam$display == "all"){
+    cur_out <- recordPlot()
+  }
+
   if(!is.null(plottingParam$save_image)){
     dev.off()
+  }
+
+  if(plottingParam$return_plot){
+    return(cur_out)
+  } else {
+    return(NULL)
   }
 }
 
