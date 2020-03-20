@@ -583,36 +583,58 @@ test_that("plotting-param: images can be plotted individually.", {
   cur_par2 <- par()
   expect_identical(cur_par1, cur_par2)
 
-  # Fix height of image title and legend
+  # return_plot
+  expect_silent(cur_out <- plotPixels(pancreasImages, colour_by = c("H3", "SMA", "CD44"),
+                           return_plot = TRUE,
+                           display = "single"))
+  expect_equal(length(cur_out$plot), 4L)
+  expect_equal(names(cur_out$plot), c("legend", names(pancreasImages)))
+  expect_silent(cur_out <- plotPixels(pancreasImages, colour_by = c("H3", "SMA", "CD44"),
+                                      return_plot = TRUE,
+                                      display = "single",
+                                      legend = NULL))
+  expect_equal(length(cur_out$plot), 3L)
+  expect_equal(names(cur_out$plot), names(pancreasImages))
 
+  expect_silent(cur_out <- plotCells(pancreasMasks, object = pancreasSCE,
+                                     img_id = "ImageNb", cell_id = "CellNb",
+                                     colour_by = c("H3", "SMA", "CD44"),
+                                     return_plot = TRUE,
+                                     display = "single"))
+  expect_equal(length(cur_out$plot), 4L)
+  expect_equal(names(cur_out$plot), c("legend", mcols(pancreasMasks)$ImageNb))
+  expect_silent(cur_out <- plotCells(pancreasMasks, object = pancreasSCE,
+                                     img_id = "ImageNb", cell_id = "CellNb",
+                                     colour_by = c("H3", "SMA", "CD44"),
+                                     return_plot = TRUE,
+                                     display = "single",
+                                     legend = NULL))
+  expect_equal(length(cur_out$plot), 3L)
+  expect_equal(names(cur_out$plot), as.character(mcols(pancreasMasks)$ImageNb))
 
-  # Check with all other entries
+  # return_images
+  expect_silent(cur_out <- plotPixels(pancreasImages, colour_by = c("H3", "SMA", "CD44"),
+                                      return_images = TRUE,
+                                      display = "single"))
+  expect_equal(length(cur_out$images), 3L)
 
+  # margin
+  expect_silent(plotPixels(pancreasImages, colour_by = c("H3", "SMA", "CD44"),
+                           margin = 10, display = "single"))
 
-  expect_silent(plotPixels(pancreasImages))
-  expect_silent(plotPixels(pancreasImages, margin = 2))
-  expect_silent(plotPixels(pancreasImages, margin = 100))
-
-  expect_silent(plotCells(pancreasMasks, margin = 2))
-  expect_silent(plotCells(pancreasMasks, margin = 100))
-
-  cur_images <- pancreasImages
-  names(cur_images) <- paste(names(cur_images), 2, sep = "_")
-  cur_images <- c(pancreasImages, cur_images)
-  expect_silent(plotPixels(cur_images))
-  expect_silent(plotPixels(cur_images, margin = 2))
-  expect_silent(plotPixels(cur_images, margin = 100))
+  # legend
+  expect_silent(plotPixels(pancreasImages, colour_by = c("H3", "SMA", "CD44"),
+                           legend = NULL, display = "single"))
+  expect_silent(plotPixels(pancreasImages, colour_by = c("H3", "SMA", "CD44"),
+                           legend = list(colour_by.labels.cex = 1,
+                                         colour_by.title.cex = 2),
+                           display = "single"))
 
   # Error
-  expect_error(plotPixels(pancreasImages, margin = "test"),
-               regexp = "Invalid 'margin' entry.",
+  expect_error(plotPixels(pancreasImages,
+                          colour_by = c("H3", "SMA", "CD44"),
+                          display = "test"),
+               regexp = "Invalid 'display' entry.",
                fixed = TRUE)
-  expect_error(plotPixels(pancreasImages, margin = c(1,2)),
-               regexp = "Invalid 'margin' entry.",
-               fixed = TRUE)
-  expect_error(plotPixels(pancreasImages, margin = -1),
-               regexp = "Invalid 'margin' entry.",
-               fixed = TRUE)
-
 })
 

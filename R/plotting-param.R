@@ -64,7 +64,7 @@ NULL
                        colour = "white",
                        margin = c(10,10),
                        font = 2,
-                       cex = 1)
+                       cex = NULL)
     dotArgs$image_title <- imagetitle
   } else {
     dotArgs$image_title <- .valid.imagetitle(dotArgs$image_title, image)
@@ -289,7 +289,7 @@ NULL
                     "'cex' should be a single number"))
       }
     } else {
-      imagetitle$cex <- 1
+      imagetitle$cex <- NULL
     }
 
     if("margin" %in% names(imagetitle)){

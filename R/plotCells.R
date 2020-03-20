@@ -124,15 +124,14 @@ plotCells <- function(mask,
   }
 
   # Plot images
-  .displayImages(object, image = NULL, exprs_values, outline_by, colour_by,
+  cur_plot <- .displayImages(object, image = NULL, exprs_values, outline_by, colour_by,
                  mask, out_img, img_id,
                  cur_col, plottingParam)
 
   return_objects <- NULL
 
-  if(plottingParam$return_plot){
+  if(!is.null(cur_plot)){
     return_objects <- as.list(return_objects)
-    cur_plot <- recordPlot()
     return_objects$plot <- cur_plot
   }
 

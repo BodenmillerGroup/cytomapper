@@ -437,7 +437,7 @@
                     ytop = 0)
       }
 
-      if(ind == 1L && !is.null(plottingParam$legend)){
+      if(ind == legend_ind && !is.null(plottingParam$legend)){
         # Plot legend
         .plotLegend(object, image, exprs_values, outline_by, colour_by,
                     m_width, m_height, cur_col, plottingParam)
@@ -497,6 +497,11 @@
       if(plottingParam$return_plot && plottingParam$display == "single"){
         cur_plot <- recordPlot()
 
+        if(ind == legend_ind && !is.null(plottingParam$legend)){
+          cur_out[["legend"]] <- cur_plot
+          next
+        }
+
         # Set the title correctly
         image_title <- plottingParam$image_title
         if(!is.null(image_title$text)){
@@ -511,7 +516,7 @@
           cur_title <- as.character(ind - legend_ind)
         }
 
-        cur_out[cur_title] <- cur_plot
+        cur_out[[as.character(cur_title)]] <- cur_plot
       }
     }
   }
@@ -817,7 +822,8 @@
 # Plot legend
 #' @importFrom graphics strwidth strheight text rasterImage legend
 #' @importFrom raster as.raster
-.plotImageTitle <- function(out_img, mask, image, img_id, ind, legend_ind, image_title, dim_x,
+.plotImageTitle <- function(out_img, mask, image, img_id, ind, legend_ind,
+                            image_title, dim_x,
                             xl, xr, yt, yb){
 
   if(!is.null(image_title$text)){
