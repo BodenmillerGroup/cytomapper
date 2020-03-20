@@ -97,7 +97,8 @@ plotPixels <- function(image,
     out_img <- .colourImageByFeature(image,
                                  colour_by,
                                  bcg,
-                                 cur_col$colour_by)
+                                 cur_col$colour_by,
+                                 plottingParam)
   } else {
     if(is.null(channelNames(image))){
       colour_by <- 1
@@ -105,14 +106,16 @@ plotPixels <- function(image,
       out_img <- .colourImageByFeature(image,
                                      colour_by,
                                      bcg,
-                                     cur_col$colour_by)
+                                     cur_col$colour_by,
+                                     plottingParam)
     } else{
       colour_by <- channelNames(image)[1]
       cur_col$colour_by <- .selectColours(object, colour_by, colour)
       out_img <- .colourImageByFeature(image,
                                      colour_by,
                                      bcg,
-                                     cur_col$colour_by)
+                                     cur_col$colour_by,
+                                     plottingParam)
     }
   }
 
@@ -122,16 +125,30 @@ plotPixels <- function(image,
     out_img <- .outlineImageByMeta(object, mask, out_img, cell_id, img_id,
                                 outline_by, cur_col$outline_by[[1]])
   } else if(!is.null(mask)){
-    out_img <- mendoapply(function(cur_mask, cur_image){
+    out_img <- mendoapply(function(cur_image, cur_mask){
       cur_img <- paintObjects(cur_mask, Image(cur_image),
                               col = plottingParam$missing_colour)
       return(cur_img)
-    }, mask, out_img)
+    }, out_img, mask)
     out_img <- as(out_img, "SimpleList")
   }
 
   # Plot images
-    .displayImages(object, image, exprs_values = NULL,
+  cur_plot <- .displayImages(object, image, exprs_values = NULL,
                    outline_by, colour_by, mask, out_img, img_id,
                    cur_col, plottingParam)
+
+  return_objects <- NULL
+
+  if(!is.null(cur_plot)){
+    return_objects <- as.list(return_objects)
+    return_objects$plot <- cur_plot
+  }
+
+  if(plottingParam$return_images){
+    return_objects <- as.list(return_objects)
+    return_objects$images <- out_img
+  }
+
+  return(return_objects)
 }

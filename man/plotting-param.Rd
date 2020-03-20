@@ -13,6 +13,18 @@
 \item{image_title}{TODO}
 
 \item{save_image}{TODO}
+
+\item{return_plot}{TODO}
+
+\item{return_images}{TODO}
+
+\item{legend}{TODO}
+
+\item{margin}{TODO}
+
+\item{display}{TODO}
+
+\item{scale}{TODO}
 }
 \value{
 TODO
@@ -23,10 +35,6 @@ TODO
 \section{Setting further parameters}{
 
 TODO
-# legend list(title, size) also allow NULL
-# return_plot TODO
-# return_images TODO
-# margin between images
 }
 
 \examples{

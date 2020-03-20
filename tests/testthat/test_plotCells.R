@@ -55,10 +55,19 @@ test_that("plotCells: Features can be displayed.", {
   expect_silent(plotCells(object = pancreasSCE,
             mask = pancreasMasks, img_id = "ImageNb",
             cell_id = "CellNb", colour_by = c("H3", "SMA", "INS")))
-  expect_silent(plotCells(object = pancreasSCE,
+  expect_silent(test1 <- plotCells(object = pancreasSCE,
             mask = pancreasMasks, img_id = "ImageNb",
             cell_id = "CellNb",
-            colour_by = c("H3", "SMA", "INS", "CD38", "CD44")))
+            colour_by = c("H3", "SMA", "INS", "CD38", "CD44"),
+            return_plot = TRUE, display = "single"))
+  expect_silent(test2 <- plotCells(object = pancreasSCE,
+                          mask = rev(pancreasMasks), img_id = "ImageNb",
+                          cell_id = "CellNb",
+                          colour_by = c("H3", "SMA", "INS", "CD38", "CD44"),
+                          return_plot = TRUE, display = "single"))
+  expect_identical(test1$plot$A02_imc, test2$plot$A02_imc)
+  expect_identical(test1$plot$D01_imc, test2$plot$D01_imc)
+  expect_identical(test1$plot$F01_imc, test2$plot$F01_imc)
 
   # Error
   expect_error(plotCells(mask = pancreasMasks, colour_by = "H3"),

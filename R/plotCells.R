@@ -103,7 +103,8 @@ plotCells <- function(mask,
                                       colour_by, exprs_values,
                                       cur_col$colour_by,
                                       plottingParam$missing_colour,
-                                      plottingParam$background_colour)
+                                      plottingParam$background_colour,
+                                      plottingParam)
     }
   } else {
     out_img <- endoapply(mask, function(x){
@@ -124,7 +125,24 @@ plotCells <- function(mask,
   }
 
   # Plot images
-  .displayImages(object, image = NULL, exprs_values, outline_by, colour_by,
+  cur_plot <- .displayImages(object, image = NULL, exprs_values, outline_by, colour_by,
                  mask, out_img, img_id,
                  cur_col, plottingParam)
+
+  return_objects <- NULL
+
+  if(!is.null(cur_plot)){
+    return_objects <- as.list(return_objects)
+    return_objects$plot <- cur_plot
+  }
+
+  if(plottingParam$return_images){
+    return_objects <- as.list(return_objects)
+    out_img <- endoapply(out_img, Image)
+    return_objects$images <- out_img
+  }
+
+  if(!is.null(return_objects)){
+    return(return_objects)
+  }
 }

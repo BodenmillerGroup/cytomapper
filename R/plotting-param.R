@@ -9,16 +9,15 @@
 #' @param scale_bar TODO
 #' @param image_title TODO
 #' @param save_image TODO
+#' @param return_plot TODO
+#' @param return_images TODO
 #' @param legend TODO
+#' @param margin TODO
+#' @param display TODO
+#' @param scale TODO
 #'
 #'@section Setting further parameters:
 #' TODO
-#' # legend list(title, size) also allow NULL
-#' # return_plot TODO
-#' # return_images TODO
-#' # margin between images
-#' # scale TRUE FALSE
-#' # individual_images TRUE FALSE
 #'
 #' @return TODO
 #'
@@ -35,7 +34,9 @@ NULL
   # Check supported names
   cur_entries <- names(dotArgs)
   supported <- c("scale_bar", "image_title", "missing_colour",
-                 "background_colour", "save_image", "legend")
+                 "background_colour", "save_image", "return_plot",
+                 "return_images", "legend", "margin", "display",
+                 "scale")
   not_supported <- cur_entries[!(cur_entries %in% supported)]
   if(length(not_supported) > 0L){
     stop("Entries ", paste0("'", not_supported, "'", collapse = ", "), " are not supported")
@@ -64,7 +65,7 @@ NULL
                        colour = "white",
                        margin = c(10,10),
                        font = 2,
-                       cex = 1)
+                       cex = NULL)
     dotArgs$image_title <- imagetitle
   } else {
     dotArgs$image_title <- .valid.imagetitle(dotArgs$image_title, image)
@@ -73,11 +74,11 @@ NULL
   # legend
   if(!("legend" %in% names(dotArgs))){
     legendparam <- list(colour_by.title.font = 1,
-                        colour_by.title.cex = 0.7,
+                        colour_by.title.cex = NULL,
                         colour_by.labels.cex = NULL,
                         colour_by.legend.cex = NULL,
                         outline_by.title.font = 1,
-                        outline_by.title.cex = 0.7,
+                        outline_by.title.cex = NULL,
                         outline_by.labels.cex = NULL,
                         outline_by.legend.cex = NULL,
                         margin = 2)
@@ -91,6 +92,59 @@ NULL
     dotArgs$save_image <- NULL
   } else {
     dotArgs$save_image <- .valid.saveimage(dotArgs$save_image)
+  }
+
+  # return_plot
+  if(!("return_plot" %in% names(dotArgs))){
+    dotArgs$return_plot <- FALSE
+  } else {
+    if(!is.logical(dotArgs$return_plot)){
+      stop("Invalid 'return_plot' entry.")
+    }
+    dotArgs$return_plot <- dotArgs$return_plot
+  }
+
+  # return_images
+  if(!("return_images" %in% names(dotArgs))){
+    dotArgs$return_images <- FALSE
+  } else {
+    if(!is.logical(dotArgs$return_images)){
+      stop("Invalid 'return_images' entry.")
+    }
+    dotArgs$return_images <- dotArgs$return_images
+  }
+
+  # return_images
+  if(!("margin" %in% names(dotArgs))){
+    dotArgs$margin <- 0L
+  } else {
+    if(!is.numeric(dotArgs$margin) ||
+       length(dotArgs$margin) != 1L ||
+       dotArgs$margin < 0L){
+      stop("Invalid 'margin' entry.")
+    }
+    dotArgs$margin <- dotArgs$margin
+  }
+
+  # return_images
+  if(!("display" %in% names(dotArgs))){
+    dotArgs$display <- "all"
+  } else {
+    if(!is.character(dotArgs$display) ||
+       !(dotArgs$display %in% c("all", "single"))){
+      stop("Invalid 'display' entry.")
+    }
+    dotArgs$display <- dotArgs$display
+  }
+
+  # scale
+  if(!("scale" %in% names(dotArgs))){
+    dotArgs$scale <- TRUE
+  } else {
+    if(!is.logical(dotArgs$scale)){
+      stop("Invalid 'scale' entry.")
+    }
+    dotArgs$scale <- dotArgs$scale
   }
 
   # missing_colour
@@ -246,7 +300,7 @@ NULL
                     "'cex' should be a single number"))
       }
     } else {
-      imagetitle$cex <- 1
+      imagetitle$cex <- NULL
     }
 
     if("margin" %in% names(imagetitle)){
@@ -314,7 +368,7 @@ NULL
                     "'colour_by.title.cex' should be a single number"))
       }
     } else {
-      legendparam$colour_by.title.cex <- 0.7
+      legendparam$colour_by.title.cex <- NULL
     }
 
     if("colour_by.labels.cex" %in% names(legendparam)){
@@ -358,7 +412,7 @@ NULL
                     "'outline_by.title.cex' should be a single number"))
       }
     } else {
-      legendparam$outline_by.title.cex <- 0.7
+      legendparam$outline_by.title.cex <- NULL
     }
 
     if("outline_by.labels.cex" %in% names(legendparam)){
