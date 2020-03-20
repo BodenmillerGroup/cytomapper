@@ -298,6 +298,7 @@
 # Custom function to display images
 #' @importFrom S4Vectors SimpleList
 #' @importFrom EBImage Image
+#' @importFrom tools file_ext file_path_sans_ext
 #' @importFrom graphics par plot rasterImage strheight text
 #' @importFrom grDevices png jpeg tiff dev.off
 .displayImages <- function(object, image, exprs_values, outline_by,
@@ -346,7 +347,7 @@
     cur_out <- list()
   }
 
-  if(!is.null(plottingParam$save_image)){
+  if(!is.null(plottingParam$save_image) && plottingParam$display == "all"){
     image_location <- plottingParam$save_image$filename
     image_scale <- plottingParam$save_image$scale
     cur_ext <- file_ext(image_location)
@@ -371,7 +372,7 @@
       yaxs="i", xaxt="n", yaxt="n", col = "white")
   on.exit(par(cur_par))
 
-  if(plottingParam$display = "all"){
+  if(plottingParam$display == "all"){
     plot(x_len, y_len, type="n", xlab="", ylab="",
          asp = 1, ylim = rev(y_len))
   }
@@ -389,13 +390,44 @@
       ybottom <- i*m_height - (m_height - dim_y)/2 + (i-1) * margin
       xright <- j*m_width - (m_width - dim_x)/2 + (j-1) * margin
       ytop <- (i-1)*m_height + (m_height - dim_y)/2 + (i-1) * margin
-      if(plottingParam$display = "all"){
+
+      # If Images should be saved
+      if(!is.null(plottingParam$save_image) && plottingParam$display == "single"){
+        image_location <- plottingParam$save_image$filename
+        image_scale <- plottingParam$save_image$scale
+        cur_ext <- file_ext(image_location)
+
+        # File name
+        cur_name <- paste0(file_path_sans_ext(image_location),
+                           "_", ind, ".", cur_ext)
+        if(cur_ext == "png"){
+          png(cur_name, width = image_scale * dim_x,
+              height = image_scale * dim_y, units = "px",
+              pointsize = 12 * image_scale)
+        } else if(cur_ext == "jpeg"){
+          jpeg(image_location, width = image_scale * dim_x,
+               height = image_scale * dim_y, units = "px",
+               pointsize = 12 * image_scale)
+        } else if(cur_ext == "tiff"){
+          tiff(image_location, width = image_scale * dim_x,
+               height = image_scale * dim_y, units = "px",
+               pointsize = 12 * image_scale)
+        }
+
+        cur_par <- par(bty="n", mai=c(0,0,0,0), xaxs="i",
+                       yaxs="i", xaxt="n", yaxt="n", col = "white")
+        on.exit(par(cur_par))
+      }
+
+      if(plottingParam$display == "all"){
         rasterImage(Image(out_img[[ind]]),
                     xleft,
                     ybottom,
                     xright,
                     ytop)
       } else {
+        plot(c(0, dim_x), c(0, dim_y), type="n", xlab="", ylab="",
+             asp = 1, ylim = rev(c(0, dim_y)))
         rasterImage(Image(out_img[[ind]]),
                     xleft = 0,
                     ybottom = dim_y,
@@ -411,29 +443,53 @@
 
       if(ind != legend_ind && !is.null(plottingParam$scale_bar)){
         if(plottingParam$scale_bar$frame == "all"){
-          # Plot scale bar
-          .plotScaleBar(plottingParam$scale_bar,
-                        xleft = 0, xright = dim_x,
-                        ytop = 0, ybottom = dim_y,
-                        image_scale)
+          if(plottingParam$display == "all"){
+            .plotScaleBar(plottingParam$scale_bar,
+                          xl = xleft, xr = xright,
+                          yt = ytop, yb = ybottom,
+                          image_scale)
+          } else {
+            .plotScaleBar(plottingParam$scale_bar,
+                          xl = 0, xr = dim_x,
+                          yt = 0, yb = dim_y,
+                          image_scale)
+          }
         } else {
           cur_ind <- legend_ind + as.integer(plottingParam$scale_bar$frame)
           if(ind == cur_ind && !is.null(plottingParam$scale_bar)){
-            # Plot scale bar
-            .plotScaleBar(plottingParam$scale_bar,
-                          xleft = 0, xright = dim_x,
-                          ytop = 0, ybottom = dim_y,
-                          image_scale)
+            if(plottingParam$display == "all"){
+              .plotScaleBar(plottingParam$scale_bar,
+                            xl = xleft, xr = xright,
+                            yt = ytop, yb = ybottom,
+                            image_scale)
+              } else {
+                .plotScaleBar(plottingParam$scale_bar,
+                            xl = 0, xr = dim_x,
+                            yt = 0, yb = dim_y,
+                            image_scale)
+              }
             }
           }
         }
 
       # Plot title on images
       if(ind != legend_ind && !is.null(plottingParam$image_title)){
-        .plotImageTitle(out_img, mask, image, img_id,
-                        ind, legend_ind, plottingParam$image_title, dim_x,
-                        xleft = 0, xright = dim_x,
-                        ytop = 0, ybottom = dim_y)
+        if(plottingParam$display == "all"){
+          .plotImageTitle(out_img, mask, image, img_id,
+                          ind, legend_ind, plottingParam$image_title, dim_x,
+                          xl = xleft, xr = xright,
+                          yt = ytop, yb = ybottom)
+        } else {
+          .plotImageTitle(out_img, mask, image, img_id,
+                          ind, legend_ind, plottingParam$image_title, dim_x,
+                          xl = 0, xr = dim_x,
+                          yt = 0, yb = dim_y)
+        }
+      }
+
+      # Close device
+      if(!is.null(plottingParam$save_image) && plottingParam$display == "single"){
+        dev.off()
       }
 
       if(plottingParam$return_plot && plottingParam$display == "single"){
@@ -493,11 +549,14 @@
   if(!is.null(colour_by) &&
      (all(colour_by %in% rownames(object)) || !is.null(image))){
 
+    # Maximum title width
+    title_width <- max(strwidth(colour_by, font = colour_by.title.font))
+
     # Maximum label width
     if(is.null(image)){
       all_max <- max(assay(object, exprs_values)[colour_by,])
     } else {
-      all_max <- max(getChannels(image, colour_by)[[1]])
+      all_max <- unlist(lapply(getChannels(image, colour_by), max))
     }
     label_width <- max(strwidth(format(round(all_max, 1), nsmall = 1)))
 
@@ -524,6 +583,13 @@
                         format(round(cur_max/2, 1), nsmall = 1),
                         format(round(cur_max, 1), nsmall = 1))
 
+        # Define title cex
+        if(is.null(colour_by.title.cex)){
+          title_cex <- (cur_space_x/1.5)/title_width
+        } else {
+          title_cex <- colour_by.title.cex
+        }
+
         # Define label cex
         if(is.null(colour_by.labels.cex)){
           label_cex <- (cur_space_x/2)/label_width
@@ -536,7 +602,7 @@
         text(x = cur_x, y = cur_y - cur_space_y/2,
              label = colour_by[i], col = "black",
              font = colour_by.title.font,
-             cex = colour_by.title.cex, adj = c(0.5, 1))
+             cex = title_cex, adj = c(0.5, 1))
         text(x=cur_x- cur_space_x/4 + 2,
              y = seq(cur_y - cur_space_y/2 + cur_space_y/4,
                      cur_y + cur_space_y/2 - cur_space_y/8, length.out = 3),
@@ -566,13 +632,22 @@
                       format(round(cur_max/2, 1), nsmall = 1),
                       format(round(cur_max, 1), nsmall = 1))
       label_width <- max(strwidth(rev(cur_labels)))
+      title_width <- strwidth(colour_by, font = colour_by.title.font)
 
       cur_legend <- as.raster(matrix(rev(colorRampPalette(cur_col$colour_by[[1]])(101)),
                                      ncol=1))
+
+      # Define title cex
+      if(is.null(colour_by.title.cex)){
+        title_cex <- (cur_space_x/1.5)/title_width
+      } else {
+        title_cex <- colour_by.title.cex
+      }
+
       text(x = cur_x + cur_space_x/2, y = cur_y,
            label = colour_by, col = "black",
            font = colour_by.title.font,
-           cex = colour_by.title.cex, adj = c(0.5, 1))
+           cex = title_cex, adj = c(0.5, 1))
 
       # Define label cex
       if(is.null(colour_by.labels.cex)){
@@ -634,13 +709,22 @@
                       format(round(cur_max/2, 1), nsmall = 1),
                       format(round(cur_max, 1), nsmall = 1))
       label_width <- max(strwidth(rev(cur_labels)))
+      title_width <- strwidth(outline_by, font = colour_by.title.font)
 
       cur_legend <- as.raster(matrix(rev(colorRampPalette(cur_col$outline_by[[1]])(101)),
                                      ncol=1))
+
+      # Define title cex
+      if(is.null(colour_by.title.cex)){
+        title_cex <- (cur_space_x/1.5)/title_width
+      } else {
+        title_cex <- outline_by.title.cex
+      }
+
       text(x = cur_x + cur_space_x/2, y = cur_y,
            label = outline_by, col = "black",
            font = outline_by.title.font,
-           cex = outline_by.title.cex, adj = c(0.5, 1))
+           cex = title_cex, adj = c(0.5, 1))
 
       # Define label cex
       if(is.null(outline_by.labels.cex)){
@@ -732,7 +816,7 @@
 #' @importFrom graphics strwidth strheight text rasterImage legend
 #' @importFrom raster as.raster
 .plotImageTitle <- function(out_img, mask, image, img_id, ind, legend_ind, image_title, dim_x,
-                            xleft, xright, ytop, ybottom){
+                            xl, xr, yt, yb){
 
   if(!is.null(image_title$text)){
     cur_title <- image_title$text[ind - legend_ind]
@@ -753,31 +837,32 @@
   cur_margin.y <- image_title$margin[2]
   cur_font <- image_title$font
 
-  text_params <- list(labels = cur_title, col = cur_col, cex = cur_cex, font = cur_font)
+  text_params <- list(labels = cur_title, col = cur_col,
+                      cex = cur_cex, font = cur_font)
 
   if(cur_position == "top"){
-    do.call(text, append(list(x = xleft + dim_x/2,
-                              y = ytop + cur_margin.y,
+    do.call(text, append(list(x = xl + dim_x/2,
+                              y = yt + cur_margin.y,
                               adj = 0.5), text_params))
   } else if(cur_position == "bottom"){
-    do.call(text, append(list(x = xleft + dim_x/2,
-                              y = ybottom - cur_margin.y,
+    do.call(text, append(list(x = xl + dim_x/2,
+                              y = yb - cur_margin.y,
                               adj = 0.5), text_params))
   } else if(cur_position == "topleft"){
-    do.call(text, append(list(x = xleft + cur_margin.x,
-                              y = ytop + cur_margin.y,
+    do.call(text, append(list(x = xl + cur_margin.x,
+                              y = yt + cur_margin.y,
                               adj = 0), text_params))
   } else if(cur_position == "topright"){
-    do.call(text, append(list(x = xright - cur_margin.x,
-                              y = ytop + cur_margin.y,
+    do.call(text, append(list(x = xr - cur_margin.x,
+                              y = yt + cur_margin.y,
                               adj = 1), text_params))
   } else if(cur_position == "bottomleft"){
-    do.call(text, append(list(x = xleft + cur_margin.x,
-                              y = ybottom - cur_margin.y,
+    do.call(text, append(list(x = xl + cur_margin.x,
+                              y = yb - cur_margin.y,
                               adj = 0), text_params))
   } else if(cur_position == "bottomright"){
-    do.call(text, append(list(x = xright - cur_margin.x,
-                              y = ybottom - cur_margin.y,
+    do.call(text, append(list(x = xr - cur_margin.x,
+                              y = yb - cur_margin.y,
                               adj = 1), text_params))
   }
 }

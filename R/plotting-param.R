@@ -73,11 +73,11 @@ NULL
   # legend
   if(!("legend" %in% names(dotArgs))){
     legendparam <- list(colour_by.title.font = 1,
-                        colour_by.title.cex = 0.7,
+                        colour_by.title.cex = NULL,
                         colour_by.labels.cex = NULL,
                         colour_by.legend.cex = NULL,
                         outline_by.title.font = 1,
-                        outline_by.title.cex = 0.7,
+                        outline_by.title.cex = NULL,
                         outline_by.labels.cex = NULL,
                         outline_by.legend.cex = NULL,
                         margin = 2)
@@ -129,7 +129,7 @@ NULL
   if(!("display" %in% names(dotArgs))){
     dotArgs$display <- "all"
   } else {
-    if(is.character(dotArgs$display) ||
+    if(!is.character(dotArgs$display) ||
        !(dotArgs$display %in% c("all", "single"))){
       stop("Invalid 'display' entry.")
     }
@@ -357,7 +357,7 @@ NULL
                     "'colour_by.title.cex' should be a single number"))
       }
     } else {
-      legendparam$colour_by.title.cex <- 0.7
+      legendparam$colour_by.title.cex <- NULL
     }
 
     if("colour_by.labels.cex" %in% names(legendparam)){
@@ -401,7 +401,7 @@ NULL
                     "'outline_by.title.cex' should be a single number"))
       }
     } else {
-      legendparam$outline_by.title.cex <- 0.7
+      legendparam$outline_by.title.cex <- NULL
     }
 
     if("outline_by.labels.cex" %in% names(legendparam)){

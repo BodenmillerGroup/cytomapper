@@ -527,11 +527,56 @@ test_that("plotting-param: images can be plotted individually.", {
   data("pancreasMasks")
   data("pancreasSCE")
 
-  # Works
+  #' @param missing_colour TODO
+  #' @param background_colour TODO
+  #' @param scale_bar TODO
+  #' @param image_title TODO
+  #' @param save_image TODO
+  #' @param return_plot TODO
+  #' @param return_images TODO
+  #' @param legend TODO
+  #' @param margin TODO
+  #' @param display TODO
 
-  # Check return plot
-  # check scale bar and names
-  # check save_image
+  # Works
+  expect_silent(plotPixels(pancreasImages, colour_by = c("H3", "SMA")))
+  expect_silent(plotPixels(pancreasImages, display = "all"))
+  expect_silent(plotPixels(pancreasImages, display = "single"))
+  expect_silent(plotPixels(pancreasImages, colour_by = c("H3", "SMA", "CD44"),
+                           display = "single"))
+  expect_silent(plotPixels(pancreasImages, colour_by = c("H3", "SMA", "CD44"),
+                           scale_bar = list(frame = 3),
+                           display = "single"))
+  # scale_bar
+  expect_silent(plotPixels(pancreasImages, colour_by = c("H3", "SMA", "CD44"),
+                           scale_bar = list(position = "topright",
+                                            frame = 3,
+                                            margin = c(20,20)),
+                           display = "single"))
+
+  # image_title
+  expect_silent(plotPixels(pancreasImages, colour_by = c("H3", "SMA", "CD44"),
+                           image_title = list(text = c(1,2,3),
+                                              cex = 3),
+                           display = "single"))
+
+  # image_title
+  expect_silent(plotPixels(pancreasImages, colour_by = c("H3", "SMA", "CD44"),
+                           image_title = list(text = c(1,2,3),
+                                              cex = 3),
+                           display = "single"))
+
+  # save_image
+  expect_silent(plotPixels(pancreasImages, colour_by = c("H3", "SMA", "CD44"),
+                           save_image = list(filename = "~/Desktop/test.png",
+                                             scale = 10),
+                           display = "single"))
+
+  # Fix height of image title and legend
+
+
+  # Check with all other entries
+
 
   expect_silent(plotPixels(pancreasImages))
   expect_silent(plotPixels(pancreasImages, margin = 2))

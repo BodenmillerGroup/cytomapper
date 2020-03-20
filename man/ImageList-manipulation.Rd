@@ -8,6 +8,9 @@
 \alias{normalize}
 \alias{normalize,ImageList-method}
 \title{Manipulating ImageList objects}
+\value{
+An ImageList object containing the manipulated Images
+}
 \description{
 Methods to change pixel values in ImageList objects. In the
   following sections, \code{object} is an \linkS4class{ImageList} object
@@ -63,7 +66,7 @@ clipping range of the input intensity values (see
 \examples{
 data(pancreasImages)
 
-# Scale images to create segmentaion masks
+# Scale images to create segmentation masks
 cur_files <- list.files(system.file("extdata", package = "SingleCellMapper"),
                         pattern = "mask.tiff", full.names = TRUE)
 x <- loadImages(cur_files)
