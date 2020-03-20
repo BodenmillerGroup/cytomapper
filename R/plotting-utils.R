@@ -316,7 +316,7 @@
 #' @importFrom EBImage Image
 #' @importFrom tools file_ext file_path_sans_ext
 #' @importFrom graphics par plot rasterImage strheight text
-#' @importFrom grDevices png jpeg tiff dev.off
+#' @importFrom grDevices png jpeg tiff dev.off recordPlot
 .displayImages <- function(object, image, exprs_values, outline_by,
                            colour_by, mask, out_img,
                            img_id, cur_col, plottingParam){

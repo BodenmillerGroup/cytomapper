@@ -106,14 +106,16 @@ plotPixels <- function(image,
       out_img <- .colourImageByFeature(image,
                                      colour_by,
                                      bcg,
-                                     cur_col$colour_by)
+                                     cur_col$colour_by,
+                                     plottingParam)
     } else{
       colour_by <- channelNames(image)[1]
       cur_col$colour_by <- .selectColours(object, colour_by, colour)
       out_img <- .colourImageByFeature(image,
                                      colour_by,
                                      bcg,
-                                     cur_col$colour_by)
+                                     cur_col$colour_by,
+                                     plottingParam)
     }
   }
 

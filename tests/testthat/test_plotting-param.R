@@ -564,6 +564,18 @@ test_that("plotting-param: images can be plotted individually.", {
   cur_path <- tempfile()
   on.exit(unlink(cur_path))
 
+  dev.off()
+
+  cur_par1 <- par()
+  expect_silent(plotPixels(pancreasImages, colour_by = c("H3", "SMA", "CD44"),
+                           save_image = list(filename = paste0(cur_path, "test.png"),
+                                             scale = 2),
+                           display = "all"))
+  cur_par2 <- par()
+  expect_identical(cur_par1, cur_par2)
+
+  dev.off()
+
   cur_par1 <- par()
   expect_silent(plotPixels(pancreasImages, colour_by = c("H3", "SMA", "CD44"),
                            save_image = list(filename = paste0(cur_path, "test.png"),

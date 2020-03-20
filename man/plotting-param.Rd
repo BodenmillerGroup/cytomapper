@@ -23,6 +23,8 @@
 \item{margin}{TODO}
 
 \item{display}{TODO}
+
+\item{scale}{TODO}
 }
 \value{
 TODO
@@ -33,7 +35,6 @@ TODO
 \section{Setting further parameters}{
 
 TODO
-# scale TRUE FALSE
 }
 
 \examples{
