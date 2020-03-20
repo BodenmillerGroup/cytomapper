@@ -103,7 +103,8 @@ plotCells <- function(mask,
                                       colour_by, exprs_values,
                                       cur_col$colour_by,
                                       plottingParam$missing_colour,
-                                      plottingParam$background_colour)
+                                      plottingParam$background_colour,
+                                      plottingParam)
     }
   } else {
     out_img <- endoapply(mask, function(x){

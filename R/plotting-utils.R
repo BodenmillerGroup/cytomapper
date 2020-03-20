@@ -67,7 +67,7 @@
 #' @importFrom SummarizedExperiment assay
 .colourMaskByFeature <- function(object, mask, cell_id, img_id,
                      colour_by, exprs_values, cur_colour, missing_colour,
-                     background_colour){
+                     background_colour, plottingParam){
 
   for(i in seq_along(mask)){
     cur_mask <- mask[[i]]
@@ -92,9 +92,15 @@
     cur_col_list <- lapply(colour_by, function(x){
       cur_frame <- cur_mask
       col_ind <- colorRampPalette(cur_colour[[x]])(101)
-      cur_scaling <- .minMaxScaling(assay(cur_sce, exprs_values)[x,],
-                                    min_x = min(assay(object, exprs_values)[x,]),
-                                    max_x = max(assay(object, exprs_values)[x,]))
+      if(plottingParam$scale){
+        cur_scaling <- .minMaxScaling(assay(cur_sce, exprs_values)[x,],
+                                      min_x = min(assay(object, exprs_values)[x,]),
+                                      max_x = max(assay(object, exprs_values)[x,]))
+      } else {
+        cur_scaling <- .minMaxScaling(assay(cur_sce, exprs_values)[x,],
+                                      min_x = min(assay(object, exprs_values)[colour_by,]),
+                                      max_x = max(assay(object, exprs_values)[colour_by,]))
+      }
       col_ind[round(100*cur_scaling) + 1]
     })
 
@@ -577,17 +583,29 @@
     }
     label_width <- max(strwidth(format(round(all_max, 1), nsmall = 1)))
 
-      for(i in seq_along(colour_by)){
-        if(i < 4){
-          cur_x <- ((m_width-(2*margin))/6 * i) + margin
-          cur_y <- (m_height-(2*margin))/4 + margin
-        } else {
-          cur_x <- ((m_width-(2*margin))/6 * (i - 3)) + margin
-          cur_y <- ((m_height-(2*margin))/4 * 3) + margin
-        }
-        cur_space_x <- (m_width-(2*margin))/6
-        cur_space_y <- (m_height-(2*margin))/2
+    # If scale = FALSE, define maximum and minimum
+    if(!plottingParam$scale){
+      if(is.null(image)){
+        cur_min <- min(assay(object, exprs_values)[colour_by,])
+        cur_max <- max(assay(object, exprs_values)[colour_by,])
+      } else {
+        cur_min <- min(unlist(lapply(getChannels(image, colour_by), min)))
+        cur_max <- max(unlist(lapply(getChannels(image, colour_by), max)))
+      }
+    }
 
+    for(i in seq_along(colour_by)){
+      if(i < 4){
+        cur_x <- ((m_width-(2*margin))/6 * i) + margin
+        cur_y <- (m_height-(2*margin))/4 + margin
+      } else {
+        cur_x <- ((m_width-(2*margin))/6 * (i - 3)) + margin
+        cur_y <- ((m_height-(2*margin))/4 * 3) + margin
+      }
+      cur_space_x <- (m_width-(2*margin))/6
+      cur_space_y <- (m_height-(2*margin))/2
+
+      if(plottingParam$scale){
         if(is.null(image)){
           cur_min <- min(assay(object, exprs_values)[colour_by[i],])
           cur_max <- max(assay(object, exprs_values)[colour_by[i],])
@@ -595,42 +613,42 @@
           cur_min <- min(unlist(lapply(getChannels(image, colour_by[i]), min)))
           cur_max <- max(unlist(lapply(getChannels(image, colour_by[i]), max)))
         }
-
-        cur_labels <- c(format(round(cur_min, 1), nsmall = 1),
-                        format(round(cur_max/2, 1), nsmall = 1),
-                        format(round(cur_max, 1), nsmall = 1))
-
-        # Define title cex
-        if(is.null(colour_by.title.cex)){
-          title_cex <- (cur_space_x/1.5)/title_width
-        } else {
-          title_cex <- colour_by.title.cex
-        }
-
-        # Define label cex
-        if(is.null(colour_by.labels.cex)){
-          label_cex <- (cur_space_x/2)/label_width
-        } else {
-          label_cex <- colour_by.labels.cex
-        }
-
-        cur_legend <- as.raster(matrix(rev(colorRampPalette(cur_col$colour_by[[colour_by[i]]])(101)),
-                                       ncol=1))
-        text(x = cur_x, y = cur_y - cur_space_y/2,
-             label = colour_by[i], col = "black",
-             font = colour_by.title.font,
-             cex = title_cex, adj = c(0.5, 1))
-        text(x=cur_x- cur_space_x/4 + 2,
-             y = seq(cur_y - cur_space_y/2 + cur_space_y/4,
-                     cur_y + cur_space_y/2 - cur_space_y/8, length.out = 3),
-             labels = rev(cur_labels), col = "black",
-             adj = 0, cex = label_cex)
-        rasterImage(cur_legend,
-                    cur_x - cur_space_x/2,
-                    cur_y + cur_space_y/2 - cur_space_y/8,
-                    cur_x - cur_space_x/4,
-                    cur_y - cur_space_y/2 + cur_space_y/4)
       }
+
+      cur_labels <- c(format(round(cur_min, 1), nsmall = 1),
+                      format(round(cur_max/2, 1), nsmall = 1),
+                      format(round(cur_max, 1), nsmall = 1))
+      # Define title cex
+      if(is.null(colour_by.title.cex)){
+        title_cex <- (cur_space_x/1.5)/title_width
+      } else {
+        title_cex <- colour_by.title.cex
+      }
+
+      # Define label cex
+      if(is.null(colour_by.labels.cex)){
+        label_cex <- (cur_space_x/2)/label_width
+      } else {
+        label_cex <- colour_by.labels.cex
+      }
+
+      cur_legend <- as.raster(matrix(rev(colorRampPalette(cur_col$colour_by[[colour_by[i]]])(101)),
+                                     ncol=1))
+      text(x = cur_x, y = cur_y - cur_space_y/2,
+           label = colour_by[i], col = "black",
+           font = colour_by.title.font,
+           cex = title_cex, adj = c(0.5, 1))
+      text(x=cur_x- cur_space_x/4 + 2,
+           y = seq(cur_y - cur_space_y/2 + cur_space_y/4,
+                   cur_y + cur_space_y/2 - cur_space_y/8, length.out = 3),
+           labels = rev(cur_labels), col = "black",
+           adj = 0, cex = label_cex)
+      rasterImage(cur_legend,
+                  cur_x - cur_space_x/2,
+                  cur_y + cur_space_y/2 - cur_space_y/8,
+                  cur_x - cur_space_x/4,
+                  cur_y - cur_space_y/2 + cur_space_y/4)
+    }
   }
 
   # Next metadata legends

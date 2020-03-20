@@ -634,13 +634,51 @@ test_that("plotting-param: scale can be correctly set", {
   data("pancreasSCE")
 
   # Works
-  cur_images <- pancreasImages[-1]
-  cur_images <- c(cur_images, pancreasImages[1])
-  expect_silent(plotPixels(cur_images, colour_by = c("H3", "SMA")))
-  expect_silent(plotPixels(pancreasImages, colour_by = c("H3", "SMA")))
+  expect_silent(plotPixels(pancreasImages, colour_by = c("SMA", "CD44", "INS")))
   expect_silent(plotPixels(pancreasImages,
                            colour_by = c("SMA", "CD44", "INS"),
                            scale = FALSE))
+  expect_silent(plotPixels(pancreasImages,
+                           colour_by = c("SMA", "CD44", "INS"),
+                           scale = FALSE,
+                           bcg = list(SMA = c(0,2,1),
+                                      CD44 = c(0,1,1),
+                                      INS = c(0,10,1))))
+  expect_silent(plotPixels(pancreasImages,
+                           colour_by = c("SMA", "CD44", "INS"),
+                           scale = FALSE,
+                           display = "single",
+                           bcg = list(SMA = c(0,2,1),
+                                      CD44 = c(0,1,1),
+                                      INS = c(0,10,1))))
 
+  expect_silent(plotCells(pancreasMasks, object = pancreasSCE,
+                          img_id = "ImageNb", cell_id = "CellNb",
+                          colour_by = c("SMA", "CD44", "INS")))
+  expect_silent(plotCells(pancreasMasks, object = pancreasSCE,
+                          img_id = "ImageNb", cell_id = "CellNb",
+                          colour_by = c("SMA", "CD44", "INS"),
+                          scale = FALSE))
+  expect_silent(plotCells(pancreasMasks, object = pancreasSCE,
+                          img_id = "ImageNb", cell_id = "CellNb",
+                          colour_by = c("H3", "CD44", "INS"),
+                          scale = FALSE))
+  expect_silent(plotCells(pancreasMasks, object = pancreasSCE,
+                          img_id = "ImageNb", cell_id = "CellNb",
+                          colour_by = c("SMA", "CD44", "INS"),
+                          scale = FALSE,
+                          exprs_values = "exprs"))
+  expect_silent(plotCells(pancreasMasks, object = pancreasSCE,
+                          img_id = "ImageNb", cell_id = "CellNb",
+                          colour_by = c("SMA", "CD44", "INS"),
+                          scale = TRUE,
+                          exprs_values = "exprs"))
+
+  # Error
+  expect_error(plotPixels(pancreasImages,
+                          colour_by = c("SMA", "CD44", "INS"),
+                          scale = "test"),
+               regexp = "Invalid 'scale' entry.",
+               fixed = TRUE)
 })
 

@@ -67,10 +67,15 @@ test_that("plotPixels: Features can be displayed.", {
                            colour_by = c("H3", "SMA")))
   expect_silent(plotPixels(image = pancreasImages,
                            colour_by = c("H3", "SMA", "INS")))
-  expect_silent(plotPixels(image = pancreasImages,
-            colour_by = c("H3", "SMA", "INS", "CD38", "CD44")))
-  expect_silent(plotPixels(image = rev(pancreasImages),
-                           colour_by = c("H3", "SMA", "INS", "CD38", "CD44")))
+  expect_silent(test1 <- plotPixels(image = pancreasImages,
+            colour_by = c("H3", "SMA", "INS", "CD38", "CD44"),
+            return_plot = TRUE, display = "single"))
+  expect_silent(test2 <- plotPixels(image = rev(pancreasImages),
+                           colour_by = c("H3", "SMA", "INS", "CD38", "CD44"),
+                           return_plot = TRUE, display = "single"))
+  expect_identical(test1$plot$A02_imc, test2$plot$A02_imc)
+  expect_identical(test1$plot$D01_imc, test2$plot$D01_imc)
+  expect_identical(test1$plot$F01_imc, test2$plot$F01_imc)
 
   # Error
   expect_error(plotPixels(image = pancreasImages, colour_by = "test"),
