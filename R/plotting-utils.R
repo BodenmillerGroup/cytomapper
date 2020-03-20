@@ -347,6 +347,10 @@
     cur_out <- list()
   }
 
+  cur_par <- par(bty="n", mai=c(0,0,0,0), xaxs="i",
+                 yaxs="i", xaxt="n", yaxt="n", col = "white")
+  on.exit(par(cur_par))
+
   if(!is.null(plottingParam$save_image) && plottingParam$display == "all"){
     image_location <- plottingParam$save_image$filename
     image_scale <- plottingParam$save_image$scale
@@ -368,9 +372,8 @@
     image_scale <- 1
   }
 
-  cur_par <- par(bty="n", mai=c(0,0,0,0), xaxs="i",
+  par(bty="n", mai=c(0,0,0,0), xaxs="i",
       yaxs="i", xaxt="n", yaxt="n", col = "white")
-  on.exit(par(cur_par))
 
   if(plottingParam$display == "all"){
     plot(x_len, y_len, type="n", xlab="", ylab="",
@@ -414,9 +417,8 @@
                pointsize = 12 * image_scale)
         }
 
-        cur_par <- par(bty="n", mai=c(0,0,0,0), xaxs="i",
-                       yaxs="i", xaxt="n", yaxt="n", col = "white")
-        on.exit(par(cur_par))
+        par(bty="n", mai=c(0,0,0,0), xaxs="i",
+            yaxs="i", xaxt="n", yaxt="n", col = "white")
       }
 
       if(plottingParam$display == "all"){

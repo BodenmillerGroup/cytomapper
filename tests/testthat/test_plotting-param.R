@@ -168,9 +168,14 @@ test_that("plotting-param: save_image can be set.", {
 
   # Works
   expect_silent(plotPixels(pancreasImages, save_image = NULL))
+
+  # Test if par is correctly returned
+  cur_par1 <- par()
   expect_silent(plotPixels(pancreasImages,
                           save_image = list(filename = paste0(cur_path, "test.png"),
                                             scale = 10)))
+  cur_par2 <- par()
+  expect_identical(cur_par1, cur_par2)
   expect_true(file.exists(paste0(cur_path, "test.png")))
   expect_silent(plotPixels(pancreasImages,
                            save_image = list(filename = paste0(cur_path, "test.jpeg"),
@@ -567,10 +572,16 @@ test_that("plotting-param: images can be plotted individually.", {
                            display = "single"))
 
   # save_image
+  cur_path <- tempfile()
+  on.exit(unlink(cur_path))
+
+  cur_par1 <- par()
   expect_silent(plotPixels(pancreasImages, colour_by = c("H3", "SMA", "CD44"),
-                           save_image = list(filename = "~/Desktop/test.png",
-                                             scale = 10),
+                           save_image = list(filename = paste0(cur_path, "test.png"),
+                                             scale = 2),
                            display = "single"))
+  cur_par2 <- par()
+  expect_identical(cur_par1, cur_par2)
 
   # Fix height of image title and legend
 
