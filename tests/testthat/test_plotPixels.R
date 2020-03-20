@@ -69,6 +69,8 @@ test_that("plotPixels: Features can be displayed.", {
                            colour_by = c("H3", "SMA", "INS")))
   expect_silent(plotPixels(image = pancreasImages,
             colour_by = c("H3", "SMA", "INS", "CD38", "CD44")))
+  expect_silent(plotPixels(image = rev(pancreasImages),
+                           colour_by = c("H3", "SMA", "INS", "CD38", "CD44")))
 
   # Error
   expect_error(plotPixels(image = pancreasImages, colour_by = "test"),

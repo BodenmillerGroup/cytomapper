@@ -59,6 +59,10 @@ test_that("plotCells: Features can be displayed.", {
             mask = pancreasMasks, img_id = "ImageNb",
             cell_id = "CellNb",
             colour_by = c("H3", "SMA", "INS", "CD38", "CD44")))
+  expect_silent(plotCells(object = pancreasSCE,
+                          mask = rev(pancreasMasks), img_id = "ImageNb",
+                          cell_id = "CellNb",
+                          colour_by = c("H3", "SMA", "INS", "CD38", "CD44")))
 
   # Error
   expect_error(plotCells(mask = pancreasMasks, colour_by = "H3"),

@@ -14,10 +14,10 @@
 #' @param legend TODO
 #' @param margin TODO
 #' @param display TODO
+#' @param scale TODO
 #'
 #'@section Setting further parameters:
 #' TODO
-#' # scale TRUE FALSE
 #'
 #' @return TODO
 #'
@@ -35,7 +35,8 @@ NULL
   cur_entries <- names(dotArgs)
   supported <- c("scale_bar", "image_title", "missing_colour",
                  "background_colour", "save_image", "return_plot",
-                 "return_images", "legend", "margin", "display")
+                 "return_images", "legend", "margin", "display",
+                 "scale")
   not_supported <- cur_entries[!(cur_entries %in% supported)]
   if(length(not_supported) > 0L){
     stop("Entries ", paste0("'", not_supported, "'", collapse = ", "), " are not supported")
@@ -134,6 +135,16 @@ NULL
       stop("Invalid 'display' entry.")
     }
     dotArgs$display <- dotArgs$display
+  }
+
+  # scale
+  if(!("scale" %in% names(dotArgs))){
+    dotArgs$scale <- TRUE
+  } else {
+    if(!is.logical(dotArgs$scale)){
+      stop("Invalid 'scale' entry.")
+    }
+    dotArgs$scale <- dotArgs$scale
   }
 
   # missing_colour

@@ -532,17 +532,6 @@ test_that("plotting-param: images can be plotted individually.", {
   data("pancreasMasks")
   data("pancreasSCE")
 
-  #' @param missing_colour TODO
-  #' @param background_colour TODO
-  #' @param scale_bar TODO
-  #' @param image_title TODO
-  #' @param save_image TODO
-  #' @param return_plot TODO
-  #' @param return_images TODO
-  #' @param legend TODO
-  #' @param margin TODO
-  #' @param display TODO
-
   # Works
   expect_silent(plotPixels(pancreasImages, colour_by = c("H3", "SMA")))
   expect_silent(plotPixels(pancreasImages, display = "all"))
@@ -636,5 +625,22 @@ test_that("plotting-param: images can be plotted individually.", {
                           display = "test"),
                regexp = "Invalid 'display' entry.",
                fixed = TRUE)
+})
+
+
+test_that("plotting-param: scale can be correctly set", {
+  data("pancreasImages")
+  data("pancreasMasks")
+  data("pancreasSCE")
+
+  # Works
+  cur_images <- pancreasImages[-1]
+  cur_images <- c(cur_images, pancreasImages[1])
+  expect_silent(plotPixels(cur_images, colour_by = c("H3", "SMA")))
+  expect_silent(plotPixels(pancreasImages, colour_by = c("H3", "SMA")))
+  expect_silent(plotPixels(pancreasImages,
+                           colour_by = c("SMA", "CD44", "INS"),
+                           scale = FALSE))
+
 })
 

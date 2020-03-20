@@ -116,7 +116,7 @@
 
 # Colour images based on features
 #' @importFrom EBImage normalize
-.colourImageByFeature <- function(image, colour_by, bcg, cur_colour){
+.colourImageByFeature <- function(image, colour_by, bcg, cur_colour, plottingParam){
 
   max.values <- as.data.frame(lapply(getChannels(image, colour_by), function(x){
     apply(x, 3, max)
@@ -146,10 +146,20 @@
       } else {
         cur_bcg <- c(0, 1, 1)
       }
+
+      # Select min and max values
+      if(plottingParam$scale){
+        cur_min <- min.values[x]
+        cur_max <- max.values[x]
+      } else {
+        cur_min <- min(min.values)
+        cur_max <- max(max.values)
+      }
+
       cur_frame <- cur_image[,,x]
       cur_frame <- ((cur_frame + cur_bcg[1]) * cur_bcg[2]) ^ cur_bcg[3]
       cur_frame <- normalize(cur_frame, separate=TRUE,
-                             ft = c(0,1), inputRange = c(min.values[x], max.values[x]))
+                             ft = c(0,1), inputRange = c(cur_min, cur_max))
       col_ind <- colorRampPalette(cur_colour[[x]])(101)
       cur_frame <- replace(cur_frame, 1:length(cur_frame), col_ind[round(100*cur_frame) + 1])
       cur_frame
@@ -582,8 +592,8 @@
           cur_min <- min(assay(object, exprs_values)[colour_by[i],])
           cur_max <- max(assay(object, exprs_values)[colour_by[i],])
         } else {
-          cur_min <- min(getChannels(image, colour_by[i])[[1]])
-          cur_max <- max(getChannels(image, colour_by[i])[[1]])
+          cur_min <- min(unlist(lapply(getChannels(image, colour_by[i]), min)))
+          cur_max <- max(unlist(lapply(getChannels(image, colour_by[i]), max)))
         }
 
         cur_labels <- c(format(round(cur_min, 1), nsmall = 1),

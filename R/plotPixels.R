@@ -97,7 +97,8 @@ plotPixels <- function(image,
     out_img <- .colourImageByFeature(image,
                                  colour_by,
                                  bcg,
-                                 cur_col$colour_by)
+                                 cur_col$colour_by,
+                                 plottingParam)
   } else {
     if(is.null(channelNames(image))){
       colour_by <- 1
