@@ -377,7 +377,7 @@ test_that("plotPixels: Size of images can be changed.", {
   # Change size of images
   # Decreasing the size
   cur_masks <- pancreasMasks
-  setImages(cur_masks, "A02_mask") <- cur_masks[[1]][1:50, 1:50,drop=FALSE]
+  setImages(cur_masks, "A02_mask") <- cur_masks[[1]][1:50, 1:10,drop=FALSE]
   expect_error(plotPixels(object = pancreasSCE,
                            image = pancreasImages,
                            mask = cur_masks, img_id = "ImageNb",
@@ -388,7 +388,7 @@ test_that("plotPixels: Size of images can be changed.", {
 
 
   cur_images <- pancreasImages
-  setImages(cur_images, "A02_imc") <- cur_images[[1]][1:50, 1:50,,drop=FALSE]
+  setImages(cur_images, "A02_imc") <- cur_images[[1]][1:50, 1:10,,drop=FALSE]
 
   expect_silent(plotPixels(object = pancreasSCE,
                            image = cur_images,
@@ -403,7 +403,9 @@ test_that("plotPixels: Size of images can be changed.", {
             subset_images = 1))
   expect_silent(plotPixels(image = cur_images,
                            colour_by = "H3",
-                           subset_images = 1))
+                           subset_images = 1,
+                           legend = list(colour_by.labels.cex = 0.6,
+                                         colour_by.title.cex = 0.5)))
 })
 
 
