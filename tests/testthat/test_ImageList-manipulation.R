@@ -17,7 +17,7 @@ test_that("ImageList can be scaled.", {
              pattern = "mask.tiff", full.names = TRUE)
   cur_images <- loadImages(image.list)
   expect_equal(imageData(cur_images[[1]])[11, 1:2],
-                   c(0.0008087282, 0.0008087282))
+                   c(0.0001983673, 0.0001983673))
 
   expect_error(plotCells(cur_images),
                regexp = "Segmentation masks must only contain integer values.",
@@ -25,7 +25,7 @@ test_that("ImageList can be scaled.", {
 
   expect_silent(cur_images <- scaleImages(cur_images, (2^16)-1))
   expect_equal(imageData(cur_images[[1]])[11, 1:2],
-               c(53, 53))
+               c(13, 13))
   expect_silent(plotCells(cur_images))
 
   # Error
