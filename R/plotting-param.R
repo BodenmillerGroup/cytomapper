@@ -15,6 +15,7 @@
 #' @param margin TODO
 #' @param display TODO
 #' @param scale TODO
+#' @param interpolate TODO
 #'
 #'@section Setting further parameters:
 #' TODO
@@ -36,7 +37,7 @@ NULL
   supported <- c("scale_bar", "image_title", "missing_colour",
                  "background_colour", "save_image", "return_plot",
                  "return_images", "legend", "margin", "display",
-                 "scale")
+                 "scale", "interpolate")
   not_supported <- cur_entries[!(cur_entries %in% supported)]
   if(length(not_supported) > 0L){
     stop("Entries ", paste0("'", not_supported, "'", collapse = ", "), " are not supported")
@@ -145,6 +146,16 @@ NULL
       stop("Invalid 'scale' entry.")
     }
     dotArgs$scale <- dotArgs$scale
+  }
+
+  # scale
+  if(!("interpolate" %in% names(dotArgs))){
+    dotArgs$interpolate <- TRUE
+  } else {
+    if(!is.logical(dotArgs$interpolate)){
+      stop("Invalid 'interpolate' entry.")
+    }
+    dotArgs$interpolate <- dotArgs$interpolate
   }
 
   # missing_colour

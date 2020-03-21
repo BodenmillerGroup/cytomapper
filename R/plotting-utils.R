@@ -442,7 +442,8 @@
                     xleft,
                     ybottom,
                     xright,
-                    ytop)
+                    ytop,
+                    interpolate = plottingParam$interpolate)
       } else {
         plot(c(0, dim_x), c(0, dim_y), type="n", xlab="", ylab="",
              asp = 1, ylim = rev(c(0, dim_y)))
@@ -450,7 +451,8 @@
                     xleft = 0,
                     ybottom = dim_y,
                     xright = dim_x,
-                    ytop = 0)
+                    ytop = 0,
+                    interpolate = plottingParam$interpolate)
       }
 
       if(ind == legend_ind && !is.null(plottingParam$legend)){

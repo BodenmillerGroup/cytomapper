@@ -694,3 +694,28 @@ test_that("plotting-param: scale can be correctly set", {
                fixed = TRUE)
 })
 
+test_that("plotting-param: images can be interpolated", {
+  data("pancreasImages")
+  data("pancreasMasks")
+  data("pancreasSCE")
+
+  # Works
+  expect_silent(plotCells(pancreasMasks, interpolate = TRUE))
+  expect_silent(plotCells(pancreasMasks, interpolate = FALSE))
+
+  expect_silent(plotPixels(pancreasImages, interpolate = TRUE))
+  expect_silent(plotPixels(pancreasImages, interpolate = FALSE))
+
+  expect_silent(plotPixels(pancreasImages, colour_by = c("SMA", "CD44"),
+                           interpolate = TRUE))
+  expect_silent(plotPixels(pancreasImages, colour_by = c("SMA", "CD44"),
+                           interpolate = FALSE))
+
+  # Error
+  expect_error(plotPixels(pancreasImages,
+                          colour_by = c("SMA", "CD44", "INS"),
+                          interpolate = "test"),
+               regexp = "Invalid 'interpolate' entry.",
+               fixed = TRUE)
+})
+
