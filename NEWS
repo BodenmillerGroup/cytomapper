@@ -60,3 +60,8 @@ Changes in version 0.1.9 (2020-03-20):
 
 + scale, return_plot, return_images, legend, margin, display parameters
 + Finalised unit tests
+
+Changes in version 0.1.10 (2020-03-21):
+
++ interpolate parameter
++ Bug fix to achieve correct aspect ratios
