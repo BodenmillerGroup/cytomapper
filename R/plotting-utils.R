@@ -324,11 +324,11 @@
   # We will take the largest image and
   # build the grid based on its size
   cur_dims <- data.frame(lapply(out_img, dim))
-  m_height <- max(cur_dims[1,])
-  m_width <- max(cur_dims[2,])
+  m_width <- max(cur_dims[1L,])
+  m_height <- max(cur_dims[2L,])
 
-  cur_dims_x <- c(m_width, as.numeric(cur_dims[2,]))
-  cur_dims_y <- c(m_height, as.numeric(cur_dims[1,]))
+  cur_dims_x <- c(m_width, as.numeric(cur_dims[1L,]))
+  cur_dims_y <- c(m_height, as.numeric(cur_dims[2L,]))
 
   # Add empty image to list for legend
   if(!is.null(plottingParam$legend)){

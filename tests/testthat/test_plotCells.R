@@ -427,11 +427,16 @@ test_that("plotCells: Size of images can be changed.", {
   # Change size of images
   # Decreasing the size
   cur_images <- pancreasMasks
-  setImages(cur_images, "A02_mask") <- cur_images[[1]][1:50, 1:50,drop=FALSE]
+  setImages(cur_images, "A02_mask") <- cur_images[[1]][1:50, 1:10,drop=FALSE]
 
   expect_silent(plotCells(object = pancreasSCE,
             mask = cur_images, img_id = "ImageNb",
             cell_id = "CellNb", colour_by = "CellType"))
+  expect_silent(plotCells(object = pancreasSCE,
+                          mask = cur_images, img_id = "ImageNb",
+                          cell_id = "CellNb",
+                          colour_by = "CellType",
+                          display = "single"))
   expect_silent(plotCells(object = pancreasSCE,
             mask = cur_images, img_id = "ImageNb",
             cell_id = "CellNb", colour_by = "CellType",
