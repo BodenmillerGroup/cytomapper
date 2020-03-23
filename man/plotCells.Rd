@@ -24,7 +24,8 @@ plotCells(
 \item{object}{a \code{\linkS4class{SingleCellExperiment}} object.}
 
 \item{cell_id}{character specifying the \code{colData(object)} entry, in which the
-integer cell IDs are stored}
+integer cell IDs are stored. These IDs should match the integer pixel values in
+the segmentation mask object.}
 
 \item{img_id}{character specifying the \code{colData(object)} and
 \code{mcols(mask)} entry, in which the image IDs are stored (see section
@@ -80,7 +81,7 @@ features and metadata stored in the SingleCellExperiment object, an \code{img_id
 and \code{cell_id} entry needs to be provided. Image IDs are matched between the
 \code{SingleCellExperiment} and \code{ImageList} object via entries to the
 \code{colData(object)[,img_id]} and the \code{mcols(mask)[,img_id]} slots.
-Cell IDs are matched between \code{SingleCellExperiment} and \code{ImageList}
+Cell IDs are matched between the \code{SingleCellExperiment} and \code{ImageList}
 object via entries to \code{colData(object)[,cell_id]} and the integer values
 of the segmentation masks.
 }
@@ -119,32 +120,32 @@ The \code{SingleCellExperiment} object can be subsetted before calling the
 data(pancreasMasks)
 data(pancreasSCE)
 
-# Visualizes the masks
+# Visualize the masks
 plotCells(pancreasMasks)
 
-# Colours the masks based on averaged expression
+# Colour the masks based on averaged expression
 plotCells(pancreasMasks, object = pancreasSCE, img_id = "ImageNb",
           cell_id = "CellNb", colour_by = c("SMA", "CD44"))
 
-# Colours the masks based on metadata
+# Colour the masks based on metadata
 plotCells(pancreasMasks, object = pancreasSCE, img_id = "ImageNb",
           cell_id = "CellNb", colour_by = "CellType")
 
-# Outlines the masks based on metadata
+# Outline the masks based on metadata
 plotCells(pancreasMasks, object = pancreasSCE, img_id = "ImageNb",
           cell_id = "CellNb", colour_by = "SMA",
           outline_by = "CellType")
 
-# Colours the masks based on arcsinh-transformed expression
+# Colour the masks based on arcsinh-transformed expression
 plotCells(pancreasMasks, object = pancreasSCE, img_id = "ImageNb",
           cell_id = "CellNb", colour_by = "SMA",
           exprs_values = "exprs")
 
-# Subsets the images
+# Subset the images
 plotCells(pancreasMasks, object = pancreasSCE, img_id = "ImageNb",
           cell_id = "CellNb", colour_by = "SMA", subset_images = c(1,2))
 
-# Sets colour
+# Set colour
 plotCells(pancreasMasks, object = pancreasSCE, img_id = "ImageNb",
           cell_id = "CellNb", colour_by = "SMA", outline_by = "CellType",
           colour = list(SMA = c("black", "red"),

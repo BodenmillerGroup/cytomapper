@@ -20,44 +20,151 @@ plotPixels(
 }
 \arguments{
 \item{image}{an \code{\linkS4class{ImageList}} object containing single or
-multi-channel \code{\linkS4class{Image}} objects (see Details)}
+multi-channel \code{\linkS4class{Image}} objects (see details below)}
 
-\item{object}{(optional) an \code{\linkS4class{SingleCellExperiment}} object.}
+\item{object}{an optional \code{\linkS4class{SingleCellExperiment}} object.}
 
-\item{mask}{(optional) an \code{\linkS4class{ImageList}} object containing
-single-channel \code{\linkS4class{Image}} objects}
+\item{mask}{an optional \code{\linkS4class{ImageList}} object containing
+segmentaion masks in form of single-channel \code{\linkS4class{Image}}
+objects (see details below)}
 
-\item{cell_id}{(optional) character specifying the \code{colData(object)}, in which the
-integer cell IDs are stored}
+\item{cell_id}{character specifying the \code{colData(object)} entry, in which the
+integer cell IDs are stored. These IDs should match the integer pixel values in
+the segmentation mask object.}
 
-\item{img_id}{(optional)}
+\item{img_id}{character specifying the \code{colData(object)},
+\code{mcols(image)} and \code{mcols(mask)} entry, in which the image IDs
+are stored (see section 'Linking the \code{SingleCellExperiment} and
+\code{ImageList} objects' below)}
 
-\item{colour_by}{TODO}
+\item{colour_by}{character or character vector specifying the features
+(contained in \code{channelNames(image)}) used to colour individual cells.
+Pixels can be coloured by up to six features.}
 
-\item{bcg}{brightness/contrast/gamma list("H3" = c(0,1,1))}
+\item{bcg}{a list with names matching the entries to \code{colour_by}. Each
+entry contains a numeric vector of three entries:
+\enumerate{
+  \item brightness value added to the specified channel
+  \item contrast value multiplied with the specified channel
+  \item gamma value (channel is exponentiated by this value)
+}
+Default is c(0,1,1).}
 
-\item{outline_by}{(optional)}
+\item{outline_by}{single character indicating the \code{colData(object)} entry
+by which to outline individual cells}
 
-\item{subset_images}{TODO Note that Masks and Images need to have same names or same IDs}
+\item{subset_images}{numeric, character or vector of such indicating which
+masks to display. Images can be subsetted by entries to \code{mcols(image)},
+\code{names(image)} and a numeric index. When providing images and masks,
+subsetting is performed via entries to \code{mcols(image)} and
+\code{mcols(mask)}.}
 
-\item{colour}{TODO}
+\item{colour}{a list with names matching the entries to \code{colour_by}
+and/or \code{outline_by}. When setting the colour for continous features,
+at least two colours need to be provided indicating the colours for minimum
+and maximum values. When colouring discrete vectors, a colour for each
+unique entry needs to be provided (see section 'Setting the colours' and
+examples)}
 
 \item{...}{Further arguments passed to  \code{?"\link{plotting-param}"}}
-}
-\value{
-TODO
 }
 \description{
 This function takes a \code{\linkS4class{ImageList}} object to colour pixels
 by marker expression. Additionally, a \code{\linkS4class{SingleCellExperiment}}
-object and \code{\linkS4class{ImageList}} object containing segmentation masks
+object and \code{ImageList} object containing segmentation masks
 can be provided to outline cells based on metadata.
 }
+\section{Multi-channel image and segmentation mask objects}{
+
+For the \code{plotPixels} function, \code{image} refers to a
+\code{\linkS4class{ImageList}} object that contains a single or multiple
+single- or multi-channel \code{\linkS4class{Image}} objects. Up to six
+channels can be overlayed to generate a composite image. When outlining
+cells, a \code{\linkS4class{SingleCellExperiment}} object and
+\code{\linkS4class{ImageList}} object containing segmentation masks must be
+provided. The function assumes that each object in the segmentation mask is a
+cell. The key features of such segmentation masks include:
+\itemize{
+  \item each Image object contains only one channel
+  \item pixel values are integers indicating the cells' IDs
+}
+}
+
+\section{Linking the \code{SingleCellExperiment} and \code{ImageList} objects}{
+
+To outline individual cells contained in the segmentation masks based on
+metadata stored in the SingleCellExperiment object, an \code{img_id}
+and \code{cell_id} entry needs to be provided. Image IDs are matched between
+the \code{SingleCellExperiment} and \code{ImageList} objects via entries to
+the \code{colData(object)[,img_id]}, \code{mcols(image)[,img_id]} and the
+\code{mcols(image)[,img_id]} slots. Cell IDs are matched between the
+\code{SingleCellExperiment} and \code{ImageList} object via entries to
+\code{colData(object)[,cell_id]} and the integer values of the segmentation
+masks.
+}
+
+\section{Setting the colours}{
+
+By default, features and metadata are coloured based on internally-set
+colours. To set new colours, a \code{list} object must be provided. The names
+of the object must correspond to the entries to \code{colour_by} and/or
+\code{outline_by}. When setting the colours for continous expression values
+or continous metadata entries, a vector of at least two colours need to be
+specified. These colours will be passed onto \code{\link{colorRampPalette}}
+for interpolation. Cells can be outlined by discrete metadata entries wh
+en specifying a named vector in which each entry corresponds to a unique
+entry to the metadata vector.
+}
+
+\section{Subsetting the \code{ImageList} objects}{
+
+The \code{subset_images} parameter controls which images to display. If the
+\code{img_id} parameter is set, images are subsetted based on the
+\code{mcols(image)[,img_id]} entry. Otherwise, images can be subsetted by
+entry names (stored in \code{names(image)}) or simply by numeric indexing.
+Alternatively, the \code{ImageList} objects can be subsetted perfore calling
+the \code{plotCells} function.
+}
+
+\section{Subsetting the \code{SingleCellExperiment} object}{
+
+The \code{SingleCellExperiment} object can be subsetted before calling the
+\code{plotCells} function. In that case, only cells contained in the
+\code{SingleCellExperiment} object are outlined.
+}
+
 \examples{
-# TODO
+data(pancreasMasks)
+data(pancreasImages)
+data(pancreasSCE)
+
+# Visualize the images - by default the first channel
+plotPixels(pancreasImages)
+
+# Colour the channels
+plotPixels(pancreasImages, colour_by = c("SMA", "CD44"))
+
+# Outline the cells based on metadata
+plotPixels(pancreasImages, object = pancreasSCE, mask = pancreasMasks,
+          img_id = "ImageNb", cell_id = "CellNb",
+          colour_by = c("SMA", "CD44"), outline_by = "CellType")
+
+# Enhance individual channels
+plotPixels(pancreasImages, colour_by = c("SMA", "CD44"),
+          bcg = list(SMA = c(0, 2, 1)))
+
+# Subset the images
+plotPixels(pancreasImages, colour_by = c("SMA", "CD44"),
+          subset_images = c(1,2))
+
+# Set colour
+plotPixels(pancreasImages, colour_by = c("SMA", "CD44"),
+          colour = list(SMA = c("black", "green"),
+                        CD44 = c("black", "blue")))
 
 }
 \author{
-Nils Eling \email{nils.eling@dqbm.uzh.ch},
-Nicolas Damond \email{nicolas.damond@dqbm.uzh.ch}
+Nils Eling (\email{nils.eling@dqbm.uzh.ch})
+
+Nicolas Damond (\email{nicolas.damond@dqbm.uzh.ch})
 }
