@@ -18,49 +18,139 @@ plotCells(
 )
 }
 \arguments{
-\item{mask}{an \code{\linkS4class{ImageList}} object single-channel
-\code{\linkS4class{Image}} objects (see Details)}
+\item{mask}{an \code{\linkS4class{ImageList}} containing single-channel
+\code{\linkS4class{Image}} objects (see section 'Segmentation mask object' below).}
 
 \item{object}{a \code{\linkS4class{SingleCellExperiment}} object.}
 
-\item{cell_id}{character specifying the \code{colData(object)}, in which the
+\item{cell_id}{character specifying the \code{colData(object)} entry, in which the
 integer cell IDs are stored}
 
-\item{img_id}{TODO}
+\item{img_id}{character specifying the \code{colData(object)} and
+\code{mcols(mask)} entry, in which the image IDs are stored (see section
+'Linking the \code{SingleCellExperiment} and \code{ImageList} object'
+below)}
 
-\item{colour_by}{TODO}
+\item{colour_by}{character or character vector specifying the features
+(\code{rownames(object)}) or metadata (\code{colData(object)} entry) used
+to colour individual cells. Cells can be coloured by single
+\code{colData(object)} entries or by up to six features.}
 
-\item{outline_by}{TODO}
+\item{outline_by}{single character indicating the \code{colData(object)} entry
+by which to outline individual cells}
 
-\item{exprs_values}{TODO}
+\item{exprs_values}{single character indicating which \code{assay(object)}
+entry to use when visualizing feature counts.}
 
-\item{subset_images}{TODO}
+\item{subset_images}{numeric, character or vector of such indicating which
+masks to display. Masks can be subsetted by entries to \code{mcols(mask)},
+\code{names(mask)} and a numeric index.}
 
-\item{colour}{TODO}
+\item{colour}{a list with names matching the entries to \code{colour_by}
+and/or \code{outline_by}. When setting the colour for continous features,
+at least two colours need to be provided indicating the colours for minimum
+and maximum values. When colouring discrete vectors, a colour for each
+unique entry needs to be provided (see section 'Setting the colours' and
+examples)}
 
 \item{...}{Further arguments passed to  \code{?"\link{plotting-param}"}}
 }
-\value{
-TODO
-}
 \description{
 This function takes a \code{\linkS4class{SingleCellExperiment}} and
-\code{\linkS4class{ImageList}} object to colour cells by marker expression or
-metadata.
+\code{\linkS4class{ImageList}} object containing segmentation masks to colour
+cells by marker expression or metadata.
 }
-\section{Segmentaion mask object}{
+\section{Segmentation mask object}{
 
-TODO
+For the \code{plotCells} function, \code{mask} refers to a
+\code{\linkS4class{ImageList}} object that contains a single or multiple
+segmentation masks in form of individual \code{\linkS4class{Image}} objects.
+The function assumes that each object in the segmentation mask is a cell.
+The key features of such masks include:
+\itemize{
+  \item each Image object contains only one channel
+  \item pixel values are integers indicating the cells' IDs
+}
 }
 
-\section{Linking image IDs and cell IDs}{
+\section{Linking the \code{SingleCellExperiment} and \code{ImageList} object}{
 
-TODO
+To colour individual cells contained in the segmentation masks based on
+features and metadata stored in the SingleCellExperiment object, an \code{img_id}
+and \code{cell_id} entry needs to be provided. Image IDs are matched between the
+\code{SingleCellExperiment} and \code{ImageList} object via entries to the
+\code{colData(object)[,img_id]} and the \code{mcols(mask)[,img_id]} slots.
+Cell IDs are matched between \code{SingleCellExperiment} and \code{ImageList}
+object via entries to \code{colData(object)[,cell_id]} and the integer values
+of the segmentation masks.
+}
+
+\section{Setting the colours}{
+
+By default, features and metadata are coloured based on internally-set
+colours. To set new colours, a \code{list} object must be provided. The names
+of the object must correspond to the entries to \code{colour_by} and/or
+\code{outline_by}. When setting the colours for continous expression values
+or continous metadata entries, a vector of at least two colours need to be
+specified. These colours will be passed onto \code{\link{colorRampPalette}}
+for interpolation. Discrete metadata entries can be coloured by specifying a
+named vector in which each entry corresponds to a unique entry to the
+metadata vector.
+}
+
+\section{Subsetting the \code{ImageList} object}{
+
+The \code{subset_images} parameter controls which images to display. If the
+\code{img_id} parameter is set, images are subsetted based on the
+\code{mcols(mask)[,img_id]} entry. Otherwise, images can be subsetted by
+entry names (stored in \code{names(mask)}) or simply by numeric indexing.
+Alternatively, the \code{ImageList} object can be subsetted perfore calling
+the \code{plotCells} function.
+}
+
+\section{Subsetting the \code{SingleCellExperiment} object}{
+
+The \code{SingleCellExperiment} object can be subsetted before calling the
+\code{plotCells} function. In that case, only cells contained in the
+\code{SingleCellExperiment} object are coloured/outlined.
 }
 
 \examples{
-# TODO
-# colour = list(cell_type = c("CD4" = "red", "CD8" = "blue"),
+data(pancreasMasks)
+data(pancreasSCE)
+
+# Visualizes the masks
+plotCells(pancreasMasks)
+
+# Colours the masks based on averaged expression
+plotCells(pancreasMasks, object = pancreasSCE, img_id = "ImageNb",
+          cell_id = "CellNb", colour_by = c("SMA", "CD44"))
+
+# Colours the masks based on metadata
+plotCells(pancreasMasks, object = pancreasSCE, img_id = "ImageNb",
+          cell_id = "CellNb", colour_by = "CellType")
+
+# Outlines the masks based on metadata
+plotCells(pancreasMasks, object = pancreasSCE, img_id = "ImageNb",
+          cell_id = "CellNb", colour_by = "SMA",
+          outline_by = "CellType")
+
+# Colours the masks based on arcsinh-transformed expression
+plotCells(pancreasMasks, object = pancreasSCE, img_id = "ImageNb",
+          cell_id = "CellNb", colour_by = "SMA",
+          exprs_values = "exprs")
+
+# Subsets the images
+plotCells(pancreasMasks, object = pancreasSCE, img_id = "ImageNb",
+          cell_id = "CellNb", colour_by = "SMA", subset_images = c(1,2))
+
+# Sets colour
+plotCells(pancreasMasks, object = pancreasSCE, img_id = "ImageNb",
+          cell_id = "CellNb", colour_by = "SMA", outline_by = "CellType",
+          colour = list(SMA = c("black", "red"),
+                        CellType = c(celltype_A = "blue",
+                                     celltype_B = "green",
+                                     celltype_C = "red")))
 
 }
 \author{

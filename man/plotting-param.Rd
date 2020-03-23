@@ -25,6 +25,8 @@
 \item{display}{TODO}
 
 \item{scale}{TODO}
+
+\item{interpolate}{TODO}
 }
 \value{
 TODO
