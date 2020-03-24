@@ -133,7 +133,70 @@ number of parameter that can be set to change the visual representation of
 plotted images.
 }
 \examples{
-# TODO
+data("pancreasImages")
+data("pancreasMasks")
+data("pancreasSCE")
+
+# Setting missing colour
+plotCells(pancreasMasks, missing_colour = "blue")
+
+# Setting background colour
+plotCells(pancreasMasks, background_colour = "blue")
+
+# Setting the scale bar
+plotCells(pancreasMasks, scale_bar = list(length = 10,
+                                          cex = 2,
+                                          lwd = 3,
+                                          colour = "red",
+                                          position = "bottomleft",
+                                          margin = c(5,5),
+                                          frame = 3))
+
+# Setting the image title
+plotCells(pancreasMasks,
+          image_title = list(text = c("image1", "image2", "image3"),
+                             position = "topleft",
+                             colour = "blue",
+                             margin = c(0,5),
+                             font = 2,
+                             cex = 2))
+
+# Return plot
+cur_out <- plotPixels(pancreasImages, return_plot = TRUE)
+cur_out$plot
+
+# Return images
+cur_out <- plotPixels(pancreasImages, return_images = TRUE)
+cur_out$images
+
+# Setting the legend
+plotCells(pancreasMasks, object = pancreasSCE,
+          img_id = "ImageNb", cell_id = "CellNb",
+          colour_by = c("SMA", "CD44"),
+          outline_by = "CellType",
+          legend = list(colour_by.title.font = 0.5,
+                        colour_by.title.cex = 0.5,
+                        colour_by.labels.cex = 0.5,
+                        outline_by.legend.cex = 0.5,
+                        margin = 0))
+
+# Setting the margin between images
+plotPixels(pancreasImages, margin = 3)
+
+# Displaying individual images
+plotPixels(pancreasImages, display = "single")
+
+# Supress scaling
+plotPixels(pancreasImages, colour_by = c("SMA", "INS"),
+           scale = TRUE)
+plotPixels(pancreasImages, colour_by = c("SMA", "INS"),
+           scale = FALSE)
+
+# Suppress interpolation
+plotPixels(pancreasImages, colour_by = c("SMA", "INS"),
+           interpolate = TRUE)
+plotPixels(pancreasImages, colour_by = c("SMA", "INS"),
+           interpolate = FALSE)
 
 }
 \seealso{
