@@ -78,6 +78,15 @@
 #' \code{plotCells} function. In that case, only cells contained in the
 #' \code{SingleCellExperiment} object are coloured/outlined.
 #'
+#' @section Colour scaling:
+#' When colouring features using the plotCells function, colours are scaled
+#' between the minimum and maximum per feature across the full assay contained
+#' in the SingleCellExperiment object. When subsetting images, cell-level
+#' expression is not scaled across the subsetted images but the whole
+#' SingleCellExperiment object. To avoid this, the SingleCellExperiment object
+#' can be subsetted to only contain the cells that should be displayed before
+#' plotting.
+#'
 #' @examples
 #' data(pancreasMasks)
 #' data(pancreasSCE)

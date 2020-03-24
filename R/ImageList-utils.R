@@ -173,7 +173,7 @@ setReplaceMethod("names",
 #' range of values in terms of percentiles (e.g. \code{c(0, 0.99)} for the 0 and
 #' 99th percentile clipping).
 #'
-#' \code{normalizeImages(object, separateChannels = TRUE, separateImages = FALSE,
+#' \code{normalize(object, separateChannels = TRUE, separateImages = FALSE,
 #'   ft = c(0, 1), percentileRange = c(0, 1), inputRange = NULL)}:
 #'
 #' \describe{

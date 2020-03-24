@@ -85,13 +85,21 @@
 #' \code{img_id} parameter is set, images are subsetted based on the
 #' \code{mcols(image)[,img_id]} entry. Otherwise, images can be subsetted by
 #' entry names (stored in \code{names(image)}) or simply by numeric indexing.
-#' Alternatively, the \code{ImageList} objects can be subsetted perfore calling
+#' Alternatively, the \code{ImageList} objects can be subsetted berfore calling
 #' the \code{plotCells} function.
 #'
 #' @section Subsetting the \code{SingleCellExperiment} object:
 #' The \code{SingleCellExperiment} object can be subsetted before calling the
 #' \code{plotCells} function. In that case, only cells contained in the
 #' \code{SingleCellExperiment} object are outlined.
+#'
+#' @section Colour scaling:
+#' When plotting pixel intensities, colours are scaled to the minimum and
+#' maximum per channel across all images that are being displayed. Therefore,
+#' when subsetting images, displayed intensities might change. However, the
+#' colour legend will display the correct numeric minimum and maximum pixel
+#' intensity. See the \code{\link[SingleCellMapper]{normalize}} on how to
+#' normalize ImageList objects.
 #'
 #' @examples
 #' data(pancreasMasks)
