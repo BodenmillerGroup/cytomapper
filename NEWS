@@ -65,3 +65,7 @@ Changes in version 0.1.10 (2020-03-21):
 
 + interpolate parameter
 + Bug fix to achieve correct aspect ratios
+
+Changes in version 0.1.11 (2020-03-24):
+
++ Complete documentation of all package functions
