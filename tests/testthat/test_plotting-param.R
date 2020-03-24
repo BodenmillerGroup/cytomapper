@@ -160,49 +160,49 @@ test_that("plotting-param: background_colour can be set.", {
                fixed = TRUE)
 })
 
-test_that("plotting-param: save_image can be set.", {
+test_that("plotting-param: save_plot can be set.", {
   data("pancreasImages")
 
   cur_path <- tempfile()
   on.exit(unlink(cur_path))
 
   # Works
-  expect_silent(plotPixels(pancreasImages, save_image = NULL))
+  expect_silent(plotPixels(pancreasImages, save_plot = NULL))
 
   # Test if par is correctly returned
   cur_par1 <- par()
   expect_silent(plotPixels(pancreasImages,
-                          save_image = list(filename = paste0(cur_path, "test.png"),
+                           save_plot = list(filename = paste0(cur_path, "test.png"),
                                             scale = 10)))
   cur_par2 <- par()
   expect_identical(cur_par1, cur_par2)
   expect_true(file.exists(paste0(cur_path, "test.png")))
   expect_silent(plotPixels(pancreasImages,
-                           save_image = list(filename = paste0(cur_path, "test.jpeg"),
+                           save_plot = list(filename = paste0(cur_path, "test.jpeg"),
                                              scale = 10)))
   expect_true(file.exists(paste0(cur_path, "test.jpeg")))
   expect_silent(plotPixels(pancreasImages,
-                           save_image = list(filename = paste0(cur_path, "test.tiff"),
+                           save_plot = list(filename = paste0(cur_path, "test.tiff"),
                                              scale = 10)))
   expect_true(file.exists(paste0(cur_path, "test.tiff")))
 
   # Error
   expect_error(plotPixels(pancreasImages,
-                          save_image = list(filename = "test")),
-               regexp = "Invalid entry to the 'save_image' list object")
+                          save_plot = list(filename = "test")),
+               regexp = "Invalid entry to the 'save_plot' list object")
   expect_error(plotPixels(pancreasImages,
-                          save_image = list(filename = 1)),
-               regexp = "Invalid entry to the 'save_image' list object")
+                          save_plot = list(filename = 1)),
+               regexp = "Invalid entry to the 'save_plot' list object")
   expect_error(plotPixels(pancreasImages,
-                          save_image = list(filename = "test.pdf")),
-               regexp = "Invalid entry to the 'save_image' list object")
+                          save_plot = list(filename = "test.pdf")),
+               regexp = "Invalid entry to the 'save_plot' list object")
   expect_error(plotPixels(pancreasImages,
-                          save_image = list(scale = 1)),
-               regexp = "Invalid entry to the 'save_image' list object")
+                          save_plot = list(scale = 1)),
+               regexp = "Invalid entry to the 'save_plot' list object")
   expect_error(plotPixels(pancreasImages,
-                          save_image = list(filename = "test.png",
+                          save_plot = list(filename = "test.png",
                                             scale = "test")),
-               regexp = "Invalid entry to the 'save_image' list object")
+               regexp = "Invalid entry to the 'save_plot' list object")
 })
 
 test_that("plotting-param: return_plot can be set.", {
@@ -560,7 +560,7 @@ test_that("plotting-param: images can be plotted individually.", {
                                               cex = 3),
                            display = "single"))
 
-  # save_image
+  # save_plot
   cur_path <- tempfile()
   on.exit(unlink(cur_path))
 
@@ -568,7 +568,7 @@ test_that("plotting-param: images can be plotted individually.", {
 
   cur_par1 <- par()
   expect_silent(plotPixels(pancreasImages, colour_by = c("H3", "SMA", "CD44"),
-                           save_image = list(filename = paste0(cur_path, "test.png"),
+                           save_plot = list(filename = paste0(cur_path, "test.png"),
                                              scale = 2),
                            display = "all"))
   cur_par2 <- par()
@@ -578,7 +578,7 @@ test_that("plotting-param: images can be plotted individually.", {
 
   cur_par1 <- par()
   expect_silent(plotPixels(pancreasImages, colour_by = c("H3", "SMA", "CD44"),
-                           save_image = list(filename = paste0(cur_path, "test.png"),
+                           save_plot = list(filename = paste0(cur_path, "test.png"),
                                              scale = 2),
                            display = "single"))
   cur_par2 <- par()

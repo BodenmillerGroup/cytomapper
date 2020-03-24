@@ -113,9 +113,9 @@
 #' \itemize{
 #'   \item \code{plot}: a single plot object (\code{display = "all"}) or a list
 #'   of plot objects (\code{display = "single"})
-#'   \item \code{images}: a \code{\linkS4class{SimpleList} object containing
-#'   three-colour \code{\linkS4class{Image}} objects.}
-#'   }
+#'   \item \code{images}: a \code{\linkS4class{SimpleList}} object containing
+#'   three-colour \code{\linkS4class{Image}} objects.
+#' }
 #'
 #' @seealso \code{\link{plotCells}} and \code{\link{plotCells}} for the main plotting functions
 #'
