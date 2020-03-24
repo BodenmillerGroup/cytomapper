@@ -54,7 +54,7 @@ and maximum values. When colouring discrete vectors, a colour for each
 unique entry needs to be provided (see section 'Setting the colours' and
 examples)}
 
-\item{...}{Further arguments passed to  \code{?"\link{plotting-param}"}}
+\item{...}{Further arguments passed to \code{?"\link{plotting-param}"}}
 }
 \description{
 This function takes a \code{\linkS4class{SingleCellExperiment}} and
@@ -164,6 +164,9 @@ plotCells(pancreasMasks, object = pancreasSCE, img_id = "ImageNb",
                                      celltype_B = "green",
                                      celltype_C = "red")))
 
+}
+\seealso{
+For further plotting parameters see \code{?"\link{plotting-param}"}
 }
 \author{
 Nils Eling (\email{nils.eling@dqbm.uzh.ch})

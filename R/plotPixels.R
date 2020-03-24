@@ -101,6 +101,8 @@
 #' intensity. See the \code{\link[SingleCellMapper]{normalize}} on how to
 #' normalize ImageList objects.
 #'
+#' @seealso For further plotting parameters see \code{?"\link{plotting-param}"}
+#'
 #' @examples
 #' data(pancreasMasks)
 #' data(pancreasImages)

@@ -122,7 +122,7 @@ The \code{subset_images} parameter controls which images to display. If the
 \code{img_id} parameter is set, images are subsetted based on the
 \code{mcols(image)[,img_id]} entry. Otherwise, images can be subsetted by
 entry names (stored in \code{names(image)}) or simply by numeric indexing.
-Alternatively, the \code{ImageList} objects can be subsetted perfore calling
+Alternatively, the \code{ImageList} objects can be subsetted berfore calling
 the \code{plotCells} function.
 }
 
@@ -172,6 +172,9 @@ plotPixels(pancreasImages, colour_by = c("SMA", "CD44"),
           colour = list(SMA = c("black", "green"),
                         CD44 = c("black", "blue")))
 
+}
+\seealso{
+For further plotting parameters see \code{?"\link{plotting-param}"}
 }
 \author{
 Nils Eling (\email{nils.eling@dqbm.uzh.ch})

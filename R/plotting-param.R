@@ -2,28 +2,188 @@
 #' @name plotting-param
 #'
 #' @description
-#' TODO
+#' The \code{\link{plotCells}} and \code{\link{plotPixels}} functions share a
+#' number of parameter that can be set to change the visual representation of
+#' plotted images.
 #'
-#' @param missing_colour TODO
-#' @param background_colour TODO
-#' @param scale_bar TODO
-#' @param image_title TODO
-#' @param save_image TODO
-#' @param return_plot TODO
-#' @param return_images TODO
-#' @param legend TODO
-#' @param margin TODO
-#' @param display TODO
-#' @param scale TODO
-#' @param interpolate TODO
+#' @param missing_colour a single character specifying a valid colour. Cells
+#'   that are not contained in the SingleCellExperiment object will be coloured
+#'   based on \code{missing_colour}. In the \code{\link{plotPixels}} function,
+#'   \code{missing_colour} defines the outline of the cells if \code{outline_by}
+#'   is not set.
+#' @param background_colour (only \code{\link{plotCells}}) a single character
+#'   specifying a valid colour that is set as the background of the image.
+#' @param scale_bar a list specifying features of the scale bar. One or multiple
+#'   of the following entries are supported:
+#' \itemize{
+#'   \item \code{length}: numeric length in pixels (default 20).
+#'   \item \code{label}: single character specifying the scale bar label (default
+#'   "20").
+#'   \item \code{cex}: numeric value indicating the size of the scale bar label.
+#'   \item \code{lwd}: numeric value indicating the line width of the scale bar.
+#'   \item \code{colour}: single character specifying the colour of scale bar and
+#'   label (default "white").
+#'   \item \code{position}: position of scale bar. Supported values: "topleft",
+#'   "topright", "bottomleft", "bottomright" (default "bottomright").
+#'   \item \code{margin}: vector of two numeric entries specifying the x and y margin
+#'   between image boundary and the scale bar (default c(10,10)).
+#'   \item \code{frame}: either "all" to display scale bar on all images or a single
+#'   number specifying the image for which the scale bar should be displayed (default "all").
+#' }
+#' Plotting of the scale bar is suppressed if set to \code{NULL}.
+#' @param image_title a list specifying features of the image titles. One or multiple
+#'   of the following entries are supported:
+#' \itemize{
+#'   \item \code{text}: character vector of image titles. Same length as the
+#'   \code{ImageList} object.
+#'   \item \code{position}: single character specifying the position of the
+#'   title. Supported entries: "top", "bottom", "topleft", "bottomleft",
+#'   "topright", "bottomright" (default "top").
+#'   \item \code{colour}: single character specifying the colour of image title
+#'   (default "white").
+#'   \item \code{margin}: vector of two numeric entries specifying the x and y margin
+#'   between image boundary and the image title (default c(10,10)).
+#'   \item \code{font}: numeric entry specifying the font of the image title
+#'   (default 1, see \code{\link{par}} for details)
+#'   \item \code{cex}: numeric value indicating the size of the image title.
+#' }
+#' Plotting of the image title is suppressed if set to \code{NULL}.
+#' @param save_plot a list specifying how to save the plot. One or multiple
+#'   of the following entries are supported:
+#' \itemize{
+#'   \item \code{filename}: single character specifying a valid file name.
+#'   The file extension specifies the format in which the file is saved.
+#'   Supported formats are: jpeg, tiff and png. If \code{display = "single"},
+#'   each image will be written in an individual file.
+#'   \item \code{scale}: by default the height and width of the saved image is
+#'   defined by the maximum image size times the number of rows or numer of
+#'   columns. This resolution is often not suffcient to clearly display the
+#'   text. The \code{scale} parameter can be set to increase the resolution of
+#'   the image while keeping the text size constant (default 1 but should be
+#'   increased for optimal results).
+#' }
+#' @param return_plot logical indicating whether to return the plot (see
+#'   \code{\link[grDevices]{recordPlot}} for more infos).
+#' @param return_images logical indicating whether to return the coloured images
+#'   in form of a \code{\linkS4class{SimpleList}} object. Each entry to this
+#'   list is a three-colour \code{\linkS4class{Image}} object. However, the
+#'   image title and scale bar are not retained.
+#' @param legend a list specifying features of the legend. One or multiple
+#'   of the following entries are supported:
+#' \itemize{
+#'   \item \code{colour_by.title.font}: numeric entry specifying the font of the
+#'   legend title for features specified by \code{colour_by}.
+#'   \item \code{colour_by.title.cex}: numeric entry specifying the size of the
+#'   legend title for features specified by \code{colour_by}.
+#'   \item \code{colour_by.labels.cex}: numeric entry specifying the size of the
+#'   legend labels for features specified by \code{colour_by}.
+#'   \item \code{colour_by.legend.cex}: (only discrete features) numeric entry
+#'   specifying the size of the legend for features specified by
+#'   \code{colour_by}.
+#'   \item \code{outline_by.title.font}: numeric entry specifying the font of the
+#'   legend title for features specified by \code{outline_by}.
+#'   \item \code{outline_by.title.cex}: numeric entry specifying the size of the
+#'   legend title for features specified by \code{outline_by}.
+#'   \item \code{outline_by.labels.cex}: numeric entry specifying the size of the
+#'   legend labels for features specified by \code{outline_by}.
+#'   \item \code{outline_by.legend.cex}: (only discrete features) numeric entry
+#'   specifying the size of the legend for features specified by
+#'   \code{outline_by}.
+#'   \item \code{margin}: numeric value indicating the margin between the
+#'   legends and the outer boundary (default 2)
+#' }
+#' Plotting of the legend is suppressed if set to \code{NULL}.
+#' @param margin numeric value indicating the gap between individual images
+#'   (default 0).
+#' @param display one of two possible values: "all" or "single". When set to
+#'   "all", all images are displayed aat once in a grid-like fashion. When
+#'   set to "single", individual images are plotted in single graphics devices.
+#'   The second option is useful when saving individual images in pdf format or
+#'   when displaying in Rmarkdown files.
+#' @param scale logical indicating whether to scale each feature individually to
+#'   its minimum/maximum across the SingleCellExperiment object (see
+#'   \code{\link{plotCells}}) or across all displayed images (see
+#'   \code{\link{plotCells}}). If set to \code{FALSE} each value is displayed
+#'   relative to the maximum of all selected features.
+#' @param interpolate a logical indicating whether to apply
+#'   linear interpolation to the image when drawing (see
+#'   \code{\link[graphics]{rasterImage}}) (default TRUE).
 #'
-#'@section Setting further parameters:
-#' TODO
+#' @return a list if return_images and/or return_plot is TRUE.
+#' \itemize{
+#'   \item \code{plot}: a single plot object (\code{display = "all"}) or a list
+#'   of plot objects (\code{display = "single"})
+#'   \item \code{images}: a \code{\linkS4class{SimpleList} object containing
+#'   three-colour \code{\linkS4class{Image}} objects.}
+#'   }
 #'
-#' @return TODO
+#' @seealso \code{\link{plotCells}} and \code{\link{plotCells}} for the main plotting functions
 #'
 #' @examples
-#' # TODO
+#' data("pancreasImages")
+#' data("pancreasMasks")
+#' data("pancreasSCE")
+#'
+#' # Setting missing colour
+#' plotCells(pancreasMasks, missing_colour = "blue")
+#'
+#' # Setting background colour
+#' plotCells(pancreasMasks, background_colour = "blue")
+#'
+#' # Setting the scale bar
+#' plotCells(pancreasMasks, scale_bar = list(length = 10,
+#'                                           cex = 2,
+#'                                           lwd = 3,
+#'                                           colour = "red",
+#'                                           position = "bottomleft",
+#'                                           margin = c(5,5),
+#'                                           frame = 3))
+#'
+#' # Setting the image title
+#' plotCells(pancreasMasks,
+#'           image_title = list(text = c("image1", "image2", "image3"),
+#'                              position = "topleft",
+#'                              colour = "blue",
+#'                              margin = c(0,5),
+#'                              font = 2,
+#'                              cex = 2))
+#'
+#' # Return plot
+#' cur_out <- plotPixels(pancreasImages, return_plot = TRUE)
+#' cur_out$plot
+#'
+#' # Return images
+#' cur_out <- plotPixels(pancreasImages, return_images = TRUE)
+#' cur_out$images
+#'
+#' # Setting the legend
+#' plotCells(pancreasMasks, object = pancreasSCE,
+#'           img_id = "ImageNb", cell_id = "CellNb",
+#'           colour_by = c("SMA", "CD44"),
+#'           outline_by = "CellType",
+#'           legend = list(colour_by.title.font = 0.5,
+#'                         colour_by.title.cex = 0.5,
+#'                         colour_by.labels.cex = 0.5,
+#'                         outline_by.legend.cex = 0.5,
+#'                         margin = 0))
+#'
+#' # Setting the margin between images
+#' plotPixels(pancreasImages, margin = 3)
+#'
+#' # Displaying individual images
+#' plotPixels(pancreasImages, display = "single")
+#'
+#' # Supress scaling
+#' plotPixels(pancreasImages, colour_by = c("SMA", "INS"),
+#'            scale = TRUE)
+#' plotPixels(pancreasImages, colour_by = c("SMA", "INS"),
+#'            scale = FALSE)
+#'
+#' # Suppress interpolation
+#' plotPixels(pancreasImages, colour_by = c("SMA", "INS"),
+#'            interpolate = TRUE)
+#' plotPixels(pancreasImages, colour_by = c("SMA", "INS"),
+#'            interpolate = FALSE)
 #'
 #' @author Nils Eling (\email{nils.eling@@dqbm.uzh.ch})
 #' @author Nicolas Damond (\email{nicolas.damond@@dqbm.uzh.ch})
@@ -35,7 +195,7 @@ NULL
   # Check supported names
   cur_entries <- names(dotArgs)
   supported <- c("scale_bar", "image_title", "missing_colour",
-                 "background_colour", "save_image", "return_plot",
+                 "background_colour", "save_plot", "return_plot",
                  "return_images", "legend", "margin", "display",
                  "scale", "interpolate")
   not_supported <- cur_entries[!(cur_entries %in% supported)]
@@ -88,11 +248,11 @@ NULL
     dotArgs$legend <- .valid.legendparam(dotArgs$legend)
   }
 
-  # save_image
-  if(!("save_image" %in% names(dotArgs))){
-    dotArgs$save_image <- NULL
+  # save_plot
+  if(!("save_plot" %in% names(dotArgs))){
+    dotArgs$save_plot <- NULL
   } else {
-    dotArgs$save_image <- .valid.saveimage(dotArgs$save_image)
+    dotArgs$save_plot <- .valid.saveplot(dotArgs$save_plot)
   }
 
   # return_plot
@@ -490,49 +650,49 @@ NULL
   return(backgroundcolour)
 }
 
-# Validity of save_image input
+# Validity of save_plot input
 #' @importFrom tools file_ext
-.valid.saveimage <- function(saveimage){
+.valid.saveplot <- function(saveplot){
 
-  error.saveimage <- "Invalid entry to the 'save_image' list object"
+  error.saveplot <- "Invalid entry to the 'save_plot' list object"
 
-  if(!is.null(saveimage)){
-    if(is.null(names(saveimage)) ||
-       !all(names(saveimage) %in% c("filename", "scale"))){
-      stop(error.saveimage)
+  if(!is.null(saveplot)){
+    if(is.null(names(saveplot)) ||
+       !all(names(saveplot) %in% c("filename", "scale"))){
+      stop(error.saveplot)
     }
 
-    if("filename" %in% names(saveimage)){
-      if(length(saveimage$filename) != 1L || !is.character(saveimage$filename)){
-        stop(paste0(error.saveimage, ": \n",
+    if("filename" %in% names(saveplot)){
+      if(length(saveplot$filename) != 1L || !is.character(saveplot$filename)){
+        stop(paste0(error.saveplot, ": \n",
                     "Invalid entry of 'filename'"))
       }
 
-      if(is.character(saveimage$filename)){
-        cur_ext <- file_ext(saveimage$filename)
+      if(is.character(saveplot$filename)){
+        cur_ext <- file_ext(saveplot$filename)
         if(cur_ext == ""){
-          stop(paste0(error.saveimage, ": \n",
+          stop(paste0(error.saveplot, ": \n",
                       "Please provide a file extension indicating in format to save the image."))
         }
         if(!(cur_ext %in% c("tiff", "png", "jpeg"))){
-          stop(paste0(error.saveimage, ": \n",
+          stop(paste0(error.saveplot, ": \n",
                       "'filename' only supports 'tiff', 'png' and 'jpeg' file types."))
         }
       }
     } else {
-      stop(paste0(error.saveimage, ": \n",
+      stop(paste0(error.saveplot, ": \n",
                   "'filename' not provided."))
     }
 
-    if("scale" %in% names(saveimage)){
-      if(length(saveimage$scale) != 1L || !is.numeric(saveimage$scale)){
-        stop(paste0(error.saveimage, ": \n",
+    if("scale" %in% names(saveplot)){
+      if(length(saveplot$scale) != 1L || !is.numeric(saveplot$scale)){
+        stop(paste0(error.saveplot, ": \n",
                     "Invalid entry of 'scale'"))
       }
     } else {
-      saveimage$scale <- 1
+      saveplot$scale <- 1
     }
   }
 
-  return(saveimage)
+  return(saveplot)
 }

@@ -31,7 +31,7 @@
 #'   and maximum values. When colouring discrete vectors, a colour for each
 #'   unique entry needs to be provided (see section 'Setting the colours' and
 #'   examples)
-#' @param ... Further arguments passed to  \code{?"\link{plotting-param}"}
+#' @param ... Further arguments passed to \code{?"\link{plotting-param}"}
 #'
 #'@section Segmentation mask object:
 #' For the \code{plotCells} function, \code{mask} refers to a
@@ -86,6 +86,8 @@
 #' SingleCellExperiment object. To avoid this, the SingleCellExperiment object
 #' can be subsetted to only contain the cells that should be displayed before
 #' plotting.
+#'
+#' @seealso For further plotting parameters see \code{?"\link{plotting-param}"}
 #'
 #' @examples
 #' data(pancreasMasks)

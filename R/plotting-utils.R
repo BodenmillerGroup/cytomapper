@@ -367,9 +367,9 @@
                  yaxs="i", xaxt="n", yaxt="n", col = "white")
   on.exit(par(cur_par))
 
-  if(!is.null(plottingParam$save_image) && plottingParam$display == "all"){
-    image_location <- plottingParam$save_image$filename
-    image_scale <- plottingParam$save_image$scale
+  if(!is.null(plottingParam$save_plot) && plottingParam$display == "all"){
+    image_location <- plottingParam$save_plot$filename
+    image_scale <- plottingParam$save_plot$scale
     cur_ext <- file_ext(image_location)
     if(cur_ext == "png"){
       png(image_location, width = image_scale * nc * m_width,
@@ -411,9 +411,9 @@
       ytop <- (i-1)*m_height + (m_height - dim_y)/2 + (i-1) * margin
 
       # If Images should be saved
-      if(!is.null(plottingParam$save_image) && plottingParam$display == "single"){
-        image_location <- plottingParam$save_image$filename
-        image_scale <- plottingParam$save_image$scale
+      if(!is.null(plottingParam$save_plot) && plottingParam$display == "single"){
+        image_location <- plottingParam$save_plot$filename
+        image_scale <- plottingParam$save_plot$scale
         cur_ext <- file_ext(image_location)
 
         # File name
@@ -508,7 +508,7 @@
       }
 
       # Close device
-      if(!is.null(plottingParam$save_image) && plottingParam$display == "single"){
+      if(!is.null(plottingParam$save_plot) && plottingParam$display == "single"){
         dev.off()
       }
 
@@ -543,7 +543,7 @@
     cur_out <- recordPlot()
   }
 
-  if(!is.null(plottingParam$save_image)){
+  if(!is.null(plottingParam$save_plot)){
     dev.off()
   }
 
