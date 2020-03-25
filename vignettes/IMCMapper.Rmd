@@ -1,5 +1,5 @@
 ---
-title: "SingleCellMapper for spatial data visualization in R"
+title: "Spatial visualization for imaging mass cytometry data in R"
 author:
 - name: Nils Eling
   affiliation: Department for Quantitative Biomedicine, University of Zurich
@@ -7,16 +7,17 @@ author:
 - name: Nicolas Damond
   affiliation: Department for Quantitative Biomedicine, University of Zurich
   email: nicolas.damond@dqbm.uzh.ch.com
-package: SingleCellMapper
+package: IMCMapper
 output:
-  BiocStyle::html_document
+  BiocStyle::html_document:
+    toc_float: yes
 abstract: |
   This vignette should explain all functionality of SingleCellMapper. 
   Starting at how to read in images and cell-level information and prepare them 
   for visualization. Afterwards, we need to highlight all different use-cases of 
   the plotting functions.
 vignette: |
-  %\VignetteIndexEntry{Vignette Title}
+  %\VignetteIndexEntry{Spatial visualization for imaging mass cytometry data in R}
   %\VignetteEngine{knitr::rmarkdown}
   %\VignetteEncoding{UTF-8}
 ---
@@ -32,7 +33,7 @@ library(SingleCellMapper)
 # Introduction
 
 This vignette gives an overview of spatial data visualization with the `SingleCellMapper` package.
-This document also introduces the `ImageList` class, which inherits from the [`SimpleList` class](https://rdrr.io/bioc/S4Vectors/man/SimpleList-class.html).
+This document also introduces the `IMCImageList` class, which inherits from the [`SimpleList` class](https://rdrr.io/bioc/S4Vectors/man/SimpleList-class.html).
 
 Explain: images, masks, sce
 
@@ -48,7 +49,7 @@ pancreasSCE
 ```
 
 Load the example data: List of images
-```{r quickstart-load-imagelist}
+```{r quickstart-load-IMCImageList}
 data(pancreasImages)
 pancreasImages
 ```
@@ -102,20 +103,20 @@ plotCells(object=pancreasSCE, mask=pancreasMasks, img_id='ImageNb', cell_id='Cel
 
 # Data formats
 
-SingleCellMapper combines objects of the `r Biocpkg("SingleCellExperiment")` class and the `ImageList` class `r Biocpkg("SingleCellMapper")` to visualize cell- and pixel-level information.
+SingleCellMapper combines objects of the `r Biocpkg("SingleCellExperiment")` class and the `IMCImageList` class `r Biocpkg("SingleCellMapper")` to visualize cell- and pixel-level information.
 
-In the main functions of the package, `image` refers to an `ImageList` object containing one or multiple multi-channel images where each channel represents the pixel-intensity of one marker (protein, RNA, etc.).
-The enrty `mask` refers to an `ImageList` object containing one or multiple segmentation masks.
+In the main functions of the package, `image` refers to an `IMCImageList` object containing one or multiple multi-channel images where each channel represents the pixel-intensity of one marker (protein, RNA, etc.).
+The enrty `mask` refers to an `IMCImageList` object containing one or multiple segmentation masks.
 Segmentation masks are defined as one-channel images containing integer values, which represent the cells' ids or 0 (background).
 Finally, the `object` entry refers to a `SingleCellExperiment` class object that contains cell-specific expression values (in the `assay` slots) and cell-specific metadata in the `colData` slot.
 For more information on the `SingleCellExperiment` object and how to create it, please see the `r Biocpkg("SingleCellExperiment")` package and the [Orchestrating Single-Cell Analysis with Bioconductor](https://osca.bioconductor.org/data-infrastructure.html#the-singlecellexperiment-class) workflow.
 
-To link information between the `SingleCellExperiment` and `ImageList` objects, two slots need to be specified:
+To link information between the `SingleCellExperiment` and `IMCImageList` objects, two slots need to be specified:
 
 * `img_id`: a single character indicating the `colData` and `elementMetadata` entry that contains the image identifiers 
 * `cell_id`: a single character indicating the `colData` entry that contains the cell identifiers. These should be integer values corresponing to pixel-values in the segmentation masks
 
-To access the `elementMetadat` slot of an `ImageList` object, please refer to the section [The ImageList object](#ImageList).
+To access the `elementMetadat` slot of an `IMCImageList` object, please refer to the section [The IMCImageList object](#IMCImageList).
 
 # Reading in data
 
@@ -130,7 +131,7 @@ colData(pancreasSCE)$ImageNb
 ```
 
 
-# The ImageList object {#ImageList}
+# The IMCImageList object {#IMCImageList}
 
 Images should be stacks, all stacks should have the same number of channels
 Masks should be single-channel images
@@ -142,7 +143,7 @@ Explain mcols
 ## Coercion
 
 ## Subsetting
-Extract one channel from the ImageList
+Extract one channel from the IMCImageList
 
 ## Looping
 

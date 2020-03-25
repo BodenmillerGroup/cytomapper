@@ -1,7 +1,7 @@
 Package: SingleCellMapper
 Version: 0.1.11
 Date: 2020-03-24
-Title: Visualization of multiplexed, spatial single-cell data 
+Title: Spatial visualization for imaging mass cytometry data in R
 Description: 
     In recent years, multiplexed imaging approaches have been developed 
     to aquire single-cell read-outs (e.g. RNA or proteins) in a spatially 
