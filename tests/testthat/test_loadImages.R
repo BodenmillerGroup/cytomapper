@@ -1,7 +1,7 @@
 test_that("loadImages function reads in correct objects.", {
-  path <- system.file("extdata", package = "SingleCellMapper")
+  path <- system.file("extdata", package = "IMCMapper")
   single_file <- system.file("extdata/A02_mask.tiff",
-                             package = "SingleCellMapper")
+                             package = "IMCMapper")
 
   # Single file
   expect_silent(cur_file <- loadImages(single_file))
@@ -30,7 +30,7 @@ test_that("loadImages function reads in correct objects.", {
 
 
   # Multiple files
-  multi_files <- list.files(system.file("extdata", package = "SingleCellMapper"),
+  multi_files <- list.files(system.file("extdata", package = "IMCMapper"),
                             pattern = "mask.tiff", full.names = TRUE)
   expect_silent(cur_files <- loadImages(multi_files))
   expect_error(cur_files <- loadImages(c(multi_files, "test")))

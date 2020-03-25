@@ -1,4 +1,4 @@
 library(testthat)
-library(SingleCellMapper)
+library(IMCMapper)
 
-test_check("SingleCellMapper")
+test_check("IMCMapper")

@@ -16,8 +16,8 @@
     \item cell number/identifier (CellNB),
     \item spatial position on the image (Pos_X, Pos_Y),
     \item shape information (MajorAxisLength, MinorAxisLength),
-    \item the associated image name (ImageName, see \code{?"\link[SingleCellMapper]{pancreasImages}"}),
-    \item the associated mask name (MaskName, see \code{?"\link[SingleCellMapper]{pancreasMasks}"}),
+    \item the associated image name (ImageName, see \code{?"\link[IMCMapper]{pancreasImages}"}),
+    \item the associated mask name (MaskName, see \code{?"\link[IMCMapper]{pancreasMasks}"}),
     \item a randomized cell-type label (CellType)
   }
   }

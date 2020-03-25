@@ -10,7 +10,7 @@ test_that("Image and channel names can be extracted and set.", {
   expect_silent(channelNames(cur_Image) <- c("test1", "test2", "test3", "test4", "test5"))
   expect_equal(channelNames(cur_Image),
                c("test1", "test2", "test3", "test4", "test5"))
-  # Standard calls - ImageList
+  # Standard calls - IMCImageList
   expect_equal(channelNames(pancreasImages),
                c("H3", "SMA", "INS", "CD38", "CD44"))
   expect_equal(names(pancreasImages),

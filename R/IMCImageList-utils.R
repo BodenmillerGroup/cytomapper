@@ -1,14 +1,14 @@
-# Utility functions for ImageList and Image class objects
+# Utility functions for IMCImageList and Image class objects
 
 #' @title Getting and setting the channel and image names
-#' @name ImageList-naming
+#' @name IMCImageList-naming
 #'
 #' @description
 #' Methods to get and set the names of individual channels or the names of
 #' individual images.
 #'
 #' @section Setting and getting the channel names:
-#' In the following code, \code{x} is either an \linkS4class{ImageList} or
+#' In the following code, \code{x} is either an \linkS4class{IMCImageList} or
 #' \linkS4class{Image} object containing one or multiple channels.
 #' The channel names can be replaced by \code{value}, which contains a character
 #' vector of the same length as the number of channels in the image(s).
@@ -21,9 +21,9 @@
 #' }
 #'
 #' @section Setting and getting the image names:
-#' Here, \code{x} is either a \linkS4class{ImageList} object. The element names
+#' Here, \code{x} is either a \linkS4class{IMCImageList} object. The element names
 #' can be replaced by \code{value}, which contains a character vector of the
-#' same length as the number of images. In case of the ImageList object,
+#' same length as the number of images. In case of the IMCImageList object,
 #' elements are always images.
 #' \describe{
 #' \item{\code{names(x)}:}{Returns the names of all images stored in \code{x}}
@@ -45,12 +45,12 @@
 #'
 #' @aliases
 #' channelNames channelNames<-
-#' channelNames,ImageList-method
-#' channelNames<-,ImageList-method
+#' channelNames,IMCImageList-method
+#' channelNames<-,IMCImageList-method
 #' channelNames,Image-method
 #' channelNames<-,Image-method
-#' names,ImageList-method
-#' names<-,ImageList-method
+#' names,IMCImageList-method
+#' names<-,IMCImageList-method
 #'
 #' @docType methods
 #'
@@ -87,7 +87,7 @@ setReplaceMethod("channelNames",
 
 #' @export
 setMethod("channelNames",
-          signature = signature(x="ImageList"),
+          signature = signature(x="IMCImageList"),
           definition =  function(x){
             if(length(dim(x[[1]])) == 2L){
               return(NULL)
@@ -101,7 +101,7 @@ setMethod("channelNames",
 #' @importFrom EBImage Image
 #' @importFrom methods validObject
 setReplaceMethod("channelNames",
-                 signature = signature(x="ImageList"),
+                 signature = signature(x="IMCImageList"),
                  definition = function(x, value){
                    # Image needs to be expanded to store channel names
                    if(length(dim(x[[1]])) == 2L){
@@ -125,7 +125,7 @@ setReplaceMethod("channelNames",
 #' @export
 #' @importFrom methods callNextMethod
 setMethod("names",
-          signature = signature(x="ImageList"),
+          signature = signature(x="IMCImageList"),
           definition = function(x){
             callNextMethod()
           })
@@ -133,19 +133,19 @@ setMethod("names",
 #' @export
 #' @importFrom methods callNextMethod as validObject
 setReplaceMethod("names",
-                 signature = signature(x="ImageList"),
+                 signature = signature(x="IMCImageList"),
                  definition = function(x, value){
                    .Object <- callNextMethod()
-                   .Object <- as(.Object, "ImageList")
+                   .Object <- as(.Object, "IMCImageList")
                    validObject(.Object)
                    return(.Object)
                  })
 
-#' @title Manipulating ImageList objects
-#' @name ImageList-manipulation
+#' @title Manipulating IMCImageList objects
+#' @name IMCImageList-manipulation
 #'
-#' @description Methods to change pixel values in ImageList objects. In the
-#'   following sections, \code{object} is an \linkS4class{ImageList} object
+#' @description Methods to change pixel values in IMCImageList objects. In the
+#'   following sections, \code{object} is an \linkS4class{IMCImageList} object
 #'   containing one or multiple channels.
 #'
 #' @section Image scaling:
@@ -154,12 +154,12 @@ setReplaceMethod("names",
 #' pixel values after reading them in.
 #' \describe{
 #'   \item{\code{scaleImages(object, value)}:}{Scales all images in the
-#'   \linkS4class{ImageList} object \code{object} by \code{value}.}
+#'   \linkS4class{IMCImageList} object \code{object} by \code{value}.}
 #' }
 #'
 #' @section Image normalization:
 #' Linear scaling of the intensity values of each \linkS4class{Image} contained
-#' in an \linkS4class{ImageList} \code{object} to a specific range. Images can
+#' in an \linkS4class{IMCImageList} \code{object} to a specific range. Images can
 #' either be scaled to the minimum/maximum value per channel or across all
 #' channels (default \code{separateChannels = TRUE}). Also, Images can be scaled
 #' to the minimum/maximum value per image or across all images (default
@@ -177,7 +177,7 @@ setReplaceMethod("names",
 #'   ft = c(0, 1), percentileRange = c(0, 1), inputRange = NULL)}:
 #'
 #' \describe{
-#' \item{\code{object}:}{An ImageList object}
+#' \item{\code{object}:}{An IMCImageList object}
 #' \item{\code{separateChannels}:}{Logical if pixel values should be normalized
 #' per channel (default) or across all channles.}
 #' \item{\code{separateImages}:}{Logical if pixel values should be normalized
@@ -191,13 +191,13 @@ setReplaceMethod("names",
 #' \code{\link[EBImage]{normalize}}).}
 #' }
 #'
-#' @return An ImageList object containing the manipulated Images
+#' @return An IMCImageList object containing the manipulated Images
 #'
 #' @examples
 #' data(pancreasImages)
 #'
 #' # Scale images to create segmentation masks
-#' cur_files <- list.files(system.file("extdata", package = "SingleCellMapper"),
+#' cur_files <- list.files(system.file("extdata", package = "IMCMapper"),
 #'                         pattern = "mask.tiff", full.names = TRUE)
 #' x <- loadImages(cur_files)
 #' # Error when running plotCells(x)
@@ -220,8 +220,8 @@ setReplaceMethod("names",
 #'
 #' @seealso \code{\link[EBImage]{normalize}} for details on Image normalization
 #'
-#' @aliases scaleImages scaleImages,ImageList-method normalize
-#'   normalize,ImageList-method
+#' @aliases scaleImages scaleImages,IMCImageList-method normalize
+#'   normalize,IMCImageList-method
 #'
 #' @docType methods
 #'
@@ -230,7 +230,7 @@ NULL
 
 #' @export
 setMethod("scaleImages",
-          signature = signature(object="ImageList"),
+          signature = signature(object="IMCImageList"),
           definition = function(object, value){
             if(length(value) != 1L || !is.numeric(value)){
               stop("'value' must be a single numeric.")
@@ -363,5 +363,5 @@ normImages <- function(object, separateChannels = TRUE, separateImages = FALSE,
 
 #' @export
 setMethod("normalize",
-          signature = signature(object = "ImageList"),
+          signature = signature(object = "IMCImageList"),
           definition = normImages)

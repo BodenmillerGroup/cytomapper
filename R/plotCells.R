@@ -1,18 +1,18 @@
 #' Function to visualize cell-level information on segmentation masks
 #'
 #' This function takes a \code{\linkS4class{SingleCellExperiment}} and
-#' \code{\linkS4class{ImageList}} object containing segmentation masks to colour
+#' \code{\linkS4class{IMCImageList}} object containing segmentation masks to colour
 #' cells by marker expression or metadata.
 #'
 #' @param object a \code{\linkS4class{SingleCellExperiment}} object.
-#' @param mask an \code{\linkS4class{ImageList}} containing single-channel
+#' @param mask an \code{\linkS4class{IMCImageList}} containing single-channel
 #'   \code{\linkS4class{Image}} objects (see section 'Segmentation mask object' below).
 #' @param cell_id character specifying the \code{colData(object)} entry, in which the
 #'   integer cell IDs are stored. These IDs should match the integer pixel values in
 #'   the segmentation mask object.
 #' @param img_id character specifying the \code{colData(object)} and
 #'   \code{mcols(mask)} entry, in which the image IDs are stored (see section
-#'   'Linking the \code{SingleCellExperiment} and \code{ImageList} object'
+#'   'Linking the \code{SingleCellExperiment} and \code{IMCImageList} object'
 #'   below)
 #' @param colour_by character or character vector specifying the features
 #'   (\code{rownames(object)}) or metadata (\code{colData(object)} entry) used
@@ -35,7 +35,7 @@
 #'
 #'@section Segmentation mask object:
 #' For the \code{plotCells} function, \code{mask} refers to a
-#' \code{\linkS4class{ImageList}} object that contains a single or multiple
+#' \code{\linkS4class{IMCImageList}} object that contains a single or multiple
 #' segmentation masks in form of individual \code{\linkS4class{Image}} objects.
 #' The function assumes that each object in the segmentation mask is a cell.
 #' The key features of such masks include:
@@ -44,13 +44,13 @@
 #'   \item pixel values are integers indicating the cells' IDs
 #' }
 #'
-#' @section Linking the \code{SingleCellExperiment} and \code{ImageList} object:
+#' @section Linking the \code{SingleCellExperiment} and \code{IMCImageList} object:
 #' To colour individual cells contained in the segmentation masks based on
 #' features and metadata stored in the SingleCellExperiment object, an \code{img_id}
 #' and \code{cell_id} entry needs to be provided. Image IDs are matched between the
-#' \code{SingleCellExperiment} and \code{ImageList} object via entries to the
+#' \code{SingleCellExperiment} and \code{IMCImageList} object via entries to the
 #' \code{colData(object)[,img_id]} and the \code{mcols(mask)[,img_id]} slots.
-#' Cell IDs are matched between the \code{SingleCellExperiment} and \code{ImageList}
+#' Cell IDs are matched between the \code{SingleCellExperiment} and \code{IMCImageList}
 #' object via entries to \code{colData(object)[,cell_id]} and the integer values
 #' of the segmentation masks.
 #'
@@ -65,12 +65,12 @@
 #' named vector in which each entry corresponds to a unique entry to the
 #' metadata vector.
 #'
-#' @section Subsetting the \code{ImageList} object:
+#' @section Subsetting the \code{IMCImageList} object:
 #' The \code{subset_images} parameter controls which images to display. If the
 #' \code{img_id} parameter is set, images are subsetted based on the
 #' \code{mcols(mask)[,img_id]} entry. Otherwise, images can be subsetted by
 #' entry names (stored in \code{names(mask)}) or simply by numeric indexing.
-#' Alternatively, the \code{ImageList} object can be subsetted perfore calling
+#' Alternatively, the \code{IMCImageList} object can be subsetted perfore calling
 #' the \code{plotCells} function.
 #'
 #' @section Subsetting the \code{SingleCellExperiment} object:

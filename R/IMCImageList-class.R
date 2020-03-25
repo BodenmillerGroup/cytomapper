@@ -1,16 +1,16 @@
 #' @export
-#' @rdname ImageList
+#' @rdname IMCImageList
 #' @importFrom utils packageVersion
 #' @importFrom S4Vectors setValidity2
 #' @importClassesFrom S4Vectors SimpleList
 setClass(
-  Class="ImageList",
-  package="SingleCellMapper",
+  Class="IMCImageList",
+  package="IMCMapper",
   representation(int_metadata="list"),
   contains = "SimpleList",
   prototype = prototype(
     int_metadata=list(
-      version=utils::packageVersion("SingleCellMapper")),
+      version=utils::packageVersion("IMCMapper")),
     elementType="Image"
     )
   )
@@ -18,7 +18,7 @@ setClass(
 # Validity checks
 #' @importFrom S4Vectors setValidity2
 #' @importFrom EBImage colorMode
-S4Vectors:::setValidity2(Class="ImageList", .ImageList_validity)
+S4Vectors:::setValidity2(Class="IMCImageList", .ImageList_validity)
 
 .ImageList_validity <- function(object) {
 
@@ -46,7 +46,7 @@ S4Vectors:::setValidity2(Class="ImageList", .ImageList_validity)
               # Check if entry names are unique
               if(!is.null(names(object)) &&
                  length(unique(names(object))) < length(names(object))){
-                msg <- c(msg, "Only unique entries allowed in an ImageList object.")
+                msg <- c(msg, "Only unique entries allowed in an IMCImageList object.")
               }
 
               # Check if names contain NA or empties
@@ -58,13 +58,13 @@ S4Vectors:::setValidity2(Class="ImageList", .ImageList_validity)
               # Check if channelNames are unique
               if(!is.null(channelNames(object)) &&
                  length(unique(channelNames(object))) < length(channelNames(object))){
-                msg <- c(msg, "Only unique channels allowed in an ImageList object.")
+                msg <- c(msg, "Only unique channels allowed in an IMCImageList object.")
               }
 
               # Check if colourmode of each Image is "Grayscale"
               colour.modes <- unlist(lapply(object, colorMode))
               if("Color" %in% colour.modes){
-                msg <- c(msg, "Only Grayscale images are supported for ImageList objects.")
+                msg <- c(msg, "Only Grayscale images are supported for IMCImageList objects.")
               }
 
               if (length(msg)) { return(msg) }

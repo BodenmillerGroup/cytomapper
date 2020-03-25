@@ -1,9 +1,9 @@
-#' @title Read images into ImageList object
+#' @title Read images into IMCImageList object
 #' @name loadImages
 #'
 #' @description
 #' Function to read in single- or multi-channel images from a specified path or file.
-#' The function returns an \linkS4class{ImageList} object containing one image per slot.
+#' The function returns an \linkS4class{IMCImageList} object containing one image per slot.
 #' Supported file extensions are: '.tiff', '.tif', '.png', '.jpeg', '.jpg'.
 #'
 #' @param x The function takes a variety of possible character inputs:
@@ -21,11 +21,11 @@
 #' }
 #' @param ... arguments passed to the \code{\link{readImage}} function.
 #'
-#' @return An \linkS4class{Image} or \linkS4class{ImageList} object
+#' @return An \linkS4class{Image} or \linkS4class{IMCImageList} object
 #'
 #' @section Loading specific images:
 #' This function loads images via the \code{\link{readImage}} function and
-#' stores them in an ImageList object. In the simplest case, \code{x} is an
+#' stores them in an IMCImageList object. In the simplest case, \code{x} is an
 #' image file name. If \code{x} is a path, the \code{pattern} argument can be
 #' used to select image names with certain patterns. For convenience, pattern
 #' also takes a vector of characters (e.g. a colData entry in a
@@ -35,20 +35,20 @@
 #'
 #' @examples
 #' # Providing a single file
-#' single.image <- system.file("extdata/A02_mask.tiff", package = "SingleCellMapper")
+#' single.image <- system.file("extdata/A02_mask.tiff", package = "IMCMapper")
 #' single.image <- loadImages(single.image)
 #'
 #' # Providing a path and pattern
-#' path.to.images <- system.file("extdata", package = "SingleCellMapper")
+#' path.to.images <- system.file("extdata", package = "IMCMapper")
 #' image.list <- loadImages(path.to.images, pattern = "mask.tiff")
 #'
 #' # Providing multiple patterns
 #' data(pancreasSCE)
-#' path.to.images <- system.file("extdata", package = "SingleCellMapper")
+#' path.to.images <- system.file("extdata", package = "IMCMapper")
 #' image.list <- loadImages(path.to.images, pattern = pancreasSCE$MaskName)
 #'
 #' # Providing multiple files
-#' list.images <- list.files(system.file("extdata", package = "SingleCellMapper"),
+#' list.images <- list.files(system.file("extdata", package = "IMCMapper"),
 #'                           pattern = "_mask.tiff", full.names = TRUE)
 #' image.list <- loadImages(list.images)
 #'
@@ -71,7 +71,7 @@ loadImages <- function(x, pattern = NULL, ...) {
   } else {
     cur_list <- lapply(x, function(y){EBImage::readImage(y, ...,
                                       names = NULL)})
-    out <- ImageList(cur_list)
+    out <- IMCImageList(cur_list)
     names(out) <- sub("\\.[^.]*$", "", basename(x))
   }
 

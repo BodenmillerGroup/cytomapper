@@ -1,4 +1,4 @@
-test_that("ImageList can be scaled.", {
+test_that("IMCImageList can be scaled.", {
   data("pancreasImages")
 
   # Works
@@ -13,7 +13,7 @@ test_that("ImageList can be scaled.", {
 
   expect_silent(plotPixels(cur_images))
 
-  image.list <- list.files(system.file("extdata", package = "SingleCellMapper"),
+  image.list <- list.files(system.file("extdata", package = "IMCMapper"),
              pattern = "mask.tiff", full.names = TRUE)
   cur_images <- loadImages(image.list)
   expect_equal(imageData(cur_images[[1]])[11, 1:2],
@@ -38,7 +38,7 @@ test_that("ImageList can be scaled.", {
 
   })
 
-test_that("ImageList can be normalized", {
+test_that("IMCImageList can be normalized", {
   data("pancreasImages")
 
   # Works

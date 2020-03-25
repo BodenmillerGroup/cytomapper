@@ -3,17 +3,17 @@
 \docType{data}
 \name{pancreasMasks}
 \alias{pancreasMasks}
-\title{Example ImageList object of segmentation masks}
-\format{An ImageList object containing 3 \code{\linkS4class{Image}} objects
+\title{Example IMCImageList object of segmentation masks}
+\format{An IMCImageList object containing 3 \code{\linkS4class{Image}} objects
 with 1 channel each. These images are the result to segmentation and associated
-to the images stored in the \code{\link[SingleCellMapper]{pancreasImages}} object.
+to the images stored in the \code{\link[IMCMapper]{pancreasImages}} object.
 Pixel values indicate the numeric cell identifier while a value of 0 represents the
 image background.}
 \usage{
 pancreasMasks
 }
 \description{
-This \linkS4class{ImageList} object contains single-channel images representing
+This \linkS4class{IMCImageList} object contains single-channel images representing
 the segmentation masks after preprocessing of imaging mass cytometry data.
 The data is part of a imaging mass cytometry
 study on the progression of Type 1 diabetes and contains pancreas cells.

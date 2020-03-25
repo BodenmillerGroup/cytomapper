@@ -1,5 +1,5 @@
 #------------------------------------------------------------------------------
-# Generic functions for the ImageList and Image classes
+# Generic functions for the IMCImageList and Image classes
 #------------------------------------------------------------------------------
 
 #' @export

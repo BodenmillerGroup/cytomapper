@@ -3,14 +3,14 @@
 \docType{data}
 \name{pancreasImages}
 \alias{pancreasImages}
-\title{Example ImageList object of image files}
-\format{An ImageList object containing 3 \code{\linkS4class{Image}} objects
-with 5 channels each. Channel names can be accessed via \code{?"\link[SingleCellMapper]{channelNames}"}.}
+\title{Example IMCImageList object of image files}
+\format{An IMCImageList object containing 3 \code{\linkS4class{Image}} objects
+with 5 channels each. Channel names can be accessed via \code{?"\link[IMCMapper]{channelNames}"}.}
 \usage{
 pancreasImages
 }
 \description{
-This \linkS4class{ImageList} object contains multi-channel stacks of three images
+This \linkS4class{IMCImageList} object contains multi-channel stacks of three images
 acquired by imaging mass cytometry. Each channel represents the pixel-intensities
 of each of the 5 measured proteins. The data is part of a imaging mass cytometry
 study on the progression of Type 1 diabetes and contains pancreas cells.

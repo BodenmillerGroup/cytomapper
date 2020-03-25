@@ -1,6 +1,6 @@
-Package: SingleCellMapper
-Version: 0.1.11
-Date: 2020-03-24
+Package: IMCMapper
+Version: 0.1.12
+Date: 2020-03-25
 Title: Spatial visualization for imaging mass cytometry data in R
 Description: 
     In recent years, multiplexed imaging approaches have been developed 
@@ -17,9 +17,9 @@ Description:
     This package contains functions for the visualization of multiplexed 
     read-outs of spatially resolved single-cell technologies on images.
     It requires three data objects for visualization: 1. a SingleCellExperiment
-    object which contains the cells' counts and metadata, 2. an ImageList or 
+    object which contains the cells' counts and metadata, 2. an IMCImageList or 
     Image object containing the pixel-level information per channel and/or 
-    3. an ImageList or Image object containing the segemntation mask per image.
+    3. an IMCImageList or Image object containing the segemntation mask per image.
     The main functionality of this package includes the individual or multiplexed 
     visualization of pixel- and cell-level information for all aquired read-outs.
     Furthermore, it allows the visualization of user-defined metadata.
@@ -50,7 +50,7 @@ Suggests:
     testthat
 biocViews: ImmunoOncology, Software, SingleCell, Imaging
 VignetteBuilder: knitr
-URL: https://github.com/BodenmillerGroup/SingleCellMapper
-BugReports: https://github.com/BodenmillerGroup/SingleCellMapper/issues
+URL: https://github.com/BodenmillerGroup/IMCMapper
+BugReports: https://github.com/BodenmillerGroup/IMCMapper/issues
 RoxygenNote: 7.0.2
 Encoding: UTF-8

@@ -1,5 +1,7 @@
 ---
 title: "Spatial visualization for imaging mass cytometry data in R"
+date: "`r BiocStyle::doc_date()`"
+package: "`r BiocStyle::pkg_ver('IMCMapper')`"
 author:
 - name: Nils Eling
   affiliation: Department for Quantitative Biomedicine, University of Zurich
@@ -7,12 +9,11 @@ author:
 - name: Nicolas Damond
   affiliation: Department for Quantitative Biomedicine, University of Zurich
   email: nicolas.damond@dqbm.uzh.ch.com
-package: IMCMapper
 output:
   BiocStyle::html_document:
     toc_float: yes
 abstract: |
-  This vignette should explain all functionality of SingleCellMapper. 
+  This vignette should explain all functionality of IMCMapper. 
   Starting at how to read in images and cell-level information and prepare them 
   for visualization. Afterwards, we need to highlight all different use-cases of 
   the plotting functions.
@@ -25,14 +26,15 @@ vignette: |
 ```{r, echo=FALSE, results="hide"}
 knitr::opts_chunk$set(error=FALSE, warning=FALSE, message=FALSE)
 library(BiocStyle)
-set.seed(20200101)
-library(SingleCellMapper)
 ```
 
+```{r library, echo=FALSE}
+library(IMCMapper)
+```
 
 # Introduction
 
-This vignette gives an overview of spatial data visualization with the `SingleCellMapper` package.
+This vignette gives an overview of spatial data visualization with the `IMCMapper` package.
 This document also introduces the `IMCImageList` class, which inherits from the [`SimpleList` class](https://rdrr.io/bioc/S4Vectors/man/SimpleList-class.html).
 
 Explain: images, masks, sce
@@ -103,7 +105,7 @@ plotCells(object=pancreasSCE, mask=pancreasMasks, img_id='ImageNb', cell_id='Cel
 
 # Data formats
 
-SingleCellMapper combines objects of the `r Biocpkg("SingleCellExperiment")` class and the `IMCImageList` class `r Biocpkg("SingleCellMapper")` to visualize cell- and pixel-level information.
+IMCMapper combines objects of the `r Biocpkg("SingleCellExperiment")` class and the `IMCImageList` class `r Biocpkg("IMCMapper")` to visualize cell- and pixel-level information.
 
 In the main functions of the package, `image` refers to an `IMCImageList` object containing one or multiple multi-channel images where each channel represents the pixel-intensity of one marker (protein, RNA, etc.).
 The enrty `mask` refers to an `IMCImageList` object containing one or multiple segmentation masks.
@@ -171,7 +173,7 @@ Extract one channel from the IMCImageList
 
 # Contributions
 
-Nicolas created SingleCellMapper - Nicolas and Nils implemented the package ...
+Nicolas created IMCMapper - Nicolas and Nils implemented the package ...
 
 # References
 

@@ -92,14 +92,14 @@
 }
 
 
-# Function to check if ImageList elements can be correctly replaced
+# Function to check if IMCImageList elements can be correctly replaced
 #' @importFrom methods is
 .valid.Image.setting <- function(x, i, value){
-  # Check if value is Image or ImageList
+  # Check if value is Image or IMCImageList
   if(!is.null(value) && !(is(value, "Image") ||
-                          is(value, "ImageList"))){
+                          is(value, "IMCImageList"))){
     stop("Invalid replacement operation: \n",
-         "Only 'Image' or 'ImageList' objects allowed.")
+         "Only 'Image' or 'IMCImageList' objects allowed.")
   }
 
   # If i is not character, both x and value need to be named,
@@ -108,20 +108,20 @@
   if(!is.null(value)){
     if(!is.character(i)){
       if(is.null(names(x))){
-        if(is(value, "ImageList") && !is.null(names(value))){
-          error <- "Cannot merge named and unnamed ImageList object."
+        if(is(value, "IMCImageList") && !is.null(names(value))){
+          error <- "Cannot merge named and unnamed IMCImageList object."
         }
       } else {
         if(is(value, "Image")){
-          error <- "Cannot set Image object to named ImageList."
+          error <- "Cannot set Image object to named IMCImageList."
         } else if(is.null(names(value))){
-          error <- "Cannot merge named and unnamed ImageList object."
+          error <- "Cannot merge named and unnamed IMCImageList object."
         }
       }
     } else {
       if(is.null(names(x))){
         error <- paste("'i' is of type character. \n",
-        "This setting is only allowed for named ImageList objects")
+        "This setting is only allowed for named IMCImageList objects")
       }
     }
   }
@@ -135,10 +135,10 @@
 # Check if channels can be replaced
 #' @importFrom methods is
 .valid.Channel.setting <- function(x, i, value){
-  # Only ImageList objects are supported
-  if(!is.null(value) && !is(value, "ImageList")){
+  # Only IMCImageList objects are supported
+  if(!is.null(value) && !is(value, "IMCImageList")){
     stop("Invalid replacement operation: \n",
-         "Only 'ImageList' objects allowed.",
+         "Only 'IMCImageList' objects allowed.",
          "To alter Image objects, see ?Image.")
   }
 
@@ -166,7 +166,7 @@
   # Check if channelNames are set if is.character(i)
   if(is.character(i) && is.null(channelNames(x))){
     stop("Invalid replacement operation: \n",
-         "Trying to set a named channel in an unnamed ImageList.")
+         "Trying to set a named channel in an unnamed IMCImageList.")
   }
 }
 
@@ -207,8 +207,8 @@
 # Check mask valididty
 #' @importFrom EBImage numberOfFrames
 .valid.mask <- function(mask, img_id){
-  if(!is(mask, "ImageList")){
-    stop("Please provide the segmentation mask(s) in form of an 'ImageList' object")
+  if(!is(mask, "IMCImageList")){
+    stop("Please provide the segmentation mask(s) in form of an 'IMCImageList' object")
   }
 
   # Check number of channels in mask
@@ -230,8 +230,8 @@
 
 # Check image valididty
 .valid.image <- function(image, img_id){
-  if(!is(image, "ImageList")){
-    stop("Please provide the image(s) in form of an 'ImageList' object")
+  if(!is(image, "IMCImageList")){
+    stop("Please provide the image(s) in form of an 'IMCImageList' object")
   }
 
   # Check if Image_id exists in elementMetadata
@@ -380,7 +380,7 @@
   }
   if(is.character(subset_images)){
     if(is.null(names(image)) && !(img_id %in% colnames(mcols(image)))){
-      stop("'subset_images' not part of names(ImageList) or mcols(ImageList)[,img_id]")
+      stop("'subset_images' not part of names(IMCImageList) or mcols(IMCImageList)[,img_id]")
     }
   }
 }

@@ -2,7 +2,7 @@
 % Please edit documentation in R/plotting-param.R
 \name{plotting-param}
 \alias{plotting-param}
-\title{Further plotting parameters for the SingleCellMapper package}
+\title{Further plotting parameters for the IMCMapper package}
 \arguments{
 \item{missing_colour}{a single character specifying a valid colour. Cells
 that are not contained in the SingleCellExperiment object will be coloured
@@ -36,7 +36,7 @@ Plotting of the scale bar is suppressed if set to \code{NULL}.}
   of the following entries are supported:
 \itemize{
   \item \code{text}: character vector of image titles. Same length as the
-  \code{ImageList} object.
+  \code{IMCImageList} object.
   \item \code{position}: single character specifying the position of the
   title. Supported entries: "top", "bottom", "topleft", "bottomleft",
   "topright", "bottomright" (default "top").
