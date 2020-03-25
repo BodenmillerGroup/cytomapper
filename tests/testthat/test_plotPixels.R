@@ -19,7 +19,7 @@ test_that("plotPixels: Standard input testing works", {
                regexp = "'img_id' is missing.",
                fixed = TRUE)
   expect_error(plotPixels(image = "test"),
-               regexp = "Please provide the image(s) in form of an 'IMCImageList' object",
+               regexp = "Please provide the image(s) in form of an 'CytoImageList' object",
                fix = TRUE)
   expect_error(plotPixels(image = pancreasImages, object = "test"),
                regexp = "'object' is not of type 'SingleCellExperiment'.",
@@ -38,7 +38,7 @@ test_that("plotPixels: Standard input testing works", {
   expect_error(plotPixels(object = pancreasSCE, image = pancreasImages,
                           mask = "test",
                           img_id = "ImageNb", cell_id = "CellNb"),
-               regexp = "Please provide the segmentation mask(s) in form of an 'IMCImageList' object",
+               regexp = "Please provide the segmentation mask(s) in form of an 'CytoImageList' object",
                fix = TRUE)
 
   mcols(pancreasMasks)$ImageNb <- NULL

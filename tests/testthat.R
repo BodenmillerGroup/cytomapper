@@ -1,4 +1,4 @@
 library(testthat)
-library(IMCMapper)
+library(cytomapper)
 
-test_check("IMCMapper")
+test_check("cytomapper")

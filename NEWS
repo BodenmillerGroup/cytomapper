@@ -72,5 +72,5 @@ Changes in version 0.1.11 (2020-03-24):
 
 Changes in version 0.1.12 (2020-03-25):
 
-+ Renamed package from SingleCellMapper to IMCMapper
-+ Renamed ImageList class to IMCImageList class
++ Renamed package from SingleCellMapper to cytomapper
++ Renamed ImageList class to CytoImageList class

@@ -1,14 +1,14 @@
 #' Function to visualize pixel-level information of multi-channel images
 #'
-#' This function takes a \code{\linkS4class{IMCImageList}} object to colour pixels
+#' This function takes a \code{\linkS4class{CytoImageList}} object to colour pixels
 #' by marker expression. Additionally, a \code{\linkS4class{SingleCellExperiment}}
-#' object and \code{IMCImageList} object containing segmentation masks
+#' object and \code{CytoImageList} object containing segmentation masks
 #' can be provided to outline cells based on metadata.
 #'
-#' @param image an \code{\linkS4class{IMCImageList}} object containing single or
+#' @param image an \code{\linkS4class{CytoImageList}} object containing single or
 #'   multi-channel \code{\linkS4class{Image}} objects (see details below)
 #' @param object an optional \code{\linkS4class{SingleCellExperiment}} object.
-#' @param mask an optional \code{\linkS4class{IMCImageList}} object containing
+#' @param mask an optional \code{\linkS4class{CytoImageList}} object containing
 #'   segmentaion masks in form of single-channel \code{\linkS4class{Image}}
 #'   objects (see details below)
 #' @param cell_id character specifying the \code{colData(object)} entry, in which the
@@ -17,7 +17,7 @@
 #' @param img_id character specifying the \code{colData(object)},
 #'   \code{mcols(image)} and \code{mcols(mask)} entry, in which the image IDs
 #'   are stored (see section 'Linking the \code{SingleCellExperiment} and
-#'   \code{IMCImageList} objects' below)
+#'   \code{CytoImageList} objects' below)
 #' @param colour_by character or character vector specifying the features
 #'   (contained in \code{channelNames(image)}) used to colour individual cells.
 #'   Pixels can be coloured by up to six features.
@@ -46,11 +46,11 @@
 #'
 #' @section Multi-channel image and segmentation mask objects:
 #' For the \code{plotPixels} function, \code{image} refers to a
-#' \code{\linkS4class{IMCImageList}} object that contains a single or multiple
+#' \code{\linkS4class{CytoImageList}} object that contains a single or multiple
 #' single- or multi-channel \code{\linkS4class{Image}} objects. Up to six
 #' channels can be overlayed to generate a composite image. When outlining
 #' cells, a \code{\linkS4class{SingleCellExperiment}} object and
-#' \code{\linkS4class{IMCImageList}} object containing segmentation masks must be
+#' \code{\linkS4class{CytoImageList}} object containing segmentation masks must be
 #' provided. The function assumes that each object in the segmentation mask is a
 #' cell. The key features of such segmentation masks include:
 #' \itemize{
@@ -58,14 +58,14 @@
 #'   \item pixel values are integers indicating the cells' IDs
 #' }
 #'
-#' @section Linking the \code{SingleCellExperiment} and \code{IMCImageList} objects:
+#' @section Linking the \code{SingleCellExperiment} and \code{CytoImageList} objects:
 #' To outline individual cells contained in the segmentation masks based on
 #' metadata stored in the SingleCellExperiment object, an \code{img_id}
 #' and \code{cell_id} entry needs to be provided. Image IDs are matched between
-#' the \code{SingleCellExperiment} and \code{IMCImageList} objects via entries to
+#' the \code{SingleCellExperiment} and \code{CytoImageList} objects via entries to
 #' the \code{colData(object)[,img_id]}, \code{mcols(image)[,img_id]} and the
 #' \code{mcols(image)[,img_id]} slots. Cell IDs are matched between the
-#' \code{SingleCellExperiment} and \code{IMCImageList} object via entries to
+#' \code{SingleCellExperiment} and \code{CytoImageList} object via entries to
 #' \code{colData(object)[,cell_id]} and the integer values of the segmentation
 #' masks.
 #'
@@ -80,12 +80,12 @@
 #' en specifying a named vector in which each entry corresponds to a unique
 #' entry to the metadata vector.
 #'
-#' @section Subsetting the \code{IMCImageList} objects:
+#' @section Subsetting the \code{CytoImageList} objects:
 #' The \code{subset_images} parameter controls which images to display. If the
 #' \code{img_id} parameter is set, images are subsetted based on the
 #' \code{mcols(image)[,img_id]} entry. Otherwise, images can be subsetted by
 #' entry names (stored in \code{names(image)}) or simply by numeric indexing.
-#' Alternatively, the \code{IMCImageList} objects can be subsetted berfore calling
+#' Alternatively, the \code{CytoImageList} objects can be subsetted berfore calling
 #' the \code{plotCells} function.
 #'
 #' @section Subsetting the \code{SingleCellExperiment} object:
@@ -98,8 +98,8 @@
 #' maximum per channel across all images that are being displayed. Therefore,
 #' when subsetting images, displayed intensities might change. However, the
 #' colour legend will display the correct numeric minimum and maximum pixel
-#' intensity. See the \code{\link[IMCMapper]{normalize}} on how to
-#' normalize IMCImageList objects.
+#' intensity. See the \code{\link[cytomapper]{normalize}} on how to
+#' normalize CytoImageList objects.
 #'
 #' @seealso For further plotting parameters see \code{?"\link{plotting-param}"}
 #'

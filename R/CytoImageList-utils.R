@@ -1,14 +1,14 @@
-# Utility functions for IMCImageList and Image class objects
+# Utility functions for CytoImageList and Image class objects
 
 #' @title Getting and setting the channel and image names
-#' @name IMCImageList-naming
+#' @name CytoImageList-naming
 #'
 #' @description
 #' Methods to get and set the names of individual channels or the names of
 #' individual images.
 #'
 #' @section Setting and getting the channel names:
-#' In the following code, \code{x} is either an \linkS4class{IMCImageList} or
+#' In the following code, \code{x} is either an \linkS4class{CytoImageList} or
 #' \linkS4class{Image} object containing one or multiple channels.
 #' The channel names can be replaced by \code{value}, which contains a character
 #' vector of the same length as the number of channels in the image(s).
@@ -21,9 +21,9 @@
 #' }
 #'
 #' @section Setting and getting the image names:
-#' Here, \code{x} is either a \linkS4class{IMCImageList} object. The element names
+#' Here, \code{x} is either a \linkS4class{CytoImageList} object. The element names
 #' can be replaced by \code{value}, which contains a character vector of the
-#' same length as the number of images. In case of the IMCImageList object,
+#' same length as the number of images. In case of the CytoImageList object,
 #' elements are always images.
 #' \describe{
 #' \item{\code{names(x)}:}{Returns the names of all images stored in \code{x}}
@@ -45,12 +45,12 @@
 #'
 #' @aliases
 #' channelNames channelNames<-
-#' channelNames,IMCImageList-method
-#' channelNames<-,IMCImageList-method
+#' channelNames,CytoImageList-method
+#' channelNames<-,CytoImageList-method
 #' channelNames,Image-method
 #' channelNames<-,Image-method
-#' names,IMCImageList-method
-#' names<-,IMCImageList-method
+#' names,CytoImageList-method
+#' names<-,CytoImageList-method
 #'
 #' @docType methods
 #'
@@ -87,7 +87,7 @@ setReplaceMethod("channelNames",
 
 #' @export
 setMethod("channelNames",
-          signature = signature(x="IMCImageList"),
+          signature = signature(x="CytoImageList"),
           definition =  function(x){
             if(length(dim(x[[1]])) == 2L){
               return(NULL)
@@ -101,7 +101,7 @@ setMethod("channelNames",
 #' @importFrom EBImage Image
 #' @importFrom methods validObject
 setReplaceMethod("channelNames",
-                 signature = signature(x="IMCImageList"),
+                 signature = signature(x="CytoImageList"),
                  definition = function(x, value){
                    # Image needs to be expanded to store channel names
                    if(length(dim(x[[1]])) == 2L){
@@ -125,7 +125,7 @@ setReplaceMethod("channelNames",
 #' @export
 #' @importFrom methods callNextMethod
 setMethod("names",
-          signature = signature(x="IMCImageList"),
+          signature = signature(x="CytoImageList"),
           definition = function(x){
             callNextMethod()
           })
@@ -133,19 +133,19 @@ setMethod("names",
 #' @export
 #' @importFrom methods callNextMethod as validObject
 setReplaceMethod("names",
-                 signature = signature(x="IMCImageList"),
+                 signature = signature(x="CytoImageList"),
                  definition = function(x, value){
                    .Object <- callNextMethod()
-                   .Object <- as(.Object, "IMCImageList")
+                   .Object <- as(.Object, "CytoImageList")
                    validObject(.Object)
                    return(.Object)
                  })
 
-#' @title Manipulating IMCImageList objects
-#' @name IMCImageList-manipulation
+#' @title Manipulating CytoImageList objects
+#' @name CytoImageList-manipulation
 #'
-#' @description Methods to change pixel values in IMCImageList objects. In the
-#'   following sections, \code{object} is an \linkS4class{IMCImageList} object
+#' @description Methods to change pixel values in CytoImageList objects. In the
+#'   following sections, \code{object} is an \linkS4class{CytoImageList} object
 #'   containing one or multiple channels.
 #'
 #' @section Image scaling:
@@ -154,12 +154,12 @@ setReplaceMethod("names",
 #' pixel values after reading them in.
 #' \describe{
 #'   \item{\code{scaleImages(object, value)}:}{Scales all images in the
-#'   \linkS4class{IMCImageList} object \code{object} by \code{value}.}
+#'   \linkS4class{CytoImageList} object \code{object} by \code{value}.}
 #' }
 #'
 #' @section Image normalization:
 #' Linear scaling of the intensity values of each \linkS4class{Image} contained
-#' in an \linkS4class{IMCImageList} \code{object} to a specific range. Images can
+#' in an \linkS4class{CytoImageList} \code{object} to a specific range. Images can
 #' either be scaled to the minimum/maximum value per channel or across all
 #' channels (default \code{separateChannels = TRUE}). Also, Images can be scaled
 #' to the minimum/maximum value per image or across all images (default
@@ -177,7 +177,7 @@ setReplaceMethod("names",
 #'   ft = c(0, 1), percentileRange = c(0, 1), inputRange = NULL)}:
 #'
 #' \describe{
-#' \item{\code{object}:}{An IMCImageList object}
+#' \item{\code{object}:}{A CytoImageList object}
 #' \item{\code{separateChannels}:}{Logical if pixel values should be normalized
 #' per channel (default) or across all channles.}
 #' \item{\code{separateImages}:}{Logical if pixel values should be normalized
@@ -191,13 +191,13 @@ setReplaceMethod("names",
 #' \code{\link[EBImage]{normalize}}).}
 #' }
 #'
-#' @return An IMCImageList object containing the manipulated Images
+#' @return An CytoImageList object containing the manipulated Images
 #'
 #' @examples
 #' data(pancreasImages)
 #'
 #' # Scale images to create segmentation masks
-#' cur_files <- list.files(system.file("extdata", package = "IMCMapper"),
+#' cur_files <- list.files(system.file("extdata", package = "cytomapper"),
 #'                         pattern = "mask.tiff", full.names = TRUE)
 #' x <- loadImages(cur_files)
 #' # Error when running plotCells(x)
@@ -220,8 +220,8 @@ setReplaceMethod("names",
 #'
 #' @seealso \code{\link[EBImage]{normalize}} for details on Image normalization
 #'
-#' @aliases scaleImages scaleImages,IMCImageList-method normalize
-#'   normalize,IMCImageList-method
+#' @aliases scaleImages scaleImages,CytoImageList-method normalize
+#'   normalize,CytoImageList-method
 #'
 #' @docType methods
 #'
@@ -230,7 +230,7 @@ NULL
 
 #' @export
 setMethod("scaleImages",
-          signature = signature(object="IMCImageList"),
+          signature = signature(object="CytoImageList"),
           definition = function(object, value){
             if(length(value) != 1L || !is.numeric(value)){
               stop("'value' must be a single numeric.")
@@ -363,5 +363,5 @@ normImages <- function(object, separateChannels = TRUE, separateImages = FALSE,
 
 #' @export
 setMethod("normalize",
-          signature = signature(object = "IMCImageList"),
+          signature = signature(object = "CytoImageList"),
           definition = normImages)

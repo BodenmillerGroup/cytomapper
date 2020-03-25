@@ -1,2 +1,3 @@
+^doc$
 ^.*\.Rproj$
 ^\.Rproj\.user$

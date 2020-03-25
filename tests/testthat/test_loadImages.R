@@ -1,7 +1,7 @@
 test_that("loadImages function reads in correct objects.", {
-  path <- system.file("extdata", package = "IMCMapper")
+  path <- system.file("extdata", package = "cytomapper")
   single_file <- system.file("extdata/A02_mask.tiff",
-                             package = "IMCMapper")
+                             package = "cytomapper")
 
   # Single file
   expect_silent(cur_file <- loadImages(single_file))
@@ -30,7 +30,7 @@ test_that("loadImages function reads in correct objects.", {
 
 
   # Multiple files
-  multi_files <- list.files(system.file("extdata", package = "IMCMapper"),
+  multi_files <- list.files(system.file("extdata", package = "cytomapper"),
                             pattern = "mask.tiff", full.names = TRUE)
   expect_silent(cur_files <- loadImages(multi_files))
   expect_error(cur_files <- loadImages(c(multi_files, "test")))

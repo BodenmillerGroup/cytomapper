@@ -1,5 +1,5 @@
 #------------------------------------------------------------------------------
-# Generic functions for the IMCImageList and Image classes
+# Generic functions for the CytoImageList and Image classes
 #------------------------------------------------------------------------------
 
 #' @export

@@ -1,4 +1,4 @@
-#' @title Further plotting parameters for the IMCMapper package
+#' @title Further plotting parameters for the cytomapper package
 #' @name plotting-param
 #'
 #' @description
@@ -35,7 +35,7 @@
 #'   of the following entries are supported:
 #' \itemize{
 #'   \item \code{text}: character vector of image titles. Same length as the
-#'   \code{IMCImageList} object.
+#'   \code{CytoImageList} object.
 #'   \item \code{position}: single character specifying the position of the
 #'   title. Supported entries: "top", "bottom", "topleft", "bottomleft",
 #'   "topright", "bottomright" (default "top").

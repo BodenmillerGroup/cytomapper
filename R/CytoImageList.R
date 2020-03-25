@@ -10,10 +10,10 @@
 #' @details Similar to the \code{\linkS4class{Image}} class, the first two
 #'   dimensions of each entry indicate the spatial dimension of the image. These
 #'   can be different for each entry. The third dimension indicates the number
-#'   of channels per Image. Each entry in the IMCImageList class object must
+#'   of channels per Image. Each entry in the CytoImageList class object must
 #'   contain the same number of channels. Here, each channel represents pixel
 #'   values indicating measurement intensities or in case of segmentation masks
-#'   the cells' ID. The IMCImageList class therefore only supports a Grayscale
+#'   the cells' ID. The CytoImageList class therefore only supports a Grayscale
 #'   colormode (see \code{\link[EBImage]{colormode}}) representation of each
 #'   individual image.
 #'
@@ -22,54 +22,54 @@
 #'   \code{\link[S4Vectors]{mcols}} accessor function.
 #'
 #' @section Restrictions on entry names:
-#' The IMCImageList class only supports unique entry names to avoid duplicated
-#' images. Names of an IMCImageList object can be get and set via \code{names(x)},
-#' where \code{x} is an IMCImageList object. Furthermore, only named or unnamed
-#' IMCImageList objects are allowed. Partially named objects causing empty or NA
+#' The CytoImageList class only supports unique entry names to avoid duplicated
+#' images. Names of an CytoImageList object can be get and set via \code{names(x)},
+#' where \code{x} is an CytoImageList object. Furthermore, only named or unnamed
+#' CytoImageList objects are allowed. Partially named objects causing empty or NA
 #' names return an error.
 #'
 #' @section Coercion:
 #' Coercion to and from list, \code{\linkS4class{SimpleList}} and
 #' \code{\linkS4class{List}}: \describe{ \item{as.list(x), as(x, "SimpleList"),
-#' as(x, "SimpleList"):}{Coercion from an IMCImageList object \code{x}} \item{as(x,
-#' "IMCImageList"):}{Coercion from a list, SimpleList or List object \code{x} to an
-#' IMCImageList object} }
+#' as(x, "SimpleList"):}{Coercion from an CytoImageList object \code{x}} \item{as(x,
+#' "CytoImageList"):}{Coercion from a list, SimpleList or List object \code{x} to an
+#' CytoImageList object} }
 #'
 #' @section Looping:
 #' While \code{\link[base]{lapply}} and \code{\link[base]{mapply}} return
 #' regular list objects, \code{\link[S4Vectors]{endoapply}} and
-#' \code{\link[S4Vectors]{mendoapply}} return IMCImageList objects.
+#' \code{\link[S4Vectors]{mendoapply}} return CytoImageList objects.
 #'
 #' @seealso
 #' \code{\linkS4class{Image}}, for further image analysis tools.
 #' \code{\linkS4class{SimpleList}}, for basics functions to handle SimpleList
 #' objects
-#' \code{?\link{loadImages}}, for reading images into an IMCImageList
+#' \code{?\link{loadImages}}, for reading images into an CytoImageList
 #' object
-#' \code{?"\link{IMCImageList-naming}"}, for setting and getting image and
+#' \code{?"\link{CytoImageList-naming}"}, for setting and getting image and
 #' channel names
-#' \code{?"\link{IMCImageList-subsetting}"}, for subsetting and
+#' \code{?"\link{CytoImageList-subsetting}"}, for subsetting and
 #' accessor functions
 #'
-#' @return An IMCImageList object
+#' @return An CytoImageList object
 #'
 #' @examples
-#' # Creation of IMCImageList
+#' # Creation of CytoImageList
 #' u <- matrix(rbinom(100, 10, 0.5), ncol=10, nrow=10)
 #' v <- matrix(rbinom(100, 10, 0.5), ncol=10, nrow=10)
-#' IL1 <- IMCImageList(image1 = Image(u), image2 = Image(v))
+#' IL1 <- CytoImageList(image1 = Image(u), image2 = Image(v))
 #'
 #' # Coercion
 #' as.list(IL1)
 #' as(IL1, "SimpleList")
-#' as(list(image1 = Image(u), image2 = Image(v)), "IMCImageList")
+#' as(list(image1 = Image(u), image2 = Image(v)), "CytoImageList")
 #'
 #' @aliases
-#' coerce,ANY,IMCImageList-method
-#' coerce,list,IMCImageList-method
-#' show,IMCImageList-method
-#' plot,IMCImageList,ANY-method
-#' plot-IMCImageList-method
+#' coerce,ANY,CytoImageList-method
+#' coerce,list,CytoImageList-method
+#' show,CytoImageList-method
+#' plot,CytoImageList,ANY-method
+#' plot-CytoImageList-method
 #'
 #' @author Nils Eling (\email{nils.eling@@dqbm.uzh.ch})
 #'
@@ -78,33 +78,33 @@
 #' @importFrom S4Vectors new2
 #'
 #' @export
-IMCImageList <- function(...){
+CytoImageList <- function(...){
   args <- list(...)
   if (length(args) == 1L && methods::extends(class(args[[1L]]), "list"))
     args <- args[[1L]]
   if (length(args) == 1L && methods::extends(class(args[[1L]]), "SimpleList"))
     args <- as.list(args[[1L]])
-  x <- S4Vectors::new2("IMCImageList", listData=args)
+  x <- S4Vectors::new2("CytoImageList", listData=args)
   return(x)
 }
 
 # Coercion from list
 #' @exportMethod coerce
-setAs("list", "IMCImageList", function(from) {
+setAs("list", "CytoImageList", function(from) {
   # Use constructor function
-  IMCImageList(from)
+  CytoImageList(from)
 })
 
 # Coercion from ANY
 #' @exportMethod coerce
-setAs("ANY", "IMCImageList", function(from) {
+setAs("ANY", "CytoImageList", function(from) {
   # Use constructor function
-  IMCImageList(from)
+  CytoImageList(from)
 })
 
 # Expanded show method
 #' @exportMethod show
-setMethod("show", signature = signature(object="IMCImageList"),
+setMethod("show", signature = signature(object="CytoImageList"),
           definition = function(object){
             lo <- length(object)
             cat(class(object)[1], " containing ", lo,
@@ -125,7 +125,7 @@ setMethod("show", signature = signature(object="IMCImageList"),
 
 #' @export
 setMethod("plot",
-          signature = signature(x="IMCImageList"),
+          signature = signature(x="CytoImageList"),
           definition = function(x){
 
             cur_check <- lapply(x, function(x){all(x == floor(x))})
