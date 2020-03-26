@@ -10,7 +10,7 @@
 #' \describe{
 #' \item{A single file}{Full path and file name of an individual image file.}
 #' \item{A path}{A path to where image files are located.}
-#' \item{A list of files}{A character vector where each entry represents an individual file.}
+#' \item{A vector of files}{A character vector where each entry represents an individual file.}
 #' }
 #' @param pattern Character inputs of the following form:
 #' \describe{
@@ -21,7 +21,7 @@
 #' }
 #' @param ... arguments passed to the \code{\link{readImage}} function.
 #'
-#' @return An \linkS4class{Image} or \linkS4class{CytoImageList} object
+#' @return A \linkS4class{CytoImageList} object
 #'
 #' @section Loading specific images:
 #' This function loads images via the \code{\link{readImage}} function and
@@ -65,15 +65,10 @@ loadImages <- function(x, pattern = NULL, ...) {
   x <- .valid.loadImage.input(x, pattern)
 
   # Read in images
-  if(length(x) == 1){
-    out <- EBImage::readImage(x, ...)
-
-  } else {
-    cur_list <- lapply(x, function(y){EBImage::readImage(y, ...,
+  cur_list <- lapply(x, function(y){EBImage::readImage(y, ...,
                                       names = NULL)})
-    out <- CytoImageList(cur_list)
-    names(out) <- sub("\\.[^.]*$", "", basename(x))
-  }
+  out <- CytoImageList(cur_list)
+  names(out) <- sub("\\.[^.]*$", "", basename(x))
 
   return(out)
 }
