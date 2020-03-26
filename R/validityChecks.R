@@ -226,6 +226,11 @@
   if(!is.null(img_id) && !(img_id %in% colnames(mcols(mask)))){
     stop("'img_id' not in 'mcols(mask)'.")
   }
+  
+  # Check if img_id contain unique entries
+  if(length(unique(mcols(mask)[,img_id])) < length((mcols(mask)[,img_id]))){
+    stop("Entries to in the 'mcols(mask)[,img_id]' slot are not unique.")
+  }
 }
 
 # Check image valididty
@@ -243,6 +248,11 @@
   if(all(unlist(cur_out)) && numberOfFrames(image[[1]]) == 1L){
     warning("All pixel intensities are integers \n", "
             make sure to not supply segmentation masks for 'images'")
+  }
+  
+  # Check if img_id contain unique entries
+  if(length(unique(mcols(image)[,img_id])) < length((mcols(image)[,img_id]))){
+    stop("Entries to in the 'mcols(image)[,img_id]' slot are not unique.")
   }
 }
 
