@@ -7,22 +7,22 @@
 #'
 #' @description
 #' These getter and setter functions are used to extract, replace and merge
-#' entries in an \code{\linkS4class{CytoImageList}} object.
+#' entries in a \code{\linkS4class{CytoImageList}} object.
 #'
 #' @param x,y \code{CytoImageList} objects
 #' @param i integer, logical, character or vector of such indicating which
 #'   element(s) to replace or extract
-#' @param value an \code{CytoImageList} or \code{\linkS4class{Image}}
+#' @param value a \code{CytoImageList} or \code{\linkS4class{Image}}
 #' object
 #'
 #' @section Setting and getting images:
-#' Functions to extract and replace elements (= images) of an
-#' \linkS4class{CytoImageList} object. In the following code, \code{x} is an
+#' Functions to extract and replace elements (= images) of a
+#' \linkS4class{CytoImageList} object. In the following code, \code{x} is a
 #' CytoImageList object. The parameter \code{i} indicates the element(s) of \code{x}
 #' that should be returned or replaced. Replacement is done by \code{value},
-#' which takes an CytoImageList or Image object. If \code{length(i) > 0},
-#' \code{value} has to be an CytoImageList object of \code{length(i)}, otherwise
-#' \code{value} allows an CytoImageList object of length 1 or an Image object. If an
+#' which takes a CytoImageList or Image object. If \code{length(i) > 0},
+#' \code{value} has to be a CytoImageList object of \code{length(i)}, otherwise
+#' \code{value} allows a CytoImageList object of length 1 or an Image object. If an
 #' Image object is provided, only the image entry in the CytoImageList object is
 #' replaced, not the corresponding elementMetadata entry.
 #'
@@ -35,17 +35,17 @@
 #' }
 #'
 #' These setter and getter functions are the recommended way of extracting and replacing
-#' images in an CytoImageList object. Alternatively, the standard operations via \code{`[`}, \code{`[[`},
+#' images in a CytoImageList object. Alternatively, the standard operations via \code{`[`}, \code{`[[`},
 #' \code{`[<-`} and \code{`[[<-`} can be performed (see \code{?\link{List}} for S4Vectors subsetting
 #' functionality). However, these operations do not change element names during replacment
 #' calls. The \code{setImages()} function makes sure that element names are replaced if
 #' \code{value} is named or of \code{i} is a character or vector of characters.
 #'
 #' @section Getting and setting channels:
-#' Functions to extract and replace channels of an \linkS4class{CytoImageList}
-#' object. Here, \code{x} is an \linkS4class{CytoImageList} object. The parameter
+#' Functions to extract and replace channels of a \linkS4class{CytoImageList}
+#' object. Here, \code{x} is a \linkS4class{CytoImageList} object. The parameter
 #' \code{i} indicates the channels of \code{x} that should be returned or
-#' replaced. Replacement is done by \code{value}, which takes an CytoImageList object.
+#' replaced. Replacement is done by \code{value}, which takes a CytoImageList object.
 #' The CytoImageList object \code{value} needs to have the same length as \code{x}.
 #' Furthermore, the number of channels in \code{value} should be identical to
 #' \code{length(i)}.
@@ -76,13 +76,13 @@
 #' Merging channels is possible via:
 #'
 #' \describe{
-#' \item{\code{mergeChannels(x,y)}:}{Returns an CytoImageList in which
+#' \item{\code{mergeChannels(x,y)}:}{Returns a CytoImageList in which
 #' the channels of the CytoImageList object \code{y} have been appended
 #' to the channels of the CytoImageList object \code{x}.
 #' Only channels of two CytoImageList objects can be merged in that way.}
 #' }
 #'
-#' @return An CytoImageList object
+#' @return A CytoImageList object
 #'
 #' @examples
 #' data("pancreasImages")

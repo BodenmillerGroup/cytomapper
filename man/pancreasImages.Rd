@@ -4,7 +4,7 @@
 \name{pancreasImages}
 \alias{pancreasImages}
 \title{Example CytoImageList object of image files}
-\format{An CytoImageList object containing 3 \code{\linkS4class{Image}} objects
+\format{A CytoImageList object containing 3 \code{\linkS4class{Image}} objects
 with 5 channels each. Channel names can be accessed via \code{?"\link[cytomapper]{channelNames}"}.}
 \usage{
 pancreasImages

@@ -19,7 +19,7 @@ plotPixels(
 )
 }
 \arguments{
-\item{image}{an \code{\linkS4class{CytoImageList}} object containing single or
+\item{image}{a \code{\linkS4class{CytoImageList}} object containing single or
 multi-channel \code{\linkS4class{Image}} objects (see details below)}
 
 \item{object}{an optional \code{\linkS4class{SingleCellExperiment}} object.}

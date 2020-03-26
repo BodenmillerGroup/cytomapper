@@ -11,7 +11,7 @@ test_that("plotCells: Standard input testing works", {
 
   # Error
   expect_error(plotCells(mask = "test"),
-               regexp = "Please provide the segmentation mask(s) in form of an 'CytoImageList' object",
+               regexp = "Please provide the segmentation mask(s) in form of a 'CytoImageList' object",
                fix = TRUE)
   expect_error(plotCells(mask = pancreasMasks, object = "test"),
                regexp = "'object' is not of type 'SingleCellExperiment'.",

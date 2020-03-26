@@ -23,15 +23,15 @@
 #'
 #' @section Restrictions on entry names:
 #' The CytoImageList class only supports unique entry names to avoid duplicated
-#' images. Names of an CytoImageList object can be get and set via \code{names(x)},
-#' where \code{x} is an CytoImageList object. Furthermore, only named or unnamed
+#' images. Names of a CytoImageList object can be get and set via \code{names(x)},
+#' where \code{x} is a CytoImageList object. Furthermore, only named or unnamed
 #' CytoImageList objects are allowed. Partially named objects causing empty or NA
 #' names return an error.
 #'
 #' @section Coercion:
 #' Coercion to and from list, \code{\linkS4class{SimpleList}} and
 #' \code{\linkS4class{List}}: \describe{ \item{as.list(x), as(x, "SimpleList"),
-#' as(x, "SimpleList"):}{Coercion from an CytoImageList object \code{x}} \item{as(x,
+#' as(x, "SimpleList"):}{Coercion from a CytoImageList object \code{x}} \item{as(x,
 #' "CytoImageList"):}{Coercion from a list, SimpleList or List object \code{x} to an
 #' CytoImageList object} }
 #'
@@ -44,14 +44,14 @@
 #' \code{\linkS4class{Image}}, for further image analysis tools.
 #' \code{\linkS4class{SimpleList}}, for basics functions to handle SimpleList
 #' objects
-#' \code{?\link{loadImages}}, for reading images into an CytoImageList
+#' \code{?\link{loadImages}}, for reading images into a CytoImageList
 #' object
 #' \code{?"\link{CytoImageList-naming}"}, for setting and getting image and
 #' channel names
 #' \code{?"\link{CytoImageList-subsetting}"}, for subsetting and
 #' accessor functions
 #'
-#' @return An CytoImageList object
+#' @return A CytoImageList object
 #'
 #' @examples
 #' # Creation of CytoImageList

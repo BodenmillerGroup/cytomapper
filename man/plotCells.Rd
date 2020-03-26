@@ -18,7 +18,7 @@ plotCells(
 )
 }
 \arguments{
-\item{mask}{an \code{\linkS4class{CytoImageList}} containing single-channel
+\item{mask}{a \code{\linkS4class{CytoImageList}} containing single-channel
 \code{\linkS4class{Image}} objects (see section 'Segmentation mask object' below).}
 
 \item{object}{a \code{\linkS4class{SingleCellExperiment}} object.}

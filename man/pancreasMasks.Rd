@@ -4,7 +4,7 @@
 \name{pancreasMasks}
 \alias{pancreasMasks}
 \title{Example CytoImageList object of segmentation masks}
-\format{An CytoImageList object containing 3 \code{\linkS4class{Image}} objects
+\format{A CytoImageList object containing 3 \code{\linkS4class{Image}} objects
 with 1 channel each. These images are the result to segmentation and associated
 to the images stored in the \code{\link[cytomapper]{pancreasImages}} object.
 Pixel values indicate the numeric cell identifier while a value of 0 represents the

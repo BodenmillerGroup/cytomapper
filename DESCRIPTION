@@ -41,7 +41,7 @@ Suggests:
     testthat
 biocViews: ImmunoOncology, Software, SingleCell, Imaging
 VignetteBuilder: knitr
-URL: https://github.com/BodenmillerGroup/IMCMapper
-BugReports: https://github.com/BodenmillerGroup/IMCMapper/issues
+URL: https://github.com/BodenmillerGroup/cytomapper
+BugReports: https://github.com/BodenmillerGroup/cytomapper/issues
 RoxygenNote: 7.0.2
 Encoding: UTF-8
