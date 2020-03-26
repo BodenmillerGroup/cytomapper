@@ -103,12 +103,9 @@ plotCells(mask = pancreasMasks)
 To colour and/or outline segmentation masks, a `SingleCellExperiment`, an `img_id` and `cell_id` entry need to be specified:
 
 ```{r quickstart-plotCells-2}
-plotCells(mask = pancreasMasks, object = pancreasSCE, cell_id = "CellNb", img_id = "ImageNb",
-          colour_by = "SMA")
-plotCells(mask = pancreasMasks, object = pancreasSCE, cell_id = "CellNb", img_id = "ImageNb",
-          colour_by = "SMA", outline_by = "CellType")
-plotCells(mask = pancreasMasks, object = pancreasSCE, cell_id = "CellNb", img_id = "ImageNb", 
-          colour_by = "CellType")
+plotCells(mask = pancreasMasks, object = pancreasSCE, cell_id = "CellNb", img_id = "ImageNb", colour_by = "SMA")
+plotCells(mask = pancreasMasks, object = pancreasSCE, cell_id = "CellNb", img_id = "ImageNb", colour_by = "SMA", outline_by = "CellType")
+plotCells(mask = pancreasMasks, object = pancreasSCE, cell_id = "CellNb", img_id = "ImageNb", colour_by = "CellType")
 ```
 
 For more information on the data formats and requirements, refer to the following section.
@@ -190,17 +187,76 @@ The `cytomapper` package provides the `loadImages` function to conveniently read
 
 ## Load images
 
+The `loadImages` function returns a `CytoImageList` object containing the multi-channel images or segmentation masks.
+Refer to the `?loadImages` function to see the full functionality.
 
+As an example, we will read in multi-channel images and segmentation masks provided by the `cytomapper` package.
 
-Introduction to the `LoadImage` function
+```{r read-in-images}
+# Read in masks
+path.to.images <- system.file("extdata", package = "cytomapper")
+all_masks <- loadImages(path.to.images, pattern = "_mask.tiff")
+all_masks
 
-## Add metadata
-```{r}
-mcols(pancreasImages)
-mcols(pancreasMasks)
-colData(pancreasSCE)$ImageNb
+# Read in images
+all_stacks <- loadImages(path.to.images, pattern = "_imc.tiff")
+all_stacks
 ```
 
+## Add metadata
+
+To link images between the two `CytoImageList` objects and the corresponding `SingleCellExperiment` object, the image ids need to be added to the `elementMetadata` slot of the `CytoImageList` objects.
+From the experimental setup, we know that the image named 'A02_imc' has image id '1', D01_imc has id '2', F01_imc has id '3'.
+
+```{r add-metadata}
+unique(pancreasSCE$ImageNb)
+mcols(all_masks)$ImageNb <- c("1", "2", "3")
+mcols(all_stacks)$ImageNb <- c("1", "2", "3")
+```
+
+## Scale images
+
+We can see, that in some cases, the pixel-values are not correctly scaled by the image encoding.
+The segmentation masks should only contain integer entries:
+
+```{r image-encoding}
+unique(as.numeric(all_masks[[1]]))
+```
+
+The provided data was processed using CellProfiler [@carpenter2006cellprofiler].
+By default, CellProfiler scales all pixel intensities between 0 and 1. 
+This is done by dividing each count by the maximum possible intensity value (see [MeasureObjectIntensity](https://cellprofiler-manual.s3.amazonaws.com/CellProfiler-3.0.0/modules/measurement.html#measureobjectintensity) for more info). 
+In the case of 16-bit encoding (where 0 is a valid intensity), this scaling value is `2^16-1 = 65535`. 
+Therefore, pixel-intensites need to be rescaled by this value.
+However, this scaling value can change and different images can be scaled by different factors.
+The user needs make sure to select the correct factors in more complex cases.
+
+The `cytopmapper` package provides a `?scaleImages` function.
+The user needs to manually scale images to obtain the correct pixel-values.
+Here, we scale the segmentation masks by the factor for 16-bit encoding: `2^16-1`
+
+```{r scaleImage-1}
+all_masks <- scaleImages(all_masks, 2^16-1)
+unique(as.numeric(all_masks[[1]]))
+```
+
+In this case, the multi-channel images are not affected by this scaling factor.
+
+## Add channel names
+
+To access the correct images in the multi-channel `CytoImageList` object, the user needs to set the correct channel names.
+For this, the `cytomapper` package provides the `?channelNames` getter and setter function:
+
+```{r channelNames-example}
+channelNames(all_stacks) <- c("H3", "SMA", "INS", "CD38", "CD44")
+```
+
+The read-in data can now be used for visualization:
+
+```{r example-viz}
+plotPixels(all_stacks, colour_by = c("H3", "SMA", "CD44"))
+plotCells(all_masks, object = pancreasSCE, cell_id = "CellNb", img_id = "ImageNb", colour_by = "CellType")
+```
 
 # The CytoImageList object {#CytoImageList}
 
@@ -225,6 +281,13 @@ Extract one channel from the CytoImageList
 ## Outline
 
 ## Normalization
+
+However, pixel intensities can be normalized.
+The `cytomapper` package provides a `normalize` (?`normalize,CytoImageList-method`) function to linearly scale images:
+
+```{r normalize}
+
+```
 
 # Plotting cell information {#CellInfo}
 
