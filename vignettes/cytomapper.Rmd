@@ -288,7 +288,7 @@ mcols(pancreasImages)
 ```
 Subsetting a `CytoImageList` object works similar to a `SimpleList` object:
 
-```{r subsetting}
+```{r subsetting-SimpleList}
 pancreasImages[1]
 pancreasImages[[1]]
 ```
@@ -475,11 +475,33 @@ plotPixels(pancreasImages, mask = pancreasMasks,
            outline_by = "CellType")
 ```
 
-
-
 ## Subsetting
 
+The user can further subset the images internally for visualization by setting the `subset_images` parameter.
+Images can be subsetted by image ID, entry name or simply by indexing.
+In the toy dataset, image IDs are numeric entries and therefore the `subset_images` parameter behaves the same for image ID subsetting and subsetting via integer indexing.
+
+```{r subsetting}
+plotPixels(pancreasImages, colour_by = c("H3", "SMA", "CD44"),
+           subset_images = 1)
+plotPixels(pancreasImages, colour_by = c("H3", "SMA", "CD44"),
+           subset_images = "F01_imc")
+```
+
 ## Adjusting the colour
+
+The user can also customize the colours for selected features.
+The `colour` parameter takes a named `list` in which names correspond to the entries to `colour_by`.
+To colour continous features such as expression or continous metadata entries (e.g. cell area, see next section), at least two colours for interpolation need to be provided.
+These colours are passed to the `colorRampPalette` function for interpolation.
+
+```{r colour-pixels}
+plotPixels(pancreasImages, colour_by = c("H3", "SMA", "CD44"),
+           colour = list(H3 = c("black", "blue"),
+                         SMA = c("black", "red"),
+                         CD44 = c("black", "white")))
+```
+
 
 # Plotting cell information {#CellInfo}
 
