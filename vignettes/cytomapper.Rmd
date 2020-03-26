@@ -260,36 +260,197 @@ plotCells(all_masks, object = pancreasSCE, cell_id = "CellNb", img_id = "ImageNb
 
 # The CytoImageList object {#CytoImageList}
 
-This document also introduces the `CytoImageList` class, which inherits from the [`SimpleList` class](https://rdrr.io/bioc/S4Vectors/man/SimpleList-class.html).
+The `cytomapper` package provides a new `CytoImageList` class, which inherits from the [`SimpleList` class](https://rdrr.io/bioc/S4Vectors/man/SimpleList-class.html).
+Each entry to the `CytoImageList` object is an `Image` class object defined in the `r BiocStyle::Biocpkg("EBImage")` package.
+A `CytoImageList` object is restricted to the following entries:
 
-Images should be stacks, all stacks should have the same number of channels
-Masks should be single-channel images
+* all images need to have the same number of channels
+* the order/naming of channels need to be the same across all images
+* entries to the `CytoImageList` object need to be uniquely named
+* names of `CytoImageList` object can either be `NULL` or should not contain `NA` or empty entries
+* only grayscale images are supported (see `?Image` for more information)
+* channels names do not support duplicated entries
 
-Explain mcols
+`CytoImageList` objects that contain masks should only contain a single channel
+
+The follwoing paragraphs will explain further details on manipulating `CytoImageList` objects
 
 ## Accessors
 
-## Coercion
+All accessor functions defined for `SimpleList` also work on `CytoImageList` class objects.
+Element-wise metadata --- in the case of the `CytoImageList` object these are image-specific metadata --- are saved in the `elementMetadata` slot. 
+This slot can be accessed via the `mcols()` function:
 
-## Subsetting
-Extract one channel from the CytoImageList
+```{r mcols}
+mcols(pancreasImages)
+mcols(pancreasImages)$PatientID <- c("Patient1", "Patient2", "Patient3")
+mcols(pancreasImages)
+```
+Subsetting a `CytoImageList` object works similar to a `SimpleList` object:
+
+```{r subsetting}
+pancreasImages[1]
+pancreasImages[[1]]
+```
+
+However, to facilitate subsetting and making sure that entry names are transfered between objects, the `cytomapper` package provides a number of getter and setter functions:
+
+### Getting and setting images
+
+Individual or multiple entries in a `CytoImageList` object can be obtained or replaced using the `getImages` and `setImages` function respectively.
+
+```{r get-set-images}
+cur_image <- getImages(pancreasImages, "A02_imc")
+cur_image
+setImages(pancreasImages, "New_image") <- cur_image
+pancreasImages
+mcols(pancreasImages)
+```
+
+The `setImages` function ensures that names are transfered from one to the other object along the assignment operator:
+
+```{r set-images}
+names(cur_image) <- "Replacement"
+setImages(pancreasImages, 2) <- cur_image
+pancreasImages
+mcols(pancreasImages)
+```
+
+However, if the image to replace is called by name, only the image and associated metadata is replaced:
+
+```{r set-images-2}
+setImages(pancreasImages, "F01_imc") <- cur_image
+pancreasImages
+mcols(pancreasImages)
+```
+
+Images can be deleted by setting the entry to `NULL`:
+
+```{r deleting-images}
+setImages(pancreasImages, c("Replacement", "New_image")) <- NULL
+pancreasImages
+```
+
+**Of note:** for plotting, the entries in the `img_id` slot in the `CytoImageList` objects have to be unique.
+
+### Getting and setting channels
+
+The `cytomapper` package also provides functions to obtain and replace channels. 
+This functionality is provided via the `getChannels` and `setChannels` functions:
+
+```{r get-set-channels}
+cur_channel <- getChannels(pancreasImages, "H3")
+cur_channel
+channelNames(cur_channel) <- "New_H3"
+setChannels(pancreasImages, 1) <- cur_channel
+pancreasImages
+```
+
+The `setChannels` function does not allow combining and adding new channels.
+For this task, the `cytomapper` package provides the `mergeChannels` section in the next paragraph.
+
+### Naming and merging channels
+
+Channel names can be obtained and replaced using the `channelNames` getter and setter function:
+
+```{r channelnames}
+channelNames(pancreasImages)
+channelNames(pancreasImages) <- c("ch1", "ch2", "ch3", "ch4", "ch5")
+pancreasImages
+```
+
+Furthermore, channels can be merged using the `mergeChannels` function:
+
+```{r mergechannels}
+cur_channels <- getChannels(pancreasImages, 1:2)
+channelNames(cur_channels) <- c("new_ch1", "new_ch2")
+pancreasImages <- mergeChannels(pancreasImages, cur_channels) 
+pancreasImages
+```
 
 ## Looping
 
+To perform custom operations on each individual entry to a `CytoImageList` object, the `r Biocpkg("S4Vectors")` package provides the `endoapply` function.
+While the `lapply` function returns a `list` object, the `endoapply` function provides an object of the same class of the input object.
+
+This allows the user to apply all functions provided by the `r Biocpkg("EBImage")` package to individual entries within the `CytoImageList` object:
+
+```{r endoapply-example}
+data("pancreasImages")
+
+# Performing a gaussian blur
+pancreasImages <- endoapply(pancreasImages, gblur, sigma = 1)
+
+plotPixels(pancreasImages, colour_by = c("H3", "SMA", "CD44"))
+```
+
 # Plotting pixel information {#PixelInfo}
 
-## Outline
+The `cytomapper` package provides the `plotPixels` function to plot pixel-level intensities of marker proteins.
+The function requires a `CytoImageList` object containing a single or multiple multi-channel images.
+To colour images based on channel name, the `channelNames` of the object need to be set.
+Furthermore, to outline images, a `CytoImageList` object containing segmentation masks and a `SingleCellExperiment` object containing cell-specific metadata need to be provided.
+
+By default, pixel values are coloured internally and scaled between the minimum and maximum values across all displayed images.
+However, to manipulate pixel values and to linearly scale values to a certain range, the `cytomapper` package provides a function for image normalization.
 
 ## Normalization
 
-However, pixel intensities can be normalized.
-The `cytomapper` package provides a `normalize` (?`normalize,CytoImageList-method`) function to linearly scale images:
+The `normalize` function provided in the `cytomapper` package internally calls the `normalize` function of the `EBImage` package.
+The main difference between the two functions is the option to scale per image or globally in the `cytomapper` package.
+Furthermore, the `cytomapper` package `normalize` function (see `?'normalize,CytoImageList-method'`) allows the user to define a clipping range based on percentiles.
 
-```{r normalize}
+By default, the `normalize` function linearly scales the images channel-wise across all images and returns values between 0 and 1:
 
+```{r normalize-default}
+data("pancreasImages")
+
+# Default normalization
+cur_images <- normalize(pancreasImages)
+
+plotPixels(cur_images, colour_by = c("H3", "SMA", "CD44"))
 ```
 
+A `CytoImageList` object can also be normalized image-wise:
+
+```{r normalize-image-wise}
+# Image-wise normalization
+cur_images <- normalize(pancreasImages, separateImages = TRUE)
+
+plotPixels(cur_images, colour_by = c("H3", "SMA", "CD44"))
+```
+
+To clip the image range, the user can provide a percentage-based clipping range:
+
+```{r normalize-clippingrange}
+# Percentage-based clipping range
+cur_images <- normalize(pancreasImages, percentileRange = c(0,0.99))
+plotPixels(cur_images, colour_by = c("H3", "SMA", "CD44"))
+```
+
+For more information on the normalization functionality provided by the `cytomapper` package, please refer to `?'normalize,CytoImageList-method'`.
+
+## Colouring
+
+## Adjusting brightness, contrast and gamma
+
+## Outlining
+
+## Subsetting
+
+## Adjusting the colour
+
 # Plotting cell information {#CellInfo}
+
+## Colouring
+
+## Outlining
+
+## Changeing the assay slot
+
+## Subsetting
+
+## Adjusting the colour
 
 # Customization
 
@@ -297,7 +458,14 @@ The `cytomapper` package provides a `normalize` (?`normalize,CytoImageList-metho
 
 ## Scale bar
 
-## Cropping
+Per pixel - user needs to know what 1 pixel is...
+
+## Scale
+
+```{r}
+cur_images <- normalize(pancreasImages, inputRange = c(0,120), percentileRange = NULL)
+plotPixels(cur_images, colour_by = c("H3", "SMA", "CD44"), scale = FALSE)
+```
 
 # Saving images
 
