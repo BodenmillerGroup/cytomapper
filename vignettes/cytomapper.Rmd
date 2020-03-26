@@ -434,7 +434,7 @@ For more information on the normalization functionality provided by the `cytomap
 
 The `cytomapper` package supports the visualization of up to 6 channels and displays a combined image:
 
-```{r colouring}
+```{r colouring-pixels}
 data("pancreasImages")
 plotPixels(pancreasImages, colour_by = c("H3", "SMA", "INS", "CD38", "CD44"))
 ```
@@ -447,7 +447,7 @@ Entry names need to correspond by channels specified in `colour_by`.
 Each entry takes a numeric vector of length three where the first entry represents the brightness value, the second the contrast factor and the third the gamma factor.
 Internally, the brightness value is added to each channel; each channel is multiplied by the contrast factor and each channel is exponentiated by the gamma factor.
 
-```{r bcg}
+```{r bcg-pixels}
 # Increase contrast for the SMA and CD44 channel
 plotPixels(pancreasImages, 
            colour_by = c("H3", "SMA", "CD44"), 
@@ -459,7 +459,7 @@ plotPixels(pancreasImages,
 
 The cells can be outlined when providing a `CytoImageList` object containing the corresponding segmentation masks and a character `img_id` indicating the name of the `elementMetadata` slot that contains the image IDs:
 
-```{r outline-1}
+```{r outline-1-pixels}
 plotPixels(pancreasImages, mask = pancreasMasks, 
            img_id = "ImageNb", colour_by = c("H3", "SMA", "CD44"))
 ```
@@ -467,7 +467,7 @@ plotPixels(pancreasImages, mask = pancreasMasks,
 The user can furthermore specify the metadata entry to outline cells by.
 For this, a `SingleCellExperiment` object containing the cell-specific metadata and a `cell_id` indicating the name of the `colData` slot that contains the cell IDs need to be provided:
 
-```{r outline-2}
+```{r outline-2-pixels}
 plotPixels(pancreasImages, mask = pancreasMasks, 
            object = pancreasSCE, img_id = "ImageNb", 
            cell_id = "CellNb",
@@ -481,7 +481,7 @@ The user can further subset the images internally for visualization by setting t
 Images can be subsetted by image ID, entry name or simply by indexing.
 In the toy dataset, image IDs are numeric entries and therefore the `subset_images` parameter behaves the same for image ID subsetting and subsetting via integer indexing.
 
-```{r subsetting}
+```{r subsetting-pixels}
 plotPixels(pancreasImages, colour_by = c("H3", "SMA", "CD44"),
            subset_images = 1)
 plotPixels(pancreasImages, colour_by = c("H3", "SMA", "CD44"),
@@ -519,7 +519,7 @@ To colour segmentation masks based on expression, the `rownames` of the `SingleC
 The `cytomapper` package supports the visualization of up to 6 channels and displays a combined image.
 However, in the case of displaying expression on segmentation mask, the user should not display too many features.
 
-```{r colouring}
+```{r colouring-cells}
 data("pancreasImages")
 plotCells(pancreasMasks, object = pancreasSCE, 
           img_id = "ImageNb", cell_id = "CellNb", 
@@ -531,7 +531,7 @@ plotCells(pancreasMasks, object = pancreasSCE,
 To visualize differently transformed counts, the `plotCells` function allows setting the `exprs_values` parameter.
 In the toy dataset, the `assay(pancreasSCE, "exprs")` slot contains the arcsinh-transformed raw expression counts.
 
-```{r exprs_values}
+```{r exprs_values-cells}
 plotCells(pancreasMasks, object = pancreasSCE, 
           img_id = "ImageNb", cell_id = "CellNb", 
           colour_by = c("SMA", "CD44"),
@@ -542,7 +542,7 @@ plotCells(pancreasMasks, object = pancreasSCE,
 
 The user can furthermore outline cells and specify the metadata entry to outline cells by.
 
-```{r outline-2}
+```{r outline-cells}
 plotCells(pancreasMasks, object = pancreasSCE, 
           img_id = "ImageNb", cell_id = "CellNb", 
           colour_by = c("SMA", "CD44"),
@@ -555,7 +555,7 @@ The user can further subset the images internally for visualization by setting t
 Images can be subsetted by image ID, entry name or simply by indexing.
 In the toy dataset, image IDs are numeric entries and therefore the `subset_images` parameter behaves the same for image ID subsetting and subsetting via integer indexing.
 
-```{r subsetting}
+```{r subsetting-cells}
 plotCells(pancreasMasks, object = pancreasSCE, 
           img_id = "ImageNb", cell_id = "CellNb", 
           colour_by = c("SMA", "CD44"), 
@@ -574,7 +574,7 @@ To colour continous features such as expression or continous metadata entries (e
 These colours are passed to the `colorRampPalette` function for interpolation.
 To colour discrete entries, one colour per entry needs to be specified in form of a named vector.
 
-```{r colour-pixels}
+```{r colour-cells}
 plotCells(pancreasMasks, object = pancreasSCE, 
           img_id = "ImageNb", cell_id = "CellNb", 
           colour_by = c("SMA", "CD44"),

@@ -208,7 +208,7 @@
 #' @importFrom EBImage numberOfFrames
 .valid.mask <- function(mask, img_id){
   if(!is(mask, "CytoImageList")){
-    stop("Please provide the segmentation mask(s) in form of an 'CytoImageList' object")
+    stop("Please provide the segmentation mask(s) in form of a 'CytoImageList' object")
   }
 
   # Check number of channels in mask
@@ -236,7 +236,7 @@
 # Check image valididty
 .valid.image <- function(image, img_id){
   if(!is(image, "CytoImageList")){
-    stop("Please provide the image(s) in form of an 'CytoImageList' object")
+    stop("Please provide the image(s) in form of a 'CytoImageList' object")
   }
 
   # Check if Image_id exists in elementMetadata
