@@ -457,6 +457,26 @@ plotPixels(pancreasImages,
 
 ## Outlining
 
+The cells can be outlined when providing a `CytoImageList` object containing the corresponding segmentation masks and a character `img_id` indicating the name of the `elementMetadata` slot that contains the image IDs:
+
+```{r outline-1}
+plotPixels(pancreasImages, mask = pancreasMasks, 
+           img_id = "ImageNb", colour_by = c("H3", "SMA", "CD44"))
+```
+
+The user can furthermore specify the colour of the outline.
+For this, a `SingleCellExperiment` object containing the cell-specific metadata and a `cell_id` indicating the name of the `colData` slot that contains the cell IDs need to be provided:
+
+```{r outline-2}
+plotPixels(pancreasImages, mask = pancreasMasks, 
+           object = pancreasSCE, img_id = "ImageNb", 
+           cell_id = "CellNb",
+           colour_by = c("H3", "SMA", "CD44"),
+           outline_by = "CellType")
+```
+
+
+
 ## Subsetting
 
 ## Adjusting the colour
@@ -474,6 +494,8 @@ plotPixels(pancreasImages,
 ## Adjusting the colour
 
 # Customization
+
+## Subsetting the SingleCellExperiment object
 
 ## Legend
 
