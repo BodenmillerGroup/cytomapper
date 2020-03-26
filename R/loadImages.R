@@ -3,7 +3,7 @@
 #'
 #' @description
 #' Function to read in single- or multi-channel images from a specified path or file.
-#' The function returns an \linkS4class{CytoImageList} object containing one image per slot.
+#' The function returns a \linkS4class{CytoImageList} object containing one image per slot.
 #' Supported file extensions are: '.tiff', '.tif', '.png', '.jpeg', '.jpg'.
 #'
 #' @param x The function takes a variety of possible character inputs:
@@ -25,12 +25,12 @@
 #'
 #' @section Loading specific images:
 #' This function loads images via the \code{\link{readImage}} function and
-#' stores them in an CytoImageList object. In the simplest case, \code{x} is an
+#' stores them in a CytoImageList object. In the simplest case, \code{x} is an
 #' image file name. If \code{x} is a path, the \code{pattern} argument can be
 #' used to select image names with certain patterns. For convenience, pattern
 #' also takes a vector of characters (e.g. a colData entry in a
 #' \linkS4class{SingleCellExperiment} object) to select by unique image names.
-#' Furthermore, a vecotr of image names can be provided to read in multiple
+#' Furthermore, a vector of image names can be provided to read in multiple
 #' images.
 #'
 #' @examples

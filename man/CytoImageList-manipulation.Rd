@@ -9,11 +9,11 @@
 \alias{normalize,CytoImageList-method}
 \title{Manipulating CytoImageList objects}
 \value{
-An CytoImageList object containing the manipulated Images
+A CytoImageList object containing the manipulated Images
 }
 \description{
 Methods to change pixel values in CytoImageList objects. In the
-  following sections, \code{object} is an \linkS4class{CytoImageList} object
+  following sections, \code{object} is a \linkS4class{CytoImageList} object
   containing one or multiple channels.
 }
 \section{Image scaling}{
@@ -30,18 +30,18 @@ pixel values after reading them in.
 \section{Image normalization}{
 
 Linear scaling of the intensity values of each \linkS4class{Image} contained
-in an \linkS4class{CytoImageList} \code{object} to a specific range. Images can
+in a \linkS4class{CytoImageList} \code{object} to a specific range. Images can
 either be scaled to the minimum/maximum value per channel or across all
 channels (default \code{separateChannels = TRUE}). Also, Images can be scaled
 to the minimum/maximum value per image or across all images (default
-\code{separateImages = FALSE}). The later allows the visual comparison of
+\code{separateImages = FALSE}). The latter allows the visual comparison of
 intensity values across images.
 
 To clip the images before normalization, the \code{inputRange} or
-\code{percentileRange} paramters can be set. The main difference between
+\code{percentileRange} parameters can be set. The main difference between
 these two options is a hard (inputRange) or percentile (percentileRange)
 clipping range. \code{percentileRange} allows setting the minimum and maximum
-range of values in terms of percentiles (e.g. \code{c(0, 0.99)} for the 0 and
+range of values in terms of percentiles (e.g. \code{c(0, 0.99)} for 0 and
 99th percentile clipping).
 
 \code{normalize(object, separateChannels = TRUE, separateImages = FALSE,

@@ -5,7 +5,7 @@
 #' cells by marker expression or metadata.
 #'
 #' @param object a \code{\linkS4class{SingleCellExperiment}} object.
-#' @param mask an \code{\linkS4class{CytoImageList}} containing single-channel
+#' @param mask a \code{\linkS4class{CytoImageList}} containing single-channel
 #'   \code{\linkS4class{Image}} objects (see section 'Segmentation mask object' below).
 #' @param cell_id character specifying the \code{colData(object)} entry, in which the
 #'   integer cell IDs are stored. These IDs should match the integer pixel values in

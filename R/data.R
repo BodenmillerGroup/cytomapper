@@ -13,8 +13,8 @@
 #'   \item{colData}{Cell-specific metadata where rownames represent the
 #'   image name and cell id. It containins the
 #'   \enumerate{
-#'     \item image number (ImageNB),
-#'     \item cell number/identifier (CellNB),
+#'     \item image number (ImageNb),
+#'     \item cell number/identifier (CellNb),
 #'     \item spatial position on the image (Pos_X, Pos_Y),
 #'     \item shape information (MajorAxisLength, MinorAxisLength),
 #'     \item the associated image name (ImageName, see \code{?"\link[cytomapper]{pancreasImages}"}),
@@ -34,7 +34,7 @@
 #'   \item{assays}{List of protein expression counts containing:
 #'   \enumerate{
 #'     \item the raw expression counts (counts):
-#'     mean pixel value per cell and protein,
+#'     mean pixel value per cell and protein
 #'     \item arcsinh-transformed raw expression counts
 #'     using a co-factor of 1 (exprs)
 #'   }
@@ -52,7 +52,7 @@
 #' of each of the 5 measured proteins. The data is part of a imaging mass cytometry
 #' study on the progression of Type 1 diabetes and contains pancreas cells.
 #'
-#' @format An CytoImageList object containing 3 \code{\linkS4class{Image}} objects
+#' @format A CytoImageList object containing 3 \code{\linkS4class{Image}} objects
 #' with 5 channels each. Channel names can be accessed via \code{?"\link[cytomapper]{channelNames}"}.
 #'
 #' @references \href{https://www.sciencedirect.com/science/article/pii/S1550413118306910}{Damond, N. et al., A Map of Human Type 1 Diabetes Progression by
@@ -66,7 +66,7 @@
 #' The data is part of a imaging mass cytometry
 #' study on the progression of Type 1 diabetes and contains pancreas cells.
 #'
-#' @format An CytoImageList object containing 3 \code{\linkS4class{Image}} objects
+#' @format A CytoImageList object containing 3 \code{\linkS4class{Image}} objects
 #' with 1 channel each. These images are the result to segmentation and associated
 #' to the images stored in the \code{\link[cytomapper]{pancreasImages}} object.
 #' Pixel values indicate the numeric cell identifier while a value of 0 represents the

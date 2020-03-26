@@ -12,8 +12,8 @@
   \item{colData}{Cell-specific metadata where rownames represent the
   image name and cell id. It containins the
   \enumerate{
-    \item image number (ImageNB),
-    \item cell number/identifier (CellNB),
+    \item image number (ImageNb),
+    \item cell number/identifier (CellNb),
     \item spatial position on the image (Pos_X, Pos_Y),
     \item shape information (MajorAxisLength, MinorAxisLength),
     \item the associated image name (ImageName, see \code{?"\link[cytomapper]{pancreasImages}"}),
@@ -33,7 +33,7 @@
   \item{assays}{List of protein expression counts containing:
   \enumerate{
     \item the raw expression counts (counts):
-    mean pixel value per cell and protein,
+    mean pixel value per cell and protein
     \item arcsinh-transformed raw expression counts
     using a co-factor of 1 (exprs)
   }

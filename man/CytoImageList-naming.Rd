@@ -18,7 +18,7 @@ individual images.
 }
 \section{Setting and getting the channel names}{
 
-In the following code, \code{x} is either an \linkS4class{CytoImageList} or
+In the following code, \code{x} is either a \linkS4class{CytoImageList} or
 \linkS4class{Image} object containing one or multiple channels.
 The channel names can be replaced by \code{value}, which contains a character
 vector of the same length as the number of channels in the image(s).

@@ -5,7 +5,7 @@
 #' object and \code{CytoImageList} object containing segmentation masks
 #' can be provided to outline cells based on metadata.
 #'
-#' @param image an \code{\linkS4class{CytoImageList}} object containing single or
+#' @param image a \code{\linkS4class{CytoImageList}} object containing single or
 #'   multi-channel \code{\linkS4class{Image}} objects (see details below)
 #' @param object an optional \code{\linkS4class{SingleCellExperiment}} object.
 #' @param mask an optional \code{\linkS4class{CytoImageList}} object containing
