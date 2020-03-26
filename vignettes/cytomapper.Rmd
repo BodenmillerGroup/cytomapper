@@ -49,7 +49,7 @@ However, other imaging cytometry approaches including multiplexed ion beam imagi
 IMC [@giesen2014imc] is a multiplexed imaging approach to measure spatial protein abundance.
 In IMC, tissue sections are stained with a mix of $\tilde{}40$ metal-conjugated antibodies prior to laser ablation with $1\mu{}m$ resolution. 
 The ablated material is transferred to a mass cytometer for time-of-flight detection of the metal ions [@giesen2014imc][@mavropoulosimc]. 
-In that way, hundreds of images (usually with an image size of around $1\mu{}m$ x $1\mu{}m$) can be generated in a reasonable amount of time [@damond2019pancreas]. 
+In that way, hundreds of images (usually with an image size of around 1mm x 1mm) can be generated in a reasonable amount of time [@damond2019pancreas]. 
 
 Raw IMC data are computationally processed using a segmentation pipeline (available at [https://github.com/BodenmillerGroup/ImcSegmentationPipeline](https://github.com/BodenmillerGroup/ImcSegmentationPipeline)). 
 This pipeline produces image stacks containing the raw pixel values for up to 40 channels, segmentation masks containing the segmented cells, cell-level expression and metadata information as well as a number of image-level meta information.
@@ -116,22 +116,73 @@ More details on the `plotCells` function are provided in the [Plotting cell info
 
 # Data formats {#DataFormats}
 
-cytomapper combines objects of the `r Biocpkg("SingleCellExperiment")` class and the `CytoImageList` class `r Biocpkg("cytomapper")` to visualize cell- and pixel-level information.
+The `cytomapper` package combines objects of the `r Biocpkg("SingleCellExperiment")` class and the `CytoImageList` class (provided in `cytomapper`) to visualize cell- and pixel-level information.
 
-In the main functions of the package, `image` refers to an `CytoImageList` object containing one or multiple multi-channel images where each channel represents the pixel-intensity of one marker (protein, RNA, etc.).
-The enrty `mask` refers to an `CytoImageList` object containing one or multiple segmentation masks.
+In the main functions of the package, `image` refers to an `CytoImageList` object containing one or multiple multi-channel images where each channel represents the pixel-intensity of one selected marker (proteins in the case of IMC).
+The entry `mask` refers to an `CytoImageList` object containing one or multiple segmentation masks.
 Segmentation masks are defined as one-channel images containing integer values, which represent the cells' ids or 0 (background).
 Finally, the `object` entry refers to a `SingleCellExperiment` class object that contains cell-specific expression values (in the `assay` slots) and cell-specific metadata in the `colData` slot.
-For more information on the `SingleCellExperiment` object and how to create it, please see the `r Biocpkg("SingleCellExperiment")` package and the [Orchestrating Single-Cell Analysis with Bioconductor](https://osca.bioconductor.org/data-infrastructure.html#the-singlecellexperiment-class) workflow.
 
 To link information between the `SingleCellExperiment` and `CytoImageList` objects, two slots need to be specified:
 
-* `img_id`: a single character indicating the `colData` and `elementMetadata` entry that contains the image identifiers 
-* `cell_id`: a single character indicating the `colData` entry that contains the cell identifiers. These should be integer values corresponing to pixel-values in the segmentation masks
+* `img_id`: a single character indicating the `colData` (in the `SingleCellExperiment` object) and `elementMetadata` (in the `CytoImageList` object) entry that contains the image identifiers. These image ids have to match between the `SingleCellExperiment` object and the `CytoImageList` object.
+* `cell_id`: a single character indicating the `colData` entry that contains the cell identifiers. These should be integer values corresponing to pixel-values in the segmentation masks.
 
-To access the `elementMetadat` slot of an `CytoImageList` object, please refer to the section [The CytoImageList object](#CytoImageList).
+The `img_id` and `cell_id` entry in the `SingleCellExperiment` object need to be accessible via: 
+
+```{r image-cell-id-sce}
+colData(pancreasSCE)[,"ImageNb"]
+colData(pancreasSCE)[,"CellNb"]
+```
+
+The `img_id` entry in the `CytoImageList` object need to be accessible via: 
+
+```{r image-cell-id-cil}
+mcols(pancreasImages)[,"ImageNb"]
+mcols(pancreasMasks)[,"ImageNb"]
+```
+
+For more information on the `CytoImageList` class, please refer to the section [The CytoImageList object](#CytoImageList).
+For more information on the `SingleCellExperiment` object and how to create it, please see the `r Biocpkg("SingleCellExperiment")` package and the [Orchestrating Single-Cell Analysis with Bioconductor](https://osca.bioconductor.org/data-infrastructure.html#the-singlecellexperiment-class) workflow.
 
 ## The provided toy dataset {#ToyData}
+
+For visualization purposes, the `cytomapper` package provides a toy dataset containing 3 images of $100\mu{m}$ x $100\mu{m}$ dimensions (100 x 100 pixels).
+The dataset contains 282 segmented cells and the expression values for 5 proteins: H3, SMA, INS, CD38, and CD44
+It represents a small subset of the data presented in [A Map of Human Type 1 Diabetes Progression by Imaging Mass Cytometry](Ahttps://www.cell.com/cell-metabolism/fulltext/S1550-4131(18)30691-0?_returnURL=https%3A%2F%2Flinkinghub.elsevier.com%2Fretrieve%2Fpii%2FS1550413118306910%3Fshowall%3Dtrue).
+
+Pixel-level intensities for all 5 markers (5 channels) are stored in the `pancreasImages` object.
+Entires to the `CytoImageList` object and the rownames of the object match: A02_imc, D01_imc, and F01_imc
+The `elementMetadata` slot (accesible via the `mcols()` function) contains the image identifiers.
+
+```{r pancreasImages}
+pancreasImages
+mcols(pancreasImages)
+channelNames(pancreasImages)
+imageData(pancreasImages[[1]])[1:15,1:5,1]
+```
+
+The corresponding segmentation masks are stored in the `pancreasMasks` object.
+Segmentation masks are defined as one-channel images containing integer values, which represent the cells' ids or 0 (background).
+
+```{r pancreasMasks}
+pancreasMasks
+mcols(pancreasMasks)
+imageData(pancreasMasks[[1]])[1:15,1:5]
+```
+
+All cell-specific metadata are stored in the `colData` slot of the corresponding `SingleCellExperiment` object: `pancreasSCE`.
+For more information on the metadata, please refer to the `?pancreasSCE` documentation.
+Of note: the cell-type labels contained in the `colData(pancreasSCE)$CellType` slot are randomized and do not represent biologically relevant cell-types.
+
+```{r pancreasSCE}
+pancreasSCE
+names(colData(pancreasSCE))
+```
+
+The `pancreasSCE` object also contains further information on the measured proteins via the `rowData(pancreasSCE)` slot.
+Furthermore, the `pancreasSCE` object contains the raw expression counts per cell in the form of mean pixel value per cell and protein (accessible via `counts(pancreasSCE)`).
+The arcsinh-transformed (using a co-factor of 1) raw expression counts can be obtained via `assay(pancreasSCE, "exprs")`.
 
 # Reading in data {#ReadingData}
 
