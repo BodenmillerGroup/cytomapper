@@ -186,7 +186,12 @@ The arcsinh-transformed (using a co-factor of 1) raw expression counts can be ob
 
 # Reading in data {#ReadingData}
 
+The `cytomapper` package provides the `loadImages` function to conveniently read images into a `CytoImageList` object.
+
 ## Load images
+
+
+
 Introduction to the `LoadImage` function
 
 ## Add metadata
