@@ -1,5 +1,5 @@
 ---
-title: "Spatial visualization for imaging mass cytometry data in R"
+title: "Spatial visualization for multiplexed imaging cytometry data in R"
 date: "`r BiocStyle::doc_date()`"
 package: "`r BiocStyle::pkg_ver('cytomapper')`"
 author:
@@ -26,7 +26,7 @@ abstract: |
     pixel-level information across multiple channels and 2. the display of
     cell-level information (expression and/or metadata) on segmentation masks.
 vignette: |
-  %\VignetteIndexEntry{Spatial visualization for imaging mass cytometry data in R}
+  %\VignetteIndexEntry{Spatial visualization for multiplexed imaging cytometry data in R}
   %\VignetteEngine{knitr::rmarkdown}
   %\VignetteEncoding{UTF-8}
 ---
@@ -42,93 +42,79 @@ library(cytomapper)
 
 # Introduction
 
-This vignette gives an introduction to displaying imaging mass cytometry data with the `cytomapper` package.
-Imaging mass cytometry (IMC)[@giesen2014imc] is a multiplexed imaging approach to measure spatial protein abundance.
-In IMC, tissue sections are stained with a mix of $\tilde{}40$ metal-conjugated antibodies prior to laser ablation with $1\mu{}m$ resolution. The ablated material is transferred to a mass cytometer for time-of-flight detection of the metal ions [@giesen2014imc][@mavropoulosimc]. In that way, hundreds of images (usually with an image size of up to $1\mu{}m$ x $1\mu{}m$) can be generated in a reasonable amount of time [@damond2019pancreas]. 
+This vignette gives an introduction to displaying highly multiplexed imaging cytometry data with the `cytomapper` package.
+As an example, these instructions display imaging mass cytometry (IMC) data.
+However, other imaging cytometry approaches including multiplexed ion beam imaging (MIBI) [@angelo2014mibi], tissue-based cyclic immunofluorescence (t-CyCIF) [@lin2018cycif] and iterative indirect immunofluorescence imaging (4i) [@gut20184i], which produce pixel-level intensities and optionally segmentation masks can be displayed using `cytomapper`.
+
+IMC [@giesen2014imc] is a multiplexed imaging approach to measure spatial protein abundance.
+In IMC, tissue sections are stained with a mix of $\tilde{}40$ metal-conjugated antibodies prior to laser ablation with $1\mu{}m$ resolution. 
+The ablated material is transferred to a mass cytometer for time-of-flight detection of the metal ions [@giesen2014imc][@mavropoulosimc]. 
+In that way, hundreds of images (usually with an image size of around $1\mu{}m$ x $1\mu{}m$) can be generated in a reasonable amount of time [@damond2019pancreas]. 
 
 Raw IMC data are computationally processed using a segmentation pipeline (available at [https://github.com/BodenmillerGroup/ImcSegmentationPipeline](https://github.com/BodenmillerGroup/ImcSegmentationPipeline)). 
 This pipeline produces image stacks containing the raw pixel values for up to 40 channels, segmentation masks containing the segmented cells, cell-level expression and metadata information as well as a number of image-level meta information.
 
-Cell-level expression and metadata can be processed and read into a 
+Cell-level expression and metadata can be processed and read into a `SingleCellExperiment` class object.
+For more information on the `SingleCellExperiment` object and how to create it, please see the `r Biocpkg("SingleCellExperiment")` package and the [Orchestrating Single-Cell Analysis with Bioconductor](https://osca.bioconductor.org/data-infrastructure.html#the-singlecellexperiment-class) workflow.
 
-This document also introduces the `CytoImageList` class, which inherits from the [`SimpleList` class](https://rdrr.io/bioc/S4Vectors/man/SimpleList-class.html).
+The `cytomapper` package provides a new `CytoImageList` class as a container for multiplexed images or segmentation masks.
+For more information on this class, refer to the [CytoImageList](#CytoImageList) section.
 
-Explain: images, masks, sce
+The main functions of this package include `plotCells` and `plotPixels`.
+The `plotCells` function requires the following object inputs to display cell-level information (expression and metadata):
 
-It requires three
-  data objects for visualization: 1. a SingleCellExperiment object, which
-  contains the cells' counts and metadata, 2. an CytoImageList object containing
-  the pixel-level information per channel and 3. an CytoImageList object
-  containing the segmentation mask per image. The main functionality of this
-  package includes the individual or multiplexed visualization of pixel- and
-  cell-level information for all aquired read-outs. Furthermore, it allows the
-  visualization of user-defined metadata.
+1. a SingleCellExperiment object, which contains the cells' counts and metadata
+2. an CytoImageList object containing the segmentation mask per image
+
+The `plotPixels` function requires the following object inputs to display pixel-level expression information:
+
+1. a `CytoImageList` object containing the pixel-level information per channel
+2. (optionally) a `SingleCellExperiment` object, which contains the cells' counts and metadata
+2. (optionally) a `CytoImageList` object containing the segmentation mask per image
 
 # Quick start
 
-Here, we will highlight the most simple use of the package
+The following section provides a quick example highlighting the functionality of `cytomapper`.
+For detailed information on reading in the data, refer to the [Reading in data](#ReadingData) section.
+More information on the required data format is provided in the [Data formats](#DataFormats) section.
+In the first step, we will read in the provided [toy dataset](#ToyData)
 
-
-Load the example data: SingleCellExperiment object
-```{r quickstart-load-sce}
+```{r quickstart-load-data}
 data(pancreasSCE)
-pancreasSCE
-```
-
-Load the example data: List of images
-```{r quickstart-load-CytoImageList}
 data(pancreasImages)
-pancreasImages
-```
-
-Load the example data: List of masks
-```{r quickstart-load-masklist}
 data(pancreasMasks)
-pancreasMasks
 ```
 
+The `CytomImageList` object containing pixel-level intensities representing the ion counts for five proteins can be displayed using the `plotPixel` function:
 
-## Quick plotting of pixel-level information
-Illustration of the `plotPixel` function
-```{r quickstart-plotpixels, fig.cap="Quick start: plot pixel-level information", fig.small=TRUE, echo=FALSE}
-plotPixels(image=pancreasImages)
+```{r quickstart-plotPixels}
+plotPixels(image = pancreasImages, colour_by = c("H3", "SMA", "CD44"))
 ```
 
-Displaying the cell masks.\n
-Here, 'img_id' is used to match images and masks. The 'ImageNb' column is present in both 'mcols(pancreasImages)' and 'mcols(pancreasMasks)'
-```{r quickstart-plotpixels-mask, fig.cap="Quick start: plot cell masks", fig.small=TRUE, echo=FALSE}
-plotPixels(image=pancreasImages, mask=pancreasMasks, img_id = "ImageNb")
+For more details on image normalization, cell outlining, and other pixel-level manipulations, refer to the [Plotting pixel information](#PixelInfo) section.
+
+The `CytoImageList` object containing segmentation masks that represent the cell areas on the image can be displayed using the `plotCells` function.
+Only the segmentation masks are plotted when no other parameters are specified.
+
+```{r quickstart-plotCells}
+plotCells(mask = pancreasMasks)
 ```
 
-Plotting specific channels
-```{r quickstart-plotpixels-twochannels, fig.cap="Quick start: plot specific channels", fig.small=TRUE, echo=FALSE}
-plotPixels(image=pancreasImages, mask=pancreasMasks, img_id = "ImageNb", colour_by=c("H3","SMA"))
+To colour and/or outline segmentation masks, a `SingleCellExperiment`, an `img_id` and `cell_id` entry need to be specified:
+
+```{r quickstart-plotCells-2}
+plotCells(mask = pancreasMasks, object = pancreasSCE, cell_id = "CellNb", img_id = "ImageNb",
+          colour_by = "SMA")
+plotCells(mask = pancreasMasks, object = pancreasSCE, cell_id = "CellNb", img_id = "ImageNb",
+          colour_by = "SMA", outline_by = "CellType")
+plotCells(mask = pancreasMasks, object = pancreasSCE, cell_id = "CellNb", img_id = "ImageNb", 
+          colour_by = "CellType")
 ```
 
+For more information on the data formats and requirements, refer to the following section.
+More details on the `plotCells` function are provided in the [Plotting cell information](#CellInfo) section.
 
-## Quick plotting of cell-level information
-Illustration of the `plotCells` function
-```{r quickstart-plotcells, fig.cap="Quick start: plot cell-level information", fig.small=TRUE, echo=FALSE}
-plotCells(object=pancreasSCE, mask=pancreasMasks, img_id='ImageNb', cell_id='CellNb')
-```
-
-Colouring cells.\n
-'colour_by' should be a column in 'colData(pancreasSCE)'\n
-'expr_values' should be an assay in 'assays(pancreasSCE)'
-```{r quickstart-plotcells-colourby, fig.cap="Quick start: colour by cell type", fig.small=TRUE, echo=FALSE}
-plotCells(object=pancreasSCE, mask=pancreasMasks, img_id='ImageNb', cell_id='CellNb',
-          colour_by="CellType", exprs_values="exprs")
-```
-
-Displaying cell outlines\n
-'outline_by' should be a column in colData(pancreasSCE)
-```{r quickstart-plotcells-outlineby, fig.cap="Quick start: outline by cell type", fig.small=TRUE, echo=FALSE}
-plotCells(object=pancreasSCE, mask=pancreasMasks, img_id='ImageNb', cell_id='CellNb',
-          outline_by="CellType")
-```
-
-
-# Data formats
+# Data formats {#DataFormats}
 
 cytomapper combines objects of the `r Biocpkg("SingleCellExperiment")` class and the `CytoImageList` class `r Biocpkg("cytomapper")` to visualize cell- and pixel-level information.
 
@@ -145,7 +131,9 @@ To link information between the `SingleCellExperiment` and `CytoImageList` objec
 
 To access the `elementMetadat` slot of an `CytoImageList` object, please refer to the section [The CytoImageList object](#CytoImageList).
 
-# Reading in data
+## The provided toy dataset {#ToyData}
+
+# Reading in data {#ReadingData}
 
 ## Load images
 Introduction to the `LoadImage` function
@@ -159,6 +147,8 @@ colData(pancreasSCE)$ImageNb
 
 
 # The CytoImageList object {#CytoImageList}
+
+This document also introduces the `CytoImageList` class, which inherits from the [`SimpleList` class](https://rdrr.io/bioc/S4Vectors/man/SimpleList-class.html).
 
 Images should be stacks, all stacks should have the same number of channels
 Masks should be single-channel images
@@ -174,15 +164,13 @@ Extract one channel from the CytoImageList
 
 ## Looping
 
-# Plotting pixel-level information
+# Plotting pixel information {#PixelInfo}
 
-## Scaling
-
-## Normalization
-
-# Plotting Cell-level information
+## Outline
 
 ## Normalization
+
+# Plotting cell information {#CellInfo}
 
 # Customization
 
