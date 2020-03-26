@@ -432,7 +432,28 @@ For more information on the normalization functionality provided by the `cytomap
 
 ## Colouring
 
+The `cytomapper` package supports the visualization of up to 6 channels and displays a combined image:
+
+```{r colouring}
+data("pancreasImages")
+plotPixels(pancreasImages, colour_by = c("H3", "SMA", "INS", "CD38", "CD44"))
+```
+
 ## Adjusting brightness, contrast and gamma
+
+To enhance individual channels, the brightness (b), contrast (c) and gamma (g) can be set channel-wise via the `bcg` parameter.
+These parameters are set in form of a named `list` object.
+Entry names need to correspond by channels specified in `colour_by`.
+Each entry takes a numeric vector of length three where the first entry represents the brightness value, the second the contrast factor and the third the gamma factor.
+Internally, the brightness value is added to each channel; each channel is multiplied by the contrast factor and each channel is exponentiated by the gamma factor.
+
+```{r bcg}
+# Increase contrast for the SMA and CD44 channel
+plotPixels(pancreasImages, 
+           colour_by = c("H3", "SMA", "CD44"), 
+           bcg = list(SMA = c(0,2,1), 
+                      CD44 = c(0,2,1)))
+```
 
 ## Outlining
 
