@@ -32,7 +32,8 @@ vignette: |
 ---
 
 ```{r, echo=FALSE, results="hide"}
-knitr::opts_chunk$set(error=FALSE, warning=FALSE, message=FALSE)
+knitr::opts_chunk$set(error=FALSE, warning=FALSE, message=FALSE,
+                      fig.retina = 1)
 library(BiocStyle)
 ```
 
@@ -743,13 +744,29 @@ However, when plotting solely the coloured images, the image title and scale bar
 
 # Saving images
 
+Finally, the user can save the plot by specifying `save_plot`.
+The `save_plot` entry takes a list of two entries: `filename` and `scale`.
+The `filename` should be a character representing a valid file name ending with `.png`, `.tiff` or `.jpeg`.
+The `scale` entry controls the resolution of the image (see `?"plotting-param"` for help).
+Increasing the scale parameter will increase the resolution of the final image.
+
+```{r save_image}
+tempf <- tempfile("test_plot", fileext = ".png")
+plotPixels(pancreasImages, colour_by = c("H3", "SMA", "CD44"), 
+           save_plot = list(filename = tempf,
+                             scale = 10))
+```
+
+When setting `display = "single"`, the `cytomapper` package will save individual images in individual files.
+
 # Acknowledgements
 
-We want to thank the whole Bodenmiller laboratory for feedback on the package and its functionality.
+We want to thank the Bodenmiller laboratory for feedback on the package and its functionality.
 
 # Contributions
 
-Nicolas created cytomapper - Nicolas and Nils implemented the package ...
+Nicolas created the first version of `cytomapper` (named `IMCMapper`).
+Nils and Nicolas implemented and maintain the package.
 
 # Session info {.unnumbered}
 
