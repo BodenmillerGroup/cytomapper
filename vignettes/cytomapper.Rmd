@@ -659,20 +659,63 @@ plotPixels(pancreasImages, colour_by = c("SMA", "CD44"),
 
 ## Legend
 
-## Scale bar
+By default, the legend all all its contents are adjusted to the size of the largest image in the `CytoImageList` object.
+However, legend features can be altered by setting the `legend` parameter.
+It takes a named list containing one or multiple of the follwoing entries: `colour_by.title.font`, `colour_by.title.cex`, `colour_by.labels.cex`, `colour_by.legend.cex`, `outline_by.title.font`, `outline_by.title.cex`, `outline_by.labels.cex`, `outline_by.legend.cex`, `margin`.
+For detailed explanation on the individual entries, please refer to the `legend` parameter in `?'plotting-param'`.
 
-Per pixel - user needs to know what 1 pixel is...
+```{r legend}
+plotCells(pancreasMasks, object = pancreasSCE, 
+          img_id = "ImageNb", cell_id = "CellNb",
+          colour_by = "SMA",
+          outline_by = "CellType",
+          legend = list(colour_by.title.font = 2,
+                       colour_by.title.cex = 1.2,
+                       colour_by.labels.cex = 0.7,
+                       outline_by.legend.cex = 0.3,
+                       margin = 10))
+```
 
 ## Scale the feature counts
 
+By default, features are scaled to the minimum and maximum per channel.
+This behaviour facilitates visualization but does not allow the user to visually compare absolute expression counts across channels.
+The default behaviour can be suppressed by setting `scale = FALSE`.
+
 ```{r}
-cur_images <- normalize(pancreasImages, inputRange = c(0,120), percentileRange = NULL)
-plotPixels(cur_images, colour_by = c("H3", "SMA", "CD44"), scale = FALSE)
+plotPixels(pancreasImages, colour_by = c("H3", "SMA", "CD44"), 
+           scale = FALSE)
 ```
+
+In this case, counts are linearly scaled to the minimum and maximum across all channels and across all displayed images.
 
 ## Margin and single-image display
 
+To enhance the display of individual images, the `cytomapper` package provides the `margin` and `display` parameter.
+
+The `margin` parameter takes a single numeric indicating the gap (in pixels) between individual images.
+
+```{r margin}
+plotPixels(pancreasImages, colour_by = c("H3", "SMA", "CD44"), 
+           margin = 2)
+```
+
+The `display` parameter supports the entries `display = "all"` (default), which displays images in a grid-like fashion and `display = "single"`, which display images individually:
+
+```{r display}
+plotPixels(pancreasImages, colour_by = c("H3", "SMA", "CD44"), 
+           display = "single")
+```
+
 ## Image interpolation
+
+By default, colours are interpolated between pixels (see `?rasterImage` for details).
+To suppress this default behaviour, the user can set `interpolate = FALSE`.
+
+```{r interpolate}
+plotPixels(pancreasImages, colour_by = c("H3", "SMA", "CD44"), 
+           interpolate = FALSE)
+```
 
 # Returning plots and images
 
