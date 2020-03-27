@@ -689,22 +689,15 @@ plotPixels(pancreasImages, colour_by = c("H3", "SMA", "CD44"),
 
 In this case, counts are linearly scaled to the minimum and maximum across all channels and across all displayed images.
 
-## Margin and single-image display
+## Setting the margin between images
 
-To enhance the display of individual images, the `cytomapper` package provides the `margin` and `display` parameter.
+To enhance the display of individual images, the `cytomapper` package provides the `margin` parameter.
 
 The `margin` parameter takes a single numeric indicating the gap (in pixels) between individual images.
 
 ```{r margin}
 plotPixels(pancreasImages, colour_by = c("H3", "SMA", "CD44"), 
            margin = 2)
-```
-
-The `display` parameter supports the entries `display = "all"` (default), which displays images in a grid-like fashion and `display = "single"`, which display images individually:
-
-```{r display}
-plotPixels(pancreasImages, colour_by = c("H3", "SMA", "CD44"), 
-           display = "single")
 ```
 
 ## Image interpolation
@@ -718,6 +711,35 @@ plotPixels(pancreasImages, colour_by = c("H3", "SMA", "CD44"),
 ```
 
 # Returning plots and images
+
+The user has the option to save the generated plots (see next section) or to get the plots and/or coloured images returned.
+If `return_plot` and/or `return_iamges` is set to `TRUE`, cytomapper returns a list object with one or two entries: `plot` and/or `images`.
+
+The `display` parameter supports the entries `display = "all"` (default), which displays images in a grid-like fashion and `display = "single"`, which display images individually:
+
+If the `return_plot` parameter is set to `TRUE`, `cytomapper` internally calls the `recordPlot` function and returns a plot object.
+The user can additionally set `display = "single"` to get a list of plots returned.
+
+If the `return_images` parameter is set to `TRUE`, `cytomapper` returns a `SimpleList` object containing three-colour (red, green. blue) `Image` objects.
+
+```{r return_plot}
+cur_out <- plotPixels(pancreasImages, colour_by = c("H3", "SMA", "CD44"), 
+           return_plot = TRUE, return_images = TRUE, display = "single")
+```
+
+The returned plot objects now allows the plotting of individual images:
+
+```{r return_plot-2}
+cur_out$plot$A02_imc
+```
+
+Furthermore, the user can directly plot the coloured images from the returned `SimpleList` object:
+
+```{r return_images}
+plot(cur_out$images$D01_imc)
+```
+
+However, when plotting solely the coloured images, the image title and scale bar will be lost.
 
 # Saving images
 
