@@ -389,10 +389,9 @@ NULL
     }
 
     if("label" %in% names(scalebar)){
-      if(length(scalebar$label) != 1L ||
-         !is.character(scalebar$label)){
+      if(length(scalebar$label) != 1L){
         stop(paste0(error.scalebar, ": \n",
-                    "'label' should be a single character entry"))
+                    "'label' should be a single entry"))
       }
     } else {
       scalebar$label <- as.character(scalebar$length)

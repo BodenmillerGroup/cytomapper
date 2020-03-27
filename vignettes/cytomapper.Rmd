@@ -586,9 +586,76 @@ plotCells(pancreasMasks, object = pancreasSCE,
                                      celltype_C = "yellow")))
 ```
 
-# Customization
+# Customisation
+
+The next sections explain different ways to customise the visual output of the `cytomapper` package.
+To find more details on additional parameters that can be set to customise the display, refer to `?'plotting-param'`.
 
 ## Subsetting the SingleCellExperiment object
+
+The `cytomapper` package matches cells contained in the `SingleCellExperiment` to objects contained in the `CytoImageList` segmentation masks object via cell identifiers.
+These are integer values, which are unique to each object per image.
+
+By matching these IDs, the user can subset the `SingleCellExperiment` object and therefore only visualize the cells retained in the object:
+
+```{r subsetting-SCE}
+cur_sce <- pancreasSCE[,colData(pancreasSCE)$CellType == "celltype_A"]
+plotCells(pancreasMasks, object = cur_sce, 
+          img_id = "ImageNb", cell_id = "CellNb", 
+          colour_by = "CellType",
+          colour = list(CellType = c(celltype_A = "red")))
+```
+
+## Background and missing colour
+
+The background of a segemntation mask is defined by the value `0`.
+To change the background colour, the `background_colour` parameter can be set.
+Furthermore, cells that are not contained in the `SingleCellExperiment` object can be coloured by setting `missing_colour`:
+
+```{r background-missing}
+plotCells(pancreasMasks, object = cur_sce, 
+          img_id = "ImageNb", cell_id = "CellNb", 
+          colour_by = "CellType",
+          colour = list(CellType = c(celltype_A = "red")),
+          background_colour = "white",
+          missing_colour = "black")
+```
+
+## Scale bar and image title
+
+Depending on the cells' and background colour, the scale bar and image title are not visible.
+To change the visual display of the scale bar, a named list can be passed to the `scale_bar` parameter.
+The list should contain one or multiple of the following entries: `length`, `label`, `cex`, `lwd`, `colour`, `position`, `margin`, `frame`.
+For a detailed explanation on the individual entries, please refer to the `scale_bar` section in `?'plotting-param'`.
+
+**Of note:** By default, the length of the scale bar is defined in number of pixels. 
+Therefore, the user needs to know the length (e.g. in $\mu{m}$) to label the scale bar correctly.
+
+```{r scale_bar}
+plotPixels(pancreasImages, colour_by = c("SMA", "CD44"),
+          scale_bar = list(length = 30,
+                        label = expression("30 " ~ mu * "m"),
+                        cex = 2,
+                        lwd = 5,
+                        colour = "blue",
+                        position = "bottomleft",
+                        margin = c(5,5),
+                        frame = 3))
+```
+
+The image titles can be set using the `image_title` parameter.
+Also here, the user needs to provide a named list with one or multiple of follwing entries: `text`, `position`, `colour`, `margin`, `font`, `cex`.
+The entry to `text` needs to be a character vector of the same length as the `CytoImageList` object.
+
+```{r image_title}
+plotPixels(pancreasImages, colour_by = c("SMA", "CD44"),
+          image_title = list(text = c("image_1", "image_2", "image_3"),
+                             position = "topleft",
+                             colour = "blue",
+                             margin = c(2,10),
+                             font = 3,
+                             cex = 2))
+```
 
 ## Legend
 
@@ -596,12 +663,16 @@ plotCells(pancreasMasks, object = pancreasSCE,
 
 Per pixel - user needs to know what 1 pixel is...
 
-## Scale
+## Scale the feature counts
 
 ```{r}
 cur_images <- normalize(pancreasImages, inputRange = c(0,120), percentileRange = NULL)
 plotPixels(cur_images, colour_by = c("H3", "SMA", "CD44"), scale = FALSE)
 ```
+
+## Margin and single-image display
+
+## Image interpolation
 
 # Returning plots and images
 

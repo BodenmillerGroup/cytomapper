@@ -807,7 +807,7 @@
 #' @importFrom raster as.raster
 .plotScaleBar <- function(scale_bar, xl, xr, yt, yb, image_scale){
   cur_length <- scale_bar$length
-  cur_label <- as.character(scale_bar$label)
+  cur_label <- scale_bar$label
   cur_cex <- scale_bar$cex
   cur_lwd <- scale_bar$lwd * image_scale
   cur_col <- scale_bar$colour
