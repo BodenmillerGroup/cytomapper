@@ -21,7 +21,7 @@ Authors@R:
       email = "nils.eling@dqbm.uzh.ch"))
 License: GPL (>= 2)
 Depends:
-    R (>= 3.6),
+    R (>= 4.0),
     EBImage,
     SingleCellExperiment,
     methods
@@ -39,7 +39,7 @@ Suggests:
     knitr,
     rmarkdown,
     testthat
-biocViews: ImmunoOncology, Software, SingleCell, Imaging
+biocViews: ImmunoOncology, Software, SingleCell, OneChannel, TwoChannel, MultipleComparison, Normalization, DataImport
 VignetteBuilder: knitr
 URL: https://github.com/BodenmillerGroup/cytomapper
 BugReports: https://github.com/BodenmillerGroup/cytomapper/issues
