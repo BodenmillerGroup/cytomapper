@@ -53,9 +53,6 @@ test_that("plotting-param: scale_bar can be set.", {
   expect_error(plotCells(pancreasMasks, scale_bar = list(length = NULL)),
                regexp = "Invalid entry to the 'scale_bar' list object",
                fixed = TRUE)
-  expect_error(plotCells(pancreasMasks, scale_bar = list(label = 1)),
-               regexp = "Invalid entry to the 'scale_bar' list object",
-               fixed = TRUE)
   expect_error(plotCells(pancreasMasks, scale_bar = list(cex = "test")),
                regexp = "Invalid entry to the 'scale_bar' list object",
                fixed = TRUE)

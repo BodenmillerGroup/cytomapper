@@ -626,7 +626,7 @@ NULL
 .valid.missingcolour <- function(missingcolour){
   if(!is.null(missingcolour)){
     res <- try(col2rgb(missingcolour), silent=TRUE)
-    if(class(res) == "try-error"){
+    if(class(res)[1] == "try-error"){
       stop("'missing_colour' not a valid colour.")
     }
   } else {
@@ -640,7 +640,7 @@ NULL
 .valid.backgroundcolour <- function(backgroundcolour){
   if(!is.null(backgroundcolour)){
     res <- try(col2rgb(backgroundcolour), silent=TRUE)
-    if(class(res) == "try-error"){
+    if(class(res)[1] == "try-error"){
       stop("'background_colour' not a valid colour.")
     }
   } else {
