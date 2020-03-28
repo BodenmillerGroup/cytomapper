@@ -33,7 +33,7 @@ vignette: |
 
 ```{r, echo=FALSE, results="hide"}
 knitr::opts_chunk$set(error=FALSE, warning=FALSE, message=FALSE,
-                      fig.retina = 1)
+                      fig.retina = 0.75)
 library(BiocStyle)
 ```
 
@@ -65,7 +65,7 @@ The main functions of this package include `plotCells` and `plotPixels`.
 The `plotCells` function requires the following object inputs to display cell-level information (expression and metadata):
 
 1. a SingleCellExperiment object, which contains the cells' counts and metadata
-2. an CytoImageList object containing the segmentation mask per image
+2. a CytoImageList object containing the segmentation mask per image
 
 The `plotPixels` function requires the following object inputs to display pixel-level expression information:
 
@@ -86,7 +86,7 @@ data(pancreasImages)
 data(pancreasMasks)
 ```
 
-The `CytomImageList` object containing pixel-level intensities representing the ion counts for five proteins can be displayed using the `plotPixel` function:
+The `CytoImageList` object containing pixel-level intensities representing the ion counts for five proteins can be displayed using the `plotPixel` function:
 
 ```{r quickstart-plotPixels}
 plotPixels(image = pancreasImages, colour_by = c("H3", "SMA", "CD44"))
@@ -116,15 +116,15 @@ More details on the `plotCells` function are provided in the [Plotting cell info
 
 The `cytomapper` package combines objects of the `r Biocpkg("SingleCellExperiment")` class and the `CytoImageList` class (provided in `cytomapper`) to visualize cell- and pixel-level information.
 
-In the main functions of the package, `image` refers to an `CytoImageList` object containing one or multiple multi-channel images where each channel represents the pixel-intensity of one selected marker (proteins in the case of IMC).
-The entry `mask` refers to an `CytoImageList` object containing one or multiple segmentation masks.
+In the main functions of the package, `image` refers to a `CytoImageList` object containing one or multiple multi-channel images where each channel represents the pixel-intensity of one selected marker (proteins in the case of IMC).
+The entry `mask` refers to a `CytoImageList` object containing one or multiple segmentation masks.
 Segmentation masks are defined as one-channel images containing integer values, which represent the cells' ids or 0 (background).
 Finally, the `object` entry refers to a `SingleCellExperiment` class object that contains cell-specific expression values (in the `assay` slots) and cell-specific metadata in the `colData` slot.
 
 To link information between the `SingleCellExperiment` and `CytoImageList` objects, two slots need to be specified:
 
 * `img_id`: a single character indicating the `colData` (in the `SingleCellExperiment` object) and `elementMetadata` (in the `CytoImageList` object) entry that contains the image identifiers. These image ids have to match between the `SingleCellExperiment` object and the `CytoImageList` object.
-* `cell_id`: a single character indicating the `colData` entry that contains the cell identifiers. These should be integer values corresponing to pixel-values in the segmentation masks.
+* `cell_id`: a single character indicating the `colData` entry that contains the cell identifiers. **These should be integer values corresponding to pixel-values in the segmentation masks**.
 
 The `img_id` and `cell_id` entry in the `SingleCellExperiment` object need to be accessible via: 
 
@@ -217,7 +217,7 @@ mcols(all_stacks)$ImageNb <- c("1", "2", "3")
 
 ## Scale images
 
-We can see, that in some cases, the pixel-values are not correctly scaled by the image encoding.
+We can see that, in some cases, the pixel-values are not correctly scaled by the image encoding.
 The segmentation masks should only contain integer entries:
 
 ```{r image-encoding}
@@ -232,7 +232,7 @@ Therefore, pixel-intensites need to be rescaled by this value.
 However, this scaling value can change and different images can be scaled by different factors.
 The user needs make sure to select the correct factors in more complex cases.
 
-The `cytopmapper` package provides a `?scaleImages` function.
+The `cytomapper` package provides a `?scaleImages` function.
 The user needs to manually scale images to obtain the correct pixel-values.
 Here, we scale the segmentation masks by the factor for 16-bit encoding: `2^16-1`
 
@@ -274,7 +274,7 @@ A `CytoImageList` object is restricted to the following entries:
 
 `CytoImageList` objects that contain masks should only contain a single channel
 
-The follwoing paragraphs will explain further details on manipulating `CytoImageList` objects
+The following paragraphs will explain further details on manipulating `CytoImageList` objects
 
 ## Accessors
 
@@ -298,7 +298,7 @@ However, to facilitate subsetting and making sure that entry names are transfere
 
 ### Getting and setting images
 
-Individual or multiple entries in a `CytoImageList` object can be obtained or replaced using the `getImages` and `setImages` function respectively.
+Individual or multiple entries in a `CytoImageList` object can be obtained or replaced using the `getImages` and `setImages` functions, respectively.
 
 ```{r get-set-images}
 cur_image <- getImages(pancreasImages, "A02_imc")
@@ -397,7 +397,7 @@ However, to manipulate pixel values and to linearly scale values to a certain ra
 
 ## Normalization
 
-The `normalize` function provided in the `cytomapper` package internally calls the `normalize` function of the `EBImage` package.
+The `normalize` function provided in the `cytomapper` package internally calls the `normalize` function of the `r Biocpkg("EBImage")` package.
 The main difference between the two functions is the option to scale per image or globally in the `cytomapper` package.
 Furthermore, the `cytomapper` package `normalize` function (see `?'normalize,CytoImageList-method'`) allows the user to define a clipping range based on percentiles.
 
@@ -638,7 +638,7 @@ plotPixels(pancreasImages, colour_by = c("SMA", "CD44"),
                         label = expression("30 " ~ mu * "m"),
                         cex = 2,
                         lwd = 5,
-                        colour = "blue",
+                        colour = "cyan",
                         position = "bottomleft",
                         margin = c(5,5),
                         frame = 3))
@@ -652,11 +652,13 @@ The entry to `text` needs to be a character vector of the same length as the `Cy
 plotPixels(pancreasImages, colour_by = c("SMA", "CD44"),
           image_title = list(text = c("image_1", "image_2", "image_3"),
                              position = "topleft",
-                             colour = "blue",
+                             colour = "cyan",
                              margin = c(2,10),
                              font = 3,
                              cex = 2))
 ```
+
+Plotting of the scale bar and image title can be suppressed by setting the `scale_bar` and `image_title` parameters to `NULL`.
 
 ## Legend
 
@@ -677,6 +679,17 @@ plotCells(pancreasMasks, object = pancreasSCE,
                        margin = 10))
 ```
 
+## Setting the margin between images
+
+To enhance the display of individual images, the `cytomapper` package provides the `margin` parameter.
+
+The `margin` parameter takes a single numeric indicating the gap (in pixels) between individual images.
+
+```{r margin}
+plotPixels(pancreasImages, colour_by = c("H3", "SMA", "CD44"), 
+           margin = 2)
+```
+
 ## Scale the feature counts
 
 By default, features are scaled to the minimum and maximum per channel.
@@ -689,17 +702,6 @@ plotPixels(pancreasImages, colour_by = c("H3", "SMA", "CD44"),
 ```
 
 In this case, counts are linearly scaled to the minimum and maximum across all channels and across all displayed images.
-
-## Setting the margin between images
-
-To enhance the display of individual images, the `cytomapper` package provides the `margin` parameter.
-
-The `margin` parameter takes a single numeric indicating the gap (in pixels) between individual images.
-
-```{r margin}
-plotPixels(pancreasImages, colour_by = c("H3", "SMA", "CD44"), 
-           margin = 2)
-```
 
 ## Image interpolation
 
@@ -714,7 +716,7 @@ plotPixels(pancreasImages, colour_by = c("H3", "SMA", "CD44"),
 # Returning plots and images
 
 The user has the option to save the generated plots (see next section) or to get the plots and/or coloured images returned.
-If `return_plot` and/or `return_iamges` is set to `TRUE`, cytomapper returns a list object with one or two entries: `plot` and/or `images`.
+If `return_plot` and/or `return_images` is set to `TRUE`, `cytomapper` returns a list object with one or two entries: `plot` and/or `images`.
 
 The `display` parameter supports the entries `display = "all"` (default), which displays images in a grid-like fashion and `display = "single"`, which display images individually:
 
@@ -761,7 +763,7 @@ When setting `display = "single"`, the `cytomapper` package will save individual
 
 # Acknowledgements
 
-We want to thank the Bodenmiller laboratory for feedback on the package and its functionality.
+We want to thank the [Bodenmiller laboratory](http://www.bodenmillerlab.org) for feedback on the package and its functionality.
 
 # Contributions
 
