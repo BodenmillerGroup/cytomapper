@@ -6,42 +6,43 @@
 #'
 #' @param object a \code{\linkS4class{SingleCellExperiment}} object.
 #' @param mask a \code{\linkS4class{CytoImageList}} containing single-channel
-#'   \code{\linkS4class{Image}} objects (see section 'Segmentation mask object' below).
+#' \code{\linkS4class{Image}} objects (see section 'Segmentation mask object'
+#' below).
 #' @param cell_id character specifying the \code{colData(object)} entry, in which the
-#'   integer cell IDs are stored. These IDs should match the integer pixel values in
-#'   the segmentation mask object.
+#' integer cell IDs are stored. These IDs should match the integer pixel values in
+#' the segmentation mask object.
 #' @param img_id character specifying the \code{colData(object)} and
-#'   \code{mcols(mask)} entry, in which the image IDs are stored (see section
-#'   'Linking the \code{SingleCellExperiment} and \code{CytoImageList} object'
-#'   below)
+#' \code{mcols(mask)} entry, in which the image IDs are stored (see section
+#' 'Linking the \code{SingleCellExperiment} and \code{CytoImageList} object'
+#' below)
 #' @param colour_by character or character vector specifying the features
-#'   (\code{rownames(object)}) or metadata (\code{colData(object)} entry) used
-#'   to colour individual cells. Cells can be coloured by single
-#'   \code{colData(object)} entries or by up to six features.
+#' (\code{rownames(object)}) or metadata (\code{colData(object)} entry) used
+#' to colour individual cells. Cells can be coloured by single
+#' \code{colData(object)} entries or by up to six features.
 #' @param outline_by single character indicating the \code{colData(object)} entry
-#'   by which to outline individual cells
+#' by which to outline individual cells
 #' @param exprs_values single character indicating which \code{assay(object)}
-#'   entry to use when visualizing feature counts.
+#' entry to use when visualizing feature counts.
 #' @param subset_images numeric, character or vector of such indicating which
-#'   masks to display. Masks can be subsetted by entries to \code{mcols(mask)},
-#'   \code{names(mask)} and a numeric index.
+#' masks to display. Masks can be subsetted by entries to \code{mcols(mask)},
+#' \code{names(mask)} and a numeric index.
 #' @param colour a list with names matching the entries to \code{colour_by}
-#'   and/or \code{outline_by}. When setting the colour for continous features,
-#'   at least two colours need to be provided indicating the colours for minimum
-#'   and maximum values. When colouring discrete vectors, a colour for each
-#'   unique entry needs to be provided (see section 'Setting the colours' and
-#'   examples)
+#' and/or \code{outline_by}. When setting the colour for continous features,
+#' at least two colours need to be provided indicating the colours for minimum
+#' and maximum values. When colouring discrete vectors, a colour for each
+#' unique entry needs to be provided (see section 'Setting the colours' and
+#' examples)
 #' @param ... Further arguments passed to \code{?"\link{plotting-param}"}
 #'
-#'@section Segmentation mask object:
+#' @section Segmentation mask object:
 #' For the \code{plotCells} function, \code{mask} refers to a
 #' \code{\linkS4class{CytoImageList}} object that contains a single or multiple
 #' segmentation masks in form of individual \code{\linkS4class{Image}} objects.
 #' The function assumes that each object in the segmentation mask is a cell.
 #' The key features of such masks include:
 #' \itemize{
-#'   \item each Image object contains only one channel
-#'   \item pixel values are integers indicating the cells' IDs
+#'     \item each Image object contains only one channel
+#'     \item pixel values are integers indicating the cells' IDs
 #' }
 #'
 #' @section Linking the \code{SingleCellExperiment} and \code{CytoImageList} object:
@@ -89,12 +90,13 @@
 #'
 #' @seealso For further plotting parameters see \code{?"\link{plotting-param}"}
 #'
-#' @return a list if return_images and/or return_plot is TRUE (see \code{?"\link{plotting-param}"}).
+#' @return a list if return_images and/or return_plot is TRUE
+#' (see \code{?"\link{plotting-param}"}).
 #' \itemize{
-#'   \item \code{plot}: a single plot object (\code{display = "all"}) or a list
-#'   of plot objects (\code{display = "single"})
-#'   \item \code{images}: a \code{\linkS4class{SimpleList}} object containing
-#'   three-colour \code{\linkS4class{Image}} objects.
+#' \item \code{plot}: a single plot object (\code{display = "all"}) or a list
+#' of plot objects (\code{display = "single"})
+#' \item \code{images}: a \code{\linkS4class{SimpleList}} object containing
+#' three-colour \code{\linkS4class{Image}} objects.
 #' }
 #'
 #' @examples
@@ -106,147 +108,147 @@
 #'
 #' # Colour the masks based on averaged expression
 #' plotCells(pancreasMasks, object = pancreasSCE, img_id = "ImageNb",
-#'           cell_id = "CellNb", colour_by = c("SMA", "CD44"))
+#'             cell_id = "CellNb", colour_by = c("SMA", "CD44"))
 #'
 #' # Colour the masks based on metadata
 #' plotCells(pancreasMasks, object = pancreasSCE, img_id = "ImageNb",
-#'           cell_id = "CellNb", colour_by = "CellType")
+#'             cell_id = "CellNb", colour_by = "CellType")
 #'
 #' # Outline the masks based on metadata
 #' plotCells(pancreasMasks, object = pancreasSCE, img_id = "ImageNb",
-#'           cell_id = "CellNb", colour_by = "SMA",
-#'           outline_by = "CellType")
+#'             cell_id = "CellNb", colour_by = "SMA",
+#'             outline_by = "CellType")
 #'
 #' # Colour the masks based on arcsinh-transformed expression
 #' plotCells(pancreasMasks, object = pancreasSCE, img_id = "ImageNb",
-#'           cell_id = "CellNb", colour_by = "SMA",
-#'           exprs_values = "exprs")
+#'             cell_id = "CellNb", colour_by = "SMA",
+#'             exprs_values = "exprs")
 #'
 #' # Subset the images
 #' plotCells(pancreasMasks, object = pancreasSCE, img_id = "ImageNb",
-#'           cell_id = "CellNb", colour_by = "SMA", subset_images = c(1,2))
+#'             cell_id = "CellNb", colour_by = "SMA", subset_images = c(1,2))
 #'
 #' # Set colour
 #' plotCells(pancreasMasks, object = pancreasSCE, img_id = "ImageNb",
-#'           cell_id = "CellNb", colour_by = "SMA", outline_by = "CellType",
-#'           colour = list(SMA = c("black", "red"),
-#'                         CellType = c(celltype_A = "blue",
-#'                                      celltype_B = "green",
-#'                                      celltype_C = "red")))
+#'             cell_id = "CellNb", colour_by = "SMA", outline_by = "CellType",
+#'             colour = list(SMA = c("black", "red"),
+#'                             CellType = c(celltype_A = "blue",
+#'                                         celltype_B = "green",
+#'                                         celltype_C = "red")))
 #'
 #' @author Nils Eling (\email{nils.eling@@dqbm.uzh.ch})
 #' @author Nicolas Damond (\email{nicolas.damond@@dqbm.uzh.ch})
 #'
 #' @export
-plotCells <- function(mask,
-                      object = NULL,
-                      cell_id = NULL,
-                      img_id = NULL,
-                      colour_by = NULL,
-                      outline_by = NULL,
-                      exprs_values = "counts",
-                      subset_images = NULL,
-                      colour = NULL,
-                      ...) {
+plotCells <- function(
+    mask,
+    object = NULL,
+    cell_id = NULL,
+    img_id = NULL,
+    colour_by = NULL,
+    outline_by = NULL,
+    exprs_values = "counts",
+    subset_images = NULL,
+    colour = NULL,
+    ...) {
 
-  # Object checks
-  .valid.mask(mask, img_id)
-  if(!is.null(object)){
-    .valid.sce(object, img_id, cell_id, exprs_values)
-    .valid.matchObjects.plotCells(object, mask, img_id)
+    # Object checks
+    .valid.mask(mask, img_id)
+    if(!is.null(object)){
+        .valid.sce(object, img_id, cell_id, exprs_values)
+        .valid.matchObjects.plotCells(object, mask, img_id)
 
-    if(is.null(img_id) || is.null(cell_id)){
-      stop("Please provide an 'img_id' and 'cell_id' entry.")
+        if(is.null(img_id) || is.null(cell_id)){
+            stop("Please provide an 'img_id' and 'cell_id' entry.")
+        }
     }
-  }
 
-  # Argument checks
-  # Check colour_by argument
-  if (!is.null(colour_by)){
-    .valid.colour_by(colour_by, object, image = NULL,
-                     call.arg = "plotCells")
-  }
-  # Check outline_by argument
-  if(!is.null(outline_by)){
-    .valid.outline_by(outline_by, object, mask, image = NULL)
-  }
-  # Check subset_images argument
-  if(!is.null(subset_images)){
-    .valid.subset_images(subset_images, image = mask, img_id)
-  }
-  # Check colour argument
-  if(!is.null(colour)){
-    .valid.colour(colour, colour_by, outline_by, object, image = NULL)
-  }
+    # Argument checks
+    # Check colour_by argument
+    if (!is.null(colour_by)){
+        .valid.colour_by(colour_by, object, image = NULL,
+                call.arg = "plotCells")
+    }
+    # Check outline_by argument
+    if(!is.null(outline_by)){
+        .valid.outline_by(outline_by, object, mask, image = NULL)
+    }
+    # Check subset_images argument
+    if(!is.null(subset_images)){
+        .valid.subset_images(subset_images, image = mask, img_id)
+    }
+    # Check colour argument
+    if(!is.null(colour)){
+        .valid.colour(colour, colour_by, outline_by, object, image = NULL)
+    }
 
-  # Set further arguments
-  dotArgs <- list(...)
-  plottingParam <- .plottingParam(dotArgs, image = mask)
+    # Set further arguments
+    dotArgs <- list(...)
+    plottingParam <- .plottingParam(dotArgs, image = mask)
 
-  # Select images for plotting
-  mask <- .select_images(object, mask, img_id, subset_images)
-  cur_col <- list()
+    # Select images for plotting
+    mask <- .select_images(object, mask, img_id, subset_images)
+    cur_col <- list()
 
-  # Colour the masks
-  # Here, a SimpleList is returned that allows storing colour Images
-  if(!is.null(colour_by)){
+    # Colour the masks
+    # Here, a SimpleList is returned that allows storing colour Images
+    if(!is.null(colour_by)){
+        # Select the colours
+        cur_col$colour_by <- .selectColours(object, colour_by, colour,
+                                    call.arg = "colour_by")
 
-    # Select the colours
-    cur_col$colour_by <- .selectColours(object, colour_by, colour,
-                                        call.arg = "colour_by")
-
-    if(all(colour_by %in% colnames(colData(object)))){
-      # Colouring by metadata
-      out_img <- .colourMaskByMeta(object, mask, cell_id, img_id,
-                                   colour_by, cur_col$colour_by[[1]],
-                                   plottingParam$missing_colour,
-                                   plottingParam$background_colour)
+        if(all(colour_by %in% colnames(colData(object)))){
+            # Colouring by metadata
+            out_img <- .colourMaskByMeta(object, mask, cell_id, img_id,
+                                    colour_by, cur_col$colour_by[[1]],
+                                    plottingParam$missing_colour,
+                                    plottingParam$background_colour)
+        } else {
+            # Colouring by features
+            out_img <- .colourMaskByFeature(object, mask, cell_id, img_id,
+                                            colour_by, exprs_values,
+                                            cur_col$colour_by,
+                                            plottingParam$missing_colour,
+                                            plottingParam$background_colour,
+                                            plottingParam)
+        }
     } else {
-      # Colouring by features
-      out_img <- .colourMaskByFeature(object, mask, cell_id, img_id,
-                                      colour_by, exprs_values,
-                                      cur_col$colour_by,
-                                      plottingParam$missing_colour,
-                                      plottingParam$background_colour,
-                                      plottingParam)
+        out_img <- endoapply(mask, function(x){
+            x[x == 0L] <- plottingParam$background_colour
+            x <- replace(x, which(x != plottingParam$background_colour),
+                    plottingParam$missing_colour)
+            x
+        })
+        out_img <- as(out_img, "SimpleList")
     }
-  } else {
-    out_img <- endoapply(mask, function(x){
-      x[x == 0L] <- plottingParam$background_colour
-      x <- replace(x, which(x != plottingParam$background_colour),
-                   plottingParam$missing_colour)
-      x
-    })
-    out_img <- as(out_img, "SimpleList")
-  }
 
-  # Add outline
-  if(!is.null(outline_by)){
-    cur_col$outline_by <- .selectColours(object, outline_by, colour,
-                                         call.arg = "outline_by")
-    out_img <- .outlineImageByMeta(object, mask, out_img, cell_id, img_id,
-                                   outline_by, cur_col$outline_by[[1]])
-  }
+    # Add outline
+    if(!is.null(outline_by)){
+        cur_col$outline_by <- .selectColours(object, outline_by, colour,
+                                        call.arg = "outline_by")
+        out_img <- .outlineImageByMeta(object, mask, out_img, cell_id, img_id,
+                                        outline_by, cur_col$outline_by[[1]])
+    }
 
-  # Plot images
-  cur_plot <- .displayImages(object, image = NULL, exprs_values, outline_by, colour_by,
-                 mask, out_img, img_id,
-                 cur_col, plottingParam)
+    # Plot images
+    cur_plot <- .displayImages(object, image = NULL, exprs_values, outline_by, colour_by,
+                    mask, out_img, img_id,
+                    cur_col, plottingParam)
 
-  return_objects <- NULL
+    return_objects <- NULL
 
-  if(!is.null(cur_plot)){
-    return_objects <- as.list(return_objects)
-    return_objects$plot <- cur_plot
-  }
+    if(!is.null(cur_plot)){
+        return_objects <- as.list(return_objects)
+        return_objects$plot <- cur_plot
+    }
 
-  if(plottingParam$return_images){
-    return_objects <- as.list(return_objects)
-    out_img <- endoapply(out_img, Image)
-    return_objects$images <- out_img
-  }
+    if(plottingParam$return_images){
+        return_objects <- as.list(return_objects)
+        out_img <- endoapply(out_img, Image)
+        return_objects$images <- out_img
+    }
 
-  if(!is.null(return_objects)){
-    return(return_objects)
-  }
+    if(!is.null(return_objects)){
+        return(return_objects)
+    }
 }

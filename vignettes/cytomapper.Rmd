@@ -4,14 +4,14 @@ date: "`r BiocStyle::doc_date()`"
 package: "`r BiocStyle::pkg_ver('cytomapper')`"
 author:
 - name: Nils Eling
-  affiliation: Department for Quantitative Biomedicine, University of Zurich
-  email: nils.eling@dqbm.uzh.ch.com
+    affiliation: Department for Quantitative Biomedicine, University of Zurich
+    email: nils.eling@dqbm.uzh.ch.com
 - name: Nicolas Damond
-  affiliation: Department for Quantitative Biomedicine, University of Zurich
-  email: nicolas.damond@dqbm.uzh.ch.com
+    affiliation: Department for Quantitative Biomedicine, University of Zurich
+    email: nicolas.damond@dqbm.uzh.ch.com
 output:
-  BiocStyle::html_document:
-    toc_float: yes
+    BiocStyle::html_document:
+        toc_float: yes
 bibliography: library.bib
 abstract: |
     Highly multiplexed imaging cytometry acquires the single-cell expression of
@@ -26,14 +26,14 @@ abstract: |
     pixel-level information across multiple channels and 2. the display of
     cell-level information (expression and/or metadata) on segmentation masks.
 vignette: |
-  %\VignetteIndexEntry{Spatial visualization for multiplexed imaging cytometry data in R}
-  %\VignetteEngine{knitr::rmarkdown}
-  %\VignetteEncoding{UTF-8}
+    %\VignetteIndexEntry{Spatial visualization for multiplexed imaging cytometry data in R}
+    %\VignetteEngine{knitr::rmarkdown}
+    %\VignetteEncoding{UTF-8}
 ---
 
 ```{r, echo=FALSE, results="hide"}
 knitr::opts_chunk$set(error=FALSE, warning=FALSE, message=FALSE,
-                      fig.retina = 0.75)
+                        fig.retina = 0.75)
 library(BiocStyle)
 ```
 
@@ -104,9 +104,13 @@ plotCells(mask = pancreasMasks)
 To colour and/or outline segmentation masks, a `SingleCellExperiment`, an `img_id` and `cell_id` entry need to be specified:
 
 ```{r quickstart-plotCells-2}
-plotCells(mask = pancreasMasks, object = pancreasSCE, cell_id = "CellNb", img_id = "ImageNb", colour_by = "SMA")
-plotCells(mask = pancreasMasks, object = pancreasSCE, cell_id = "CellNb", img_id = "ImageNb", colour_by = "SMA", outline_by = "CellType")
-plotCells(mask = pancreasMasks, object = pancreasSCE, cell_id = "CellNb", img_id = "ImageNb", colour_by = "CellType")
+plotCells(mask = pancreasMasks, object = pancreasSCE, 
+            cell_id = "CellNb", img_id = "ImageNb", colour_by = "SMA")
+plotCells(mask = pancreasMasks, object = pancreasSCE, 
+            cell_id = "CellNb", img_id = "ImageNb", 
+            colour_by = "SMA", outline_by = "CellType")
+plotCells(mask = pancreasMasks, object = pancreasSCE, 
+            cell_id = "CellNb", img_id = "ImageNb", colour_by = "CellType")
 ```
 
 For more information on the data formats and requirements, refer to the following section.
@@ -256,7 +260,8 @@ The read-in data can now be used for visualization:
 
 ```{r example-viz}
 plotPixels(all_stacks, colour_by = c("H3", "SMA", "CD44"))
-plotCells(all_masks, object = pancreasSCE, cell_id = "CellNb", img_id = "ImageNb", colour_by = "CellType")
+plotCells(all_masks, object = pancreasSCE, cell_id = "CellNb", 
+            img_id = "ImageNb", colour_by = "CellType")
 ```
 
 # The CytoImageList object {#CytoImageList}
@@ -451,9 +456,9 @@ Internally, the brightness value is added to each channel; each channel is multi
 ```{r bcg-pixels}
 # Increase contrast for the SMA and CD44 channel
 plotPixels(pancreasImages, 
-           colour_by = c("H3", "SMA", "CD44"), 
-           bcg = list(SMA = c(0,2,1), 
-                      CD44 = c(0,2,1)))
+            colour_by = c("H3", "SMA", "CD44"), 
+            bcg = list(SMA = c(0,2,1), 
+                        CD44 = c(0,2,1)))
 ```
 
 ## Outlining
@@ -462,7 +467,7 @@ The cells can be outlined when providing a `CytoImageList` object containing the
 
 ```{r outline-1-pixels}
 plotPixels(pancreasImages, mask = pancreasMasks, 
-           img_id = "ImageNb", colour_by = c("H3", "SMA", "CD44"))
+            img_id = "ImageNb", colour_by = c("H3", "SMA", "CD44"))
 ```
 
 The user can furthermore specify the metadata entry to outline cells by.
@@ -470,10 +475,10 @@ For this, a `SingleCellExperiment` object containing the cell-specific metadata 
 
 ```{r outline-2-pixels}
 plotPixels(pancreasImages, mask = pancreasMasks, 
-           object = pancreasSCE, img_id = "ImageNb", 
-           cell_id = "CellNb",
-           colour_by = c("H3", "SMA", "CD44"),
-           outline_by = "CellType")
+            object = pancreasSCE, img_id = "ImageNb", 
+            cell_id = "CellNb",
+            colour_by = c("H3", "SMA", "CD44"),
+            outline_by = "CellType")
 ```
 
 ## Subsetting
@@ -484,9 +489,9 @@ In the toy dataset, image IDs are numeric entries and therefore the `subset_imag
 
 ```{r subsetting-pixels}
 plotPixels(pancreasImages, colour_by = c("H3", "SMA", "CD44"),
-           subset_images = 1)
+            subset_images = 1)
 plotPixels(pancreasImages, colour_by = c("H3", "SMA", "CD44"),
-           subset_images = "F01_imc")
+            subset_images = "F01_imc")
 ```
 
 ## Adjusting the colour
@@ -498,9 +503,9 @@ These colours are passed to the `colorRampPalette` function for interpolation.
 
 ```{r colour-pixels}
 plotPixels(pancreasImages, colour_by = c("H3", "SMA", "CD44"),
-           colour = list(H3 = c("black", "blue"),
-                         SMA = c("black", "red"),
-                         CD44 = c("black", "white")))
+            colour = list(H3 = c("black", "blue"),
+                            SMA = c("black", "red"),
+                            CD44 = c("black", "white")))
 ```
 
 # Plotting cell information {#CellInfo}
@@ -523,8 +528,8 @@ However, in the case of displaying expression on segmentation mask, the user sho
 ```{r colouring-cells}
 data("pancreasImages")
 plotCells(pancreasMasks, object = pancreasSCE, 
-          img_id = "ImageNb", cell_id = "CellNb", 
-          colour_by = c("SMA", "CD44"))
+            img_id = "ImageNb", cell_id = "CellNb", 
+            colour_by = c("SMA", "CD44"))
 ```
 
 ## Changing the assay slot
@@ -534,9 +539,9 @@ In the toy dataset, the `assay(pancreasSCE, "exprs")` slot contains the arcsinh-
 
 ```{r exprs_values-cells}
 plotCells(pancreasMasks, object = pancreasSCE, 
-          img_id = "ImageNb", cell_id = "CellNb", 
-          colour_by = c("SMA", "CD44"),
-          exprs_values = "exprs")
+            img_id = "ImageNb", cell_id = "CellNb", 
+            colour_by = c("SMA", "CD44"),
+            exprs_values = "exprs")
 ```
 
 ## Outlining
@@ -545,9 +550,9 @@ The user can furthermore outline cells and specify the metadata entry to outline
 
 ```{r outline-cells}
 plotCells(pancreasMasks, object = pancreasSCE, 
-          img_id = "ImageNb", cell_id = "CellNb", 
-          colour_by = c("SMA", "CD44"),
-          outline_by = "CellType")
+            img_id = "ImageNb", cell_id = "CellNb", 
+            colour_by = c("SMA", "CD44"),
+            outline_by = "CellType")
 ```
 
 ## Subsetting
@@ -558,13 +563,13 @@ In the toy dataset, image IDs are numeric entries and therefore the `subset_imag
 
 ```{r subsetting-cells}
 plotCells(pancreasMasks, object = pancreasSCE, 
-          img_id = "ImageNb", cell_id = "CellNb", 
-          colour_by = c("SMA", "CD44"), 
-          subset_images = 1)
+            img_id = "ImageNb", cell_id = "CellNb", 
+            colour_by = c("SMA", "CD44"), 
+            subset_images = 1)
 plotCells(pancreasMasks, object = pancreasSCE, 
-          img_id = "ImageNb", cell_id = "CellNb", 
-          colour_by = c("SMA", "CD44"), 
-          subset_images = "F01_mask")
+            img_id = "ImageNb", cell_id = "CellNb", 
+            colour_by = c("SMA", "CD44"), 
+            subset_images = "F01_mask")
 ```
 
 ## Adjusting the colour
@@ -577,14 +582,14 @@ To colour discrete entries, one colour per entry needs to be specified in form o
 
 ```{r colour-cells}
 plotCells(pancreasMasks, object = pancreasSCE, 
-          img_id = "ImageNb", cell_id = "CellNb", 
-          colour_by = c("SMA", "CD44"),
-          outline_by = "CellType",
-          colour = list(SMA = c("black", "red"),
+            img_id = "ImageNb", cell_id = "CellNb", 
+            colour_by = c("SMA", "CD44"),
+            outline_by = "CellType",
+            colour = list(SMA = c("black", "red"),
                         CD44 = c("black", "white"),
                         CellType = c(celltype_A = "blue", 
-                                     celltype_B = "green",
-                                     celltype_C = "yellow")))
+                                    celltype_B = "green",
+                                    celltype_C = "yellow")))
 ```
 
 # Customisation
@@ -602,9 +607,9 @@ By matching these IDs, the user can subset the `SingleCellExperiment` object and
 ```{r subsetting-SCE}
 cur_sce <- pancreasSCE[,colData(pancreasSCE)$CellType == "celltype_A"]
 plotCells(pancreasMasks, object = cur_sce, 
-          img_id = "ImageNb", cell_id = "CellNb", 
-          colour_by = "CellType",
-          colour = list(CellType = c(celltype_A = "red")))
+            img_id = "ImageNb", cell_id = "CellNb", 
+            colour_by = "CellType",
+            colour = list(CellType = c(celltype_A = "red")))
 ```
 
 ## Background and missing colour
@@ -615,11 +620,11 @@ Furthermore, cells that are not contained in the `SingleCellExperiment` object c
 
 ```{r background-missing}
 plotCells(pancreasMasks, object = cur_sce, 
-          img_id = "ImageNb", cell_id = "CellNb", 
-          colour_by = "CellType",
-          colour = list(CellType = c(celltype_A = "red")),
-          background_colour = "white",
-          missing_colour = "black")
+            img_id = "ImageNb", cell_id = "CellNb", 
+            colour_by = "CellType",
+            colour = list(CellType = c(celltype_A = "red")),
+            background_colour = "white",
+            missing_colour = "black")
 ```
 
 ## Scale bar and image title
@@ -634,14 +639,14 @@ Therefore, the user needs to know the length (e.g. in $\mu{m}$) to label the sca
 
 ```{r scale_bar}
 plotPixels(pancreasImages, colour_by = c("SMA", "CD44"),
-          scale_bar = list(length = 30,
-                        label = expression("30 " ~ mu * "m"),
-                        cex = 2,
-                        lwd = 5,
-                        colour = "cyan",
-                        position = "bottomleft",
-                        margin = c(5,5),
-                        frame = 3))
+            scale_bar = list(length = 30,
+                            label = expression("30 " ~ mu * "m"),
+                            cex = 2,
+                            lwd = 5,
+                            colour = "cyan",
+                            position = "bottomleft",
+                            margin = c(5,5),
+                            frame = 3))
 ```
 
 The image titles can be set using the `image_title` parameter.
@@ -650,12 +655,12 @@ The entry to `text` needs to be a character vector of the same length as the `Cy
 
 ```{r image_title}
 plotPixels(pancreasImages, colour_by = c("SMA", "CD44"),
-          image_title = list(text = c("image_1", "image_2", "image_3"),
-                             position = "topleft",
-                             colour = "cyan",
-                             margin = c(2,10),
-                             font = 3,
-                             cex = 2))
+            image_title = list(text = c("image_1", "image_2", "image_3"),
+                                position = "topleft",
+                                colour = "cyan",
+                                margin = c(2,10),
+                                font = 3,
+                                cex = 2))
 ```
 
 Plotting of the scale bar and image title can be suppressed by setting the `scale_bar` and `image_title` parameters to `NULL`.
@@ -669,14 +674,14 @@ For detailed explanation on the individual entries, please refer to the `legend`
 
 ```{r legend}
 plotCells(pancreasMasks, object = pancreasSCE, 
-          img_id = "ImageNb", cell_id = "CellNb",
-          colour_by = "SMA",
-          outline_by = "CellType",
-          legend = list(colour_by.title.font = 2,
-                       colour_by.title.cex = 1.2,
-                       colour_by.labels.cex = 0.7,
-                       outline_by.legend.cex = 0.3,
-                       margin = 10))
+            img_id = "ImageNb", cell_id = "CellNb",
+            colour_by = "SMA",
+            outline_by = "CellType",
+            legend = list(colour_by.title.font = 2,
+                        colour_by.title.cex = 1.2,
+                        colour_by.labels.cex = 0.7,
+                        outline_by.legend.cex = 0.3,
+                        margin = 10))
 ```
 
 ## Setting the margin between images
@@ -687,7 +692,7 @@ The `margin` parameter takes a single numeric indicating the gap (in pixels) bet
 
 ```{r margin}
 plotPixels(pancreasImages, colour_by = c("H3", "SMA", "CD44"), 
-           margin = 2)
+            margin = 2)
 ```
 
 ## Scale the feature counts
@@ -698,7 +703,7 @@ The default behaviour can be suppressed by setting `scale = FALSE`.
 
 ```{r}
 plotPixels(pancreasImages, colour_by = c("H3", "SMA", "CD44"), 
-           scale = FALSE)
+            scale = FALSE)
 ```
 
 In this case, counts are linearly scaled to the minimum and maximum across all channels and across all displayed images.
@@ -710,7 +715,7 @@ To suppress this default behaviour, the user can set `interpolate = FALSE`.
 
 ```{r interpolate}
 plotPixels(pancreasImages, colour_by = c("H3", "SMA", "CD44"), 
-           interpolate = FALSE)
+            interpolate = FALSE)
 ```
 
 # Returning plots and images
@@ -727,7 +732,7 @@ If the `return_images` parameter is set to `TRUE`, `cytomapper` returns a `Simpl
 
 ```{r return_plot}
 cur_out <- plotPixels(pancreasImages, colour_by = c("H3", "SMA", "CD44"), 
-           return_plot = TRUE, return_images = TRUE, display = "single")
+                    return_plot = TRUE, return_images = TRUE, display = "single")
 ```
 
 The returned plot objects now allows the plotting of individual images:
@@ -755,8 +760,8 @@ Increasing the scale parameter will increase the resolution of the final image.
 ```{r save_image}
 tempf <- tempfile("test_plot", fileext = ".png")
 plotPixels(pancreasImages, colour_by = c("H3", "SMA", "CD44"), 
-           save_plot = list(filename = tempf,
-                             scale = 10))
+            save_plot = list(filename = tempf,
+                                scale = 10))
 ```
 
 When setting `display = "single"`, the `cytomapper` package will save individual images in individual files.

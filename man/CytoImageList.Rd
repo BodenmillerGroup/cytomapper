@@ -27,18 +27,18 @@ multi-dimensional array in form of an \code{\linkS4class{Image}} object.
 }
 \details{
 Similar to the \code{\linkS4class{Image}} class, the first two
-  dimensions of each entry indicate the spatial dimension of the image. These
-  can be different for each entry. The third dimension indicates the number
-  of channels per Image. Each entry in the CytoImageList class object must
-  contain the same number of channels. Here, each channel represents pixel
-  values indicating measurement intensities or in case of segmentation masks
-  the cells' ID. The CytoImageList class therefore only supports a Grayscale
-  colormode (see \code{\link[EBImage]{colormode}}) representation of each
-  individual image.
+dimensions of each entry indicate the spatial dimension of the image. These
+can be different for each entry. The third dimension indicates the number
+of channels per Image. Each entry in the CytoImageList class object must
+contain the same number of channels. Here, each channel represents pixel
+values indicating measurement intensities or in case of segmentation masks
+the cells' ID. The CytoImageList class therefore only supports a Grayscale
+colormode (see \code{\link[EBImage]{colormode}}) representation of each
+individual image.
 
-  The class further contains an \code{\link{elementMetadata}} slot that
-  stores image-level meta information. This slot should be accessed using the
-  \code{\link[S4Vectors]{mcols}} accessor function.
+The class further contains an \code{\link{elementMetadata}} slot that
+stores image-level meta information. This slot should be accessed using the
+\code{\link[S4Vectors]{mcols}} accessor function.
 }
 \section{Restrictions on entry names}{
 

@@ -5,17 +5,17 @@
 \title{Function to visualize pixel-level information of multi-channel images}
 \usage{
 plotPixels(
-  image,
-  object = NULL,
-  mask = NULL,
-  cell_id = NULL,
-  img_id = NULL,
-  colour_by = NULL,
-  bcg = NULL,
-  outline_by = NULL,
-  subset_images = NULL,
-  colour = NULL,
-  ...
+    image,
+    object = NULL,
+    mask = NULL,
+    cell_id = NULL,
+    img_id = NULL,
+    colour_by = NULL,
+    bcg = NULL,
+    outline_by = NULL,
+    subset_images = NULL,
+    colour = NULL,
+    ...
 )
 }
 \arguments{
@@ -44,9 +44,9 @@ Pixels can be coloured by up to six features.}
 \item{bcg}{a list with names matching the entries to \code{colour_by}. Each
 entry contains a numeric vector of three entries:
 \enumerate{
-  \item brightness value added to the specified channel
-  \item contrast value multiplied with the specified channel
-  \item gamma value (channel is exponentiated by this value)
+    \item brightness value added to the specified channel
+    \item contrast value multiplied with the specified channel
+    \item gamma value (channel is exponentiated by this value)
 }
 Default is c(0,1,1).}
 
@@ -71,10 +71,10 @@ examples)}
 \value{
 a list if return_images and/or return_plot is TRUE (see \code{?"\link{plotting-param}"}).
 \itemize{
-  \item \code{plot}: a single plot object (\code{display = "all"}) or a list
-  of plot objects (\code{display = "single"})
-  \item \code{images}: a \code{\linkS4class{SimpleList}} object containing
-  three-colour \code{\linkS4class{Image}} objects.
+\item \code{plot}: a single plot object (\code{display = "all"}) or a list
+of plot objects (\code{display = "single"})
+\item \code{images}: a \code{\linkS4class{SimpleList}} object containing
+three-colour \code{\linkS4class{Image}} objects.
 }
 }
 \description{
@@ -94,8 +94,8 @@ cells, a \code{\linkS4class{SingleCellExperiment}} object and
 provided. The function assumes that each object in the segmentation mask is a
 cell. The key features of such segmentation masks include:
 \itemize{
-  \item each Image object contains only one channel
-  \item pixel values are integers indicating the cells' IDs
+    \item each Image object contains only one channel
+    \item pixel values are integers indicating the cells' IDs
 }
 }
 
@@ -165,21 +165,21 @@ plotPixels(pancreasImages, colour_by = c("SMA", "CD44"))
 
 # Outline the cells based on metadata
 plotPixels(pancreasImages, object = pancreasSCE, mask = pancreasMasks,
-          img_id = "ImageNb", cell_id = "CellNb",
-          colour_by = c("SMA", "CD44"), outline_by = "CellType")
+            img_id = "ImageNb", cell_id = "CellNb",
+            colour_by = c("SMA", "CD44"), outline_by = "CellType")
 
 # Enhance individual channels
 plotPixels(pancreasImages, colour_by = c("SMA", "CD44"),
-          bcg = list(SMA = c(0, 2, 1)))
+            bcg = list(SMA = c(0, 2, 1)))
 
 # Subset the images
 plotPixels(pancreasImages, colour_by = c("SMA", "CD44"),
-          subset_images = c(1,2))
+            subset_images = c(1,2))
 
 # Set colour
 plotPixels(pancreasImages, colour_by = c("SMA", "CD44"),
-          colour = list(SMA = c("black", "green"),
-                        CD44 = c("black", "blue")))
+            colour = list(SMA = c("black", "green"),
+                            CD44 = c("black", "blue")))
 
 }
 \seealso{

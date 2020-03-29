@@ -8,18 +8,18 @@
 #' @param ... A list of images (or coercible to a list) or individual images
 #'
 #' @details Similar to the \code{\linkS4class{Image}} class, the first two
-#'   dimensions of each entry indicate the spatial dimension of the image. These
-#'   can be different for each entry. The third dimension indicates the number
-#'   of channels per Image. Each entry in the CytoImageList class object must
-#'   contain the same number of channels. Here, each channel represents pixel
-#'   values indicating measurement intensities or in case of segmentation masks
-#'   the cells' ID. The CytoImageList class therefore only supports a Grayscale
-#'   colormode (see \code{\link[EBImage]{colormode}}) representation of each
-#'   individual image.
+#' dimensions of each entry indicate the spatial dimension of the image. These
+#' can be different for each entry. The third dimension indicates the number
+#' of channels per Image. Each entry in the CytoImageList class object must
+#' contain the same number of channels. Here, each channel represents pixel
+#' values indicating measurement intensities or in case of segmentation masks
+#' the cells' ID. The CytoImageList class therefore only supports a Grayscale
+#' colormode (see \code{\link[EBImage]{colormode}}) representation of each
+#' individual image.
 #'
-#'   The class further contains an \code{\link{elementMetadata}} slot that
-#'   stores image-level meta information. This slot should be accessed using the
-#'   \code{\link[S4Vectors]{mcols}} accessor function.
+#' The class further contains an \code{\link{elementMetadata}} slot that
+#' stores image-level meta information. This slot should be accessed using the
+#' \code{\link[S4Vectors]{mcols}} accessor function.
 #'
 #' @section Restrictions on entry names:
 #' The CytoImageList class only supports unique entry names to avoid duplicated
@@ -79,60 +79,64 @@
 #'
 #' @export
 CytoImageList <- function(...){
-  args <- list(...)
-  if (length(args) == 1L && methods::extends(class(args[[1L]]), "list"))
-    args <- args[[1L]]
-  if (length(args) == 1L && methods::extends(class(args[[1L]]), "SimpleList"))
-    args <- as.list(args[[1L]])
-  x <- S4Vectors::new2("CytoImageList", listData=args)
-  return(x)
+    args <- list(...)
+    if (length(args) == 1L && methods::extends(class(args[[1L]]), "list")){
+        args <- args[[1]]
+    }
+    if (length(args) == 1L && methods::extends(class(args[[1L]]), "SimpleList")){
+        args <- as.list(args[[1]])
+    }
+    x <- S4Vectors::new2("CytoImageList", listData=args)
+    return(x)
 }
 
 # Coercion from list
 #' @exportMethod coerce
 setAs("list", "CytoImageList", function(from) {
-  # Use constructor function
-  CytoImageList(from)
+    # Use constructor function
+    CytoImageList(from)
 })
 
 # Coercion from ANY
 #' @exportMethod coerce
 setAs("ANY", "CytoImageList", function(from) {
-  # Use constructor function
-  CytoImageList(from)
+    # Use constructor function
+    CytoImageList(from)
 })
 
 # Expanded show method
 #' @exportMethod show
 setMethod("show", signature = signature(object="CytoImageList"),
-          definition = function(object){
-            lo <- length(object)
-            cat(class(object)[1], " containing ", lo,
-                " image(s)\n", sep = "")
-            if (!is.null(names(object)))
-              cat(paste0("names(", lo, "):"), names(object), "\n", sep = " ")
-            if(length(dim(object[[1]])) > 2){
-              cat("Each image contains ", dim(object[[1]])[3],
-                  " channel(s)\n", sep = "")
-            } else {
-              cat("Each image contains 1 channel\n", sep = "")
-            }
-            if(!is.null(channelNames(object))){
-              cat(paste0("channelNames(", length(channelNames(object)),
-                  "):"), channelNames(object), "\n", sep = " ")
-            }
-          })
+    definition = function(object){
+        lo <- length(object)
+        cat(class(object)[1], " containing ", lo,
+            " image(s)\n", sep = "")
+        if (!is.null(names(object))) {
+                cat(paste0("names(", lo, "):"), names(object), "\n", sep = " ")
+                if (length(dim(object[[1]])) > 2) {
+                cat("Each image contains ", dim(object[[1]])[3],
+                    " channel(s)\n", sep = "")
+                } else {
+                cat("Each image contains 1 channel\n", sep = "")
+                }
+        }
+        if (!is.null(channelNames(object))) {
+            cat(paste0("channelNames(", length(channelNames(object)),
+                    "):"), channelNames(object), "\n", sep = " ")
+        }
+    }
+)
 
 #' @export
 setMethod("plot",
-          signature = signature(x="CytoImageList"),
-          definition = function(x){
-
-            cur_check <- lapply(x, function(x){all(x == floor(x))})
+    signature = signature(x="CytoImageList"),
+    definition = function(x){
+        cur_check <- lapply(x, function(x){all(x == floor(x))})
             if(all(unlist(cur_check))){
-              plotCells(mask = x)
+                plotCells(mask = x)
             } else {
-              plotPixels(image = x)
+                plotPixels(image = x)
             }
-          })
+    }
+)
 

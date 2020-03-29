@@ -4,16 +4,16 @@
 #' @importFrom S4Vectors setValidity2
 #' @importClassesFrom S4Vectors SimpleList
 setClass(
-  Class="CytoImageList",
-  package="cytomapper",
-  representation(int_metadata="list"),
-  contains = "SimpleList",
-  prototype = prototype(
+    Class="CytoImageList",
+    package="cytomapper",
+    representation(int_metadata="list"),
+    contains = "SimpleList",
+    prototype = prototype(
     int_metadata=list(
-      version=utils::packageVersion("cytomapper")),
+        version=utils::packageVersion("cytomapper")),
     elementType="Image"
     )
-  )
+)
 
 # Validity checks
 #' @importFrom S4Vectors setValidity2
@@ -22,54 +22,55 @@ S4Vectors:::setValidity2(Class="CytoImageList", .ImageList_validity)
 
 .ImageList_validity <- function(object) {
 
-              msg <- NULL
+    msg <- NULL
 
-              # Check if all images have the same number of channels
-              dims <- unlist(lapply(object, function(x){
-                dim(x)[3]
-              }))
-              if(length(unique(dims)) > 1L){
-                msg <- c(msg, "The images contain different number of channels.\n")
-              }
+    # Check if all images have the same number of channels
+    dims <- unlist(lapply(object, function(x){
+        dim(x)[3]
+    }))
+    if(length(unique(dims)) > 1L){
+        msg <- c(msg, "The images contain different number of channels.\n")
+    }
 
-              # Check if all channels have the same names
-              if(length(dim(object[[1]])) == 3L){
-                cur_names <- dimnames(object[[1]])[[3]]
-                errors <- unlist(lapply(object, function(x){
-                  !identical(cur_names, dimnames(x)[[3]])
-                }))
-                if(sum(errors) > 0){
-                  msg <- c(msg, "Not all channels have the same names.")
-                }
-              }
+    # Check if all channels have the same names
+    if(length(dim(object[[1]])) == 3L){
+        cur_names <- dimnames(object[[1]])[[3]]
+        errors <- unlist(lapply(object, function(x){
+            !identical(cur_names, dimnames(x)[[3]])
+        }))
+        if(sum(errors) > 0){
+            msg <- c(msg, "Not all channels have the same names.")
+        }
+    }
 
-              # Check if entry names are unique
-              if(!is.null(names(object)) &&
-                 length(unique(names(object))) < length(names(object))){
-                msg <- c(msg, "Only unique entries allowed in a CytoImageList object.")
-              }
+    # Check if entry names are unique
+    if(!is.null(names(object)) &&
+        length(unique(names(object))) < length(names(object))){
+        msg <- c(msg, "Only unique entries allowed in a CytoImageList object.")
+    }
 
-              # Check if names contain NA or empties
-              if(!is.null(names(object)) && (sum(is.na(names(object))) > 0 ||
-                                             sum(names(object) %in% "") > 0)){
-                msg <- c(msg, "Empty or NA names not supported.")
-              }
+    # Check if names contain NA or empties
+    if(!is.null(names(object)) && (sum(is.na(names(object))) > 0 ||
+            sum(names(object) %in% "") > 0)){
+        msg <- c(msg, "Empty or NA names not supported.")
+    }
 
-              # Check if channelNames are unique
-              if(!is.null(channelNames(object)) &&
-                 length(unique(channelNames(object))) < length(channelNames(object))){
-                msg <- c(msg, "Only unique channels allowed in a CytoImageList object.")
-              }
+    # Check if channelNames are unique
+    if(!is.null(channelNames(object)) &&
+        length(unique(channelNames(object))) < length(channelNames(object))){
+        msg <- c(msg, "Only unique channels allowed in a CytoImageList object.")
+    }
 
-              # Check if colourmode of each Image is "Grayscale"
-              colour.modes <- unlist(lapply(object, colorMode))
-              if("Color" %in% colour.modes){
-                msg <- c(msg, "Only Grayscale images are supported for CytoImageList objects.")
-              }
+    # Check if colourmode of each Image is "Grayscale"
+    colour.modes <- unlist(lapply(object, colorMode))
+    if("Color" %in% colour.modes){
+        msg <- c(msg, "Only Grayscale images are supported for CytoImageList objects.")
+    }
 
-              if (length(msg)) { return(msg) }
-              return(TRUE)
-            }
+    if (length(msg)) { return(msg) }
+
+    return(TRUE)
+}
 
 
 

@@ -13,8 +13,8 @@ A CytoImageList object containing the manipulated Images
 }
 \description{
 Methods to change pixel values in CytoImageList objects. In the
-  following sections, \code{object} is a \linkS4class{CytoImageList} object
-  containing one or multiple channels.
+following sections, \code{object} is a \linkS4class{CytoImageList} object
+containing one or multiple channels.
 }
 \section{Image scaling}{
 
@@ -22,8 +22,8 @@ In some cases, images need to be scaled by a constant
 (e.g. 2^16-1 = 65535) \code{value} to revert them back to the original
 pixel values after reading them in.
 \describe{
-  \item{\code{scaleImages(object, value)}:}{Scales all images in the
-  \linkS4class{CytoImageList} object \code{object} by \code{value}.}
+\item{\code{scaleImages(object, value)}:}{Scales all images in the
+\linkS4class{CytoImageList} object \code{object} by \code{value}.}
 }
 }
 
@@ -45,7 +45,7 @@ range of values in terms of percentiles (e.g. \code{c(0, 0.99)} for 0 and
 99th percentile clipping).
 
 \code{normalize(object, separateChannels = TRUE, separateImages = FALSE,
-  ft = c(0, 1), percentileRange = c(0, 1), inputRange = NULL)}:
+ft = c(0, 1), percentileRange = c(0, 1), inputRange = NULL)}:
 
 \describe{
 \item{\code{object}:}{A CytoImageList object}
@@ -85,7 +85,7 @@ plotPixels(x, colour_by = c("H3", "SMA"))
 
 # Normalizing per image
 x <- normalize(pancreasImages, separateImages = TRUE,
-               percentileRange = c(0, 0.99))
+                percentileRange = c(0, 0.99))
 plotPixels(x, colour_by = c("H3", "SMA"))
 
 }

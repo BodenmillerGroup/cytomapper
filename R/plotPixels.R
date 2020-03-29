@@ -6,42 +6,42 @@
 #' can be provided to outline cells based on metadata.
 #'
 #' @param image a \code{\linkS4class{CytoImageList}} object containing single or
-#'   multi-channel \code{\linkS4class{Image}} objects (see details below)
+#' multi-channel \code{\linkS4class{Image}} objects (see details below)
 #' @param object an optional \code{\linkS4class{SingleCellExperiment}} object.
 #' @param mask an optional \code{\linkS4class{CytoImageList}} object containing
-#'   segmentaion masks in form of single-channel \code{\linkS4class{Image}}
-#'   objects (see details below)
+#' segmentaion masks in form of single-channel \code{\linkS4class{Image}}
+#' objects (see details below)
 #' @param cell_id character specifying the \code{colData(object)} entry, in which the
-#'   integer cell IDs are stored. These IDs should match the integer pixel values in
-#'   the segmentation mask object.
+#' integer cell IDs are stored. These IDs should match the integer pixel values in
+#' the segmentation mask object.
 #' @param img_id character specifying the \code{colData(object)},
-#'   \code{mcols(image)} and \code{mcols(mask)} entry, in which the image IDs
-#'   are stored (see section 'Linking the \code{SingleCellExperiment} and
-#'   \code{CytoImageList} objects' below)
+#' \code{mcols(image)} and \code{mcols(mask)} entry, in which the image IDs
+#' are stored (see section 'Linking the \code{SingleCellExperiment} and
+#' \code{CytoImageList} objects' below)
 #' @param colour_by character or character vector specifying the features
-#'   (contained in \code{channelNames(image)}) used to colour individual cells.
-#'   Pixels can be coloured by up to six features.
+#' (contained in \code{channelNames(image)}) used to colour individual cells.
+#' Pixels can be coloured by up to six features.
 #' @param bcg a list with names matching the entries to \code{colour_by}. Each
-#'   entry contains a numeric vector of three entries:
-#'   \enumerate{
+#' entry contains a numeric vector of three entries:
+#' \enumerate{
 #'     \item brightness value added to the specified channel
 #'     \item contrast value multiplied with the specified channel
 #'     \item gamma value (channel is exponentiated by this value)
-#'   }
-#'   Default is c(0,1,1).
+#' }
+#' Default is c(0,1,1).
 #' @param outline_by single character indicating the \code{colData(object)} entry
-#'   by which to outline individual cells
+#' by which to outline individual cells
 #' @param subset_images numeric, character or vector of such indicating which
-#'   masks to display. Images can be subsetted by entries to \code{mcols(image)},
-#'   \code{names(image)} and a numeric index. When providing images and masks,
-#'   subsetting is performed via entries to \code{mcols(image)} and
-#'   \code{mcols(mask)}.
+#' masks to display. Images can be subsetted by entries to \code{mcols(image)},
+#' \code{names(image)} and a numeric index. When providing images and masks,
+#' subsetting is performed via entries to \code{mcols(image)} and
+#' \code{mcols(mask)}.
 #' @param colour a list with names matching the entries to \code{colour_by}
-#'   and/or \code{outline_by}. When setting the colour for continous features,
-#'   at least two colours need to be provided indicating the colours for minimum
-#'   and maximum values. When colouring discrete vectors, a colour for each
-#'   unique entry needs to be provided (see section 'Setting the colours' and
-#'   examples)
+#' and/or \code{outline_by}. When setting the colour for continous features,
+#' at least two colours need to be provided indicating the colours for minimum
+#' and maximum values. When colouring discrete vectors, a colour for each
+#' unique entry needs to be provided (see section 'Setting the colours' and
+#' examples)
 #' @param ... Further arguments passed to  \code{?"\link{plotting-param}"}
 #'
 #' @section Multi-channel image and segmentation mask objects:
@@ -54,8 +54,8 @@
 #' provided. The function assumes that each object in the segmentation mask is a
 #' cell. The key features of such segmentation masks include:
 #' \itemize{
-#'   \item each Image object contains only one channel
-#'   \item pixel values are integers indicating the cells' IDs
+#'     \item each Image object contains only one channel
+#'     \item pixel values are integers indicating the cells' IDs
 #' }
 #'
 #' @section Linking the \code{SingleCellExperiment} and \code{CytoImageList} objects:
@@ -102,13 +102,13 @@
 #' normalize CytoImageList objects.
 #'
 #' @seealso For further plotting parameters see \code{?"\link{plotting-param}"}
-#' 
+#'
 #' @return a list if return_images and/or return_plot is TRUE (see \code{?"\link{plotting-param}"}).
 #' \itemize{
-#'   \item \code{plot}: a single plot object (\code{display = "all"}) or a list
-#'   of plot objects (\code{display = "single"})
-#'   \item \code{images}: a \code{\linkS4class{SimpleList}} object containing
-#'   three-colour \code{\linkS4class{Image}} objects.
+#' \item \code{plot}: a single plot object (\code{display = "all"}) or a list
+#' of plot objects (\code{display = "single"})
+#' \item \code{images}: a \code{\linkS4class{SimpleList}} object containing
+#' three-colour \code{\linkS4class{Image}} objects.
 #' }
 #'
 #' @examples
@@ -124,147 +124,142 @@
 #'
 #' # Outline the cells based on metadata
 #' plotPixels(pancreasImages, object = pancreasSCE, mask = pancreasMasks,
-#'           img_id = "ImageNb", cell_id = "CellNb",
-#'           colour_by = c("SMA", "CD44"), outline_by = "CellType")
+#'             img_id = "ImageNb", cell_id = "CellNb",
+#'             colour_by = c("SMA", "CD44"), outline_by = "CellType")
 #'
 #' # Enhance individual channels
 #' plotPixels(pancreasImages, colour_by = c("SMA", "CD44"),
-#'           bcg = list(SMA = c(0, 2, 1)))
+#'             bcg = list(SMA = c(0, 2, 1)))
 #'
 #' # Subset the images
 #' plotPixels(pancreasImages, colour_by = c("SMA", "CD44"),
-#'           subset_images = c(1,2))
+#'             subset_images = c(1,2))
 #'
 #' # Set colour
 #' plotPixels(pancreasImages, colour_by = c("SMA", "CD44"),
-#'           colour = list(SMA = c("black", "green"),
-#'                         CD44 = c("black", "blue")))
+#'             colour = list(SMA = c("black", "green"),
+#'                             CD44 = c("black", "blue")))
 #'
 #' @author Nils Eling (\email{nils.eling@@dqbm.uzh.ch})
 #' @author Nicolas Damond (\email{nicolas.damond@@dqbm.uzh.ch})
 #'
 #' @export
-plotPixels <- function(image,
-                       object = NULL,
-                       mask = NULL,
-                       cell_id = NULL,
-                       img_id = NULL,
-                       colour_by = NULL,
-                       bcg = NULL,
-                       outline_by = NULL,
-                       subset_images = NULL,
-                       colour = NULL,
-                       ...) {
-  # Object checks
-  .valid.image(image, img_id)
-  if(!is.null(object)){
-    .valid.sce(object, img_id, cell_id, exprs_values = NULL)
-  }
-  if(!is.null(mask)){
-    .valid.mask(mask, img_id)
-  }
-  .valid.matchObjects.plotPixels(object, mask, image, img_id)
-
-  # Argument checks
-  # Check colour_by argument
-  if (!is.null(colour_by)){
-    .valid.colour_by(colour_by, object, image,
-                     call.arg = "plotPixels")
-  }
-  # Check outline_by argument
-  if(!is.null(outline_by)){
-    .valid.outline_by(outline_by, object, mask, image)
-  }
-  # Check subset_images argument
-  if(!is.null(subset_images)){
-    .valid.subset_images(subset_images, image = image, img_id)
-  }
-  # Check colour argument
-  if(!is.null(colour)){
-    .valid.colour(colour, colour_by, outline_by, object, image = image)
-  }
-
-  # Check bcg argument
-  if(!is.null(bcg)){
-    .valid.bcg(bcg, colour_by)
-  }
-
-  # Set further arguments
-  dotArgs <- list(...)
-  plottingParam <- .plottingParam(dotArgs, image = image)
-
-  # Select images for plotting
-  image <- .select_images(object, image, img_id, subset_images)
-  if(!is.null(mask)){
-    mask <- .select_images(object, mask, img_id, subset_images)
-  }
-  cur_col <- list()
-
-  # Colour the images
-  # Here, a SimpleList is returned that allows storing colour Images
-  if(!is.null(colour_by)){
-
-    # Select the colours
-    cur_col$colour_by <- .selectColours(object, colour_by, colour)
-
-    # Colouring by features
-    out_img <- .colourImageByFeature(image,
-                                 colour_by,
-                                 bcg,
-                                 cur_col$colour_by,
-                                 plottingParam)
-  } else {
-    if(is.null(channelNames(image))){
-      colour_by <- 1
-      cur_col$colour_by <- .selectColours(object, colour_by, colour)
-      out_img <- .colourImageByFeature(image,
-                                     colour_by,
-                                     bcg,
-                                     cur_col$colour_by,
-                                     plottingParam)
-    } else{
-      colour_by <- channelNames(image)[1]
-      cur_col$colour_by <- .selectColours(object, colour_by, colour)
-      out_img <- .colourImageByFeature(image,
-                                     colour_by,
-                                     bcg,
-                                     cur_col$colour_by,
-                                     plottingParam)
+plotPixels <- function(
+    image,
+    object = NULL,
+    mask = NULL,
+    cell_id = NULL,
+    img_id = NULL,
+    colour_by = NULL,
+    bcg = NULL,
+    outline_by = NULL,
+    subset_images = NULL,
+    colour = NULL,
+    ...) {
+    # Object checks
+    .valid.image(image, img_id)
+    if(!is.null(object)){
+        .valid.sce(object, img_id, cell_id, exprs_values = NULL)
     }
-  }
+    if(!is.null(mask)){
+        .valid.mask(mask, img_id)
+    }
+    .valid.matchObjects.plotPixels(object, mask, image, img_id)
 
-  # Add outline
-  if(!is.null(outline_by)){
-    cur_col$outline_by <- .selectColours(object, outline_by, colour)
-    out_img <- .outlineImageByMeta(object, mask, out_img, cell_id, img_id,
-                                outline_by, cur_col$outline_by[[1]])
-  } else if(!is.null(mask)){
-    out_img <- mendoapply(function(cur_image, cur_mask){
-      cur_img <- paintObjects(cur_mask, Image(cur_image),
-                              col = plottingParam$missing_colour)
-      return(cur_img)
-    }, out_img, mask)
-    out_img <- as(out_img, "SimpleList")
-  }
+    # Argument checks
+    # Check colour_by argument
+    if (!is.null(colour_by)){
+        .valid.colour_by(colour_by, object, image,
+                    call.arg = "plotPixels")
+    }
+    # Check outline_by argument
+    if(!is.null(outline_by)){
+        .valid.outline_by(outline_by, object, mask, image)
+    }
+    # Check subset_images argument
+    if(!is.null(subset_images)){
+        .valid.subset_images(subset_images, image = image, img_id)
+    }
+    # Check colour argument
+    if(!is.null(colour)){
+        .valid.colour(colour, colour_by, outline_by, object, image = image)
+    }
 
-  # Plot images
-  cur_plot <- .displayImages(object, image, exprs_values = NULL,
-                   outline_by, colour_by, mask, out_img, img_id,
-                   cur_col, plottingParam)
+    # Check bcg argument
+    if(!is.null(bcg)){
+        .valid.bcg(bcg, colour_by)
+    }
 
-  return_objects <- NULL
+    # Set further arguments
+    dotArgs <- list(...)
+    plottingParam <- .plottingParam(dotArgs, image = image)
 
-  if(!is.null(cur_plot)){
-    return_objects <- as.list(return_objects)
-    return_objects$plot <- cur_plot
-  }
+    # Select images for plotting
+    image <- .select_images(object, image, img_id, subset_images)
+    if(!is.null(mask)){
+        mask <- .select_images(object, mask, img_id, subset_images)
+    }
+    cur_col <- list()
 
-  if(plottingParam$return_images){
-    return_objects <- as.list(return_objects)
-    return_objects$images <- out_img
-  }
+    # Colour the images
+    # Here, a SimpleList is returned that allows storing colour Images
+    if(!is.null(colour_by)){
 
-  if(!is.null(return_objects)){
-    return(return_objects)
-  }
+        # Select the colours
+        cur_col$colour_by <- .selectColours(object, colour_by, colour)
+
+        # Colouring by features
+        out_img <- .colourImageByFeature(image,
+                colour_by, bcg, cur_col$colour_by,
+                plottingParam)
+    } else {
+        if(is.null(channelNames(image))){
+            colour_by <- 1
+            cur_col$colour_by <- .selectColours(object, colour_by, colour)
+            out_img <- .colourImageByFeature(image, colour_by,
+                                    bcg, cur_col$colour_by,
+                                    plottingParam)
+        } else{
+            colour_by <- channelNames(image)[1]
+            cur_col$colour_by <- .selectColours(object, colour_by, colour)
+            out_img <- .colourImageByFeature(image, colour_by,
+                                    bcg, cur_col$colour_by,
+                                    plottingParam)
+        }
+    }
+
+    # Add outline
+    if(!is.null(outline_by)){
+        cur_col$outline_by <- .selectColours(object, outline_by, colour)
+        out_img <- .outlineImageByMeta(object, mask, out_img, cell_id, img_id,
+                                    outline_by, cur_col$outline_by[[1]])
+    } else if (!is.null(mask)) {
+        out_img <- mendoapply(function(cur_image, cur_mask){
+            cur_img <- paintObjects(cur_mask, Image(cur_image),
+                                col = plottingParam$missing_colour)
+            return(cur_img)
+        }, out_img, mask)
+        out_img <- as(out_img, "SimpleList")
+    }
+
+    # Plot images
+    cur_plot <- .displayImages(object, image, exprs_values = NULL,
+                    outline_by, colour_by, mask, out_img, img_id,
+                    cur_col, plottingParam)
+
+    return_objects <- NULL
+
+    if(!is.null(cur_plot)){
+        return_objects <- as.list(return_objects)
+        return_objects$plot <- cur_plot
+    }
+
+    if(plottingParam$return_images){
+        return_objects <- as.list(return_objects)
+        return_objects$images <- out_img
+    }
+
+    if(!is.null(return_objects)){
+        return(return_objects)
+    }
 }

@@ -14,55 +14,55 @@ is not set.}
 specifying a valid colour that is set as the background of the image.}
 
 \item{scale_bar}{a list specifying features of the scale bar. One or multiple
-  of the following entries are supported:
+of the following entries are supported:
 \itemize{
-  \item \code{length}: numeric length in pixels (default 20).
-  \item \code{label}: single character specifying the scale bar label (default
-  "20").
-  \item \code{cex}: numeric value indicating the size of the scale bar label.
-  \item \code{lwd}: numeric value indicating the line width of the scale bar.
-  \item \code{colour}: single character specifying the colour of scale bar and
-  label (default "white").
-  \item \code{position}: position of scale bar. Supported values: "topleft",
-  "topright", "bottomleft", "bottomright" (default "bottomright").
-  \item \code{margin}: vector of two numeric entries specifying the x and y margin
-  between image boundary and the scale bar (default c(10,10)).
-  \item \code{frame}: either "all" to display scale bar on all images or a single
-  number specifying the image for which the scale bar should be displayed (default "all").
+\item \code{length}: numeric length in pixels (default 20).
+\item \code{label}: single character specifying the scale bar label (default
+"20").
+\item \code{cex}: numeric value indicating the size of the scale bar label.
+\item \code{lwd}: numeric value indicating the line width of the scale bar.
+\item \code{colour}: single character specifying the colour of scale bar and
+label (default "white").
+\item \code{position}: position of scale bar. Supported values: "topleft",
+"topright", "bottomleft", "bottomright" (default "bottomright").
+\item \code{margin}: vector of two numeric entries specifying the x and y margin
+between image boundary and the scale bar (default c(10,10)).
+\item \code{frame}: either "all" to display scale bar on all images or a single
+number specifying the image for which the scale bar should be displayed (default "all").
 }
 Plotting of the scale bar is suppressed if set to \code{NULL}.}
 
 \item{image_title}{a list specifying features of the image titles. One or multiple
-  of the following entries are supported:
+of the following entries are supported:
 \itemize{
-  \item \code{text}: character vector of image titles. Same length as the
-  \code{CytoImageList} object.
-  \item \code{position}: single character specifying the position of the
-  title. Supported entries: "top", "bottom", "topleft", "bottomleft",
-  "topright", "bottomright" (default "top").
-  \item \code{colour}: single character specifying the colour of image title
-  (default "white").
-  \item \code{margin}: vector of two numeric entries specifying the x and y margin
-  between image boundary and the image title (default c(10,10)).
-  \item \code{font}: numeric entry specifying the font of the image title
-  (default 1, see \code{\link{par}} for details)
-  \item \code{cex}: numeric value indicating the size of the image title.
+\item \code{text}: character vector of image titles. Same length as the
+\code{CytoImageList} object.
+\item \code{position}: single character specifying the position of the
+title. Supported entries: "top", "bottom", "topleft", "bottomleft",
+"topright", "bottomright" (default "top").
+\item \code{colour}: single character specifying the colour of image title
+(default "white").
+\item \code{margin}: vector of two numeric entries specifying the x and y margin
+between image boundary and the image title (default c(10,10)).
+\item \code{font}: numeric entry specifying the font of the image title
+(default 1, see \code{\link{par}} for details)
+\item \code{cex}: numeric value indicating the size of the image title.
 }
 Plotting of the image title is suppressed if set to \code{NULL}.}
 
 \item{save_plot}{a list specifying how to save the plot. One or multiple
-  of the following entries are supported:
+of the following entries are supported:
 \itemize{
-  \item \code{filename}: single character specifying a valid file name.
-  The file extension specifies the format in which the file is saved.
-  Supported formats are: jpeg, tiff and png. If \code{display = "single"},
-  each image will be written in an individual file.
-  \item \code{scale}: by default the height and width of the saved image is
-  defined by the maximum image size times the number of rows or numer of
-  columns. This resolution is often not suffcient to clearly display the
-  text. The \code{scale} parameter can be set to increase the resolution of
-  the image while keeping the text size constant (default 1 but should be
-  increased for optimal results).
+\item \code{filename}: single character specifying a valid file name.
+The file extension specifies the format in which the file is saved.
+Supported formats are: jpeg, tiff and png. If \code{display = "single"},
+each image will be written in an individual file.
+\item \code{scale}: by default the height and width of the saved image is
+defined by the maximum image size times the number of rows or numer of
+columns. This resolution is often not suffcient to clearly display the
+text. The \code{scale} parameter can be set to increase the resolution of
+the image while keeping the text size constant (default 1 but should be
+increased for optimal results).
 }}
 
 \item{return_plot}{logical indicating whether to return the plot (see
@@ -74,28 +74,28 @@ list is a three-colour \code{\linkS4class{Image}} object. However, the
 image title and scale bar are not retained.}
 
 \item{legend}{a list specifying features of the legend. One or multiple
-  of the following entries are supported:
+of the following entries are supported:
 \itemize{
-  \item \code{colour_by.title.font}: numeric entry specifying the font of the
-  legend title for features specified by \code{colour_by}.
-  \item \code{colour_by.title.cex}: numeric entry specifying the size of the
-  legend title for features specified by \code{colour_by}.
-  \item \code{colour_by.labels.cex}: numeric entry specifying the size of the
-  legend labels for features specified by \code{colour_by}.
-  \item \code{colour_by.legend.cex}: (only discrete features) numeric entry
-  specifying the size of the legend for features specified by
-  \code{colour_by}.
-  \item \code{outline_by.title.font}: numeric entry specifying the font of the
-  legend title for features specified by \code{outline_by}.
-  \item \code{outline_by.title.cex}: numeric entry specifying the size of the
-  legend title for features specified by \code{outline_by}.
-  \item \code{outline_by.labels.cex}: numeric entry specifying the size of the
-  legend labels for features specified by \code{outline_by}.
-  \item \code{outline_by.legend.cex}: (only discrete features) numeric entry
-  specifying the size of the legend for features specified by
-  \code{outline_by}.
-  \item \code{margin}: numeric value indicating the margin between the
-  legends and the outer boundary (default 2)
+\item \code{colour_by.title.font}: numeric entry specifying the font of the
+legend title for features specified by \code{colour_by}.
+\item \code{colour_by.title.cex}: numeric entry specifying the size of the
+legend title for features specified by \code{colour_by}.
+\item \code{colour_by.labels.cex}: numeric entry specifying the size of the
+legend labels for features specified by \code{colour_by}.
+\item \code{colour_by.legend.cex}: (only discrete features) numeric entry
+specifying the size of the legend for features specified by
+\code{colour_by}.
+\item \code{outline_by.title.font}: numeric entry specifying the font of the
+legend title for features specified by \code{outline_by}.
+\item \code{outline_by.title.cex}: numeric entry specifying the size of the
+legend title for features specified by \code{outline_by}.
+\item \code{outline_by.labels.cex}: numeric entry specifying the size of the
+legend labels for features specified by \code{outline_by}.
+\item \code{outline_by.legend.cex}: (only discrete features) numeric entry
+specifying the size of the legend for features specified by
+\code{outline_by}.
+\item \code{margin}: numeric value indicating the margin between the
+legends and the outer boundary (default 2)
 }
 Plotting of the legend is suppressed if set to \code{NULL}.}
 
@@ -121,10 +121,10 @@ linear interpolation to the image when drawing (see
 \value{
 a list if return_images and/or return_plot is TRUE.
 \itemize{
-  \item \code{plot}: a single plot object (\code{display = "all"}) or a list
-  of plot objects (\code{display = "single"})
-  \item \code{images}: a \code{\linkS4class{SimpleList}} object containing
-  three-colour \code{\linkS4class{Image}} objects.
+\item \code{plot}: a single plot object (\code{display = "all"}) or a list
+of plot objects (\code{display = "single"})
+\item \code{images}: a \code{\linkS4class{SimpleList}} object containing
+three-colour \code{\linkS4class{Image}} objects.
 }
 }
 \description{
@@ -145,21 +145,21 @@ plotCells(pancreasMasks, background_colour = "blue")
 
 # Setting the scale bar
 plotCells(pancreasMasks, scale_bar = list(length = 10,
-                                          cex = 2,
-                                          lwd = 3,
-                                          colour = "red",
-                                          position = "bottomleft",
-                                          margin = c(5,5),
-                                          frame = 3))
+                                        cex = 2,
+                                        lwd = 3,
+                                        colour = "red",
+                                        position = "bottomleft",
+                                        margin = c(5,5),
+                                        frame = 3))
 
 # Setting the image title
 plotCells(pancreasMasks,
-          image_title = list(text = c("image1", "image2", "image3"),
-                             position = "topleft",
-                             colour = "blue",
-                             margin = c(0,5),
-                             font = 2,
-                             cex = 2))
+            image_title = list(text = c("image1", "image2", "image3"),
+                                position = "topleft",
+                                colour = "blue",
+                                margin = c(0,5),
+                                font = 2,
+                                cex = 2))
 
 # Return plot
 cur_out <- plotPixels(pancreasImages, return_plot = TRUE)
@@ -171,10 +171,10 @@ cur_out$images
 
 # Setting the legend
 plotCells(pancreasMasks, object = pancreasSCE,
-          img_id = "ImageNb", cell_id = "CellNb",
-          colour_by = c("SMA", "CD44"),
-          outline_by = "CellType",
-          legend = list(colour_by.title.font = 0.5,
+            img_id = "ImageNb", cell_id = "CellNb",
+            colour_by = c("SMA", "CD44"),
+            outline_by = "CellType",
+            legend = list(colour_by.title.font = 0.5,
                         colour_by.title.cex = 0.5,
                         colour_by.labels.cex = 0.5,
                         outline_by.legend.cex = 0.5,
@@ -188,15 +188,15 @@ plotPixels(pancreasImages, display = "single")
 
 # Supress scaling
 plotPixels(pancreasImages, colour_by = c("SMA", "INS"),
-           scale = TRUE)
+            scale = TRUE)
 plotPixels(pancreasImages, colour_by = c("SMA", "INS"),
-           scale = FALSE)
+            scale = FALSE)
 
 # Suppress interpolation
 plotPixels(pancreasImages, colour_by = c("SMA", "INS"),
-           interpolate = TRUE)
+            interpolate = TRUE)
 plotPixels(pancreasImages, colour_by = c("SMA", "INS"),
-           interpolate = FALSE)
+            interpolate = FALSE)
 
 }
 \seealso{

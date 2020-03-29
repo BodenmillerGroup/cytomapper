@@ -60,7 +60,7 @@ image.list <- loadImages(path.to.images, pattern = pancreasSCE$MaskName)
 
 # Providing multiple files
 list.images <- list.files(system.file("extdata", package = "cytomapper"),
-                          pattern = "_mask.tiff", full.names = TRUE)
+                            pattern = "_mask.tiff", full.names = TRUE)
 image.list <- loadImages(list.images)
 
 }

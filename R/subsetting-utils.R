@@ -11,7 +11,7 @@
 #'
 #' @param x,y \code{CytoImageList} objects
 #' @param i integer, logical, character or vector of such indicating which
-#'   element(s) to replace or extract
+#' element(s) to replace or extract
 #' @param value a \code{CytoImageList} or \code{\linkS4class{Image}}
 #' object
 #'
@@ -137,193 +137,194 @@ NULL
 
 #' @export
 setMethod("getImages",
-          signature = signature(x="CytoImageList"),
-          definition = function(x, i){
+    signature = signature(x="CytoImageList"),
+    definition = function(x, i){
 
-            if(missing(i) || is.null(x)){
-              return(x)
-            }
+        if(missing(i) || is.null(x)){
+            return(x)
+        }
 
-            # Initial checks
-            if(is.null(i) || (!is.numeric(i)  &&
-                              !is.character(i) &&
-                              !is.logical(i))){
-              stop("Invalid subsetting. \n",
-                   "Only logicals, characters and integers are supported")
-            }
+        # Initial checks
+        if(is.null(i) || (!is.numeric(i)  &&
+            !is.character(i) &&
+            !is.logical(i))){
+            stop("Invalid subsetting. \n",
+                "Only logicals, characters and integers are supported")
+        }
 
-            return(x[i])
-          })
+        return(x[i])
+    })
 
 #' @export
 setReplaceMethod("setImages",
-                 signature = signature(x="CytoImageList"),
-                 definition = function(x, i, value){
+    signature = signature(x="CytoImageList"),
+    definition = function(x, i, value){
 
-                   if(missing(i) || is.null(x)){
-                     return(x)
-                   }
+        if(missing(i) || is.null(x)){
+            return(x)
+        }
 
-                   if(is.null(i) || (!is.numeric(i)  &&
-                                     !is.character(i) &&
-                                     !is.logical(i))){
-                     stop("Invalid subsetting. \n",
-                          "Only logicals, characters and integers are supported")
-                   }
+        if(is.null(i) || (!is.numeric(i)  &&
+            !is.character(i) &&
+            !is.logical(i))){
+            stop("Invalid subsetting. \n",
+                "Only logicals, characters and integers are supported")
+        }
 
-                   # Further checks
-                   .valid.Image.setting(x, i, value)
+        # Further checks
+        .valid.Image.setting(x, i, value)
 
-                   # Set correct names
-                   cor_names <- NULL
-                   if(!is.character(i) && !is.null(value)){
-                     cor_names <- names(x)
-                     names(cor_names) <- cor_names
-                     cor_names[i] <- names(value)
-                   }
+        # Set correct names
+        cor_names <- NULL
+        if(!is.character(i) && !is.null(value)){
+            cor_names <- names(x)
+            names(cor_names) <- cor_names
+            cor_names[i] <- names(value)
+        }
 
-                   # If value is Image, only the image will be replaced
-                   if(is(value, "Image")){
-                     x[[i]] <- value
-                   } else {
-                     x[i] <- value
-                   }
+        # If value is Image, only the image will be replaced
+        if(is(value, "Image")){
+            x[[i]] <- value
+        } else {
+            x[i] <- value
+        }
 
-                   if(!is.null(cor_names)){
-                     names(x) <- as.character(cor_names)
-                   }
+        if(!is.null(cor_names)){
+            names(x) <- as.character(cor_names)
+        }
 
-                   return(x)
-                 })
+        return(x)
+    })
 
 #' @export
 #' @importFrom S4Vectors endoapply
 #' @importFrom methods validObject
 setMethod("getChannels",
-          signature = signature(x="CytoImageList"),
-          definition = function(x, i){
-            # Initial checks
-            if(is.null(i) || (!is.numeric(i)  &&
-                              !is.character(i) &&
-                              !is.logical(i))){
-              stop("Invalid subsetting. \n",
-                   "Only logicals, characters and integers are supported")
-            }
+    signature = signature(x="CytoImageList"),
+    definition = function(x, i){
+        # Initial checks
+        if(is.null(i) || (!is.numeric(i)  &&
+            !is.character(i) &&
+            !is.logical(i))){
+            stop("Invalid subsetting. \n",
+                "Only logicals, characters and integers are supported")
+        }
 
-            if(is.character(i) &&
-               sum(!(i %in% channelNames(x))) > 0){
-              stop("'i' not in channelNames(x)")
-            }
+        if(is.character(i) &&
+            sum(!(i %in% channelNames(x))) > 0){
+            stop("'i' not in channelNames(x)")
+        }
 
-            if(length(dim(x[[1]])) >= 3){
-              x <- S4Vectors::endoapply(x, function(y){
+        if(length(dim(x[[1]])) >= 3){
+            x <- S4Vectors::endoapply(x, function(y){
                 y[,,i,drop=FALSE]
-              })
-            } else {
-              if(i != 1L){
+            })
+        } else {
+            if(i != 1L){
                 stop("For single-channel images, channels must be named or 'i' needs to be 1.")
-              }
             }
+        }
 
-            validObject(x)
+        validObject(x)
 
-            return(x)
-          })
+        return(x)
+    })
 
 #' @export
 #' @importFrom S4Vectors mendoapply
 #' @importFrom methods is validObject
 setReplaceMethod("setChannels",
-                 signature = signature(x="CytoImageList"),
-                 definition = function(x, i, value){
+    signature = signature(x="CytoImageList"),
+    definition = function(x, i, value){
 
-                   if(missing(i) || is.null(x)){
-                     return(x)
-                   }
+        if(missing(i) || is.null(x)){
+            return(x)
+        }
 
-                   if(is.null(i) || (!is.numeric(i)  &&
-                                     !is.character(i) &&
-                                     !is.logical(i))){
-                     stop("Invalid subsetting. \n",
-                          "Only logicals, characters and integers are supported")
-                   }
+        if(is.null(i) || (!is.numeric(i)  &&
+            !is.character(i) &&
+            !is.logical(i))){
+            stop("Invalid subsetting. \n",
+                "Only logicals, characters and integers are supported")
+            }
 
-                   # Further checks
-                   .valid.Channel.setting(x, i, value)
+        # Further checks
+        .valid.Channel.setting(x, i, value)
 
-                   # Use getChannels function if value is NULL
-                   if(is.null(value) && is.numeric(i)){
-                     cur_ind <- seq_len(length.out = dim(x[[1]])[3])
-                     cur_ind <- cur_ind[-i]
-                     x <- getChannels(x, cur_ind)
-                   } else if(is.null(value) && is.character(i)){
-                     x <- getChannels(x, !(channelNames(x) %in% i))
-                   } else {
-                     # Set correct names
-                     cor_names <- NULL
-                     if(!is.character(i)){
-                       cor_names <- channelNames(x)
-                       cor_names[i] <- channelNames(value)
-                     }
+        # Use getChannels function if value is NULL
+        if(is.null(value) && is.numeric(i)){
+            cur_ind <- seq_len(length.out = dim(x[[1]])[3])
+            cur_ind <- cur_ind[-i]
+            x <- getChannels(x, cur_ind)
+        } else if(is.null(value) && is.character(i)){
+            x <- getChannels(x, !(channelNames(x) %in% i))
+        } else {
+            # Set correct names
+            cor_names <- NULL
+            if(!is.character(i)){
+                cor_names <- channelNames(x)
+                cor_names[i] <- channelNames(value)
+            }
 
-                     x <- S4Vectors::mendoapply(function(k, u){
-                         k[,,i] <- u
-                         return(k)
-                       }, x, value)
+            x <- S4Vectors::mendoapply(function(k, u){
+                k[,,i] <- u
+                return(k)
+            }, x, value)
 
-                     if(!is.null(cor_names)){
-                       channelNames(x) <- as.character(cor_names)
-                     }
-                   }
+            if(!is.null(cor_names)){
+                channelNames(x) <- as.character(cor_names)
+            }
+        }
 
-                   validObject(x)
+        validObject(x)
 
-                   return(x)
-                 })
+        return(x)
+    })
 
 # Expand bracket functions to check if valid object is returned
 #' @export
 #' @importFrom methods callNextMethod as validObject
 setReplaceMethod("[",
-                 signature = c("CytoImageList", "ANY", "ANY", "CytoImageList"),
-                 definition = function(x, i, j, ..., value){
-                   .Object <- callNextMethod()
-                   .Object <- as(.Object, "CytoImageList")
-                   validObject(.Object)
-                   return(.Object)
-                 })
+    signature = c("CytoImageList", "ANY", "ANY", "CytoImageList"),
+    definition = function(x, i, j, ..., value){
+        .Object <- callNextMethod()
+        .Object <- as(.Object, "CytoImageList")
+        validObject(.Object)
+        return(.Object)
+    })
+
 #' @export
 #' @importFrom methods callNextMethod as validObject
 setReplaceMethod("[[",
-                 signature = c("CytoImageList", "ANY", "ANY"),
-                 definition = function(x, i, j, ..., value){
-                   .Object <- callNextMethod()
-                   .Object <- as(.Object, "CytoImageList")
-                   validObject(.Object)
-                   return(.Object)
-                 })
+    signature = c("CytoImageList", "ANY", "ANY"),
+    definition = function(x, i, j, ..., value){
+        .Object <- callNextMethod()
+        .Object <- as(.Object, "CytoImageList")
+        validObject(.Object)
+        return(.Object)
+    })
 
 #' @export
 #' @importFrom S4Vectors mendoapply
 #' @importFrom methods is validObject
 #' @importFrom EBImage abind
 mergeChannels <- function(x, y){
-  if(!is(x, "CytoImageList") || !is(y, "CytoImageList")){
-    stop("'x' and 'y' must be CytoImageList objects")
-  }
+    if(!is(x, "CytoImageList") || !is(y, "CytoImageList")){
+        stop("'x' and 'y' must be CytoImageList objects")
+    }
 
-  # Further checks
-  if(length(x) != length(y)){
-    stop("Invalid merge operation: \n",
-         "'y' needs to have same length as 'x'")
-  }
+    # Further checks
+    if(length(x) != length(y)){
+        stop("Invalid merge operation: \n",
+            "'y' needs to have same length as 'x'")
+    }
 
-  x <- S4Vectors::mendoapply(function(k, u){
-    k <- abind(k,u)
-    return(k)
-  }, x, y)
+    x <- S4Vectors::mendoapply(function(k, u){
+        k <- abind(k,u)
+        return(k)
+    }, x, y)
 
-  validObject(x)
+    validObject(x)
 
-  return(x)
+    return(x)
 }

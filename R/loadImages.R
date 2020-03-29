@@ -49,7 +49,7 @@
 #'
 #' # Providing multiple files
 #' list.images <- list.files(system.file("extdata", package = "cytomapper"),
-#'                           pattern = "_mask.tiff", full.names = TRUE)
+#'                             pattern = "_mask.tiff", full.names = TRUE)
 #' image.list <- loadImages(list.images)
 #'
 #' @seealso
@@ -61,14 +61,14 @@
 #' @export
 loadImages <- function(x, pattern = NULL, ...) {
 
-  # Validity checks
-  x <- .valid.loadImage.input(x, pattern)
+    # Validity checks
+    x <- .valid.loadImage.input(x, pattern)
 
-  # Read in images
-  cur_list <- lapply(x, function(y){EBImage::readImage(y, ...,
-                                      names = NULL)})
-  out <- CytoImageList(cur_list)
-  names(out) <- sub("\\.[^.]*$", "", basename(x))
+    # Read in images
+    cur_list <- lapply(x, function(y){EBImage::readImage(y, ...,
+                                        names = NULL)})
+    out <- CytoImageList(cur_list)
+    names(out) <- sub("\\.[^.]*$", "", basename(x))
 
-  return(out)
+    return(out)
 }

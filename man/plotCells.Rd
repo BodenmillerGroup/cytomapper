@@ -5,21 +5,22 @@
 \title{Function to visualize cell-level information on segmentation masks}
 \usage{
 plotCells(
-  mask,
-  object = NULL,
-  cell_id = NULL,
-  img_id = NULL,
-  colour_by = NULL,
-  outline_by = NULL,
-  exprs_values = "counts",
-  subset_images = NULL,
-  colour = NULL,
-  ...
+    mask,
+    object = NULL,
+    cell_id = NULL,
+    img_id = NULL,
+    colour_by = NULL,
+    outline_by = NULL,
+    exprs_values = "counts",
+    subset_images = NULL,
+    colour = NULL,
+    ...
 )
 }
 \arguments{
 \item{mask}{a \code{\linkS4class{CytoImageList}} containing single-channel
-\code{\linkS4class{Image}} objects (see section 'Segmentation mask object' below).}
+\code{\linkS4class{Image}} objects (see section 'Segmentation mask object'
+below).}
 
 \item{object}{a \code{\linkS4class{SingleCellExperiment}} object.}
 
@@ -57,12 +58,13 @@ examples)}
 \item{...}{Further arguments passed to \code{?"\link{plotting-param}"}}
 }
 \value{
-a list if return_images and/or return_plot is TRUE (see \code{?"\link{plotting-param}"}).
+a list if return_images and/or return_plot is TRUE
+(see \code{?"\link{plotting-param}"}).
 \itemize{
-  \item \code{plot}: a single plot object (\code{display = "all"}) or a list
-  of plot objects (\code{display = "single"})
-  \item \code{images}: a \code{\linkS4class{SimpleList}} object containing
-  three-colour \code{\linkS4class{Image}} objects.
+\item \code{plot}: a single plot object (\code{display = "all"}) or a list
+of plot objects (\code{display = "single"})
+\item \code{images}: a \code{\linkS4class{SimpleList}} object containing
+three-colour \code{\linkS4class{Image}} objects.
 }
 }
 \description{
@@ -78,8 +80,8 @@ segmentation masks in form of individual \code{\linkS4class{Image}} objects.
 The function assumes that each object in the segmentation mask is a cell.
 The key features of such masks include:
 \itemize{
-  \item each Image object contains only one channel
-  \item pixel values are integers indicating the cells' IDs
+    \item each Image object contains only one channel
+    \item pixel values are integers indicating the cells' IDs
 }
 }
 
@@ -145,33 +147,33 @@ plotCells(pancreasMasks)
 
 # Colour the masks based on averaged expression
 plotCells(pancreasMasks, object = pancreasSCE, img_id = "ImageNb",
-          cell_id = "CellNb", colour_by = c("SMA", "CD44"))
+            cell_id = "CellNb", colour_by = c("SMA", "CD44"))
 
 # Colour the masks based on metadata
 plotCells(pancreasMasks, object = pancreasSCE, img_id = "ImageNb",
-          cell_id = "CellNb", colour_by = "CellType")
+            cell_id = "CellNb", colour_by = "CellType")
 
 # Outline the masks based on metadata
 plotCells(pancreasMasks, object = pancreasSCE, img_id = "ImageNb",
-          cell_id = "CellNb", colour_by = "SMA",
-          outline_by = "CellType")
+            cell_id = "CellNb", colour_by = "SMA",
+            outline_by = "CellType")
 
 # Colour the masks based on arcsinh-transformed expression
 plotCells(pancreasMasks, object = pancreasSCE, img_id = "ImageNb",
-          cell_id = "CellNb", colour_by = "SMA",
-          exprs_values = "exprs")
+            cell_id = "CellNb", colour_by = "SMA",
+            exprs_values = "exprs")
 
 # Subset the images
 plotCells(pancreasMasks, object = pancreasSCE, img_id = "ImageNb",
-          cell_id = "CellNb", colour_by = "SMA", subset_images = c(1,2))
+            cell_id = "CellNb", colour_by = "SMA", subset_images = c(1,2))
 
 # Set colour
 plotCells(pancreasMasks, object = pancreasSCE, img_id = "ImageNb",
-          cell_id = "CellNb", colour_by = "SMA", outline_by = "CellType",
-          colour = list(SMA = c("black", "red"),
-                        CellType = c(celltype_A = "blue",
-                                     celltype_B = "green",
-                                     celltype_C = "red")))
+            cell_id = "CellNb", colour_by = "SMA", outline_by = "CellType",
+            colour = list(SMA = c("black", "red"),
+                            CellType = c(celltype_A = "blue",
+                                        celltype_B = "green",
+                                        celltype_C = "red")))
 
 }
 \seealso{
