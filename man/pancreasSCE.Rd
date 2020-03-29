@@ -4,7 +4,8 @@
 \name{pancreasSCE}
 \alias{pancreasSCE}
 \title{Example SingleCellExperiment object}
-\format{A SingleCellExperiment object containing the raw and
+\format{
+A SingleCellExperiment object containing the raw and
   arcsinh-transformed mean pixel counts per cell as well as associated cell-
   and protein-specific metadata. Row names represent the names of the target proteins
   and column names represent the image name and cell id of each cell.
@@ -38,7 +39,8 @@
     using a co-factor of 1 (exprs)
   }
   }
-  }}
+  }
+}
 \usage{
 pancreasSCE
 }

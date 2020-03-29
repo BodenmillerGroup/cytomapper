@@ -145,7 +145,8 @@
     # Based on this, we will first merge the colours and colour
     # the images accordingly
     # We also allow the user to change the scale thresholds using the 'bcg' object
-    # This will allow the user tot change the brightness (b),
+    # This will allow the user to change the brightness (b), contrast (c) and
+    # gamma (g)
     cur_frame_list <- lapply(colour_by, function(x){
       if(x %in% names(bcg)){
         cur_bcg <- bcg[[x]]
@@ -167,7 +168,8 @@
       cur_frame <- normalize(cur_frame, separate=TRUE,
                              ft = c(0,1), inputRange = c(cur_min, cur_max))
       col_ind <- colorRampPalette(cur_colour[[x]])(101)
-      cur_frame <- replace(cur_frame, 1:length(cur_frame), col_ind[round(100*cur_frame) + 1])
+      cur_frame <- replace(cur_frame, seq_len(length(cur_frame)), 
+                           col_ind[round(100*cur_frame) + 1])
       cur_frame
     })
 
@@ -262,7 +264,7 @@
                            brewer.pal(12, "Set3")[-c(2,3,7,8,9,11,12)],
                            "brown3"))
         }
-        cur_col <- cur_col[1:length(cur_entries)]
+        cur_col <- cur_col[seq_len(length(cur_entries))]
         names(cur_col) <- cur_entries
       }
       col_out <- list(cur_col)
@@ -279,7 +281,7 @@
                          colorRampPalette(c("black", "cyan"))(100),
                          colorRampPalette(c("black", "magenta"))(100),
                          colorRampPalette(c("black", "yellow"))(100))
-        col_list <- col_list[1:length(colour_by)]
+        col_list <- col_list[seq_len(length(colour_by))]
         names(col_list) <- colour_by
         col_out <- col_list
       } else {
@@ -345,7 +347,7 @@
   ni <- length(out_img)
 
   # Size of images
-  si <- lapply(out_img, function(x)dim(x)[1:2])
+  si <- lapply(out_img, function(x){dim(x)[c(1,2)]})
 
   # Ncols and nrow
   nc <- ceiling(sqrt(ni))

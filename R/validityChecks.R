@@ -19,7 +19,7 @@
     if(dir.exists(x) & is.null(pattern)){
 
       # Check if path only contains images
-      exten <- sapply(list.files(x), file_ext)
+      exten <- file_ext(list.files(x))
 
       if(sum(!(unique(exten) %in% c("jpeg", "png", "tiff", "tif", "jpg"))) > 0){
         stop("The provided path contains file-types other than 'jpeg', 'tiff', or 'png'.\n",
@@ -56,7 +56,7 @@
       }
 
       # Check if all of the files are of the supported format
-      exten <- sapply(out, tools::file_ext)
+      exten <- file_ext(out)
 
       if(sum(!(unique(exten) %in% c("jpeg", "png", "tiff", "tif", "jpg"))) > 0){
         stop("The provided path contains file-types other than 'jpeg', 'tiff' or 'png'.\n",
@@ -64,7 +64,8 @@
       }
 
     } else {
-      if(!tools::file_ext(x) %in% c("jpeg", "png", "tiff", "tif", "jpg")){
+      cur_ext <- file_ext(x)
+      if(!(cur_ext %in% c("jpeg", "png", "tiff", "tif", "jpg"))){
         stop("The provided file is not of type 'jpeg', 'tiff' or 'png'.\n",
              "Other image types are not supported.")
       }
@@ -72,14 +73,14 @@
     }
   } else {
     # Check if files exists
-    cur_check <- sapply(x, file.exists)
+    cur_check <- file.exists(x)
     if(sum(!cur_check) > 0){
       stop("One or multiple files do not exist.\n",
            "Please correct the input.")
     }
 
     # Check if files are os supported format
-    exten <- sapply(x, tools::file_ext)
+    exten <- file_ext(x)
     if(sum(!(unique(exten) %in% c("jpeg", "png", "tiff", "tif", "jpg"))) > 0){
       stop("The files are of type other than 'jpeg', 'tiff' or 'png'.\n",
            "Please only provide files of the supported file-type..")
@@ -126,7 +127,7 @@
     }
   }
 
-  if(length(error > 0)){
+  if(length(error > 0L)){
     stop("Invalid replacement operation: \n",
          error)
   }
@@ -278,8 +279,8 @@
       stop("Mask and image ids must be identical.")
     }
 
-    image_dims <- as.numeric(unlist(lapply(image, function(x){dim(x)[1:2]})))
-    mask_dims <- as.numeric(unlist(lapply(mask, function(x){dim(x)[1:2]})))
+    image_dims <- as.numeric(unlist(lapply(image, function(x){dim(x)[c(1,2)]})))
+    mask_dims <- as.numeric(unlist(lapply(mask, function(x){dim(x)[c(1,2)]})))
     if(!identical(image_dims, mask_dims)){
       stop("Mask and image entries must have the same dimensions.")
     }
