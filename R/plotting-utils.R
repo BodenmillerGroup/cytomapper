@@ -28,8 +28,8 @@
         if(is.null(names(cur_colour))){
             col_ind <- colorRampPalette(cur_colour)(101)
             cur_scaling <- .minMaxScaling(colData(cur_sce)[,colour_by],
-                                        min_x = min(colData(object)[,colour_by]),
-                                        max_x = max(colData(object)[,colour_by]))
+                                    min_x = min(colData(object)[,colour_by]),
+                                    max_x = max(colData(object)[,colour_by]))
             col_ind <- col_ind[round(100*cur_scaling) + 1]
         } else {
         col_ind <- cur_colour[colData(cur_sce)[,colour_by]]
@@ -66,8 +66,8 @@
 #' @importFrom grDevices colorRampPalette
 #' @importFrom SummarizedExperiment assay
 .colourMaskByFeature <- function(object, mask, cell_id, img_id,
-                        colour_by, exprs_values, cur_colour, missing_colour,
-                        background_colour, plottingParam){
+                        colour_by, exprs_values, cur_colour,
+                        missing_colour, background_colour, plottingParam){
 
     for(i in seq_along(mask)){
         cur_mask <- mask[[i]]
@@ -93,13 +93,17 @@
             cur_frame <- cur_mask
             col_ind <- colorRampPalette(cur_colour[[x]])(101)
             if(plottingParam$scale){
+                cur_min <- min(assay(object, exprs_values)[x,])
+                cur_max <- max(assay(object, exprs_values)[x,])
                 cur_scaling <- .minMaxScaling(assay(cur_sce, exprs_values)[x,],
-                                    min_x = min(assay(object, exprs_values)[x,]),
-                                    max_x = max(assay(object, exprs_values)[x,]))
+                                min_x = cur_min,
+                                max_x = cur_max)
             } else {
+                cur_min <- min(assay(object, exprs_values)[colour_by,])
+                cur_max <- max(assay(object, exprs_values)[colour_by,])
                 cur_scaling <- .minMaxScaling(assay(cur_sce, exprs_values)[x,],
-                                    min_x = min(assay(object, exprs_values)[colour_by,]),
-                                    max_x = max(assay(object, exprs_values)[colour_by,]))
+                                min_x = cur_min,
+                                max_x = cur_max)
             }
             col_ind[round(100*cur_scaling) + 1]
         })
@@ -122,14 +126,17 @@
 
 # Colour images based on features
 #' @importFrom EBImage normalize
-.colourImageByFeature <- function(image, colour_by, bcg, cur_colour, plottingParam){
+.colourImageByFeature <- function(image, colour_by, bcg,
+                                    cur_colour, plottingParam){
 
-    max.values <- as.data.frame(lapply(getChannels(image, colour_by), function(x){
+    max.values <- as.data.frame(lapply(getChannels(image, colour_by),
+                                        function(x){
         apply(x, 3, max)
     }))
     max.values <- apply(max.values, 1, max)
 
-    min.values <- as.data.frame(lapply(getChannels(image, colour_by), function(x){
+    min.values <- as.data.frame(lapply(getChannels(image, colour_by),
+                                        function(x){
         apply(x, 3, min)
     }))
     min.values <- apply(min.values, 1, min)
@@ -139,14 +146,14 @@
         cur_image <- getChannels(image, colour_by)[[i]]
 
         # Colour pixels
-        # For this, we will perform a min/max scaling on the pixel values per channel
-        # However, to keep pixel values comparable across images, we will fix
-        # the scale across all images to the min/max of all images per channel
-        # Based on this, we will first merge the colours and colour
-        # the images accordingly
-        # We also allow the user to change the scale thresholds using the 'bcg' object
-        # This will allow the user to change the brightness (b), contrast (c) and
-        # gamma (g)
+        # For this, we will perform a min/max scaling on the pixel values per
+        # channel. However, to keep pixel values comparable across images,
+        # we will fix the scale across all images to the min/max of all
+        # images per channel. Based on this, we will first merge the
+        # colours and colour the images accordingly, We also allow the
+        # user to change the scale thresholds using the 'bcg' object.
+        # This will allow the user to change the brightness (b),
+        # contrast (c) and gamma (g)
         cur_frame_list <- lapply(colour_by, function(x){
             if(x %in% names(bcg)){
                 cur_bcg <- bcg[[x]]
@@ -212,9 +219,11 @@
         } else {
             for(j in unique(colData(cur_sce)[,outline_by])){
                 meta_mask <- cur_mask
-                cur_cell_id <- colData(cur_sce)[colData(cur_sce)[,outline_by] == j,cell_id]
+                ind <- colData(cur_sce)[,outline_by] == j
+                cur_cell_id <- colData(cur_sce)[ind, cell_id]
                 meta_mask[!(meta_mask %in% cur_cell_id)] <- 0L
-                cur_img <- paintObjects(meta_mask, Image(cur_img), col = cur_colour[j])
+                cur_img <- paintObjects(meta_mask, Image(cur_img),
+                                        col = cur_colour[j])
             }
         }
 
@@ -413,7 +422,8 @@
             ytop <- (i-1)*m_height + (m_height - dim_y)/2 + (i-1) * margin
 
             # If Images should be saved
-            if(!is.null(plottingParam$save_plot) && plottingParam$display == "single"){
+            if(!is.null(plottingParam$save_plot) &&
+                plottingParam$display == "single"){
                 image_location <- plottingParam$save_plot$filename
                 image_scale <- plottingParam$save_plot$scale
                 cur_ext <- file_ext(image_location)
@@ -473,7 +483,8 @@
                                 image_scale)
                     }
                 } else {
-                    cur_ind <- legend_ind + as.integer(plottingParam$scale_bar$frame)
+                    frame_ind <- as.integer(plottingParam$scale_bar$frame)
+                    cur_ind <- legend_ind + frame_ind
                     if(ind == cur_ind && !is.null(plottingParam$scale_bar)){
                         if(plottingParam$display == "all"){
                             .plotScaleBar(plottingParam$scale_bar,
@@ -494,19 +505,20 @@
             if(ind != legend_ind && !is.null(plottingParam$image_title)){
                 if(plottingParam$display == "all"){
                     .plotImageTitle(out_img, mask, image, img_id,
-                                ind, legend_ind, plottingParam$image_title, dim_x,
-                                xl = xleft, xr = xright,
+                                ind, legend_ind, plottingParam$image_title,
+                                dim_x, xl = xleft, xr = xright,
                                 yt = ytop, yb = ybottom)
                 } else {
                     .plotImageTitle(out_img, mask, image, img_id,
-                                ind, legend_ind, plottingParam$image_title, dim_x,
-                                xl = 0, xr = dim_x,
+                                ind, legend_ind, plottingParam$image_title,
+                                dim_x, xl = 0, xr = dim_x,
                                 yt = 0, yb = dim_y)
                 }
             }
 
             # Close device
-            if(!is.null(plottingParam$save_plot) && plottingParam$display == "single"){
+            if(!is.null(plottingParam$save_plot) &&
+                plottingParam$display == "single"){
                 dev.off()
             }
 
@@ -589,12 +601,15 @@
                 cur_min <- min(assay(object, exprs_values)[colour_by,])
                 cur_max <- max(assay(object, exprs_values)[colour_by,])
             } else {
-                cur_min <- min(unlist(lapply(getChannels(image, colour_by), min)))
-                cur_max <- max(unlist(lapply(getChannels(image, colour_by), max)))
+                cur_min <- unlist(lapply(getChannels(image, colour_by), min))
+                cur_max <- unlist(lapply(getChannels(image, colour_by), max))
+                cur_min <- min(cur_min)
+                cur_max <- max(cur_max)
             }
         }
 
         for(i in seq_along(colour_by)){
+            col_n <- colour_by[i]
             if(i < 4){
                 cur_x <- ((m_width-(2*margin))/6 * i) + margin
                 cur_y <- (m_height-(2*margin))/4 + margin
@@ -607,11 +622,13 @@
 
             if(plottingParam$scale){
                 if(is.null(image)){
-                    cur_min <- min(assay(object, exprs_values)[colour_by[i],])
-                    cur_max <- max(assay(object, exprs_values)[colour_by[i],])
+                    cur_min <- min(assay(object, exprs_values)[col_n,])
+                    cur_max <- max(assay(object, exprs_values)[col_n,])
                 } else {
-                    cur_min <- min(unlist(lapply(getChannels(image, colour_by[i]), min)))
-                    cur_max <- max(unlist(lapply(getChannels(image, colour_by[i]), max)))
+                    cur_min <- min(unlist(lapply(getChannels(image,
+                                                            col_n), min)))
+                    cur_max <- max(unlist(lapply(getChannels(image,
+                                                            col_n), max)))
                 }
             }
 
@@ -632,10 +649,10 @@
                 label_cex <- colour_by.labels.cex
             }
 
-            cur_legend <- as.raster(matrix(rev(colorRampPalette(cur_col$colour_by[[colour_by[i]]])(101)),
-                                        ncol=1))
+            col_ramp <- colorRampPalette(cur_col$colour_by[[col_n]])(101)
+            cur_legend <- as.raster(matrix(rev(col_ramp), ncol=1))
             text(x = cur_x, y = cur_y - cur_space_y/2,
-                label = colour_by[i], col = "black",
+                label = col_n, col = "black",
                 font = colour_by.title.font,
                 cex = title_cex, adj = c(0.5, 1))
             text(x=cur_x- cur_space_x/4 + 2,
@@ -669,8 +686,8 @@
             label_width <- max(strwidth(rev(cur_labels)))
             title_width <- strwidth(colour_by, font = colour_by.title.font)
 
-            cur_legend <- as.raster(matrix(rev(colorRampPalette(cur_col$colour_by[[1]])(101)),
-                                        ncol=1))
+            col_ramp <- colorRampPalette(cur_col$colour_by[[1]])(101)
+            cur_legend <- as.raster(matrix(rev(col_ramp), ncol=1))
 
             # Define title cex
             if(is.null(colour_by.title.cex)){
@@ -708,7 +725,8 @@
             cur_x <- m_width/2 + cur_space_x
             cur_y <- margin
             cur_colouring <- cur_col$colour_by[[1]]
-            legend_c <- legend(x = cur_x, y = cur_y, legend = names(cur_colouring),
+            legend_c <- legend(x = cur_x, y = cur_y,
+                                legend = names(cur_colouring),
                                 fill = cur_colouring, title = colour_by,
                                 text.col = "black", plot = FALSE)
 
@@ -719,7 +737,8 @@
                 legend_cex <- colour_by.legend.cex
             }
 
-            legend_c <- legend(x = cur_x, y = cur_y, legend = names(cur_colouring),
+            legend_c <- legend(x = cur_x, y = cur_y,
+                                legend = names(cur_colouring),
                                 fill = cur_colouring, title = colour_by,
                                 text.col = "black", cex = legend_cex)
             cur_legend_height <- abs(legend_c$rect$h)
@@ -728,7 +747,8 @@
 
     # Outline
     if(!is.null(outline_by)){
-        if(!is.null(colour_by) && all(colour_by %in% colnames(colData(object)))){
+        if(!is.null(colour_by) &&
+            all(colour_by %in% colnames(colData(object)))){
             cur_y <- margin + abs(cur_legend_height) + 10
         } else {
             cur_y <- margin
@@ -747,8 +767,8 @@
             label_width <- max(strwidth(rev(cur_labels)))
             title_width <- strwidth(outline_by, font = colour_by.title.font)
 
-            cur_legend <- as.raster(matrix(rev(colorRampPalette(cur_col$outline_by[[1]])(101)),
-                                        ncol=1))
+            col_ramp <- colorRampPalette(cur_col$outline_by[[1]])(101)
+            cur_legend <- as.raster(matrix(rev(col_ramp), ncol=1))
 
             # Define title cex
             if(is.null(colour_by.title.cex)){
@@ -783,7 +803,8 @@
             cur_space_x <- (m_width-(2*margin))/6
             cur_x <- m_width/2 + cur_space_x
             cur_colouring <- cur_col$outline_by[[1]]
-            legend_o <- legend(x = cur_x, y = cur_y, legend = names(cur_colouring),
+            legend_o <- legend(x = cur_x, y = cur_y,
+                            legend = names(cur_colouring),
                             fill = cur_colouring, title = outline_by,
                             text.col = "black", plot = FALSE)
 
@@ -825,7 +846,7 @@
                                 y0 = yb - cur_margin.y,
                                 x1 = xr - cur_margin.x), segm_params))
         do.call(text, append(list(x = xr - cur_length/2 - cur_margin.x,
-                                y = yb - cur_margin.y - label_height - label_height/4),
+                        y = yb - cur_margin.y - label_height - label_height/4),
                             text_params))
     } else if(cur_position == "bottomleft"){
         do.call(segments, append(list(x0 = xl + cur_margin.x,
@@ -833,20 +854,23 @@
                                 x1 = xl + cur_length + cur_margin.x),
                                 segm_params))
         do.call(text, append(list(x = xl + cur_length/2 + cur_margin.x,
-                                y = yb - cur_margin.y - label_height - label_height/4),
-                            text_params))
+                        y = yb - cur_margin.y - label_height - label_height/4),
+                        text_params))
     } else if(cur_position == "topright"){
         do.call(segments, append(list(x0 = xr - cur_length - cur_margin.x,
                                 y0 = yt + cur_margin.y,
                                 x1 = xr - cur_margin.x), segm_params))
         do.call(text, append(list(x = xr - cur_length/2 - cur_margin.x,
-                                y = yt + cur_margin.y - label_height - label_height/4), text_params))
+                        y = yt + cur_margin.y - label_height - label_height/4),
+                        text_params))
     } else if(cur_position == "topleft"){
         do.call(segments, append(list(x0 = xl + cur_margin.x,
                                 y0 = yt + cur_margin.y,
-                                x1 = xl + cur_length + cur_margin.x), segm_params))
+                                x1 = xl + cur_length + cur_margin.x),
+                                segm_params))
         do.call(text, append(list(x = xl + cur_length/2 + cur_margin.x,
-                                y = yt + cur_margin.y - label_height - label_height/4), text_params))
+                        y = yt + cur_margin.y - label_height - label_height/4),
+                        text_params))
     }
 }
 

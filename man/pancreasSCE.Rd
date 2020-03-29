@@ -7,8 +7,8 @@
 \format{
 A SingleCellExperiment object containing the raw and
 arcsinh-transformed mean pixel counts per cell as well as associated cell-
-and protein-specific metadata. Row names represent the names of the target proteins
-and column names represent the image name and cell id of each cell.
+and protein-specific metadata. Row names represent the names of the target
+proteins and column names represent the image name and cell id of each cell.
 \describe{
 \item{colData}{Cell-specific metadata where rownames represent the
 image name and cell id. It containins the
@@ -17,8 +17,10 @@ image name and cell id. It containins the
     \item cell number/identifier (CellNb),
     \item spatial position on the image (Pos_X, Pos_Y),
     \item shape information (MajorAxisLength, MinorAxisLength),
-    \item the associated image name (ImageName, see \code{?"\link[cytomapper]{pancreasImages}"}),
-    \item the associated mask name (MaskName, see \code{?"\link[cytomapper]{pancreasMasks}"}),
+    \item the associated image name (ImageName, see
+    \code{?"\link[cytomapper]{pancreasImages}"}),
+    \item the associated mask name (MaskName, see
+    \code{?"\link[cytomapper]{pancreasMasks}"}),
     \item a randomized cell-type label (CellType)
 }
 }
@@ -46,12 +48,13 @@ pancreasSCE
 }
 \description{
 This \linkS4class{SingleCellExperiment} object contains the expression values
-of 5 proteins (rows) from 282 cells (columns) across 3 images. The data is part
-of a imaging mass cytometry study on the progression of Type 1 diabetes
+of 5 proteins (rows) from 282 cells (columns) across 3 images. The data is
+part of a imaging mass cytometry study on the progression of Type 1 diabetes
 and therefore contains pancreas cells.
 }
 \references{
-\href{https://www.sciencedirect.com/science/article/pii/S1550413118306910}{Damond, N. et al., A Map of Human Type 1 Diabetes Progression by
+\href{https://www.sciencedirect.com/science/article/pii/S1550413118306910}{
+Damond, N. et al., A Map of Human Type 1 Diabetes Progression by
 Imaging Mass Cytometry, Cell Metabolism 29:3, 2019}
 }
 \keyword{datasets}

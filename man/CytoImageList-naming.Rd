@@ -19,9 +19,9 @@ individual images.
 \section{Setting and getting the channel names}{
 
 In the following code, \code{x} is either a \linkS4class{CytoImageList} or
-\linkS4class{Image} object containing one or multiple channels.
-The channel names can be replaced by \code{value}, which contains a character
-vector of the same length as the number of channels in the image(s).
+\linkS4class{Image} object containing one or multiple channels. The channel
+names can be replaced by \code{value}, which contains a character vector of
+the same length as the number of channels in the image(s).
 \describe{
 \item{\code{channelNames(x)}:}{Returns the names of all channels stored in
 \code{x}}
@@ -33,9 +33,9 @@ length as the number of channels in \code{x}}
 
 \section{Setting and getting the image names}{
 
-Here, \code{x} is either a \linkS4class{CytoImageList} object. The element names
-can be replaced by \code{value}, which contains a character vector of the
-same length as the number of images. In case of the CytoImageList object,
+Here, \code{x} is either a \linkS4class{CytoImageList} object. The element
+names can be replaced by \code{value}, which contains a character vector of
+the same length as the number of images. In case of the CytoImageList object,
 elements are always images.
 \describe{
 \item{\code{names(x)}:}{Returns the names of all images stored in \code{x}}

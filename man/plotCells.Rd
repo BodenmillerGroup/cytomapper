@@ -5,16 +5,16 @@
 \title{Function to visualize cell-level information on segmentation masks}
 \usage{
 plotCells(
-    mask,
-    object = NULL,
-    cell_id = NULL,
-    img_id = NULL,
-    colour_by = NULL,
-    outline_by = NULL,
-    exprs_values = "counts",
-    subset_images = NULL,
-    colour = NULL,
-    ...
+  mask,
+  object = NULL,
+  cell_id = NULL,
+  img_id = NULL,
+  colour_by = NULL,
+  outline_by = NULL,
+  exprs_values = "counts",
+  subset_images = NULL,
+  colour = NULL,
+  ...
 )
 }
 \arguments{
@@ -24,9 +24,9 @@ below).}
 
 \item{object}{a \code{\linkS4class{SingleCellExperiment}} object.}
 
-\item{cell_id}{character specifying the \code{colData(object)} entry, in which the
-integer cell IDs are stored. These IDs should match the integer pixel values in
-the segmentation mask object.}
+\item{cell_id}{character specifying the \code{colData(object)} entry, in
+which the integer cell IDs are stored. These IDs should match the integer
+pixel values in the segmentation mask object.}
 
 \item{img_id}{character specifying the \code{colData(object)} and
 \code{mcols(mask)} entry, in which the image IDs are stored (see section
@@ -38,8 +38,8 @@ below)}
 to colour individual cells. Cells can be coloured by single
 \code{colData(object)} entries or by up to six features.}
 
-\item{outline_by}{single character indicating the \code{colData(object)} entry
-by which to outline individual cells}
+\item{outline_by}{single character indicating the \code{colData(object)}
+entry by which to outline individual cells}
 
 \item{exprs_values}{single character indicating which \code{assay(object)}
 entry to use when visualizing feature counts.}
@@ -69,8 +69,8 @@ three-colour \code{\linkS4class{Image}} objects.
 }
 \description{
 This function takes a \code{\linkS4class{SingleCellExperiment}} and
-\code{\linkS4class{CytoImageList}} object containing segmentation masks to colour
-cells by marker expression or metadata.
+\code{\linkS4class{CytoImageList}} object containing segmentation masks to
+colour cells by marker expression or metadata.
 }
 \section{Segmentation mask object}{
 
@@ -85,16 +85,17 @@ The key features of such masks include:
 }
 }
 
-\section{Linking the \code{SingleCellExperiment} and \code{CytoImageList} object}{
+\section{Linking SingleCellExperiment and CytoImageList objects}{
 
 To colour individual cells contained in the segmentation masks based on
-features and metadata stored in the SingleCellExperiment object, an \code{img_id}
-and \code{cell_id} entry needs to be provided. Image IDs are matched between the
-\code{SingleCellExperiment} and \code{CytoImageList} object via entries to the
-\code{colData(object)[,img_id]} and the \code{mcols(mask)[,img_id]} slots.
-Cell IDs are matched between the \code{SingleCellExperiment} and \code{CytoImageList}
-object via entries to \code{colData(object)[,cell_id]} and the integer values
-of the segmentation masks.
+features and metadata stored in the SingleCellExperiment object, an
+\code{img_id} and \code{cell_id} entry needs to be provided. Image IDs are
+matched between the \code{SingleCellExperiment} and \code{CytoImageList}
+object via entries to the \code{colData(object)[,img_id]} and the
+\code{mcols(mask)[,img_id]} slots. Cell IDs are matched between the
+\code{SingleCellExperiment} and \code{CytoImageList} object via entries to
+\code{colData(object)[,cell_id]} and the integer values of the segmentation
+masks.
 }
 
 \section{Setting the colours}{
@@ -116,8 +117,8 @@ The \code{subset_images} parameter controls which images to display. If the
 \code{img_id} parameter is set, images are subsetted based on the
 \code{mcols(mask)[,img_id]} entry. Otherwise, images can be subsetted by
 entry names (stored in \code{names(mask)}) or simply by numeric indexing.
-Alternatively, the \code{CytoImageList} object can be subsetted perfore calling
-the \code{plotCells} function.
+Alternatively, the \code{CytoImageList} object can be subsetted perfore
+calling the \code{plotCells} function.
 }
 
 \section{Subsetting the \code{SingleCellExperiment} object}{

@@ -11,7 +11,8 @@ loadImages(x, pattern = NULL, ...)
 \describe{
 \item{A single file}{Full path and file name of an individual image file.}
 \item{A path}{A path to where image files are located.}
-\item{A vector of files}{A character vector where each entry represents an individual file.}
+\item{A vector of files}{A character vector where each entry represents an
+individual file.}
 }}
 
 \item{pattern}{Character inputs of the following form:
@@ -28,9 +29,10 @@ file names in the specified path.}
 A \linkS4class{CytoImageList} object
 }
 \description{
-Function to read in single- or multi-channel images from a specified path or file.
-The function returns a \linkS4class{CytoImageList} object containing one image per slot.
-Supported file extensions are: '.tiff', '.tif', '.png', '.jpeg', '.jpg'.
+Function to read in single- or multi-channel images from a specified path or
+file. The function returns a \linkS4class{CytoImageList} object containing
+one image per slot. Supported file extensions are: '.tiff', '.tif', '.png',
+'.jpeg', '.jpg'.
 }
 \section{Loading specific images}{
 

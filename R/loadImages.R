@@ -2,15 +2,17 @@
 #' @name loadImages
 #'
 #' @description
-#' Function to read in single- or multi-channel images from a specified path or file.
-#' The function returns a \linkS4class{CytoImageList} object containing one image per slot.
-#' Supported file extensions are: '.tiff', '.tif', '.png', '.jpeg', '.jpg'.
+#' Function to read in single- or multi-channel images from a specified path or
+#' file. The function returns a \linkS4class{CytoImageList} object containing
+#' one image per slot. Supported file extensions are: '.tiff', '.tif', '.png',
+#' '.jpeg', '.jpg'.
 #'
 #' @param x The function takes a variety of possible character inputs:
 #' \describe{
 #' \item{A single file}{Full path and file name of an individual image file.}
 #' \item{A path}{A path to where image files are located.}
-#' \item{A vector of files}{A character vector where each entry represents an individual file.}
+#' \item{A vector of files}{A character vector where each entry represents an
+#' individual file.}
 #' }
 #' @param pattern Character inputs of the following form:
 #' \describe{

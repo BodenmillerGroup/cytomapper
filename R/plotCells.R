@@ -1,16 +1,16 @@
 #' Function to visualize cell-level information on segmentation masks
 #'
 #' This function takes a \code{\linkS4class{SingleCellExperiment}} and
-#' \code{\linkS4class{CytoImageList}} object containing segmentation masks to colour
-#' cells by marker expression or metadata.
+#' \code{\linkS4class{CytoImageList}} object containing segmentation masks to
+#' colour cells by marker expression or metadata.
 #'
 #' @param object a \code{\linkS4class{SingleCellExperiment}} object.
 #' @param mask a \code{\linkS4class{CytoImageList}} containing single-channel
 #' \code{\linkS4class{Image}} objects (see section 'Segmentation mask object'
 #' below).
-#' @param cell_id character specifying the \code{colData(object)} entry, in which the
-#' integer cell IDs are stored. These IDs should match the integer pixel values in
-#' the segmentation mask object.
+#' @param cell_id character specifying the \code{colData(object)} entry, in
+#' which the integer cell IDs are stored. These IDs should match the integer
+#' pixel values in the segmentation mask object.
 #' @param img_id character specifying the \code{colData(object)} and
 #' \code{mcols(mask)} entry, in which the image IDs are stored (see section
 #' 'Linking the \code{SingleCellExperiment} and \code{CytoImageList} object'
@@ -19,8 +19,8 @@
 #' (\code{rownames(object)}) or metadata (\code{colData(object)} entry) used
 #' to colour individual cells. Cells can be coloured by single
 #' \code{colData(object)} entries or by up to six features.
-#' @param outline_by single character indicating the \code{colData(object)} entry
-#' by which to outline individual cells
+#' @param outline_by single character indicating the \code{colData(object)}
+#'   entry by which to outline individual cells
 #' @param exprs_values single character indicating which \code{assay(object)}
 #' entry to use when visualizing feature counts.
 #' @param subset_images numeric, character or vector of such indicating which
@@ -45,15 +45,16 @@
 #'     \item pixel values are integers indicating the cells' IDs
 #' }
 #'
-#' @section Linking the \code{SingleCellExperiment} and \code{CytoImageList} object:
+#' @section Linking SingleCellExperiment and CytoImageList objects:
 #' To colour individual cells contained in the segmentation masks based on
-#' features and metadata stored in the SingleCellExperiment object, an \code{img_id}
-#' and \code{cell_id} entry needs to be provided. Image IDs are matched between the
-#' \code{SingleCellExperiment} and \code{CytoImageList} object via entries to the
-#' \code{colData(object)[,img_id]} and the \code{mcols(mask)[,img_id]} slots.
-#' Cell IDs are matched between the \code{SingleCellExperiment} and \code{CytoImageList}
-#' object via entries to \code{colData(object)[,cell_id]} and the integer values
-#' of the segmentation masks.
+#' features and metadata stored in the SingleCellExperiment object, an
+#' \code{img_id} and \code{cell_id} entry needs to be provided. Image IDs are
+#' matched between the \code{SingleCellExperiment} and \code{CytoImageList}
+#' object via entries to the \code{colData(object)[,img_id]} and the
+#' \code{mcols(mask)[,img_id]} slots. Cell IDs are matched between the
+#' \code{SingleCellExperiment} and \code{CytoImageList} object via entries to
+#' \code{colData(object)[,cell_id]} and the integer values of the segmentation
+#' masks.
 #'
 #' @section Setting the colours:
 #' By default, features and metadata are coloured based on internally-set
@@ -71,8 +72,8 @@
 #' \code{img_id} parameter is set, images are subsetted based on the
 #' \code{mcols(mask)[,img_id]} entry. Otherwise, images can be subsetted by
 #' entry names (stored in \code{names(mask)}) or simply by numeric indexing.
-#' Alternatively, the \code{CytoImageList} object can be subsetted perfore calling
-#' the \code{plotCells} function.
+#' Alternatively, the \code{CytoImageList} object can be subsetted perfore
+#' calling the \code{plotCells} function.
 #'
 #' @section Subsetting the \code{SingleCellExperiment} object:
 #' The \code{SingleCellExperiment} object can be subsetted before calling the
@@ -231,8 +232,8 @@ plotCells <- function(
     }
 
     # Plot images
-    cur_plot <- .displayImages(object, image = NULL, exprs_values, outline_by, colour_by,
-                    mask, out_img, img_id,
+    cur_plot <- .displayImages(object, image = NULL, exprs_values, outline_by,
+                    colour_by,  mask, out_img, img_id,
                     cur_col, plottingParam)
 
     return_objects <- NULL

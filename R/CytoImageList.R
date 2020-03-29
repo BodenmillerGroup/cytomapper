@@ -23,17 +23,19 @@
 #'
 #' @section Restrictions on entry names:
 #' The CytoImageList class only supports unique entry names to avoid duplicated
-#' images. Names of a CytoImageList object can be get and set via \code{names(x)},
-#' where \code{x} is a CytoImageList object. Furthermore, only named or unnamed
-#' CytoImageList objects are allowed. Partially named objects causing empty or NA
-#' names return an error.
+#' images. Names of a CytoImageList object can be get and set via
+#' \code{names(x)}, where \code{x} is a CytoImageList object. Furthermore, only
+#' named or unnamed CytoImageList objects are allowed. Partially named objects
+#' causing empty or NA names return an error.
 #'
 #' @section Coercion:
 #' Coercion to and from list, \code{\linkS4class{SimpleList}} and
-#' \code{\linkS4class{List}}: \describe{ \item{as.list(x), as(x, "SimpleList"),
-#' as(x, "SimpleList"):}{Coercion from a CytoImageList object \code{x}} \item{as(x,
-#' "CytoImageList"):}{Coercion from a list, SimpleList or List object \code{x} to an
-#' CytoImageList object} }
+#' \code{\linkS4class{List}}:
+#' \describe{
+#' \item{as.list(x), as(x, "SimpleList"),
+#' as(x, "SimpleList"):}{Coercion from a CytoImageList object \code{x}}
+#' \item{as(x, "CytoImageList"):}{Coercion from a list, SimpleList or List
+#' object \code{x} to anCytoImageList object}}
 #'
 #' @section Looping:
 #' While \code{\link[base]{lapply}} and \code{\link[base]{mapply}} return
@@ -80,10 +82,12 @@
 #' @export
 CytoImageList <- function(...){
     args <- list(...)
-    if (length(args) == 1L && methods::extends(class(args[[1L]]), "list")){
+    if (length(args) == 1L &&
+        methods::extends(class(args[[1L]]), "list")){
         args <- args[[1]]
     }
-    if (length(args) == 1L && methods::extends(class(args[[1L]]), "SimpleList")){
+    if (length(args) == 1L &&
+        methods::extends(class(args[[1L]]), "SimpleList")){
         args <- as.list(args[[1]])
     }
     x <- S4Vectors::new2("CytoImageList", listData=args)

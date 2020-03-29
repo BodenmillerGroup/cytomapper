@@ -25,15 +25,16 @@ of the following entries are supported:
 label (default "white").
 \item \code{position}: position of scale bar. Supported values: "topleft",
 "topright", "bottomleft", "bottomright" (default "bottomright").
-\item \code{margin}: vector of two numeric entries specifying the x and y margin
-between image boundary and the scale bar (default c(10,10)).
-\item \code{frame}: either "all" to display scale bar on all images or a single
-number specifying the image for which the scale bar should be displayed (default "all").
+\item \code{margin}: vector of two numeric entries specifying the x and y
+margin between image boundary and the scale bar (default c(10,10)).
+\item \code{frame}: either "all" to display scale bar on all images or a
+single number specifying the image for which the scale bar should be
+displayed (default "all").
 }
 Plotting of the scale bar is suppressed if set to \code{NULL}.}
 
-\item{image_title}{a list specifying features of the image titles. One or multiple
-of the following entries are supported:
+\item{image_title}{a list specifying features of the image titles. One or
+multiple of the following entries are supported:
 \itemize{
 \item \code{text}: character vector of image titles. Same length as the
 \code{CytoImageList} object.
@@ -42,8 +43,8 @@ title. Supported entries: "top", "bottom", "topleft", "bottomleft",
 "topright", "bottomright" (default "top").
 \item \code{colour}: single character specifying the colour of image title
 (default "white").
-\item \code{margin}: vector of two numeric entries specifying the x and y margin
-between image boundary and the image title (default c(10,10)).
+\item \code{margin}: vector of two numeric entries specifying the x and y
+margin between image boundary and the image title (default c(10,10)).
 \item \code{font}: numeric entry specifying the font of the image title
 (default 1, see \code{\link{par}} for details)
 \item \code{cex}: numeric value indicating the size of the image title.
@@ -200,7 +201,8 @@ plotPixels(pancreasImages, colour_by = c("SMA", "INS"),
 
 }
 \seealso{
-\code{\link{plotCells}} and \code{\link{plotCells}} for the main plotting functions
+\code{\link{plotCells}} and \code{\link{plotCells}}
+for the main plotting functions
 }
 \author{
 Nils Eling (\email{nils.eling@dqbm.uzh.ch})

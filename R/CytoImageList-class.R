@@ -58,13 +58,15 @@ S4Vectors:::setValidity2(Class="CytoImageList", .ImageList_validity)
     # Check if channelNames are unique
     if(!is.null(channelNames(object)) &&
         length(unique(channelNames(object))) < length(channelNames(object))){
-        msg <- c(msg, "Only unique channels allowed in a CytoImageList object.")
+        msg <- c(msg, paste("Only unique channels",
+                            "allowed in a CytoImageList object."))
     }
 
     # Check if colourmode of each Image is "Grayscale"
     colour.modes <- unlist(lapply(object, colorMode))
     if("Color" %in% colour.modes){
-        msg <- c(msg, "Only Grayscale images are supported for CytoImageList objects.")
+        msg <- c(msg, paste("Only Grayscale images are",
+                        "supported for CytoImageList objects."))
     }
 
     if (length(msg)) { return(msg) }

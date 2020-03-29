@@ -30,8 +30,8 @@ pixel values after reading them in.
 \section{Image normalization}{
 
 Linear scaling of the intensity values of each \linkS4class{Image} contained
-in a \linkS4class{CytoImageList} \code{object} to a specific range. Images can
-either be scaled to the minimum/maximum value per channel or across all
+in a \linkS4class{CytoImageList} \code{object} to a specific range. Images
+can either be scaled to the minimum/maximum value per channel or across all
 channels (default \code{separateChannels = TRUE}). Also, Images can be scaled
 to the minimum/maximum value per image or across all images (default
 \code{separateImages = FALSE}). The latter allows the visual comparison of

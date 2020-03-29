@@ -12,7 +12,8 @@
         if(!file.exists(x)){
 
             stop("The provided file or path does not exist.\n",
-            "Make sure the file or path is accessible from the current location.")
+            "Make sure the file or path is accessible\n",
+            "from the current location.")
 
         }
 
@@ -21,9 +22,12 @@
             # Check if path only contains images
             exten <- file_ext(list.files(x))
 
-            if(sum(!(unique(exten) %in% c("jpeg", "png", "tiff", "tif", "jpg"))) > 0){
-                stop("The provided path contains file-types other than 'jpeg', 'tiff', or 'png'.\n",
-                    "Please provide a correct regular expression in the 'pattern' argument to select correct images.")
+            if(sum(!(unique(exten) %in% c("jpeg", "png", "tiff",
+                                            "tif", "jpg"))) > 0){
+                stop("The provided path contains file-types other than\n",
+                    "'jpeg', 'tiff', or 'png'.\n",
+                    "Please provide a correct regular expression\n",
+                    "in the 'pattern' argument to select correct images.")
             }
 
             message("All files in the provided location will be read in.")
@@ -33,7 +37,8 @@
 
         # Check pattern
         if(!is.character(pattern) & !is.factor(pattern)){
-            stop("Please provide a single character, character vector or factor as pattern input .\n")
+            stop("Please provide a single character,\n",
+                    "character vector or factor as pattern input .\n")
         }
 
         out <- list.files(x, full.names = TRUE)
@@ -52,21 +57,26 @@
 
         # Check if any of the files contain the pattern
         if(length(out) == 0){
-            stop("The pattern does not match any of the files in the provided directory.")
+            stop("The pattern does not match any\n",
+                    "of the files in the provided directory.")
         }
 
         # Check if all of the files are of the supported format
         exten <- file_ext(out)
 
-        if(sum(!(unique(exten) %in% c("jpeg", "png", "tiff", "tif", "jpg"))) > 0){
-            stop("The provided path contains file-types other than 'jpeg', 'tiff' or 'png'.\n",
-                "Please provide a correct regular expression in the 'pattern' argument to select correct images.")
+        if(sum(!(unique(exten) %in% c("jpeg", "png", "tiff",
+                                        "tif", "jpg"))) > 0){
+            stop("The provided path contains file-types other than\n",
+                "'jpeg', 'tiff', or 'png'.\n",
+                "Please provide a correct regular expression\n",
+                "in the 'pattern' argument to select correct images.")
         }
 
         } else {
             cur_ext <- file_ext(x)
             if(!(cur_ext %in% c("jpeg", "png", "tiff", "tif", "jpg"))){
-                stop("The provided file is not of type 'jpeg', 'tiff' or 'png'.\n",
+                stop("The provided file is not of type\n",
+                    "'jpeg', 'tiff' or 'png'.\n",
                     "Other image types are not supported.")
             }
             out <- x
@@ -81,7 +91,8 @@
 
         # Check if files are os supported format
         exten <- file_ext(x)
-        if(sum(!(unique(exten) %in% c("jpeg", "png", "tiff", "tif", "jpg"))) > 0){
+        cur_test <- unique(exten) %in% c("jpeg", "png", "tiff", "tif", "jpg")
+        if(sum(!cur_test) > 0){
         stop("The files are of type other than 'jpeg', 'tiff' or 'png'.\n",
             "Please only provide files of the supported file-type..")
         }
@@ -110,13 +121,15 @@
         if(!is.character(i)){
             if(is.null(names(x))){
                 if(is(value, "CytoImageList") && !is.null(names(value))){
-                    error <- "Cannot merge named and unnamed CytoImageList object."
+                    error <- paste("Cannot merge named and",
+                                    "unnamed CytoImageList object.")
                 }
             } else {
                 if(is(value, "Image")){
                     error <- "Cannot set Image object to named CytoImageList."
                 } else if(is.null(names(value))){
-                    error <- "Cannot merge named and unnamed CytoImageList object."
+                    error <- paste("Cannot merge named and",
+                                    "unnamed CytoImageList object.")
                 }
             }
         } else {
@@ -188,7 +201,8 @@
     }
 
     if(is.null(colData(object))){
-        stop("Please store the image- and cell-level metadata in the 'colData' slot of 'object'.")
+        stop("Please store the image- and cell-level metadata\n",
+                "in the 'colData' slot of 'object'.")
     }
 
     if(!(img_id %in% colnames(colData(object))) ||
@@ -209,7 +223,8 @@
 #' @importFrom EBImage numberOfFrames
 .valid.mask <- function(mask, img_id){
     if(!is(mask, "CytoImageList")){
-        stop("Please provide the segmentation mask(s) in form of a 'CytoImageList' object")
+        stop("Please provide the segmentation mask(s)\n",
+                "in form of a 'CytoImageList' object")
     }
 
     # Check number of channels in mask
@@ -252,7 +267,9 @@
     }
 
     # Check if img_id contain unique entries
-    if(length(unique(mcols(image)[,img_id])) < length((mcols(image)[,img_id]))){
+    l_unique <- length(unique(mcols(image)[,img_id]))
+    l_all <- length(mcols(image)[,img_id])
+    if(l_unique < l_all){
         stop("Entries to in the 'mcols(image)[,img_id]' slot are not unique.")
     }
 }
@@ -279,9 +296,9 @@
             stop("Mask and image ids must be identical.")
         }
 
-        image_dims <- as.numeric(unlist(lapply(image, function(x){dim(x)[c(1,2)]})))
-        mask_dims <- as.numeric(unlist(lapply(mask, function(x){dim(x)[c(1,2)]})))
-        if(!identical(image_dims, mask_dims)){
+        image_dims <- unlist(lapply(image, function(x){dim(x)[c(1,2)]}))
+        mask_dims <- unlist(lapply(mask, function(x){dim(x)[c(1,2)]}))
+        if(!identical(as.numeric(image_dims), as.numeric(mask_dims))){
             stop("Mask and image entries must have the same dimensions.")
         }
     }
@@ -315,23 +332,29 @@
 
         if(is.null(colData(object)) || isEmpty(colData(object))){
             if(!all(colour_by %in% rownames(object))){
-                stop("'colour_by' not in 'rownames(object)' or the 'colData(object)' slot.")
+                stop(paste("'colour_by' not in 'rownames(object)'",
+                            "or the 'colData(object)' slot."))
             }
         } else {
             if(sum(colour_by %in% rownames(object)) > 0L &&
                 sum(colour_by %in% colnames(colData(object))) > 0L){
-                stop("'colour_by' entries found in 'rownames(object)' and 'colData(object)' slot.\n",
+                stop("'colour_by' entries found in 'rownames(object)'\n",
+                    "and 'colData(object)' slot.\n",
                     "Please select either rownames or colData entries.")
             }
             if(!all(colour_by %in% rownames(object)) &&
                 !all(colour_by %in% colnames(colData(object)))){
-                stop("'colour_by' not in 'rownames(object)' or the 'colData(object)' slot.")
+                stop(paste("'colour_by' not in 'rownames(object)'",
+                            "or the 'colData(object)' slot."))
             }
-            if(all(colour_by %in% colnames(colData(object))) && length(colour_by) > 1L){
-                stop("Only one 'colour_by' entry allowed when selecting a 'colData(object)' slot.")
+            if(all(colour_by %in% colnames(colData(object))) &&
+                length(colour_by) > 1L){
+                stop(paste("Only one 'colour_by' entry allowed",
+                            "when selecting a 'colData(object)' slot."))
             }
             if(all(colour_by %in% rownames(object)) && length(colour_by) > 6L){
-                stop("Only six 'colour_by' entries allowed when selecting marker expression.")
+                stop(paste("Only six 'colour_by' entries",
+                            "allowed when selecting marker expression."))
             }
         }
     }
@@ -356,7 +379,7 @@
     # outline_by only takes entries from the colData slot
     # Check if all outline_by entries are in the colData slot
     if(!is.null(image) && (is.null(object) || is.null(mask))){
-        stop("When outlining cells, please provide a SingleCellExperiment 'object' \n",
+        stop("Outlining cells: provide a SingleCellExperiment 'object' \n",
             "and segmentation 'mask' object.")
     }
 
@@ -391,7 +414,8 @@
     }
     if(is.character(subset_images)){
         if(is.null(names(image)) && !(img_id %in% colnames(mcols(image)))){
-        stop("'subset_images' not part of names(CytoImageList) or mcols(CytoImageList)[,img_id]")
+        stop("'subset_images' not part of names(CytoImageList)\n",
+            "or mcols(CytoImageList)[,img_id]")
         }
     }
 }
@@ -407,7 +431,8 @@
     if(!is.null(colour_by) || !is.null(outline_by)){
         valid_names <- c(colour_by, outline_by)
         if(!all(names(colour) %in% valid_names)){
-            stop("'names(colour)' do not match with 'colour_by' and/or 'outline_by'")
+            stop(paste("'names(colour)' do not match",
+                        "with 'colour_by' and/or 'outline_by'"))
         }
     }
     cur_entries <- unlist(lapply(colour, is.null))
@@ -419,7 +444,8 @@
     if(!is.null(image)){
         cur_logical <- !is.null(colour_by)
     } else{
-        cur_logical <- !is.null(colour_by) && all(colour_by %in% rownames(object))
+        cur_logical <- !is.null(colour_by) &&
+                all(colour_by %in% rownames(object))
     }
     if(cur_logical){
         if(sum(colour_by %in% names(colour)) > 0L &&
@@ -428,7 +454,8 @@
         }
         if(all(colour_by %in% names(colour)) &&
             sum(unlist(lapply(colour[colour_by], length)) <= 1L)){
-            stop("Please specify at least two colours when colouring features.")
+            stop(paste("Please specify at least two",
+                        "colours when colouring features."))
         }
     }
     if(!is.null(object) && !is.null(colour_by) &&
@@ -438,7 +465,8 @@
         if(length(cur_entries) > 23L && is.numeric(cur_entries) &&
             is.null(names(colour[[colour_by]]))){
             if(length(colour[[colour_by]]) <= 1){
-                stop("Please specify at least two colours when colouring continous entries.")
+                stop(paste("Please specify at least two",
+                            "colours when colouring continous entries."))
             }
         } else if(!all(cur_entries %in% names(colour[[colour_by]]))){
             stop("Please specify colours for all 'colour_by' levels.")
@@ -451,7 +479,8 @@
         if(length(cur_entries) > 23L && is.numeric(cur_entries) &&
             is.null(names(colour[[outline_by]]))){
             if(length(colour[[outline_by]]) <= 1){
-                stop("Please specify at least two colours when colouring continous entries.")
+                stop(paste("Please specify at least two",
+                            "colours when colouring continous entries."))
             }
         } else if(!all(cur_entries %in% names(colour[[outline_by]]))){
             stop("Please specify colours for all 'outline_by' levels.")

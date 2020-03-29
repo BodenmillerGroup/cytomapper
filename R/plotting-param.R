@@ -25,14 +25,15 @@
 #' label (default "white").
 #' \item \code{position}: position of scale bar. Supported values: "topleft",
 #' "topright", "bottomleft", "bottomright" (default "bottomright").
-#' \item \code{margin}: vector of two numeric entries specifying the x and y margin
-#' between image boundary and the scale bar (default c(10,10)).
-#' \item \code{frame}: either "all" to display scale bar on all images or a single
-#' number specifying the image for which the scale bar should be displayed (default "all").
+#' \item \code{margin}: vector of two numeric entries specifying the x and y
+#' margin between image boundary and the scale bar (default c(10,10)).
+#' \item \code{frame}: either "all" to display scale bar on all images or a
+#' single number specifying the image for which the scale bar should be
+#' displayed (default "all").
 #' }
 #' Plotting of the scale bar is suppressed if set to \code{NULL}.
-#' @param image_title a list specifying features of the image titles. One or multiple
-#' of the following entries are supported:
+#' @param image_title a list specifying features of the image titles. One or
+#' multiple of the following entries are supported:
 #' \itemize{
 #' \item \code{text}: character vector of image titles. Same length as the
 #' \code{CytoImageList} object.
@@ -41,8 +42,8 @@
 #' "topright", "bottomright" (default "top").
 #' \item \code{colour}: single character specifying the colour of image title
 #' (default "white").
-#' \item \code{margin}: vector of two numeric entries specifying the x and y margin
-#' between image boundary and the image title (default c(10,10)).
+#' \item \code{margin}: vector of two numeric entries specifying the x and y
+#' margin between image boundary and the image title (default c(10,10)).
 #' \item \code{font}: numeric entry specifying the font of the image title
 #' (default 1, see \code{\link{par}} for details)
 #' \item \code{cex}: numeric value indicating the size of the image title.
@@ -117,7 +118,8 @@
 #' three-colour \code{\linkS4class{Image}} objects.
 #' }
 #'
-#' @seealso \code{\link{plotCells}} and \code{\link{plotCells}} for the main plotting functions
+#' @seealso \code{\link{plotCells}} and \code{\link{plotCells}}
+#' for the main plotting functions
 #'
 #' @examples
 #' data("pancreasImages")
@@ -200,7 +202,8 @@ NULL
                     "scale", "interpolate")
     not_supported <- cur_entries[!(cur_entries %in% supported)]
     if(length(not_supported) > 0L){
-        stop("Entries ", paste0("'", not_supported, "'", collapse = ", "), " are not supported")
+        stop("Entries ", paste0("'", not_supported, "'",
+                                collapse = ", "), " are not supported")
     }
 
     # scale_bar
@@ -319,9 +322,11 @@ NULL
     }
 
     # missing_colour
-    dotArgs$missing_colour <- .valid.missingcolour(dotArgs$missing_colour)
+    cur_missing <- dotArgs$missing_colour
+    dotArgs$missing_colour <- .valid.missingcolour(cur_missing)
     # missing_colour
-    dotArgs$background_colour <- .valid.backgroundcolour(dotArgs$background_colour)
+    cur_background <- dotArgs$background_colour
+    dotArgs$background_colour <- .valid.backgroundcolour(cur_missing)
 
     return(dotArgs)
 }
@@ -329,7 +334,8 @@ NULL
 # Validity of scale_bar input
 .valid.scalebar <- function(scalebar){
     error.scalebar <- "Invalid entry to the 'scale_bar' list object"
-    # scale_bar has to be of the form list(length, label, lwd, colour, position, margin)
+    # scale_bar has to be of the form
+    # list(length, label, lwd, colour, position, margin)
     if(!is.null(scalebar)){
         if(!is.list(scalebar)){
             stop(error.scalebar)
@@ -343,7 +349,8 @@ NULL
         }
 
         if("position" %in% names(scalebar)){
-            if(!(scalebar$position %in% c("topleft", "topright", "bottomleft", "bottomright"))){
+            if(!(scalebar$position %in% c("topleft", "topright",
+                                            "bottomleft", "bottomright"))){
                 stop(paste0(error.scalebar, ": \n",
                         "position not correctly specified"))
             }
@@ -355,7 +362,8 @@ NULL
             if(length(scalebar$margin) != 2L ||
                 !is.numeric(scalebar$margin)){
                 stop(paste0(error.scalebar, ": \n",
-                    "'margin' should contain two numeric elements corresponding to x and y margin"))
+                    "'margin' should contain two numeric ",
+                    "elements corresponding to x and y margin"))
             }
         } else {
             scalebar$margin <- c(10,10)
@@ -425,14 +433,16 @@ NULL
 # Validity of image_title input
 .valid.imagetitle <- function(imagetitle, image){
     error.imagetitle <- "Invalid entry to the 'image_title' list object"
-    # image_title has to be of the form list(text, position, cex, colour, margin, font)
+    # image_title has to be of the form
+    # list(text, position, cex, colour, margin, font)
     if(!is.null(imagetitle)){
         if(!is.list(imagetitle)){
         stop(error.imagetitle)
         }
 
         if(is.null(names(imagetitle)) ||
-            !all(names(imagetitle) %in% c("text", "position", "cex", "colour", "margin", "font"))){
+            !all(names(imagetitle) %in% c("text", "position", "cex",
+                                            "colour", "margin", "font"))){
         stop(error.imagetitle)
         }
 
@@ -447,7 +457,8 @@ NULL
 
         if("position" %in% names(imagetitle)){
             if(!(imagetitle$position %in%
-                c("top", "bottom", "topleft", "bottomleft", "topright", "bottomright"))){
+                c("top", "bottom", "topleft", "bottomleft",
+                    "topright", "bottomright"))){
                 stop(paste0(error.imagetitle, ": \n",
                         "position not correctly specified"))
             }
@@ -479,7 +490,8 @@ NULL
             if(!is.numeric(imagetitle$margin) ||
                 length(imagetitle$margin) != 2L){
                 stop(paste0(error.imagetitle, ": \n",
-                    "'margin' should contain two numeric elements corresponding to x and y margin"))
+                    "'margin' should contain two numeric ",
+                    "elements corresponding to x and y margin"))
             }
         } else {
             imagetitle$margin <- c(10,10)
@@ -664,7 +676,8 @@ NULL
         }
 
         if("filename" %in% names(saveplot)){
-            if(length(saveplot$filename) != 1L || !is.character(saveplot$filename)){
+            if(length(saveplot$filename) != 1L ||
+                !is.character(saveplot$filename)){
                 stop(paste0(error.saveplot, ": \n",
                         "Invalid entry of 'filename'"))
             }
@@ -673,11 +686,13 @@ NULL
                 cur_ext <- file_ext(saveplot$filename)
                 if(cur_ext == ""){
                     stop(paste0(error.saveplot, ": \n",
-                        "Please provide a file extension indicating in format to save the image."))
+                        "Please provide a file extension ",
+                        "indicating in format to save the image."))
                 }
                 if(!(cur_ext %in% c("tiff", "png", "jpeg"))){
                     stop(paste0(error.saveplot, ": \n",
-                        "'filename' only supports 'tiff', 'png' and 'jpeg' file types."))
+                        "'filename' only supports 'tiff', ",
+                        "'png' and 'jpeg' file types."))
                 }
             }
         } else {

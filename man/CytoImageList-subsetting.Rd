@@ -35,13 +35,14 @@ entries in a \code{\linkS4class{CytoImageList}} object.
 
 Functions to extract and replace elements (= images) of a
 \linkS4class{CytoImageList} object. In the following code, \code{x} is a
-CytoImageList object. The parameter \code{i} indicates the element(s) of \code{x}
-that should be returned or replaced. Replacement is done by \code{value},
-which takes a CytoImageList or Image object. If \code{length(i) > 0},
-\code{value} has to be a CytoImageList object of \code{length(i)}, otherwise
-\code{value} allows a CytoImageList object of length 1 or an Image object. If an
-Image object is provided, only the image entry in the CytoImageList object is
-replaced, not the corresponding elementMetadata entry.
+CytoImageList object. The parameter \code{i} indicates the element(s) of
+\code{x} that should be returned or replaced. Replacement is done by
+\code{value}, which takes a CytoImageList or Image object. If \code{length(i)
+> 0}, \code{value} has to be a CytoImageList object of \code{length(i)},
+otherwise \code{value} allows a CytoImageList object of length 1 or an Image
+object. If an Image object is provided, only the image entry in the
+CytoImageList object is replaced, not the corresponding elementMetadata
+entry.
 
 \describe{
 \item{\code{getImages(x, i)}:}{Returns image(s) indicated by \code{i} of
@@ -51,12 +52,14 @@ the CytoImageList object \code{x}}
 \code{value} needs to have the same length as \code{i}}
 }
 
-These setter and getter functions are the recommended way of extracting and replacing
-images in a CytoImageList object. Alternatively, the standard operations via \code{`[`}, \code{`[[`},
-\code{`[<-`} and \code{`[[<-`} can be performed (see \code{?\link{List}} for S4Vectors subsetting
-functionality). However, these operations do not change element names during replacment
-calls. The \code{setImages()} function makes sure that element names are replaced if
-\code{value} is named or of \code{i} is a character or vector of characters.
+These setter and getter functions are the recommended way of extracting and
+replacing images in a CytoImageList object. Alternatively, the standard
+operations via \code{`[`}, \code{`[[`}, \code{`[<-`} and \code{`[[<-`} can be
+performed (see \code{?\link{List}} for S4Vectors subsetting functionality).
+However, these operations do not change element names during replacment
+calls. The \code{setImages()} function makes sure that element names are
+replaced if \code{value} is named or of \code{i} is a character or vector of
+characters.
 }
 
 \section{Getting and setting channels}{
@@ -64,23 +67,23 @@ calls. The \code{setImages()} function makes sure that element names are replace
 Functions to extract and replace channels of a \linkS4class{CytoImageList}
 object. Here, \code{x} is a \linkS4class{CytoImageList} object. The parameter
 \code{i} indicates the channels of \code{x} that should be returned or
-replaced. Replacement is done by \code{value}, which takes a CytoImageList object.
-The CytoImageList object \code{value} needs to have the same length as \code{x}.
-Furthermore, the number of channels in \code{value} should be identical to
-\code{length(i)}.
+replaced. Replacement is done by \code{value}, which takes a CytoImageList
+object. The CytoImageList object \code{value} needs to have the same length
+as \code{x}. Furthermore, the number of channels in \code{value} should be
+identical to \code{length(i)}.
 
 \describe{
 \item{\code{getChannels(x, i)}:}{Returns channel(s) indicated by \code{i} of
 the CytoImageList object \code{x}}
-\item{\code{setChannels(x, i) <- value}:}{Replaces the channel(s) indicated by
-\code{i} of the CytoImageList object \code{x} with \code{value}. For this,
+\item{\code{setChannels(x, i) <- value}:}{Replaces the channel(s) indicated
+by \code{i} of the CytoImageList object \code{x} with \code{value}. For this,
 \code{value} needs to have the same length as \code{i} and the same
 number of channels as \code{length(i)}.}
 }
 
-The \code{setChannels()} setter function does not allow adding new channels to
-the CytoImageList object. For this operation, the \code{mergeChannels} function
-was implemented (see below).
+The \code{setChannels()} setter function does not allow adding new channels
+to the CytoImageList object. For this operation, the \code{mergeChannels}
+function was implemented (see below).
 }
 
 \section{Merging images}{

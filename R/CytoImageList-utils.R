@@ -1,4 +1,4 @@
-# Utility functions for CytoImageList and Image class objects
+# Utility functions for CytoImageList and Image class objects -----------------
 
 #' @title Getting and setting the channel and image names
 #' @name CytoImageList-naming
@@ -9,9 +9,9 @@
 #'
 #' @section Setting and getting the channel names:
 #' In the following code, \code{x} is either a \linkS4class{CytoImageList} or
-#' \linkS4class{Image} object containing one or multiple channels.
-#' The channel names can be replaced by \code{value}, which contains a character
-#' vector of the same length as the number of channels in the image(s).
+#' \linkS4class{Image} object containing one or multiple channels. The channel
+#' names can be replaced by \code{value}, which contains a character vector of
+#' the same length as the number of channels in the image(s).
 #' \describe{
 #' \item{\code{channelNames(x)}:}{Returns the names of all channels stored in
 #' \code{x}}
@@ -21,9 +21,9 @@
 #' }
 #'
 #' @section Setting and getting the image names:
-#' Here, \code{x} is either a \linkS4class{CytoImageList} object. The element names
-#' can be replaced by \code{value}, which contains a character vector of the
-#' same length as the number of images. In case of the CytoImageList object,
+#' Here, \code{x} is either a \linkS4class{CytoImageList} object. The element
+#' names can be replaced by \code{value}, which contains a character vector of
+#' the same length as the number of images. In case of the CytoImageList object,
 #' elements are always images.
 #' \describe{
 #' \item{\code{names(x)}:}{Returns the names of all images stored in \code{x}}
@@ -159,8 +159,8 @@ setReplaceMethod("names",
 #'
 #' @section Image normalization:
 #' Linear scaling of the intensity values of each \linkS4class{Image} contained
-#' in a \linkS4class{CytoImageList} \code{object} to a specific range. Images can
-#' either be scaled to the minimum/maximum value per channel or across all
+#' in a \linkS4class{CytoImageList} \code{object} to a specific range. Images
+#' can either be scaled to the minimum/maximum value per channel or across all
 #' channels (default \code{separateChannels = TRUE}). Also, Images can be scaled
 #' to the minimum/maximum value per image or across all images (default
 #' \code{separateImages = FALSE}). The latter allows the visual comparison of
@@ -274,15 +274,18 @@ normImages <- function(object, separateChannels = TRUE, separateImages = FALSE,
 
             cur_out <- endoapply(object, function(y){
                 if(!is.null(inputRange)){
-                    y <- EBImage::normalize(y, separate = TRUE, ft=ft, inputRange)
+                    y <- EBImage::normalize(y, separate = TRUE,
+                                            ft=ft, inputRange)
                 } else {
                     for(i in seq_len(dim(y)[3])){
                         cur_min <- quantile(y[,,i], probs = percentileRange[1])
                         cur_max <- quantile(y[,,i], probs = percentileRange[2])
                     if(cur_min == cur_max){
-                        stop("Minimum and maximum value for the indicated percentiles are identical.")
+                        stop(paste("Minimum and maximum value for",
+                                "the indicated percentiles are identical."))
                     }
-                    y[,,i] <- EBImage::normalize(y[,,i], separate = TRUE, ft=ft,
+                    y[,,i] <- EBImage::normalize(y[,,i],
+                                                separate = TRUE, ft=ft,
                         inputRange = c(cur_min, cur_max))
                     }
                 }
@@ -298,7 +301,8 @@ normImages <- function(object, separateChannels = TRUE, separateImages = FALSE,
                     cur_min <- quantile(y, probs = percentileRange[1])
                     cur_max <- quantile(y, probs = percentileRange[2])
                     if(cur_min == cur_max){
-                        stop("Minimum and maximum value for the indicated percentiles are identical.")
+                        stop(paste("Minimum and maximum value for",
+                                    "the indicated percentiles are identical."))
                     }
                     y <- EBImage::normalize(y, separate = FALSE, ft=ft,
                         inputRange = c(cur_min, cur_max))
@@ -313,13 +317,15 @@ normImages <- function(object, separateChannels = TRUE, separateImages = FALSE,
                 min_vector <- NULL
                 max_vector <- NULL
                 for(i in seq_len(numberOfFrames(object[[1]]))){
-                    cur_dist <- unlist(lapply(getChannels(object, i), as.numeric))
+                    cur_dist <- unlist(lapply(getChannels(object, i),
+                                                as.numeric))
                     cur_min <- quantile(cur_dist, percentileRange[1])
                     cur_max <- quantile(cur_dist, percentileRange[2])
                     min_vector <- c(min_vector, cur_min)
                     max_vector <- c(max_vector, cur_max)
                     if(cur_min == cur_max){
-                        stop("Minimum and maximum value for the indicated percentiles are identical.")
+                        stop(paste("Minimum and maximum value",
+                            "for the indicated percentiles are identical."))
                     }
                 }
             }
@@ -329,8 +335,10 @@ normImages <- function(object, separateChannels = TRUE, separateImages = FALSE,
                     y <- normalize(y, separate = TRUE, ft=ft, inputRange)
                 } else {
                     for(i in seq_len(dim(y)[3])){
-                        y[,,i] <- EBImage::normalize(y[,,i], separate = TRUE, ft=ft,
-                                    inputRange = c(min_vector[i], max_vector[i]))
+                        y[,,i] <- EBImage::normalize(y[,,i],
+                                    separate = TRUE, ft=ft,
+                                    inputRange = c(min_vector[i],
+                                                    max_vector[i]))
                     }
                 }
                 return(y)
@@ -341,13 +349,15 @@ normImages <- function(object, separateChannels = TRUE, separateImages = FALSE,
                 cur_min <- quantile(cur_dist, probs = percentileRange[1])
                 cur_max <- quantile(cur_dist, probs = percentileRange[2])
                 if(cur_min == cur_max){
-                    stop("Minimum and maximum value for the indicated percentiles are identical.")
+                    stop(paste("Minimum and maximum value",
+                            "for the indicated percentiles are identical."))
                 }
             }
 
             cur_out <- endoapply(object, function(y){
                 if(!is.null(inputRange)){
-                    y <- EBImage::normalize(y, separate = FALSE, ft=ft, inputRange)
+                    y <- EBImage::normalize(y, separate = FALSE,
+                                            ft=ft, inputRange)
                 } else {
                     y <- EBImage::normalize(y, separate = FALSE, ft=ft,
                             inputRange = c(cur_min, cur_max))

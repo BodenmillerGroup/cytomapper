@@ -3,7 +3,7 @@
 #------------------------------------------------------------------------------
 
 #' @export
-setGeneric("channelNames", function(x) standardGeneric("channelNames") )
+setGeneric("channelNames", function(x) standardGeneric("channelNames"))
 
 #' @export
 setGeneric("channelNames<-",

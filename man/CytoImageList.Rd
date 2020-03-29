@@ -43,19 +43,21 @@ stores image-level meta information. This slot should be accessed using the
 \section{Restrictions on entry names}{
 
 The CytoImageList class only supports unique entry names to avoid duplicated
-images. Names of a CytoImageList object can be get and set via \code{names(x)},
-where \code{x} is a CytoImageList object. Furthermore, only named or unnamed
-CytoImageList objects are allowed. Partially named objects causing empty or NA
-names return an error.
+images. Names of a CytoImageList object can be get and set via
+\code{names(x)}, where \code{x} is a CytoImageList object. Furthermore, only
+named or unnamed CytoImageList objects are allowed. Partially named objects
+causing empty or NA names return an error.
 }
 
 \section{Coercion}{
 
 Coercion to and from list, \code{\linkS4class{SimpleList}} and
-\code{\linkS4class{List}}: \describe{ \item{as.list(x), as(x, "SimpleList"),
-as(x, "SimpleList"):}{Coercion from a CytoImageList object \code{x}} \item{as(x,
-"CytoImageList"):}{Coercion from a list, SimpleList or List object \code{x} to an
-CytoImageList object} }
+\code{\linkS4class{List}}:
+\describe{
+\item{as.list(x), as(x, "SimpleList"),
+as(x, "SimpleList"):}{Coercion from a CytoImageList object \code{x}}
+\item{as(x, "CytoImageList"):}{Coercion from a list, SimpleList or List
+object \code{x} to anCytoImageList object}}
 }
 
 \section{Looping}{
