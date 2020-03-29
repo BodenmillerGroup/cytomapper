@@ -38,7 +38,7 @@ test_that("plotPixels: Standard input testing works", {
   expect_error(plotPixels(object = pancreasSCE, image = pancreasImages,
                           mask = "test",
                           img_id = "ImageNb", cell_id = "CellNb"),
-               regexp = "Please provide the segmentation mask(s) in form of a 'CytoImageList' object",
+               regexp = "Please provide the segmentation mask(s)\nin form of a 'CytoImageList' object",
                fix = TRUE)
 
   mcols(pancreasMasks)$ImageNb <- NULL
@@ -179,14 +179,14 @@ test_that("plotPixels: Cells can be outlined correctly.", {
   # Error
   expect_error(plotPixels(image = pancreasImages,
                          outline_by = "CellType"),
-               regexp = "When outlining cells, please provide a SingleCellExperiment 'object' \nand segmentation 'mask' object.",
+               regexp = "Outlining cells: provide a SingleCellExperiment 'object' \nand segmentation 'mask' object.",
                fix = TRUE)
   expect_error(plotPixels(image = pancreasImages,
                           object = pancreasSCE,
                           img_id = "ImageNb",
                           cell_id = "CellNb",
                           outline_by = "CellType"),
-               regexp = "When outlining cells, please provide a SingleCellExperiment 'object' \nand segmentation 'mask' object.",
+               regexp = "Outlining cells: provide a SingleCellExperiment 'object' \nand segmentation 'mask' object.",
                fix = TRUE)
   expect_error(plotPixels(image = pancreasImages,
                           object = pancreasSCE,

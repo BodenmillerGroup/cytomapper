@@ -326,7 +326,7 @@ NULL
     dotArgs$missing_colour <- .valid.missingcolour(cur_missing)
     # missing_colour
     cur_background <- dotArgs$background_colour
-    dotArgs$background_colour <- .valid.backgroundcolour(cur_missing)
+    dotArgs$background_colour <- .valid.backgroundcolour(cur_background)
 
     return(dotArgs)
 }
