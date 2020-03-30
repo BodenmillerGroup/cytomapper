@@ -88,12 +88,14 @@ vignette("cytomapper")
 ## Authors
 
 [Nils Eling](https://github.com/nilseling) nils.eling 'at' dqbm.uzh.ch
+
 [Nicolas Damond](https://github.com/ndamond)
 
 
 ## References
 
 [1] [Giesen et al. (2014), Nature Methods, 11](https://www.nature.com/articles/nmeth.2869)
+
 [2] [Damond et al. (2019), Cell Metabolism, 29](https://www.cell.com/cell-metabolism/fulltext/S1550-4131(18)30691-0)
 
 
