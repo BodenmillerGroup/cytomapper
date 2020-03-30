@@ -95,7 +95,7 @@ pixel-level expression information:
 counts and metadata 2. (optionally) a `CytoImageList` object containing the
 segmentation mask per image
 
-# Quick start
+# Quick start {#QuickStart}
 
 The following section provides a quick example highlighting the functionality of
 `cytomapper`. For detailed information on reading in the data, refer to the
@@ -123,19 +123,13 @@ The `CytoImageList` object containing segmentation masks that represent the cell
 areas on the image can be displayed using the `plotCells` function. Only the
 segmentation masks are plotted when no other parameters are specified.
 
-```{r quickstart-plotCells}
-plotCells(mask = pancreasMasks)
-```
-
 To colour and/or outline segmentation masks, a `SingleCellExperiment`, an
 `img_id` and `cell_id` entry need to be specified:
 
 ```{r quickstart-plotCells-2}
 plotCells(mask = pancreasMasks, object = pancreasSCE, 
-            cell_id = "CellNb", img_id = "ImageNb", colour_by = "SMA")
-plotCells(mask = pancreasMasks, object = pancreasSCE, 
-            cell_id = "CellNb", img_id = "ImageNb", 
-            colour_by = "SMA", outline_by = "CellType")
+            cell_id = "CellNb", img_id = "ImageNb", colour_by = "SMA",
+            outline_by = "CellType")
 plotCells(mask = pancreasMasks, object = pancreasSCE, 
             cell_id = "CellNb", img_id = "ImageNb", colour_by = "CellType")
 ```
@@ -175,8 +169,8 @@ The `img_id` and `cell_id` entry in the `SingleCellExperiment` object need to be
 accessible via:
 
 ```{r image-cell-id-sce}
-colData(pancreasSCE)[,"ImageNb"]
-colData(pancreasSCE)[,"CellNb"]
+head(colData(pancreasSCE)[,"ImageNb"])
+head(colData(pancreasSCE)[,"CellNb"])
 ```
 
 The `img_id` entry in the `CytoImageList` object need to be accessible via: 
@@ -288,7 +282,7 @@ We can see that, in some cases, the pixel-values are not correctly scaled by the
 image encoding. The segmentation masks should only contain integer entries:
 
 ```{r image-encoding}
-unique(as.numeric(all_masks[[1]]))
+head(unique(as.numeric(all_masks[[1]])))
 ```
 
 The provided data was processed using CellProfiler [@carpenter2006cellprofiler].
@@ -307,7 +301,7 @@ segmentation masks by the factor for 16-bit encoding: `2^16-1`
 
 ```{r scaleImage-1}
 all_masks <- scaleImages(all_masks, 2^16-1)
-unique(as.numeric(all_masks[[1]]))
+head(unique(as.numeric(all_masks[[1]])))
 ```
 
 In this case, the multi-channel images are not affected by this scaling factor.
@@ -322,13 +316,8 @@ provides the `?channelNames` getter and setter function:
 channelNames(all_stacks) <- c("H3", "SMA", "INS", "CD38", "CD44")
 ```
 
-The read-in data can now be used for visualization:
-
-```{r example-viz}
-plotPixels(all_stacks, colour_by = c("H3", "SMA", "CD44"))
-plotCells(all_masks, object = pancreasSCE, cell_id = "CellNb", 
-            img_id = "ImageNb", colour_by = "CellType")
-```
+The read-in data can now be used for visualization as explained in the [Quick
+start section](#QuickStart).
 
 # The CytoImageList object {#CytoImageList}
 
@@ -472,8 +461,6 @@ data("pancreasImages")
 
 # Performing a gaussian blur
 pancreasImages <- endoapply(pancreasImages, gblur, sigma = 1)
-
-plotPixels(pancreasImages, colour_by = c("H3", "SMA", "CD44"))
 ```
 
 # Plotting pixel information {#PixelInfo}
@@ -508,8 +495,6 @@ data("pancreasImages")
 
 # Default normalization
 cur_images <- normalize(pancreasImages)
-
-plotPixels(cur_images, colour_by = c("H3", "SMA", "CD44"))
 ```
 
 A `CytoImageList` object can also be normalized image-wise:
@@ -517,8 +502,6 @@ A `CytoImageList` object can also be normalized image-wise:
 ```{r normalize-image-wise}
 # Image-wise normalization
 cur_images <- normalize(pancreasImages, separateImages = TRUE)
-
-plotPixels(cur_images, colour_by = c("H3", "SMA", "CD44"))
 ```
 
 To clip the image range, the user can provide a percentage-based clipping range:
@@ -535,12 +518,8 @@ For more information on the normalization functionality provided by the
 ## Colouring
 
 The `cytomapper` package supports the visualization of up to 6 channels and
-displays a combined image:
-
-```{r colouring-pixels}
-data("pancreasImages")
-plotPixels(pancreasImages, colour_by = c("H3", "SMA", "INS", "CD38", "CD44"))
-```
+displays a combined image by setting the `colour_by` parameter.
+See `?plotPixels` for examples.
 
 ## Adjusting brightness, contrast and gamma
 
@@ -554,6 +533,7 @@ to each channel; each channel is multiplied by the contrast factor and each
 channel is exponentiated by the gamma factor.
 
 ```{r bcg-pixels}
+data("pancreasImages")
 # Increase contrast for the SMA and CD44 channel
 plotPixels(pancreasImages, 
             colour_by = c("H3", "SMA", "CD44"), 
@@ -561,23 +541,18 @@ plotPixels(pancreasImages,
                         CD44 = c(0,2,1)))
 ```
 
-## Outlining
+## Outlining {#Outlining}
 
 The cells can be outlined when providing a `CytoImageList` object containing the
 corresponding segmentation masks and a character `img_id` indicating the name of
-the `elementMetadata` slot that contains the image IDs:
-
-```{r outline-1-pixels}
-plotPixels(pancreasImages, mask = pancreasMasks, 
-            img_id = "ImageNb", colour_by = c("H3", "SMA", "CD44"))
-```
+the `elementMetadata` slot that contains the image IDs.
 
 The user can furthermore specify the metadata entry to outline cells by. For
 this, a `SingleCellExperiment` object containing the cell-specific metadata and
 a `cell_id` indicating the name of the `colData` slot that contains the cell IDs
 need to be provided:
 
-```{r outline-2-pixels}
+```{r outline-1-pixels}
 plotPixels(pancreasImages, mask = pancreasMasks, 
             object = pancreasSCE, img_id = "ImageNb", 
             cell_id = "CellNb",
@@ -585,7 +560,7 @@ plotPixels(pancreasImages, mask = pancreasMasks,
             outline_by = "CellType")
 ```
 
-## Subsetting
+## Subsetting {#subsetting}
 
 The user can further subset the images internally for visualization by setting
 the `subset_images` parameter. Images can be subsetted by image ID, entry name
@@ -594,8 +569,6 @@ therefore the `subset_images` parameter behaves the same for image ID subsetting
 and subsetting via integer indexing.
 
 ```{r subsetting-pixels}
-plotPixels(pancreasImages, colour_by = c("H3", "SMA", "CD44"),
-            subset_images = 1)
 plotPixels(pancreasImages, colour_by = c("H3", "SMA", "CD44"),
             subset_images = "F01_imc")
 ```
@@ -608,13 +581,8 @@ parameter takes a named `list` in which names correspond to the entries to
 metadata entries (e.g. cell area, see next section), at least two colours for
 interpolation need to be provided. These colours are passed to the
 `colorRampPalette` function for interpolation.
-
-```{r colour-pixels}
-plotPixels(pancreasImages, colour_by = c("H3", "SMA", "CD44"),
-            colour = list(H3 = c("black", "blue"),
-                            SMA = c("black", "red"),
-                            CD44 = c("black", "white")))
-```
+For details, please refer to the next [Adjusting the colour](#adjustingColour)
+section
 
 # Plotting cell information {#CellInfo}
 
@@ -638,13 +606,7 @@ expression, the `rownames` of the `SingleCellExperiment` must be correctly
 named. The `cytomapper` package supports the visualization of up to 6 channels
 and displays a combined image. However, in the case of displaying expression on
 segmentation mask, the user should not display too many features.
-
-```{r colouring-cells}
-data("pancreasImages")
-plotCells(pancreasMasks, object = pancreasSCE, 
-            img_id = "ImageNb", cell_id = "CellNb", 
-            colour_by = c("SMA", "CD44"))
-```
+See `?plotCells` for examples.
 
 ## Changing the assay slot
 
@@ -663,14 +625,8 @@ plotCells(pancreasMasks, object = pancreasSCE,
 ## Outlining
 
 The user can furthermore outline cells and specify the metadata entry to outline
-cells by.
-
-```{r outline-cells}
-plotCells(pancreasMasks, object = pancreasSCE, 
-            img_id = "ImageNb", cell_id = "CellNb", 
-            colour_by = c("SMA", "CD44"),
-            outline_by = "CellType")
-```
+cells by. See the previous [Outlining](#Outlining) section and `?plotCells` 
+for examples.
 
 ## Subsetting
 
@@ -679,19 +635,9 @@ the `subset_images` parameter. Images can be subsetted by image ID, entry name
 or simply by indexing. In the toy dataset, image IDs are numeric entries and
 therefore the `subset_images` parameter behaves the same for image ID subsetting
 and subsetting via integer indexing.
+For examples, please see the previous [Subsetting](#subsetting) section.
 
-```{r subsetting-cells}
-plotCells(pancreasMasks, object = pancreasSCE, 
-            img_id = "ImageNb", cell_id = "CellNb", 
-            colour_by = c("SMA", "CD44"), 
-            subset_images = 1)
-plotCells(pancreasMasks, object = pancreasSCE, 
-            img_id = "ImageNb", cell_id = "CellNb", 
-            colour_by = c("SMA", "CD44"), 
-            subset_images = "F01_mask")
-```
-
-## Adjusting the colour
+## Adjusting the colour {#adjustingColour}
 
 The user can also customize the colours for selected features and metadata. The
 `colour` parameter takes a named `list` in which names correspond to the entries
@@ -742,16 +688,8 @@ plotCells(pancreasMasks, object = cur_sce,
 The background of a segemntation mask is defined by the value `0`. To change the
 background colour, the `background_colour` parameter can be set. Furthermore,
 cells that are not contained in the `SingleCellExperiment` object can be
-coloured by setting `missing_colour`:
-
-```{r background-missing}
-plotCells(pancreasMasks, object = cur_sce, 
-            img_id = "ImageNb", cell_id = "CellNb", 
-            colour_by = "CellType",
-            colour = list(CellType = c(celltype_A = "red")),
-            background_colour = "white",
-            missing_colour = "black")
-```
+coloured by setting `missing_colour`. For an example, see figure
+\@ref(fig:customization).
 
 ## Scale bar and image title
 
@@ -766,35 +704,15 @@ refer to the `scale_bar` section in `?'plotting-param'`.
 pixels. Therefore, the user needs to know the length (e.g. in $\mu{m}$) to label
 the scale bar correctly.
 
-```{r scale_bar}
-plotPixels(pancreasImages, colour_by = c("SMA", "CD44"),
-            scale_bar = list(length = 30,
-                            label = expression("30 " ~ mu * "m"),
-                            cex = 2,
-                            lwd = 5,
-                            colour = "cyan",
-                            position = "bottomleft",
-                            margin = c(5,5),
-                            frame = 3))
-```
-
 The image titles can be set using the `image_title` parameter. Also here, the
 user needs to provide a named list with one or multiple of follwing entries:
 `text`, `position`, `colour`, `margin`, `font`, `cex`. The entry to `text` needs
 to be a character vector of the same length as the `CytoImageList` object.
 
-```{r image_title}
-plotPixels(pancreasImages, colour_by = c("SMA", "CD44"),
-            image_title = list(text = c("image_1", "image_2", "image_3"),
-                                position = "topleft",
-                                colour = "cyan",
-                                margin = c(2,10),
-                                font = 3,
-                                cex = 2))
-```
-
 Plotting of the scale bar and image title can be suppressed by setting the
 `scale_bar` and `image_title` parameters to `NULL`.
+
+For an example, see figure \@ref(fig:customization).
 
 ## Legend
 
@@ -807,17 +725,7 @@ or multiple of the follwoing entries: `colour_by.title.font`,
 `outline_by.legend.cex`, `margin`. For detailed explanation on the individual
 entries, please refer to the `legend` parameter in `?'plotting-param'`.
 
-```{r legend}
-plotCells(pancreasMasks, object = pancreasSCE, 
-            img_id = "ImageNb", cell_id = "CellNb",
-            colour_by = "SMA",
-            outline_by = "CellType",
-            legend = list(colour_by.title.font = 2,
-                        colour_by.title.cex = 1.2,
-                        colour_by.labels.cex = 0.7,
-                        outline_by.legend.cex = 0.3,
-                        margin = 10))
-```
+For an example, see figure \@ref(fig:customization).
 
 ## Setting the margin between images
 
@@ -827,10 +735,7 @@ the `margin` parameter.
 The `margin` parameter takes a single numeric indicating the gap (in pixels)
 between individual images.
 
-```{r margin}
-plotPixels(pancreasImages, colour_by = c("H3", "SMA", "CD44"), 
-            margin = 2)
-```
+For an example, see figure \@ref(fig:customization).
 
 ## Scale the feature counts
 
@@ -839,13 +744,10 @@ behaviour facilitates visualization but does not allow the user to visually
 compare absolute expression counts across channels. The default behaviour can be
 suppressed by setting `scale = FALSE`.
 
-```{r}
-plotPixels(pancreasImages, colour_by = c("H3", "SMA", "CD44"), 
-            scale = FALSE)
-```
-
 In this case, counts are linearly scaled to the minimum and maximum across all
 channels and across all displayed images.
+
+For an example, see figure \@ref(fig:customization).
 
 ## Image interpolation
 
@@ -853,9 +755,33 @@ By default, colours are interpolated between pixels (see `?rasterImage` for
 details). To suppress this default behaviour, the user can set `interpolate =
 FALSE`.
 
-```{r interpolate}
-plotPixels(pancreasImages, colour_by = c("H3", "SMA", "CD44"), 
-            interpolate = FALSE)
+```{r customization, fig.cap = "Plot customization example."}
+plotCells(pancreasMasks, object = pancreasSCE, 
+            img_id = "ImageNb", cell_id = "CellNb", 
+            colour_by = "SMA",
+            outline_by = "CellType",
+            background_colour = "white",
+            missing_colour = "black",
+            scale_bar = list(length = 30,
+                            label = expression("30 " ~ mu * "m"),
+                            cex = 2,
+                            lwd = 5,
+                            colour = "cyan",
+                            position = "bottomleft",
+                            margin = c(5,5),
+                            frame = 3),
+            image_title = list(text = c("image_1", "image_2", "image_3"),
+                            position = "topleft",
+                            colour = "cyan",
+                            margin = c(2,10),
+                            font = 3,
+                            cex = 2),
+            legend = list(colour_by.title.font = 2,
+                            colour_by.title.cex = 1.2,
+                            colour_by.labels.cex = 0.7,
+                            outline_by.legend.cex = 0.3,
+                            margin = 10),
+            margin = 2)
 ```
 
 # Returning plots and images
@@ -905,13 +831,6 @@ be a character representing a valid file name ending with `.png`, `.tiff` or
 `.jpeg`. The `scale` entry controls the resolution of the image (see
 `?"plotting-param"` for help). Increasing the scale parameter will increase the
 resolution of the final image.
-
-```{r save_image}
-tempf <- tempfile("test_plot", fileext = ".png")
-plotPixels(pancreasImages, colour_by = c("H3", "SMA", "CD44"), 
-            save_plot = list(filename = tempf,
-                                scale = 10))
-```
 
 When setting `display = "single"`, the `cytomapper` package will save individual
 images in individual files.
