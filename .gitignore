@@ -1,7 +1,8 @@
 .DS_Store
 .Rproj.user
-.Rhistory
+#.Rhistory
 .RData
 .Ruserdata
 *.html
-cytomapper.Rproj
+#*.Rapp.history
+#cytomapper.Rproj
