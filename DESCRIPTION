@@ -1,7 +1,7 @@
 Package: cytomapper
 Version: 0.1.13
 Date: 2020-03-28
-Title: Spatial visualization for imaging mass cytometry data in R
+Title: Visualization of highly multiplexed imaging cytometry data in R
 Description: 
     Highly multiplexed imaging cytometry acquires the single-cell expression of
     selected proteins in a spatially-resolved fashion. These measurements can be
