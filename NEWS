@@ -78,3 +78,7 @@ Changes in version 0.1.12 (2020-03-25):
 Changes in version 0.1.13 (2020-03-28):
 
 + Full vignette and correction to docs
+
+Changes in version 0.99.0 (2020-03-30):
+
++ Formatted the package for Bioconductor submission

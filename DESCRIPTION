@@ -1,6 +1,6 @@
 Package: cytomapper
-Version: 0.1.13
-Date: 2020-03-28
+Version: 0.99.0
+Date: 2020-03-30
 Title: Visualization of highly multiplexed imaging cytometry data in R
 Description: 
     Highly multiplexed imaging cytometry acquires the single-cell expression of
@@ -15,10 +15,12 @@ Description:
     pixel-level information across multiple channels and 2. the display of
     cell-level information (expression and/or metadata) on segmentation masks.
 Authors@R: 
-    c(person("Nicolas", "Damond", role = c("aut", "cre"), 
-      email = "nicolas.damond@dqbm.uzh.ch"))
     c(person("Nils", "Eling", role = c("aut", "cre"), 
-      email = "nils.eling@dqbm.uzh.ch"))
+      email = "nils.eling@dqbm.uzh.ch",
+      comment = c(ORCID = "0000-0002-4711-1176")),
+      person("Nicolas", "Damond", role = c("aut"), 
+      email = "nicolas.damond@dqbm.uzh.ch", 
+      comment = c(ORCID = "0000-0003-3027-8989")))
 License: GPL (>= 2)
 Depends:
     R (>= 4.0),

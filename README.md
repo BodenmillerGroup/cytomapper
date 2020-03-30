@@ -50,7 +50,7 @@ The `cytomapper` package offers two main functions: `plotPixels` and `plotCells`
 
 **plotPixels**
 
-The function takes a `CytoImageList` object (available via the `cytomapper` package) containing multi-channel images containing pixel-level expression values and optionally a `CytoImageList` object containing segementation masks and a `SingleCellExperiment` object containing cell-level metadata.
+The function takes a `CytoImageList` object (available via the `cytomapper` package) containing multi-channel images representing pixel-level expression values and optionally a `CytoImageList` object containing segementation masks and a `SingleCellExperiment` object containing cell-level metadata.
 
 It allows the visualization of pixel-level information of up to six channels and outlining cells based on cell-level metadata.
 To see the full functionality in R type:
