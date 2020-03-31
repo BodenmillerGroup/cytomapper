@@ -7,7 +7,7 @@
 \format{
 A CytoImageList object containing 3 \code{\linkS4class{Image}}
 objects with 5 channels each. Channel names can be accessed via
-\code{?"\link[cytomapper]{channelNames}"}.
+\code{?\link{channelNames}}.
 }
 \usage{
 pancreasImages

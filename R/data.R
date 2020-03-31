@@ -59,7 +59,7 @@
 #'
 #' @format A CytoImageList object containing 3 \code{\linkS4class{Image}}
 #' objects with 5 channels each. Channel names can be accessed via
-#' \code{?"\link[cytomapper]{channelNames}"}.
+#' \code{?\link{channelNames}}.
 #'
 #' @references
 #' \href{https://www.sciencedirect.com/science/article/pii/S1550413118306910}{
