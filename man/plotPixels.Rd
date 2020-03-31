@@ -150,8 +150,7 @@ When plotting pixel intensities, colours are scaled to the minimum and
 maximum per channel across all images that are being displayed. Therefore,
 when subsetting images, displayed intensities might change. However, the
 colour legend will display the correct numeric minimum and maximum pixel
-intensity. See the \code{\link{normalize}} function on how to
-normalize CytoImageList objects.
+intensity.
 }
 
 \examples{
@@ -185,7 +184,9 @@ plotPixels(pancreasImages, colour_by = c("SMA", "CD44"),
 
 }
 \seealso{
-For further plotting parameters see \code{?"\link{plotting-param}"}
+For further plotting parameters see \code{?"\link{plotting-param}"}.
+For instructions on how to normalize images see
+\code{\link[EBImage]{normalize}}.
 }
 \author{
 Nils Eling (\email{nils.eling@dqbm.uzh.ch})

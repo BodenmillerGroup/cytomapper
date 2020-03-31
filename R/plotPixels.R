@@ -99,10 +99,12 @@
 #' maximum per channel across all images that are being displayed. Therefore,
 #' when subsetting images, displayed intensities might change. However, the
 #' colour legend will display the correct numeric minimum and maximum pixel
-#' intensity. See the \code{\link{normalize}} function on how to
-#' normalize CytoImageList objects.
+#' intensity. 
 #'
-#' @seealso For further plotting parameters see \code{?"\link{plotting-param}"}
+#' @seealso 
+#' For further plotting parameters see \code{?"\link{plotting-param}"}.
+#' For instructions on how to normalize images see
+#' \code{\link[EBImage]{normalize}}.
 #'
 #' @return a list if \code{return_images} and/or \code{return_plot}
 #' is TRUE (see \code{?"\link{plotting-param}"}).
