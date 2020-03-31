@@ -14,12 +14,12 @@
 #' contain the same number of channels. Here, each channel represents pixel
 #' values indicating measurement intensities or in case of segmentation masks
 #' the cells' ID. The CytoImageList class therefore only supports a Grayscale
-#' colormode (see \code{\link[EBImage]{colormode}}) representation of each
+#' colormode (see \code{\link{colormode}}) representation of each
 #' individual image.
 #'
-#' The class further contains an \code{\link{elementMetadata}} slot that
+#' The class further contains an \code{elementMetadata} slot that
 #' stores image-level meta information. This slot should be accessed using the
-#' \code{\link[S4Vectors]{mcols}} accessor function.
+#' \code{\link{mcols}} accessor function.
 #'
 #' @section Restrictions on entry names:
 #' The CytoImageList class only supports unique entry names to avoid duplicated
@@ -39,8 +39,8 @@
 #'
 #' @section Looping:
 #' While \code{\link[base]{lapply}} and \code{\link[base]{mapply}} return
-#' regular list objects, \code{\link[S4Vectors]{endoapply}} and
-#' \code{\link[S4Vectors]{mendoapply}} return CytoImageList objects.
+#' regular list objects, \code{\link{endoapply}} and
+#' \code{\link{mendoapply}} return CytoImageList objects.
 #'
 #' @seealso
 #' \code{\linkS4class{Image}}, for further image analysis tools.

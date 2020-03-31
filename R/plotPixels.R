@@ -99,8 +99,8 @@
 #' maximum per channel across all images that are being displayed. Therefore,
 #' when subsetting images, displayed intensities might change. However, the
 #' colour legend will display the correct numeric minimum and maximum pixel
-#' intensity. See the \code{\link[cytomapper]{normalize}} on how to normalize
-#' CytoImageList objects.
+#' intensity. See the \code{\link{normalize}} function on how to
+#' normalize CytoImageList objects.
 #'
 #' @seealso For further plotting parameters see \code{?"\link{plotting-param}"}
 #'
