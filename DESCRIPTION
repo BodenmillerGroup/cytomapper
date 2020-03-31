@@ -1,5 +1,5 @@
 Package: cytomapper
-Version: 0.99.2
+Version: 0.99.3
 Date: 2020-03-30
 Title: Visualization of highly multiplexed imaging cytometry data in R
 Description: 
@@ -23,7 +23,7 @@ Authors@R:
       comment = c(ORCID = "0000-0003-3027-8989")))
 License: GPL (>= 2)
 Depends:
-    R (>= 3.6),
+    R (>= 4.0),
     EBImage,
     SingleCellExperiment,
     methods
