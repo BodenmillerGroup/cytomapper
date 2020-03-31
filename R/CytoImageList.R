@@ -70,8 +70,6 @@
 #' coerce,ANY,CytoImageList-method
 #' coerce,list,CytoImageList-method
 #' show,CytoImageList-method
-#' plot,CytoImageList,ANY-method
-#' plot-CytoImageList-method
 #'
 #' @author Nils Eling (\email{nils.eling@@dqbm.uzh.ch})
 #'
@@ -128,19 +126,6 @@ setMethod("show", signature = signature(object="CytoImageList"),
             cat(paste0("channelNames(", length(channelNames(object)),
                     "):"), channelNames(object), "\n", sep = " ")
         }
-    }
-)
-
-#' @export
-setMethod("plot",
-    signature = signature(x="CytoImageList"),
-    definition = function(x){
-        cur_check <- lapply(x, function(x){all(x == floor(x))})
-            if(all(unlist(cur_check))){
-                plotCells(mask = x)
-            } else {
-                plotPixels(image = x)
-            }
     }
 )
 

@@ -7,8 +7,6 @@
 \alias{coerce,ANY,CytoImageList-method}
 \alias{coerce,list,CytoImageList-method}
 \alias{show,CytoImageList-method}
-\alias{plot,CytoImageList,ANY-method}
-\alias{plot-CytoImageList-method}
 \title{S4 class for list of images}
 \usage{
 CytoImageList(...)
