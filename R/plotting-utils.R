@@ -475,11 +475,13 @@
                         .plotScaleBar(plottingParam$scale_bar,
                                 xl = xleft, xr = xright,
                                 yt = ytop, yb = ybottom,
+                                m_width, m_height,
                                 image_scale)
                     } else {
                         .plotScaleBar(plottingParam$scale_bar,
                                 xl = 0, xr = dim_x,
                                 yt = 0, yb = dim_y,
+                                m_width, m_height,
                                 image_scale)
                     }
                 } else {
@@ -490,11 +492,13 @@
                             .plotScaleBar(plottingParam$scale_bar,
                                     xl = xleft, xr = xright,
                                     yt = ytop, yb = ybottom,
+                                    m_width, m_height,
                                     image_scale)
                         } else {
                             .plotScaleBar(plottingParam$scale_bar,
                                     xl = 0, xr = dim_x,
                                     yt = 0, yb = dim_y,
+                                    m_width, m_height,
                                     image_scale)
                         }
                     }
@@ -825,11 +829,37 @@
 # Plot scale_bar
 #' @importFrom graphics strheight text segments
 #' @importFrom raster as.raster
-.plotScaleBar <- function(scale_bar, xl, xr, yt, yb, image_scale){
-    cur_length <- scale_bar$length
-    cur_label <- scale_bar$label
-    cur_cex <- scale_bar$cex
-    cur_lwd <- scale_bar$lwd * image_scale
+.plotScaleBar <- function(scale_bar, xl, xr, yt, yb, m_w, m_h,image_scale){
+    # Set default scale bar length
+    if (is.null(scale_bar$length)) {
+        cur_length <- ifelse(m_w > 25, round(m_w/5, digits = -1), 10)
+    } else {
+        cur_length <- scale_bar$length
+    }
+    if (is.null(scale_bar$label)) {
+        cur_label <- as.character(cur_length)
+    } else {
+        cur_label <- scale_bar$label
+    }
+    if (is.null(scale_bar$cex)) {
+        label_height <- abs(strheight(cur_label))
+        # Target size is 5% of max image height
+        cur_cex <- (m_h/20)/label_height
+    } else {
+        cur_cex <- scale_bar$cex
+    }
+    if (is.null(scale_bar$lwd)) {
+        label_height <- abs(strheight(cur_label))
+        # Target size is 2% of max image height
+        cur_lwd <- (m_h/50) 
+    } else {
+        cur_lwd <- scale_bar$lwd 
+    }
+    # Adjust lwd to image scale
+    cur_lwd <- cur_lwd * image_scale
+    
+    print(c(cur_cex, cur_lwd))
+    
     cur_col <- scale_bar$colour
     cur_position <- scale_bar$position
     cur_margin.x <- scale_bar$margin[1]

@@ -16,11 +16,13 @@
 #' @param scale_bar a list specifying features of the scale bar. One or multiple
 #' of the following entries are supported:
 #' \itemize{
-#' \item \code{length}: numeric length in pixels (default 20).
-#' \item \code{label}: single character specifying the scale bar label (default
-#' "20").
+#' \item \code{length}: numeric length in pixels (default 20% of the largest
+#' image width).
+#' \item \code{label}: single character specifying the scale bar label.
 #' \item \code{cex}: numeric value indicating the size of the scale bar label.
 #' \item \code{lwd}: numeric value indicating the line width of the scale bar.
+#' By default, the line width is adjusted relative to the maximum height of the
+#' images.
 #' \item \code{colour}: single character specifying the colour of scale bar and
 #' label (default "white").
 #' \item \code{position}: position of scale bar. Supported values: "topleft",
@@ -208,11 +210,10 @@ NULL
 
     # scale_bar
     if(!("scale_bar" %in% names(dotArgs))){
-        cur_length <- 20
-        scalebar <- list(length = cur_length,
-                        label = as.character(cur_length),
-                        cex = 1,
-                        lwd = 2,
+        scalebar <- list(length = NULL,
+                        label = NULL,
+                        cex = NULL,
+                        lwd = NULL,
                         colour = "white",
                         position = "bottomright",
                         margin = c(10,10),
@@ -376,7 +377,7 @@ NULL
                     "'length' should be numeric and of length 1"))
             }
         } else {
-            scalebar$length <- 20
+            scalebar$length <- NULL
         }
 
         if("cex" %in% names(scalebar)){
@@ -385,7 +386,7 @@ NULL
                         "'cex' should be a single number"))
             }
         } else {
-            scalebar$cex <- 1
+            scalebar$cex <- NULL
         }
 
         if("lwd" %in% names(scalebar)){
@@ -394,7 +395,7 @@ NULL
                     "'lwd' should be a single number"))
             }
         } else {
-            scalebar$lwd <- 2
+            scalebar$lwd <- NULL
         }
 
         if("label" %in% names(scalebar)){
@@ -403,7 +404,7 @@ NULL
                         "'label' should be a single entry"))
             }
         } else {
-            scalebar$label <- as.character(scalebar$length)
+            scalebar$label <- NULL
         }
 
         if("colour" %in% names(scalebar)){
