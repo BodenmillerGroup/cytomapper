@@ -20,9 +20,9 @@
 #' image width).
 #' \item \code{label}: single character specifying the scale bar label.
 #' \item \code{cex}: numeric value indicating the size of the scale bar label.
-#' \item \code{lwd}: numeric value indicating the line width of the scale bar.
-#' By default, the line width is adjusted relative to the maximum height of the
-#' images.
+#' \item \code{lwidth}: numeric value indicating the line width of the scale bar
+#' in pixels. By default, the line width is adjusted relative to the maximum
+#' height of the images.
 #' \item \code{colour}: single character specifying the colour of scale bar and
 #' label (default "white").
 #' \item \code{position}: position of scale bar. Supported values: "topleft",
@@ -137,7 +137,7 @@
 #' # Setting the scale bar
 #' plotCells(pancreasMasks, scale_bar = list(length = 10,
 #'                                         cex = 2,
-#'                                         lwd = 3,
+#'                                         lwidth = 10,
 #'                                         colour = "red",
 #'                                         position = "bottomleft",
 #'                                         margin = c(5,5),
@@ -213,7 +213,7 @@ NULL
         scalebar <- list(length = NULL,
                         label = NULL,
                         cex = NULL,
-                        lwd = NULL,
+                        lwidth = NULL,
                         colour = "white",
                         position = "bottomright",
                         margin = c(10,10),
@@ -335,8 +335,7 @@ NULL
 # Validity of scale_bar input
 .valid.scalebar <- function(scalebar){
     error.scalebar <- "Invalid entry to the 'scale_bar' list object"
-    # scale_bar has to be of the form
-    # list(length, label, lwd, colour, position, margin)
+
     if(!is.null(scalebar)){
         if(!is.list(scalebar)){
             stop(error.scalebar)
@@ -344,7 +343,7 @@ NULL
 
         if(is.null(names(scalebar)) ||
             !all(names(scalebar) %in% c("length", "label", "cex",
-                                        "lwd", "colour",
+                                        "lwidth", "colour",
                                         "position", "margin", "frame"))){
             stop(error.scalebar)
         }
@@ -389,13 +388,13 @@ NULL
             scalebar$cex <- NULL
         }
 
-        if("lwd" %in% names(scalebar)){
-            if(!is.numeric(scalebar$lwd) || length(scalebar$lwd) != 1L){
+        if("lwidth" %in% names(scalebar)){
+            if(!is.numeric(scalebar$lwidth) || length(scalebar$lwidth) != 1L){
                 stop(paste0(error.scalebar, ": \n",
-                    "'lwd' should be a single number"))
+                    "'lwidth' should be a single number"))
             }
         } else {
-            scalebar$lwd <- NULL
+            scalebar$lwidth <- NULL
         }
 
         if("label" %in% names(scalebar)){

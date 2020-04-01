@@ -848,17 +848,13 @@
     } else {
         cur_cex <- scale_bar$cex
     }
-    if (is.null(scale_bar$lwd)) {
+    if (is.null(scale_bar$lwidth)) {
         label_height <- abs(strheight(cur_label))
         # Target size is 2% of max image height
-        cur_lwd <- (m_h/50) 
+        cur_lwidth <- ifelse(m_h >= 50, round(m_h/50, digits = 0), 1)
     } else {
-        cur_lwd <- scale_bar$lwd 
+        cur_lwidth <- scale_bar$lwidth 
     }
-    # Adjust lwd to image scale
-    cur_lwd <- cur_lwd * image_scale
-    
-    print(c(cur_cex, cur_lwd))
     
     cur_col <- scale_bar$colour
     cur_position <- scale_bar$position
@@ -867,39 +863,45 @@
 
     # Plot scale bar
     label_height <- abs(strheight(cur_label, cex = cur_cex))
-    segm_params <- list(lwd = cur_lwd, col = cur_col, lend = 1)
+    rect_params <- list(col = cur_col)
     text_params <- list(labels = cur_label, cex = cur_cex,
-                        col = cur_col, adj = 0.5, lwd = cur_lwd)
+                        col = cur_col, adj = c(0.5, 0))
 
     if(cur_position == "bottomright"){
-        do.call(segments, append(list(x0 = xr - cur_length - cur_margin.x,
-                                y0 = yb - cur_margin.y,
-                                x1 = xr - cur_margin.x), segm_params))
+        rect(xleft = xr - cur_length - cur_margin.x,
+            xright = xr - cur_margin.x,
+            ybottom = yb - cur_margin.y,
+            ytop = yb - cur_margin.y - cur_lwidth,
+            col = cur_col, border = NA)
         do.call(text, append(list(x = xr - cur_length/2 - cur_margin.x,
-                        y = yb - cur_margin.y - label_height - label_height/4),
+                        y = yb - cur_margin.y - cur_lwidth - label_height/2),
                             text_params))
     } else if(cur_position == "bottomleft"){
-        do.call(segments, append(list(x0 = xl + cur_margin.x,
-                                y0 = yb - cur_margin.y,
-                                x1 = xl + cur_length + cur_margin.x),
-                                segm_params))
+        rect(xleft = xl + cur_margin.x,
+            xright = xl + cur_length + cur_margin.x,
+            ybottom = yb - cur_margin.y,
+            ytop = yb - cur_margin.y - cur_lwidth,
+            col = cur_col, border = NA)
         do.call(text, append(list(x = xl + cur_length/2 + cur_margin.x,
-                        y = yb - cur_margin.y - label_height - label_height/4),
+                        y = yb - cur_margin.y - cur_lwidth - label_height/2),
                         text_params))
     } else if(cur_position == "topright"){
-        do.call(segments, append(list(x0 = xr - cur_length - cur_margin.x,
-                                y0 = yt + cur_margin.y,
-                                x1 = xr - cur_margin.x), segm_params))
+        rect(xleft = xr - cur_length - cur_margin.x,
+            xright = xr - cur_margin.x,
+            ybottom = yt + cur_margin.y + cur_lwidth,
+            ytop = yt + cur_margin.y,
+            col = cur_col, border = NA)
         do.call(text, append(list(x = xr - cur_length/2 - cur_margin.x,
-                        y = yt + cur_margin.y - label_height - label_height/4),
+                        y = yt + cur_margin.y - label_height/2),
                         text_params))
     } else if(cur_position == "topleft"){
-        do.call(segments, append(list(x0 = xl + cur_margin.x,
-                                y0 = yt + cur_margin.y,
-                                x1 = xl + cur_length + cur_margin.x),
-                                segm_params))
+        rect(xleft = xl + cur_margin.x,
+             xright = xl + cur_length + cur_margin.x,
+             ybottom = yt + cur_margin.y + cur_lwidth,
+             ytop = yt + cur_margin.y,
+             col = cur_col, border = NA)
         do.call(text, append(list(x = xl + cur_length/2 + cur_margin.x,
-                        y = yt + cur_margin.y - label_height - label_height/4),
+                        y = yt + cur_margin.y - label_height/2),
                         text_params))
     }
 }

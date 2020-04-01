@@ -696,7 +696,7 @@ coloured by setting `missing_colour`. For an example, see figure
 Depending on the cells' and background colour, the scale bar and image title are
 not visible. To change the visual display of the scale bar, a named list can be
 passed to the `scale_bar` parameter. The list should contain one or multiple of
-the following entries: `length`, `label`, `cex`, `lwd`, `colour`, `position`,
+the following entries: `length`, `label`, `cex`, `lwidth`, `colour`, `position`,
 `margin`, `frame`. For a detailed explanation on the individual entries, please
 refer to the `scale_bar` section in `?'plotting-param'`.
 
@@ -765,7 +765,7 @@ plotCells(pancreasMasks, object = pancreasSCE,
             scale_bar = list(length = 30,
                             label = expression("30 " ~ mu * "m"),
                             cex = 2,
-                            lwd = 5,
+                            lwidth = 10,
                             colour = "cyan",
                             position = "bottomleft",
                             margin = c(5,5),

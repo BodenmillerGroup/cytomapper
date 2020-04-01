@@ -14,7 +14,7 @@ test_that("plotting-param: scale_bar can be set.", {
   expect_silent(plotCells(cur_images,
                           scale_bar = list(cex = 2)))
   expect_silent(plotCells(cur_images,
-                          scale_bar = list(lwd = 10)))
+                          scale_bar = list(lwidth = 5)))
   expect_silent(plotCells(cur_images,
                           scale_bar = list(colour = "red")))
   expect_silent(plotCells(cur_images,
@@ -41,7 +41,7 @@ test_that("plotting-param: scale_bar can be set.", {
                           scale_bar = list(length = 10,
                                            label = "10 um",
                                            cex = 2,
-                                           lwd = 5,
+                                           lwidth = 5,
                                            colour = "dark red",
                                            position = "bottomright",
                                            margin = c(20,20))))
