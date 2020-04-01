@@ -7,8 +7,6 @@
 \alias{channelNames<-}
 \alias{channelNames,CytoImageList-method}
 \alias{channelNames<-,CytoImageList-method}
-\alias{channelNames,Image-method}
-\alias{channelNames<-,Image-method}
 \alias{names,CytoImageList-method}
 \alias{names<-,CytoImageList-method}
 \title{Getting and setting the channel and image names}
@@ -18,10 +16,10 @@ individual images.
 }
 \section{Setting and getting the channel names}{
 
-In the following code, \code{x} is either a \linkS4class{CytoImageList} or
-\linkS4class{Image} object containing one or multiple channels. The channel
+In the following code, \code{x} is either a \linkS4class{CytoImageList} 
+object containing one or multiple channels. The channel
 names can be replaced by \code{value}, which contains a character vector of
-the same length as the number of channels in the image(s).
+the same length as the number of channels in the images.
 \describe{
 \item{\code{channelNames(x)}:}{Returns the names of all channels stored in
 \code{x}}

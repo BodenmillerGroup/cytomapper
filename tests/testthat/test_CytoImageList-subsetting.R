@@ -59,6 +59,7 @@ test_that("Merging works on CytoImageList object.", {
 })
 
 test_that("General operations work on CytoImageList object.", {
+    data("pancreasImages")
   # Subsetting
   ## Getters
   expect_true(is(pancreasImages[1], "CytoImageList"))
@@ -106,7 +107,7 @@ test_that("General operations work on CytoImageList object.", {
   expect_silent(cur_list <- lapply(pancreasImages, dim))
   expect_true(is.list(cur_list))
   expect_silent(cur_list <- endoapply(pancreasImages, function(x){
-    channelNames(x) <- NULL
+    EBImage::gblur(x, sigma = 1)
     return(x)}))
   expect_true(is(cur_list, "CytoImageList"))
 

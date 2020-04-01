@@ -16,11 +16,13 @@ specifying a valid colour that is set as the background of the image.}
 \item{scale_bar}{a list specifying features of the scale bar. One or multiple
 of the following entries are supported:
 \itemize{
-\item \code{length}: numeric length in pixels (default 20).
-\item \code{label}: single character specifying the scale bar label (default
-"20").
+\item \code{length}: numeric length in pixels (default 20% of the largest
+image width).
+\item \code{label}: single character specifying the scale bar label.
 \item \code{cex}: numeric value indicating the size of the scale bar label.
-\item \code{lwd}: numeric value indicating the line width of the scale bar.
+\item \code{lwidth}: numeric value indicating the line width of the scale bar
+in pixels. By default, the line width is adjusted relative to the maximum
+height of the images.
 \item \code{colour}: single character specifying the colour of scale bar and
 label (default "white").
 \item \code{position}: position of scale bar. Supported values: "topleft",
@@ -147,7 +149,7 @@ plotCells(pancreasMasks, background_colour = "blue")
 # Setting the scale bar
 plotCells(pancreasMasks, scale_bar = list(length = 10,
                                         cex = 2,
-                                        lwd = 3,
+                                        lwidth = 10,
                                         colour = "red",
                                         position = "bottomleft",
                                         margin = c(5,5),

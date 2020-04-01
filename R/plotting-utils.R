@@ -830,7 +830,7 @@
 }
 
 # Plot scale_bar
-#' @importFrom graphics strheight text segments
+#' @importFrom graphics strheight text rect
 #' @importFrom raster as.raster
 .plotScaleBar <- function(scale_bar, xl, xr, yt, yb, m_w, m_h,image_scale){
     # Set default scale bar length

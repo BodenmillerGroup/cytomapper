@@ -2,14 +2,6 @@ test_that("Image and channel names can be extracted and set.", {
   data("pancreasImages")
   cur_Images <- pancreasImages
 
-  # Standard calls - Image
-  cur_Image <- pancreasImages[[1]]
-  expect_equal(channelNames(cur_Image),
-               c("H3", "SMA", "INS", "CD38", "CD44"))
-
-  expect_silent(channelNames(cur_Image) <- c("test1", "test2", "test3", "test4", "test5"))
-  expect_equal(channelNames(cur_Image),
-               c("test1", "test2", "test3", "test4", "test5"))
   # Standard calls - CytoImageList
   expect_equal(channelNames(pancreasImages),
                c("H3", "SMA", "INS", "CD38", "CD44"))
@@ -37,13 +29,6 @@ test_that("Image and channel names can be extracted and set.", {
 
   # Check if expansion works
   ## Subset image that third dimension is lost
-  cur_Image <- pancreasImages[[1]][,,1]
-  cur_Image2 <- cur_Image
-  expect_null(channelNames(cur_Image2))
-  channelNames(cur_Image2) <- "test"
-  expect_equal(channelNames(cur_Image2), "test")
-  expect_identical(cur_Image2[,,1], cur_Image)
-
   cur_Images <- S4Vectors::endoapply(pancreasImages, function(x){
     return(x[,,1])
   })

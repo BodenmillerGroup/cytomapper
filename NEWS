@@ -82,3 +82,13 @@ Changes in version 0.1.13 (2020-03-28):
 Changes in version 0.99.0 (2020-03-30):
 
 + Formatted the package for Bioconductor submission
+
+Changes in version 0.99.4 (2020-04-01):
+
++ Fixed docs to pass checks on Windows
+
+Changes in version 0.99.4 (2020-04-01):
+
++ Aesthetic changes to scale bar, image title and legend title
++ Removed channelNames as Image generic
++ removed exported plot method
