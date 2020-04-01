@@ -8,10 +8,10 @@
 #' individual images.
 #'
 #' @section Setting and getting the channel names:
-#' In the following code, \code{x} is either a \linkS4class{CytoImageList} or
-#' \linkS4class{Image} object containing one or multiple channels. The channel
+#' In the following code, \code{x} is either a \linkS4class{CytoImageList} 
+#' object containing one or multiple channels. The channel
 #' names can be replaced by \code{value}, which contains a character vector of
-#' the same length as the number of channels in the image(s).
+#' the same length as the number of channels in the images.
 #' \describe{
 #' \item{\code{channelNames(x)}:}{Returns the names of all channels stored in
 #' \code{x}}
@@ -47,8 +47,6 @@
 #' channelNames channelNames<-
 #' channelNames,CytoImageList-method
 #' channelNames<-,CytoImageList-method
-#' channelNames,Image-method
-#' channelNames<-,Image-method
 #' names,CytoImageList-method
 #' names<-,CytoImageList-method
 #'
@@ -57,33 +55,6 @@
 #' @author
 #' Nils Eling \email{nils.eling@@dqbm.uzh.ch}
 NULL
-
-#' @export
-setMethod("channelNames",
-    signature = signature(x="Image"),
-    definition = function(x){
-    if(length(dim(x)) == 2L){
-        return(NULL)
-    } else {
-        return(dimnames(x)[[3]])
-    }
-})
-
-#' @export
-#' @importFrom EBImage Image
-setReplaceMethod("channelNames",
-    signature = signature(x="Image"),
-    definition = function(x, value){
-    # Image needs to be expanded to store channel names
-    if(length(dim(x)) == 2L){
-        cur_Image <- Image(x, dim = c(dim(x)[1], dim(x)[2], 1))
-        dimnames(cur_Image) <- c(dimnames(x), NULL)
-        x <- cur_Image
-    }
-
-    dimnames(x)[[3]] <- as.character(value)
-    return(x)
-})
 
 #' @export
 setMethod("channelNames",
