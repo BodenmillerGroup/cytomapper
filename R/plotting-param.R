@@ -433,8 +433,7 @@ NULL
 # Validity of image_title input
 .valid.imagetitle <- function(imagetitle, image){
     error.imagetitle <- "Invalid entry to the 'image_title' list object"
-    # image_title has to be of the form
-    # list(text, position, cex, colour, margin, font)
+
     if(!is.null(imagetitle)){
         if(!is.list(imagetitle)){
         stop(error.imagetitle)

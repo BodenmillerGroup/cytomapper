@@ -101,6 +101,9 @@ test_that("plotting-param: image_title can be set.", {
                           image_title = list(position = "topright",
                                              margin = c(0,0))))
   expect_silent(plotCells(cur_images,
+                          image_title = list(position = "bottomleft",
+                                             margin = c(0,0))))
+  expect_silent(plotCells(cur_images,
                           image_title = list(font = 1)))
   expect_silent(plotCells(cur_images,
                           image_title = list(cex = 3)))

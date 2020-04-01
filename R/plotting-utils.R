@@ -511,12 +511,12 @@
                     .plotImageTitle(out_img, mask, image, img_id,
                                 ind, legend_ind, plottingParam$image_title,
                                 dim_x, xl = xleft, xr = xright,
-                                yt = ytop, yb = ybottom)
+                                yt = ytop, yb = ybottom, m_h = m_height)
                 } else {
                     .plotImageTitle(out_img, mask, image, img_id,
                                 ind, legend_ind, plottingParam$image_title,
                                 dim_x, xl = 0, xr = dim_x,
-                                yt = 0, yb = dim_y)
+                                yt = 0, yb = dim_y, m_h = m_height)
                 }
             }
 
@@ -912,7 +912,7 @@
 #' @importFrom raster as.raster
 .plotImageTitle <- function(out_img, mask, image, img_id, ind, legend_ind,
                             image_title, dim_x,
-                            xl, xr, yt, yb){
+                            xl, xr, yt, yb, m_h){
 
     if(!is.null(image_title$text)){
         cur_title <- image_title$text[ind - legend_ind]
@@ -925,9 +925,16 @@
     } else {
         cur_title <- as.character(ind - legend_ind)
     }
+    
+    if(is.null(image_title$cex)){
+        title_height <- abs(strheight(cur_title))
+        # Target size is 5% of max image height
+        cur_cex <- (m_h/20)/title_height
+    } else {
+        cur_cex <- image_title$cex
+    }
 
     cur_position <- image_title$position
-    cur_cex <- image_title$cex
     cur_col <- image_title$colour
     cur_margin.x <- image_title$margin[1]
     cur_margin.y <- image_title$margin[2]
@@ -939,27 +946,27 @@
     if(cur_position == "top"){
         do.call(text, append(list(x = xl + dim_x/2,
                                 y = yt + cur_margin.y,
-                                adj = 0.5), text_params))
+                                adj = c(0.5, 1)), text_params))
     } else if(cur_position == "bottom"){
         do.call(text, append(list(x = xl + dim_x/2,
                                 y = yb - cur_margin.y,
-                                adj = 0.5), text_params))
+                                adj = c(0.5, 0)), text_params))
     } else if(cur_position == "topleft"){
         do.call(text, append(list(x = xl + cur_margin.x,
                                 y = yt + cur_margin.y,
-                                adj = 0), text_params))
+                                adj = c(0, 1)), text_params))
     } else if(cur_position == "topright"){
         do.call(text, append(list(x = xr - cur_margin.x,
                                 y = yt + cur_margin.y,
-                                adj = 1), text_params))
+                                adj = c(1, 1)), text_params))
     } else if(cur_position == "bottomleft"){
         do.call(text, append(list(x = xl + cur_margin.x,
                                 y = yb - cur_margin.y,
-                                adj = 0), text_params))
+                                adj = c(0, 0)), text_params))
     } else if(cur_position == "bottomright"){
         do.call(text, append(list(x = xr - cur_margin.x,
                                 y = yb - cur_margin.y,
-                                adj = 1), text_params))
+                                adj = c(1, 0)), text_params))
     }
 }
 
