@@ -588,8 +588,8 @@
     if(!is.null(colour_by) &&
         (all(colour_by %in% rownames(object)) || !is.null(image))){
 
-        # Maximum title width
-        title_width <- max(strwidth(colour_by, font = colour_by.title.font))
+        # Maximum title height
+        title_height <- max(strheight(colour_by, font = colour_by.title.font))
 
         # Maximum label width
         if(is.null(image)){
@@ -615,14 +615,14 @@
         for(i in seq_along(colour_by)){
             col_n <- colour_by[i]
             if(i < 4){
-                cur_x <- ((m_width-(2*margin))/6 * i) + margin
-                cur_y <- (m_height-(2*margin))/4 + margin
+                cur_x <- ((m_width - (2*margin))/6 * i) + margin
+                cur_y <- (m_height - (2*margin))/4 + margin
             } else {
-                cur_x <- ((m_width-(2*margin))/6 * (i - 3)) + margin
-                cur_y <- ((m_height-(2*margin))/4 * 3) + margin
+                cur_x <- ((m_width - (2*margin))/6 * (i - 3)) + margin
+                cur_y <- ((m_height - (2*margin))/4 * 3) + margin
             }
-            cur_space_x <- (m_width-(2*margin))/6
-            cur_space_y <- (m_height-(2*margin))/2
+            cur_space_x <- (m_width - (2*margin))/6
+            cur_space_y <- (m_height - (2*margin))/2
 
             if(plottingParam$scale){
                 if(is.null(image)){
@@ -639,9 +639,10 @@
             cur_labels <- c(format(round(cur_min, 1), nsmall = 1),
                             format(round(cur_max/2, 1), nsmall = 1),
                             format(round(cur_max, 1), nsmall = 1))
+            
             # Define title cex
             if(is.null(colour_by.title.cex)){
-                title_cex <- (cur_space_x/1.5)/title_width
+                title_cex <- (cur_space_y/8)/title_height
             } else {
                 title_cex <- colour_by.title.cex
             }
@@ -659,7 +660,7 @@
                 label = col_n, col = "black",
                 font = colour_by.title.font,
                 cex = title_cex, adj = c(0.5, 1))
-            text(x=cur_x- cur_space_x/4 + 2,
+            text(x=cur_x - cur_space_x/4 + 2,
                 y = seq(cur_y - cur_space_y/2 + cur_space_y/4,
                 cur_y + cur_space_y/2 - cur_space_y/8, length.out = 3),
                 labels = rev(cur_labels), col = "black",
@@ -688,14 +689,15 @@
                             format(round(cur_max/2, 1), nsmall = 1),
                             format(round(cur_max, 1), nsmall = 1))
             label_width <- max(strwidth(rev(cur_labels)))
-            title_width <- strwidth(colour_by, font = colour_by.title.font)
+            title_height <- abs(strheight(colour_by, 
+                                        font = colour_by.title.font))
 
             col_ramp <- colorRampPalette(cur_col$colour_by[[1]])(101)
             cur_legend <- as.raster(matrix(rev(col_ramp), ncol=1))
 
             # Define title cex
             if(is.null(colour_by.title.cex)){
-                title_cex <- (cur_space_x/1.5)/title_width
+                title_cex <- (cur_space_y/8)/title_height
             } else {
                 title_cex <- colour_by.title.cex
             }
@@ -769,14 +771,15 @@
                             format(round(cur_max/2, 1), nsmall = 1),
                             format(round(cur_max, 1), nsmall = 1))
             label_width <- max(strwidth(rev(cur_labels)))
-            title_width <- strwidth(outline_by, font = colour_by.title.font)
+            title_height <- abs(strheight(outline_by, 
+                                        font = colour_by.title.font))
 
             col_ramp <- colorRampPalette(cur_col$outline_by[[1]])(101)
             cur_legend <- as.raster(matrix(rev(col_ramp), ncol=1))
 
             # Define title cex
             if(is.null(colour_by.title.cex)){
-                title_cex <- (cur_space_x/1.5)/title_width
+                title_cex <- (cur_space_y/8)/title_height
             } else {
                 title_cex <- outline_by.title.cex
             }
