@@ -163,7 +163,7 @@ test_that("plotting-param: background_colour can be set.", {
 test_that("plotting-param: save_plot can be set.", {
   data("pancreasImages")
 
-  cur_path <- tempfile()
+  cur_path <- tempdir()
   on.exit(unlink(cur_path))
 
   # Works
@@ -172,20 +172,123 @@ test_that("plotting-param: save_plot can be set.", {
   # Test if par is correctly returned
   cur_par1 <- par()
   expect_silent(plotPixels(pancreasImages,
-                           save_plot = list(filename = paste0(cur_path, "test.png"),
+                           save_plot = list(filename = paste0(cur_path, "/test.png"),
                                             scale = 10)))
   cur_par2 <- par()
   expect_identical(cur_par1, cur_par2)
-  expect_true(file.exists(paste0(cur_path, "test.png")))
+  expect_true(file.exists(paste0(cur_path, "/test.png")))
   expect_silent(plotPixels(pancreasImages,
-                           save_plot = list(filename = paste0(cur_path, "test.jpeg"),
+                           save_plot = list(filename = paste0(cur_path, "/test.jpeg"),
                                              scale = 10)))
-  expect_true(file.exists(paste0(cur_path, "test.jpeg")))
+  expect_true(file.exists(paste0(cur_path, "/test.jpeg")))
   expect_silent(plotPixels(pancreasImages,
-                           save_plot = list(filename = paste0(cur_path, "test.tiff"),
+                           save_plot = list(filename = paste0(cur_path, "/test.tiff"),
                                              scale = 10)))
-  expect_true(file.exists(paste0(cur_path, "test.tiff")))
+  expect_true(file.exists(paste0(cur_path, "/test.tiff")))
 
+  # Test if displaying single images works
+  expect_silent(plotPixels(pancreasImages,
+                           save_plot = list(filename = paste0(cur_path, "/test.png"),
+                                            scale = 10),
+                           display = "single"))
+  expect_true(file.exists(paste0(cur_path, "/test_legend.png")))
+  expect_true(file.exists(paste0(cur_path, "/test_1.png")))
+  expect_true(file.exists(paste0(cur_path, "/test_2.png")))
+  expect_true(file.exists(paste0(cur_path, "/test_3.png")))
+  
+  expect_silent(plotPixels(pancreasImages,
+                           save_plot = list(filename = paste0(cur_path, "/test.jpeg"),
+                                            scale = 10),
+                           display = "single"))
+  expect_true(file.exists(paste0(cur_path, "/test_legend.jpeg")))
+  expect_true(file.exists(paste0(cur_path, "/test_1.jpeg")))
+  expect_true(file.exists(paste0(cur_path, "/test_2.jpeg")))
+  expect_true(file.exists(paste0(cur_path, "/test_3.jpeg")))
+  
+  expect_silent(plotPixels(pancreasImages,
+                           save_plot = list(filename = paste0(cur_path, "/test.tiff"),
+                                            scale = 10),
+                           display = "single"))
+  expect_true(file.exists(paste0(cur_path, "/test_legend.png")))
+  expect_true(file.exists(paste0(cur_path, "/test_1.png")))
+  expect_true(file.exists(paste0(cur_path, "/test_2.png")))
+  expect_true(file.exists(paste0(cur_path, "/test_3.png")))
+  
+  # Test if subsetting works
+  expect_silent(plotPixels(pancreasImages,
+                           save_plot = list(filename = paste0(cur_path, "/test_all.png"),
+                                            scale = 10),
+                           subset_images = c(1,3),
+                           display = "all"))
+  expect_true(file.exists(paste0(cur_path, "/test_all.png")))
+  
+  expect_silent(plotPixels(pancreasImages,
+                           save_plot = list(filename = paste0(cur_path, "/test_all.jpeg"),
+                                            scale = 10),
+                           subset_images = c(1,3),
+                           display = "all"))
+  expect_true(file.exists(paste0(cur_path, "/test_all.jpeg")))
+  
+  expect_silent(plotPixels(pancreasImages,
+                           save_plot = list(filename = paste0(cur_path, "/test_all.tiff"),
+                                            scale = 10),
+                           subset_images = c(1,3),
+                           display = "all"))
+  expect_true(file.exists(paste0(cur_path, "/test_all.tiff")))
+  
+  # Test if subsetting and displaying single images works
+  expect_silent(plotPixels(pancreasImages,
+                           save_plot = list(filename = paste0(cur_path, "/test_single.png"),
+                                            scale = 10),
+                           subset_images = c(1,3),
+                           display = "single"))
+  expect_true(file.exists(paste0(cur_path, "/test_single_legend.png")))
+  expect_true(file.exists(paste0(cur_path, "/test_single_1.png")))
+  expect_true(file.exists(paste0(cur_path, "/test_single_2.png")))
+  
+  expect_silent(plotPixels(pancreasImages,
+                           save_plot = list(filename = paste0(cur_path, "/test_single.jpeg"),
+                                            scale = 10),
+                           subset_images = c(1,3),
+                           display = "single"))
+  expect_true(file.exists(paste0(cur_path, "/test_single_legend.jpeg")))
+  expect_true(file.exists(paste0(cur_path, "/test_single_1.jpeg")))
+  expect_true(file.exists(paste0(cur_path, "/test_single_2.jpeg")))
+  
+  expect_silent(plotPixels(pancreasImages,
+                           save_plot = list(filename = paste0(cur_path, "/test_single.tiff"),
+                                            scale = 10),
+                           subset_images = c(1,3),
+                           display = "single"))
+  expect_true(file.exists(paste0(cur_path, "/test_single_legend.tiff")))
+  expect_true(file.exists(paste0(cur_path, "/test_single_1.tiff")))
+  expect_true(file.exists(paste0(cur_path, "/test_single_2.tiff")))
+  
+  # Remove legend
+  expect_silent(plotPixels(pancreasImages,
+                           save_plot = list(filename = paste0(cur_path, "/test_nl.png"),
+                                            scale = 10),
+                           subset_images = c(1,3), legend = NULL,
+                           display = "single"))
+  expect_true(file.exists(paste0(cur_path, "/test_nl_1.png")))
+  expect_true(file.exists(paste0(cur_path, "/test_nl_2.png")))
+  
+  expect_silent(plotPixels(pancreasImages,
+                           save_plot = list(filename = paste0(cur_path, "/test_nl.jpeg"),
+                                            scale = 10),
+                           subset_images = c(1,3),
+                           display = "single"))
+  expect_true(file.exists(paste0(cur_path, "/test_nl_1.jpeg")))
+  expect_true(file.exists(paste0(cur_path, "/test_nl_2.jpeg")))
+  
+  expect_silent(plotPixels(pancreasImages,
+                           save_plot = list(filename = paste0(cur_path, "/test_nl.tiff"),
+                                            scale = 10),
+                           subset_images = c(1,3),
+                           display = "single"))
+  expect_true(file.exists(paste0(cur_path, "/test_nl_1.tiff")))
+  expect_true(file.exists(paste0(cur_path, "/test_nl_2.tiff")))
+  
   # Error
   expect_error(plotPixels(pancreasImages,
                           save_plot = list(filename = "test")),
@@ -561,14 +664,14 @@ test_that("plotting-param: images can be plotted individually.", {
                            display = "single"))
 
   # save_plot
-  cur_path <- tempfile()
+  cur_path <- tempdir()
   on.exit(unlink(cur_path))
 
   dev.off()
 
   cur_par1 <- par()
   expect_silent(plotPixels(pancreasImages, colour_by = c("H3", "SMA", "CD44"),
-                           save_plot = list(filename = paste0(cur_path, "test.png"),
+                           save_plot = list(filename = paste0(cur_path, "/test.png"),
                                              scale = 2),
                            display = "all"))
   cur_par2 <- par()
@@ -578,7 +681,7 @@ test_that("plotting-param: images can be plotted individually.", {
 
   cur_par1 <- par()
   expect_silent(plotPixels(pancreasImages, colour_by = c("H3", "SMA", "CD44"),
-                           save_plot = list(filename = paste0(cur_path, "test.png"),
+                           save_plot = list(filename = paste0(cur_path, "/test.png"),
                                              scale = 2),
                            display = "single"))
   cur_par2 <- par()

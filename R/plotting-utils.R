@@ -429,18 +429,24 @@
                 cur_ext <- file_ext(image_location)
 
                 # File name
-                cur_name <- paste0(file_path_sans_ext(image_location),
-                                    "_", ind, ".", cur_ext)
+                if (ind == legend_ind) {
+                    cur_name <- paste0(file_path_sans_ext(image_location),
+                                        "_legend.", cur_ext)
+                } else {
+                    cur_name <- paste0(file_path_sans_ext(image_location),
+                                        "_", ind - legend_ind, ".", cur_ext)
+                }
+
                 if(cur_ext == "png"){
                     png(cur_name, width = image_scale * dim_x,
                         height = image_scale * dim_y, units = "px",
                         pointsize = 12 * image_scale)
                 } else if(cur_ext == "jpeg"){
-                    jpeg(image_location, width = image_scale * dim_x,
+                    jpeg(cur_name, width = image_scale * dim_x,
                         height = image_scale * dim_y, units = "px",
                         pointsize = 12 * image_scale)
                 } else if(cur_ext == "tiff"){
-                    tiff(image_location, width = image_scale * dim_x,
+                    tiff(cur_name, width = image_scale * dim_x,
                         height = image_scale * dim_y, units = "px",
                         pointsize = 12 * image_scale)
                 }
