@@ -37,26 +37,20 @@ to the minimum/maximum value per image or across all images (default
 \code{separateImages = FALSE}). The latter allows the visual comparison of
 intensity values across images.
 
-To clip the images before normalization, the \code{inputRange} or
-\code{percentileRange} parameters can be set. The main difference between
-these two options is a hard (inputRange) or percentile (percentileRange)
-clipping range. \code{percentileRange} allows setting the minimum and maximum
-range of values in terms of percentiles (e.g. \code{c(0, 0.99)} for 0 and
-99th percentile clipping).
+To clip the images before normalization, the \code{inputRange} can be set. 
+Explain in more detail... 
 
 \code{normalize(object, separateChannels = TRUE, separateImages = FALSE,
-ft = c(0, 1), percentileRange = c(0, 1), inputRange = NULL)}:
+ft = c(0, 1), inputRange = NULL)}:
 
 \describe{
 \item{\code{object}:}{A CytoImageList object}
 \item{\code{separateChannels}:}{Logical if pixel values should be normalized
-per channel (default) or across all channles.}
+per channel (default) or across all channels.}
 \item{\code{separateImages}:}{Logical if pixel values should be normalized
 per image or across all images (default).}
 \item{\code{ft}:}{Numeric vector of 2 values, target minimum and maximum
 intensity values after normalization (see \code{\link[EBImage]{normalize}}).}
-\item{\code{percentileRange}:}{Numeric vector of 2 values between 0 and 1,
-sets the precentile clipping range of the input intensity values.}
 \item{\code{inputRange}:}{Numeric vector of 2 values, sets the absolute
 clipping range of the input intensity values (see
 \code{\link[EBImage]{normalize}}).}
@@ -80,12 +74,11 @@ x <- normalize(pancreasImages)
 plotPixels(x, colour_by = c("H3", "SMA"))
 
 # Setting the clipping range
-x <- normalize(pancreasImages, percentileRange = c(0, 0.99))
+x <- normalize(x, inputRange = c(0, 0.9))
 plotPixels(x, colour_by = c("H3", "SMA"))
 
 # Normalizing per image
-x <- normalize(pancreasImages, separateImages = TRUE,
-                percentileRange = c(0, 0.99))
+x <- normalize(pancreasImages, separateImages = TRUE)
 plotPixels(x, colour_by = c("H3", "SMA"))
 
 }

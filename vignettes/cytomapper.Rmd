@@ -488,7 +488,7 @@ globally in the `cytomapper` package. Furthermore, the `cytomapper` package
 to define a clipping range based on percentiles.
 
 By default, the `normalize` function linearly scales the images channel-wise
-across all images and returns values between 0 and 1:
+across all images and returns values between 0 and 1 (or the chosen `ft` range):
 
 ```{r normalize-default}
 data("pancreasImages")
@@ -504,11 +504,12 @@ A `CytoImageList` object can also be normalized image-wise:
 cur_images <- normalize(pancreasImages, separateImages = TRUE)
 ```
 
-To clip the image range, the user can provide a percentage-based clipping range:
+To clip the image range, the user can provide a clipping range.
 
 ```{r normalize-clippingrange}
 # Percentage-based clipping range
-cur_images <- normalize(pancreasImages, percentileRange = c(0,0.99))
+cur_images <- normalize(pancreasImages)
+cur_images <- normalize(cur_images, inputRange = c(0, 0.9))
 plotPixels(cur_images, colour_by = c("H3", "SMA", "CD44"))
 ```
 

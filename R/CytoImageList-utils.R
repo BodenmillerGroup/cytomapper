@@ -137,26 +137,20 @@ setReplaceMethod("names",
 #' \code{separateImages = FALSE}). The latter allows the visual comparison of
 #' intensity values across images.
 #'
-#' To clip the images before normalization, the \code{inputRange} or
-#' \code{percentileRange} parameters can be set. The main difference between
-#' these two options is a hard (inputRange) or percentile (percentileRange)
-#' clipping range. \code{percentileRange} allows setting the minimum and maximum
-#' range of values in terms of percentiles (e.g. \code{c(0, 0.99)} for 0 and
-#' 99th percentile clipping).
+#' To clip the images before normalization, the \code{inputRange} can be set. 
+#' Explain in more detail... 
 #'
 #' \code{normalize(object, separateChannels = TRUE, separateImages = FALSE,
-#' ft = c(0, 1), percentileRange = c(0, 1), inputRange = NULL)}:
+#' ft = c(0, 1), inputRange = NULL)}:
 #'
 #' \describe{
 #' \item{\code{object}:}{A CytoImageList object}
 #' \item{\code{separateChannels}:}{Logical if pixel values should be normalized
-#' per channel (default) or across all channles.}
+#' per channel (default) or across all channels.}
 #' \item{\code{separateImages}:}{Logical if pixel values should be normalized
 #' per image or across all images (default).}
 #' \item{\code{ft}:}{Numeric vector of 2 values, target minimum and maximum
 #' intensity values after normalization (see \code{\link[EBImage]{normalize}}).}
-#' \item{\code{percentileRange}:}{Numeric vector of 2 values between 0 and 1,
-#' sets the precentile clipping range of the input intensity values.}
 #' \item{\code{inputRange}:}{Numeric vector of 2 values, sets the absolute
 #' clipping range of the input intensity values (see
 #' \code{\link[EBImage]{normalize}}).}
@@ -179,14 +173,13 @@ setReplaceMethod("names",
 #' # Default normalization
 #' x <- normalize(pancreasImages)
 #' plotPixels(x, colour_by = c("H3", "SMA"))
-#'
+#' 
 #' # Setting the clipping range
-#' x <- normalize(pancreasImages, percentileRange = c(0, 0.99))
+#' x <- normalize(x, inputRange = c(0, 0.9))
 #' plotPixels(x, colour_by = c("H3", "SMA"))
 #'
 #' # Normalizing per image
-#' x <- normalize(pancreasImages, separateImages = TRUE,
-#'                 percentileRange = c(0, 0.99))
+#' x <- normalize(pancreasImages, separateImages = TRUE)
 #' plotPixels(x, colour_by = c("H3", "SMA"))
 #'
 #' @seealso \code{\link[EBImage]{normalize}} for details on Image normalization
@@ -204,7 +197,7 @@ NULL
 setMethod("scaleImages",
     signature = signature(object="CytoImageList"),
     definition = function(object, value){
-        if(length(value) != 1L || !is.numeric(value)){
+        if (length(value) != 1L || !is.numeric(value)) {
             stop("'value' must be a single numeric.")
         }
         cur_out <- endoapply(object, function(y){y * value})
@@ -212,188 +205,112 @@ setMethod("scaleImages",
     })
 
 #' @importFrom stats quantile
+#' @importFrom EBImage combine
 normImages <- function(object, separateChannels = TRUE, separateImages = FALSE,
-                ft = c(0, 1), percentileRange = c(0, 1), inputRange = NULL){
-
-    ## Remove this
-    start_time <- Sys.time()
+                ft = c(0, 1), inputRange = NULL){
     
-    if (!is.logical(separateChannels)) {
+    if (!is.logical(separateChannels) || 
+        length(separateChannels) > 1L || 
+        is.na(separateChannels)) {
         stop("'separateChannels' only takes TRUE or FALSE.")
     }
-    if (!is.logical(separateImages)) {
+    if (!is.logical(separateImages) || 
+        length(separateImages) > 1L || 
+        is.na(separateImages)) {
         stop("'separateImages' only takes TRUE or FALSE.")
     }
-
-    if (!is.null(percentileRange)) {
-        if (!is.numeric(percentileRange) ||
-            length(percentileRange) != 2L ||
-            min(percentileRange) < 0 ||
-            max(percentileRange) > 1) {
-        stop("'percentileRange' takes two numeric values indicating \n",
-            "the lower and upper percentile for clipping")
-        }
-        if (diff(percentileRange) <= 0) {
-            stop("Invalid input for 'percentileRange'")
-        }
-    }
-
-    if ((!is.null(percentileRange) && !is.null(inputRange)) ||
-        (is.null(percentileRange) && is.null(inputRange))) {
-        stop("Please specify either 'percentileRange' or 'inputRange'")
-    }
+    
+    # Number of frames
+    nf <- numberOfFrames(object[[1]])
+    
+    # Number of images
+    ni <- length(object)
 
     if (separateImages) {
+        
+        cur_out <- endoapply(object, function(y){
+            y <- EBImage::normalize(y, separate = separateChannels,
+                                    ft = ft, inputRange = inputRange)
+            return(y)
+        })
+
+    } else {
+        
+        # Finding the maximum and minimum values 
+        if (separateChannels && is.null(inputRange)) {
+            if (nf == 1) {
+                cur_range <- vapply(object, function(i){
+                    quantile(i, probs = c(0, 1))  
+                }, FUN.VALUE = numeric(2)) 
+                cur_range <- quantile(cur_range, c(0, 1))
+            } else {
+                cur_range <- vapply(seq_len(nf), function(i){
+                    cur_r <- vapply(getChannels(object, i),
+                                    function(x){
+                                        quantile(x, c(0,1))
+                                    }, FUN.VALUE = numeric(2))
+                    quantile(cur_r, c(0, 1))
+                }, FUN.VALUE = numeric(2)) 
+            }
+        } else if(!separateChannels && is.null(inputRange)) {
+            cur_range <- vapply(object, function(i){
+                quantile(i, probs = c(0, 1))  
+            }, FUN.VALUE = numeric(2)) 
+            cur_range <- quantile(cur_range, c(0, 1))
+        }
+        
         if (separateChannels) {
             
             cur_out <- endoapply(object, function(y){
-                if(!is.null(inputRange)){
-                    y <- EBImage::normalize(y, separate = TRUE,
-                                            ft = ft, inputRange)
-                } else {
-                    if (length(dim(y)) == 3L) {
-                        cur_range <- apply(y, 3, function(z){
-                            quantile(z, probs = percentileRange)})
+                
+                cur_names <- dimnames(y)  
+                
+                if (nf == 1) {
+                    
+                    if (!is.null(inputRange)) {
+                        cur_range <- inputRange
                     } else {
-                        cur_range <- quantile(y, probs = percentileRange)
+                        cur_range <- as.numeric(cur_range)
                     }
                     
-                    if (any(diff(cur_range) == 0)) {
-                        stop(paste("Minimum and maximum value for",
-                                   "the indicated percentiles are identical."))
-                    }
-
-                    cur_names <- dimnames(y)                    
+                    y <- EBImage::normalize(y,
+                                            separate = TRUE, ft=ft,
+                                            inputRange = cur_range)
+                
+                } else {
                     
-                    if (length(dim(y)) == 3L) {
-                        y <- lapply(seq_len(dim(y)[3]), function(i){
+                    if (!is.null(inputRange)) {
+                        y <- EBImage::normalize(y, separate = TRUE, ft=ft,
+                                        inputRange = inputRange)
+                    } else {
+                        y <- lapply(seq_len(nf), function(i){
                             EBImage::normalize(y[,,i],
                                         separate = TRUE, ft=ft,
                                         inputRange = as.numeric(cur_range[,i]))           
                         })    
                         y <- combine(y)
-                    } else {
-                        y <- EBImage::normalize(y,
-                                        separate = TRUE, ft=ft,
-                                        inputRange = as.numeric(cur_range))
                     }
                     
-                    dimnames(y) <- cur_names
-                    
                 }
+                
+                dimnames(y) <- cur_names
+                
                 return(y)
             })
-
-        } else {
-
-            cur_out <- endoapply(object, function(y){
-                if (!is.null(inputRange)) {
-                    y <- EBImage::normalize(y, separate = FALSE, 
-                                        ft = ft, inputRange)
-                } else {
-                    cur_range <- quantile(y, probs = percentileRange)
-                    if (diff(cur_range) == 0L) {
-                        stop(paste("Minimum and maximum value for",
-                                "the indicated percentiles are identical."))
-                    }
-                    y <- EBImage::normalize(y, separate = FALSE, ft=ft,
-                        inputRange = as.numeric(cur_range))
-                }
-
-                return(y)
-            })
-        }
-    } else {
-        if(separateChannels){
-            
-            ## Remove this
-            cur_time <- Sys.time()
-            print(cur_time - start_time)
-            
-            if(!is.null(percentileRange)){
-                
-                nf <- numberOfFrames(object[[1]])
-                
-                cur_range <- vapply(seq_len(nf), function(i){
-                    cur_dist <- unlist(lapply(getChannels(object, i), 
-                                            as.numeric))
-                    quantile(cur_dist, percentileRange)
-                }, FUN.VALUE = numeric(2))
-                
-                if (any(diff(cur_range) == 0)) {
-                    stop(paste("Minimum and maximum value for",
-                               "the indicated percentiles are identical."))
-                }
-            }
-            
-            ## Remove this
-            cur_time <- Sys.time()
-            print(cur_time - start_time)
-
-            cur_out <- endoapply(object, function(y){
-                if(!is.null(inputRange)){
-                    y <- EBImage::normalize(y, separate = TRUE, 
-                                        ft=ft, inputRange)
-                } else {
-                    
-                    cur_names <- dimnames(y)   
-                    
-                    if (length(dim(y)) == 3L) {
-                        y <- lapply(seq_len(dim(y)[3]), function(i){
-                            EBImage::normalize(y[,,i],
-                                        separate = TRUE, ft=ft,
-                                        inputRange = as.numeric(cur_range[,i]))           
-                        })    
-                        y <- combine(y)
-                    } else {
-                        y <- EBImage::normalize(y,
-                                        separate = TRUE, ft=ft,
-                                        inputRange = as.numeric(cur_range))
-                    }
-                    
-                    dimnames(y) <- cur_names
-                }
-                return(y)
-            })
-            
-            ## Remove this
-            cur_time <- Sys.time()
-            print(cur_time - start_time)
             
         } else {
-            
-            ## Remove this
-            cur_time <- Sys.time()
-            print(cur_time - start_time)
-            
-            if(!is.null(percentileRange)){
-                cur_dist <- unlist(lapply(object, as.numeric))
-                cur_range <- quantile(cur_dist, probs = percentileRange)
-                if(diff(cur_range) == 0){
-                    stop(paste("Minimum and maximum value",
-                            "for the indicated percentiles are identical."))
-                }
-            }
-            
-            ## Remove this
-            cur_time <- Sys.time()
-            print(paste("time2:", cur_time - start_time))
-
             cur_out <- endoapply(object, function(y){
-                if(!is.null(inputRange)){
-                    y <- EBImage::normalize(y, separate = FALSE,
-                                            ft=ft, inputRange)
-                } else {
-                    y <- EBImage::normalize(y, separate = FALSE, ft=ft,
-                            inputRange = c(cur_min, cur_max))
+                if(is.null(inputRange)){
+                    inputRange <- as.numeric(cur_range)
                 }
+                    
+                    
+                y <- EBImage::normalize(y, separate = FALSE,
+                                        ft=ft, inputRange = inputRange)
+
                 return(y)
             })
             
-            ## Remove this
-            cur_time <- Sys.time()
-            print(cur_time - start_time)
-
         }
     }
     return(cur_out)

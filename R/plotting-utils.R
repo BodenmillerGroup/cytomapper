@@ -620,6 +620,7 @@
 
         for(i in seq_along(colour_by)){
             col_n <- colour_by[i]
+            
             if(i < 4){
                 cur_x <- ((m_width - (2*margin))/6 * i) + margin
                 cur_y <- (m_height - (2*margin))/4 + margin
