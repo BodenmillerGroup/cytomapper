@@ -2,23 +2,8 @@
 # Helper functions for plotting cells and pixels
 # -----------------------------------------------------------------------------
 
-# Selection of images based on entries in SCE object or by subset
-#' @importFrom S4Vectors mcols
-.select_images <- function(object, images, img_id, subset_images){
-
-    if(!is.null(subset_images)){
-        if(!is.null(img_id) &&
-            all(subset_images %in% mcols(images)[,img_id])){
-            images <- images[mcols(images)[,img_id] %in% subset_images]
-        } else {
-            images <- images[subset_images]
-        }
-    }
-
-    return(images)
-}
-
 # Colour segmentation masks based on metadata
+#' @importFrom S4Vectors mcols
 .colourMaskByMeta <- function(object, mask, cell_id, img_id,
                                 colour_by, cur_colour, missing_colour,
                                 background_colour){
@@ -65,6 +50,7 @@
 # Colour segmentation masks based on features
 #' @importFrom grDevices colorRampPalette
 #' @importFrom SummarizedExperiment assay
+#' @importFrom S4Vectors mcols
 .colourMaskByFeature <- function(object, mask, cell_id, img_id,
                         colour_by, exprs_values, cur_colour,
                         missing_colour, background_colour, plottingParam){
@@ -195,6 +181,7 @@
 
 # Outline image based on metadata
 #' @importFrom EBImage paintObjects
+#' @importFrom S4Vectors mcols
 .outlineImageByMeta <- function(object, mask, out_img, cell_id, img_id,
                                 outline_by, cur_colour, missing_colour){
 
@@ -323,7 +310,7 @@
 }
 
 # Custom function to display images
-#' @importFrom S4Vectors SimpleList
+#' @importFrom S4Vectors SimpleList mcols
 #' @importFrom EBImage Image
 #' @importFrom tools file_ext file_path_sans_ext
 #' @importFrom graphics par rasterImage strheight text
@@ -917,9 +904,10 @@
 }
 
 
-# Plot legend
+# Plot Title
 #' @importFrom graphics strwidth strheight text rasterImage legend
 #' @importFrom raster as.raster
+#' @importFrom S4Vectors mcols
 .plotImageTitle <- function(out_img, mask, image, img_id, ind, legend_ind,
                             image_title, dim_x,
                             xl, xr, yt, yb, m_h){

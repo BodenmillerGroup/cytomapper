@@ -189,7 +189,7 @@ test_that("plotting-param: save_plot can be set.", {
   # Test if displaying single images works
   expect_silent(plotPixels(pancreasImages,
                            save_plot = list(filename = paste0(cur_path, "/test.png"),
-                                            scale = 10),
+                                            scale = 1),
                            display = "single"))
   expect_true(file.exists(paste0(cur_path, "/test_legend.png")))
   expect_true(file.exists(paste0(cur_path, "/test_1.png")))
@@ -198,7 +198,7 @@ test_that("plotting-param: save_plot can be set.", {
   
   expect_silent(plotPixels(pancreasImages,
                            save_plot = list(filename = paste0(cur_path, "/test.jpeg"),
-                                            scale = 10),
+                                            scale = 1),
                            display = "single"))
   expect_true(file.exists(paste0(cur_path, "/test_legend.jpeg")))
   expect_true(file.exists(paste0(cur_path, "/test_1.jpeg")))
@@ -207,7 +207,7 @@ test_that("plotting-param: save_plot can be set.", {
   
   expect_silent(plotPixels(pancreasImages,
                            save_plot = list(filename = paste0(cur_path, "/test.tiff"),
-                                            scale = 10),
+                                            scale = 1),
                            display = "single"))
   expect_true(file.exists(paste0(cur_path, "/test_legend.png")))
   expect_true(file.exists(paste0(cur_path, "/test_1.png")))
@@ -215,76 +215,89 @@ test_that("plotting-param: save_plot can be set.", {
   expect_true(file.exists(paste0(cur_path, "/test_3.png")))
   
   # Test if subsetting works
-  expect_silent(plotPixels(pancreasImages,
+  expect_silent(plotPixels(pancreasImages[c(1,3)],
                            save_plot = list(filename = paste0(cur_path, "/test_all.png"),
-                                            scale = 10),
-                           subset_images = c(1,3),
+                                            scale = 1),
                            display = "all"))
   expect_true(file.exists(paste0(cur_path, "/test_all.png")))
   
-  expect_silent(plotPixels(pancreasImages,
+  expect_silent(plotPixels(pancreasImages[c(1,3)],
                            save_plot = list(filename = paste0(cur_path, "/test_all.jpeg"),
-                                            scale = 10),
-                           subset_images = c(1,3),
+                                            scale = 1),
                            display = "all"))
   expect_true(file.exists(paste0(cur_path, "/test_all.jpeg")))
   
-  expect_silent(plotPixels(pancreasImages,
+  expect_silent(plotPixels(pancreasImages[c(1,3)],
                            save_plot = list(filename = paste0(cur_path, "/test_all.tiff"),
-                                            scale = 10),
-                           subset_images = c(1,3),
+                                            scale = 1),
                            display = "all"))
   expect_true(file.exists(paste0(cur_path, "/test_all.tiff")))
   
   # Test if subsetting and displaying single images works
-  expect_silent(plotPixels(pancreasImages,
+  expect_silent(plotPixels(pancreasImages[c(1,3)],
                            save_plot = list(filename = paste0(cur_path, "/test_single.png"),
-                                            scale = 10),
-                           subset_images = c(1,3),
+                                            scale = 1),
                            display = "single"))
   expect_true(file.exists(paste0(cur_path, "/test_single_legend.png")))
   expect_true(file.exists(paste0(cur_path, "/test_single_1.png")))
   expect_true(file.exists(paste0(cur_path, "/test_single_2.png")))
   
-  expect_silent(plotPixels(pancreasImages,
+  expect_silent(plotPixels(pancreasImages[1],
+                           save_plot = list(filename = paste0(cur_path, "/test_one.png"),
+                                            scale = 1),
+                           display = "single"))
+  expect_true(file.exists(paste0(cur_path, "/test_one_legend.png")))
+  expect_true(file.exists(paste0(cur_path, "/test_one_1.png")))
+  
+  expect_silent(plotPixels(pancreasImages[c(1,3)],
                            save_plot = list(filename = paste0(cur_path, "/test_single.jpeg"),
-                                            scale = 10),
-                           subset_images = c(1,3),
+                                            scale = 1),
                            display = "single"))
   expect_true(file.exists(paste0(cur_path, "/test_single_legend.jpeg")))
   expect_true(file.exists(paste0(cur_path, "/test_single_1.jpeg")))
   expect_true(file.exists(paste0(cur_path, "/test_single_2.jpeg")))
   
-  expect_silent(plotPixels(pancreasImages,
+  expect_silent(plotPixels(pancreasImages[1],
+                           save_plot = list(filename = paste0(cur_path, "/test_one.jpeg"),
+                                            scale = 1),
+                           display = "single"))
+  expect_true(file.exists(paste0(cur_path, "/test_one_legend.jpeg")))
+  expect_true(file.exists(paste0(cur_path, "/test_one_1.jpeg")))
+  
+  expect_silent(plotPixels(pancreasImages[c(1,3)],
                            save_plot = list(filename = paste0(cur_path, "/test_single.tiff"),
-                                            scale = 10),
-                           subset_images = c(1,3),
+                                            scale = 1),
                            display = "single"))
   expect_true(file.exists(paste0(cur_path, "/test_single_legend.tiff")))
   expect_true(file.exists(paste0(cur_path, "/test_single_1.tiff")))
   expect_true(file.exists(paste0(cur_path, "/test_single_2.tiff")))
   
+  expect_silent(plotPixels(pancreasImages[1],
+                           save_plot = list(filename = paste0(cur_path, "/test_one.tiff"),
+                                            scale = 1),
+                           display = "single"))
+  expect_true(file.exists(paste0(cur_path, "/test_one_legend.tiff")))
+  expect_true(file.exists(paste0(cur_path, "/test_one_1.tiff")))
+  
   # Remove legend
-  expect_silent(plotPixels(pancreasImages,
+  expect_silent(plotPixels(pancreasImages[c(1,3)],
                            save_plot = list(filename = paste0(cur_path, "/test_nl.png"),
                                             scale = 10),
-                           subset_images = c(1,3), legend = NULL,
+                           legend = NULL,
                            display = "single"))
   expect_true(file.exists(paste0(cur_path, "/test_nl_1.png")))
   expect_true(file.exists(paste0(cur_path, "/test_nl_2.png")))
   
-  expect_silent(plotPixels(pancreasImages,
+  expect_silent(plotPixels(pancreasImages[c(1,3)],
                            save_plot = list(filename = paste0(cur_path, "/test_nl.jpeg"),
                                             scale = 10),
-                           subset_images = c(1,3),
                            display = "single"))
   expect_true(file.exists(paste0(cur_path, "/test_nl_1.jpeg")))
   expect_true(file.exists(paste0(cur_path, "/test_nl_2.jpeg")))
   
-  expect_silent(plotPixels(pancreasImages,
+  expect_silent(plotPixels(pancreasImages[c(1,3)],
                            save_plot = list(filename = paste0(cur_path, "/test_nl.tiff"),
                                             scale = 10),
-                           subset_images = c(1,3),
                            display = "single"))
   expect_true(file.exists(paste0(cur_path, "/test_nl_1.tiff")))
   expect_true(file.exists(paste0(cur_path, "/test_nl_2.tiff")))
@@ -664,13 +677,11 @@ test_that("plotting-param: images can be plotted individually.", {
                            display = "single"))
   
   # subsetting
-  expect_silent(plotPixels(pancreasImages, colour_by = c("H3", "SMA", "CD44"),
-                           subset_images = "A02_imc",
+  expect_silent(plotPixels(pancreasImages["A02_imc"], colour_by = c("H3", "SMA", "CD44"),
                            scale_bar = list(frame = 3),
                            display = "single"))
   
-  expect_silent(plotCells(pancreasMasks,
-                           subset_images = "A02_mask",
+  expect_silent(plotCells(pancreasMasks["A02_mask"],
                            display = "single"))
 
   # save_plot
@@ -698,8 +709,7 @@ test_that("plotting-param: images can be plotted individually.", {
   expect_identical(cur_par1, cur_par2)
 
   # Subsetting the images
-  expect_silent(plotPixels(pancreasImages,
-                          subset_images = "A02_imc",
+  expect_silent(plotPixels(pancreasImages["A02_imc"],
                           display = "single",
                           save_plot = list(filename = paste0(cur_path, "/test.png"),
                                            scale = 2)))

@@ -221,6 +221,7 @@
 
 # Check mask valididty
 #' @importFrom EBImage numberOfFrames
+#' @importFrom S4Vectors mcols
 .valid.mask <- function(mask, img_id){
     if(!is(mask, "CytoImageList")){
         stop("Please provide the segmentation mask(s)\n",
@@ -250,6 +251,7 @@
 }
 
 # Check image valididty
+#' @importFrom S4Vectors mcols
 .valid.image <- function(image, img_id){
     if(!is(image, "CytoImageList")){
         stop("Please provide the image(s) in form of a 'CytoImageList' object")
@@ -275,6 +277,7 @@
 }
 
 # Check if entries in objects are matching
+#' @importFrom S4Vectors mcols
 .valid.matchObjects.plotCells <- function(object, mask, img_id){
     # Check if image ids match
     sce_images <- unique(colData(object)[,img_id])
@@ -285,6 +288,7 @@
     }
 }
 
+#' @importFrom S4Vectors mcols
 .valid.matchObjects.plotPixels <- function(object, mask, image, img_id){
     if(!is.null(mask)){
         if(is.null(img_id)){
@@ -396,26 +400,6 @@
     } else {
         if(!all(outline_by %in% colnames(colData(object)))){
             stop("'outline_by' not in 'colData(object)' slot.")
-        }
-    }
-}
-
-.valid.subset_images <- function(subset_images, image, img_id){
-    # subset_images need to be either numeric, a logical,
-    # a character and part of names(mask) or a character
-    # and part of mcols(mask)$img_id
-    if(!is.numeric(subset_images) && !is.character(subset_images) &&
-        !is.logical(subset_images)){
-        stop("'subset_images' has to be numeric, logical or a character")
-    }
-    if(is.logical(subset_images) &&
-        length(subset_images) != length(image)){
-        stop("Invalid 'subset_images' argument.")
-    }
-    if(is.character(subset_images)){
-        if(is.null(names(image)) && !(img_id %in% colnames(mcols(image)))){
-        stop("'subset_images' not part of names(CytoImageList)\n",
-            "or mcols(CytoImageList)[,img_id]")
         }
     }
 }

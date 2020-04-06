@@ -341,7 +341,7 @@ to the following entries:
 The following paragraphs will explain further details on manipulating
 `CytoImageList` objects
 
-## Accessors
+## Accessors {#accessors}
 
 All accessor functions defined for `SimpleList` also work on `CytoImageList`
 class objects. Element-wise metadata --- in the case of the `CytoImageList`
@@ -563,16 +563,15 @@ plotPixels(pancreasImages, mask = pancreasMasks,
 
 ## Subsetting {#subsetting}
 
-The user can further subset the images internally for visualization by setting
-the `subset_images` parameter. Images can be subsetted by image ID, entry name
-or simply by indexing. In the toy dataset, image IDs are numeric entries and
-therefore the `subset_images` parameter behaves the same for image ID subsetting
-and subsetting via integer indexing.
+The user can subset the images before calling the plotting functions:
 
 ```{r subsetting-pixels}
-plotPixels(pancreasImages, colour_by = c("H3", "SMA", "CD44"),
-            subset_images = "F01_imc")
+cur_images <- getImages(pancreasImages, "F01_imc")
+plotPixels(cur_images, colour_by = c("H3", "SMA", "CD44"))
 ```
+
+For further information on subsetting functionality, please refer to the
+[Accessors](#accessors) section.
 
 ## Adjusting the colour
 
@@ -631,12 +630,9 @@ for examples.
 
 ## Subsetting
 
-The user can further subset the images internally for visualization by setting
-the `subset_images` parameter. Images can be subsetted by image ID, entry name
-or simply by indexing. In the toy dataset, image IDs are numeric entries and
-therefore the `subset_images` parameter behaves the same for image ID subsetting
-and subsetting via integer indexing.
-For examples, please see the previous [Subsetting](#subsetting) section.
+Similar to the `plotPixels` function, the user can subset the images before
+plotting. For an example, please see the previous [Subsetting](#subsetting)
+section and the [Accessors](#accessors) section.
 
 ## Adjusting the colour {#adjustingColour}
 

@@ -12,7 +12,6 @@ plotCells(
   colour_by = NULL,
   outline_by = NULL,
   exprs_values = "counts",
-  subset_images = NULL,
   colour = NULL,
   ...
 )
@@ -43,10 +42,6 @@ entry by which to outline individual cells}
 
 \item{exprs_values}{single character indicating which \code{assay(object)}
 entry to use when visualizing feature counts.}
-
-\item{subset_images}{numeric, character or vector of such indicating which
-masks to display. Masks can be subsetted by entries to \code{mcols(mask)},
-\code{names(mask)} and a numeric index.}
 
 \item{colour}{a list with names matching the entries to \code{colour_by}
 and/or \code{outline_by}. When setting the colour for continous features,
@@ -113,12 +108,9 @@ metadata vector.
 
 \section{Subsetting the \code{CytoImageList} object}{
 
-The \code{subset_images} parameter controls which images to display. If the
-\code{img_id} parameter is set, images are subsetted based on the
-\code{mcols(mask)[,img_id]} entry. Otherwise, images can be subsetted by
-entry names (stored in \code{names(mask)}) or simply by numeric indexing.
-Alternatively, the \code{CytoImageList} object can be subsetted perfore
-calling the \code{plotCells} function.
+The \code{CytoImageList} object can be subsetted before calling the
+\code{plotCells} function. In that case, only the selected images are 
+displayed.
 }
 
 \section{Subsetting the \code{SingleCellExperiment} object}{
@@ -165,8 +157,9 @@ plotCells(pancreasMasks, object = pancreasSCE, img_id = "ImageNb",
             exprs_values = "exprs")
 
 # Subset the images
-plotCells(pancreasMasks, object = pancreasSCE, img_id = "ImageNb",
-            cell_id = "CellNb", colour_by = "SMA", subset_images = c(1,2))
+cur_images <- getImages(pancreasMasks, 1:2)
+plotCells(cur_images, object = pancreasSCE, img_id = "ImageNb",
+            cell_id = "CellNb", colour_by = "SMA")
 
 # Set colour
 plotCells(pancreasMasks, object = pancreasSCE, img_id = "ImageNb",

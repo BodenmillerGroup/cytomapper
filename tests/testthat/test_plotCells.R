@@ -204,30 +204,29 @@ test_that("plotCells: images can be correctly subsetted.", {
 
   # Works
   expect_silent(plotCells(object = pancreasSCE,
-            mask = pancreasMasks, img_id = "ImageNb",
+            mask = pancreasMasks[1], img_id = "ImageNb",
             cell_id = "CellNb", exprs_values = "counts",
-            colour_by = "SMA", subset_images = 1))
+            colour_by = "SMA"))
   expect_silent(plotCells(object = pancreasSCE,
-                          mask = pancreasMasks, img_id = "ImageNb",
+                          mask = pancreasMasks[1:3], img_id = "ImageNb",
                           cell_id = "CellNb", exprs_values = "counts",
-                          colour_by = "SMA", subset_images = 1:3))
+                          colour_by = "SMA"))
   expect_silent(plotCells(object = pancreasSCE,
-                          mask = pancreasMasks, img_id = "ImageNb",
+                          mask = pancreasMasks[1:2], img_id = "ImageNb",
                           cell_id = "CellNb", exprs_values = "counts",
-                          colour_by = "SMA", subset_images = 1:2))
+                          colour_by = "SMA"))
   expect_silent(plotCells(object = pancreasSCE,
-                          mask = pancreasMasks, img_id = "ImageNb",
+                          mask = pancreasMasks[c(1,3)], img_id = "ImageNb",
                           cell_id = "CellNb", exprs_values = "counts",
-                          colour_by = "SMA", subset_images = c(1,3)))
+                          colour_by = "SMA"))
   expect_silent(plotCells(object = pancreasSCE,
-                          mask = pancreasMasks, img_id = "ImageNb",
+                          mask = pancreasMasks["A02_mask"], img_id = "ImageNb",
                           cell_id = "CellNb", exprs_values = "counts",
-                          colour_by = "SMA", subset_images = "A02_mask"))
+                          colour_by = "SMA"))
   expect_silent(plotCells(object = pancreasSCE,
-                          mask = pancreasMasks, img_id = "ImageNb",
+                          mask = pancreasMasks[c("A02_mask", "F01_mask")], img_id = "ImageNb",
                           cell_id = "CellNb", exprs_values = "counts",
-                          colour_by = "SMA",
-                          subset_images = c("A02_mask", "F01_mask")))
+                          colour_by = "SMA"))
   
   cur_images <- pancreasMasks["A02_mask"]
   expect_silent(plotCells(object = pancreasSCE,
@@ -242,50 +241,25 @@ test_that("plotCells: images can be correctly subsetted.", {
                           colour_by = "SMA"))
   
   # Set image title
+  cut_images <- getImages(pancreasMasks, c("A02_mask", "F01_mask"))
   expect_silent(plotCells(object = pancreasSCE,
-                          mask = pancreasMasks, img_id = "ImageNb",
+                          mask = cut_images, img_id = "ImageNb",
                           cell_id = "CellNb", exprs_values = "counts",
                           colour_by = "SMA",
-                          subset_images = c("A02_mask", "F01_mask"),
                           image_title = list(text = c("test1", "test2"))))
 
   # Use mcols entry
   mcols(pancreasMasks)$MaskName <- paste0(names(pancreasMasks), ".tiff")
+  cur_images <- getImages(pancreasMasks, mcols(pancreasMasks)$MaskName %in% c("A02_mask.tiff", "F01_mask.tiff"))
   expect_silent(plotCells(object = pancreasSCE,
-                          mask = pancreasMasks, img_id = "MaskName",
+                          mask = cur_images, img_id = "MaskName",
                           cell_id = "CellNb", exprs_values = "counts",
-                          colour_by = "SMA",
-                          subset_images = c("A02_mask.tiff", "F01_mask.tiff")))
+                          colour_by = "SMA"))
+  cur_images <- getImages(pancreasMasks, 1:2)  
   expect_silent(plotCells(object = pancreasSCE,
-                          mask = pancreasMasks, img_id = "MaskName",
+                          mask = cur_images, img_id = "MaskName",
                           cell_id = "CellNb", exprs_values = "counts",
-                          colour_by = "SMA",
-                          subset_images = 1:2))
-
-  # Error
-  expect_error(plotCells(object = pancreasSCE,
-                          mask = pancreasMasks, img_id = "ImageNb",
-                          cell_id = "CellNb", exprs_values = "counts",
-                          colour_by = "SMA",
-                          subset_images = 4),
-               regexp = "subscript contains out-of-bounds indices",
-               fixed = TRUE)
-  expect_error(plotCells(object = pancreasSCE,
-                         mask = pancreasMasks, img_id = "ImageNb",
-                         cell_id = "CellNb", exprs_values = "counts",
-                         colour_by = "SMA",
-                         subset_images = "test"),
-               regexp = "subscript contains invalid names",
-               fixed = TRUE)
-  
-  expect_error(plotCells(object = pancreasSCE,
-                          mask = pancreasMasks, img_id = "ImageNb",
-                          cell_id = "CellNb", exprs_values = "counts",
-                          colour_by = "SMA",
-                          subset_images = 1:2,
-                          image_title = list(text = c("test1", "test2", "test3"))),
-               regexp = "Invalid entry to the 'image_title' list object: \nPlease specify one title per image.",
-               fixed = TRUE)
+                          colour_by = "SMA"))
 
 })
 
@@ -443,10 +417,10 @@ test_that("plotCells: SCE can be subsetted.", {
   expect_silent(plotCells(object = cur_sce,
                           mask = pancreasMasks, img_id = "ImageNb",
                           cell_id = "CellNb", colour_by = "CellType"))
+  cur_images <- getImages(pancreasMasks, mcols(pancreasMasks)$ImageNb == unique(cur_sce$ImageNb))
   expect_silent(plotCells(object = cur_sce,
-                          mask = pancreasMasks, img_id = "ImageNb",
-                          cell_id = "CellNb", colour_by = "CellType",
-                          subset_images = unique(cur_sce$ImageNb)))
+                          mask = cur_images, img_id = "ImageNb",
+                          cell_id = "CellNb", colour_by = "CellType"))
 })
 
 test_that("plotCells: Size of images can be changed.", {
@@ -467,13 +441,11 @@ test_that("plotCells: Size of images can be changed.", {
                           colour_by = "CellType",
                           display = "single"))
   expect_silent(plotCells(object = pancreasSCE,
-            mask = cur_images, img_id = "ImageNb",
-            cell_id = "CellNb", colour_by = "CellType",
-            subset_images = 1))
+            mask = cur_images[1], img_id = "ImageNb",
+            cell_id = "CellNb", colour_by = "CellType"))
   expect_silent(plotCells(object = pancreasSCE,
-                          mask = cur_images, img_id = "ImageNb",
-                          cell_id = "CellNb", outline_by = "CellType",
-                          subset_images = 1))
+                          mask = cur_images[1], img_id = "ImageNb",
+                          cell_id = "CellNb", outline_by = "CellType"))
 })
 
 

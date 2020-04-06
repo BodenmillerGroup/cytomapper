@@ -32,11 +32,6 @@
 #' Default is c(0,1,1).
 #' @param outline_by single character indicating the \code{colData(object)}
 #' entry by which to outline individual cells
-#' @param subset_images numeric, character or vector of such indicating which
-#' masks to display. Images can be subsetted by entries to \code{mcols(image)},
-#' \code{names(image)} and a numeric index. When providing images and masks,
-#' subsetting is performed via entries to \code{mcols(image)} and
-#' \code{mcols(mask)}.
 #' @param colour a list with names matching the entries to \code{colour_by}
 #' and/or \code{outline_by}. When setting the colour for continous features,
 #' at least two colours need to be provided indicating the colours for minimum
@@ -82,16 +77,13 @@
 #' to the metadata vector.
 #'
 #' @section Subsetting the \code{CytoImageList} objects:
-#' The \code{subset_images} parameter controls which images to display. If the
-#' \code{img_id} parameter is set, images are subsetted based on the
-#' \code{mcols(image)[,img_id]} entry. Otherwise, images can be subsetted by
-#' entry names (stored in \code{names(image)}) or simply by numeric indexing.
-#' Alternatively, the \code{CytoImageList} objects can be subsetted berfore
-#' calling the \code{plotCells} function.
+#' The \code{CytoImageList} object(s) can be subsetted before calling the
+#' \code{plotPixels} function. In that case, only the selected images are 
+#' displayed.
 #'
 #' @section Subsetting the \code{SingleCellExperiment} object:
 #' The \code{SingleCellExperiment} object can be subsetted before calling the
-#' \code{plotCells} function. In that case, only cells contained in the
+#' \code{plotPixels} function. In that case, only cells contained in the
 #' \code{SingleCellExperiment} object are outlined.
 #'
 #' @section Colour scaling:
@@ -136,8 +128,8 @@
 #'             bcg = list(SMA = c(0, 2, 1)))
 #'
 #' # Subset the images
-#' plotPixels(pancreasImages, colour_by = c("SMA", "CD44"),
-#'             subset_images = c(1,2))
+#' cur_images <- getImages(pancreasImages, 1:2)
+#' plotPixels(cur_images, colour_by = c("SMA", "CD44"))
 #'
 #' # Set colour
 #' plotPixels(pancreasImages, colour_by = c("SMA", "CD44"),
@@ -157,7 +149,6 @@ plotPixels <- function(
     colour_by = NULL,
     bcg = NULL,
     outline_by = NULL,
-    subset_images = NULL,
     colour = NULL,
     ...) {
     # Object checks
@@ -180,10 +171,6 @@ plotPixels <- function(
     if(!is.null(outline_by)){
         .valid.outline_by(outline_by, object, mask, image)
     }
-    # Check subset_images argument
-    if(!is.null(subset_images)){
-        .valid.subset_images(subset_images, image = image, img_id)
-    }
     # Check colour argument
     if(!is.null(colour)){
         .valid.colour(colour, colour_by, outline_by, object, image = image)
@@ -192,12 +179,6 @@ plotPixels <- function(
     # Check bcg argument
     if(!is.null(bcg)){
         .valid.bcg(bcg, colour_by)
-    }
-
-    # Select images for plotting
-    image <- .select_images(object, image, img_id, subset_images)
-    if(!is.null(mask)){
-        mask <- .select_images(object, mask, img_id, subset_images)
     }
     
     # Set further arguments
