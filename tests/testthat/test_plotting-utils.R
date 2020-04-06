@@ -171,7 +171,7 @@ test_that("masks can be coloured by features.", {
     cur_img <- EBImage::normalize(cur_img, separate = TRUE)
     cur_img[is.na(cur_img)] <- 0
     
-    expect_equal(Image(cur_out[[1]]), Image(cur_img, colormode = "Color"), tolerance = 0.01)
+    expect_equal(imageData(Image(cur_out[[1]])), imageData(Image(cur_img, colormode = "Color")), tolerance = 0.01)
     
     # Now with global scaling
     expect_silent(cur_out <- .colourMaskByFeature(object = pancreasSCE, mask = pancreasMasks, 
@@ -211,7 +211,7 @@ test_that("masks can be coloured by features.", {
     
     cur_img[is.na(cur_img)] <- 0
     
-    expect_equal(Image(cur_out[[1]]), Image(cur_img, colormode = "Color"), tolerance = 0.02)
+    expect_equal(imageData(Image(cur_out[[1]])), imageData(Image(cur_img, colormode = "Color")), tolerance = 0.01)
     
     cur_img <- combine(pancreasMasks[[2]], pancreasMasks[[2]], pancreasMasks[[2]])
     cur_sce <- pancreasSCE[,pancreasSCE$ImageNb == 2]
@@ -242,7 +242,7 @@ test_that("masks can be coloured by features.", {
     
     cur_img[is.na(cur_img)] <- 0
     
-    expect_equal(Image(cur_out[[2]]), Image(cur_img, colormode = "Color"), tolerance = 0.025)
+    expect_equal(imageData(Image(cur_out[[2]])), imageData(Image(cur_img, colormode = "Color")), tolerance = 0.01)
     
     cur_img <- combine(pancreasMasks[[3]], pancreasMasks[[3]], pancreasMasks[[2]])
     cur_sce <- pancreasSCE[,pancreasSCE$ImageNb == 3]
@@ -273,7 +273,7 @@ test_that("masks can be coloured by features.", {
     
     cur_img[is.na(cur_img)] <- 0
     
-    expect_equal(Image(cur_out[[3]]), Image(cur_img, colormode = "Color"), tolerance = 0.025)
+    expect_equal(imageData(Image(cur_out[[3]])), imageData(Image(cur_img, colormode = "Color")), tolerance = 0.01)
     
     # Set scaling to FALSE
     plottingParam <- list(scale = FALSE)
@@ -315,7 +315,7 @@ test_that("masks can be coloured by features.", {
     
     cur_img[is.na(cur_img)] <- 0
     
-    expect_equal(Image(cur_out[[1]]), Image(cur_img, colormode = "Color"), tolerance = 0.025)
+    expect_equal(imageData(Image(cur_out[[1]])), imageData(Image(cur_img, colormode = "Color")), tolerance = 0.01)
     
     cur_img <- combine(pancreasMasks[[2]], pancreasMasks[[2]], pancreasMasks[[2]])
     cur_sce <- pancreasSCE[,pancreasSCE$ImageNb == 2]
@@ -346,7 +346,7 @@ test_that("masks can be coloured by features.", {
     
     cur_img[is.na(cur_img)] <- 0
     
-    expect_equal(Image(cur_out[[2]]), Image(cur_img, colormode = "Color"), tolerance = 0.035)
+    expect_equal(imageData(Image(cur_out[[2]])), imageData(Image(cur_img, colormode = "Color")), tolerance = 0.01)
     
     cur_img <- combine(pancreasMasks[[3]], pancreasMasks[[3]], pancreasMasks[[2]])
     cur_sce <- pancreasSCE[,pancreasSCE$ImageNb == 3]
@@ -377,10 +377,147 @@ test_that("masks can be coloured by features.", {
     
     cur_img[is.na(cur_img)] <- 0
     
-    expect_equal(Image(cur_out[[3]]), Image(cur_img, colormode = "Color"), tolerance = 0.03)
+    expect_equal(imageData(Image(cur_out[[3]])), imageData(Image(cur_img, colormode = "Color")), tolerance = 0.01)
 })
 
-test_that("masks can be outlined by metadata.", {
+test_that("images can be coloured by features.", {
+    data("pancreasImages")
+    
+    cur_col <- list(H3 = c("black", "red"), SMA = c("black", "green"), CD44 = c("black", "blue"))
+    colour_by <- c("H3", "SMA", "CD44")
+    plottingParam <- list(scale = TRUE)
+    
+    expect_silent(cur_out <- .colourImageByFeature(image = pancreasImages[1], colour_by = colour_by, 
+                                                   bcg = list(H3 = c(0,1,1), SMA = c(0,1,1), CD44 = c(0,1,1)),
+                                                   cur_colour = cur_col, plottingParam = plottingParam))
+    
+    # Compare to EBImage
+    cur_img <- getChannels(pancreasImages[1], c("H3", "SMA", "CD44"))
+    cur_img <- EBImage::normalize(cur_img[[1]])
+    
+    dimnames(cur_img) <- list(NULL, NULL, NULL)
+    
+    expect_equal(imageData(Image(cur_out[[1]])), imageData(Image(cur_img, colormode = "Color")), tolerance = 0.01)
+    
+    expect_silent(cur_out <- .colourImageByFeature(image = pancreasImages, colour_by = colour_by, 
+                                                   bcg = list(H3 = c(0,1,1), SMA = c(0,1,1), CD44 = c(0,1,1)),
+                                                   cur_colour = cur_col, plottingParam = plottingParam))
+    
+    # Compare to EBImage
+    H3_dist <- unlist(lapply(getChannels(pancreasImages, "H3"), as.numeric))
+    SMA_dist <- unlist(lapply(getChannels(pancreasImages, "SMA"), as.numeric))
+    CD44_dist <- unlist(lapply(getChannels(pancreasImages, "CD44"), as.numeric))
+    cur_img <- getChannels(pancreasImages[1], c("H3", "SMA", "CD44"))
+    cur_img <- Image(cur_img[[1]])
+    cur_img[,,1] <- EBImage::normalize(cur_img[,,1], inputRange = c(min(H3_dist), max(H3_dist)))
+    cur_img[,,2] <- EBImage::normalize(cur_img[,,2], inputRange = c(min(SMA_dist), max(SMA_dist)))
+    cur_img[,,3] <- EBImage::normalize(cur_img[,,3], inputRange = c(min(CD44_dist), max(CD44_dist)))
+    
+    dimnames(cur_img) <- list(NULL, NULL, NULL)
+    
+    expect_equal(imageData(Image(cur_out[[1]])), imageData(Image(cur_img, colormode = "Color")), tolerance = 0.01)
+
+    cur_img <- getChannels(pancreasImages[2], c("H3", "SMA", "CD44"))
+    cur_img <- Image(cur_img[[1]])
+    cur_img[,,1] <- EBImage::normalize(cur_img[,,1], inputRange = c(min(H3_dist), max(H3_dist)))
+    cur_img[,,2] <- EBImage::normalize(cur_img[,,2], inputRange = c(min(SMA_dist), max(SMA_dist)))
+    cur_img[,,3] <- EBImage::normalize(cur_img[,,3], inputRange = c(min(CD44_dist), max(CD44_dist)))
+    
+    dimnames(cur_img) <- list(NULL, NULL, NULL)
+    
+    expect_equal(imageData(Image(cur_out[[2]])), imageData(Image(cur_img, colormode = "Color")), tolerance = 0.01)
+    
+    cur_img <- getChannels(pancreasImages[3], c("H3", "SMA", "CD44"))
+    cur_img <- Image(cur_img[[1]])
+    cur_img[,,1] <- EBImage::normalize(cur_img[,,1], inputRange = c(min(H3_dist), max(H3_dist)))
+    cur_img[,,2] <- EBImage::normalize(cur_img[,,2], inputRange = c(min(SMA_dist), max(SMA_dist)))
+    cur_img[,,3] <- EBImage::normalize(cur_img[,,3], inputRange = c(min(CD44_dist), max(CD44_dist)))
+    
+    dimnames(cur_img) <- list(NULL, NULL, NULL)
+    
+    expect_equal(imageData(Image(cur_out[[3]])), imageData(Image(cur_img, colormode = "Color")), tolerance = 0.01)
+    
+    # Set scale to FALSE
+    plottingParam <- list(scale = FALSE)
+    
+    expect_silent(cur_out <- .colourImageByFeature(image = pancreasImages, colour_by = colour_by, 
+                                                   bcg = list(H3 = c(0,1,1), SMA = c(0,1,1), CD44 = c(0,1,1)),
+                                                   cur_colour = cur_col, plottingParam = plottingParam))
+    
+    all_dist <- unlist(lapply(getChannels(pancreasImages, colour_by), as.numeric))
+    cur_img <- getChannels(pancreasImages[1], c("H3", "SMA", "CD44"))
+    cur_img <- Image(cur_img[[1]])
+    cur_img[,,1] <- EBImage::normalize(cur_img[,,1], inputRange = c(min(all_dist), max(all_dist)))
+    cur_img[,,2] <- EBImage::normalize(cur_img[,,2], inputRange = c(min(all_dist), max(all_dist)))
+    cur_img[,,3] <- EBImage::normalize(cur_img[,,3], inputRange = c(min(all_dist), max(all_dist)))
+    
+    dimnames(cur_img) <- list(NULL, NULL, NULL)
+    
+    expect_equal(imageData(Image(cur_out[[1]])), imageData(Image(cur_img, colormode = "Color")), tolerance = 0.01)
+    
+    cur_img <- getChannels(pancreasImages[2], c("H3", "SMA", "CD44"))
+    cur_img <- Image(cur_img[[1]])
+    cur_img[,,1] <- EBImage::normalize(cur_img[,,1], inputRange = c(min(all_dist), max(all_dist)))
+    cur_img[,,2] <- EBImage::normalize(cur_img[,,2], inputRange = c(min(all_dist), max(all_dist)))
+    cur_img[,,3] <- EBImage::normalize(cur_img[,,3], inputRange = c(min(all_dist), max(all_dist)))
+    
+    dimnames(cur_img) <- list(NULL, NULL, NULL)
+    
+    expect_equal(imageData(Image(cur_out[[2]])), imageData(Image(cur_img, colormode = "Color")), tolerance = 0.01)
+    
+    cur_img <- getChannels(pancreasImages[3], c("H3", "SMA", "CD44"))
+    cur_img <- Image(cur_img[[1]])
+    cur_img[,,1] <- EBImage::normalize(cur_img[,,1], inputRange = c(min(all_dist), max(all_dist)))
+    cur_img[,,2] <- EBImage::normalize(cur_img[,,2], inputRange = c(min(all_dist), max(all_dist)))
+    cur_img[,,3] <- EBImage::normalize(cur_img[,,3], inputRange = c(min(all_dist), max(all_dist)))
+    
+    dimnames(cur_img) <- list(NULL, NULL, NULL)
+    
+    expect_equal(imageData(Image(cur_out[[3]])), imageData(Image(cur_img, colormode = "Color")), tolerance = 0.01)
+    
+    # Set bcg
+    plottingParam <- list(scale = TRUE)
+    
+    expect_silent(cur_out <- .colourImageByFeature(image = pancreasImages, colour_by = colour_by, 
+                                                   bcg = list(H3 = c(0,0.5,1), SMA = c(0,1,2), CD44 = c(10,1,1)),
+                                                   cur_colour = cur_col, plottingParam = plottingParam))
+    
+    # Compare to EBImage
+    H3_dist <- unlist(lapply(getChannels(pancreasImages, "H3"), as.numeric))
+    SMA_dist <- unlist(lapply(getChannels(pancreasImages, "SMA"), as.numeric))
+    CD44_dist <- unlist(lapply(getChannels(pancreasImages, "CD44"), as.numeric))
+    cur_img <- getChannels(pancreasImages[1], c("H3", "SMA", "CD44"))
+    cur_img <- Image(cur_img[[1]])
+    cur_img[,,1] <- EBImage::normalize(cur_img[,,1] * 0.5, inputRange = c(min(H3_dist), max(H3_dist)))
+    cur_img[,,2] <- EBImage::normalize(cur_img[,,2] ^ 2, inputRange = c(min(SMA_dist), max(SMA_dist)))
+    cur_img[,,3] <- EBImage::normalize(cur_img[,,3] + 10, inputRange = c(min(CD44_dist), max(CD44_dist)))
+    
+    dimnames(cur_img) <- list(NULL, NULL, NULL)
+    
+    expect_equal(imageData(Image(cur_out[[1]])), imageData(Image(cur_img, colormode = "Color")), tolerance = 0.01)
+    
+    cur_img <- getChannels(pancreasImages[2], c("H3", "SMA", "CD44"))
+    cur_img <- Image(cur_img[[1]])
+    cur_img[,,1] <- EBImage::normalize(cur_img[,,1] * 0.5, inputRange = c(min(H3_dist), max(H3_dist)))
+    cur_img[,,2] <- EBImage::normalize(cur_img[,,2] ^ 2, inputRange = c(min(SMA_dist), max(SMA_dist)))
+    cur_img[,,3] <- EBImage::normalize(cur_img[,,3] + 10, inputRange = c(min(CD44_dist), max(CD44_dist)))
+    
+    dimnames(cur_img) <- list(NULL, NULL, NULL)
+    
+    expect_equal(imageData(Image(cur_out[[2]])), imageData(Image(cur_img, colormode = "Color")), tolerance = 0.01)
+    
+    cur_img <- getChannels(pancreasImages[3], c("H3", "SMA", "CD44"))
+    cur_img <- Image(cur_img[[1]])
+    cur_img[,,1] <- EBImage::normalize(cur_img[,,1] * 0.5, inputRange = c(min(H3_dist), max(H3_dist)))
+    cur_img[,,2] <- EBImage::normalize(cur_img[,,2] ^ 2, inputRange = c(min(SMA_dist), max(SMA_dist)))
+    cur_img[,,3] <- EBImage::normalize(cur_img[,,3] + 10, inputRange = c(min(CD44_dist), max(CD44_dist)))
+    
+    dimnames(cur_img) <- list(NULL, NULL, NULL)
+    
+    expect_equal(imageData(Image(cur_out[[3]])), imageData(Image(cur_img, colormode = "Color")), tolerance = 0.01)
+})
+
+test_that("images can be outlined by metadata.", {
   # .outlineMaskByMeta
 })
 
