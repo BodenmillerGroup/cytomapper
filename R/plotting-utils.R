@@ -304,7 +304,6 @@
     cols <- lapply(args, function(x){col2rgb(x)/255})
     cur_mix <- Reduce("+", cols)
     cur_mix[cur_mix > 1] <- 1
-    cur_mix <- cur_mix
     cur_mix <- rgb(t(cur_mix), maxColorValue = 1)
     return(cur_mix)
 }

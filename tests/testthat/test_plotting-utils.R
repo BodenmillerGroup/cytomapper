@@ -704,11 +704,50 @@ test_that("colours can be selected.", {
 })
 
 test_that("min/max scaling works.", {
-  # .minMaxScaling
+    set.seed(1234)
+    cur_dist <- rnorm(1000)
+    
+    cur_out <- .minMaxScaling(cur_dist, min_x = min(cur_dist), max_x = max(cur_dist))
+    expect_equal(max(cur_out), 1)
+    expect_equal(min(cur_out), 0)
 })
 
 test_that("colour mixing works.", {
-  # .mixColours
+  test_col <- c("red", "green")
+  expect_equal(.mixColours(test_col), "#FFFF00")
+  
+  test_col <- c("red", "blue")
+  expect_equal(.mixColours(test_col), "#FF00FF")
+  
+  test_col <- c("blue", "green")
+  expect_equal(.mixColours(test_col), "#00FFFF")
+  
+  test_col <- c("red", "green", "blue")
+  expect_equal(.mixColours(test_col), "#FFFFFF")
+  
+  test_col <- c("white", "red")
+  expect_equal(.mixColours(test_col), "#FFFFFF")
+
+  # Compare to EBImage colour composition
+  img1 <- Image(data = c("#FFED00", "#070a0a", "blue", "white"), dim = c(2,2,1))
+  img2 <- Image(data = c("#FF0000", "#1ee6df", "blue", "red"), dim = c(2,2,1))
+  img3 <- Image(data = c("#FF00AB", "#020808", "blue", "white"), dim = c(2,2,1))
+  
+  cur_image <- img1 + img2 + img3
+  
+  cur_test <- .mixColours(c("#070a0a", "#1ee6df", "#020808"))
+  cur_test <- col2rgb(cur_test)/255
+  
+  expect_equal(cur_test[1], imageData(cur_image)[2,1,1,1])
+  expect_equal(cur_test[2], imageData(cur_image)[2,1,2,1])
+  expect_equal(cur_test[3], imageData(cur_image)[2,1,3,1])
+
+  cur_test <- .mixColours(c("#FFED00", "#FF0000", "#FF00AB"))
+  cur_test <- col2rgb(cur_test)/255
+
+  expect_equal(cur_test[1], 1)
+  expect_equal(cur_test[2], imageData(cur_image)[1,1,2,1])
+  expect_equal(cur_test[3], imageData(cur_image)[1,1,3,1])
 })
 
 test_that("images can be displayed.", {
