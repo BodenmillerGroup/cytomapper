@@ -2,7 +2,7 @@ test_that("masks can be coloured by metadata.", {
     data("pancreasMasks")
     data("pancreasSCE")
     
-    cur_col <- c(celltype_A = "red", celltype_B = "blue", celltype_C = "green")
+    cur_col <- c(celltype_A = "red", celltype_B = "green", celltype_C = "blue")
     
     expect_silent(cur_out <- .colourMaskByMeta(object = pancreasSCE, mask = pancreasMasks, 
                       cell_id = "CellNb", img_id = "ImageNb", 
@@ -13,23 +13,23 @@ test_that("masks can be coloured by metadata.", {
     cur_ids <- pancreasSCE$CellNb[pancreasSCE$ImageNb == 1 & pancreasSCE$CellType == "celltype_A"]
     expect_true(all(cur_out[[1]][pancreasMasks[[1]] %in% cur_ids] == "red"))
     cur_ids <- pancreasSCE$CellNb[pancreasSCE$ImageNb == 1 & pancreasSCE$CellType == "celltype_B"]
-    expect_true(all(cur_out[[1]][pancreasMasks[[1]] %in% cur_ids] == "blue"))
-    cur_ids <- pancreasSCE$CellNb[pancreasSCE$ImageNb == 1 & pancreasSCE$CellType == "celltype_C"]
     expect_true(all(cur_out[[1]][pancreasMasks[[1]] %in% cur_ids] == "green"))
+    cur_ids <- pancreasSCE$CellNb[pancreasSCE$ImageNb == 1 & pancreasSCE$CellType == "celltype_C"]
+    expect_true(all(cur_out[[1]][pancreasMasks[[1]] %in% cur_ids] == "blue"))
     
     cur_ids <- pancreasSCE$CellNb[pancreasSCE$ImageNb == 2 & pancreasSCE$CellType == "celltype_A"]
     expect_true(all(cur_out[[2]][pancreasMasks[[2]] %in% cur_ids] == "red"))
     cur_ids <- pancreasSCE$CellNb[pancreasSCE$ImageNb == 2 & pancreasSCE$CellType == "celltype_B"]
-    expect_true(all(cur_out[[2]][pancreasMasks[[2]] %in% cur_ids] == "blue"))
-    cur_ids <- pancreasSCE$CellNb[pancreasSCE$ImageNb == 2 & pancreasSCE$CellType == "celltype_C"]
     expect_true(all(cur_out[[2]][pancreasMasks[[2]] %in% cur_ids] == "green"))
+    cur_ids <- pancreasSCE$CellNb[pancreasSCE$ImageNb == 2 & pancreasSCE$CellType == "celltype_C"]
+    expect_true(all(cur_out[[2]][pancreasMasks[[2]] %in% cur_ids] == "blue"))
     
     cur_ids <- pancreasSCE$CellNb[pancreasSCE$ImageNb == 3 & pancreasSCE$CellType == "celltype_A"]
     expect_true(all(cur_out[[3]][pancreasMasks[[3]] %in% cur_ids] == "red"))
     cur_ids <- pancreasSCE$CellNb[pancreasSCE$ImageNb == 3 & pancreasSCE$CellType == "celltype_B"]
-    expect_true(all(cur_out[[3]][pancreasMasks[[3]] %in% cur_ids] == "blue"))
-    cur_ids <- pancreasSCE$CellNb[pancreasSCE$ImageNb == 3 & pancreasSCE$CellType == "celltype_C"]
     expect_true(all(cur_out[[3]][pancreasMasks[[3]] %in% cur_ids] == "green"))
+    cur_ids <- pancreasSCE$CellNb[pancreasSCE$ImageNb == 3 & pancreasSCE$CellType == "celltype_C"]
+    expect_true(all(cur_out[[3]][pancreasMasks[[3]] %in% cur_ids] == "blue"))
 
     cur_col <- c("black", "green")
     
@@ -83,7 +83,7 @@ test_that("masks can be coloured by metadata.", {
     expect_true(all(cur_out[[3]][pancreasMasks[[3]] %in% cur_ids] == cur_col_ind))
 
     # Check missing colour and background colour
-    cur_col <- c(celltype_A = "red", celltype_B = "blue", celltype_C = "green")
+    cur_col <- c(celltype_A = "red", celltype_B = "green", celltype_C = "blue")
     
     expect_silent(cur_out <- .colourMaskByMeta(object = pancreasSCE, mask = pancreasMasks, 
                                                cell_id = "CellNb", img_id = "ImageNb", 
@@ -110,27 +110,27 @@ test_that("masks can be coloured by metadata.", {
     cur_ids <- cur_sce$CellNb[cur_sce$ImageNb == 1 & cur_sce$CellType == "celltype_A"]
     expect_true(all(cur_out[[1]][pancreasMasks[[1]] %in% cur_ids] == "red"))
     cur_ids <- cur_sce$CellNb[cur_sce$ImageNb == 1 & cur_sce$CellType == "celltype_B"]
-    expect_true(all(cur_out[[1]][pancreasMasks[[1]] %in% cur_ids] == "blue"))
-    cur_ids <- cur_sce$CellNb[cur_sce$ImageNb == 1 & cur_sce$CellType == "celltype_C"]
     expect_true(all(cur_out[[1]][pancreasMasks[[1]] %in% cur_ids] == "green"))
+    cur_ids <- cur_sce$CellNb[cur_sce$ImageNb == 1 & cur_sce$CellType == "celltype_C"]
+    expect_true(all(cur_out[[1]][pancreasMasks[[1]] %in% cur_ids] == "blue"))
     cur_ids <- cur_sce$CellNb[cur_sce$ImageNb == 1]  
     expect_true(all(cur_out[[1]][!(pancreasMasks[[1]] %in% cur_ids) & as.vector(pancreasMasks[[1]] != 0L)] == "grey"))
     
     cur_ids <- cur_sce$CellNb[cur_sce$ImageNb == 2 & cur_sce$CellType == "celltype_A"]
     expect_true(all(cur_out[[2]][pancreasMasks[[2]] %in% cur_ids] == "red"))
     cur_ids <- cur_sce$CellNb[cur_sce$ImageNb == 2 & cur_sce$CellType == "celltype_B"]
-    expect_true(all(cur_out[[2]][cur_out[[2]] %in% cur_ids] == "blue"))
+    expect_true(all(cur_out[[2]][cur_out[[2]] %in% cur_ids] == "green"))
     cur_ids <- cur_sce$CellNb[cur_sce$ImageNb == 2 & cur_sce$CellType == "celltype_C"]
-    expect_true(all(cur_out[[2]][pancreasMasks[[2]] %in% cur_ids] == "green"))
+    expect_true(all(cur_out[[2]][pancreasMasks[[2]] %in% cur_ids] == "blue"))
     cur_ids <- cur_sce$CellNb[cur_sce$ImageNb == 2]  
     expect_true(all(cur_out[[2]][!(pancreasMasks[[2]] %in% cur_ids) & as.vector(pancreasMasks[[2]] != 0L)] == "grey"))
     
     cur_ids <- cur_sce$CellNb[cur_sce$ImageNb == 3 & cur_sce$CellType == "celltype_A"]
     expect_true(all(cur_out[[3]][pancreasMasks[[3]] %in% cur_ids] == "red"))
     cur_ids <- cur_sce$CellNb[cur_sce$ImageNb == 3 & cur_sce$CellType == "celltype_B"]
-    expect_true(all(cur_out[[3]][pancreasMasks[[3]] %in% cur_ids] == "blue"))
-    cur_ids <- cur_sce$CellNb[cur_sce$ImageNb == 3 & cur_sce$CellType == "celltype_C"]
     expect_true(all(cur_out[[3]][pancreasMasks[[3]] %in% cur_ids] == "green"))
+    cur_ids <- cur_sce$CellNb[cur_sce$ImageNb == 3 & cur_sce$CellType == "celltype_C"]
+    expect_true(all(cur_out[[3]][pancreasMasks[[3]] %in% cur_ids] == "blue"))
     cur_ids <- cur_sce$CellNb[cur_sce$ImageNb == 3]  
     expect_true(all(cur_out[[3]][!(pancreasMasks[[3]] %in% cur_ids) & as.vector(pancreasMasks[[3]] != 0L)] == "grey"))
 })
@@ -518,7 +518,83 @@ test_that("images can be coloured by features.", {
 })
 
 test_that("images can be outlined by metadata.", {
-  # .outlineMaskByMeta
+    data("pancreasImages")
+    data("pancreasMasks")
+    data("pancreasSCE")
+    
+    cur_col <- list(H3 = c("black", "red"), SMA = c("black", "green"), CD44 = c("black", "blue"))
+    colour_by <- c("H3", "SMA", "CD44")
+    plottingParam <- list(scale = TRUE)
+    
+    expect_silent(out_img <- .colourImageByFeature(image = pancreasImages, colour_by = colour_by, 
+                                                   bcg = list(H3 = c(0,1,1), SMA = c(0,1,1), CD44 = c(0,1,1)),
+                                                   cur_colour = cur_col, plottingParam = plottingParam))
+    
+    cur_col <- c(celltype_A = "red", celltype_B = "green", celltype_C = "blue")
+    
+    expect_silent(cur_out <- .outlineImageByMeta(object = pancreasSCE, mask = pancreasMasks, 
+                                                 out_img = out_img, cell_id = "CellNb", img_id = "ImageNb",
+                                                 outline_by = "CellType", 
+                                                 cur_colour = cur_col, missing_colour = "grey"))
+    
+    # Compare to EBImage
+    cur_img <- out_img[[1]]
+    cur_sce <- pancreasSCE[,pancreasSCE$ImageNb == 1]
+    cur_mask <- pancreasMasks[[1]]
+    cur_mask[!(cur_mask %in% cur_sce$CellNb[cur_sce$CellType == "celltype_A"])] <- 0L
+    cur_img <- paintObjects(cur_mask, Image(cur_img, colormode = "Color"), col = "red")
+    cur_mask <- pancreasMasks[[1]]
+    cur_mask[!(cur_mask %in% cur_sce$CellNb[cur_sce$CellType == "celltype_B"])] <- 0L
+    cur_img <- paintObjects(cur_mask, Image(cur_img, colormode = "Color"), col = "green")
+    cur_mask <- pancreasMasks[[1]]
+    cur_mask[!(cur_mask %in% cur_sce$CellNb[cur_sce$CellType == "celltype_C"])] <- 0L
+    cur_img <- paintObjects(cur_mask, Image(cur_img, colormode = "Color"), col = "blue")
+    
+    expect_equal(imageData(Image(cur_out[[1]])), imageData(Image(cur_img, colormode = "Color")))
+    
+    cur_img <- out_img[[2]]
+    cur_sce <- pancreasSCE[,pancreasSCE$ImageNb == 2]
+    cur_mask <- pancreasMasks[[2]]
+    cur_mask[!(cur_mask %in% cur_sce$CellNb[cur_sce$CellType == "celltype_A"])] <- 0L
+    cur_img <- paintObjects(cur_mask, Image(cur_img, colormode = "Color"), col = "red")
+    cur_mask <- pancreasMasks[[2]]
+    cur_mask[!(cur_mask %in% cur_sce$CellNb[cur_sce$CellType == "celltype_B"])] <- 0L
+    cur_img <- paintObjects(cur_mask, Image(cur_img, colormode = "Color"), col = "green")
+    cur_mask <- pancreasMasks[[2]]
+    cur_mask[!(cur_mask %in% cur_sce$CellNb[cur_sce$CellType == "celltype_C"])] <- 0L
+    cur_img <- paintObjects(cur_mask, Image(cur_img, colormode = "Color"), col = "blue")
+    
+    expect_equal(imageData(Image(cur_out[[2]])), imageData(Image(cur_img, colormode = "Color")))
+    
+    cur_img <- out_img[[3]]
+    cur_sce <- pancreasSCE[,pancreasSCE$ImageNb == 3]
+    cur_mask <- pancreasMasks[[3]]
+    cur_mask[!(cur_mask %in% cur_sce$CellNb[cur_sce$CellType == "celltype_A"])] <- 0L
+    cur_img <- paintObjects(cur_mask, Image(cur_img, colormode = "Color"), col = "red")
+    cur_mask <- pancreasMasks[[3]]
+    cur_mask[!(cur_mask %in% cur_sce$CellNb[cur_sce$CellType == "celltype_B"])] <- 0L
+    cur_img <- paintObjects(cur_mask, Image(cur_img, colormode = "Color"), col = "green")
+    cur_mask <- pancreasMasks[[3]]
+    cur_mask[!(cur_mask %in% cur_sce$CellNb[cur_sce$CellType == "celltype_C"])] <- 0L
+    cur_img <- paintObjects(cur_mask, Image(cur_img, colormode = "Color"), col = "blue")
+    
+    expect_equal(imageData(Image(cur_out[[3]])), imageData(Image(cur_img, colormode = "Color")))
+    
+    # Continous scale
+    cur_col <- c("black", "red")
+    
+    expect_silent(cur_out <- .outlineImageByMeta(object = pancreasSCE, mask = pancreasMasks, 
+                                                 out_img = out_img, cell_id = "CellNb", img_id = "ImageNb",
+                                                 outline_by = "Area", 
+                                                 cur_colour = cur_col, missing_colour = "grey"))
+    
+    # Test for completely continous scale
+    cur_col <- c("blue", "red")
+
+    expect_silent(cur_out <- .outlineImageByMeta(object = pancreasSCE, mask = pancreasMasks, 
+                                                 out_img = out_img, cell_id = "CellNb", img_id = "ImageNb",
+                                                 outline_by = "Pos_X", 
+                                                 cur_colour = cur_col, missing_colour = "grey"))
 })
 
 test_that("colours can be selected.", {
