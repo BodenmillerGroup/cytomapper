@@ -598,7 +598,109 @@ test_that("images can be outlined by metadata.", {
 })
 
 test_that("colours can be selected.", {
-  # .selectColours
+    # Test the defaults
+    # Discret
+    cur_out <- .selectColours(object = pancreasSCE, colour_by = "CellType", 
+                   colour = NULL, call.arg = "colour_by")
+    
+    expect_equal(cur_out, list(CellType = c(celltype_B = "#A6CEE3", 
+                                            celltype_C = "#1F78B4",
+                                            celltype_A = "#B2DF8A")))
+    
+    cur_out <- .selectColours(object = pancreasSCE, colour_by = "CellType", 
+                              colour = NULL, call.arg = "outline_by")
+    
+    expect_equal(cur_out, list(CellType = c(celltype_B = "brown3", 
+                                            celltype_C = "#BC80BD",
+                                            celltype_A = "#FDB462")))
+    
+    # Continous
+    cur_out <- .selectColours(object = pancreasSCE, colour_by = "Area", 
+                              colour = NULL, call.arg = "colour_by")
+    
+    expect_equal(cur_out, list(Area = viridis(100)))
+    
+    cur_out <- .selectColours(object = pancreasSCE, colour_by = "Area", 
+                              colour = NULL, call.arg = "outline_by")
+    
+    expect_equal(cur_out, list(Area = inferno(100)))
+    
+    # Expand the Number of features
+    set.seed(1234)
+    pancreasSCE$test <- sample(paste("test", 1:23), ncol(pancreasSCE), replace = TRUE) 
+    
+    cur_out <- .selectColours(object = pancreasSCE, colour_by = "test", 
+                              colour = NULL, call.arg = "colour_by")
+    
+    cur_vec <- c(brewer.pal(12, "Paired"),
+                 brewer.pal(8, "Pastel2")[-c(3,5,8)],
+                 brewer.pal(12, "Set3")[-c(2,3,8,9,11,12)])
+    names(cur_vec) <- unique(pancreasSCE$test)
+    
+    expect_equal(cur_out, list(test = cur_vec))
+    
+    cur_out <- .selectColours(object = pancreasSCE, colour_by = "test", 
+                              colour = NULL, call.arg = "outline_by")
+    
+    cur_vec <- rev(c(brewer.pal(12, "Paired"),
+                     brewer.pal(8, "Pastel2")[-c(3,5,8)],
+                     brewer.pal(12, "Set3")[-c(2,3,7,8,9,11,12)],
+                     "brown3"))
+    names(cur_vec) <- unique(pancreasSCE$test)
+    
+    expect_equal(cur_out, list(test = cur_vec))
+    
+    set.seed(1234)
+    pancreasSCE$test <- sample(paste("test", 1:50), ncol(pancreasSCE), replace = TRUE) 
+    
+    cur_out <- .selectColours(object = pancreasSCE, colour_by = "test", 
+                              colour = NULL, call.arg = "colour_by")
+    
+    cur_vec <- viridis(50)
+    names(cur_vec) <- unique(pancreasSCE$test)
+    
+    expect_equal(cur_out, list(test = cur_vec))
+    
+    cur_out <- .selectColours(object = pancreasSCE, colour_by = "test", 
+                              colour = NULL, call.arg = "outline_by")
+    
+    cur_vec <- inferno(50)
+    names(cur_vec) <- unique(pancreasSCE$test)
+    
+    expect_equal(cur_out, list(test = cur_vec))
+    
+    # Provide custom colours
+    cur_out <- .selectColours(object = pancreasSCE, colour_by = "CellType", 
+                              colour = list(CellType = c(celltype_A = "red", 
+                                         celltype_B = "blue",
+                                         celltype_C = "green")), 
+                              call.arg = "colour_by")
+    
+    expect_equal(cur_out, list(CellType = c(celltype_A = "red", 
+                                            celltype_B = "blue",
+                                            celltype_C = "green")))
+    
+    cur_out <- .selectColours(object = pancreasSCE, colour_by = "CellType", 
+                              colour = list(CellType = c(celltype_A = "red", 
+                                                         celltype_B = "blue",
+                                                         celltype_C = "green")), 
+                              call.arg = "outline_by")
+    
+    expect_equal(cur_out, list(CellType = c(celltype_A = "red", 
+                                            celltype_B = "blue",
+                                            celltype_C = "green")))
+  
+    cur_out <- .selectColours(object = pancreasSCE, colour_by = "Area", 
+                              colour = list(Area = c("black", "red")), 
+                              call.arg = "colour_by")
+    
+    expect_equal(cur_out, list(Area = c("black", "red")))
+    
+    cur_out <- .selectColours(object = pancreasSCE, colour_by = "Area", 
+                              colour = list(Area = c("black", "red")), 
+                              call.arg = "outline_by")
+    
+    expect_equal(cur_out, list(Area = c("black", "red")))
 })
 
 test_that("min/max scaling works.", {
