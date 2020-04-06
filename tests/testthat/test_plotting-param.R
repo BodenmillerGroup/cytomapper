@@ -662,6 +662,16 @@ test_that("plotting-param: images can be plotted individually.", {
                            image_title = list(text = c(1,2,3),
                                               cex = 3),
                            display = "single"))
+  
+  # subsetting
+  expect_silent(plotPixels(pancreasImages, colour_by = c("H3", "SMA", "CD44"),
+                           subset_images = "A02_imc",
+                           scale_bar = list(frame = 3),
+                           display = "single"))
+  
+  expect_silent(plotCells(pancreasMasks,
+                           subset_images = "A02_mask",
+                           display = "single"))
 
   # save_plot
   cur_path <- tempdir()
@@ -687,6 +697,12 @@ test_that("plotting-param: images can be plotted individually.", {
   cur_par2 <- par()
   expect_identical(cur_par1, cur_par2)
 
+  # Subsetting the images
+  expect_silent(plotPixels(pancreasImages,
+                          subset_images = "A02_imc",
+                          display = "single",
+                          save_plot = list(filename = paste0(cur_path, "/test.png"),
+                                           scale = 2)))
   # return_plot
   expect_silent(cur_out <- plotPixels(pancreasImages, colour_by = c("H3", "SMA", "CD44"),
                            return_plot = TRUE,

@@ -224,6 +224,12 @@ test_that("plotPixels: images can be correctly subsetted.", {
   expect_silent(plotPixels(image = pancreasImages,
                            colour_by = "SMA",
                            subset_images = c("A02_imc", "F01_imc")))
+  
+  # Setting the image title
+  expect_silent(plotPixels(image = pancreasImages,
+                           colour_by = "SMA",
+                           subset_images = c("A02_imc", "F01_imc"),
+                           image_title = list(text = c("test1", "test2"))))
 
   # Use mcols entry
   mcols(pancreasImages)$ImageName <- paste0(names(pancreasImages), ".tiff")
@@ -246,7 +252,7 @@ test_that("plotPixels: images can be correctly subsetted.", {
                            colour_by = "SMA",
                            outline_by = "CellType",
                            subset_images = 1:2))
-
+  
   # Error
   expect_error(plotPixels(image = pancreasImages,
                           subset_images = 4),
@@ -269,7 +275,13 @@ test_that("plotPixels: images can be correctly subsetted.", {
                           subset_images = 1:2),
                regexp = "Mask and image ids must be identical.",
                fixed = TRUE)
-
+  
+  expect_error(plotPixels(image = pancreasImages,
+                           colour_by = "SMA",
+                           subset_images = c("A02_imc", "F01_imc"),
+                           image_title = list(text = c("test1", "test2", "test3"))),
+                regexp = "Invalid entry to the 'image_title' list object: \nPlease specify one title per image.",
+                fixed = TRUE)
 })
 
 test_that("plotPixels: colour can be correctly adjusted.", {

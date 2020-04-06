@@ -183,12 +183,13 @@ plotCells <- function(
         .valid.colour(colour, colour_by, outline_by, object, image = NULL)
     }
 
+    # Select images for plotting
+    mask <- .select_images(object, mask, img_id, subset_images)
+    
     # Set further arguments
     dotArgs <- list(...)
     plottingParam <- .plottingParam(dotArgs, image = mask)
 
-    # Select images for plotting
-    mask <- .select_images(object, mask, img_id, subset_images)
     cur_col <- list()
 
     # Colour the masks

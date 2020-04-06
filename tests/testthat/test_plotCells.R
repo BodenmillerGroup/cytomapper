@@ -228,6 +228,26 @@ test_that("plotCells: images can be correctly subsetted.", {
                           cell_id = "CellNb", exprs_values = "counts",
                           colour_by = "SMA",
                           subset_images = c("A02_mask", "F01_mask")))
+  
+  cur_images <- pancreasMasks["A02_mask"]
+  expect_silent(plotCells(object = pancreasSCE,
+                          mask = cur_images, img_id = "ImageNb",
+                          cell_id = "CellNb", exprs_values = "counts",
+                          colour_by = "SMA"))
+  
+  cur_sce <- pancreasSCE[,pancreasSCE$ImageNb == 1]
+  expect_silent(plotCells(object = cur_sce,
+                          mask = cur_images, img_id = "ImageNb",
+                          cell_id = "CellNb", exprs_values = "counts",
+                          colour_by = "SMA"))
+  
+  # Set image title
+  expect_silent(plotCells(object = pancreasSCE,
+                          mask = pancreasMasks, img_id = "ImageNb",
+                          cell_id = "CellNb", exprs_values = "counts",
+                          colour_by = "SMA",
+                          subset_images = c("A02_mask", "F01_mask"),
+                          image_title = list(text = c("test1", "test2"))))
 
   # Use mcols entry
   mcols(pancreasMasks)$MaskName <- paste0(names(pancreasMasks), ".tiff")
@@ -256,6 +276,15 @@ test_that("plotCells: images can be correctly subsetted.", {
                          colour_by = "SMA",
                          subset_images = "test"),
                regexp = "subscript contains invalid names",
+               fixed = TRUE)
+  
+  expect_error(plotCells(object = pancreasSCE,
+                          mask = pancreasMasks, img_id = "ImageNb",
+                          cell_id = "CellNb", exprs_values = "counts",
+                          colour_by = "SMA",
+                          subset_images = 1:2,
+                          image_title = list(text = c("test1", "test2", "test3"))),
+               regexp = "Invalid entry to the 'image_title' list object: \nPlease specify one title per image.",
                fixed = TRUE)
 
 })

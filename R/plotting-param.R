@@ -38,7 +38,10 @@
 #' multiple of the following entries are supported:
 #' \itemize{
 #' \item \code{text}: character vector of image titles. Same length as the
-#' \code{CytoImageList} object.
+#' number of displayed images. This by default is the length of the
+#' \code{CytoImageList} object. When subsetting within the \code{plotCells} or
+#' \code{plotPixels} function, one title per subsetted image needs to be
+#' specified.
 #' \item \code{position}: single character specifying the position of the
 #' title. Supported entries: "top", "bottom", "topleft", "bottomleft",
 #' "topright", "bottomright" (default "top").

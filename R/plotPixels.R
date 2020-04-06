@@ -194,15 +194,16 @@ plotPixels <- function(
         .valid.bcg(bcg, colour_by)
     }
 
-    # Set further arguments
-    dotArgs <- list(...)
-    plottingParam <- .plottingParam(dotArgs, image = image)
-
     # Select images for plotting
     image <- .select_images(object, image, img_id, subset_images)
     if(!is.null(mask)){
         mask <- .select_images(object, mask, img_id, subset_images)
     }
+    
+    # Set further arguments
+    dotArgs <- list(...)
+    plottingParam <- .plottingParam(dotArgs, image = image)
+
     cur_col <- list()
 
     # Colour the images
