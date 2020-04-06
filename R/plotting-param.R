@@ -57,7 +57,7 @@
 #' \item \code{filename}: single character specifying a valid file name.
 #' The file extension specifies the format in which the file is saved.
 #' Supported formats are: jpeg, tiff and png. If \code{display = "single"},
-#' each image will be written in an individual file.
+#' each image will be written in an individual file. These 
 #' \item \code{scale}: by default the height and width of the saved image is
 #' defined by the maximum image size times the number of rows or numer of
 #' columns. This resolution is often not suffcient to clearly display the

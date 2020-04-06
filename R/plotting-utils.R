@@ -26,7 +26,7 @@
         # Then colour cells that are not in sce
         cur_m <- as.vector(cur_mask != background_colour) &
             !(cur_mask %in% as.character(colData(cur_sce)[,cell_id]))
-            cur_mask <- replace(cur_mask, which(cur_m), missing_colour)
+        cur_mask <- replace(cur_mask, which(cur_m), missing_colour)
 
         # Next, colour cells that are present in sce object
         cur_m <- match(cur_mask, as.character(colData(cur_sce)[,cell_id]))
