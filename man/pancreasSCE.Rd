@@ -22,6 +22,8 @@ image name and cell id. It containins the
     \item the associated mask name (MaskName, see
     \code{?"\link[cytomapper]{pancreasMasks}"}),
     \item a randomized cell-type label (CellType)
+    \item a logical (Pattern) indicating cells with x position smaller than
+    50 pixel
 }
 }
 \item{rowData}{Protein-specific metadata where rownames represent

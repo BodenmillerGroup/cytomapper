@@ -17,7 +17,7 @@
                                     max_x = max(colData(object)[,colour_by]))
             col_ind <- col_ind[round(100*cur_scaling) + 1]
         } else {
-        col_ind <- cur_colour[colData(cur_sce)[,colour_by]]
+            col_ind <- cur_colour[as.character(colData(cur_sce)[,colour_by])]
         }
 
         # Colour first the background
@@ -247,7 +247,7 @@
                     } else {
                         cur_col <- inferno(length(cur_entries))
                     }
-                    names(cur_col) <- cur_entries
+                    names(cur_col) <- as.character(cur_entries)
                 }
             } else {
                 if(call.arg == "colour_by"){
@@ -261,7 +261,7 @@
                         "brown3"))
                 }
                 cur_col <- cur_col[seq_len(length(cur_entries))]
-                names(cur_col) <- cur_entries
+                names(cur_col) <- as.character(cur_entries)
             }
             col_out <- list(cur_col)
             names(col_out) <- colour_by
