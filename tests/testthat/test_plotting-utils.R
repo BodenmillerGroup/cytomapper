@@ -598,6 +598,7 @@ test_that("images can be outlined by metadata.", {
 })
 
 test_that("colours can be selected.", {
+    data("pancreasSCE")
     # Test the defaults
     # Discret
     cur_out <- .selectColours(object = pancreasSCE, colour_by = "CellType", 
@@ -613,6 +614,15 @@ test_that("colours can be selected.", {
     expect_equal(cur_out, list(CellType = c(celltype_B = "brown3", 
                                             celltype_C = "#BC80BD",
                                             celltype_A = "#FDB462")))
+    
+    # Factor
+    pancreasSCE$CellType2 <- factor(pancreasSCE$CellType)
+    cur_out <- .selectColours(object = pancreasSCE, colour_by = "CellType2", 
+                              colour = NULL, call.arg = "colour_by")
+    
+    expect_equal(cur_out, list(CellType = c(celltype_B = "#A6CEE3", 
+                                            celltype_C = "#1F78B4",
+                                            celltype_A = "#B2DF8A")))
     
     # Continous
     cur_out <- .selectColours(object = pancreasSCE, colour_by = "Area", 

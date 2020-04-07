@@ -115,7 +115,39 @@ test_that("plotCells: Metadata can be displayed.", {
             mask = pancreasMasks, img_id = "ImageNb",
             cell_id = "CellNb",
             colour_by = "Pos_Y"))
+  
+  # Test if cell id is factor
+  pancreasSCE$CellNb2 <- factor(pancreasSCE$CellNb)
+  expect_error(plotCells(object = pancreasSCE,
+                          mask = pancreasMasks, img_id = "ImageNb",
+                          cell_id = "CellNb2", colour_by = "CellType"),
+               regexp = "‘floor’ not meaningful for factors",
+               fixed = TRUE)
+  
+  # Test if image id is factor
+  pancreasSCE$ImageNb2 <- factor(pancreasSCE$ImageNb)
+  mcols(pancreasMasks)$ImageNb2 <- factor(mcols(pancreasMasks)$ImageNb)
+  expect_silent(plotCells(object = pancreasSCE,
+                         mask = pancreasMasks, img_id = "ImageNb",
+                         cell_id = "CellNb", colour_by = "CellType"))
 
+  # Use factor entry
+  # Fix this!!!!
+  pancreasSCE$CellType2 <- factor(pancreasSCE$CellType)
+  expect_silent(plotCells(object = pancreasSCE,
+                          mask = pancreasMasks, img_id = "ImageNb",
+                          cell_id = "CellNb", colour_by = "CellType2"))
+  
+  pancreasSCE$Area2 <- factor(pancreasSCE$Area)
+  expect_silent(plotCells(object = pancreasSCE,
+                          mask = pancreasMasks, img_id = "ImageNb",
+                          cell_id = "CellNb", colour_by = "Area2"))
+  
+  # Use logical entry
+  expect_silent(plotCells(object = pancreasSCE,
+                          mask = pancreasMasks, img_id = "ImageNb",
+                          cell_id = "CellNb", colour_by = "CellType2"))
+  
   # Error
   expect_error(plotCells(mask = pancreasMasks,
                          colour_by = "H3"),
