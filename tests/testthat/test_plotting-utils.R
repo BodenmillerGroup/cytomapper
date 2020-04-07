@@ -738,19 +738,19 @@ test_that("min/max scaling works.", {
 
 test_that("colour mixing works.", {
   test_col <- c("red", "green")
-  expect_equal(.mixColours(test_col), "#FFFF00")
+  expect_equal(.mixColours(test_col)[,1], c(red = 1, green = 1, blue = 0))
   
   test_col <- c("red", "blue")
-  expect_equal(.mixColours(test_col), "#FF00FF")
+  expect_equal(.mixColours(test_col)[,1], c(red = 1, green = 0, blue = 1))
   
   test_col <- c("blue", "green")
-  expect_equal(.mixColours(test_col), "#00FFFF")
+  expect_equal(.mixColours(test_col)[,1], c(red = 0, green = 1, blue = 1))
   
   test_col <- c("red", "green", "blue")
-  expect_equal(.mixColours(test_col), "#FFFFFF")
+  expect_equal(.mixColours(test_col)[,1], c(red = 1, green = 1, blue = 1))
   
   test_col <- c("white", "red")
-  expect_equal(.mixColours(test_col), "#FFFFFF")
+  expect_equal(.mixColours(test_col)[,1], c(red = 2, green = 1, blue = 1))
 
   # Compare to EBImage colour composition
   img1 <- Image(data = c("#FFED00", "#070a0a", "blue", "white"), dim = c(2,2,1))
@@ -760,18 +760,63 @@ test_that("colour mixing works.", {
   cur_image <- img1 + img2 + img3
   
   cur_test <- .mixColours(c("#070a0a", "#1ee6df", "#020808"))
-  cur_test <- col2rgb(cur_test)/255
   
   expect_equal(cur_test[1], imageData(cur_image)[2,1,1,1])
   expect_equal(cur_test[2], imageData(cur_image)[2,1,2,1])
   expect_equal(cur_test[3], imageData(cur_image)[2,1,3,1])
 
   cur_test <- .mixColours(c("#FFED00", "#FF0000", "#FF00AB"))
-  cur_test <- col2rgb(cur_test)/255
 
-  expect_equal(cur_test[1], 1)
+  expect_equal(cur_test[1], imageData(cur_image)[1,1,1,1])
   expect_equal(cur_test[2], imageData(cur_image)[1,1,2,1])
   expect_equal(cur_test[3], imageData(cur_image)[1,1,3,1])
+})
+
+test_that("colour vector creation works.", {
+    data("pancreasSCE")
+
+    expect_silent(cur_out <- .createColourVector(object = pancreasSCE,colour_by = "SMA", 
+                                   exprs_values = "counts", cur_colour = list(SMA = c("black", "red")), 
+                                   plottingParam = list(scale = TRUE)))   
+    expect_s4_class(cur_out, "SingleCellExperiment")
+    expect_true("CYTO_COLOUR" %in% names(int_colData(cur_out)))
+    
+    expect_silent(cur_out <- .createColourVector(object = pancreasSCE,colour_by = c("H3", "SMA"), 
+                                                 exprs_values = "counts", 
+                                                 cur_colour = list(SMA = c("black", "red"),
+                                                                   H3 = c("black", "green")), 
+                                                 plottingParam = list(scale = TRUE)))   
+    expect_s4_class(cur_out, "SingleCellExperiment")
+    expect_true("CYTO_COLOUR" %in% names(int_colData(cur_out)))
+    
+    expect_silent(cur_out <- .createColourVector(object = pancreasSCE,colour_by = c("H3", "SMA"), 
+                                                 exprs_values = "exprs", 
+                                                 cur_colour = list(SMA = c("black", "red"),
+                                                                   H3 = c("black", "green")), 
+                                                 plottingParam = list(scale = TRUE)))   
+    expect_s4_class(cur_out, "SingleCellExperiment")
+    expect_true("CYTO_COLOUR" %in% names(int_colData(cur_out)))
+
+    # Generate example sce
+    cur_test <- SingleCellExperiment(assay = list(counts = matrix(c(1:3, 1:3, 1:3, 1:3), 
+                                                                  ncol = 3,byrow = TRUE)))
+    rownames(cur_test) <- paste0("test", 1:4)
+    expect_silent(cur_out <- .createColourVector(object = cur_test,
+                                                 colour_by = c("test1", "test2", "test3", "test4"), 
+                                                 exprs_values = "counts", 
+                                                 cur_colour = list(test1 = c("black", "red"),
+                                                                   test2 = c("black", "green"),
+                                                                   test3 = c("black", "blue"),
+                                                                   test4 = c("black", "magenta")), 
+                                                 plottingParam = list(scale = TRUE)))  
+    
+    cur_col <- col2rgb("red") + col2rgb("green") + col2rgb("blue") + col2rgb("magenta")
+    cur_col <- (cur_col / max(cur_col)) * 255
+    
+    expect_equal(int_colData(cur_out)$CYTO_COLOUR[1], "#000000")
+    expect_equal(as.numeric(col2rgb(int_colData(cur_out)$CYTO_COLOUR[2])), as.numeric(cur_col/2), tolerance = 0.5)
+    expect_equal(as.numeric(col2rgb(int_colData(cur_out)$CYTO_COLOUR[3])), as.numeric(cur_col), tolerance = 0.5)
+    
 })
 
 test_that("images can be displayed.", {

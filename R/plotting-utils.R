@@ -47,6 +47,64 @@
 
 }
 
+# Function to mix colours similar to how EBImage is creating an RGB
+#' @importFrom grDevices col2rgb rgb
+.mixColours <- function(col_vector){
+    args <- as.list(col_vector)
+    cols <- lapply(args, function(x){col2rgb(x)/255})
+    cur_mix <- Reduce("+", cols)
+    return(cur_mix)
+}
+
+# Function to create a composite colour vector
+.createColourVector <- function(object, colour_by, 
+                                exprs_values, cur_colour,
+                                plottingParam){
+    
+    if (plottingParam$scale) {
+        if (length(colour_by) == 1L) {
+            cur_range <- quantile(assay(object, exprs_values)[colour_by,],
+                                  probs = c(0,1))
+            cur_range <- matrix(cur_range, ncol = 1, 
+                                dimnames = list(c("1", "2"), colour_by))
+        } else {
+            cur_range <- apply(assay(object, exprs_values)[colour_by,], 1, 
+                               quantile, probs = c(0,1))
+        }
+    } else {
+        cur_range <- quantile(assay(object, exprs_values)[colour_by,],
+                              probs = c(0,1))
+    }
+    
+    cur_col_df <- vapply(colour_by, function(x){
+        col_ind <- colorRampPalette(cur_colour[[x]])(101)
+        if (plottingParam$scale) {
+            cur_scaling <- .minMaxScaling(assay(object, exprs_values)[x,],
+                                          min_x = cur_range[1,x],
+                                          max_x = cur_range[2,x])
+        } else {
+            cur_scaling <- .minMaxScaling(assay(object, exprs_values)[x,],
+                                          min_x = as.numeric(cur_range[1]),
+                                          max_x = as.numeric(cur_range[2]))
+        }
+        return(col_ind[round(100*cur_scaling) + 1])
+    }, FUN.VALUE = character(ncol(object)))
+    
+    # Hex colours to rgb
+    col_ind <- apply(cur_col_df, 1, .mixColours)
+    
+    # Rescale to account for additive colour mixing
+    col_ind <- col_ind / (max(col_ind))
+    
+    # Convert to hex colour
+    col_out <- apply(col_ind, 2, function(x){rgb(x[1], x[2], x[3], maxColorValue = )})
+
+    # Store in internal colData
+    int_colData(object)$CYTO_COLOUR <- col_out
+
+    return(object)
+}
+
 # Colour segmentation masks based on features
 #' @importFrom grDevices colorRampPalette
 #' @importFrom SummarizedExperiment assay
@@ -54,6 +112,10 @@
 .colourMaskByFeature <- function(object, mask, cell_id, img_id,
                         colour_by, exprs_values, cur_colour,
                         missing_colour, background_colour, plottingParam){
+    
+    object <- .createColourVector(object, colour_by, 
+                                  exprs_values, cur_colour,
+                                  plottingParam)
 
     for(i in seq_along(mask)){
         cur_mask <- mask[[i]]
@@ -75,26 +137,8 @@
         # the mask accordingly
         cur_m <- match(cur_mask, as.character(colData(cur_sce)[,cell_id]))
         cur_ind <- which(!is.na(cur_m))
-        cur_col_list <- lapply(colour_by, function(x){
-            cur_frame <- cur_mask
-            col_ind <- colorRampPalette(cur_colour[[x]])(101)
-            if(plottingParam$scale){
-                cur_min <- min(assay(object, exprs_values)[x,])
-                cur_max <- max(assay(object, exprs_values)[x,])
-                cur_scaling <- .minMaxScaling(assay(cur_sce, exprs_values)[x,],
-                                min_x = cur_min,
-                                max_x = cur_max)
-            } else {
-                cur_min <- min(assay(object, exprs_values)[colour_by,])
-                cur_max <- max(assay(object, exprs_values)[colour_by,])
-                cur_scaling <- .minMaxScaling(assay(cur_sce, exprs_values)[x,],
-                                min_x = cur_min,
-                                max_x = cur_max)
-            }
-            col_ind[round(100*cur_scaling) + 1]
-        })
 
-        col_ind <- apply(data.frame(cur_col_list), 1, .mixColours)
+        col_ind <- int_colData(cur_sce)$CYTO_COLOUR
         col_ind <- col_ind[cur_m[!is.na(cur_m)]]
 
         cur_mask <- replace(cur_mask, cur_ind, col_ind)
@@ -175,7 +219,18 @@
         }
         out.list[[ind]] <- cur_image
     }
-
+    
+    # Rescale images to account for additive colour merging
+    cur_range <- vapply(X = out.list, FUN = quantile, 
+                        FUN.VALUE = numeric(2), probs = c(0, 1))
+    cur_min <- min(cur_range[1,])
+    cur_max <- max(cur_range[2,])
+    
+    if (cur_max > 1) {
+        out.list <- endoapply(out.list, normalize, separate = FALSE, 
+                              ft = c(0,1), inputRange = c(cur_min, cur_max))
+    }
+    
     return(out.list)
 }
 
@@ -295,17 +350,6 @@
 # Min/max scaling of expression counts
 .minMaxScaling <- function(x, min_x, max_x){
     return((x - min_x)/(max_x - min_x))
-}
-
-# Function to mix colours similar to how EBImage is creating an RGB
-#' @importFrom grDevices col2rgb rgb
-.mixColours <- function(col_vector){
-    args <- as.list(col_vector)
-    cols <- lapply(args, function(x){col2rgb(x)/255})
-    cur_mix <- Reduce("+", cols)
-    cur_mix[cur_mix > 1] <- 1
-    cur_mix <- rgb(t(cur_mix), maxColorValue = 1)
-    return(cur_mix)
 }
 
 # Custom function to display images
