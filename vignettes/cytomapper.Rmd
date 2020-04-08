@@ -127,10 +127,10 @@ To colour and/or outline segmentation masks, a `SingleCellExperiment`, an
 `img_id` and `cell_id` entry need to be specified:
 
 ```{r quickstart-plotCells-2}
-plotCells(mask = pancreasMasks, object = pancreasSCE, 
+plotCells(mask = pancreasMasks, object = pancreasSCE,
             cell_id = "CellNb", img_id = "ImageNb", colour_by = "CD99",
             outline_by = "CellType")
-plotCells(mask = pancreasMasks, object = pancreasSCE, 
+plotCells(mask = pancreasMasks, object = pancreasSCE,
             cell_id = "CellNb", img_id = "ImageNb", colour_by = "CellType")
 ```
 
@@ -160,7 +160,7 @@ objects, two slots need to be specified:
 * `img_id`: a single character indicating the `colData` (in the
 `SingleCellExperiment` object) and `elementMetadata` (in the `CytoImageList`
 object) entry that contains the image identifiers. These image ids have to match
-between the `SingleCellExperiment` object and the `CytoImageList` object. 
+between the `SingleCellExperiment` object and the `CytoImageList` object.
 * `cell_id`: a single character indicating the `colData` entry that contains the
 cell identifiers. **These should be integer values corresponding to pixel-values
 in the segmentation masks**.
@@ -173,7 +173,7 @@ head(colData(pancreasSCE)[,"ImageNb"])
 head(colData(pancreasSCE)[,"CellNb"])
 ```
 
-The `img_id` entry in the `CytoImageList` object need to be accessible via: 
+The `img_id` entry in the `CytoImageList` object need to be accessible via:
 
 ```{r image-cell-id-cil}
 mcols(pancreasImages)[,"ImageNb"]
@@ -197,6 +197,15 @@ proteins: H3, CD99, PIN, CD8a, and CDH It represents a small subset of the data
 presented in [A Map of Human Type 1 Diabetes Progression by Imaging Mass
 Cytometry](Ahttps://www.cell.com/cell-metabolism/fulltext/S1550-4131(18)30691-0?_returnURL=https%3A%2F%2Flinkinghub.elsevier.com%2Fretrieve%2Fpii%2FS1550413118306910%3Fshowall%3Dtrue).
 
+This dataset was generated using imaging mass cytometry [@giesen2014imc]. Raw
+output files (in .mcd format) were processed using the [IMC segmentation
+pipeline](https://github.com/BodenmillerGroup/ImcSegmentationPipeline), which
+produces tiff-stacks containing the pixel-level information of all measured
+markers, segmentation masks that contain the cells' object ids as well as cell-
+and image-specific measurements. Cell-specific measurements include the mean
+marker intensity per cell and per marker, the cells' position and size
+measurements.
+
 Pixel-level intensities for all 5 markers (5 channels) are stored in the
 `pancreasImages` object. Entires to the `CytoImageList` object and the rownames
 of the object match: E34_imc, G01_imc, and J02_imc The `elementMetadata` slot
@@ -209,7 +218,9 @@ channelNames(pancreasImages)
 imageData(pancreasImages[[1]])[1:15,1:5,1]
 ```
 
-The corresponding segmentation masks are stored in the `pancreasMasks` object.
+The corresponding segmentation masks are stored in the `pancreasMasks` object
+and can be read in from tiff images containing the segmentation masks (see next
+section).
 Segmentation masks are defined as one-channel images containing integer values,
 which represent the cells' ids or 0 (background).
 
@@ -219,7 +230,12 @@ mcols(pancreasMasks)
 imageData(pancreasMasks[[1]])[1:15,1:5]
 ```
 
-All cell-specific metadata are stored in the `colData` slot of the corresponding
+The IMC segmentation pipeline also generates cell-specific measurements. The
+`SingleCellExperiment` class offers an ideal container to store cell-specific
+expression counts together with cell-specific metadata. For the toy dataset,
+cell-specific mean marker intensities (`counts`) and arcsinh-transformed mean
+marker intensities (`exprs`) are stored in the `assays(pancreasSCE)` slot. All
+cell-specific metadata are stored in the `colData` slot of the corresponding
 `SingleCellExperiment` object: `pancreasSCE`. For more information on the
 metadata, please refer to the `?pancreasSCE` documentation. Of note: the
 cell-type labels contained in the `colData(pancreasSCE)$CellType` slot are
@@ -236,6 +252,11 @@ object contains the raw expression counts per cell in the form of mean pixel
 value per cell and protein (accessible via `counts(pancreasSCE)`). The
 arcsinh-transformed (using a co-factor of 1) raw expression counts can be
 obtained via `assay(pancreasSCE, "exprs")`.
+
+For more information on how to generate `SingleCellExperiment` objects from
+count-based data, see [Orchestrating Single-Cell
+Analysis with
+Bioconductor](https://osca.bioconductor.org/data-infrastructure.html#the-singlecellexperiment-class).
 
 # Reading in data {#ReadingData}
 
@@ -305,6 +326,8 @@ head(unique(as.numeric(all_masks[[1]])))
 ```
 
 In this case, the multi-channel images are not affected by this scaling factor.
+The final `all_masks` object corresponds to the `pancreasMasks` object provided
+by `cytomapper`.
 
 ## Add channel names
 
@@ -441,7 +464,7 @@ Furthermore, channels can be merged using the `mergeChannels` function:
 ```{r mergechannels}
 cur_channels <- getChannels(pancreasImages, 1:2)
 channelNames(cur_channels) <- c("new_ch1", "new_ch2")
-pancreasImages <- mergeChannels(pancreasImages, cur_channels) 
+pancreasImages <- mergeChannels(pancreasImages, cur_channels)
 pancreasImages
 ```
 
@@ -536,9 +559,9 @@ channel is exponentiated by the gamma factor.
 ```{r bcg-pixels}
 data("pancreasImages")
 # Increase contrast for the CD99 and CDH channel
-plotPixels(pancreasImages, 
-            colour_by = c("H3", "CD99", "CDH"), 
-            bcg = list(CD99 = c(0,2,1), 
+plotPixels(pancreasImages,
+            colour_by = c("H3", "CD99", "CDH"),
+            bcg = list(CD99 = c(0,2,1),
                         CDH = c(0,2,1)))
 ```
 
@@ -554,8 +577,8 @@ a `cell_id` indicating the name of the `colData` slot that contains the cell IDs
 need to be provided:
 
 ```{r outline-1-pixels}
-plotPixels(pancreasImages, mask = pancreasMasks, 
-            object = pancreasSCE, img_id = "ImageNb", 
+plotPixels(pancreasImages, mask = pancreasMasks,
+            object = pancreasSCE, img_id = "ImageNb",
             cell_id = "CellNb",
             colour_by = c("H3", "CD99", "CDH"),
             outline_by = "CellType")
@@ -616,8 +639,8 @@ setting the `exprs_values` parameter. In the toy dataset, the
 expression counts.
 
 ```{r exprs_values-cells}
-plotCells(pancreasMasks, object = pancreasSCE, 
-            img_id = "ImageNb", cell_id = "CellNb", 
+plotCells(pancreasMasks, object = pancreasSCE,
+            img_id = "ImageNb", cell_id = "CellNb",
             # colour_by = c("CD99", "CDH"),
             exprs_values = "exprs")
 ```
@@ -625,7 +648,7 @@ plotCells(pancreasMasks, object = pancreasSCE,
 ## Outlining
 
 The user can furthermore outline cells and specify the metadata entry to outline
-cells by. See the previous [Outlining](#Outlining) section and `?plotCells` 
+cells by. See the previous [Outlining](#Outlining) section and `?plotCells`
 for examples.
 
 ## Subsetting
@@ -645,13 +668,13 @@ for interpolation need to be provided. These colours are passed to the
 colour per entry needs to be specified in form of a named vector.
 
 ```{r colour-cells}
-plotCells(pancreasMasks, object = pancreasSCE, 
-            img_id = "ImageNb", cell_id = "CellNb", 
+plotCells(pancreasMasks, object = pancreasSCE,
+            img_id = "ImageNb", cell_id = "CellNb",
             colour_by = c("CD99", "CDH"),
             outline_by = "CellType",
             colour = list(CD99 = c("black", "red"),
                         CDH = c("black", "white"),
-                        CellType = c(celltype_A = "blue", 
+                        CellType = c(celltype_A = "blue",
                                     celltype_B = "green",
                                     celltype_C = "yellow")))
 ```
@@ -674,8 +697,8 @@ therefore only visualize the cells retained in the object:
 
 ```{r subsetting-SCE}
 cur_sce <- pancreasSCE[,colData(pancreasSCE)$CellType == "celltype_A"]
-plotCells(pancreasMasks, object = cur_sce, 
-            img_id = "ImageNb", cell_id = "CellNb", 
+plotCells(pancreasMasks, object = cur_sce,
+            img_id = "ImageNb", cell_id = "CellNb",
             colour_by = "CellType",
             colour = list(CellType = c(celltype_A = "red")))
 ```
@@ -753,8 +776,8 @@ details). To suppress this default behaviour, the user can set `interpolate =
 FALSE`.
 
 ```{r customization, fig.cap = "Plot customization example."}
-plotCells(pancreasMasks, object = pancreasSCE, 
-            img_id = "ImageNb", cell_id = "CellNb", 
+plotCells(pancreasMasks, object = pancreasSCE,
+            img_id = "ImageNb", cell_id = "CellNb",
             colour_by = "CD99",
             outline_by = "CellType",
             background_colour = "white",
@@ -800,7 +823,7 @@ If the `return_images` parameter is set to `TRUE`, `cytomapper` returns a
 `SimpleList` object containing three-colour (red, green. blue) `Image` objects.
 
 ```{r return_plot}
-cur_out <- plotPixels(pancreasImages, colour_by = c("H3", "CD99", "CDH"), 
+cur_out <- plotPixels(pancreasImages, colour_by = c("H3", "CD99", "CDH"),
                 return_plot = TRUE, return_images = TRUE, display = "single")
 ```
 
@@ -849,4 +872,3 @@ sessionInfo()
 ```
 
 # References
-

@@ -19,20 +19,28 @@ For further instructions to process raw imaging mass cytometry data, please refe
 The current implementation of `cytomapper` requires R version 4.0, which is currently only available as development version at [https://stat.ethz.ch/R/daily/](https://stat.ethz.ch/R/daily/).
 
 The `cytomapper` package builds on data objects and functions contained in the [SingleCellExperiment](https://bioconductor.org/packages/release/bioc/html/SingleCellExperiment.html) and [EBImage](https://bioconductor.org/packages/release/bioc/html/EBImage.html) packages.
-Therefore, these packages need to be installed via:
+Therefore, these packages need to be installed (see below).
+
+## Installation
+
+The `cytomapper` package can be installed from `Bioconductor` via:
+
+```r
+if (!requireNamespace("BiocManager", quietly = TRUE))
+    install.packages("BiocManager")
+    
+BiocManager::install("cytomapper")
+```
+
+The development version of the `cytomapper` package can be currently installed from Github using `devtools` in R.
+Please make sure to also install its dependecies:
 
 ```r
 if (!requireNamespace("BiocManager", quietly = TRUE))
     install.packages("BiocManager")
     
 BiocManager::install(c("EBImage", "SingleCellExperiment"))
-```
 
-## Installation
-
-The `cytomapper` package can be currently installed from Github using `devtools` in R:
-
-```r
 # install.packages("devtools")
 
 devtools::install_github("BodenmillerGroup/cytomapper", build_vignettes = TRUE)

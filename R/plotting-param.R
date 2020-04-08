@@ -419,8 +419,8 @@ NULL
         }
 
         if("frame" %in% names(scalebar)){
-            if(length(scalebar$frame) != 1L &&
-                (!is.numeric(scalebar$frame) ||
+            if(length(scalebar$frame) != 1L ||
+                (!is.numeric(scalebar$frame) &&
                 scalebar$frame != "all")){
                 stop(paste0(error.scalebar, ": \n",
                         "'frame' should be a single integer or set to 'all'"))
@@ -639,7 +639,12 @@ NULL
 # Validity of missing_colour input
 #' @importFrom grDevices col2rgb
 .valid.missingcolour <- function(missingcolour){
-    if(!is.null(missingcolour)){
+    if (!is.null(missingcolour)) {
+        
+        if (length(missingcolour) > 1) {
+            stop("'missing_colour' not a valid colour.")
+        }
+        
         res <- try(col2rgb(missingcolour), silent=TRUE)
         if(class(res)[1] == "try-error"){
             stop("'missing_colour' not a valid colour.")
@@ -654,6 +659,11 @@ NULL
 #' @importFrom grDevices col2rgb
 .valid.backgroundcolour <- function(backgroundcolour){
     if(!is.null(backgroundcolour)){
+        
+        if (length(backgroundcolour) > 1) {
+            stop("'background_colour' not a valid colour.")
+        }
+        
         res <- try(col2rgb(backgroundcolour), silent=TRUE)
         if(class(res)[1] == "try-error"){
             stop("'background_colour' not a valid colour.")
@@ -671,6 +681,10 @@ NULL
     error.saveplot <- "Invalid entry to the 'save_plot' list object"
 
     if(!is.null(saveplot)){
+        if(!is.list(saveplot)){
+            stop(error.saveplot)
+        }
+        
         if(is.null(names(saveplot)) ||
             !all(names(saveplot) %in% c("filename", "scale"))){
             stop(error.saveplot)
@@ -688,7 +702,7 @@ NULL
                 if(cur_ext == ""){
                     stop(paste0(error.saveplot, ": \n",
                         "Please provide a file extension ",
-                        "indicating in format to save the image."))
+                        "indicating the format to save the image."))
                 }
                 if(!(cur_ext %in% c("tiff", "png", "jpeg"))){
                     stop(paste0(error.saveplot, ": \n",
