@@ -8,7 +8,7 @@
 #' individual images.
 #'
 #' @section Setting and getting the channel names:
-#' In the following code, \code{x} is either a \linkS4class{CytoImageList} 
+#' In the following code, \code{x} is either a \linkS4class{CytoImageList}
 #' object containing one or multiple channels. The channel
 #' names can be replaced by \code{value}, which contains a character vector of
 #' the same length as the number of channels in the images.
@@ -137,8 +137,8 @@ setReplaceMethod("names",
 #' \code{separateImages = FALSE}). The latter allows the visual comparison of
 #' intensity values across images.
 #'
-#' To clip the images before normalization, the \code{inputRange} can be set. 
-#' Explain in more detail... 
+#' To clip the images before normalization, the \code{inputRange} can be set.
+#' Explain in more detail...
 #'
 #' \code{normalize(object, separateChannels = TRUE, separateImages = FALSE,
 #' ft = c(0, 1), inputRange = NULL)}:
@@ -172,15 +172,15 @@ setReplaceMethod("names",
 #'
 #' # Default normalization
 #' x <- normalize(pancreasImages)
-#' plotPixels(x, colour_by = c("H3", "SMA"))
-#' 
+#' plotPixels(x, colour_by = c("H3", "CD99"))
+#'
 #' # Setting the clipping range
 #' x <- normalize(x, inputRange = c(0, 0.9))
-#' plotPixels(x, colour_by = c("H3", "SMA"))
+#' plotPixels(x, colour_by = c("H3", "CD99"))
 #'
 #' # Normalizing per image
 #' x <- normalize(pancreasImages, separateImages = TRUE)
-#' plotPixels(x, colour_by = c("H3", "SMA"))
+#' plotPixels(x, colour_by = c("H3", "CD99"))
 #'
 #' @seealso \code{\link[EBImage]{normalize}} for details on Image normalization
 #'
@@ -208,26 +208,26 @@ setMethod("scaleImages",
 #' @importFrom EBImage combine
 normImages <- function(object, separateChannels = TRUE, separateImages = FALSE,
                 ft = c(0, 1), inputRange = NULL){
-    
-    if (!is.logical(separateChannels) || 
-        length(separateChannels) > 1L || 
+
+    if (!is.logical(separateChannels) ||
+        length(separateChannels) > 1L ||
         is.na(separateChannels)) {
         stop("'separateChannels' only takes TRUE or FALSE.")
     }
-    if (!is.logical(separateImages) || 
-        length(separateImages) > 1L || 
+    if (!is.logical(separateImages) ||
+        length(separateImages) > 1L ||
         is.na(separateImages)) {
         stop("'separateImages' only takes TRUE or FALSE.")
     }
-    
+
     # Number of frames
     nf <- numberOfFrames(object[[1]])
-    
+
     # Number of images
     ni <- length(object)
 
     if (separateImages) {
-        
+
         cur_out <- endoapply(object, function(y){
             y <- EBImage::normalize(y, separate = separateChannels,
                                     ft = ft, inputRange = inputRange)
@@ -235,13 +235,13 @@ normImages <- function(object, separateChannels = TRUE, separateImages = FALSE,
         })
 
     } else {
-        
-        # Finding the maximum and minimum values 
+
+        # Finding the maximum and minimum values
         if (separateChannels && is.null(inputRange)) {
             if (nf == 1) {
                 cur_range <- vapply(object, function(i){
-                    quantile(i, probs = c(0, 1))  
-                }, FUN.VALUE = numeric(2)) 
+                    quantile(i, probs = c(0, 1))
+                }, FUN.VALUE = numeric(2))
                 cur_range <- quantile(cur_range, c(0, 1))
             } else {
                 cur_range <- vapply(seq_len(nf), function(i){
@@ -250,35 +250,35 @@ normImages <- function(object, separateChannels = TRUE, separateImages = FALSE,
                                         quantile(x, c(0,1))
                                     }, FUN.VALUE = numeric(2))
                     quantile(cur_r, c(0, 1))
-                }, FUN.VALUE = numeric(2)) 
+                }, FUN.VALUE = numeric(2))
             }
         } else if(!separateChannels && is.null(inputRange)) {
             cur_range <- vapply(object, function(i){
-                quantile(i, probs = c(0, 1))  
-            }, FUN.VALUE = numeric(2)) 
+                quantile(i, probs = c(0, 1))
+            }, FUN.VALUE = numeric(2))
             cur_range <- quantile(cur_range, c(0, 1))
         }
-        
+
         if (separateChannels) {
-            
+
             cur_out <- endoapply(object, function(y){
-                
-                cur_names <- dimnames(y)  
-                
+
+                cur_names <- dimnames(y)
+
                 if (nf == 1) {
-                    
+
                     if (!is.null(inputRange)) {
                         cur_range <- inputRange
                     } else {
                         cur_range <- as.numeric(cur_range)
                     }
-                    
+
                     y <- EBImage::normalize(y,
                                             separate = TRUE, ft=ft,
                                             inputRange = cur_range)
-                
+
                 } else {
-                    
+
                     if (!is.null(inputRange)) {
                         y <- EBImage::normalize(y, separate = TRUE, ft=ft,
                                         inputRange = inputRange)
@@ -286,31 +286,31 @@ normImages <- function(object, separateChannels = TRUE, separateImages = FALSE,
                         y <- lapply(seq_len(nf), function(i){
                             EBImage::normalize(y[,,i],
                                         separate = TRUE, ft=ft,
-                                        inputRange = as.numeric(cur_range[,i]))           
-                        })    
+                                        inputRange = as.numeric(cur_range[,i]))
+                        })
                         y <- combine(y)
                     }
-                    
+
                 }
-                
+
                 dimnames(y) <- cur_names
-                
+
                 return(y)
             })
-            
+
         } else {
             cur_out <- endoapply(object, function(y){
                 if(is.null(inputRange)){
                     inputRange <- as.numeric(cur_range)
                 }
-                    
-                    
+
+
                 y <- EBImage::normalize(y, separate = FALSE,
                                         ft=ft, inputRange = inputRange)
 
                 return(y)
             })
-            
+
         }
     }
     return(cur_out)

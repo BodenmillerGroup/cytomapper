@@ -1,7 +1,7 @@
 #' Example SingleCellExperiment object
 #'
 #' This \linkS4class{SingleCellExperiment} object contains the expression values
-#' of 5 proteins (rows) from 282 cells (columns) across 3 images. The data is
+#' of 5 proteins (rows) from 362 cells (columns) across 3 images. The data is
 #' part of a imaging mass cytometry study on the progression of Type 1 diabetes
 #' and therefore contains pancreas cells.
 #'
@@ -13,10 +13,9 @@
 #' \item{colData}{Cell-specific metadata where rownames represent the
 #' image name and cell id. It containins the
 #' \enumerate{
-#'     \item image number (ImageNb),
-#'     \item cell number/identifier (CellNb),
+#'     \item image number (ImageNumber),
+#'     \item cell number/identifier (CellNumber),
 #'     \item spatial position on the image (Pos_X, Pos_Y),
-#'     \item shape information (MajorAxisLength, MinorAxisLength),
 #'     \item the associated image name (ImageName, see
 #'     \code{?"\link[cytomapper]{pancreasImages}"}),
 #'     \item the associated mask name (MaskName, see

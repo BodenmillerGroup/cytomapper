@@ -2,7 +2,7 @@ test_that("plotting-param: scale_bar can be set.", {
   data("pancreasMasks")
 
   cur_images <- pancreasMasks
-  setImages(cur_images, "A02_mask") <- cur_images[[1]][1:50, 1:50,drop=FALSE]
+  setImages(cur_images, "E34_mask") <- cur_images[[1]][1:50, 1:50,drop=FALSE]
 
   # Works
   expect_silent(plotCells(cur_images))
@@ -74,7 +74,7 @@ test_that("plotting-param: image_title can be set.", {
   data("pancreasMasks")
 
   cur_images <- pancreasMasks
-  setImages(cur_images, "A02_mask") <- cur_images[[1]][1:50, 1:50,drop=FALSE]
+  setImages(cur_images, "E34_mask") <- cur_images[[1]][1:50, 1:50,drop=FALSE]
 
   # Works
   expect_silent(plotCells(cur_images))
@@ -195,7 +195,7 @@ test_that("plotting-param: save_plot can be set.", {
   expect_true(file.exists(paste0(cur_path, "/test_1.png")))
   expect_true(file.exists(paste0(cur_path, "/test_2.png")))
   expect_true(file.exists(paste0(cur_path, "/test_3.png")))
-  
+
   expect_silent(plotPixels(pancreasImages,
                            save_plot = list(filename = paste0(cur_path, "/test.jpeg"),
                                             scale = 1),
@@ -204,7 +204,7 @@ test_that("plotting-param: save_plot can be set.", {
   expect_true(file.exists(paste0(cur_path, "/test_1.jpeg")))
   expect_true(file.exists(paste0(cur_path, "/test_2.jpeg")))
   expect_true(file.exists(paste0(cur_path, "/test_3.jpeg")))
-  
+
   expect_silent(plotPixels(pancreasImages,
                            save_plot = list(filename = paste0(cur_path, "/test.tiff"),
                                             scale = 1),
@@ -213,26 +213,26 @@ test_that("plotting-param: save_plot can be set.", {
   expect_true(file.exists(paste0(cur_path, "/test_1.png")))
   expect_true(file.exists(paste0(cur_path, "/test_2.png")))
   expect_true(file.exists(paste0(cur_path, "/test_3.png")))
-  
+
   # Test if subsetting works
   expect_silent(plotPixels(pancreasImages[c(1,3)],
                            save_plot = list(filename = paste0(cur_path, "/test_all.png"),
                                             scale = 1),
                            display = "all"))
   expect_true(file.exists(paste0(cur_path, "/test_all.png")))
-  
+
   expect_silent(plotPixels(pancreasImages[c(1,3)],
                            save_plot = list(filename = paste0(cur_path, "/test_all.jpeg"),
                                             scale = 1),
                            display = "all"))
   expect_true(file.exists(paste0(cur_path, "/test_all.jpeg")))
-  
+
   expect_silent(plotPixels(pancreasImages[c(1,3)],
                            save_plot = list(filename = paste0(cur_path, "/test_all.tiff"),
                                             scale = 1),
                            display = "all"))
   expect_true(file.exists(paste0(cur_path, "/test_all.tiff")))
-  
+
   # Test if subsetting and displaying single images works
   expect_silent(plotPixels(pancreasImages[c(1,3)],
                            save_plot = list(filename = paste0(cur_path, "/test_single.png"),
@@ -241,14 +241,14 @@ test_that("plotting-param: save_plot can be set.", {
   expect_true(file.exists(paste0(cur_path, "/test_single_legend.png")))
   expect_true(file.exists(paste0(cur_path, "/test_single_1.png")))
   expect_true(file.exists(paste0(cur_path, "/test_single_2.png")))
-  
+
   expect_silent(plotPixels(pancreasImages[1],
                            save_plot = list(filename = paste0(cur_path, "/test_one.png"),
                                             scale = 1),
                            display = "single"))
   expect_true(file.exists(paste0(cur_path, "/test_one_legend.png")))
   expect_true(file.exists(paste0(cur_path, "/test_one_1.png")))
-  
+
   expect_silent(plotPixels(pancreasImages[c(1,3)],
                            save_plot = list(filename = paste0(cur_path, "/test_single.jpeg"),
                                             scale = 1),
@@ -256,14 +256,14 @@ test_that("plotting-param: save_plot can be set.", {
   expect_true(file.exists(paste0(cur_path, "/test_single_legend.jpeg")))
   expect_true(file.exists(paste0(cur_path, "/test_single_1.jpeg")))
   expect_true(file.exists(paste0(cur_path, "/test_single_2.jpeg")))
-  
+
   expect_silent(plotPixels(pancreasImages[1],
                            save_plot = list(filename = paste0(cur_path, "/test_one.jpeg"),
                                             scale = 1),
                            display = "single"))
   expect_true(file.exists(paste0(cur_path, "/test_one_legend.jpeg")))
   expect_true(file.exists(paste0(cur_path, "/test_one_1.jpeg")))
-  
+
   expect_silent(plotPixels(pancreasImages[c(1,3)],
                            save_plot = list(filename = paste0(cur_path, "/test_single.tiff"),
                                             scale = 1),
@@ -271,14 +271,14 @@ test_that("plotting-param: save_plot can be set.", {
   expect_true(file.exists(paste0(cur_path, "/test_single_legend.tiff")))
   expect_true(file.exists(paste0(cur_path, "/test_single_1.tiff")))
   expect_true(file.exists(paste0(cur_path, "/test_single_2.tiff")))
-  
+
   expect_silent(plotPixels(pancreasImages[1],
                            save_plot = list(filename = paste0(cur_path, "/test_one.tiff"),
                                             scale = 1),
                            display = "single"))
   expect_true(file.exists(paste0(cur_path, "/test_one_legend.tiff")))
   expect_true(file.exists(paste0(cur_path, "/test_one_1.tiff")))
-  
+
   # Remove legend
   expect_silent(plotPixels(pancreasImages[c(1,3)],
                            save_plot = list(filename = paste0(cur_path, "/test_nl.png"),
@@ -287,21 +287,21 @@ test_that("plotting-param: save_plot can be set.", {
                            display = "single"))
   expect_true(file.exists(paste0(cur_path, "/test_nl_1.png")))
   expect_true(file.exists(paste0(cur_path, "/test_nl_2.png")))
-  
+
   expect_silent(plotPixels(pancreasImages[c(1,3)],
                            save_plot = list(filename = paste0(cur_path, "/test_nl.jpeg"),
                                             scale = 10),
                            display = "single"))
   expect_true(file.exists(paste0(cur_path, "/test_nl_1.jpeg")))
   expect_true(file.exists(paste0(cur_path, "/test_nl_2.jpeg")))
-  
+
   expect_silent(plotPixels(pancreasImages[c(1,3)],
                            save_plot = list(filename = paste0(cur_path, "/test_nl.tiff"),
                                             scale = 10),
                            display = "single"))
   expect_true(file.exists(paste0(cur_path, "/test_nl_1.tiff")))
   expect_true(file.exists(paste0(cur_path, "/test_nl_2.tiff")))
-  
+
   # Error
   expect_error(plotPixels(pancreasImages,
                           save_plot = list(filename = "test")),
@@ -376,7 +376,7 @@ test_that("plotting-param: return_images can be set.", {
                                       object = pancreasSCE,
                                       img_id = "ImageNb",
                                       cell_id = "CellNb",
-                                      colour_by = c("H3", "SMA"),
+                                      colour_by = c("H3", "CD99"),
                                       outline_by = "CellType",
                                       return_images = TRUE))
   expect_identical(mcols(cur_out$images), mcols(pancreasImages))
@@ -418,23 +418,23 @@ test_that("plotting-param: legend can be set.", {
   # Works
   expect_silent(plotPixels(pancreasImages))
   expect_silent(plotPixels(pancreasImages,
-                           colour_by = c("H3", "SMA", "INS",
-                                         "CD38", "CD44")))
+                           colour_by = c("H3", "CD99", "PIN",
+                                         "CD8a", "CDH")))
   expect_silent(plotPixels(pancreasImages,
-                           colour_by = c("H3", "SMA", "INS",
-                                         "CD38", "CD44"),
+                           colour_by = c("H3", "CD99", "PIN",
+                                         "CD8a", "CDH"),
                            legend = NULL))
   expect_silent(plotPixels(pancreasImages,
-                           colour_by = c("H3", "SMA", "INS",
-                                         "CD38", "CD44"),
+                           colour_by = c("H3", "CD99", "PIN",
+                                         "CD8a", "CDH"),
                            legend = list(colour_by.title.font = 4)))
   expect_silent(plotPixels(pancreasImages,
-                           colour_by = c("H3", "SMA", "INS",
-                                         "CD38", "CD44"),
+                           colour_by = c("H3", "CD99", "PIN",
+                                         "CD8a", "CDH"),
                            legend = list(colour_by.title.cex = 0.5)))
   expect_silent(plotPixels(pancreasImages,
-                           colour_by = c("H3", "SMA", "INS",
-                                         "CD38", "CD44"),
+                           colour_by = c("H3", "CD99", "PIN",
+                                         "CD8a", "CDH"),
                            legend = list(colour_by.labels.cex = 0.5)))
 
 
@@ -442,15 +442,15 @@ test_that("plotting-param: legend can be set.", {
                           object = pancreasSCE,
                           img_id = "ImageNb",
                           cell_id = "CellNb",
-                          colour_by = c("H3", "SMA", "INS",
-                                        "CD38", "CD44"),
+                          colour_by = c("H3", "CD99", "PIN",
+                                        "CD8a", "CDH"),
                           legend = NULL))
   expect_silent(plotCells(mask = pancreasMasks,
                           object = pancreasSCE,
                           img_id = "ImageNb",
                           cell_id = "CellNb",
-                          colour_by = c("H3", "SMA", "INS",
-                                        "CD38", "CD44")))
+                          colour_by = c("H3", "CD99", "PIN",
+                                        "CD8a", "CDH")))
   expect_silent(plotCells(mask = pancreasMasks,
                           object = pancreasSCE,
                           img_id = "ImageNb",
@@ -503,8 +503,8 @@ test_that("plotting-param: legend can be set.", {
   # Margin
   expect_silent(plotPixels(pancreasImages))
   expect_silent(plotPixels(pancreasImages,
-                           colour_by = c("H3", "SMA", "INS",
-                                         "CD38", "CD44"),
+                           colour_by = c("H3", "CD99", "PIN",
+                                         "CD8a", "CDH"),
                            legend = list(margin = 10)))
   expect_silent(plotCells(mask = pancreasMasks,
                           object = pancreasSCE,
@@ -548,16 +548,16 @@ test_that("plotting-param: legend can be set.", {
                           object = pancreasSCE,
                           img_id = "ImageNb",
                           cell_id = "CellNb",
-                          colour_by = c("H3", "SMA", "INS",
-                                        "CD38", "CD44"),
+                          colour_by = c("H3", "CD99", "PIN",
+                                        "CD8a", "CDH"),
                           outline_by = "Area",
                           legend = list(margin = 10)))
   expect_silent(plotCells(mask = pancreasMasks,
                           object = pancreasSCE,
                           img_id = "ImageNb",
                           cell_id = "CellNb",
-                          colour_by = c("H3", "SMA", "INS",
-                                        "CD38", "CD44"),
+                          colour_by = c("H3", "CD99", "PIN",
+                                        "CD8a", "CDH"),
                           outline_by = "CellType",
                           legend = list(margin = 10)))
 
@@ -649,39 +649,39 @@ test_that("plotting-param: images can be plotted individually.", {
   data("pancreasSCE")
 
   # Works
-  expect_silent(plotPixels(pancreasImages, colour_by = c("H3", "SMA")))
+  expect_silent(plotPixels(pancreasImages, colour_by = c("H3", "CD99")))
   expect_silent(plotPixels(pancreasImages, display = "all"))
   expect_silent(plotPixels(pancreasImages, display = "single"))
-  expect_silent(plotPixels(pancreasImages, colour_by = c("H3", "SMA", "CD44"),
+  expect_silent(plotPixels(pancreasImages, colour_by = c("H3", "CD99", "CDH"),
                            display = "single"))
-  expect_silent(plotPixels(pancreasImages, colour_by = c("H3", "SMA", "CD44"),
+  expect_silent(plotPixels(pancreasImages, colour_by = c("H3", "CD99", "CDH"),
                            scale_bar = list(frame = 3),
                            display = "single"))
   # scale_bar
-  expect_silent(plotPixels(pancreasImages, colour_by = c("H3", "SMA", "CD44"),
+  expect_silent(plotPixels(pancreasImages, colour_by = c("H3", "CD99", "CDH"),
                            scale_bar = list(position = "topright",
                                             frame = 3,
                                             margin = c(20,20)),
                            display = "single"))
 
   # image_title
-  expect_silent(plotPixels(pancreasImages, colour_by = c("H3", "SMA", "CD44"),
+  expect_silent(plotPixels(pancreasImages, colour_by = c("H3", "CD99", "CDH"),
                            image_title = list(text = c(1,2,3),
                                               cex = 3),
                            display = "single"))
 
   # image_title
-  expect_silent(plotPixels(pancreasImages, colour_by = c("H3", "SMA", "CD44"),
+  expect_silent(plotPixels(pancreasImages, colour_by = c("H3", "CD99", "CDH"),
                            image_title = list(text = c(1,2,3),
                                               cex = 3),
                            display = "single"))
-  
+
   # subsetting
-  expect_silent(plotPixels(pancreasImages["A02_imc"], colour_by = c("H3", "SMA", "CD44"),
+  expect_silent(plotPixels(pancreasImages["E34_imc"], colour_by = c("H3", "CD99", "CDH"),
                            scale_bar = list(frame = 3),
                            display = "single"))
-  
-  expect_silent(plotCells(pancreasMasks["A02_mask"],
+
+  expect_silent(plotCells(pancreasMasks["E34_mask"],
                            display = "single"))
 
   # save_plot
@@ -691,7 +691,7 @@ test_that("plotting-param: images can be plotted individually.", {
   dev.off()
 
   cur_par1 <- par()
-  expect_silent(plotPixels(pancreasImages, colour_by = c("H3", "SMA", "CD44"),
+  expect_silent(plotPixels(pancreasImages, colour_by = c("H3", "CD99", "CDH"),
                            save_plot = list(filename = paste0(cur_path, "/test.png"),
                                              scale = 2),
                            display = "all"))
@@ -701,7 +701,7 @@ test_that("plotting-param: images can be plotted individually.", {
   dev.off()
 
   cur_par1 <- par()
-  expect_silent(plotPixels(pancreasImages, colour_by = c("H3", "SMA", "CD44"),
+  expect_silent(plotPixels(pancreasImages, colour_by = c("H3", "CD99", "CDH"),
                            save_plot = list(filename = paste0(cur_path, "/test.png"),
                                              scale = 2),
                            display = "single"))
@@ -709,17 +709,17 @@ test_that("plotting-param: images can be plotted individually.", {
   expect_identical(cur_par1, cur_par2)
 
   # Subsetting the images
-  expect_silent(plotPixels(pancreasImages["A02_imc"],
+  expect_silent(plotPixels(pancreasImages["E34_imc"],
                           display = "single",
                           save_plot = list(filename = paste0(cur_path, "/test.png"),
                                            scale = 2)))
   # return_plot
-  expect_silent(cur_out <- plotPixels(pancreasImages, colour_by = c("H3", "SMA", "CD44"),
+  expect_silent(cur_out <- plotPixels(pancreasImages, colour_by = c("H3", "CD99", "CDH"),
                            return_plot = TRUE,
                            display = "single"))
   expect_equal(length(cur_out$plot), 4L)
   expect_equal(names(cur_out$plot), c("legend", names(pancreasImages)))
-  expect_silent(cur_out <- plotPixels(pancreasImages, colour_by = c("H3", "SMA", "CD44"),
+  expect_silent(cur_out <- plotPixels(pancreasImages, colour_by = c("H3", "CD99", "CDH"),
                                       return_plot = TRUE,
                                       display = "single",
                                       legend = NULL))
@@ -728,14 +728,14 @@ test_that("plotting-param: images can be plotted individually.", {
 
   expect_silent(cur_out <- plotCells(pancreasMasks, object = pancreasSCE,
                                      img_id = "ImageNb", cell_id = "CellNb",
-                                     colour_by = c("H3", "SMA", "CD44"),
+                                     colour_by = c("H3", "CD99", "CDH"),
                                      return_plot = TRUE,
                                      display = "single"))
   expect_equal(length(cur_out$plot), 4L)
   expect_equal(names(cur_out$plot), c("legend", mcols(pancreasMasks)$ImageNb))
   expect_silent(cur_out <- plotCells(pancreasMasks, object = pancreasSCE,
                                      img_id = "ImageNb", cell_id = "CellNb",
-                                     colour_by = c("H3", "SMA", "CD44"),
+                                     colour_by = c("H3", "CD99", "CDH"),
                                      return_plot = TRUE,
                                      display = "single",
                                      legend = NULL))
@@ -743,26 +743,26 @@ test_that("plotting-param: images can be plotted individually.", {
   expect_equal(names(cur_out$plot), as.character(mcols(pancreasMasks)$ImageNb))
 
   # return_images
-  expect_silent(cur_out <- plotPixels(pancreasImages, colour_by = c("H3", "SMA", "CD44"),
+  expect_silent(cur_out <- plotPixels(pancreasImages, colour_by = c("H3", "CD99", "CDH"),
                                       return_images = TRUE,
                                       display = "single"))
   expect_equal(length(cur_out$images), 3L)
 
   # margin
-  expect_silent(plotPixels(pancreasImages, colour_by = c("H3", "SMA", "CD44"),
+  expect_silent(plotPixels(pancreasImages, colour_by = c("H3", "CD99", "CDH"),
                            margin = 10, display = "single"))
 
   # legend
-  expect_silent(plotPixels(pancreasImages, colour_by = c("H3", "SMA", "CD44"),
+  expect_silent(plotPixels(pancreasImages, colour_by = c("H3", "CD99", "CDH"),
                            legend = NULL, display = "single"))
-  expect_silent(plotPixels(pancreasImages, colour_by = c("H3", "SMA", "CD44"),
+  expect_silent(plotPixels(pancreasImages, colour_by = c("H3", "CD99", "CDH"),
                            legend = list(colour_by.labels.cex = 1,
                                          colour_by.title.cex = 2),
                            display = "single"))
 
   # Error
   expect_error(plotPixels(pancreasImages,
-                          colour_by = c("H3", "SMA", "CD44"),
+                          colour_by = c("H3", "CD99", "CDH"),
                           display = "test"),
                regexp = "Invalid 'display' entry.",
                fixed = TRUE)
@@ -775,49 +775,49 @@ test_that("plotting-param: scale can be correctly set", {
   data("pancreasSCE")
 
   # Works
-  expect_silent(plotPixels(pancreasImages, colour_by = c("SMA", "CD44", "INS")))
+  expect_silent(plotPixels(pancreasImages, colour_by = c("CD99", "CDH", "PIN")))
   expect_silent(plotPixels(pancreasImages,
-                           colour_by = c("SMA", "CD44", "INS"),
+                           colour_by = c("CD99", "CDH", "PIN"),
                            scale = FALSE))
   expect_silent(plotPixels(pancreasImages,
-                           colour_by = c("SMA", "CD44", "INS"),
+                           colour_by = c("CD99", "CDH", "PIN"),
                            scale = FALSE,
-                           bcg = list(SMA = c(0,2,1),
-                                      CD44 = c(0,1,1),
-                                      INS = c(0,10,1))))
+                           bcg = list(CD99 = c(0,2,1),
+                                      CDH = c(0,1,1),
+                                      PIN = c(0,10,1))))
   expect_silent(plotPixels(pancreasImages,
-                           colour_by = c("SMA", "CD44", "INS"),
+                           colour_by = c("CD99", "CDH", "PIN"),
                            scale = FALSE,
                            display = "single",
-                           bcg = list(SMA = c(0,2,1),
-                                      CD44 = c(0,1,1),
-                                      INS = c(0,10,1))))
+                           bcg = list(CD99 = c(0,2,1),
+                                      CDH = c(0,1,1),
+                                      PIN = c(0,10,1))))
 
   expect_silent(plotCells(pancreasMasks, object = pancreasSCE,
                           img_id = "ImageNb", cell_id = "CellNb",
-                          colour_by = c("SMA", "CD44", "INS")))
+                          colour_by = c("CD99", "CDH", "PIN")))
   expect_silent(plotCells(pancreasMasks, object = pancreasSCE,
                           img_id = "ImageNb", cell_id = "CellNb",
-                          colour_by = c("SMA", "CD44", "INS"),
+                          colour_by = c("CD99", "CDH", "PIN"),
                           scale = FALSE))
   expect_silent(plotCells(pancreasMasks, object = pancreasSCE,
                           img_id = "ImageNb", cell_id = "CellNb",
-                          colour_by = c("H3", "CD44", "INS"),
+                          colour_by = c("H3", "CDH", "PIN"),
                           scale = FALSE))
   expect_silent(plotCells(pancreasMasks, object = pancreasSCE,
                           img_id = "ImageNb", cell_id = "CellNb",
-                          colour_by = c("SMA", "CD44", "INS"),
+                          colour_by = c("CD99", "CDH", "PIN"),
                           scale = FALSE,
                           exprs_values = "exprs"))
   expect_silent(plotCells(pancreasMasks, object = pancreasSCE,
                           img_id = "ImageNb", cell_id = "CellNb",
-                          colour_by = c("SMA", "CD44", "INS"),
+                          colour_by = c("CD99", "CDH", "PIN"),
                           scale = TRUE,
                           exprs_values = "exprs"))
 
   # Error
   expect_error(plotPixels(pancreasImages,
-                          colour_by = c("SMA", "CD44", "INS"),
+                          colour_by = c("CD99", "CDH", "PIN"),
                           scale = "test"),
                regexp = "Invalid 'scale' entry.",
                fixed = TRUE)
@@ -835,14 +835,14 @@ test_that("plotting-param: images can be interpolated", {
   expect_silent(plotPixels(pancreasImages, interpolate = TRUE))
   expect_silent(plotPixels(pancreasImages, interpolate = FALSE))
 
-  expect_silent(plotPixels(pancreasImages, colour_by = c("SMA", "CD44"),
+  expect_silent(plotPixels(pancreasImages, colour_by = c("CD99", "CDH"),
                            interpolate = TRUE))
-  expect_silent(plotPixels(pancreasImages, colour_by = c("SMA", "CD44"),
+  expect_silent(plotPixels(pancreasImages, colour_by = c("CD99", "CDH"),
                            interpolate = FALSE))
 
   # Error
   expect_error(plotPixels(pancreasImages,
-                          colour_by = c("SMA", "CD44", "INS"),
+                          colour_by = c("CD99", "CDH", "PIN"),
                           interpolate = "test"),
                regexp = "Invalid 'interpolate' entry.",
                fixed = TRUE)

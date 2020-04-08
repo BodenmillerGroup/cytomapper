@@ -66,7 +66,7 @@
 #'
 #' @section Subsetting the \code{CytoImageList} object:
 #' The \code{CytoImageList} object can be subsetted before calling the
-#' \code{plotCells} function. In that case, only the selected images are 
+#' \code{plotCells} function. In that case, only the selected images are
 #' displayed.
 #'
 #' @section Subsetting the \code{SingleCellExperiment} object:
@@ -103,7 +103,7 @@
 #'
 #' # Colour the masks based on averaged expression
 #' plotCells(pancreasMasks, object = pancreasSCE, img_id = "ImageNb",
-#'             cell_id = "CellNb", colour_by = c("SMA", "CD44"))
+#'             cell_id = "CellNb", colour_by = c("CD99", "CDH"))
 #'
 #' # Colour the masks based on metadata
 #' plotCells(pancreasMasks, object = pancreasSCE, img_id = "ImageNb",
@@ -111,23 +111,23 @@
 #'
 #' # Outline the masks based on metadata
 #' plotCells(pancreasMasks, object = pancreasSCE, img_id = "ImageNb",
-#'             cell_id = "CellNb", colour_by = "SMA",
+#'             cell_id = "CellNb", colour_by = "CD99",
 #'             outline_by = "CellType")
 #'
 #' # Colour the masks based on arcsinh-transformed expression
 #' plotCells(pancreasMasks, object = pancreasSCE, img_id = "ImageNb",
-#'             cell_id = "CellNb", colour_by = "SMA",
+#'             cell_id = "CellNb", colour_by = "CD99",
 #'             exprs_values = "exprs")
 #'
 #' # Subset the images
 #' cur_images <- getImages(pancreasMasks, 1:2)
 #' plotCells(cur_images, object = pancreasSCE, img_id = "ImageNb",
-#'             cell_id = "CellNb", colour_by = "SMA")
+#'             cell_id = "CellNb", colour_by = "CD99")
 #'
 #' # Set colour
 #' plotCells(pancreasMasks, object = pancreasSCE, img_id = "ImageNb",
-#'             cell_id = "CellNb", colour_by = "SMA", outline_by = "CellType",
-#'             colour = list(SMA = c("black", "red"),
+#'             cell_id = "CellNb", colour_by = "CD99", outline_by = "CellType",
+#'             colour = list(CD99 = c("black", "red"),
 #'                             CellType = c(celltype_A = "blue",
 #'                                         celltype_B = "green",
 #'                                         celltype_C = "red")))
@@ -172,7 +172,7 @@ plotCells <- function(
     if(!is.null(colour)){
         .valid.colour(colour, colour_by, outline_by, object, image = NULL)
     }
-    
+
     # Set further arguments
     dotArgs <- list(...)
     plottingParam <- .plottingParam(dotArgs, image = mask)

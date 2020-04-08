@@ -113,7 +113,7 @@ The `CytoImageList` object containing pixel-level intensities representing the
 ion counts for five proteins can be displayed using the `plotPixel` function:
 
 ```{r quickstart-plotPixels}
-plotPixels(image = pancreasImages, colour_by = c("H3", "SMA", "CD44"))
+plotPixels(image = pancreasImages, colour_by = c("H3", "CD99", "CDH"))
 ```
 
 For more details on image normalization, cell outlining, and other pixel-level
@@ -128,7 +128,7 @@ To colour and/or outline segmentation masks, a `SingleCellExperiment`, an
 
 ```{r quickstart-plotCells-2}
 plotCells(mask = pancreasMasks, object = pancreasSCE, 
-            cell_id = "CellNb", img_id = "ImageNb", colour_by = "SMA",
+            cell_id = "CellNb", img_id = "ImageNb", colour_by = "CD99",
             outline_by = "CellType")
 plotCells(mask = pancreasMasks, object = pancreasSCE, 
             cell_id = "CellNb", img_id = "ImageNb", colour_by = "CellType")
@@ -193,13 +193,13 @@ workflow.
 For visualization purposes, the `cytomapper` package provides a toy dataset
 containing 3 images of $100\mu{m}$ x $100\mu{m}$ dimensions (100 x 100 pixels).
 The dataset contains 282 segmented cells and the expression values for 5
-proteins: H3, SMA, INS, CD38, and CD44 It represents a small subset of the data
+proteins: H3, CD99, PIN, CD8a, and CDH It represents a small subset of the data
 presented in [A Map of Human Type 1 Diabetes Progression by Imaging Mass
 Cytometry](Ahttps://www.cell.com/cell-metabolism/fulltext/S1550-4131(18)30691-0?_returnURL=https%3A%2F%2Flinkinghub.elsevier.com%2Fretrieve%2Fpii%2FS1550413118306910%3Fshowall%3Dtrue).
 
 Pixel-level intensities for all 5 markers (5 channels) are stored in the
 `pancreasImages` object. Entires to the `CytoImageList` object and the rownames
-of the object match: A02_imc, D01_imc, and F01_imc The `elementMetadata` slot
+of the object match: E34_imc, G01_imc, and J02_imc The `elementMetadata` slot
 (accesible via the `mcols()` function) contains the image identifiers.
 
 ```{r pancreasImages}
@@ -267,8 +267,8 @@ all_stacks
 To link images between the two `CytoImageList` objects and the corresponding
 `SingleCellExperiment` object, the image ids need to be added to the
 `elementMetadata` slot of the `CytoImageList` objects. From the experimental
-setup, we know that the image named 'A02_imc' has image id '1', D01_imc has id
-'2', F01_imc has id '3'.
+setup, we know that the image named 'E34_imc' has image id '1', G01_imc has id
+'2', J02_imc has id '3'.
 
 ```{r add-metadata}
 unique(pancreasSCE$ImageNb)
@@ -313,7 +313,7 @@ user needs to set the correct channel names. For this, the `cytomapper` package
 provides the `?channelNames` getter and setter function:
 
 ```{r channelNames-example}
-channelNames(all_stacks) <- c("H3", "SMA", "INS", "CD38", "CD44")
+channelNames(all_stacks) <- c("H3", "CD99", "PIN", "CD8a", "CDH")
 ```
 
 The read-in data can now be used for visualization as explained in the [Quick
@@ -371,7 +371,7 @@ Individual or multiple entries in a `CytoImageList` object can be obtained or
 replaced using the `getImages` and `setImages` functions, respectively.
 
 ```{r get-set-images}
-cur_image <- getImages(pancreasImages, "A02_imc")
+cur_image <- getImages(pancreasImages, "E34_imc")
 cur_image
 setImages(pancreasImages, "New_image") <- cur_image
 pancreasImages
@@ -392,7 +392,7 @@ However, if the image to replace is called by name, only the image and
 associated metadata is replaced:
 
 ```{r set-images-2}
-setImages(pancreasImages, "F01_imc") <- cur_image
+setImages(pancreasImages, "J02_imc") <- cur_image
 pancreasImages
 mcols(pancreasImages)
 ```
@@ -510,7 +510,7 @@ To clip the image range, the user can provide a clipping range.
 # Percentage-based clipping range
 cur_images <- normalize(pancreasImages)
 cur_images <- normalize(cur_images, inputRange = c(0, 0.9))
-plotPixels(cur_images, colour_by = c("H3", "SMA", "CD44"))
+plotPixels(cur_images, colour_by = c("H3", "CD99", "CDH"))
 ```
 
 For more information on the normalization functionality provided by the
@@ -535,11 +535,11 @@ channel is exponentiated by the gamma factor.
 
 ```{r bcg-pixels}
 data("pancreasImages")
-# Increase contrast for the SMA and CD44 channel
+# Increase contrast for the CD99 and CDH channel
 plotPixels(pancreasImages, 
-            colour_by = c("H3", "SMA", "CD44"), 
-            bcg = list(SMA = c(0,2,1), 
-                        CD44 = c(0,2,1)))
+            colour_by = c("H3", "CD99", "CDH"), 
+            bcg = list(CD99 = c(0,2,1), 
+                        CDH = c(0,2,1)))
 ```
 
 ## Outlining {#Outlining}
@@ -557,7 +557,7 @@ need to be provided:
 plotPixels(pancreasImages, mask = pancreasMasks, 
             object = pancreasSCE, img_id = "ImageNb", 
             cell_id = "CellNb",
-            colour_by = c("H3", "SMA", "CD44"),
+            colour_by = c("H3", "CD99", "CDH"),
             outline_by = "CellType")
 ```
 
@@ -566,8 +566,8 @@ plotPixels(pancreasImages, mask = pancreasMasks,
 The user can subset the images before calling the plotting functions:
 
 ```{r subsetting-pixels}
-cur_images <- getImages(pancreasImages, "F01_imc")
-plotPixels(cur_images, colour_by = c("H3", "SMA", "CD44"))
+cur_images <- getImages(pancreasImages, "J02_imc")
+plotPixels(cur_images, colour_by = c("H3", "CD99", "CDH"))
 ```
 
 For further information on subsetting functionality, please refer to the
@@ -618,7 +618,7 @@ expression counts.
 ```{r exprs_values-cells}
 plotCells(pancreasMasks, object = pancreasSCE, 
             img_id = "ImageNb", cell_id = "CellNb", 
-            colour_by = c("SMA", "CD44"),
+            # colour_by = c("CD99", "CDH"),
             exprs_values = "exprs")
 ```
 
@@ -647,10 +647,10 @@ colour per entry needs to be specified in form of a named vector.
 ```{r colour-cells}
 plotCells(pancreasMasks, object = pancreasSCE, 
             img_id = "ImageNb", cell_id = "CellNb", 
-            colour_by = c("SMA", "CD44"),
+            colour_by = c("CD99", "CDH"),
             outline_by = "CellType",
-            colour = list(SMA = c("black", "red"),
-                        CD44 = c("black", "white"),
+            colour = list(CD99 = c("black", "red"),
+                        CDH = c("black", "white"),
                         CellType = c(celltype_A = "blue", 
                                     celltype_B = "green",
                                     celltype_C = "yellow")))
@@ -755,7 +755,7 @@ FALSE`.
 ```{r customization, fig.cap = "Plot customization example."}
 plotCells(pancreasMasks, object = pancreasSCE, 
             img_id = "ImageNb", cell_id = "CellNb", 
-            colour_by = "SMA",
+            colour_by = "CD99",
             outline_by = "CellType",
             background_colour = "white",
             missing_colour = "black",
@@ -800,21 +800,21 @@ If the `return_images` parameter is set to `TRUE`, `cytomapper` returns a
 `SimpleList` object containing three-colour (red, green. blue) `Image` objects.
 
 ```{r return_plot}
-cur_out <- plotPixels(pancreasImages, colour_by = c("H3", "SMA", "CD44"), 
+cur_out <- plotPixels(pancreasImages, colour_by = c("H3", "CD99", "CDH"), 
                 return_plot = TRUE, return_images = TRUE, display = "single")
 ```
 
 The returned plot objects now allows the plotting of individual images:
 
 ```{r return_plot-2}
-cur_out$plot$A02_imc
+cur_out$plot$E34_imc
 ```
 
 Furthermore, the user can directly plot the coloured images from the returned
 `SimpleList` object:
 
 ```{r return_images}
-plot(cur_out$images$D01_imc)
+plot(cur_out$images$G01_imc)
 ```
 
 However, when plotting solely the coloured images, the image title and scale bar

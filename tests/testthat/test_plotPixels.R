@@ -56,26 +56,26 @@ test_that("plotPixels: Features can be displayed.", {
   expect_silent(plotPixels(image = pancreasImages,
                            colour_by = "H3"))
   expect_silent(plotPixels(image = pancreasImages,
-                           colour_by = "SMA"))
+                           colour_by = "CD99"))
   expect_silent(plotPixels(image = pancreasImages,
-                           colour_by = "INS"))
+                           colour_by = "PIN"))
   expect_silent(plotPixels(image = pancreasImages,
-                           colour_by = "CD38"))
+                           colour_by = "CD8a"))
   expect_silent(plotPixels(image = pancreasImages,
-                           colour_by = "CD44"))
+                           colour_by = "CDH"))
   expect_silent(plotPixels(image = pancreasImages,
-                           colour_by = c("H3", "SMA")))
+                           colour_by = c("H3", "CD99")))
   expect_silent(plotPixels(image = pancreasImages,
-                           colour_by = c("H3", "SMA", "INS")))
+                           colour_by = c("H3", "CD99", "PIN")))
   expect_silent(test1 <- plotPixels(image = pancreasImages,
-            colour_by = c("H3", "SMA", "INS", "CD38", "CD44"),
+            colour_by = c("H3", "CD99", "PIN", "CD8a", "CDH"),
             return_plot = TRUE, display = "single"))
   expect_silent(test2 <- plotPixels(image = rev(pancreasImages),
-                           colour_by = c("H3", "SMA", "INS", "CD38", "CD44"),
+                           colour_by = c("H3", "CD99", "PIN", "CD8a", "CDH"),
                            return_plot = TRUE, display = "single"))
-  expect_identical(test1$plot$A02_imc, test2$plot$A02_imc)
-  expect_identical(test1$plot$D01_imc, test2$plot$D01_imc)
-  expect_identical(test1$plot$F01_imc, test2$plot$F01_imc)
+  expect_identical(test1$plot$E34_imc, test2$plot$E34_imc)
+  expect_identical(test1$plot$G01_imc, test2$plot$G01_imc)
+  expect_identical(test1$plot$J02_imc, test2$plot$J02_imc)
 
   # Error
   expect_error(plotPixels(image = pancreasImages, colour_by = "test"),
@@ -106,45 +106,45 @@ test_that("plotPixels: Channels can be enhanced.", {
   expect_silent(plotPixels(image = pancreasImages,
                            colour_by = "H3", bcg = list(H3 = c(100,1,1))))
   expect_silent(plotPixels(image = pancreasImages,
-                           colour_by = c("H3", "SMA"),
+                           colour_by = c("H3", "CD99"),
                            bcg = list(H3 = c(0,1,1),
-                                      SMA = c(0,1,1))))
+                                      CD99 = c(0,1,1))))
   expect_silent(plotPixels(image = pancreasImages,
-                           colour_by = c("H3", "SMA"),
+                           colour_by = c("H3", "CD99"),
                            bcg = list(H3 = c(0,1,1),
-                                      SMA = c(0,2,1))))
+                                      CD99 = c(0,2,1))))
   expect_silent(plotPixels(image = pancreasImages,
-                           colour_by = c("H3", "SMA"),
+                           colour_by = c("H3", "CD99"),
                            bcg = list(H3 = c(0,1,1),
-                                      SMA = c(0,1,2))))
+                                      CD99 = c(0,1,2))))
   expect_silent(plotPixels(image = pancreasImages,
-                           colour_by = c("H3", "SMA"),
+                           colour_by = c("H3", "CD99"),
                            bcg = list(H3 = c(0,1,1),
-                                      SMA = c(10,2,1))))
+                                      CD99 = c(10,2,1))))
 
   # Error
   expect_error(plotPixels(image = pancreasImages,
-                           colour_by = c("H3", "SMA"),
+                           colour_by = c("H3", "CD99"),
                            bcg = list(test = c(0,1,1))),
                regexp = "'bcg': names do not match 'colour_by' argument",
                fixed = TRUE)
   expect_error(plotPixels(image = pancreasImages,
-                          colour_by = c("H3", "SMA"),
+                          colour_by = c("H3", "CD99"),
                           bcg = list(H3 = c(0,1))),
                regexp = "'bcg': specify in form of c(0,1,1)",
                fixed = TRUE)
   expect_error(plotPixels(image = pancreasImages,
-                          colour_by = c("H3", "SMA"),
+                          colour_by = c("H3", "CD99"),
                           bcg = list(H3 = c("test",1,1))),
                regexp = "'bcg': specify in form of numeric entries",
                fixed = TRUE)
   expect_error(plotPixels(image = pancreasImages,
-                          colour_by = c("H3", "SMA"),
+                          colour_by = c("H3", "CD99"),
                           bcg = list(test = c(0,1,1))),
                regexp = "'bcg': names do not match 'colour_by' argument",
                fixed = TRUE)
   expect_error(plotPixels(image = pancreasImages,
-                          colour_by = c("H3", "SMA"),
+                          colour_by = c("H3", "CD99"),
                           bcg = c(0,1,1)),
                regexp = "'bcg': please specify a list object",
                fixed = TRUE)
@@ -167,13 +167,13 @@ test_that("plotPixels: Cells can be outlined correctly.", {
                            mask = pancreasMasks,
                            image = pancreasImages,
                            img_id = "ImageNb",
-                          cell_id = "CellNb", colour_by = "SMA",
+                          cell_id = "CellNb", colour_by = "CD99",
                           outline_by = "CellType"))
   expect_silent(plotPixels(object = pancreasSCE,
                            mask = pancreasMasks,
                            image = pancreasImages,
                            img_id = "ImageNb",
-            cell_id = "CellNb", colour_by = "SMA",
+            cell_id = "CellNb", colour_by = "CD99",
             outline_by = "Area"))
 
   # Error
@@ -191,14 +191,14 @@ test_that("plotPixels: Cells can be outlined correctly.", {
   expect_error(plotPixels(image = pancreasImages,
                           object = pancreasSCE,
                           mask = pancreasMasks, img_id = "ImageNb",
-                          cell_id = "CellNb", colour_by = "SMA",
+                          cell_id = "CellNb", colour_by = "CD99",
                           outline_by = "test"),
                regexp = "'outline_by' not in 'colData(object)' slot.",
                fixed = TRUE)
   expect_error(plotPixels(image = pancreasImages,
                           object = pancreasSCE,
                           mask = pancreasMasks, img_id = "ImageNb",
-                         cell_id = "CellNb", colour_by = "SMA",
+                         cell_id = "CellNb", colour_by = "CD99",
                          outline_by = c("CellType", "Area")),
                regexp = "Only one 'outline_by' entry allowed.",
                fixed = TRUE)
@@ -211,33 +211,33 @@ test_that("plotPixels: images can be correctly subsetted.", {
 
   # Works
   expect_silent(plotPixels(image = pancreasImages[1],
-            colour_by = "SMA"))
+            colour_by = "CD99"))
   expect_silent(plotPixels(image = pancreasImages[1:3],
-                           colour_by = "SMA"))
+                           colour_by = "CD99"))
   expect_silent(plotPixels(image = pancreasImages[1:2],
-                           colour_by = "SMA"))
+                           colour_by = "CD99"))
   expect_silent(plotPixels(image = pancreasImages[c(1,3)],
-                           colour_by = "SMA"))
-  expect_silent(plotPixels(image = pancreasImages["F01_imc"],
-                           colour_by = "SMA"))
-  expect_silent(plotPixels(image = pancreasImages[c("A02_imc", "F01_imc")],
-                           colour_by = "SMA"))
-  
+                           colour_by = "CD99"))
+  expect_silent(plotPixels(image = pancreasImages["J02_imc"],
+                           colour_by = "CD99"))
+  expect_silent(plotPixels(image = pancreasImages[c("E34_imc", "J02_imc")],
+                           colour_by = "CD99"))
+
   # Setting the image title
-  expect_silent(plotPixels(image = pancreasImages[c("A02_imc", "F01_imc")],
-                           colour_by = "SMA",
+  expect_silent(plotPixels(image = pancreasImages[c("E34_imc", "J02_imc")],
+                           colour_by = "CD99",
                            image_title = list(text = c("test1", "test2"))))
 
   # Use mcols entry
   mcols(pancreasImages)$ImageName <- paste0(names(pancreasImages), ".tiff")
-  cur_images <- getImages(pancreasImages, mcols(pancreasImages)$ImageName %in% c("A02_imc.tiff", "F01_imc.tiff"))
+  cur_images <- getImages(pancreasImages, mcols(pancreasImages)$ImageName %in% c("E34_imc.tiff", "J02_imc.tiff"))
   expect_silent(plotPixels(image = cur_images,
                            img_id = "ImageName",
-                           colour_by = "SMA"))
+                           colour_by = "CD99"))
   expect_silent(plotPixels(image = pancreasImages[1:2],
                            img_id = "ImageName",
                           cell_id = "CellNb",
-                          colour_by = "SMA"))
+                          colour_by = "CD99"))
 
   # Image and Mask
   expect_silent(plotPixels(image = pancreasImages[1:2],
@@ -245,15 +245,15 @@ test_that("plotPixels: images can be correctly subsetted.", {
                            object = pancreasSCE,
                            img_id = "ImageNb",
                            cell_id = "CellNb",
-                           colour_by = "SMA",
+                           colour_by = "CD99",
                            outline_by = "CellType"))
-  
+
   # Error
   expect_error(plotPixels(image = pancreasImages[4]),
                regexp = "subscript contains out-of-bounds indices",
                fixed = TRUE)
   expect_error(plotPixels(image = pancreasImages["test"],
-                          colour_by = "SMA"),
+                          colour_by = "CD99"),
                regexp = "subscript contains invalid names",
                fixed = TRUE)
 
@@ -263,24 +263,24 @@ test_that("plotPixels: images can be correctly subsetted.", {
                           object = pancreasSCE,
                           img_id = "ImageNb",
                           cell_id = "CellNb",
-                          colour_by = "SMA",
+                          colour_by = "CD99",
                           outline_by = "CellType"),
                regexp = "Mask and image ids must be identical.",
                fixed = TRUE)
-  
-  expect_error(plotPixels(image = pancreasImages[c("A02_imc", "F01_imc")],
-                           colour_by = "SMA",
+
+  expect_error(plotPixels(image = pancreasImages[c("E34_imc", "J02_imc")],
+                           colour_by = "CD99",
                            image_title = list(text = c("test1", "test2", "test3"))),
                 regexp = "Invalid entry to the 'image_title' list object: \nPlease specify one title per image.",
                 fixed = TRUE)
-  
+
   data(pancreasMasks)
   expect_error(plotPixels(image = pancreasImages[2:3],
                           mask = pancreasMasks[1:2],
                           object = pancreasSCE,
                           img_id = "ImageNb",
                           cell_id = "CellNb",
-                          colour_by = "SMA",
+                          colour_by = "CD99",
                           outline_by = "CellType"),
                regexp = "Mask and image ids must be identical.",
                fixed = TRUE)
@@ -294,15 +294,15 @@ test_that("plotPixels: colour can be correctly adjusted.", {
 
   # Works
   expect_silent(plotPixels(image = pancreasImages,
-                          colour_by = "SMA",
-                          colour = list(SMA = colorRampPalette(c("black", "red"))(100))))
+                          colour_by = "CD99",
+                          colour = list(CD99 = colorRampPalette(c("black", "red"))(100))))
   expect_silent(plotPixels(image = pancreasImages,
-                          colour_by = "SMA",
-                          colour = list(SMA = c("black", "red"))))
+                          colour_by = "CD99",
+                          colour = list(CD99 = c("black", "red"))))
   expect_silent(plotPixels(image = pancreasImages,
-                          colour_by = c("H3", "CD44"),
+                          colour_by = c("H3", "CDH"),
                           colour = list(H3 = colorRampPalette(c("black", "red"))(100),
-                                        CD44 = colorRampPalette(c("black", "green"))(100))))
+                                        CDH = colorRampPalette(c("black", "green"))(100))))
   expect_silent(plotPixels(object = pancreasSCE,
                            image = pancreasImages,
                           mask = pancreasMasks, img_id = "ImageNb",
@@ -330,17 +330,17 @@ test_that("plotPixels: colour can be correctly adjusted.", {
 
   # Error
   expect_error(plotPixels(image = pancreasImages,
-                          colour_by = "SMA",
-                          colour = list(SMA = "green")),
+                          colour_by = "CD99",
+                          colour = list(CD99 = "green")),
                regexp = "Please specify at least two colours when colouring features.",
                fixed = TRUE)
   expect_error(plotPixels(image = pancreasImages,
-                         colour_by = "SMA",
+                         colour_by = "CD99",
                          colour = list(test = c("black", "green"))),
                regexp = "'names(colour)' do not match with 'colour_by' and/or 'outline_by'",
                fixed = TRUE)
   expect_error(plotPixels(image = pancreasImages,
-                          colour_by = c("H3", "SMA"),
+                          colour_by = c("H3", "CD99"),
                           colour = list(H3 = c("black", "green"))),
                regexp = "Please specify colour gradients for all features.",
                fixed = TRUE)
@@ -393,7 +393,7 @@ test_that("plotPixels: Size of images can be changed.", {
   # Change size of images
   # Decreasing the size
   cur_masks <- pancreasMasks
-  setImages(cur_masks, "A02_mask") <- cur_masks[[1]][1:50, 1:10,drop=FALSE]
+  setImages(cur_masks, "E34_mask") <- cur_masks[[1]][1:50, 1:10,drop=FALSE]
   expect_error(plotPixels(object = pancreasSCE,
                            image = pancreasImages,
                            mask = cur_masks, img_id = "ImageNb",
@@ -404,7 +404,7 @@ test_that("plotPixels: Size of images can be changed.", {
 
 
   cur_images <- pancreasImages
-  setImages(cur_images, "A02_imc") <- cur_images[[1]][1:50, 1:10,,drop=FALSE]
+  setImages(cur_images, "E34_imc") <- cur_images[[1]][1:50, 1:10,,drop=FALSE]
 
   expect_silent(plotPixels(object = pancreasSCE,
                            image = cur_images,

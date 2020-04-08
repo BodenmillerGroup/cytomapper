@@ -37,8 +37,8 @@
 #' @param image_title a list specifying features of the image titles. One or
 #' multiple of the following entries are supported:
 #' \itemize{
-#' \item \code{text}: character vector of image titles. Same length as the 
-#' \code{CytoImageList} object. 
+#' \item \code{text}: character vector of image titles. Same length as the
+#' \code{CytoImageList} object.
 #' \item \code{position}: single character specifying the position of the
 #' title. Supported entries: "top", "bottom", "topleft", "bottomleft",
 #' "topright", "bottomright" (default "top").
@@ -58,7 +58,7 @@
 #' The file extension specifies the format in which the file is saved.
 #' Supported formats are: jpeg, tiff and png. If \code{display = "single"},
 #' each image will be written in an individual file. The file names obtain
-#' a "_x" ending where x indicates the position of the image within the 
+#' a "_x" ending where x indicates the position of the image within the
 #' \code{CytoImageList} object.
 #' \item \code{scale}: by default the height and width of the saved image is
 #' defined by the maximum image size times the number of rows or numer of
@@ -165,7 +165,7 @@
 #' # Setting the legend
 #' plotCells(pancreasMasks, object = pancreasSCE,
 #'             img_id = "ImageNb", cell_id = "CellNb",
-#'             colour_by = c("SMA", "CD44"),
+#'             colour_by = c("CD99", "CDH"),
 #'             outline_by = "CellType",
 #'             legend = list(colour_by.title.font = 0.5,
 #'                         colour_by.title.cex = 0.5,
@@ -180,15 +180,15 @@
 #' plotPixels(pancreasImages, display = "single")
 #'
 #' # Supress scaling
-#' plotPixels(pancreasImages, colour_by = c("SMA", "INS"),
+#' plotPixels(pancreasImages, colour_by = c("CD99", "PIN"),
 #'             scale = TRUE)
-#' plotPixels(pancreasImages, colour_by = c("SMA", "INS"),
+#' plotPixels(pancreasImages, colour_by = c("CD99", "PIN"),
 #'             scale = FALSE)
 #'
 #' # Suppress interpolation
-#' plotPixels(pancreasImages, colour_by = c("SMA", "INS"),
+#' plotPixels(pancreasImages, colour_by = c("CD99", "PIN"),
 #'             interpolate = TRUE)
-#' plotPixels(pancreasImages, colour_by = c("SMA", "INS"),
+#' plotPixels(pancreasImages, colour_by = c("CD99", "PIN"),
 #'             interpolate = FALSE)
 #'
 #' @author Nils Eling (\email{nils.eling@@dqbm.uzh.ch})

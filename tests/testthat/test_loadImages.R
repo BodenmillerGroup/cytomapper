@@ -1,6 +1,6 @@
 test_that("loadImages function reads in correct objects.", {
   path <- system.file("extdata", package = "cytomapper")
-  single_file <- system.file("extdata/A02_mask.tiff",
+  single_file <- system.file("extdata/E34_mask.tiff",
                              package = "cytomapper")
 
   # Single file
@@ -28,18 +28,18 @@ test_that("loadImages function reads in correct objects.", {
   expect_silent(plotPixels(cur_files))
 
   # Multiple pattern
-  expect_silent(cur_files <- loadImages(path, pattern = c("A02_imc", "F01_imc")))
+  expect_silent(cur_files <- loadImages(path, pattern = c("E34_imc", "J02_imc")))
   expect_s4_class(cur_files, "CytoImageList")
   expect_equal(length(cur_files), 2L)
-  expect_silent(cur_files <- loadImages(path, pattern = c("A02_imc", "A02_imc",
-                                                          "F01_imc", "F01_imc")))
+  expect_silent(cur_files <- loadImages(path, pattern = c("E34_imc", "E34_imc",
+                                                          "J02_imc", "J02_imc")))
   expect_s4_class(cur_files, "CytoImageList")
   expect_equal(length(cur_files), 2L)
-  expect_silent(cur_files <- loadImages(path, pattern = c("A02_imc", "test")))
+  expect_silent(cur_files <- loadImages(path, pattern = c("E34_imc", "test")))
   expect_s4_class(cur_files, "CytoImageList")
   expect_equal(length(cur_files), 1L)
   expect_error(cur_files <- loadImages(path, pattern = c("test1", "test")))
-  
+
   # Multiple files
   multi_files <- list.files(system.file("extdata", package = "cytomapper"),
                             pattern = "mask.tiff", full.names = TRUE)

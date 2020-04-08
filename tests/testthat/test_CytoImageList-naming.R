@@ -4,9 +4,9 @@ test_that("Image and channel names can be extracted and set.", {
 
   # Standard calls - CytoImageList
   expect_equal(channelNames(pancreasImages),
-               c("H3", "SMA", "INS", "CD38", "CD44"))
+               c("H3", "CD99", "PIN", "CD8a", "CDH"))
   expect_equal(names(pancreasImages),
-               c("A02_imc", "D01_imc", "F01_imc"))
+               c("E34_imc", "G01_imc", "J02_imc"))
 
   expect_silent(channelNames(cur_Images) <- c("test1", "test2", "test3", "test4", "test5"))
   expect_equal(channelNames(cur_Images),

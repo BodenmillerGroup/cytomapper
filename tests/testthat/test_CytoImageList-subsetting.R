@@ -29,8 +29,8 @@ test_that("Merging works on CytoImageList object.", {
   ## Should work
   expect_silent(test.list <- c(pancreasImages[c(1,3)], pancreasImages[2]))
   expect_s4_class(test.list, "CytoImageList")
-  expect_equal(names(test.list), c("A02_imc", "F01_imc", "D01_imc"))
-  expect_equal(rownames(mcols(test.list)), c("A02_imc", "F01_imc", "D01_imc"))
+  expect_equal(names(test.list), c("E34_imc", "J02_imc", "G01_imc"))
+  expect_equal(rownames(mcols(test.list)), c("E34_imc", "J02_imc", "G01_imc"))
   expect_identical(test.list[[3]], pancreasImages[[2]])
 
   ## Should fail due to duplicated names
@@ -42,8 +42,8 @@ test_that("Merging works on CytoImageList object.", {
 
   ## Should work
   expect_silent(channels3 <- mergeChannels(channels1, channels2))
-  expect_equal(channelNames(channels3), c("H3", "SMA", "INS", "CD38"))
-  expect_equal(names(channels3), c("A02_imc", "D01_imc", "F01_imc"))
+  expect_equal(channelNames(channels3), c("H3", "CD99", "PIN", "CD8a"))
+  expect_equal(names(channels3), c("E34_imc", "G01_imc", "J02_imc"))
 
   ## Should not work
   channels1 <- getChannels(pancreasImages, 1:2)
@@ -65,8 +65,8 @@ test_that("General operations work on CytoImageList object.", {
   expect_true(is(pancreasImages[1], "CytoImageList"))
   expect_true(is(pancreasImages[[1]], "Image"))
 
-  expect_equal(names(pancreasImages), c("A02_imc", "D01_imc", "F01_imc"))
-  expect_equal(rownames(mcols(pancreasImages)), c("A02_imc", "D01_imc", "F01_imc"))
+  expect_equal(names(pancreasImages), c("E34_imc", "G01_imc", "J02_imc"))
+  expect_equal(rownames(mcols(pancreasImages)), c("E34_imc", "G01_imc", "J02_imc"))
 
   ## Setters
   #### These checks are mainly in place to avoid NA or empty names
@@ -124,19 +124,19 @@ test_that("Custom accessors work on CytoImageList object.", {
   # Accessors
   ## getImages
   ### Should work
-  expect_s4_class(getImages(pancreasImages, "A02_imc"), "CytoImageList")
-  expect_s4_class(getImages(pancreasImages, "A02_imc")[[1]], "Image")
+  expect_s4_class(getImages(pancreasImages, "E34_imc"), "CytoImageList")
+  expect_s4_class(getImages(pancreasImages, "E34_imc")[[1]], "Image")
   expect_s4_class(getImages(pancreasImages, 1), "CytoImageList")
   expect_s4_class(getImages(pancreasImages, 1)[[1]], "Image")
   expect_s4_class(getImages(pancreasImages, c(TRUE, FALSE, FALSE)), "CytoImageList")
   expect_s4_class(getImages(pancreasImages, c(TRUE, FALSE, FALSE))[[1]], "Image")
-  expect_s4_class(getImages(pancreasImages, c("A02_imc", "D01_imc")), "CytoImageList")
+  expect_s4_class(getImages(pancreasImages, c("E34_imc", "G01_imc")), "CytoImageList")
   expect_s4_class(getImages(pancreasImages, c(1,2)), "CytoImageList")
 
   ### Should not work
   expect_error(getImages(pancreasImages, "A"))
-  expect_error(getImages(pancreasImages, "A02_imc", "test"))
-  expect_error(getImages(pancreasImages, c("A02_imc", "test")))
+  expect_error(getImages(pancreasImages, "E34_imc", "test"))
+  expect_error(getImages(pancreasImages, c("E34_imc", "test")))
   expect_error(getImages(pancreasImages, 4))
 
   ## setImages
@@ -148,27 +148,27 @@ test_that("Custom accessors work on CytoImageList object.", {
   names(cur_Images3) <- NULL
 
   ### Should work
-  expect_silent(setImages(cur_Images1, "A02_imc") <- cur_Images2[1])
-  expect_equal(names(cur_Images1), c("A02_imc", "D01_imc", "F01_imc"))
-  expect_equal(channelNames(cur_Images1), c("H3", "SMA", "INS", "CD38", "CD44"))
+  expect_silent(setImages(cur_Images1, "E34_imc") <- cur_Images2[1])
+  expect_equal(names(cur_Images1), c("E34_imc", "G01_imc", "J02_imc"))
+  expect_equal(channelNames(cur_Images1), c("H3", "CD99", "PIN", "CD8a", "CDH"))
   expect_equal(mcols(cur_Images1)$ImageNb, c(1, 2, 3))
   expect_equal(mcols(cur_Images1)$ImageNumber, c(1, NA, NA))
-  expect_silent(setImages(cur_Images1, "A02_imc") <- cur_Images2[[1]])
-  expect_equal(names(cur_Images1), c("A02_imc", "D01_imc", "F01_imc"))
-  expect_equal(channelNames(cur_Images1), c("H3", "SMA", "INS", "CD38", "CD44"))
+  expect_silent(setImages(cur_Images1, "E34_imc") <- cur_Images2[[1]])
+  expect_equal(names(cur_Images1), c("E34_imc", "G01_imc", "J02_imc"))
+  expect_equal(channelNames(cur_Images1), c("H3", "CD99", "PIN", "CD8a", "CDH"))
   expect_equal(mcols(cur_Images1)$ImageNb, c(1, 2, 3))
   expect_equal(mcols(cur_Images1)$ImageNumber, c(1, NA, NA))
   expect_silent(setImages(cur_Images1, "G02_imc") <- cur_Images2[1])
-  expect_equal(names(cur_Images1), c("A02_imc", "D01_imc", "F01_imc", "G02_imc"))
-  expect_equal(channelNames(cur_Images1), c("H3", "SMA", "INS", "CD38", "CD44"))
+  expect_equal(names(cur_Images1), c("E34_imc", "G01_imc", "J02_imc", "G02_imc"))
+  expect_equal(channelNames(cur_Images1), c("H3", "CD99", "PIN", "CD8a", "CDH"))
   expect_silent(setImages(cur_Images1, 1) <- cur_Images2[2])
-  expect_equal(names(cur_Images1), c("test2", "D01_imc", "F01_imc", "G02_imc"))
-  expect_equal(channelNames(cur_Images1), c("H3", "SMA", "INS", "CD38", "CD44"))
+  expect_equal(names(cur_Images1), c("test2", "G01_imc", "J02_imc", "G02_imc"))
+  expect_equal(channelNames(cur_Images1), c("H3", "CD99", "PIN", "CD8a", "CDH"))
   expect_silent(setImages(cur_Images1, 1:2) <- cur_Images2[2:3])
-  expect_equal(names(cur_Images1), c("test2", "test3", "F01_imc", "G02_imc"))
-  expect_equal(channelNames(cur_Images1), c("H3", "SMA", "INS", "CD38", "CD44"))
+  expect_equal(names(cur_Images1), c("test2", "test3", "J02_imc", "G02_imc"))
+  expect_equal(channelNames(cur_Images1), c("H3", "CD99", "PIN", "CD8a", "CDH"))
   expect_silent(setImages(cur_Images3, 1) <- cur_Images3[2])
-  expect_equal(channelNames(cur_Images3), c("H3", "SMA", "INS", "CD38", "CD44"))
+  expect_equal(channelNames(cur_Images3), c("H3", "CD99", "PIN", "CD8a", "CDH"))
 
   ### Should not work
   expect_error(setImages(cur_Images1, 1) <- cur_Images2[[1]])
@@ -179,9 +179,9 @@ test_that("Custom accessors work on CytoImageList object.", {
 
   ### Remove images
   expect_silent(setImages(cur_Images1, 1) <- NULL)
-  expect_equal(names(cur_Images1), c("test3", "F01_imc", "G02_imc"))
+  expect_equal(names(cur_Images1), c("test3", "J02_imc", "G02_imc"))
   expect_silent(setImages(cur_Images1, "test3") <- NULL)
-  expect_equal(names(cur_Images1), c("F01_imc", "G02_imc"))
+  expect_equal(names(cur_Images1), c("J02_imc", "G02_imc"))
 
   ## getChannels
   ### Should work
@@ -192,12 +192,12 @@ test_that("Custom accessors work on CytoImageList object.", {
   expect_silent(test <- getChannels(pancreasImages, 1))
   expect_equal(channelNames(test), "H3")
   expect_equal(length(test), 3L)
-  expect_equal(names(test), c("A02_imc", "D01_imc", "F01_imc"))
+  expect_equal(names(test), c("E34_imc", "G01_imc", "J02_imc"))
 
   expect_silent(test <- getChannels(pancreasImages, "H3"))
   expect_equal(channelNames(test), "H3")
   expect_equal(length(test), 3L)
-  expect_equal(names(test), c("A02_imc", "D01_imc", "F01_imc"))
+  expect_equal(names(test), c("E34_imc", "G01_imc", "J02_imc"))
 
   ### Should not work
   expect_error(getChannels(pancreasImages, 10))
@@ -211,11 +211,11 @@ test_that("Custom accessors work on CytoImageList object.", {
 
   ### Should work
   expect_silent(setChannels(cur_Images1, 1) <- cur_Images2)
-  expect_equal(channelNames(cur_Images1), c("test", "SMA", "INS", "CD38", "CD44"))
+  expect_equal(channelNames(cur_Images1), c("test", "CD99", "PIN", "CD8a", "CDH"))
   expect_equal(cur_Images1[[1]][,,1], cur_Images1[[1]][,,2])
 
-  expect_silent(setChannels(cur_Images1, "INS") <- cur_Images2)
-  expect_equal(channelNames(cur_Images1), c("test", "SMA", "INS", "CD38", "CD44"))
+  expect_silent(setChannels(cur_Images1, "PIN") <- cur_Images2)
+  expect_equal(channelNames(cur_Images1), c("test", "CD99", "PIN", "CD8a", "CDH"))
   expect_equal(cur_Images1[[1]][,,2], cur_Images1[[1]][,,3])
 
   cur_Images1 <- pancreasImages
@@ -223,13 +223,13 @@ test_that("Custom accessors work on CytoImageList object.", {
   channelNames(cur_Images2) <- c("test1", "test2")
 
   expect_silent(setChannels(cur_Images1, 1:2) <- cur_Images2)
-  expect_equal(channelNames(cur_Images1), c("test1", "test2", "INS", "CD38", "CD44"))
+  expect_equal(channelNames(cur_Images1), c("test1", "test2", "PIN", "CD8a", "CDH"))
   expect_equal(cur_Images1[[1]][,,2], cur_Images1[[1]][,,3])
 
   expect_silent(setChannels(cur_Images1, 1:2) <- NULL)
-  expect_equal(channelNames(cur_Images1), c("INS", "CD38", "CD44"))
-  expect_silent(setChannels(cur_Images1, "INS") <- NULL)
-  expect_equal(channelNames(cur_Images1), c("CD38", "CD44"))
+  expect_equal(channelNames(cur_Images1), c("PIN", "CD8a", "CDH"))
+  expect_silent(setChannels(cur_Images1, "PIN") <- NULL)
+  expect_equal(channelNames(cur_Images1), c("CD8a", "CDH"))
 
   ### Should not work
   cur_Images1 <- pancreasImages
