@@ -1,24 +1,27 @@
 # Example data
+This folder describes the files contained in `inst/extdata`, how these files
+were obtained and how to generate them by running the scripts contained in
+`insts/scripts`.
 
-Publication
-Full dataset
+Raw Imaging Mass Cytometry (IMC) data are computationally processed using a
+segmentation pipeline (available at https://github.com/BodenmillerGroup/ImcSegmentationPipeline).
+This produces image stacks containing the raw pixel values for > 35 channels,
+masks containing the segmented cells, cell-level expression, metadata
+information as well as a number of image-level meta information.
 
-## Short overview
-Sgementation
-Link to single cell SingleCellExperiment
+The dataset used here is associated with the publication [A Map of Human Type 1 Diabetes Progression by Imaging Mass Cytometry](https://doi.org/10.1016/j.cmet.2018.11.014)
+and is available from Mendeley Data: http://dx.doi.org/10.17632/cydmwsfztj.2.
 
-## Getting single cell data and cell masks from raw data
+The scripts contained in `insts/scripts` can be run to download the data and to
+generate the toy dataset used to illustrate the `cytomapper`package.
 
-
-The `inst/extdata` folder contains three multiplexed images (image stacks) and the corresponding cell masks.
-
-Original files are Imaging Mass Cytometry (IMC)
-Fluidigm Hyperion
-`ImcSegmentationPipeline`(https://github.com/BodenmillerGroup/ImcSegmentationPipeline)
-
-Generate cell masks and extract single-cell data
-
-
+## Content of the inst/extdata folder:
+This folder contains the tiff files from which the toy dataset in `data` was
+generated. There are three images stacks (suffix `_imc.tiff`), each containing
+5 channels for a size of 100 x 100 pixels and three associated cell masks
+(suffix `_mask.tiff`).
+The image names (`E34`, `G01`, `J02`) are used to match the image stacks with
+the associated mask.
 
 ## Downloading the dataset
 The dataset can be downloaded and saved using the `1_LoadPancreasData.Rmd` and
@@ -31,32 +34,35 @@ The `2_LoadPancreasImages.Rmd` generates two `CytoImageList` objects:
 - `pancreas_images.rds`: contains the multiplexed images.
 - `pancreas_masks.rds`: contains the cell masks.
 
-These files are saved in the `inst/exdata`sufolder and form a 100 image dataset
-that is a subset of the original publication dataset, which comprises 845
-images.
+These files are saved in the `inst/exdata` subfolder and form a dataset
+comprising a hundred multiplexed images that each contain 38 channels, as well
+as the associated single-cell data. This represents a subset of the original
+publication data set, which contains 845 images. The full dataset is also
+available from Mendeley Data.
 
 ## Generating the toy dataset
-The toy data used to illustrate the `cytomapper` package is generated from the
-three .rds files generated above by running the `3_GenerateToyData.Rmd`.
+For space reasons, the 100 images dataset needs to be subsetted in order to
+generate the small toy dataset used to illustrate the `cytomapper` package.
 
+This toy dataset is generated from the three .rds files generated above by
+running the `3_GenerateToyData.Rmd` script.
 
-This folder is used to store the example data from the pancreas dataset after running the `LoadPancreasData.Rmd` and the `LoadPancreasImages.Rmd` R scripts.
+In this script, a subset of three images (named `E34`, `G01`, and `J02`) is
+extracted and these images are cropped to 100 x 100 pixels. The number of
+channels is limited to five (`H3`, `CD99`, `PIN`, `CD8a` and `CDH`).  
 
+The `SingleCellExperiment` object containing the single-cell data is subsetted
+accordingly in order to retain only the cells and channels that are present on
+the toy images.
 
+When running the `3_GenerateToyData.Rmd` script, the following files are
+created:
+In `inst/extdata`:
+- imc.tiff files: stacks corresponding to the subsetted images.
+- mask.tiff files: masks associated with the imc.tiff files.
 
-
-
-
-
-# Script to generate toy data for the `cytomapper` package
-
-
-These three object form a dataset comprising a hundred multiplexed images that each
-contain 38 channels and the associated single-cell data.
-
-For space reasons, this dataset needs to be subsetted in order to generate the small
-toy dataset used to illustrate the `cytomapper` package.
-
-In this script, we will crop the images to 100 x 100 pixels and limit the number of
-channels to five. We will subset the single-cell dataset accordingly, to retain only
-the cells and channels that are present on the toy images.
+In `data`, the toy dataset:
+- `pancreasImages.RData`: a `CytoImageList` object containing the images.
+- `pancreasMasks.RData`: a `CytoImageList` object containing the masks.
+- `pancreasSCE.RData`: a `SingleCellExperiment` object containing the single-
+cell data.

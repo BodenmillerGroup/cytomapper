@@ -13,8 +13,8 @@
 #' \item{colData}{Cell-specific metadata where rownames represent the
 #' image name and cell id. It containins the
 #' \enumerate{
-#'     \item image number (ImageNumber),
-#'     \item cell number/identifier (CellNumber),
+#'     \item image number (ImageNb),
+#'     \item cell number/identifier (CellNb),
 #'     \item spatial position on the image (Pos_X, Pos_Y),
 #'     \item the associated image name (ImageName, see
 #'     \code{?"\link[cytomapper]{pancreasImages}"}),

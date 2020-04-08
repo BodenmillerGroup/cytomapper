@@ -192,7 +192,7 @@ workflow.
 
 For visualization purposes, the `cytomapper` package provides a toy dataset
 containing 3 images of $100\mu{m}$ x $100\mu{m}$ dimensions (100 x 100 pixels).
-The dataset contains 282 segmented cells and the expression values for 5
+The dataset contains 362 segmented cells and the expression values for 5
 proteins: H3, CD99, PIN, CD8a, and CDH It represents a small subset of the data
 presented in [A Map of Human Type 1 Diabetes Progression by Imaging Mass
 Cytometry](Ahttps://www.cell.com/cell-metabolism/fulltext/S1550-4131(18)30691-0?_returnURL=https%3A%2F%2Flinkinghub.elsevier.com%2Fretrieve%2Fpii%2FS1550413118306910%3Fshowall%3Dtrue).
