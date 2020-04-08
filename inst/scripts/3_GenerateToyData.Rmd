@@ -1,0 +1,212 @@
+---
+title: "Subsetting to generate a toy dataset"
+author: "Nicolas Damond, Nils Eling"
+date: "`r Sys.Date()`"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+knitr::opts_knit$set(root.dir = file.path("..", "extdata"))
+```
+
+# Script to generate toy data for the `cytomapper` package
+Running the `1_LoadPancreasData.Rmd` script generates a `SingleCellExperiment` 
+object:  
+- `pancreas_sce.rds`: contains the single cell data.  
+Runing the `2_LoadPancreasImages.Rmd` generates two `CytoImageList` objects:  
+- `pancreas_images.rds`: contains the multiplexed images.
+- `pancreas_masks.rds`: contains the cell masks.
+  
+These three object form a dataset comprising a hundred multiplexed images that 
+each contain 38 channels and the associated single-cell data.
+
+For space reasons, this dataset needs to be subsetted in order to generate the 
+small toy dataset used to illustrate the `cytomapper` package.
+
+In this script, we will crop the images to 100 x 100 pixels and limit the number
+of channels to five. We will subset the single-cell dataset accordingly, to 
+retain only the cells and channels that are present on the toy images.
+
+
+```{r load-packages, message=FALSE}
+library(SingleCellExperiment)
+library(cytomapper)
+library(ijtiff)
+```
+
+# Read in single-cell data
+```{r read-in data}
+sce <- readRDS("pancreas_sce.rds")
+sce
+```
+
+# Load images
+```{r load-images}
+images <- readRDS("pancreas_images.rds")
+images
+```
+
+# Load masks
+```{r load-masks}
+masks <- readRDS("pancreas_masks.rds")
+masks
+```
+
+# Subset the images and masks
+We first rename the images and the masks to have shorter names.  
+We next select three images to subset by providing three image names that are 
+in `names(images)` and use the `cytomapper::getImages` function to subset them.  
+```{r subset-images}
+# Rename the images
+names(images) <- gsub('_a0_full_clean', '', names(images))
+names(masks) <- gsub('_a0_full_mask', '', names(masks))
+
+# Name of the images to subset
+image.list = c("E34", "G01", "J02")
+
+# Subset the three selected images
+images <- getImages(images, image.list)
+masks <- getImages(masks, image.list)
+```
+
+# Subset the channels
+We will subset five channels from the subsetted images.
+We provide five channel names (that are in `channelNames(images)`) and use the 
+`cytomapper::getChannels` function to subset them.
+```{r subset-channels}
+# Name of the channel to subset
+channel.list = c("H3", "CD99", "PIN",  "CD8a", "CDH")
+
+# Subset the five selected channels
+images <- getChannels(images, channel.list)
+```
+
+# Crop the images and the masks
+For each image, we provide specific coordinates.  
+The same coordinates are used for the images and the masks.
+```{r crop-images}
+images$E34 <- CytoImageList(images$E34[95:194, 201:300,])
+images$G01 <- CytoImageList(images$G01[121:220, 291:390,])
+images$J02 <- CytoImageList(images$J02[246:345, 501:600,])
+
+masks$E34 <- CytoImageList(masks$E34[95:194, 201:300])
+masks$G01 <- CytoImageList(masks$G01[121:220, 291:390])
+masks$J02 <- CytoImageList(masks$J02[246:345, 501:600])
+```
+
+# Subset the SingleCellExperiment Object (1/2)
+We first subset the selected images from the `SingleCellExperiment` object.
+We then subset the selected channels
+```{r subset-SCE-1}
+# Subset the selected images
+sce <- sce[, sce$ImageName %in% image.list]
+
+# Subset the selected channels
+sce <- sce[rownames(sce) %in% channel.list, ]
+```
+
+# Subset the SingleCellExperiment Object (2/2)
+We first extract the numbers of the cells present on the cropped masks.
+We then subset these cells from the SCE object.
+```{r subset-SCE-2}
+# Subset the selected channels
+E34.cells <- unique(as.vector(masks$E34))
+G01.cells <- unique(as.vector(masks$G01))
+J02.cells <- unique(as.vector(masks$J02))
+
+# Subset the cells from the SCE
+sce <- cbind(sce[,sce$ImageName == "E34" & sce$CellNumber %in% E34.cells],
+             sce[,sce$ImageName == "G01" & sce$CellNumber %in% G01.cells],
+             sce[,sce$ImageName == "J02" & sce$CellNumber %in% J02.cells])
+```
+
+# Remove unnecessary metadata
+To save additional space, we will remove the unnecessary metadata from the SCE 
+object.
+```{r remove-metadata}
+# Metadata to retain from colData(sce) and rowData(sce)
+keep.cols <- c("ImageName", "CellNumber", "Pos_X", "Pos_Y", "Area", "stage")
+keep.rows <- c("MetalTag", "Target", "clean_Target")
+
+# Subset the SCE object
+rowData(sce) <- rowData(sce)[, colnames(rowData(sce)) %in% keep.rows]
+colData(sce) <- colData(sce)[, colnames(colData(sce)) %in% keep.cols]
+```
+
+# Add metadata
+For convenience, we will add image numbers (`ImageNb`) and a channel 
+numbers (`frame`) to the SCE object.  
+We will also add a column containing randomly-attributed cell types.
+```{r add-metadata}
+# Add image numbers
+image.numbers <- data.frame(ImageName = image.list,
+                            ImageNumber = c(1:3))
+colData(sce) <- transform(merge(colData(sce), image.numbers,
+                                by="ImageName", all=TRUE),
+                          rownames=rownames(colData(sce)))
+
+rownames(colData(sce)) <- colData(sce)$rownames
+colData(sce)$rownames <- NULL
+
+# Add channel numbers
+rowData(sce)$frame <- c(1:5)
+
+# Add cell types
+set.seed(12345)
+sce$CellType <- sample(c("celltype_A", "celltype_B", "celltype_C"),
+                       ncol(sce), replace = TRUE)
+```
+
+# Save images as tiff files
+We now save the images and masks as tiff files. These files are used to 
+illustrate the `cytomapper` package.  
+The EBImage and tiff packages do not support 32-bit encodings for images.
+However, after compensation, the pixels contain floats rather than integers.  
+We have to use the ijtiff package to write out the images.
+*Of Note:* The file names need to be changed to '.tiff' after saving since 
+the ijtiff package has this weird way of saving every image as '.tif'.
+```{r save-tiffs, message=FALSE}
+# Save multiplexed images
+write_tif(imageData(transpose(images$E34)), 
+          path = "E34_imc.tiff",
+          bits_per_sample = 32L, overwrite = TRUE)
+file.rename("E34_imc.tif", "E34_imc.tiff")
+
+write_tif(imageData(transpose(images$G01)), 
+          path = "G01_imc.tiff",
+          bits_per_sample = 32L, overwrite = TRUE)
+file.rename("G01_imc.tif", "G01_imc.tiff")
+
+write_tif(imageData(transpose(images$J02)), 
+          path = "J02_imc.tiff",
+          bits_per_sample = 32L, overwrite = TRUE)
+file.rename("J02_imc.tif", "J02_imc.tiff")
+
+# Save masks
+write_tif(imageData(transpose(masks$E34)), 
+          path = "E34_mask.tiff",
+          bits_per_sample = 16L, overwrite = TRUE)
+file.rename("E34_mask.tif", "E34_mask.tiff")
+
+write_tif(imageData(transpose(masks$G01)), 
+          path = "G01_mask.tiff",
+          bits_per_sample = 16L, overwrite = TRUE)
+file.rename("G01_mask.tif", "G01_mask.tiff")
+
+write_tif(imageData(transpose(masks$J02)), 
+          path = "J02_mask.tiff",
+          bits_per_sample = 16L, overwrite = TRUE)
+file.rename("J02_mask.tif", "J02_mask.tiff")
+```
+
+# Save the SCE object and the images and masks `CytoImageList` objects.
+```{r save-objects}
+save(sce,
+     file = file.path("..", "..", "data", "pancreasSCE.RData"))
+save(masks,
+     file = file.path("..", "..", "data", "pancreasMasks.RData"))
+save(images,
+     file = file.path("..", "..", "data", "pancreasImages.RData"))
+```
+
