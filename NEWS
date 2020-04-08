@@ -1,5 +1,5 @@
 Changes in version 0.1.0 (2020-01-16):
- 
+
 + Initial commit
 + Creation of the SingleCellMapper package
 + Created inst/extdata folder with example images and data
@@ -92,3 +92,8 @@ Changes in version 0.99.4 (2020-04-01):
 + Aesthetic changes to scale bar, image title and legend title
 + Removed channelNames as Image generic
 + removed exported plot method
+
+Changes in version 0.99.4 (2020-04-08):
+
++ Added script to generate the toy dataset
++ Modified the doy dataset
