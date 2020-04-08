@@ -511,14 +511,12 @@
                         .plotScaleBar(plottingParam$scale_bar,
                                 xl = xleft, xr = xright,
                                 yt = ytop, yb = ybottom,
-                                m_width, m_height,
-                                image_scale)
+                                m_width, m_height)
                     } else {
                         .plotScaleBar(plottingParam$scale_bar,
                                 xl = 0, xr = dim_x,
                                 yt = 0, yb = dim_y,
-                                m_width, m_height,
-                                image_scale)
+                                m_width, m_height)
                     }
                 } else {
                     frame_ind <- as.integer(plottingParam$scale_bar$frame)
@@ -528,14 +526,12 @@
                             .plotScaleBar(plottingParam$scale_bar,
                                     xl = xleft, xr = xright,
                                     yt = ytop, yb = ybottom,
-                                    m_width, m_height,
-                                    image_scale)
+                                    m_width, m_height)
                         } else {
                             .plotScaleBar(plottingParam$scale_bar,
                                     xl = 0, xr = dim_x,
                                     yt = 0, yb = dim_y,
-                                    m_width, m_height,
-                                    image_scale)
+                                    m_width, m_height)
                         }
                     }
                 }
@@ -869,7 +865,7 @@
 # Plot scale_bar
 #' @importFrom graphics strheight text rect
 #' @importFrom raster as.raster
-.plotScaleBar <- function(scale_bar, xl, xr, yt, yb, m_w, m_h,image_scale){
+.plotScaleBar <- function(scale_bar, xl, xr, yt, yb, m_w, m_h){
     # Set default scale bar length
     if (is.null(scale_bar$length)) {
         cur_length <- ifelse(m_w > 25, round(m_w/5, digits = -1), 10)

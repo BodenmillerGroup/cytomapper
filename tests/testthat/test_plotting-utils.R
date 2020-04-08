@@ -820,19 +820,406 @@ test_that("colour vector creation works.", {
 })
 
 test_that("images can be displayed.", {
-  # .displayImages
+    data("pancreasImages")
+    data("pancreasSCE")
+    
+    # Generate images to plot
+    out_img <- .colourImageByFeature(image = pancreasImages, colour_by = "SMA", 
+                                     bcg = list(SMA = c(0,1,1)), cur_colour = list(SMA = c("black", "red")),
+                                     plottingParam = list(scale = TRUE))
+    plottingParam <- .plottingParam(dotArgs = list(), image = pancreasImages)
+    
+    expect_silent(cur_out <- .displayImages(object = pancreasSCE, 
+                   image = pancreasImages, 
+                   exprs_values = "counts", 
+                   outline_by = NULL,
+                   colour_by = "SMA", 
+                   mask = NULL, 
+                   out_img = out_img,
+                   img_id = NULL, 
+                   cur_col = list(colour_by = list(SMA = c("black", "red"))), 
+                   plottingParam = plottingParam))
+    expect_true(is.null(cur_out))
+    
+    plottingParam$legend <- NULL
+    expect_silent(cur_out <- .displayImages(object = pancreasSCE, 
+                                            image = pancreasImages, 
+                                            exprs_values = "counts", 
+                                            outline_by = NULL,
+                                            colour_by = "SMA", 
+                                            mask = NULL, 
+                                            out_img = out_img,
+                                            img_id = NULL, 
+                                            cur_col = list(colour_by = list(SMA = c("black", "red"))), 
+                                            plottingParam = plottingParam))
+    expect_true(is.null(cur_out))
+    
+    plottingParam$legend <- NULL
+    expect_silent(cur_out <- .displayImages(object = pancreasSCE, 
+                                            image = pancreasImages, 
+                                            exprs_values = "counts", 
+                                            outline_by = NULL,
+                                            colour_by = "SMA", 
+                                            mask = NULL, 
+                                            out_img = out_img,
+                                            img_id = NULL, 
+                                            cur_col = list(colour_by = list(SMA = c("black", "red"))), 
+                                            plottingParam = plottingParam))
+    expect_true(is.null(cur_out))
+    
+    plottingParam <- .plottingParam(dotArgs = list(), image = pancreasImages)
+    plottingParam$return_plot <- TRUE
+    expect_silent(cur_out <- .displayImages(object = pancreasSCE, 
+                                            image = pancreasImages, 
+                                            exprs_values = "counts", 
+                                            outline_by = NULL,
+                                            colour_by = "SMA", 
+                                            mask = NULL, 
+                                            out_img = out_img,
+                                            img_id = NULL, 
+                                            cur_col = list(colour_by = list(SMA = c("black", "red"))), 
+                                            plottingParam = plottingParam))
+    expect_true(is(cur_out, "recordedplot"))
+    
+    plottingParam <- .plottingParam(dotArgs = list(), image = pancreasImages)
+    plottingParam$return_plot <- TRUE
+    plottingParam$display <- "single"
+    expect_silent(cur_out <- .displayImages(object = pancreasSCE, 
+                                            image = pancreasImages, 
+                                            exprs_values = "counts", 
+                                            outline_by = NULL,
+                                            colour_by = "SMA", 
+                                            mask = NULL, 
+                                            out_img = out_img,
+                                            img_id = NULL, 
+                                            cur_col = list(colour_by = list(SMA = c("black", "red"))), 
+                                            plottingParam = plottingParam))
+    expect_true(is(cur_out, "list"))
+    expect_length(cur_out, 4)
+    expect_equal(names(cur_out), c("legend", "A02_imc", "D01_imc", "F01_imc"))
+    expect_true(is(cur_out[[1]], "recordedplot"))
+    expect_true(is(cur_out[[2]], "recordedplot"))
+    expect_true(is(cur_out[[3]], "recordedplot"))
+    expect_true(is(cur_out[[4]], "recordedplot"))
 })
 
 test_that("legend can be plotted.", {
-  # .plotLegend
+    data("pancreasSCE")
+    data("pancreasImages")  
+  
+    plottingParam <- .plottingParam(dotArgs = list(), image = pancreasImages)
+    colour_by = c("SMA", "H3", "CD44", "CD38")
+    cur_col = list(colour_by = list(SMA = c("black", "red"),
+                                    H3 = c("black", "green"),
+                                    CD44 = c("black", "blue"),
+                                    CD38 = c("black", "cyan")))
+    
+    x_len <- 100
+    y_len <- 100
+    
+    par(bty="n", mai=c(0,0,0,0), xaxs="i",
+        yaxs="i", xaxt="n", yaxt="n", col = "white")
+    
+    plot(c(0, x_len), c(0, y_len), type="n", xlab="", ylab="",
+         asp = 1, ylim = rev(c(0, y_len)))
+    
+    expect_silent(.plotLegend(object = pancreasSCE, 
+                image = pancreasImages, 
+                exprs_values = "counts", 
+                outline_by = NULL, 
+                colour_by = colour_by,
+                m_width = x_len, 
+                m_height = y_len, 
+                cur_col = cur_col, 
+                plottingParam))
+    
+    x_len <- 1000
+    y_len <- 1000
+    
+    par(bty="n", mai=c(0,0,0,0), xaxs="i",
+        yaxs="i", xaxt="n", yaxt="n", col = "white")
+    
+    plot(c(0, x_len), c(0, y_len), type="n", xlab="", ylab="",
+         asp = 1, ylim = rev(c(0, y_len)))
+    
+    expect_silent(.plotLegend(object = pancreasSCE, 
+                              image = pancreasImages, 
+                              exprs_values = "counts", 
+                              outline_by = NULL, 
+                              colour_by = colour_by,
+                              m_width = x_len, 
+                              m_height = y_len, 
+                              cur_col = cur_col, 
+                              plottingParam))
+    
+    x_len <- 2000
+    y_len <- 2000
+    
+    par(bty="n", mai=c(0,0,0,0), xaxs="i",
+        yaxs="i", xaxt="n", yaxt="n", col = "white")
+    
+    plot(c(0, x_len), c(0, y_len), type="n", xlab="", ylab="",
+         asp = 1, ylim = rev(c(0, y_len)))
+    
+    expect_silent(.plotLegend(object = pancreasSCE, 
+                              image = pancreasImages, 
+                              exprs_values = "counts", 
+                              outline_by = NULL, 
+                              colour_by = colour_by,
+                              m_width = x_len, 
+                              m_height = y_len, 
+                              cur_col = cur_col, 
+                              plottingParam))
+    
+    plottingParam <- .plottingParam(dotArgs = list(), image = pancreasImages)
+    colour_by = "CellType"
+    cur_col = list(colour_by = list(CellType = c(celltype_A = "red",
+                                                 celltype_B = "blue",
+                                                 celltype_C = "green")))
+    
+    x_len <- 100
+    y_len <- 100
+    
+    par(bty="n", mai=c(0,0,0,0), xaxs="i",
+        yaxs="i", xaxt="n", yaxt="n", col = "white")
+    
+    plot(c(0, x_len), c(0, y_len), type="n", xlab="", ylab="",
+         asp = 1, ylim = rev(c(0, y_len)))
+    
+    expect_silent(.plotLegend(object = pancreasSCE, 
+                              image = NULL, 
+                              exprs_values = "counts", 
+                              outline_by = NULL, 
+                              colour_by = colour_by,
+                              m_width = x_len, 
+                              m_height = y_len, 
+                              cur_col = cur_col, 
+                              plottingParam))
+    
+    x_len <- 1000
+    y_len <- 1000
+    
+    par(bty="n", mai=c(0,0,0,0), xaxs="i",
+        yaxs="i", xaxt="n", yaxt="n", col = "white")
+    
+    plot(c(0, x_len), c(0, y_len), type="n", xlab="", ylab="",
+         asp = 1, ylim = rev(c(0, y_len)))
+    
+    expect_silent(.plotLegend(object = pancreasSCE, 
+                              image = NULL, 
+                              exprs_values = "counts", 
+                              outline_by = NULL, 
+                              colour_by = colour_by,
+                              m_width = x_len, 
+                              m_height = y_len, 
+                              cur_col = cur_col, 
+                              plottingParam))
+    
+    x_len <- 2000
+    y_len <- 2000
+    
+    par(bty="n", mai=c(0,0,0,0), xaxs="i",
+        yaxs="i", xaxt="n", yaxt="n", col = "white")
+    
+    plot(c(0, x_len), c(0, y_len), type="n", xlab="", ylab="",
+         asp = 1, ylim = rev(c(0, y_len)))
+    
+    expect_silent(.plotLegend(object = pancreasSCE, 
+                              image = NULL, 
+                              exprs_values = "counts", 
+                              outline_by = NULL, 
+                              colour_by = colour_by,
+                              m_width = x_len, 
+                              m_height = y_len, 
+                              cur_col = cur_col, 
+                              plottingParam))
+    
+    plottingParam <- .plottingParam(dotArgs = list(), image = pancreasImages)
+    colour_by = "CellType"
+    outline_by = "CellType"
+    cur_col = list(colour_by = list(CellType = c(celltype_A = "red",
+                                                 celltype_B = "blue",
+                                                 celltype_C = "green")),
+                   outline_by = list(CellType = c(celltype_A = "brown",
+                                                 celltype_B = "magenta",
+                                                 celltype_C = "cyan")))
+    
+    x_len <- 100
+    y_len <- 100
+    
+    par(bty="n", mai=c(0,0,0,0), xaxs="i",
+        yaxs="i", xaxt="n", yaxt="n", col = "white")
+    
+    plot(c(0, x_len), c(0, y_len), type="n", xlab="", ylab="",
+         asp = 1, ylim = rev(c(0, y_len)))
+    
+    expect_silent(.plotLegend(object = pancreasSCE, 
+                              image = NULL, 
+                              exprs_values = "counts", 
+                              outline_by = outline_by, 
+                              colour_by = colour_by,
+                              m_width = x_len, 
+                              m_height = y_len, 
+                              cur_col = cur_col, 
+                              plottingParam))
+    
+    x_len <- 1000
+    y_len <- 1000
+    
+    par(bty="n", mai=c(0,0,0,0), xaxs="i",
+        yaxs="i", xaxt="n", yaxt="n", col = "white")
+    
+    plot(c(0, x_len), c(0, y_len), type="n", xlab="", ylab="",
+         asp = 1, ylim = rev(c(0, y_len)))
+    
+    expect_silent(.plotLegend(object = pancreasSCE, 
+                              image = NULL, 
+                              exprs_values = "counts", 
+                              outline_by = outline_by, 
+                              colour_by = colour_by,
+                              m_width = x_len, 
+                              m_height = y_len, 
+                              cur_col = cur_col, 
+                              plottingParam))
+    
+    x_len <- 2000
+    y_len <- 2000
+    
+    par(bty="n", mai=c(0,0,0,0), xaxs="i",
+        yaxs="i", xaxt="n", yaxt="n", col = "white")
+    
+    plot(c(0, x_len), c(0, y_len), type="n", xlab="", ylab="",
+         asp = 1, ylim = rev(c(0, y_len)))
+    
+    expect_silent(.plotLegend(object = pancreasSCE, 
+                              image = NULL, 
+                              exprs_values = "counts", 
+                              outline_by = outline_by, 
+                              colour_by = colour_by,
+                              m_width = x_len, 
+                              m_height = y_len, 
+                              cur_col = cur_col, 
+                              plottingParam))
+    
+    
 })
 
 test_that("scale bar can be plotted.", {
-  # .plotScaleBar
+    plottingParam <- .plottingParam(dotArgs = list(), image = pancreasImages)
+    plottingParam$scale_bar$colour <- "black"
+    
+    x_len <- 100
+    y_len <- 100
+    
+    par(bty="n", mai=c(0,0,0,0), xaxs="i",
+        yaxs="i", xaxt="n", yaxt="n", col = "black")
+    
+    plot(c(0, x_len), c(0, y_len), type="n", xlab="", ylab="",
+         asp = 1, ylim = rev(c(0, y_len)))
+    
+    expect_silent(.plotScaleBar(scale_bar = plottingParam$scale_bar, 
+                  xl = 0, xr = x_len, yt = 0, yb = y_len,
+                  m_w = x_len, m_h = y_len))
+    
+    x_len <- 1000
+    y_len <- 1000
+    
+    par(bty="n", mai=c(0,0,0,0), xaxs="i",
+        yaxs="i", xaxt="n", yaxt="n", col = "black")
+    
+    plot(c(0, x_len), c(0, y_len), type="n", xlab="", ylab="",
+         asp = 1, ylim = rev(c(0, y_len)))
+    
+    expect_silent(.plotScaleBar(scale_bar = plottingParam$scale_bar, 
+                                xl = 0, xr = x_len, yt = 0, yb = y_len,
+                                m_w = x_len, m_h = y_len))
+    
+    x_len <- 50
+    y_len <- 50
+    
+    par(bty="n", mai=c(0,0,0,0), xaxs="i",
+        yaxs="i", xaxt="n", yaxt="n", col = "black")
+    
+    plot(c(0, x_len), c(0, y_len), type="n", xlab="", ylab="",
+         asp = 1, ylim = rev(c(0, y_len)))
+    
+    expect_silent(.plotScaleBar(scale_bar = plottingParam$scale_bar, 
+                                xl = 0, xr = x_len, yt = 0, yb = y_len,
+                                m_w = x_len, m_h = y_len))
+
 })
 
 test_that("title can be set", {
-    # .plotScaleBar
+    data("pancreasImages")
+    data("pancreasSCE")
+    
+    # Generate images to plot
+    out_img <- .colourImageByFeature(image = pancreasImages, colour_by = "SMA", 
+                                     bcg = list(SMA = c(0,1,1)), cur_colour = list(SMA = c("black", "red")),
+                                     plottingParam = list(scale = TRUE))
+    plottingParam <- .plottingParam(dotArgs = list(), image = pancreasImages)
+    plottingParam$image_title$colour <- "black"
+    plottingParam$image_title$text <- "test"
+    
+    x_len <- 100
+    y_len <- 100
+    
+    par(bty="n", mai=c(0,0,0,0), xaxs="i",
+        yaxs="i", xaxt="n", yaxt="n", col = "black")
+    
+    plot(c(0, x_len), c(0, y_len), type="n", xlab="", ylab="",
+         asp = 1, ylim = rev(c(0, y_len)))
+    
+    expect_silent(.plotImageTitle(out_img = NULL, 
+                                  mask = NULL, 
+                                  image = NULL, 
+                                  img_id = NULL, 
+                                  ind = 1, 
+                                  legend_ind = 0,
+                                  image_title = plottingParam$image_title, 
+                                  dim_x = x_len,
+                                  xl = 0, xr = x_len, yt = 0, yb = y_len,
+                                  m_h = y_len))
+    
+    x_len <- 1000
+    y_len <- 1000
+    
+    par(bty="n", mai=c(0,0,0,0), xaxs="i",
+        yaxs="i", xaxt="n", yaxt="n", col = "black")
+    
+    plot(c(0, x_len), c(0, y_len), type="n", xlab="", ylab="",
+         asp = 1, ylim = rev(c(0, y_len)))
+    
+    expect_silent(.plotImageTitle(out_img = NULL, 
+                                  mask = NULL, 
+                                  image = NULL, 
+                                  img_id = NULL, 
+                                  ind = 1, 
+                                  legend_ind = 0,
+                                  image_title = plottingParam$image_title, 
+                                  dim_x = x_len,
+                                  xl = 0, xr = x_len, yt = 0, yb = y_len,
+                                  m_h = y_len))
+    
+    x_len <- 12
+    y_len <- 12
+    
+    par(bty="n", mai=c(0,0,0,0), xaxs="i",
+        yaxs="i", xaxt="n", yaxt="n", col = "black")
+    
+    plot(c(0, x_len), c(0, y_len), type="n", xlab="", ylab="",
+         asp = 1, ylim = rev(c(0, y_len)))
+    
+    expect_silent(.plotImageTitle(out_img = NULL, 
+                                  mask = NULL, 
+                                  image = NULL, 
+                                  img_id = NULL, 
+                                  ind = 1, 
+                                  legend_ind = 0,
+                                  image_title = plottingParam$image_title, 
+                                  dim_x = x_len,
+                                  xl = 0, xr = x_len, yt = 0, yb = y_len,
+                                  m_h = y_len))
 })
 
 
