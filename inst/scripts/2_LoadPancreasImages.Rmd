@@ -25,18 +25,12 @@ library(cytomapper)
 
 Here, a subset of 100 images from the pancreas IMC dataset is downloaded.
 
-! The updated Mendeley dataset is not published yet, can be temporarily accessed from https://data.mendeley.com/datasets/cydmwsfztj/draft?a=e02ab17c-c014-4338-b379-101424e1c64d 
-
 ```{r load-images}
 # Download the zipped folder image and unzip it
-# url.images <- ("...")
-# download.file(url.images, destfile = "images.zip")
-# unzip("images.zip")
-# remove.file("images.zip")
-
-# (Temporary code to unzip the images, will be removed when the Mendeley dataset is public)
-fn.images <- ("/Volumes/bbvolume/server_homes/nicolasd/Data/CM2017/mendeley/ImageSubset.zip")
-unzip(fn.images)
+url.images <- ("https://data.mendeley.com/datasets/cydmwsfztj/2/files/b37054d2-d5d0-4c48-a001-81ff77136f41/ImageSubset.zip?dl=1")
+download.file(url.images, destfile = "ImageSubset.zip")
+unzip("ImageSubset.zip")
+file.remove("ImageSubset.zip")
 
 # Load the images as a CytoImageList object
 images <- loadImages("./", pattern="_full_clean.tiff")
@@ -47,14 +41,10 @@ images
 
 ```{r load-masks}
 # Download the zipped folder image and unzip it
-# url.masks <- ("...")
-# download.file(url.masks, destfile = "masks.zip")
-# unzip("masks.zip")
-# remove.file("masks.zip")
-
-# (Temporary code to unzip the masks, will be removed when the Mendeley dataset is public)
-fn.masks <- ("/Volumes/bbvolume/server_homes/nicolasd/Data/CM2017/mendeley/Masks.zip")
-unzip(fn.masks)
+url.masks <- ("https://data.mendeley.com/datasets/cydmwsfztj/2/files/13679a61-e9b4-4820-9f09-a5bbc697647c/Masks.zip?dl=1")
+download.file(url.masks, destfile = "Masks.zip")
+unzip("Masks.zip")
+file.remove("Masks.zip")
 
 # Load the images as a CytoImageList object
 masks <- loadImages("./", pattern="_full_mask.tiff")
@@ -80,19 +70,14 @@ The channel-mass file is used to match panel information and image stack slices.
 
 ```{r load-panel}
 # Import panel
-# url.panel <- ("...")
-# download.file(url.panel, destfile = "panel.csv")
-# panel <- read.csv(panel.csv)
+url.panel <- ("https://data.mendeley.com/datasets/cydmwsfztj/2/files/2f9fecfc-b98f-4937-bc38-ae1b959bd74d/Panel.csv?dl=1")
+download.file(url.panel, destfile = "panel.csv")
+panel <- read.csv("panel.csv")
 
 # Import channel-mass file
-# url.channelmass <- ("...")
-# download.file(url.channelmass, destfile = "ChannelMass.csv")
-# panel <- read.csv(ChannelMass.csv)
-
-# Temporary code
-panel <- read.csv("/Volumes/bbvolume/server_homes/nicolasd/Data/CM2017/mendeley/Panel.csv")
-channel.mass <- read.csv("/Volumes/bbvolume/server_homes/nicolasd/Data/CM2017/mendeley/ChannelMass.csv", 
-                         header = FALSE)
+url.channelmass <- ("https://data.mendeley.com/datasets/cydmwsfztj/2/files/704312eb-377c-42e2-8227-44bb9aca0fb3/ChannelMass.csv?dl=1")
+download.file(url.channelmass, destfile = "ChannelMass.csv")
+channel.mass <- read.csv("ChannelMass.csv", header = FALSE)
 ```
 
 # Scale masks
@@ -139,3 +124,8 @@ saveRDS(images, "pancreas_images.rds")
 saveRDS(masks, "pancreas_masks.rds")
 ```
 
+# Delete unneeded CSV files from the extdata directory
+
+```{r clean-up, message = FALSE}
+file.remove("panel.csv", "ChannelMass.csv")
+```

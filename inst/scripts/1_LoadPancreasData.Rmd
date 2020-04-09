@@ -24,20 +24,18 @@ library(cytomapper)
 
 # Read-in single-cell data
 
-Here, a subset of single-cell data, corresponding to 100 images from the full dataset is loaded
-
-! The updated Mendeley dataset is not published yet, can be temporarily accessed from https://data.mendeley.com/datasets/cydmwsfztj/draft?a=e02ab17c-c014-4338-b379-101424e1c64d 
+Here, a subset of single-cell data, corresponding to 100 images from the full dataset is downloaded.
 
 ```{r download-cell-data}
 # Download the zipped folder image and unzip it
-# url.cells <- ("...")
-# download.file(url.cells, destfile = "CellSubset.zip")
-# unzip("CellSubset.zip")
-# file.remove("CellSubset.zip")
+url.cells <- ("https://data.mendeley.com/datasets/cydmwsfztj/2/files/f1e3b8dc-56be-4172-bbc4-3a6f9de97563/CellSubset.zip?dl=1")
+download.file(url.cells, destfile = "CellSubset.zip")
+unzip("CellSubset.zip")
+file.remove("CellSubset.zip")
 
 # (Temporary code to unzip the data, will be removed when the Mendeley dataset is public)
-fn.cells <- ("/Volumes/bbvolume/server_homes/nicolasd/Data/CM2017/mendeley/CellSubset.zip")
-unzip(fn.cells)
+# fn.cells <- ("/Volumes/bbvolume/server_homes/nicolasd/Data/CM2017/mendeley/CellSubset.zip")
+# unzip(fn.cells)
 
 # Read-in the data
 cells <- read.csv("CellSubset.csv", stringsAsFactors = FALSE)
@@ -50,14 +48,10 @@ cells <- cells[order(cells$ImageNumber, cells$ObjectNumber), ]
 
 ```{r download-image-metadata}
 # Download the zipped folder image and unzip it
-# url.image <- ("...")
-# download.file(url.image, destfile = "Image.zip")
-# unzip("Image.zip")
-# file.remove("Image.zip")
-
-# (Temporary code to unzip the data, will be removed when the Mendeley dataset is public)
-fn.images <- ("/Volumes/bbvolume/server_homes/nicolasd/Data/CM2017/mendeley/Image.zip")
-unzip(fn.images)
+url.image <- ("https://data.mendeley.com/datasets/cydmwsfztj/2/files/0b236273-d21b-4566-84a2-f1c56324a900/Image.zip?dl=1")
+download.file(url.image, destfile = "Image.zip")
+unzip("Image.zip")
+file.remove("Image.zip")
 
 # Read-in the data
 image <- read.csv("All_Image.csv", stringsAsFactors = FALSE)
@@ -67,14 +61,10 @@ image <- read.csv("All_Image.csv", stringsAsFactors = FALSE)
 
 ```{r download-celltypes}
 # Download the zipped folder image and unzip it
-# url.celltypes <- ("...")
-# download.file(url.celltypes, destfile = "CellTypes.zip")
-# unzip("CellTypes.zip")
-# file.remove("CellTypes.zip")
-
-# (Temporary code to unzip the data, will be removed when the Mendeley dataset is public)
-fn.celltypes <- ("/Volumes/bbvolume/server_homes/nicolasd/Data/CM2017/mendeley/CellTypes.zip")
-unzip(fn.celltypes)
+url.celltypes <- ("https://data.mendeley.com/datasets/cydmwsfztj/2/files/59e8da72-5bfe-4289-b95b-28348a6e1222/CellTypes.zip?dl=1")
+download.file(url.celltypes, destfile = "CellTypes.zip")
+unzip("CellTypes.zip")
+file.remove("CellTypes.zip")
 
 # Read-in the data
 celltypes <- read.csv("CellTypes.csv", stringsAsFactors = FALSE)
@@ -84,14 +74,10 @@ celltypes <- read.csv("CellTypes.csv", stringsAsFactors = FALSE)
 
 ```{r download-donor-info}
 # Download the zipped folder image and unzip it
-# url.donors <- ("...")
-# download.file(url.donors, destfile = "Donors.zip")
-# unzip("Donors.zip")
-# file.remove("Donors.zip")
-
-# (Temporary code to unzip the data, will be removed when the Mendeley dataset is public)
-fn.donors <- ("/Volumes/bbvolume/server_homes/nicolasd/Data/CM2017/mendeley/Donors.zip")
-unzip(fn.donors)
+url.donors <- ("https://data.mendeley.com/datasets/cydmwsfztj/2/files/9074990e-1b93-4c79-8c49-1db01a66398b/Donors.zip?dl=1")
+download.file(url.donors, destfile = "Donors.zip")
+unzip("Donors.zip")
+file.remove("Donors.zip")
 
 # Read-in the data
 donors <- read.csv("Donors.csv", stringsAsFactors = FALSE)
@@ -169,19 +155,14 @@ The channel-mass file is used to match panel information and image stack slices.
 
 ```{r load-panel}
 # Import panel
-# url.panel <- ("...")
-# download.file(url.panel, destfile = "panel.csv")
-# panel <- read.csv(panel.csv)
+url.panel <- ("https://data.mendeley.com/datasets/cydmwsfztj/2/files/2f9fecfc-b98f-4937-bc38-ae1b959bd74d/Panel.csv?dl=1")
+download.file(url.panel, destfile = "panel.csv")
+panel <- read.csv("panel.csv")
 
 # Import channel-mass file
-# url.channelmass <- ("...")
-# download.file(url.channelmass, destfile = "ChannelMass.csv")
-# panel <- read.csv(ChannelMass.csv)
-
-# Temporary code
-panel <- read.csv("/Volumes/bbvolume/server_homes/nicolasd/Data/CM2017/mendeley/Panel.csv")
-channel.mass <- read.csv("/Volumes/bbvolume/server_homes/nicolasd/Data/CM2017/mendeley/ChannelMass.csv", 
-                         header = FALSE)
+url.channelmass <- ("https://data.mendeley.com/datasets/cydmwsfztj/2/files/704312eb-377c-42e2-8227-44bb9aca0fb3/ChannelMass.csv?dl=1")
+download.file(url.channelmass, destfile = "ChannelMass.csv")
+channel.mass <- read.csv("ChannelMass.csv", header = FALSE)
 ```
 
 # Select relevant channels and match them with image stack slices
@@ -247,6 +228,6 @@ saveRDS(sce, "pancreas_sce.rds")
 # Delete unneeded CSV files from the extdata directory
 
 ```{r clean-up, message = FALSE}
-file.remove("CellSubset.csv", "All_Image.csv", "CellTypes.csv", "Donors.csv", "Panel.csv", "ChannelMass.csv")
+file.remove("All_Image.csv", "CellSubset.csv", "CellTypes.csv", "Donors.csv", "panel.csv", "ChannelMass.csv")
 ```
 
