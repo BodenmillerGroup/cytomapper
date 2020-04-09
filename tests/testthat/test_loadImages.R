@@ -21,10 +21,8 @@ test_that("loadImages function reads in correct objects.", {
   expect_equal(length(cur_files), 3L)
   expect_silent(cur_files <- loadImages(path, pattern = "[A-Z]01_imc"))
   expect_s4_class(cur_files, "CytoImageList")
-  expect_equal(length(cur_files), 2L)
+  expect_equal(length(cur_files), 1L)
   expect_error(cur_files <- loadImages(path, pattern = "test"))
-
-  # Fix this!
   expect_silent(plotPixels(cur_files))
 
   # Multiple pattern

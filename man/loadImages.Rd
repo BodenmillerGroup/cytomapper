@@ -48,7 +48,7 @@ images.
 
 \examples{
 # Providing a single file
-single.image <- system.file("extdata/A02_mask.tiff", package = "cytomapper")
+single.image <- system.file("extdata/E34_mask.tiff", package = "cytomapper")
 single.image <- loadImages(single.image)
 
 # Providing a path and pattern

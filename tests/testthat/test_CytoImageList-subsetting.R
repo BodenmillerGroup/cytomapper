@@ -96,7 +96,7 @@ test_that("General operations work on CytoImageList object.", {
   mcols(cur_Images2)$ImageNumber <- mcols(cur_Images2)$ImageNb
 
   cur_Images3 <- c(cur_Images1, cur_Images2)
-  expect_true(is.na(mcols(cur_Images3[1,2])))
+  expect_true(all(is.na(mcols(cur_Images3[1:3,3]))))
 
   ### Test channel subsetting
   cur_Images <- pancreasImages

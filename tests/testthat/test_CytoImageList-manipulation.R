@@ -5,11 +5,11 @@ test_that("CytoImageList can be scaled.", {
   expect_silent(cur_images <- scaleImages(pancreasImages, 1))
   expect_identical(imageData(cur_images[[1]]), imageData(pancreasImages[[1]]))
   expect_equal(imageData(cur_images[[1]])[11, 1:2,1],
-               c(3.980039, 0.000000), tolerance = 1e-06)
+               c(1.382069, 3.025825), tolerance = 1e-06)
 
   expect_silent(cur_images <- scaleImages(cur_images, 2))
   expect_equal(imageData(cur_images[[1]])[11, 1:2,1],
-               c(7.960078, 0.000000), tolerance = 1e-06)
+               c(2.764137, 6.051649), tolerance = 1e-06)
 
   expect_silent(plotPixels(cur_images))
 
@@ -17,7 +17,7 @@ test_that("CytoImageList can be scaled.", {
              pattern = "mask.tiff", full.names = TRUE)
   cur_images <- loadImages(image.list)
   expect_equal(imageData(cur_images[[1]])[11, 1:2],
-                   c(0.0001983673, 0.0001983673))
+                   c(0.01257343, 0.01257343))
 
   expect_error(plotCells(cur_images),
                regexp = "Segmentation masks must only contain integer values.",
@@ -25,7 +25,7 @@ test_that("CytoImageList can be scaled.", {
 
   expect_silent(cur_images <- scaleImages(cur_images, (2^16)-1))
   expect_equal(imageData(cur_images[[1]])[11, 1:2],
-               c(13, 13))
+               c(824, 824))
   expect_silent(plotCells(cur_images))
 
   # Error

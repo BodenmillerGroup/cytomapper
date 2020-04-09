@@ -604,15 +604,15 @@ test_that("colours can be selected.", {
     cur_out <- .selectColours(object = pancreasSCE, colour_by = "CellType",
                    colour = NULL, call.arg = "colour_by")
 
-    expect_equal(cur_out, list(CellType = c(celltype_B = "#A6CEE3",
-                                            celltype_C = "#1F78B4",
+    expect_equal(cur_out, list(CellType = c(celltype_C = "#A6CEE3",
+                                            celltype_B = "#1F78B4",
                                             celltype_A = "#B2DF8A")))
 
     cur_out <- .selectColours(object = pancreasSCE, colour_by = "CellType",
                               colour = NULL, call.arg = "outline_by")
 
-    expect_equal(cur_out, list(CellType = c(celltype_B = "brown3",
-                                            celltype_C = "#BC80BD",
+    expect_equal(cur_out, list(CellType = c(celltype_C = "brown3",
+                                            celltype_B = "#BC80BD",
                                             celltype_A = "#FDB462")))
 
     # Factor
@@ -620,23 +620,23 @@ test_that("colours can be selected.", {
     cur_out <- .selectColours(object = pancreasSCE, colour_by = "CellType2",
                               colour = NULL, call.arg = "colour_by")
 
-    expect_equal(cur_out, list(CellType2 = c(celltype_B = "#A6CEE3",
-                                            celltype_C = "#1F78B4",
+    expect_equal(cur_out, list(CellType2 = c(celltype_C = "#A6CEE3",
+                                            celltype_B = "#1F78B4",
                                             celltype_A = "#B2DF8A")))
 
     cur_out <- .selectColours(object = pancreasSCE, colour_by = "CellType2",
                               colour = NULL, call.arg = "outline_by")
 
-    expect_equal(cur_out, list(CellType2 = c(celltype_B = "brown3",
-                                             celltype_C = "#BC80BD",
+    expect_equal(cur_out, list(CellType2 = c(celltype_C = "brown3",
+                                             celltype_B = "#BC80BD",
                                              celltype_A = "#FDB462")))
 
     # Logical
     cur_out <- .selectColours(object = pancreasSCE, colour_by = "Pattern",
                               colour = NULL, call.arg = "colour_by")
 
-    expect_equal(cur_out, list(Pattern = c("FALSE" = "#A6CEE3",
-                                             "TRUE" = "#1F78B4")))
+    expect_equal(cur_out, list(Pattern = c("TRUE" = "#A6CEE3",
+                                             "FALSE" = "#1F78B4")))
 
     # Continous
     cur_out <- .selectColours(object = pancreasSCE, colour_by = "Area",

@@ -114,29 +114,30 @@ data("pancreasImages")
 
 # Get images
 getImages(pancreasImages, 1)
-getImages(pancreasImages, "A02_imc")
+getImages(pancreasImages, "E34_imc")
 getImages(pancreasImages, 1:2)
-getImages(pancreasImages, c("A02_imc", "D01_imc"))
-getImages(pancreasImages, grepl("A02_imc", names(pancreasImages)))
+getImages(pancreasImages, c("E34_imc", "G01_imc"))
+getImages(pancreasImages, grepl("E34_imc", names(pancreasImages)))
 
 # Set images
 setImages(pancreasImages, 1) <- pancreasImages[1]
-setImages(pancreasImages, "F02_imc") <- pancreasImages[1]
-setImages(pancreasImages, "F02_imc") <- NULL
+setImages(pancreasImages, "J02_imc") <- pancreasImages[1]
+setImages(pancreasImages, "J02_imc") <- NULL
 
 # Get channels
 getChannels(pancreasImages, 1)
-getChannels(pancreasImages, "SMA")
-getChannels(pancreasImages, c("SMA", "INS"))
+getChannels(pancreasImages, "CD99")
+getChannels(pancreasImages, c("CD99", "PIN"))
 
 # Set channels
 channel1 <- getChannels(pancreasImages, 1)
 setChannels(pancreasImages, 1) <- channel1
-channelINS <- getChannels(pancreasImages, "INS")
-setChannels(pancreasImages, "CD38") <- channelINS
-setChannels(pancreasImages, "CD38") <- NULL
+channelPIN <- getChannels(pancreasImages, "PIN")
+setChannels(pancreasImages, "CD8a") <- channelPIN
+setChannels(pancreasImages, "CD8a") <- NULL
 
 # Merge images
+data("pancreasImages")
 c(pancreasImages[c(1,3)], pancreasImages[2])
 
 # Merge channels

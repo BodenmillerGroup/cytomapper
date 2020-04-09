@@ -123,7 +123,7 @@ to the metadata vector.
 \section{Subsetting the \code{CytoImageList} objects}{
 
 The \code{CytoImageList} object(s) can be subsetted before calling the
-\code{plotPixels} function. In that case, only the selected images are 
+\code{plotPixels} function. In that case, only the selected images are
 displayed.
 }
 
@@ -152,25 +152,25 @@ data(pancreasSCE)
 plotPixels(pancreasImages)
 
 # Colour the channels
-plotPixels(pancreasImages, colour_by = c("SMA", "CD44"))
+plotPixels(pancreasImages, colour_by = c("CD99", "CDH"))
 
 # Outline the cells based on metadata
 plotPixels(pancreasImages, object = pancreasSCE, mask = pancreasMasks,
             img_id = "ImageNb", cell_id = "CellNb",
-            colour_by = c("SMA", "CD44"), outline_by = "CellType")
+            colour_by = c("CD99", "CDH"), outline_by = "CellType")
 
 # Enhance individual channels
-plotPixels(pancreasImages, colour_by = c("SMA", "CD44"),
-            bcg = list(SMA = c(0, 2, 1)))
+plotPixels(pancreasImages, colour_by = c("CD99", "CDH"),
+            bcg = list(CD99 = c(0, 2, 1)))
 
 # Subset the images
 cur_images <- getImages(pancreasImages, 1:2)
-plotPixels(cur_images, colour_by = c("SMA", "CD44"))
+plotPixels(cur_images, colour_by = c("CD99", "CDH"))
 
 # Set colour
-plotPixels(pancreasImages, colour_by = c("SMA", "CD44"),
-            colour = list(SMA = c("black", "green"),
-                            CD44 = c("black", "blue")))
+plotPixels(pancreasImages, colour_by = c("CD99", "CDH"),
+            colour = list(CD99 = c("black", "green"),
+                            CDH = c("black", "blue")))
 
 }
 \seealso{

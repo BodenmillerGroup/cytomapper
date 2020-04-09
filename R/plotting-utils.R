@@ -64,28 +64,28 @@
     if (plottingParam$scale) {
         if (length(colour_by) == 1L) {
             cur_range <- quantile(assay(object, exprs_values)[colour_by,],
-                                  probs = c(0,1))
+                                    probs = c(0,1))
             cur_range <- matrix(cur_range, ncol = 1, 
                                 dimnames = list(c("1", "2"), colour_by))
         } else {
             cur_range <- apply(assay(object, exprs_values)[colour_by,], 1, 
-                               quantile, probs = c(0,1))
+                                quantile, probs = c(0,1))
         }
     } else {
         cur_range <- quantile(assay(object, exprs_values)[colour_by,],
-                              probs = c(0,1))
+                                probs = c(0,1))
     }
     
     cur_col_df <- vapply(colour_by, function(x){
         col_ind <- colorRampPalette(cur_colour[[x]])(101)
         if (plottingParam$scale) {
             cur_scaling <- .minMaxScaling(assay(object, exprs_values)[x,],
-                                          min_x = cur_range[1,x],
-                                          max_x = cur_range[2,x])
+                                            min_x = cur_range[1,x],
+                                            max_x = cur_range[2,x])
         } else {
             cur_scaling <- .minMaxScaling(assay(object, exprs_values)[x,],
-                                          min_x = as.numeric(cur_range[1]),
-                                          max_x = as.numeric(cur_range[2]))
+                                            min_x = as.numeric(cur_range[1]),
+                                            max_x = as.numeric(cur_range[2]))
         }
         return(col_ind[round(100*cur_scaling) + 1])
     }, FUN.VALUE = character(ncol(object)))
@@ -114,8 +114,8 @@
                         missing_colour, background_colour, plottingParam){
     
     object <- .createColourVector(object, colour_by, 
-                                  exprs_values, cur_colour,
-                                  plottingParam)
+                                    exprs_values, cur_colour,
+                                    plottingParam)
 
     for(i in seq_along(mask)){
         cur_mask <- mask[[i]]
@@ -228,7 +228,7 @@
     
     if (cur_max > 1) {
         out.list <- endoapply(out.list, normalize, separate = FALSE, 
-                              ft = c(0,1), inputRange = c(cur_min, cur_max))
+                                ft = c(0,1), inputRange = c(cur_min, cur_max))
     }
     
     return(out.list)
@@ -932,10 +932,10 @@
                         text_params))
     } else if(cur_position == "topleft"){
         rect(xleft = xl + cur_margin.x,
-             xright = xl + cur_length + cur_margin.x,
-             ybottom = yt + cur_margin.y + cur_lwidth,
-             ytop = yt + cur_margin.y,
-             col = cur_col, border = NA)
+                xright = xl + cur_length + cur_margin.x,
+                ybottom = yt + cur_margin.y + cur_lwidth,
+                ytop = yt + cur_margin.y,
+                col = cur_col, border = NA)
         do.call(text, append(list(x = xl + cur_length/2 + cur_margin.x,
                         y = yt + cur_margin.y - label_height/2),
                         text_params))

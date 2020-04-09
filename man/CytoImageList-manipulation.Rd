@@ -37,8 +37,8 @@ to the minimum/maximum value per image or across all images (default
 \code{separateImages = FALSE}). The latter allows the visual comparison of
 intensity values across images.
 
-To clip the images before normalization, the \code{inputRange} can be set. 
-Explain in more detail... 
+To clip the images before normalization, the \code{inputRange} can be set.
+Explain in more detail...
 
 \code{normalize(object, separateChannels = TRUE, separateImages = FALSE,
 ft = c(0, 1), inputRange = NULL)}:
@@ -71,15 +71,15 @@ plotCells(x)
 
 # Default normalization
 x <- normalize(pancreasImages)
-plotPixels(x, colour_by = c("H3", "SMA"))
+plotPixels(x, colour_by = c("H3", "CD99"))
 
 # Setting the clipping range
 x <- normalize(x, inputRange = c(0, 0.9))
-plotPixels(x, colour_by = c("H3", "SMA"))
+plotPixels(x, colour_by = c("H3", "CD99"))
 
 # Normalizing per image
 x <- normalize(pancreasImages, separateImages = TRUE)
-plotPixels(x, colour_by = c("H3", "SMA"))
+plotPixels(x, colour_by = c("H3", "CD99"))
 
 }
 \seealso{

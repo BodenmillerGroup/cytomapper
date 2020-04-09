@@ -1,4 +1,5 @@
 # Example data
+
 This folder describes the files contained in `inst/extdata`, how these files
 were obtained and how to generate them by running the scripts contained in
 `insts/scripts`.
@@ -10,12 +11,13 @@ masks containing the segmented cells, cell-level expression, metadata
 information as well as a number of image-level meta information.
 
 The dataset used here is associated with the publication [A Map of Human Type 1 Diabetes Progression by Imaging Mass Cytometry](https://doi.org/10.1016/j.cmet.2018.11.014)
-and is available from Mendeley Data: http://dx.doi.org/10.17632/cydmwsfztj.2.
+and is available from Mendeley Data: [http://dx.doi.org/10.17632/cydmwsfztj.2](http://dx.doi.org/10.17632/cydmwsfztj.2).
 
 The scripts contained in `insts/scripts` can be run to download the data and to
-generate the toy dataset used to illustrate the `cytomapper`package.
+generate the toy dataset used to illustrate the `cytomapper` package.
 
 ## Content of the inst/extdata folder:
+
 This folder contains the tiff files from which the toy dataset in `data` was
 generated. There are three images stacks (suffix `_imc.tiff`), each containing
 5 channels for a size of 100 x 100 pixels and three associated cell masks
@@ -24,11 +26,12 @@ The image names (`E34`, `G01`, `J02`) are used to match the image stacks with
 the associated mask.
 
 ## Downloading the dataset
+
 The dataset can be downloaded and saved using the `1_LoadPancreasData.Rmd` and
 the `2_LoadPancreasImages.Rmd` scripts.
 
 The `1_LoadPancreasData.Rmd` script generates a `SingleCellExperiment` object:  
-- `pancreas_sce.rds`: contains the single cell data.
+- `pancreas_sce.rds`:  contains the single cell data.
 
 The `2_LoadPancreasImages.Rmd` generates two `CytoImageList` objects:  
 - `pancreas_images.rds`: contains the multiplexed images.
@@ -41,6 +44,7 @@ publication data set, which contains 845 images. The full dataset is also
 available from Mendeley Data.
 
 ## Generating the toy dataset
+
 For space reasons, the 100 images dataset needs to be subsetted in order to
 generate the small toy dataset used to illustrate the `cytomapper` package.
 

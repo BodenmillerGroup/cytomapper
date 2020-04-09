@@ -115,6 +115,7 @@
 #' setChannels(pancreasImages, "CD8a") <- NULL
 #'
 #' # Merge images
+#' data("pancreasImages")
 #' c(pancreasImages[c(1,3)], pancreasImages[2])
 #'
 #' # Merge channels

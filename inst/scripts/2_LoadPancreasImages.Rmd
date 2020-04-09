@@ -11,7 +11,8 @@ knitr::opts_knit$set(root.dir = file.path("..", "extdata"))
 ```
 
 
-# Script to download images and masks from the pancreas IMC dataset and format them as ImageList objects
+# Script to download images and masks from the pancreas IMC dataset and format them as CytoImageList objects
+
 - Publication: [Damond et al. A Map of Human Type 1 Diabetes Progression by Imaging Mass Cytometry. Cell Metab. 2019 Mar 5;29(3):755-768](https://www.ncbi.nlm.nih.gov/pmc/articles/PMC6821395)
 - Dataset: [accessible from Mendeley Data](http://dx.doi.org/10.17632/cydmwsfztj.2)
 
@@ -20,10 +21,12 @@ library(EBImage)
 library(cytomapper)
 ```
 
-# Download the images and load them as an ImageList object
+# Download the images and load them as a CytoImageList object
+
 Here, a subset of 100 images from the pancreas IMC dataset is downloaded.
 
 ! The updated Mendeley dataset is not published yet, can be temporarily accessed from https://data.mendeley.com/datasets/cydmwsfztj/draft?a=e02ab17c-c014-4338-b379-101424e1c64d 
+
 ```{r load-images}
 # Download the zipped folder image and unzip it
 # url.images <- ("...")
@@ -32,15 +35,16 @@ Here, a subset of 100 images from the pancreas IMC dataset is downloaded.
 # remove.file("images.zip")
 
 # (Temporary code to unzip the images, will be removed when the Mendeley dataset is public)
-fn.images <- ("/home/nicolasd/Data/CM2017/mendeley/ImageSubset.zip")
+fn.images <- ("/Volumes/bbvolume/server_homes/nicolasd/Data/CM2017/mendeley/ImageSubset.zip")
 unzip(fn.images)
 
-# Load the images as an ImageList object
+# Load the images as a CytoImageList object
 images <- loadImages("./", pattern="_full_clean.tiff")
 images
 ```
 
-# Download the cell masks and load them as an ImageList object
+# Download the cell masks and load them as a CytoImageList object
+
 ```{r load-masks}
 # Download the zipped folder image and unzip it
 # url.masks <- ("...")
@@ -49,16 +53,17 @@ images
 # remove.file("masks.zip")
 
 # (Temporary code to unzip the masks, will be removed when the Mendeley dataset is public)
-fn.masks <- ("/home/nicolasd/Data/CM2017/mendeley/Masks.zip")
+fn.masks <- ("/Volumes/bbvolume/server_homes/nicolasd/Data/CM2017/mendeley/Masks.zip")
 unzip(fn.masks)
 
-# Load the images as an ImageList object
+# Load the images as a CytoImageList object
 masks <- loadImages("./", pattern="_full_mask.tiff")
 masks
 ```
 
 # Remove tiff files from the root directory
-```{r clean-up, message=F}
+
+```{r clean-up, message = FALSE}
 # Remove image stacks
 images.del <- list.files("./", pattern="_full_clean.tiff")
 file.remove(images.del)
@@ -69,8 +74,10 @@ file.remove(masks.del)
 ```
 
 # Load panel data
+
 The panel contains antibody-related metadata.
 The channel-mass file is used to match panel information and image stack slices.
+
 ```{r load-panel}
 # Import panel
 # url.panel <- ("...")
@@ -83,42 +90,50 @@ The channel-mass file is used to match panel information and image stack slices.
 # panel <- read.csv(ChannelMass.csv)
 
 # Temporary code
-panel <- read.csv("/home/nicolasd/Data/CM2017/mendeley/Panel.csv")
-channel.mass <- read.csv("/home/nicolasd/Data/CM2017/mendeley/ChannelMass.csv", header=F)
+panel <- read.csv("/Volumes/bbvolume/server_homes/nicolasd/Data/CM2017/mendeley/Panel.csv")
+channel.mass <- read.csv("/Volumes/bbvolume/server_homes/nicolasd/Data/CM2017/mendeley/ChannelMass.csv", 
+                         header = FALSE)
 ```
 
 # Scale masks
+
 The masks are 16-bit images and need to be re-scaled.
 We then convert the mask values to integer.
+
 ```{r scale-masks}
-masks <- endoapply(masks, function(x) x * (2^16-1))
-masks <- endoapply(masks, function(x) Image(as.integer(x), dim=dim(x)))
+masks <- scaleImages(masks, (2 ^ 16) - 1)
 ```
 
 # Add image names for images and masks
-This information is stored in the metadata columns of the ImageList objects
+
+This information is stored in the metadata columns of the CytoImageList objects
 and is used by SingleCellMapper to match single cell data, images and mask
+
 ```{r add-image-names}
 mcols(images)$ImageName <- gsub("_a0_full_clean", "", names(images))
 mcols(masks)$ImageName <- gsub("_a0_full_mask", "", names(masks))
 ```
 
 # Subset the masks to keep only masks matching an image in `images`
+
 ```{r subset-masks}
 masks <- masks[mcols(masks)$ImageName %in% mcols(images)$ImageName]
+identical(mcols(masks)$ImageName, mcols(images)$ImageName)
 ```
 
 # Add protein short names as channel names
+
 ```{r add-channel-names}
 # Match panel and stack slice information
 panel <- panel[panel$full == 1,]
 panel <- panel[match(channel.mass[,1], panel$MetalTag),]
 
-# Add channel names to the  image stacks ImageList object
+# Add channel names to the  image stacks CytoImageList object
 channelNames(images) <- panel$shortname
 ```
 
-# Save the ImageList objects
+# Save the CytoImageList objects
+
 ```{r save}
 saveRDS(images, "pancreas_images.rds")
 saveRDS(masks, "pancreas_masks.rds")

@@ -239,7 +239,7 @@ cell-specific metadata are stored in the `colData` slot of the corresponding
 `SingleCellExperiment` object: `pancreasSCE`. For more information on the
 metadata, please refer to the `?pancreasSCE` documentation. Of note: the
 cell-type labels contained in the `colData(pancreasSCE)$CellType` slot are
-randomized and do not represent biologically relevant cell-types.
+arbitrary and only partly represent biologically relevant cell-types.
 
 ```{r pancreasSCE}
 pancreasSCE
@@ -641,7 +641,7 @@ expression counts.
 ```{r exprs_values-cells}
 plotCells(pancreasMasks, object = pancreasSCE,
             img_id = "ImageNb", cell_id = "CellNb",
-            # colour_by = c("CD99", "CDH"),
+            colour_by = c("CD8a", "PIN"),
             exprs_values = "exprs")
 ```
 
