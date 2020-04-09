@@ -3,7 +3,7 @@
 
     # Check if input is character
     if(!is.character(x)){
-        stop("Please provide a string input indicating a single file\n",
+        stop("Please provide a string input indicating a single file/n",
             ", a path or a vector of files.")
     }
 
@@ -17,7 +17,7 @@
 
         }
 
-        if(dir.exists(x) && is.null(pattern)){
+        if(dir.exists(x) & is.null(pattern)){
 
             # Check if path only contains images
             exten <- file_ext(list.files(x))
@@ -33,42 +33,44 @@
             message("All files in the provided location will be read in.")
             out <- list.files(x, full.names = TRUE)
 
-        } else if (dir.exists(x) && !is.null(pattern)) {
-            # Check pattern
-            if (!is.character(pattern) && !is.factor(pattern)) {
-                stop("Please provide a single character,\n",
-                        "character vector or factor as pattern input.")
-            }
+        } else if(dir.exists(x) & !is.null(pattern)){
 
-            out <- list.files(x, full.names = TRUE)
+        # Check pattern
+        if(!is.character(pattern) & !is.factor(pattern)){
+            stop("Please provide a single character,\n",
+                    "character vector or factor as pattern input .\n")
+        }
 
-            # Since more than regular expressions can be given to pattern,
-            # we need to perform selection manually
-            if(length(pattern) == 1){
-                out <- out[grepl(pattern, out)]
-            } else {
-                # Build pattern for grep function
-                pattern <- unique(pattern)
+        out <- list.files(x, full.names = TRUE)
 
-                out <- out[grepl(paste(pattern, collapse = "|"), out)]
-            }
+        # Since more than regular expressions can be given to pattern,
+        # we need to perform selection manually
+        if(length(pattern) == 1){
+            out <- out[grepl(pattern, out)]
 
-            # Check if any of the files contain the pattern
-            if(length(out) == 0){
-                stop("The pattern does not match any\n",
+        } else {
+            # Build pattern for grep function
+            pattern <- unique(pattern)
+
+            out <- out[grepl(paste(pattern, collapse = "|"), out)]
+        }
+
+        # Check if any of the files contain the pattern
+        if(length(out) == 0){
+            stop("The pattern does not match any\n",
                     "of the files in the provided directory.")
-            }
+        }
 
-            # Check if all of the files are of the supported format
-            exten <- file_ext(out)
+        # Check if all of the files are of the supported format
+        exten <- file_ext(out)
 
-            if(sum(!(unique(exten) %in% c("jpeg", "png", "tiff",
+        if(sum(!(unique(exten) %in% c("jpeg", "png", "tiff",
                                         "tif", "jpg"))) > 0){
-                stop("The provided path contains file-types other than\n",
-                    "'jpeg', 'tiff', or 'png'.\n",
-                    "Please provide a correct regular expression\n",
-                    "in the 'pattern' argument to select correct images.")
-            }
+            stop("The provided path contains file-types other than\n",
+                "'jpeg', 'tiff', or 'png'.\n",
+                "Please provide a correct regular expression\n",
+                "in the 'pattern' argument to select correct images.")
+        }
 
         } else {
             cur_ext <- file_ext(x)
@@ -83,16 +85,16 @@
         # Check if files exists
         cur_check <- file.exists(x)
         if(sum(!cur_check) > 0){
-            stop("One or multiple files do not exist.\n",
-                "Please correct the input.")
+        stop("One or multiple files do not exist.\n",
+            "Please correct the input.")
         }
 
         # Check if files are os supported format
         exten <- file_ext(x)
         cur_test <- unique(exten) %in% c("jpeg", "png", "tiff", "tif", "jpg")
         if(sum(!cur_test) > 0){
-            stop("The files are of type other than 'jpeg', 'tiff' or 'png'.\n",
-                "Please only provide files of the supported file-type.")
+        stop("The files are of type other than 'jpeg', 'tiff' or 'png'.\n",
+            "Please only provide files of the supported file-type..")
         }
 
         out <- x
@@ -130,10 +132,10 @@
                                     "unnamed CytoImageList object.")
                 }
             }
-        } else if (is.character(i)) {
+        } else {
             if(is.null(names(x))){
                 error <- paste("'i' is of type character. \n",
-                "This setting is only allowed for named CytoImageList objects.")
+                "This setting is only allowed for named CytoImageList objects")
             }
         }
     }
@@ -150,14 +152,14 @@
     # Only CytoImageList objects are supported
     if(!is.null(value) && !is(value, "CytoImageList")){
         stop("Invalid replacement operation: \n",
-            "Only 'CytoImageList' objects allowed.\n",
+            "Only 'CytoImageList' objects allowed.",
             "To alter Image objects, see ?Image.")
     }
 
     # Check if replacement has the same length
     if(!is.null(value) && length(x) != length(value)){
         stop("Invalid replacement operation: \n",
-            "Replacement needs to have same length as 'x'.")
+            "Replacement needs to have same length as 'x'")
     }
 
     # Check if names of x and value match
@@ -169,7 +171,7 @@
     }
 
     # Check if number of channels is same as length(i)
-    if(!is.null(value) && length(i) != numberOfFrames(value[[1]])){
+    if(!is.null(value) && length(i) != dim(value[[1]])[3]){
         stop("Invalid replacement operation: \n",
             "Number of replacement channels is not the same as \n",
             "number of channels to replace.")
@@ -243,9 +245,7 @@
     }
 
     # Check if img_id contain unique entries
-    l_unique <- length(unique(mcols(mask)[,img_id]))
-    l_all <- length(mcols(mask)[,img_id])
-    if(l_unique < l_all){
+    if(length(unique(mcols(mask)[,img_id])) < length((mcols(mask)[,img_id]))){
         stop("Entries to in the 'mcols(mask)[,img_id]' slot are not unique.")
     }
 }
@@ -260,6 +260,12 @@
     # Check if Image_id exists in elementMetadata
     if(!is.null(img_id) && !(img_id %in% colnames(mcols(image)))){
         stop("'img_id' not in 'mcols(image)'.")
+    }
+
+    cur_out <- lapply(image, function(x){all(x == floor(x))})
+    if(all(unlist(cur_out)) && numberOfFrames(image[[1]]) == 1L){
+        warning("All pixel intensities are integers \n",
+                "make sure to not supply segmentation masks for 'images'")
     }
 
     # Check if img_id contain unique entries
@@ -303,13 +309,12 @@
 
     if(!is.null(object)){
         if(is.null(img_id)){
-            stop("'img_id' is missing.")
+        stop("'img_id' is missing.")
         }
         image_images <- mcols(image)[,img_id]
         sce_images <- unique(colData(object)[,img_id])
         if(all(!(sce_images %in% image_images))){
-            stop("Image ids in 'mcols(image)' and",
-                 " 'colData(object)' do not match")
+        stop("Image ids in 'mcols(image)' and 'colData(object)' do not match")
         }
     }
 }
