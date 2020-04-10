@@ -93,7 +93,12 @@ Changes in version 0.99.4 (2020-04-01):
 + Removed channelNames as Image generic
 + removed exported plot method
 
-Changes in version 0.99.4 (2020-04-08):
+Changes in version 0.99.5 (2020-04-10):
 
 + Added script to generate the toy dataset
-+ Modified the doy dataset
++ Modified the toy dataset
++ Added more explanation on datasets to vignette
++ Bug fixes when colouring cells
++ Unit tests on all hidden functions
++ Account for over-saturation when merging colours
+

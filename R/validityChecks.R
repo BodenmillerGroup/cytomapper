@@ -309,7 +309,7 @@
         sce_images <- unique(colData(object)[,img_id])
         if(all(!(sce_images %in% image_images))){
             stop("Image ids in 'mcols(image)' and",
-                 " 'colData(object)' do not match")
+                    " 'colData(object)' do not match")
         }
     }
 }

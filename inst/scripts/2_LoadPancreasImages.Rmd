@@ -53,7 +53,7 @@ masks
 
 # Remove tiff files from the root directory
 
-```{r clean-up, message = FALSE}
+```{r clean-up-2, message = FALSE}
 # Remove image stacks
 images.del <- list.files("./", pattern="_full_clean.tiff")
 file.remove(images.del)
