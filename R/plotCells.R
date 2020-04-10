@@ -149,27 +149,27 @@ plotCells <- function(
 
     # Object checks
     .valid.mask(mask, img_id)
-    if(!is.null(object)){
+    if (!is.null(object)) {
         .valid.sce(object, img_id, cell_id, exprs_values)
         .valid.matchObjects.plotCells(object, mask, img_id)
 
-        if(is.null(img_id) || is.null(cell_id)){
+        if (is.null(img_id) || is.null(cell_id)) {
             stop("Please provide an 'img_id' and 'cell_id' entry.")
         }
     }
 
     # Argument checks
     # Check colour_by argument
-    if (!is.null(colour_by)){
+    if (!is.null(colour_by)) {
         .valid.colour_by(colour_by, object, image = NULL,
                 call.arg = "plotCells")
     }
     # Check outline_by argument
-    if(!is.null(outline_by)){
+    if (!is.null(outline_by)) {
         .valid.outline_by(outline_by, object, mask, image = NULL)
     }
     # Check colour argument
-    if(!is.null(colour)){
+    if (!is.null(colour)) {
         .valid.colour(colour, colour_by, outline_by, object, image = NULL)
     }
 
@@ -181,12 +181,12 @@ plotCells <- function(
 
     # Colour the masks
     # Here, a SimpleList is returned that allows storing colour Images
-    if(!is.null(colour_by)){
+    if (!is.null(colour_by)) {
         # Select the colours
         cur_col$colour_by <- .selectColours(object, colour_by, colour,
                                     call.arg = "colour_by")
 
-        if(all(colour_by %in% colnames(colData(object)))){
+        if (all(colour_by %in% colnames(colData(object)))) {
             # Colouring by metadata
             out_img <- .colourMaskByMeta(object, mask, cell_id, img_id,
                                     colour_by, cur_col$colour_by[[1]],
@@ -212,7 +212,7 @@ plotCells <- function(
     }
 
     # Add outline
-    if(!is.null(outline_by)){
+    if (!is.null(outline_by)) {
         cur_col$outline_by <- .selectColours(object, outline_by, colour,
                                         call.arg = "outline_by")
         out_img <- .outlineImageByMeta(object, mask, out_img, cell_id, img_id,
@@ -226,18 +226,18 @@ plotCells <- function(
 
     return_objects <- NULL
 
-    if(!is.null(cur_plot)){
+    if (!is.null(cur_plot)) {
         return_objects <- as.list(return_objects)
         return_objects$plot <- cur_plot
     }
 
-    if(plottingParam$return_images){
+    if (plottingParam$return_images) {
         return_objects <- as.list(return_objects)
         out_img <- endoapply(out_img, Image)
         return_objects$images <- out_img
     }
 
-    if(!is.null(return_objects)){
+    if (!is.null(return_objects)) {
         return(return_objects)
     }
 }

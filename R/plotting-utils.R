@@ -7,10 +7,11 @@
 .colourMaskByMeta <- function(object, mask, cell_id, img_id,
                                 colour_by, cur_colour, missing_colour,
                                 background_colour){
+    
     for(i in seq_along(mask)){
         cur_mask <- mask[[i]]
         cur_sce <- object[,colData(object)[,img_id] == mcols(mask)[i,img_id]]
-        if(is.null(names(cur_colour))){
+        if (is.null(names(cur_colour))) {
             col_ind <- colorRampPalette(cur_colour)(101)
             cur_scaling <- .minMaxScaling(colData(cur_sce)[,colour_by],
                                     min_x = min(colData(object)[,colour_by]),
@@ -26,19 +27,21 @@
         # Then colour cells that are not in sce
         cur_m <- as.vector(cur_mask != background_colour) &
             !(cur_mask %in% as.character(colData(cur_sce)[,cell_id]))
-        cur_mask <- replace(cur_mask, which(cur_m), missing_colour)
+        if (sum(cur_m) > 0) {
+            cur_mask <- replace(cur_mask, which(cur_m), missing_colour)
+        }
 
         # Next, colour cells that are present in sce object
         cur_m <- match(cur_mask, as.character(colData(cur_sce)[,cell_id]))
         cur_ind <- which(!is.na(cur_m))
-        col_ind <- col_ind[cur_m[!is.na(cur_m)]]
+        col_ind <- col_ind[cur_m[cur_ind]]
 
         cur_mask <- replace(cur_mask, cur_ind, col_ind)
 
-        if(!is.null(names(mask))){
-        ind <- names(mask)[i]
-        } else{
-        ind <- i
+        if (!is.null(names(mask))) {
+            ind <- names(mask)[i]
+        } else {
+            ind <- i
         }
         setImages(mask, ind) <- cur_mask
     }
@@ -47,7 +50,7 @@
 
 }
 
-# Function to mix colours similar to how EBImage is creating an RGB
+# Function to mix colours
 #' @importFrom grDevices col2rgb rgb
 .mixColours <- function(col_vector){
     args <- as.list(col_vector)
@@ -78,6 +81,7 @@
     
     cur_col_df <- vapply(colour_by, function(x){
         col_ind <- colorRampPalette(cur_colour[[x]])(101)
+        
         if (plottingParam$scale) {
             cur_scaling <- .minMaxScaling(assay(object, exprs_values)[x,],
                                             min_x = cur_range[1,x],
@@ -87,6 +91,7 @@
                                             min_x = as.numeric(cur_range[1]),
                                             max_x = as.numeric(cur_range[2]))
         }
+        
         return(col_ind[round(100*cur_scaling) + 1])
     }, FUN.VALUE = character(ncol(object)))
     
@@ -94,10 +99,12 @@
     col_ind <- apply(cur_col_df, 1, .mixColours)
     
     # Rescale to account for additive colour mixing
-    col_ind <- col_ind / (max(col_ind))
+    col_ind <- col_ind / max(col_ind)
     
     # Convert to hex colour
-    col_out <- apply(col_ind, 2, function(x){rgb(x[1], x[2], x[3], maxColorValue = )})
+    col_out <- apply(col_ind, 2, function(x){rgb(red = x[1], green = x[2], 
+                                                    blue = x[3],
+                                                    maxColorValue = 1)})
 
     # Store in internal colData
     int_colData(object)$CYTO_COLOUR <- col_out
@@ -127,26 +134,23 @@
         # Then colour cells that are not in sce
         cur_m <- as.vector(cur_mask != background_colour) &
             !(cur_mask %in% as.character(colData(cur_sce)[,cell_id]))
-        cur_mask <- replace(cur_mask, which(cur_m), missing_colour)
+        if (sum(cur_m) > 0) {
+            cur_mask <- replace(cur_mask, which(cur_m), missing_colour)
+        }
 
         # Next, colour cells that are present in sce object
-        # For this, we will perform a min/max scaling on the provided counts
-        # However, to keep counts comparable across images, we will fix
-        # the scale across all images to the min/max of the whole sce object
-        # Based on this, we will first merge the colours and colour
-        # the mask accordingly
         cur_m <- match(cur_mask, as.character(colData(cur_sce)[,cell_id]))
         cur_ind <- which(!is.na(cur_m))
 
         col_ind <- int_colData(cur_sce)$CYTO_COLOUR
-        col_ind <- col_ind[cur_m[!is.na(cur_m)]]
+        col_ind <- col_ind[cur_m[cur_ind]]
 
         cur_mask <- replace(cur_mask, cur_ind, col_ind)
 
         if(!is.null(names(mask))){
-        ind <- names(mask)[i]
+            ind <- names(mask)[i]
         } else{
-        ind <- i
+            ind <- i
         }
         setImages(mask, ind) <- cur_mask
     }
@@ -159,21 +163,20 @@
 .colourImageByFeature <- function(image, colour_by, bcg,
                                     cur_colour, plottingParam){
 
-    max.values <- as.data.frame(lapply(getChannels(image, colour_by),
-                                        function(x){
+    max.values <- vapply(getChannels(image, colour_by), function(x){
         apply(x, 3, max)
-    }))
+    }, FUN.VALUE = numeric(length(colour_by)))
     max.values <- apply(max.values, 1, max)
 
-    min.values <- as.data.frame(lapply(getChannels(image, colour_by),
-                                        function(x){
+    min.values <- vapply(getChannels(image, colour_by), function(x){
         apply(x, 3, min)
-    }))
+    }, FUN.VALUE = numeric(length(colour_by)))
     min.values <- apply(min.values, 1, min)
-    out.list <- as(image, "SimpleList")
+    
+    image <- as(image, "SimpleList")
 
     for(i in seq_along(image)){
-        cur_image <- getChannels(image, colour_by)[[i]]
+        cur_image <- image[[i]][,,colour_by]
 
         # Colour pixels
         # For this, we will perform a min/max scaling on the pixel values per
@@ -185,16 +188,16 @@
         # This will allow the user to change the brightness (b),
         # contrast (c) and gamma (g)
         cur_frame_list <- lapply(colour_by, function(x){
-            if(x %in% names(bcg)){
+            if (x %in% names(bcg)) {
                 cur_bcg <- bcg[[x]]
             } else {
                 cur_bcg <- c(0, 1, 1)
             }
 
             # Select min and max values
-            if(plottingParam$scale){
-                cur_min <- min.values[x]
-                cur_max <- max.values[x]
+            if (plottingParam$scale) {
+                cur_min <- as.numeric(min.values[x])
+                cur_max <- as.numeric(max.values[x])
             } else {
                 cur_min <- min(min.values)
                 cur_max <- max(max.values)
@@ -203,42 +206,38 @@
             cur_frame <- cur_image[,,x]
             cur_frame <- ((cur_frame + cur_bcg[1]) * cur_bcg[2]) ^ cur_bcg[3]
             cur_frame <- normalize(cur_frame, separate=TRUE,
-                                ft = c(0,1), inputRange = c(cur_min, cur_max))
+                                ft = c(0,1), 
+                                inputRange = c(cur_min, cur_max))
             col_ind <- colorRampPalette(cur_colour[[x]])(101)
             cur_frame <- replace(cur_frame, seq_len(length(cur_frame)),
                             col_ind[round(100*cur_frame) + 1])
-            cur_frame
+            return(Image(cur_frame))
         })
 
-        cur_image <- Reduce("+", lapply(cur_frame_list, Image))
+        cur_image <- Reduce("+", cur_frame_list)
 
-        if(!is.null(names(image))){
-            ind <- names(image)[i]
-        } else{
-            ind <- i
-        }
-        out.list[[ind]] <- cur_image
+        image[[i]] <- cur_image
     }
     
     # Rescale images to account for additive colour merging
-    cur_range <- vapply(X = out.list, FUN = quantile, 
+    cur_range <- vapply(X = image, FUN = quantile, 
                         FUN.VALUE = numeric(2), probs = c(0, 1))
     cur_min <- min(cur_range[1,])
     cur_max <- max(cur_range[2,])
     
     if (cur_max > 1) {
-        out.list <- endoapply(out.list, normalize, separate = FALSE, 
+        image <- endoapply(image, normalize, separate = FALSE, 
                                 ft = c(0,1), inputRange = c(cur_min, cur_max))
     }
     
-    return(out.list)
+    return(image)
 }
 
 # Outline image based on metadata
 #' @importFrom EBImage paintObjects
 #' @importFrom S4Vectors mcols
 .outlineImageByMeta <- function(object, mask, out_img, cell_id, img_id,
-                                outline_by, cur_colour, missing_colour){
+                                outline_by, cur_colour){
 
     for(i in seq_along(mask)){
         cur_mask <- mask[[i]]
