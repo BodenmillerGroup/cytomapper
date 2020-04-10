@@ -535,7 +535,7 @@ test_that("images can be outlined by metadata.", {
     expect_silent(cur_out <- .outlineImageByMeta(object = pancreasSCE, mask = pancreasMasks,
                                                  out_img = out_img, cell_id = "CellNb", img_id = "ImageNb",
                                                  outline_by = "CellType",
-                                                 cur_colour = cur_col, missing_colour = "grey"))
+                                                 cur_colour = cur_col))
 
     # Compare to EBImage
     cur_img <- out_img[[1]]
@@ -586,7 +586,7 @@ test_that("images can be outlined by metadata.", {
     expect_silent(cur_out <- .outlineImageByMeta(object = pancreasSCE, mask = pancreasMasks,
                                                  out_img = out_img, cell_id = "CellNb", img_id = "ImageNb",
                                                  outline_by = "Area",
-                                                 cur_colour = cur_col, missing_colour = "grey"))
+                                                 cur_colour = cur_col))
 
     # Test for completely continous scale
     cur_col <- c("blue", "red")
@@ -594,7 +594,7 @@ test_that("images can be outlined by metadata.", {
     expect_silent(cur_out <- .outlineImageByMeta(object = pancreasSCE, mask = pancreasMasks,
                                                  out_img = out_img, cell_id = "CellNb", img_id = "ImageNb",
                                                  outline_by = "Pos_X",
-                                                 cur_colour = cur_col, missing_colour = "grey"))
+                                                 cur_colour = cur_col))
 })
 
 test_that("colours can be selected.", {

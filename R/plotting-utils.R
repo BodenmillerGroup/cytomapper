@@ -163,20 +163,34 @@
 .colourImageByFeature <- function(image, colour_by, bcg,
                                     cur_colour, plottingParam){
 
-    max.values <- vapply(getChannels(image, colour_by), function(x){
-        apply(x, 3, max)
-    }, FUN.VALUE = numeric(length(colour_by)))
-    max.values <- apply(max.values, 1, max)
-
-    min.values <- vapply(getChannels(image, colour_by), function(x){
-        apply(x, 3, min)
-    }, FUN.VALUE = numeric(length(colour_by)))
-    min.values <- apply(min.values, 1, min)
+    if (length(colour_by) > 1) {
+        max.values <- vapply(getChannels(image, colour_by), function(x){
+            apply(x, 3, max)
+        }, FUN.VALUE = numeric(length(colour_by)))
+        max.values <- apply(max.values, 1, max)
+        
+        min.values <- vapply(getChannels(image, colour_by), function(x){
+            apply(x, 3, min)
+        }, FUN.VALUE = numeric(length(colour_by)))
+        min.values <- apply(min.values, 1, min)
+    } else {
+        max.values <- vapply(getChannels(image, colour_by), function(x){
+            apply(x, 3, max)
+        }, FUN.VALUE = numeric(1))
+        max.values <- max(max.values)
+        names(max.values) <- colour_by
+        
+        min.values <- vapply(getChannels(image, colour_by), function(x){
+            apply(x, 3, min)
+        }, FUN.VALUE = numeric(1))
+        min.values <- min(min.values)
+        names(min.values) <- colour_by
+    }
     
     image <- as(image, "SimpleList")
 
     for(i in seq_along(image)){
-        cur_image <- image[[i]][,,colour_by]
+        cur_image <- image[[i]][,,colour_by, drop = FALSE]
 
         # Colour pixels
         # For this, we will perform a min/max scaling on the pixel values per
@@ -213,23 +227,25 @@
                             col_ind[round(100*cur_frame) + 1])
             return(Image(cur_frame))
         })
-
+        
         cur_image <- Reduce("+", cur_frame_list)
 
         image[[i]] <- cur_image
     }
     
     # Rescale images to account for additive colour merging
-    cur_range <- vapply(X = image, FUN = quantile, 
-                        FUN.VALUE = numeric(2), probs = c(0, 1))
-    cur_min <- min(cur_range[1,])
-    cur_max <- max(cur_range[2,])
-    
-    if (cur_max > 1) {
-        image <- endoapply(image, normalize, separate = FALSE, 
-                                ft = c(0,1), inputRange = c(cur_min, cur_max))
+    if (length(colour_by) > 1) {
+        cur_range <- vapply(X = image, FUN = quantile, 
+                            FUN.VALUE = numeric(2), probs = c(0, 1))
+        cur_min <- min(cur_range[1,])
+        cur_max <- max(cur_range[2,])
+        
+        if (cur_max > 1) {
+            image <- endoapply(image, normalize, separate = FALSE, 
+                               ft = c(0,1), inputRange = c(cur_min, cur_max))
+        }
     }
-    
+
     return(image)
 }
 
@@ -253,14 +269,15 @@
             for(j in seq_along(cur_scaling)){
                 meta_mask <- cur_mask
                 cur_cell_id <- colData(cur_sce)[j,cell_id]
-                meta_mask[!(meta_mask %in% cur_cell_id)] <- 0L
+                meta_mask[meta_mask != cur_cell_id] <- 0L
                 cur_img <- paintObjects(meta_mask, Image(cur_img),
                                 col = col_ind[round(100*cur_scaling[j]) + 1])
             }
         } else {
-            for(j in unique(colData(cur_sce)[,outline_by])){
+            cur_vec <- as.character(colData(cur_sce)[,outline_by])
+            for(j in unique(cur_vec)){
                 meta_mask <- cur_mask
-                ind <- colData(cur_sce)[,outline_by] == j
+                ind <- cur_vec == j
                 cur_cell_id <- colData(cur_sce)[ind, cell_id]
                 meta_mask[!(meta_mask %in% cur_cell_id)] <- 0L
                 cur_img <- paintObjects(meta_mask, Image(cur_img),
