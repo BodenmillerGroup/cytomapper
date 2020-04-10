@@ -22,7 +22,7 @@ Authors@R:
       comment = c(ORCID = "0000-0003-3027-8989")))
 License: GPL (>= 2)
 Depends:
-    R (>= 3.6),
+    R (>= 4.0),
     EBImage,
     SingleCellExperiment,
     methods
