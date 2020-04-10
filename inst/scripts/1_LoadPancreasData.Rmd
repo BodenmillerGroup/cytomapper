@@ -33,10 +33,6 @@ download.file(url.cells, destfile = "CellSubset.zip")
 unzip("CellSubset.zip")
 file.remove("CellSubset.zip")
 
-# (Temporary code to unzip the data, will be removed when the Mendeley dataset is public)
-# fn.cells <- ("/Volumes/bbvolume/server_homes/nicolasd/Data/CM2017/mendeley/CellSubset.zip")
-# unzip(fn.cells)
-
 # Read-in the data
 cells <- read.csv("CellSubset.csv", stringsAsFactors = FALSE)
 
