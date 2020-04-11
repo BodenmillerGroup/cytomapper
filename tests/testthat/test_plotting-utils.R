@@ -970,6 +970,25 @@ test_that("legend can be plotted.", {
                               m_height = y_len,
                               cur_col = cur_col,
                               plottingParam))
+    
+    x_len <- 20
+    y_len <- 20
+    
+    par(bty="n", mai=c(0,0,0,0), xaxs="i",
+        yaxs="i", xaxt="n", yaxt="n", col = "white")
+    
+    plot(c(0, x_len), c(0, y_len), type="n", xlab="", ylab="",
+         asp = 1, ylim = rev(c(0, y_len)))
+    
+    expect_silent(.plotLegend(object = pancreasSCE,
+                              image = pancreasImages,
+                              exprs_values = "counts",
+                              outline_by = NULL,
+                              colour_by = colour_by,
+                              m_width = x_len,
+                              m_height = y_len,
+                              cur_col = cur_col,
+                              plottingParam))
 
     plottingParam <- .plottingParam(dotArgs = list(), image = pancreasImages)
     colour_by = "CellType"

@@ -242,7 +242,7 @@
         
         if (cur_max > 1) {
             image <- endoapply(image, normalize, separate = FALSE, 
-                               ft = c(0,1), inputRange = c(cur_min, cur_max))
+                                ft = c(0,1), inputRange = c(cur_min, cur_max))
         }
     }
 
@@ -260,7 +260,7 @@
         cur_img <- out_img[[i]]
         cur_sce <- object[,colData(object)[,img_id] == mcols(mask)[i,img_id]]
 
-        if(is.null(names(cur_colour))){
+        if (is.null(names(cur_colour))) {
             col_ind <- colorRampPalette(cur_colour)(101)
             cur_scaling <- .minMaxScaling(colData(cur_sce)[,outline_by],
                                     min_x = min(colData(object)[,outline_by]),
@@ -297,23 +297,22 @@
 #' @importFrom viridis viridis inferno
 .selectColours <- function(object, colour_by, colour,
                         call.arg = c("colour_by", "outline_by")){
+    
     call.arg <- match.arg(call.arg)
 
-    # We seperate this function between colouring based on metadata
-    # or the marker expression (rownames)
-    if(!is.null(object) && all(colour_by %in% colnames(colData(object)))){
-        # If colour is not specified, we select a number of default colours
+    if (!is.null(object) && all(colour_by %in% colnames(colData(object)))) {
+
         cur_entries <- unique(colData(object)[,colour_by])
-        if(is.null(colour[[colour_by]])){
-            if(length(cur_entries) > 23){
-                if(is.numeric(cur_entries)){
-                    if(call.arg == "colour_by"){
+        if (is.null(colour[[colour_by]])) {
+            if (length(cur_entries) > 23) {
+                if (is.numeric(cur_entries)) {
+                    if (call.arg == "colour_by") {
                         cur_col <- viridis(100)
                     } else {
                         cur_col <- inferno(100)
                     }
                 } else {
-                    if(call.arg == "colour_by"){
+                    if (call.arg == "colour_by") {
                         cur_col <- viridis(length(cur_entries))
                     } else {
                         cur_col <- inferno(length(cur_entries))
@@ -321,7 +320,7 @@
                     names(cur_col) <- as.character(cur_entries)
                 }
             } else {
-                if(call.arg == "colour_by"){
+                if (call.arg == "colour_by") {
                     cur_col <- c(brewer.pal(12, "Paired"),
                         brewer.pal(8, "Pastel2")[-c(3,5,8)],
                         brewer.pal(12, "Set3")[-c(2,3,8,9,11,12)])
@@ -340,8 +339,8 @@
             col_out <- colour[colour_by]
         }
     } else {
-        if(!all(colour_by %in% names(colour))){
-            if(length(colour_by) > 1){
+        if (!all(colour_by %in% names(colour))) {
+            if (length(colour_by) > 1) {
                 col_list <- list(colorRampPalette(c("black", "red"))(100),
                             colorRampPalette(c("black", "green"))(100),
                             colorRampPalette(c("black", "blue"))(100),
@@ -365,7 +364,7 @@
 
 # Min/max scaling of expression counts
 .minMaxScaling <- function(x, min_x, max_x){
-    return((x - min_x)/(max_x - min_x))
+    return( (x - min_x) / (max_x - min_x) )
 }
 
 # Custom function to display images
@@ -380,7 +379,8 @@
 
     # We will take the largest image and
     # build the grid based on its size
-    cur_dims <- data.frame(lapply(out_img, dim))
+    cur_dims <- vapply(out_img, dim, 
+                        FUN.VALUE = numeric(length(dim(out_img[[1]]))))
     m_width <- max(cur_dims[1L,])
     m_height <- max(cur_dims[2L,])
 
@@ -388,7 +388,7 @@
     cur_dims_y <- c(m_height, as.numeric(cur_dims[2L,]))
 
     # Add empty image to list for legend
-    if(!is.null(plottingParam$legend)){
+    if (!is.null(plottingParam$legend)) {
         out_img <- c(SimpleList(Image("#FFFFFF",
                                 dim = c(m_height, m_width))),
                     out_img)
@@ -400,10 +400,7 @@
     # Number of images
     # The first space is used for the figure legend
     ni <- length(out_img)
-
-    # Size of images
-    si <- lapply(out_img, function(x){dim(x)[c(1,2)]})
-
+    
     # Ncols and nrow
     nc <- ceiling(sqrt(ni))
     nr <- ceiling(ni/nc)
@@ -416,7 +413,7 @@
     y_len <- c(0, (nr * m_height) + (nr - 1) * margin)
 
     # Initialize list for storing plots
-    if(plottingParam$return_plot && plottingParam$display == "single"){
+    if (plottingParam$return_plot && plottingParam$display == "single") {
         cur_out <- list()
     }
 
@@ -424,21 +421,27 @@
                     yaxs="i", xaxt="n", yaxt="n", col = "white")
     on.exit(par(cur_par))
 
-    if(!is.null(plottingParam$save_plot) && plottingParam$display == "all"){
+    if (!is.null(plottingParam$save_plot) && plottingParam$display == "all") {
         image_location <- plottingParam$save_plot$filename
         image_scale <- plottingParam$save_plot$scale
         cur_ext <- file_ext(image_location)
-        if(cur_ext == "png"){
-            png(image_location, width = image_scale * nc * m_width,
-                height = image_scale * nr * m_height, units = "px",
+        if (cur_ext == "png") {
+            png(filename = image_location, 
+                width = image_scale * nc * m_width,
+                height = image_scale * nr * m_height, 
+                units = "px",
                 pointsize = 12 * image_scale)
-        } else if(cur_ext == "jpeg"){
-            jpeg(image_location, width = image_scale * nc * m_width,
-                height = image_scale * nr * m_height, units = "px",
+        } else if (cur_ext == "jpeg") {
+            jpeg(filename = image_location, 
+                width = image_scale * nc * m_width,
+                height = image_scale * nr * m_height, 
+                units = "px",
                 pointsize = 12 * image_scale)
-        } else if(cur_ext == "tiff"){
-            tiff(image_location, width = image_scale * nc * m_width,
-                height = image_scale * nr * m_height, units = "px",
+        } else if (cur_ext == "tiff") {
+            tiff(filename = image_location, 
+                width = image_scale * nc * m_width,
+                height = image_scale * nr * m_height, 
+                units = "px",
                 pointsize = 12 * image_scale)
         }
     } else {
@@ -456,25 +459,29 @@
     # Plot the images
     for(i in seq_len(nr)){
         for(j in seq_len(nc)){
-            ind <- (i-1)*nc + j
+            ind <- ((i - 1) * nc) + j
 
-            if(ind > ni){break}
+            if (ind > ni) {break}
 
             dim_x <- cur_dims_x[ind]
             dim_y <- cur_dims_y[ind]
-            xleft <- (j-1)*m_width + (m_width - dim_x)/2 + (j-1) * margin
-            ybottom <- i*m_height - (m_height - dim_y)/2 + (i-1) * margin
-            xright <- j*m_width - (m_width - dim_x)/2 + (j-1) * margin
-            ytop <- (i-1)*m_height + (m_height - dim_y)/2 + (i-1) * margin
+            
+            xleft <- (j - 1) * m_width + 
+                (m_width - dim_x) / 2 + (j - 1) * margin
+            ybottom <- i * m_height - 
+                (m_height - dim_y) / 2 + (i - 1) * margin
+            xright <- j * m_width - 
+                (m_width - dim_x) / 2 + (j - 1) * margin
+            ytop <- (i - 1) * m_height + 
+                (m_height - dim_y) / 2 + (i - 1) * margin
 
             # If Images should be saved
-            if(!is.null(plottingParam$save_plot) &&
-                plottingParam$display == "single"){
+            if (!is.null(plottingParam$save_plot) &&
+                plottingParam$display == "single") {
                 image_location <- plottingParam$save_plot$filename
                 image_scale <- plottingParam$save_plot$scale
                 cur_ext <- file_ext(image_location)
 
-                # File name
                 if (ind == legend_ind) {
                     cur_name <- paste0(file_path_sans_ext(image_location),
                                         "_legend.", cur_ext)
@@ -483,16 +490,19 @@
                                         "_", ind - legend_ind, ".", cur_ext)
                 }
 
-                if(cur_ext == "png"){
-                    png(cur_name, width = image_scale * dim_x,
+                if (cur_ext == "png") {
+                    png(filename = cur_name, 
+                        width = image_scale * dim_x,
                         height = image_scale * dim_y, units = "px",
                         pointsize = 12 * image_scale)
-                } else if(cur_ext == "jpeg"){
-                    jpeg(cur_name, width = image_scale * dim_x,
+                } else if (cur_ext == "jpeg") {
+                    jpeg(filename = cur_name, 
+                        width = image_scale * dim_x,
                         height = image_scale * dim_y, units = "px",
                         pointsize = 12 * image_scale)
-                } else if(cur_ext == "tiff"){
-                    tiff(cur_name, width = image_scale * dim_x,
+                } else if (cur_ext == "tiff") {
+                    tiff(filename = cur_name, 
+                        width = image_scale * dim_x,
                         height = image_scale * dim_y, units = "px",
                         pointsize = 12 * image_scale)
                 }
@@ -501,10 +511,10 @@
                     yaxs="i", xaxt="n", yaxt="n", col = "white")
             }
 
-            if(plottingParam$display == "all"){
+            if (plottingParam$display == "all") {
                 rasterImage(Image(out_img[[ind]]),
-                            xleft, ybottom,
-                            xright, ytop,
+                            xleft = xleft, ybottom = ybottom,
+                            xright = xright, ytop = ytop,
                             interpolate = plottingParam$interpolate)
             } else {
                 plot(c(0, dim_x), c(0, dim_y), type="n", xlab="", ylab="",
@@ -514,83 +524,92 @@
                             xright = dim_x, ytop = 0,
                             interpolate = plottingParam$interpolate)
             }
-
-            if(ind == legend_ind && !is.null(plottingParam$legend)){
-                # Plot legend
-                .plotLegend(object, image, exprs_values, outline_by, colour_by,
-                            m_width, m_height, cur_col, plottingParam)
+            
+            # Plot legend
+            if (ind == legend_ind && !is.null(plottingParam$legend)) {
+                .plotLegend(object = object, image = image, 
+                            exprs_values = exprs_values, 
+                            outline_by = outline_by, colour_by = colour_by, 
+                            m_width = m_width, m_height = m_height, 
+                            cur_col = cur_col, plottingParam = plottingParam)
             }
 
-            if(ind != legend_ind && !is.null(plottingParam$scale_bar)){
-                if(plottingParam$scale_bar$frame == "all"){
-                    if(plottingParam$display == "all"){
+            # Plot scale bar
+            if (ind != legend_ind && !is.null(plottingParam$scale_bar)) {
+                if (plottingParam$scale_bar$frame == "all") {
+                    if (plottingParam$display == "all") {
                         .plotScaleBar(plottingParam$scale_bar,
                                 xl = xleft, xr = xright,
                                 yt = ytop, yb = ybottom,
-                                m_width, m_height)
+                                m_w = m_width, m_h = m_height)
                     } else {
                         .plotScaleBar(plottingParam$scale_bar,
                                 xl = 0, xr = dim_x,
                                 yt = 0, yb = dim_y,
-                                m_width, m_height)
+                                m_w = m_width, m_h = m_height)
                     }
                 } else {
                     frame_ind <- as.integer(plottingParam$scale_bar$frame)
                     cur_ind <- legend_ind + frame_ind
-                    if(ind == cur_ind && !is.null(plottingParam$scale_bar)){
-                        if(plottingParam$display == "all"){
+                    if (ind == cur_ind && !is.null(plottingParam$scale_bar)) {
+                        if (plottingParam$display == "all") {
                             .plotScaleBar(plottingParam$scale_bar,
                                     xl = xleft, xr = xright,
                                     yt = ytop, yb = ybottom,
-                                    m_width, m_height)
+                                    m_w = m_width, m_h = m_height)
                         } else {
                             .plotScaleBar(plottingParam$scale_bar,
                                     xl = 0, xr = dim_x,
                                     yt = 0, yb = dim_y,
-                                    m_width, m_height)
+                                    m_w = m_width, m_h = m_height)
                         }
                     }
                 }
             }
 
             # Plot title on images
-            if(ind != legend_ind && !is.null(plottingParam$image_title)){
-                if(plottingParam$display == "all"){
-                    .plotImageTitle(out_img, mask, image, img_id,
-                                ind, legend_ind, plottingParam$image_title,
-                                dim_x, xl = xleft, xr = xright,
+            if (ind != legend_ind && !is.null(plottingParam$image_title)) {
+                if (plottingParam$display == "all") {
+                    .plotImageTitle(out_img = out_img, mask = mask, 
+                                image = image, img_id = img_id,
+                                ind = ind, legend_ind = legend_ind, 
+                                image_title = plottingParam$image_title,
+                                dim_x = dim_x, xl = xleft, xr = xright,
                                 yt = ytop, yb = ybottom, m_h = m_height)
                 } else {
-                    .plotImageTitle(out_img, mask, image, img_id,
-                                ind, legend_ind, plottingParam$image_title,
-                                dim_x, xl = 0, xr = dim_x,
+                    .plotImageTitle(out_img = out_img, mask = mask, 
+                                image = image, img_id = img_id,
+                                ind = ind, legend_ind = legend_ind, 
+                                image_title = plottingParam$image_title,
+                                dim_x = dim_x, xl = 0, xr = dim_x,
                                 yt = 0, yb = dim_y, m_h = m_height)
                 }
             }
 
             # Close device
-            if(!is.null(plottingParam$save_plot) &&
-                plottingParam$display == "single"){
+            if (!is.null(plottingParam$save_plot) &&
+                plottingParam$display == "single") {
                 dev.off()
             }
 
-            if(plottingParam$return_plot && plottingParam$display == "single"){
+            if (plottingParam$return_plot && 
+                plottingParam$display == "single") {
                 cur_plot <- recordPlot()
 
-                if(ind == legend_ind && !is.null(plottingParam$legend)){
+                if (ind == legend_ind && !is.null(plottingParam$legend)) {
                     cur_out[["legend"]] <- cur_plot
                     next
                 }
 
                 # Set the title correctly
                 image_title <- plottingParam$image_title
-                if(!is.null(image_title$text)){
+                if (!is.null(image_title$text)) {
                     cur_title <- image_title$text[ind - legend_ind]
-                } else if(!is.null(mask) && !is.null(img_id)){
+                } else if (!is.null(mask) && !is.null(img_id)) {
                     cur_title <- mcols(mask)[ind - legend_ind,img_id]
-                } else if(!is.null(image) && !is.null(img_id)){
+                } else if (!is.null(image) && !is.null(img_id)) {
                     cur_title <- mcols(image)[ind - legend_ind,img_id]
-                } else if(!is.null(names(out_img))){
+                } else if (!is.null(names(out_img))) {
                     cur_title <- names(out_img)[ind]
                 } else {
                     cur_title <- as.character(ind - legend_ind)
@@ -601,15 +620,15 @@
         }
     }
 
-    if(plottingParam$return_plot && plottingParam$display == "all"){
+    if (plottingParam$return_plot && plottingParam$display == "all") {
         cur_out <- recordPlot()
     }
 
-    if(!is.null(plottingParam$save_plot)){
+    if (!is.null(plottingParam$save_plot) && plottingParam$display == "all") {
         dev.off()
     }
 
-    if(plottingParam$return_plot){
+    if (plottingParam$return_plot) {
         return(cur_out)
     } else {
         return(NULL)
@@ -633,19 +652,20 @@
     outline_by.legend.cex <- plottingParam$legend$outline_by.legend.cex
 
     # Plot feature legends first
-    if(!is.null(colour_by) &&
-        (all(colour_by %in% rownames(object)) || !is.null(image))){
+    if (!is.null(colour_by) &&
+        (all(colour_by %in% rownames(object)) || !is.null(image))) {
 
         # Maximum title height
-        title_height <- max(strheight(colour_by, font = colour_by.title.font))
+        title_height <- max(abs(strheight(colour_by, 
+                                            font = colour_by.title.font)))
 
         # Maximum label width
-        if(is.null(image)){
+        if (is.null(image)) {
             all_max <- max(assay(object, exprs_values)[colour_by,])
         } else {
-            all_max <- unlist(lapply(getChannels(image, colour_by), max))
+            all_max <- max(unlist(lapply(getChannels(image, colour_by), max)))
         }
-        label_width <- max(strwidth(format(round(all_max, 1), nsmall = 1)))
+        label_width <- strwidth(format(round(all_max, 1), nsmall = 1))
 
         # If scale = FALSE, define maximum and minimum
         if(!plottingParam$scale){
@@ -663,18 +683,18 @@
         for(i in seq_along(colour_by)){
             col_n <- colour_by[i]
             
-            if(i < 4){
-                cur_x <- ((m_width - (2*margin))/6 * i) + margin
-                cur_y <- (m_height - (2*margin))/4 + margin
+            if (i < 4) {
+                cur_x <- (((m_width - (2 * margin)) / 6) * i) + margin
+                cur_y <- (m_height - (2 * margin)) / 4 + margin
             } else {
-                cur_x <- ((m_width - (2*margin))/6 * (i - 3)) + margin
-                cur_y <- ((m_height - (2*margin))/4 * 3) + margin
+                cur_x <- ((m_width - (2 * margin)) / 6 * (i - 3)) + margin
+                cur_y <- (((m_height - (2*margin)) / 4) * 3) + margin
             }
-            cur_space_x <- (m_width - (2*margin))/6
-            cur_space_y <- (m_height - (2*margin))/2
+            cur_space_x <- (m_width - (2 * margin)) / 6
+            cur_space_y <- (m_height - (2 * margin)) / 2
 
-            if(plottingParam$scale){
-                if(is.null(image)){
+            if (plottingParam$scale) {
+                if (is.null(image)) {
                     cur_min <- min(assay(object, exprs_values)[col_n,])
                     cur_max <- max(assay(object, exprs_values)[col_n,])
                 } else {
@@ -690,46 +710,49 @@
                             format(round(cur_max, 1), nsmall = 1))
             
             # Define title cex
-            if(is.null(colour_by.title.cex)){
-                title_cex <- (cur_space_y/8)/title_height
+            if (is.null(colour_by.title.cex)) {
+                title_cex <- (cur_space_y / 10) / title_height
             } else {
                 title_cex <- colour_by.title.cex
             }
 
             # Define label cex
-            if(is.null(colour_by.labels.cex)){
-                label_cex <- (cur_space_x/2)/label_width
+            if (is.null(colour_by.labels.cex)) {
+                label_cex <- (cur_space_x / 2) / label_width
             } else {
                 label_cex <- colour_by.labels.cex
             }
 
             col_ramp <- colorRampPalette(cur_col$colour_by[[col_n]])(101)
             cur_legend <- as.raster(matrix(rev(col_ramp), ncol=1))
+            
             text(x = cur_x, y = cur_y - cur_space_y/2,
                 label = col_n, col = "black",
                 font = colour_by.title.font,
                 cex = title_cex, adj = c(0.5, 1))
-            text(x=cur_x - cur_space_x/4 + 2,
+            
+            text(x = cur_x - cur_space_x/4 + cur_space_x/8,
                 y = seq(cur_y - cur_space_y/2 + cur_space_y/4,
                 cur_y + cur_space_y/2 - cur_space_y/8, length.out = 3),
                 labels = rev(cur_labels), col = "black",
                 adj = 0, cex = label_cex)
-            rasterImage(cur_legend,
-                    cur_x - cur_space_x/2,
-                    cur_y + cur_space_y/2 - cur_space_y/8,
-                    cur_x - cur_space_x/4,
-                    cur_y - cur_space_y/2 + cur_space_y/4)
+            
+            rasterImage(cur_legend, 
+                    xleft = cur_x - cur_space_x/2,
+                    ybottom =  cur_y + cur_space_y/2 - cur_space_y/8, 
+                    xright = cur_x - cur_space_x/4, 
+                    ytop = cur_y - cur_space_y/2 + cur_space_y/4)
         }
     }
 
     # Next metadata legends
-    if(!is.null(object) &&
+    if (!is.null(object) &&
         !is.null(colour_by) &&
-        all(colour_by %in% colnames(colData(object)))){
-        # Continous scale
-        if(is.null(names(cur_col$colour_by[[1]]))){
-            cur_space_x <- (m_width-(2*margin))/4
-            cur_space_y <- (m_height-(2*margin))/2
+        all(colour_by %in% colnames(colData(object)))) {
+
+        if (is.null(names(cur_col$colour_by[[1]]))) {
+            cur_space_x <- (m_width - (2 * margin)) / 4
+            cur_space_y <- (m_height - (2 * margin)) / 2
             cur_x <- m_width/2 + cur_space_x
             cur_y <- margin
             cur_min <- min(colData(object)[,colour_by])
@@ -745,20 +768,20 @@
             cur_legend <- as.raster(matrix(rev(col_ramp), ncol=1))
 
             # Define title cex
-            if(is.null(colour_by.title.cex)){
-                title_cex <- (cur_space_y/8)/title_height
+            if (is.null(colour_by.title.cex)) {
+                title_cex <- (cur_space_y / 10) / title_height
             } else {
                 title_cex <- colour_by.title.cex
             }
 
-            text(x = cur_x + cur_space_x/2, y = cur_y,
+            text(x = cur_x + cur_space_x / 2, y = cur_y,
                 label = colour_by, col = "black",
                 font = colour_by.title.font,
                 cex = title_cex, adj = c(0.5, 1))
 
             # Define label cex
-            if(is.null(colour_by.labels.cex)){
-                label_cex <- (cur_space_x/2)/label_width
+            if (is.null(colour_by.labels.cex)) {
+                label_cex <- (cur_space_x / 2) / label_width
             } else {
                 label_cex <- colour_by.labels.cex
             }
@@ -769,14 +792,17 @@
                         length.out = 3),
                 labels = rev(cur_labels), col = "black",
                 adj = 0, cex = label_cex)
+            
             rasterImage(cur_legend,
                         cur_x,
                         cur_y + cur_space_y - cur_space_y/8,
                         cur_x + cur_space_x/2 - 5,
                         cur_y + cur_space_y/4)
+            
             cur_legend_height <- cur_space_y - cur_space_y/8
+            
         } else {
-            cur_space_x <- (m_width-(2*margin))/6
+            cur_space_x <- (m_width - (2 * margin)) / 6
             cur_x <- m_width/2 + cur_space_x
             cur_y <- margin
             cur_colouring <- cur_col$colour_by[[1]]
@@ -786,8 +812,8 @@
                                 text.col = "black", plot = FALSE)
 
             # Define legend cex
-            if(is.null(colour_by.legend.cex)){
-                legend_cex <- (m_width-margin-cur_x)/legend_c$rect$w
+            if (is.null(colour_by.legend.cex)) {
+                legend_cex <- (m_width - margin - cur_x) / legend_c$rect$w
             } else {
                 legend_cex <- colour_by.legend.cex
             }
@@ -801,19 +827,19 @@
     }
 
     # Outline
-    if(!is.null(outline_by)){
-        if(!is.null(colour_by) &&
-            all(colour_by %in% colnames(colData(object)))){
+    if (!is.null(outline_by)) {
+        if (!is.null(colour_by) &&
+            all(colour_by %in% colnames(colData(object)))) {
             cur_y <- margin + abs(cur_legend_height) + 10
         } else {
             cur_y <- margin
         }
 
         # Continous scale
-        if(is.null(names(cur_col$outline_by[[1]]))){
-            cur_space_x <- (m_width-(2*margin))/4
-            cur_space_y <- (m_height-(2*margin))/2
-            cur_x <- m_width/2 + cur_space_x
+        if (is.null(names(cur_col$outline_by[[1]]))) {
+            cur_space_x <- (m_width - (2 * margin)) / 4
+            cur_space_y <- (m_height - (2 * margin)) / 2
+            cur_x <- m_width / 2 + cur_space_x
             cur_min <- min(colData(object)[,outline_by])
             cur_max <- max(colData(object)[,outline_by])
             cur_labels <- c(format(round(cur_min, 1), nsmall = 1),
@@ -827,8 +853,8 @@
             cur_legend <- as.raster(matrix(rev(col_ramp), ncol=1))
 
             # Define title cex
-            if(is.null(colour_by.title.cex)){
-                title_cex <- (cur_space_y/8)/title_height
+            if (is.null(colour_by.title.cex)) {
+                title_cex <- (cur_space_y / 10) / title_height
             } else {
                 title_cex <- outline_by.title.cex
             }
@@ -839,15 +865,16 @@
                     cex = title_cex, adj = c(0.5, 1))
 
             # Define label cex
-            if(is.null(outline_by.labels.cex)){
-                label_cex <- (cur_space_x/2)/label_width
+            if (is.null(outline_by.labels.cex)) {
+                label_cex <- (cur_space_x / 2) / label_width
             } else {
                 label_cex <- outline_by.labels.cex
             }
 
             text(x=cur_x + cur_space_x/2,
                 y = seq(cur_y + cur_space_y/4,
-                        cur_y + cur_space_y - cur_space_y/8, length.out = 3),
+                        cur_y + cur_space_y - cur_space_y/8, 
+                        length.out = 3),
                 labels = rev(cur_labels), col = "black",
                 adj = 0, cex = label_cex)
             rasterImage(cur_legend,
@@ -856,8 +883,8 @@
                         cur_x + cur_space_x/2 - 5,
                         cur_y + cur_space_y/4)
         } else {
-            cur_space_x <- (m_width-(2*margin))/6
-            cur_x <- m_width/2 + cur_space_x
+            cur_space_x <- (m_width - (2 * margin)) / 6
+            cur_x <- m_width / 2 + cur_space_x
             cur_colouring <- cur_col$outline_by[[1]]
             legend_o <- legend(x = cur_x, y = cur_y,
                             legend = names(cur_colouring),
@@ -865,8 +892,8 @@
                             text.col = "black", plot = FALSE)
 
             # Define legend cex
-            if(is.null(outline_by.legend.cex)){
-                legend_cex <- (m_width-margin-cur_x)/legend_o$rect$w
+            if (is.null(outline_by.legend.cex)) {
+                legend_cex <- (m_width-margin - cur_x) / legend_o$rect$w
             } else {
                 legend_cex <- outline_by.legend.cex
             }
@@ -888,20 +915,22 @@
     } else {
         cur_length <- scale_bar$length
     }
+    
     if (is.null(scale_bar$label)) {
         cur_label <- as.character(cur_length)
     } else {
         cur_label <- scale_bar$label
     }
+    
     if (is.null(scale_bar$cex)) {
         label_height <- abs(strheight(cur_label))
         # Target size is 5% of max image height
-        cur_cex <- (m_h/20)/label_height
+        cur_cex <- (m_h / 20) / label_height
     } else {
         cur_cex <- scale_bar$cex
     }
+    
     if (is.null(scale_bar$lwidth)) {
-        label_height <- abs(strheight(cur_label))
         # Target size is 2% of max image height
         cur_lwidth <- ifelse(m_h >= 50, round(m_h/50, digits = 0), 1)
     } else {
@@ -918,42 +947,43 @@
     rect_params <- list(col = cur_col)
     text_params <- list(labels = cur_label, cex = cur_cex,
                         col = cur_col, adj = c(0.5, 0))
+    label_dist <- m_h / 40
 
-    if(cur_position == "bottomright"){
+    if (cur_position == "bottomright") {
         rect(xleft = xr - cur_length - cur_margin.x,
             xright = xr - cur_margin.x,
             ybottom = yb - cur_margin.y,
             ytop = yb - cur_margin.y - cur_lwidth,
             col = cur_col, border = NA)
         do.call(text, append(list(x = xr - cur_length/2 - cur_margin.x,
-                        y = yb - cur_margin.y - cur_lwidth - label_height/2),
+                        y = yb - cur_margin.y - cur_lwidth - label_dist),
                             text_params))
-    } else if(cur_position == "bottomleft"){
+    } else if (cur_position == "bottomleft") {
         rect(xleft = xl + cur_margin.x,
             xright = xl + cur_length + cur_margin.x,
             ybottom = yb - cur_margin.y,
             ytop = yb - cur_margin.y - cur_lwidth,
             col = cur_col, border = NA)
         do.call(text, append(list(x = xl + cur_length/2 + cur_margin.x,
-                        y = yb - cur_margin.y - cur_lwidth - label_height/2),
+                        y = yb - cur_margin.y - cur_lwidth - label_dist),
                         text_params))
-    } else if(cur_position == "topright"){
+    } else if (cur_position == "topright") {
         rect(xleft = xr - cur_length - cur_margin.x,
             xright = xr - cur_margin.x,
             ybottom = yt + cur_margin.y + cur_lwidth,
             ytop = yt + cur_margin.y,
             col = cur_col, border = NA)
         do.call(text, append(list(x = xr - cur_length/2 - cur_margin.x,
-                        y = yt + cur_margin.y - label_height/2),
+                        y = yt + cur_margin.y - label_dist),
                         text_params))
-    } else if(cur_position == "topleft"){
+    } else if (cur_position == "topleft") {
         rect(xleft = xl + cur_margin.x,
                 xright = xl + cur_length + cur_margin.x,
                 ybottom = yt + cur_margin.y + cur_lwidth,
                 ytop = yt + cur_margin.y,
                 col = cur_col, border = NA)
         do.call(text, append(list(x = xl + cur_length/2 + cur_margin.x,
-                        y = yt + cur_margin.y - label_height/2),
+                        y = yt + cur_margin.y - label_dist),
                         text_params))
     }
 }
@@ -967,22 +997,24 @@
                             image_title, dim_x,
                             xl, xr, yt, yb, m_h){
 
-    if(!is.null(image_title$text)){
+    if (!is.null(image_title$text)) { 
         cur_title <- image_title$text[ind - legend_ind]
-    } else if(!is.null(mask) && !is.null(img_id)){
-        cur_title <- mcols(mask)[ind - legend_ind,img_id]
-    } else if(!is.null(image) && !is.null(img_id)){
-        cur_title <- mcols(image)[ind - legend_ind,img_id]
-    } else if(!is.null(names(out_img))){
+    } else if (!is.null(mask) && !is.null(img_id)) {
+        cur_title <- mcols(mask)[ind - legend_ind, img_id]
+    } else if (!is.null(image) && !is.null(img_id)) {
+        cur_title <- mcols(image)[ind - legend_ind, img_id]
+    } else if (!is.null(names(out_img))) {
         cur_title <- names(out_img)[ind]
     } else {
         cur_title <- as.character(ind - legend_ind)
     }
     
-    if(is.null(image_title$cex)){
-        title_height <- abs(strheight(cur_title))
+    cur_font <- image_title$font
+    
+    if (is.null(image_title$cex)) {
+        title_height <- abs(strheight(cur_title, font = cur_font))
         # Target size is 5% of max image height
-        cur_cex <- (m_h/20)/title_height
+        cur_cex <- (m_h / 20) / title_height
     } else {
         cur_cex <- image_title$cex
     }
@@ -991,7 +1023,6 @@
     cur_col <- image_title$colour
     cur_margin.x <- image_title$margin[1]
     cur_margin.y <- image_title$margin[2]
-    cur_font <- image_title$font
 
     text_params <- list(labels = cur_title, col = cur_col,
                         cex = cur_cex, font = cur_font)
@@ -1000,23 +1031,23 @@
         do.call(text, append(list(x = xl + dim_x/2,
                                 y = yt + cur_margin.y,
                                 adj = c(0.5, 1)), text_params))
-    } else if(cur_position == "bottom"){
+    } else if (cur_position == "bottom") {
         do.call(text, append(list(x = xl + dim_x/2,
                                 y = yb - cur_margin.y,
                                 adj = c(0.5, 0)), text_params))
-    } else if(cur_position == "topleft"){
+    } else if (cur_position == "topleft") {
         do.call(text, append(list(x = xl + cur_margin.x,
                                 y = yt + cur_margin.y,
                                 adj = c(0, 1)), text_params))
-    } else if(cur_position == "topright"){
+    } else if (cur_position == "topright") {
         do.call(text, append(list(x = xr - cur_margin.x,
                                 y = yt + cur_margin.y,
                                 adj = c(1, 1)), text_params))
-    } else if(cur_position == "bottomleft"){
+    } else if (cur_position == "bottomleft") {
         do.call(text, append(list(x = xl + cur_margin.x,
                                 y = yb - cur_margin.y,
                                 adj = c(0, 0)), text_params))
-    } else if(cur_position == "bottomright"){
+    } else if (cur_position == "bottomright") {
         do.call(text, append(list(x = xr - cur_margin.x,
                                 y = yb - cur_margin.y,
                                 adj = c(1, 0)), text_params))
