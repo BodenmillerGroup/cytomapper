@@ -13,12 +13,17 @@
         cur_sce <- object[,colData(object)[,img_id] == mcols(mask)[i,img_id]]
         if (is.null(names(cur_colour))) {
             col_ind <- colorRampPalette(cur_colour)(101)
+            cur_min <- min(colData(object)[,colour_by])
+            cur_max <- max(colData(object)[,colour_by])
             cur_scaling <- .minMaxScaling(colData(cur_sce)[,colour_by],
-                                    min_x = min(colData(object)[,colour_by]),
-                                    max_x = max(colData(object)[,colour_by]))
+                                    min_x = cur_min,
+                                    max_x = cur_max)
             col_ind <- col_ind[round(100*cur_scaling) + 1]
+            cur_limit <- list(c(cur_min, cur_max)) 
+            names(cur_limit) <- colour_by
         } else {
             col_ind <- cur_colour[as.character(colData(cur_sce)[,colour_by])]
+            cur_limit <- NULL
         }
 
         # Colour first the background
@@ -46,7 +51,7 @@
         setImages(mask, ind) <- cur_mask
     }
 
-    return(as(mask, "SimpleList"))
+    return(list(imgs = as(mask, "SimpleList"), cur_limit = cur_limit))
 
 }
 
@@ -68,15 +73,22 @@
         if (length(colour_by) == 1L) {
             cur_range <- quantile(assay(object, exprs_values)[colour_by,],
                                     probs = c(0,1))
+            cur_limit <- list(as.numeric(cur_range))
+            names(cur_limit) <- colour_by
             cur_range <- matrix(cur_range, ncol = 1, 
                                 dimnames = list(c("1", "2"), colour_by))
         } else {
             cur_range <- apply(assay(object, exprs_values)[colour_by,], 1, 
                                 quantile, probs = c(0,1))
+            cur_limit <- as.list(as.data.frame(cur_range))
         }
     } else {
         cur_range <- quantile(assay(object, exprs_values)[colour_by,],
                                 probs = c(0,1))
+        cur_limit <- data.frame(matrix(cur_range, ncol = length(colour_by), 
+                                        nrow = 2, byrow = FALSE))
+        names(cur_limit) <- colour_by    
+        cur_limit <- as.list(cur_limit)
     }
     
     cur_col_df <- vapply(colour_by, function(x){
@@ -109,7 +121,7 @@
     # Store in internal colData
     int_colData(object)$CYTO_COLOUR <- col_out
 
-    return(object)
+    return(list(object = object, cur_out = cur_limit))
 }
 
 # Colour segmentation masks based on features
@@ -123,6 +135,8 @@
     object <- .createColourVector(object, colour_by, 
                                     exprs_values, cur_colour,
                                     plottingParam)
+    cur_limit <- object$cur_out
+    object <- object$object
 
     for(i in seq_along(mask)){
         cur_mask <- mask[[i]]
@@ -155,7 +169,7 @@
         setImages(mask, ind) <- cur_mask
     }
 
-    return(as(mask, "SimpleList"))
+    return(list(imgs = as(mask, "SimpleList"), cur_limit = cur_limit))
 }
 
 # Colour images based on features
@@ -188,6 +202,20 @@
     }
     
     image <- as(image, "SimpleList")
+    
+    if (plottingParam$scale) {
+        cur_limit <- data.frame(matrix(c(min.values, max.values), ncol = length(colour_by), 
+                                       nrow = 2, byrow = TRUE))
+        names(cur_limit) <- colour_by
+        cur_limit <- as.list(cur_limit)
+    } else {
+        cur_limit <- data.frame(matrix(c(rep(min(min.values), length(min.values)), 
+                                         rep(max(max.values), length(max.values))), 
+                                       ncol = length(colour_by), 
+                                       nrow = 2, byrow = TRUE))
+        names(cur_limit) <- colour_by
+        cur_limit <- as.list(cur_limit)
+    }
 
     for(i in seq_along(image)){
         cur_image <- image[[i]][,,colour_by, drop = FALSE]
@@ -246,7 +274,7 @@
         }
     }
 
-    return(image)
+    return(list(imgs = image, cur_limit = cur_limit))
 }
 
 # Outline image based on metadata
@@ -262,9 +290,13 @@
 
         if (is.null(names(cur_colour))) {
             col_ind <- colorRampPalette(cur_colour)(101)
+            cur_min <- min(colData(object)[,outline_by])
+            cur_max <- max(colData(object)[,outline_by])
             cur_scaling <- .minMaxScaling(colData(cur_sce)[,outline_by],
-                                    min_x = min(colData(object)[,outline_by]),
-                                    max_x = max(colData(object)[,outline_by]))
+                                    min_x = cur_min,
+                                    max_x = cur_max)
+            cur_limit <- list(c(cur_min, cur_max))
+            names(cur_limit) <- outline_by
 
             for(j in seq_along(cur_scaling)){
                 meta_mask <- cur_mask
@@ -283,12 +315,13 @@
                 cur_img <- paintObjects(meta_mask, Image(cur_img),
                                         col = cur_colour[j])
             }
+            cur_limit <- NULL
         }
 
         out_img[[i]] <- Image(cur_img)
     }
 
-    return(out_img)
+    return(list(imgs = out_img, cur_limit = cur_limit))
 }
 
 # Selecting the colours for plotting
@@ -375,7 +408,7 @@
 #' @importFrom grDevices png jpeg tiff dev.off recordPlot
 .displayImages <- function(object, image, exprs_values, outline_by,
                             colour_by, mask, out_img,
-                            img_id, cur_col, plottingParam){
+                            img_id, cur_col, plottingParam, cur_limits){
 
     # We will take the largest image and
     # build the grid based on its size
@@ -531,7 +564,8 @@
                             exprs_values = exprs_values, 
                             outline_by = outline_by, colour_by = colour_by, 
                             m_width = m_width, m_height = m_height, 
-                            cur_col = cur_col, plottingParam = plottingParam)
+                            cur_col = cur_col, plottingParam = plottingParam,
+                            cur_limits = cur_limits)
             }
 
             # Plot scale bar
@@ -639,7 +673,7 @@
 #' @importFrom graphics strwidth strheight text rasterImage legend
 #' @importFrom raster as.raster
 .plotLegend <- function(object, image, exprs_values, outline_by, colour_by,
-                        m_width, m_height, cur_col, plottingParam){
+                        m_width, m_height, cur_col, plottingParam, cur_limits){
     # Build one legend per feature or metadata entry
     margin <- plottingParam$legend$margin
     colour_by.title.font <- plottingParam$legend$colour_by.title.font
@@ -660,26 +694,13 @@
                                             font = colour_by.title.font)))
 
         # Maximum label width
-        if (is.null(image)) {
-            all_max <- max(assay(object, exprs_values)[colour_by,])
-        } else {
-            all_max <- max(unlist(lapply(getChannels(image, colour_by), max)))
-        }
-        label_width <- strwidth(format(round(all_max, 1), nsmall = 2))
-
-        # If scale = FALSE, define maximum and minimum
-        if(!plottingParam$scale){
-            if(is.null(image)){
-                cur_min <- min(assay(object, exprs_values)[colour_by,])
-                cur_max <- max(assay(object, exprs_values)[colour_by,])
-            } else {
-                cur_min <- unlist(lapply(getChannels(image, colour_by), min))
-                cur_max <- unlist(lapply(getChannels(image, colour_by), max))
-                cur_min <- min(cur_min)
-                cur_max <- max(cur_max)
-            }
-        }
-
+        cur_labels <- unlist(lapply(cur_limits$colour_by[colour_by], 
+               function(x){c(format(round(x[1], 1), nsmall = 1),
+                             format(round(x[2], 1)/2),
+                             format(round(x[2], 1), nsmall = 1))}))
+        
+        label_width <- max(strwidth(cur_labels))
+        
         for(i in seq_along(colour_by)){
             col_n <- colour_by[i]
             
@@ -692,18 +713,9 @@
             }
             cur_space_x <- (m_width - (2 * margin)) / 6
             cur_space_y <- (m_height - (2 * margin)) / 2
-
-            if (plottingParam$scale) {
-                if (is.null(image)) {
-                    cur_min <- min(assay(object, exprs_values)[col_n,])
-                    cur_max <- max(assay(object, exprs_values)[col_n,])
-                } else {
-                    cur_min <- min(unlist(lapply(getChannels(image,
-                                                            col_n), min)))
-                    cur_max <- max(unlist(lapply(getChannels(image,
-                                                            col_n), max)))
-                }
-            }
+            
+            cur_min <- cur_limits$colour_by[[col_n]][1]
+            cur_max <- cur_limits$colour_by[[col_n]][2]
 
             cur_labels <- c(format(round(cur_min, 1), nsmall = 1),
                             format(round(cur_max, 1)/2),
@@ -756,8 +768,10 @@
             cur_space_y <- (m_height - (2 * margin)) / 2
             cur_x <- m_width / 2 + cur_space_x
             cur_y <- margin
-            cur_min <- min(colData(object)[,colour_by])
-            cur_max <- max(colData(object)[,colour_by])
+            
+            cur_min <- cur_limits$colour_by[[colour_by]][1]
+            cur_max <- cur_limits$colour_by[[colour_by]][2]
+            
             cur_labels <- c(format(round(cur_min, 1), nsmall = 1),
                             format(round(cur_max, 1)/2),
                             format(round(cur_max, 1), nsmall = 1))
@@ -841,8 +855,10 @@
             cur_space_x <- (m_width - (2 * margin)) / 4
             cur_space_y <- (m_height - (2 * margin)) / 2
             cur_x <- m_width / 2 + cur_space_x
-            cur_min <- min(colData(object)[,outline_by])
-            cur_max <- max(colData(object)[,outline_by])
+            
+            cur_min <- cur_limits$outline_by[[outline_by]][1]
+            cur_max <- cur_limits$outline_by[[outline_by]][2]
+            
             cur_labels <- c(format(round(cur_min, 1), nsmall = 1),
                             format(round(cur_max, 1)/2),
                             format(round(cur_max, 1), nsmall = 1))

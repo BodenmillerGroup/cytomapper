@@ -178,6 +178,7 @@ plotCells <- function(
     plottingParam <- .plottingParam(dotArgs, image = mask)
 
     cur_col <- list()
+    cur_limits <- list()
 
     # Colour the masks
     # Here, a SimpleList is returned that allows storing colour Images
@@ -192,6 +193,8 @@ plotCells <- function(
                                     colour_by, cur_col$colour_by[[1]],
                                     plottingParam$missing_colour,
                                     plottingParam$background_colour)
+            cur_limits$colour_by <- out_img$cur_limit
+            out_img <- out_img$imgs
         } else {
             # Colouring by features
             out_img <- .colourMaskByFeature(object, mask, cell_id, img_id,
@@ -200,6 +203,8 @@ plotCells <- function(
                                             plottingParam$missing_colour,
                                             plottingParam$background_colour,
                                             plottingParam)
+            cur_limits$colour_by <- out_img$cur_limit
+            out_img <- out_img$imgs
         }
     } else {
         out_img <- endoapply(mask, function(x){
@@ -209,6 +214,7 @@ plotCells <- function(
             Image(x)
         })
         out_img <- as(out_img, "SimpleList")
+        cur_limits$colour_by <- NULL
     }
 
     # Add outline
@@ -217,12 +223,16 @@ plotCells <- function(
                                         call.arg = "outline_by")
         out_img <- .outlineImageByMeta(object, mask, out_img, cell_id, img_id,
                                         outline_by, cur_col$outline_by[[1]])
+        cur_limits$outline_by <- out_img$cur_limit
+        out_img <- out_img$imgs
     }
 
     # Plot images
-    cur_plot <- .displayImages(object, image = NULL, exprs_values, outline_by,
-                    colour_by,  mask, out_img, img_id,
-                    cur_col, plottingParam)
+    cur_plot <- .displayImages(object = object, image = NULL, 
+                    exprs_values = exprs_values, outline_by = outline_by,
+                    colour_by = colour_by,  mask = mask, out_img = out_img, 
+                    img_id = img_id, cur_col = cur_col, 
+                    plottingParam = plottingParam, cur_limits = cur_limits)
 
     return_objects <- NULL
 
