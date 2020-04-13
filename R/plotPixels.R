@@ -22,6 +22,8 @@
 #' @param colour_by character or character vector specifying the features
 #' (contained in \code{channelNames(image)}) used to colour individual cells.
 #' Pixels can be coloured by up to six features.
+#' @param outline_by single character indicating the \code{colData(object)}
+#' entry by which to outline individual cells
 #' @param bcg a list with names matching the entries to \code{colour_by}. Each
 #' entry contains a numeric vector of three entries:
 #' \enumerate{
@@ -30,8 +32,6 @@
 #'     \item gamma value (channel is exponentiated by this value)
 #' }
 #' Default is c(0,1,1).
-#' @param outline_by single character indicating the \code{colData(object)}
-#' entry by which to outline individual cells
 #' @param colour a list with names matching the entries to \code{colour_by}
 #' and/or \code{outline_by}. When setting the colour for continous features,
 #' at least two colours need to be provided indicating the colours for minimum
@@ -147,37 +147,37 @@ plotPixels <- function(
     cell_id = NULL,
     img_id = NULL,
     colour_by = NULL,
-    bcg = NULL,
     outline_by = NULL,
+    bcg = NULL,
     colour = NULL,
     ...) {
     # Object checks
     .valid.image(image, img_id)
-    if(!is.null(object)){
+    if (!is.null(object)) {
         .valid.sce(object, img_id, cell_id, exprs_values = NULL)
     }
-    if(!is.null(mask)){
+    if (!is.null(mask)) {
         .valid.mask(mask, img_id)
     }
     .valid.matchObjects.plotPixels(object, mask, image, img_id)
 
     # Argument checks
     # Check colour_by argument
-    if (!is.null(colour_by)){
+    if (!is.null(colour_by)) {
         .valid.colour_by(colour_by, object, image,
                     call.arg = "plotPixels")
     }
     # Check outline_by argument
-    if(!is.null(outline_by)){
+    if (!is.null(outline_by)) {
         .valid.outline_by(outline_by, object, mask, image)
     }
     # Check colour argument
-    if(!is.null(colour)){
+    if (!is.null(colour)) {
         .valid.colour(colour, colour_by, outline_by, object, image = image)
     }
 
     # Check bcg argument
-    if(!is.null(bcg)){
+    if (!is.null(bcg)) {
         .valid.bcg(bcg, colour_by)
     }
 
@@ -189,7 +189,7 @@ plotPixels <- function(
 
     # Colour the images
     # Here, a SimpleList is returned that allows storing colour Images
-    if(!is.null(colour_by)){
+    if (!is.null(colour_by)) {
 
         # Select the colours
         cur_col$colour_by <- .selectColours(object, colour_by, colour)
@@ -199,13 +199,13 @@ plotPixels <- function(
                 colour_by, bcg, cur_col$colour_by,
                 plottingParam)
     } else {
-        if(is.null(channelNames(image))){
+        if (is.null(channelNames(image))) {
             colour_by <- 1
             cur_col$colour_by <- .selectColours(object, colour_by, colour)
             out_img <- .colourImageByFeature(image, colour_by,
                                     bcg, cur_col$colour_by,
                                     plottingParam)
-        } else{
+        } else {
             colour_by <- channelNames(image)[1]
             cur_col$colour_by <- .selectColours(object, colour_by, colour)
             out_img <- .colourImageByFeature(image, colour_by,
@@ -215,7 +215,7 @@ plotPixels <- function(
     }
 
     # Add outline
-    if(!is.null(outline_by)){
+    if (!is.null(outline_by)) {
         cur_col$outline_by <- .selectColours(object, outline_by, colour)
         out_img <- .outlineImageByMeta(object, mask, out_img, cell_id, img_id,
                                     outline_by, cur_col$outline_by[[1]])
@@ -235,17 +235,18 @@ plotPixels <- function(
 
     return_objects <- NULL
 
-    if(!is.null(cur_plot)){
+    if (!is.null(cur_plot)) {
         return_objects <- as.list(return_objects)
         return_objects$plot <- cur_plot
     }
 
-    if(plottingParam$return_images){
+    if (plottingParam$return_images) {
         return_objects <- as.list(return_objects)
+        out_img <- endoapply(out_img, Image)
         return_objects$images <- out_img
     }
 
-    if(!is.null(return_objects)){
+    if (!is.null(return_objects)) {
         return(return_objects)
     }
 }

@@ -206,7 +206,7 @@ plotCells <- function(
             x[x == 0L] <- plottingParam$background_colour
             x <- replace(x, which(x != plottingParam$background_colour),
                     plottingParam$missing_colour)
-            x
+            Image(x)
         })
         out_img <- as(out_img, "SimpleList")
     }

@@ -11,8 +11,8 @@ plotPixels(
   cell_id = NULL,
   img_id = NULL,
   colour_by = NULL,
-  bcg = NULL,
   outline_by = NULL,
+  bcg = NULL,
   colour = NULL,
   ...
 )
@@ -40,6 +40,9 @@ are stored (see section 'Linking the \code{SingleCellExperiment} and
 (contained in \code{channelNames(image)}) used to colour individual cells.
 Pixels can be coloured by up to six features.}
 
+\item{outline_by}{single character indicating the \code{colData(object)}
+entry by which to outline individual cells}
+
 \item{bcg}{a list with names matching the entries to \code{colour_by}. Each
 entry contains a numeric vector of three entries:
 \enumerate{
@@ -48,9 +51,6 @@ entry contains a numeric vector of three entries:
     \item gamma value (channel is exponentiated by this value)
 }
 Default is c(0,1,1).}
-
-\item{outline_by}{single character indicating the \code{colData(object)}
-entry by which to outline individual cells}
 
 \item{colour}{a list with names matching the entries to \code{colour_by}
 and/or \code{outline_by}. When setting the colour for continous features,
