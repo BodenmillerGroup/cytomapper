@@ -665,7 +665,7 @@
         } else {
             all_max <- max(unlist(lapply(getChannels(image, colour_by), max)))
         }
-        label_width <- strwidth(format(round(all_max, 1), nsmall = 1))
+        label_width <- strwidth(format(round(all_max, 1), nsmall = 2))
 
         # If scale = FALSE, define maximum and minimum
         if(!plottingParam$scale){
@@ -684,11 +684,11 @@
             col_n <- colour_by[i]
             
             if (i < 4) {
-                cur_x <- (((m_width - (2 * margin)) / 6) * i) + margin
-                cur_y <- (m_height - (2 * margin)) / 4 + margin
+                cur_x <- (((m_width - (2 * margin)) / 6) * (i - 1)) + margin
+                cur_y <- margin
             } else {
-                cur_x <- ((m_width - (2 * margin)) / 6 * (i - 3)) + margin
-                cur_y <- (((m_height - (2*margin)) / 4) * 3) + margin
+                cur_x <- ((m_width - (2 * margin)) / 6 * (i - 4)) + margin
+                cur_y <- m_height / 2 
             }
             cur_space_x <- (m_width - (2 * margin)) / 6
             cur_space_y <- (m_height - (2 * margin)) / 2
@@ -706,7 +706,7 @@
             }
 
             cur_labels <- c(format(round(cur_min, 1), nsmall = 1),
-                            format(round(cur_max/2, 1), nsmall = 1),
+                            format(round(cur_max, 1)/2),
                             format(round(cur_max, 1), nsmall = 1))
             
             # Define title cex
@@ -726,22 +726,23 @@
             col_ramp <- colorRampPalette(cur_col$colour_by[[col_n]])(101)
             cur_legend <- as.raster(matrix(rev(col_ramp), ncol=1))
             
-            text(x = cur_x, y = cur_y - cur_space_y/2,
+            text(x = cur_x + cur_space_x/2, 
+                y = cur_y,
                 label = col_n, col = "black",
                 font = colour_by.title.font,
                 cex = title_cex, adj = c(0.5, 1))
             
-            text(x = cur_x - cur_space_x/4 + cur_space_x/8,
-                y = seq(cur_y - cur_space_y/2 + cur_space_y/4,
-                cur_y + cur_space_y/2 - cur_space_y/8, length.out = 3),
+            text(x = cur_x + cur_space_x / 2,
+                y = seq(cur_y + cur_space_y/4,
+                cur_y + cur_space_y - cur_space_y/8, length.out = 3),
                 labels = rev(cur_labels), col = "black",
-                adj = 0, cex = label_cex)
+                adj = c(0, 0.5), cex = label_cex)
             
             rasterImage(cur_legend, 
-                    xleft = cur_x - cur_space_x/2,
-                    ybottom =  cur_y + cur_space_y/2 - cur_space_y/8, 
-                    xright = cur_x - cur_space_x/4, 
-                    ytop = cur_y - cur_space_y/2 + cur_space_y/4)
+                    xleft = cur_x,
+                    ybottom =  cur_y + cur_space_y - cur_space_y/8, 
+                    xright = cur_x + cur_space_x / 3, 
+                    ytop = cur_y + cur_space_y/4)
         }
     }
 
@@ -758,7 +759,7 @@
             cur_min <- min(colData(object)[,colour_by])
             cur_max <- max(colData(object)[,colour_by])
             cur_labels <- c(format(round(cur_min, 1), nsmall = 1),
-                            format(round(cur_max/2, 1), nsmall = 1),
+                            format(round(cur_max, 1)/2),
                             format(round(cur_max, 1), nsmall = 1))
             label_width <- max(strwidth(rev(cur_labels)))
             title_height <- abs(strheight(colour_by, 
@@ -843,7 +844,7 @@
             cur_min <- min(colData(object)[,outline_by])
             cur_max <- max(colData(object)[,outline_by])
             cur_labels <- c(format(round(cur_min, 1), nsmall = 1),
-                            format(round(cur_max/2, 1), nsmall = 1),
+                            format(round(cur_max, 1)/2),
                             format(round(cur_max, 1), nsmall = 1))
             label_width <- max(strwidth(rev(cur_labels)))
             title_height <- abs(strheight(outline_by, 
