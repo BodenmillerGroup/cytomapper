@@ -1119,6 +1119,70 @@ test_that("legend can be plotted.", {
                               m_height = y_len,
                               cur_col = cur_col,
                               plottingParam))
+    
+    # Continous scale
+    plottingParam <- .plottingParam(dotArgs = list(), image = pancreasMasks)
+    colour_by = "Area"
+    outline_by = "Area"
+    cur_col = list(colour_by = list(Area = inferno(100)),
+                   outline_by = list(Area = viridis(100)))
+    
+    x_len <- 100
+    y_len <- 100
+    
+    par(bty="n", mai=c(0,0,0,0), xaxs="i",
+        yaxs="i", xaxt="n", yaxt="n", col = "white")
+    
+    plot(c(0, x_len), c(0, y_len), type="n", xlab="", ylab="",
+         asp = 1, ylim = rev(c(0, y_len)))
+    
+    expect_silent(.plotLegend(object = pancreasSCE,
+                              image = NULL,
+                              exprs_values = "counts",
+                              outline_by = outline_by,
+                              colour_by = colour_by,
+                              m_width = x_len,
+                              m_height = y_len,
+                              cur_col = cur_col,
+                              plottingParam))
+    
+    x_len <- 1000
+    y_len <- 1000
+    
+    par(bty="n", mai=c(0,0,0,0), xaxs="i",
+        yaxs="i", xaxt="n", yaxt="n", col = "white")
+    
+    plot(c(0, x_len), c(0, y_len), type="n", xlab="", ylab="",
+         asp = 1, ylim = rev(c(0, y_len)))
+    
+    expect_silent(.plotLegend(object = pancreasSCE,
+                              image = NULL,
+                              exprs_values = "counts",
+                              outline_by = outline_by,
+                              colour_by = colour_by,
+                              m_width = x_len,
+                              m_height = y_len,
+                              cur_col = cur_col,
+                              plottingParam))
+    
+    x_len <- 2000
+    y_len <- 2000
+    
+    par(bty="n", mai=c(0,0,0,0), xaxs="i",
+        yaxs="i", xaxt="n", yaxt="n", col = "white")
+    
+    plot(c(0, x_len), c(0, y_len), type="n", xlab="", ylab="",
+         asp = 1, ylim = rev(c(0, y_len)))
+    
+    expect_silent(.plotLegend(object = pancreasSCE,
+                              image = NULL,
+                              exprs_values = "counts",
+                              outline_by = outline_by,
+                              colour_by = colour_by,
+                              m_width = x_len,
+                              m_height = y_len,
+                              cur_col = cur_col,
+                              plottingParam))
 
 
 })

@@ -740,9 +740,9 @@
             
             rasterImage(cur_legend, 
                     xleft = cur_x,
-                    ybottom =  cur_y + cur_space_y - cur_space_y/8, 
+                    ybottom =  cur_y + cur_space_y - cur_space_y / 8, 
                     xright = cur_x + cur_space_x / 3, 
-                    ytop = cur_y + cur_space_y/4)
+                    ytop = cur_y + cur_space_y / 4)
         }
     }
 
@@ -754,7 +754,7 @@
         if (is.null(names(cur_col$colour_by[[1]]))) {
             cur_space_x <- (m_width - (2 * margin)) / 4
             cur_space_y <- (m_height - (2 * margin)) / 2
-            cur_x <- m_width/2 + cur_space_x
+            cur_x <- m_width / 2 + cur_space_x
             cur_y <- margin
             cur_min <- min(colData(object)[,colour_by])
             cur_max <- max(colData(object)[,colour_by])
@@ -787,24 +787,24 @@
                 label_cex <- colour_by.labels.cex
             }
 
-            text(x=cur_x + cur_space_x/2,
-                y = seq(cur_y + cur_space_y/4,
+            text(x= cur_x + cur_space_x / 2,
+                y = seq(cur_y + cur_space_y / 4,
                         cur_y + cur_space_y - cur_space_y/8,
                         length.out = 3),
                 labels = rev(cur_labels), col = "black",
                 adj = 0, cex = label_cex)
             
             rasterImage(cur_legend,
-                        cur_x,
-                        cur_y + cur_space_y - cur_space_y/8,
-                        cur_x + cur_space_x/2 - 5,
-                        cur_y + cur_space_y/4)
+                        xleft = cur_x,
+                        ybottom = cur_y + cur_space_y - cur_space_y / 8,
+                        xright = cur_x + cur_space_x / 3,
+                        ytop = cur_y + cur_space_y / 4)
             
             cur_legend_height <- cur_space_y - cur_space_y/8
             
         } else {
             cur_space_x <- (m_width - (2 * margin)) / 6
-            cur_x <- m_width/2 + cur_space_x
+            cur_x <- m_width / 2 + cur_space_x
             cur_y <- margin
             cur_colouring <- cur_col$colour_by[[1]]
             legend_c <- legend(x = cur_x, y = cur_y,
@@ -831,7 +831,7 @@
     if (!is.null(outline_by)) {
         if (!is.null(colour_by) &&
             all(colour_by %in% colnames(colData(object)))) {
-            cur_y <- margin + abs(cur_legend_height) + 10
+            cur_y <- margin + abs(cur_legend_height) + m_width / 20
         } else {
             cur_y <- margin
         }
@@ -872,17 +872,18 @@
                 label_cex <- outline_by.labels.cex
             }
 
-            text(x=cur_x + cur_space_x/2,
-                y = seq(cur_y + cur_space_y/4,
-                        cur_y + cur_space_y - cur_space_y/8, 
+            text(x=cur_x + cur_space_x / 2,
+                y = seq(cur_y + cur_space_y / 4,
+                        cur_y + cur_space_y - cur_space_y / 8, 
                         length.out = 3),
                 labels = rev(cur_labels), col = "black",
                 adj = 0, cex = label_cex)
+            
             rasterImage(cur_legend,
                         cur_x,
                         cur_y + cur_space_y - cur_space_y/8,
-                        cur_x + cur_space_x/2 - 5,
-                        cur_y + cur_space_y/4)
+                        cur_x + cur_space_x / 3,
+                        cur_y + cur_space_y / 4)
         } else {
             cur_space_x <- (m_width - (2 * margin)) / 6
             cur_x <- m_width / 2 + cur_space_x
@@ -894,7 +895,7 @@
 
             # Define legend cex
             if (is.null(outline_by.legend.cex)) {
-                legend_cex <- (m_width-margin - cur_x) / legend_o$rect$w
+                legend_cex <- (m_width - margin - cur_x) / legend_o$rect$w
             } else {
                 legend_cex <- outline_by.legend.cex
             }
@@ -912,7 +913,7 @@
 .plotScaleBar <- function(scale_bar, xl, xr, yt, yb, m_w, m_h){
     # Set default scale bar length
     if (is.null(scale_bar$length)) {
-        cur_length <- ifelse(m_w > 25, round(m_w/5, digits = -1), 10)
+        cur_length <- ifelse(m_w > 25, round(m_w / 5, digits = -1), 10)
     } else {
         cur_length <- scale_bar$length
     }
@@ -933,7 +934,7 @@
     
     if (is.null(scale_bar$lwidth)) {
         # Target size is 2% of max image height
-        cur_lwidth <- ifelse(m_h >= 50, round(m_h/50, digits = 0), 1)
+        cur_lwidth <- ifelse(m_h >= 50, round(m_h / 50, digits = 0), 1)
     } else {
         cur_lwidth <- scale_bar$lwidth 
     }
@@ -956,7 +957,7 @@
             ybottom = yb - cur_margin.y,
             ytop = yb - cur_margin.y - cur_lwidth,
             col = cur_col, border = NA)
-        do.call(text, append(list(x = xr - cur_length/2 - cur_margin.x,
+        do.call(text, append(list(x = xr - cur_length / 2 - cur_margin.x,
                         y = yb - cur_margin.y - cur_lwidth - label_dist),
                             text_params))
     } else if (cur_position == "bottomleft") {
@@ -965,7 +966,7 @@
             ybottom = yb - cur_margin.y,
             ytop = yb - cur_margin.y - cur_lwidth,
             col = cur_col, border = NA)
-        do.call(text, append(list(x = xl + cur_length/2 + cur_margin.x,
+        do.call(text, append(list(x = xl + cur_length / 2 + cur_margin.x,
                         y = yb - cur_margin.y - cur_lwidth - label_dist),
                         text_params))
     } else if (cur_position == "topright") {
@@ -974,7 +975,7 @@
             ybottom = yt + cur_margin.y + cur_lwidth,
             ytop = yt + cur_margin.y,
             col = cur_col, border = NA)
-        do.call(text, append(list(x = xr - cur_length/2 - cur_margin.x,
+        do.call(text, append(list(x = xr - cur_length / 2 - cur_margin.x,
                         y = yt + cur_margin.y - label_dist),
                         text_params))
     } else if (cur_position == "topleft") {
@@ -983,7 +984,7 @@
                 ybottom = yt + cur_margin.y + cur_lwidth,
                 ytop = yt + cur_margin.y,
                 col = cur_col, border = NA)
-        do.call(text, append(list(x = xl + cur_length/2 + cur_margin.x,
+        do.call(text, append(list(x = xl + cur_length / 2 + cur_margin.x,
                         y = yt + cur_margin.y - label_dist),
                         text_params))
     }
