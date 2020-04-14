@@ -4,12 +4,12 @@ test_that("CytoImageList can be scaled.", {
   # Works
   expect_silent(cur_images <- scaleImages(pancreasImages, 1))
   expect_identical(imageData(cur_images[[1]]), imageData(pancreasImages[[1]]))
-  expect_equal(imageData(cur_images[[1]])[11, 1:2,1],
-               c(1.382069, 3.025825), tolerance = 1e-06)
+  expect_equal(imageData(cur_images[[1]]),
+               imageData(pancreasImages[[1]]))
 
   expect_silent(cur_images <- scaleImages(cur_images, 2))
-  expect_equal(imageData(cur_images[[1]])[11, 1:2,1],
-               c(2.764137, 6.051649), tolerance = 1e-06)
+  expect_equal(imageData(cur_images[[1]]),
+               imageData(pancreasImages[[1]] * 2))
 
   expect_silent(plotPixels(cur_images))
 
@@ -35,8 +35,7 @@ test_that("CytoImageList can be scaled.", {
   expect_error(scaleImages(cur_images, "test"),
                regexp = "'value' must be a single numeric.",
                fixed = TRUE)
-
-  })
+})
 
 test_that("CytoImageList can be normalized", {
   data("pancreasImages")

@@ -209,7 +209,7 @@ test_that("plotCells: Exprs values can be correctly set.", {
             colour_by = "H3"))
   expect_silent(plotCells(object = pancreasSCE,
             mask = pancreasMasks, img_id = "ImageNb",
-            cell_id = "CellNb", exprs_values = "exprs",
+            cell_id = "CellNb", exprs_values = "counts",
             colour_by = "H3"))
 
   # Error
@@ -422,6 +422,9 @@ test_that("plotCells: SCE can be subsetted.", {
   expect_silent(plotCells(object = cur_sce,
             mask = pancreasMasks, img_id = "ImageNb",
             cell_id = "CellNb", colour_by = "CellType"))
+  expect_silent(plotCells(object = cur_sce,
+                          mask = pancreasMasks, img_id = "ImageNb",
+                          cell_id = "CellNb", colour_by = "Pattern"))
   expect_silent(plotCells(object = cur_sce,
                           mask = pancreasMasks, img_id = "ImageNb",
                           cell_id = "CellNb", colour_by = "CellType",

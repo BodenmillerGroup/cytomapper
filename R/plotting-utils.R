@@ -204,15 +204,18 @@
     image <- as(image, "SimpleList")
     
     if (plottingParam$scale) {
-        cur_limit <- data.frame(matrix(c(min.values, max.values), ncol = length(colour_by), 
-                                       nrow = 2, byrow = TRUE))
+        cur_limit <- data.frame(matrix(c(min.values, max.values), 
+                                        ncol = length(colour_by), 
+                                        nrow = 2, byrow = TRUE))
         names(cur_limit) <- colour_by
         cur_limit <- as.list(cur_limit)
     } else {
-        cur_limit <- data.frame(matrix(c(rep(min(min.values), length(min.values)), 
-                                         rep(max(max.values), length(max.values))), 
-                                       ncol = length(colour_by), 
-                                       nrow = 2, byrow = TRUE))
+        cur_limit <- data.frame(matrix(c(rep(min(min.values), 
+                                                length(min.values)), 
+                                            rep(max(max.values), 
+                                                length(max.values))), 
+                                        ncol = length(colour_by), 
+                                        nrow = 2, byrow = TRUE))
         names(cur_limit) <- colour_by
         cur_limit <- as.list(cur_limit)
     }
@@ -695,9 +698,10 @@
 
         # Maximum label width
         cur_labels <- unlist(lapply(cur_limits$colour_by[colour_by], 
-               function(x){c(format(round(x[1], 1), nsmall = 1),
-                             format(round(x[2], 1)/2),
-                             format(round(x[2], 1), nsmall = 1))}))
+                function(x){c(format(round(x[1], 1), nsmall = 1),
+                                format(((round(x[2], 1) - round(x[1], 1)) / 
+                                        2) + round(x[1], 1), nsmall = 1),
+                                format(round(x[2], 1), nsmall = 1))}))
         
         label_width <- max(strwidth(cur_labels))
         
@@ -718,7 +722,8 @@
             cur_max <- cur_limits$colour_by[[col_n]][2]
 
             cur_labels <- c(format(round(cur_min, 1), nsmall = 1),
-                            format(round(cur_max, 1)/2),
+                            format(((round(cur_max, 1) - round(cur_min, 1)) / 
+                                        2) + round(cur_min, 1), nsmall = 1),
                             format(round(cur_max, 1), nsmall = 1))
             
             # Define title cex
@@ -774,7 +779,8 @@
             cur_max <- cur_limits$colour_by[[colour_by]][2]
             
             cur_labels <- c(format(round(cur_min, 1), nsmall = 1),
-                            format(round(cur_max, 1)/2),
+                            format(((round(cur_max, 1) - round(cur_min, 1)) / 
+                                        2) + round(cur_min, 1), nsmall = 1),
                             format(round(cur_max, 1), nsmall = 1))
             label_width <- max(strwidth(rev(cur_labels)))
             title_height <- abs(strheight(colour_by, 
@@ -861,7 +867,8 @@
             cur_max <- cur_limits$outline_by[[outline_by]][2]
             
             cur_labels <- c(format(round(cur_min, 1), nsmall = 1),
-                            format(round(cur_max, 1)/2),
+                            format(((round(cur_max, 1) - round(cur_min, 1)) / 
+                                        2) + round(cur_min, 1), nsmall = 1),
                             format(round(cur_max, 1), nsmall = 1))
             label_width <- max(strwidth(rev(cur_labels)))
             title_height <- abs(strheight(outline_by, 

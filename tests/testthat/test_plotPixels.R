@@ -154,7 +154,7 @@ test_that("plotPixels: Channels can be enhanced.", {
 test_that("plotPixels: Cells can be outlined correctly.", {
   data("pancreasSCE")
   data("pancreasImages")
-  data("pancreasImages")
+  data("pancreasMasks")
 
   # Works
   expect_silent(plotPixels(object = pancreasSCE,
@@ -360,6 +360,11 @@ test_that("plotPixels: SCE can be subsetted.", {
                            mask = pancreasMasks, img_id = "ImageNb",
                            cell_id = "CellNb",
                            colour_by = "H3", outline_by = "CellType"))
+  expect_silent(plotPixels(object = cur_sce,
+                           image = pancreasImages,
+                           mask = pancreasMasks, img_id = "ImageNb",
+                           cell_id = "CellNb",
+                           colour_by = "H3", outline_by = "Pattern"))
   expect_silent(plotPixels(object = cur_sce,
                            image = pancreasImages,
                            mask = pancreasMasks, img_id = "ImageNb",
