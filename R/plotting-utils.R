@@ -731,6 +731,7 @@
             # Define label cex
             if (is.null(colour_by.labels.cex)) {
                 label_cex <- (cur_space_x / 2) / label_width
+                label_cex <- label_cex * 0.9
             } else {
                 label_cex <- colour_by.labels.cex
             }
