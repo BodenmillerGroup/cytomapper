@@ -8,6 +8,14 @@ test_that("loadImages function reads in correct objects.", {
   expect_error(cur_file <- loadImages("test"))
   expect_s4_class(cur_file, "CytoImageList")
 
+  expect_silent(cur_file <- scaleImages(cur_file, 2^16))
+  expect_error(plotCells(cur_file), regexp = "Segmentation masks must only contain integer values.",
+               fixed = TRUE)
+  
+  expect_silent(cur_file <- loadImages(single_file))
+  expect_error(cur_file <- loadImages("test"))
+  expect_s4_class(cur_file, "CytoImageList")
+  
   expect_silent(cur_file <- scaleImages(cur_file, 2^16-1))
   expect_silent(plotCells(cur_file))
 
