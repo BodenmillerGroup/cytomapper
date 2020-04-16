@@ -5,10 +5,10 @@ package: "`r BiocStyle::pkg_ver('cytomapper')`"
 author:
 - name: Nils Eling
   affiliation: Department for Quantitative Biomedicine, University of Zurich
-  email: nils.eling@dqbm.uzh.ch.com
+  email: nils.eling@dqbm.uzh.ch
 - name: Nicolas Damond
   affiliation: Department for Quantitative Biomedicine, University of Zurich
-  email: nicolas.damond@dqbm.uzh.ch.com
+  email: nicolas.damond@dqbm.uzh.ch
 output:
     BiocStyle::html_document:
         toc_float: yes
