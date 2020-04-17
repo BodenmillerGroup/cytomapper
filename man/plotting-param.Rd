@@ -16,7 +16,7 @@ specifying a valid colour that is set as the background of the image.}
 \item{scale_bar}{a list specifying features of the scale bar. One or multiple
 of the following entries are supported:
 \itemize{
-\item \code{length}: numeric length in pixels (default 20% of the largest
+\item \code{length}: numeric length in pixels (default 20\% of the largest
 image width).
 \item \code{label}: single character specifying the scale bar label.
 \item \code{cex}: numeric value indicating the size of the scale bar label.
@@ -60,13 +60,13 @@ of the following entries are supported:
 The file extension specifies the format in which the file is saved.
 Supported formats are: jpeg, tiff and png. If \code{display = "single"},
 each image will be written in an individual file. The file names obtain
-a "_x" ending where x indicates the position of the image within the
-\code{CytoImageList} object.
+a "_x" ending where x indicates the position of the image in the
+\code{CytoImageList} object or "legend".
 \item \code{scale}: by default the height and width of the saved image is
-defined by the maximum image size times the number of rows or numer of
-columns. This resolution is often not suffcient to clearly display the
+defined by the maximum image size times the number of rows and number of
+columns. This resolution is often not sufficient to clearly display the
 text. The \code{scale} parameter can be set to increase the resolution of
-the image while keeping the text size constant (default 1 but should be
+the image while keeping the text size constant (default 1 but can be
 increased for optimal results).
 }}
 
@@ -99,16 +99,16 @@ legend labels for features specified by \code{outline_by}.
 \item \code{outline_by.legend.cex}: (only discrete features) numeric entry
 specifying the size of the legend for features specified by
 \code{outline_by}.
-\item \code{margin}: numeric value indicating the margin between the
-legends and the outer boundary (default 2)
+\item \code{margin}: numeric value indicating the margin (in pixels) between 
+the legends and the outer boundary (default 2)
 }
 Plotting of the legend is suppressed if set to \code{NULL}.}
 
-\item{margin}{numeric value indicating the gap between individual images
-(default 0).}
+\item{margin}{numeric value indicating the gap (in pixels) between 
+individual images (default 0).}
 
 \item{display}{one of two possible values: "all" or "single". When set to
-"all", all images are displayed aat once in a grid-like fashion. When
+"all", all images are displayed at once in a grid-like fashion. When
 set to "single", individual images are plotted in single graphics devices.
 The second option is useful when saving individual images in pdf format or
 when displaying in Rmarkdown files.}
@@ -124,7 +124,7 @@ linear interpolation to the image when drawing (see
 \code{\link[graphics]{rasterImage}}) (default TRUE).}
 }
 \value{
-a list if return_images and/or return_plot is TRUE.
+a list if \code{return_images} and/or \code{return_plot} is TRUE.
 \itemize{
 \item \code{plot}: a single plot object (\code{display = "all"}) or a list
 of plot objects (\code{display = "single"})
@@ -205,7 +205,7 @@ plotPixels(pancreasImages, colour_by = c("CD99", "PIN"),
 
 }
 \seealso{
-\code{\link{plotCells}} and \code{\link{plotCells}}
+\code{\link{plotCells}} and \code{\link{plotPixels}}
 for the main plotting functions
 }
 \author{

@@ -8,7 +8,11 @@ test_that("masks can be coloured by metadata.", {
                       cell_id = "CellNb", img_id = "ImageNb",
                       colour_by = "CellType", cur_colour = cur_col,
                       missing_colour = "grey", background_colour = "black"))
-
+    
+    expect_true(is.list(cur_out))
+    expect_true(is.null(cur_out$cur_limit))
+    cur_out <- cur_out$imgs
+    
     # Test if cells are correctly coloured
     cur_ids <- pancreasSCE$CellNb[pancreasSCE$ImageNb == 1 & pancreasSCE$CellType == "celltype_A"]
     expect_true(all(cur_out[[1]][pancreasMasks[[1]] %in% cur_ids] == "red"))
@@ -39,7 +43,10 @@ test_that("masks can be coloured by metadata.", {
                                                missing_colour = "grey", background_colour = "black"))
 
     cur_col_ramp <- colorRampPalette(cur_col)(101)
-
+    expect_true(is.list(cur_out))
+    expect_equal(cur_out$cur_limit, list(Area = c(2, 200)))
+    cur_out <- cur_out$imgs
+    
     # First image
     cur_scaling <- .minMaxScaling(colData(pancreasSCE[,pancreasSCE$ImageNb == 1])[,"Area"],
                                   min_x = min(colData(pancreasSCE)[,"Area"]),
@@ -90,6 +97,10 @@ test_that("masks can be coloured by metadata.", {
                                                colour_by = "CellType", cur_colour = cur_col,
                                                missing_colour = "grey", background_colour = "black"))
 
+    expect_true(is.list(cur_out))
+    expect_true(is.null(cur_out$cur_limit))
+    cur_out <- cur_out$imgs
+    
     expect_true(all(cur_out[[1]][pancreasMasks[[1]] == 0L] == "black"))
     expect_true(all(cur_out[[2]][pancreasMasks[[2]] == 0L] == "black"))
     expect_true(all(cur_out[[3]][pancreasMasks[[3]] == 0L] == "black"))
@@ -101,6 +112,10 @@ test_that("masks can be coloured by metadata.", {
                                                cell_id = "CellNb", img_id = "ImageNb",
                                                colour_by = "CellType", cur_colour = cur_col,
                                                missing_colour = "grey", background_colour = "black"))
+    
+    expect_true(is.list(cur_out))
+    expect_true(is.null(cur_out$cur_limit))
+    cur_out <- cur_out$imgs
 
     expect_true(all(cur_out[[1]][pancreasMasks[[1]] == 0L] == "black"))
     expect_true(all(cur_out[[2]][pancreasMasks[[2]] == 0L] == "black"))
@@ -149,6 +164,12 @@ test_that("masks can be coloured by features.", {
                                                   missing_colour = "grey", background_colour = "black",
                                                   plottingParam = plottingParam))
 
+    expect_true(is.list(cur_out))
+    expect_equal(cur_out$cur_limit$H3, as.numeric(quantile(counts(pancreasSCE)["H3",pancreasSCE$ImageNb == 1], probs = c(0,1))))
+    expect_equal(cur_out$cur_limit$CD99, as.numeric(quantile(counts(pancreasSCE)["CD99",pancreasSCE$ImageNb == 1], probs = c(0,1))))
+    expect_equal(cur_out$cur_limit$CDH, as.numeric(quantile(counts(pancreasSCE)["CDH",pancreasSCE$ImageNb == 1], probs = c(0,1))))
+    cur_out <- cur_out$imgs
+    
     # Check if overlayed image is the same as EBImage output
     cur_img <- combine(pancreasMasks[[1]], pancreasMasks[[1]], pancreasMasks[[1]])
     cur_sce <- pancreasSCE[,pancreasSCE$ImageNb == 1]
@@ -180,6 +201,12 @@ test_that("masks can be coloured by features.", {
                                                   exprs_values = "counts", cur_colour = cur_col,
                                                   missing_colour = "grey", background_colour = "black",
                                                   plottingParam = plottingParam))
+    
+    expect_true(is.list(cur_out))
+    expect_equal(cur_out$cur_limit$H3, as.numeric(quantile(counts(pancreasSCE)["H3",], probs = c(0,1))))
+    expect_equal(cur_out$cur_limit$CD99, as.numeric(quantile(counts(pancreasSCE)["CD99",], probs = c(0,1))))
+    expect_equal(cur_out$cur_limit$CDH, as.numeric(quantile(counts(pancreasSCE)["CDH",], probs = c(0,1))))
+    cur_out <- cur_out$imgs
 
     # Check if overlayed image is the same as EBImage output
     cur_img <- combine(pancreasMasks[[1]], pancreasMasks[[1]], pancreasMasks[[1]])
@@ -285,6 +312,12 @@ test_that("masks can be coloured by features.", {
                                                   missing_colour = "grey", background_colour = "black",
                                                   plottingParam = plottingParam))
 
+    expect_true(is.list(cur_out))
+    expect_equal(cur_out$cur_limit$H3, as.numeric(quantile(counts(pancreasSCE)[colour_by,], probs = c(0,1))))
+    expect_equal(cur_out$cur_limit$CD99, as.numeric(quantile(counts(pancreasSCE)[colour_by,], probs = c(0,1))))
+    expect_equal(cur_out$cur_limit$CDH, as.numeric(quantile(counts(pancreasSCE)[colour_by,], probs = c(0,1))))
+    cur_out <- cur_out$imgs
+    
     # Check if overlayed image is the same as EBImage output
     cur_img <- combine(pancreasMasks[[1]], pancreasMasks[[1]], pancreasMasks[[1]])
     cur_sce <- pancreasSCE[,pancreasSCE$ImageNb == 1]
@@ -390,6 +423,12 @@ test_that("images can be coloured by features.", {
     expect_silent(cur_out <- .colourImageByFeature(image = pancreasImages[1], colour_by = colour_by,
                                                    bcg = list(H3 = c(0,1,1), CD99 = c(0,1,1), CDH = c(0,1,1)),
                                                    cur_colour = cur_col, plottingParam = plottingParam))
+    
+    expect_true(is.list(cur_out))
+    expect_equal(cur_out$cur_limit$H3, as.numeric(quantile(pancreasImages[[1]][,,"H3"], probs = c(0,1))))
+    expect_equal(cur_out$cur_limit$CD99, as.numeric(quantile(pancreasImages[[1]][,,"CD99"], probs = c(0,1))))
+    expect_equal(cur_out$cur_limit$CDH, as.numeric(quantile(pancreasImages[[1]][,,"CDH"], probs = c(0,1))))
+    cur_out <- cur_out$imgs
 
     # Compare to EBImage
     cur_img <- getChannels(pancreasImages[1], c("H3", "CD99", "CDH"))
@@ -402,6 +441,15 @@ test_that("images can be coloured by features.", {
     expect_silent(cur_out <- .colourImageByFeature(image = pancreasImages, colour_by = colour_by,
                                                    bcg = list(H3 = c(0,1,1), CD99 = c(0,1,1), CDH = c(0,1,1)),
                                                    cur_colour = cur_col, plottingParam = plottingParam))
+    
+    expect_true(is.list(cur_out))
+    expect_equal(cur_out$cur_limit$H3, as.numeric(quantile(unlist(lapply(pancreasImages, function(x){as.numeric(x[,,"H3"])})), 
+                                                           probs = c(0,1))))
+    expect_equal(cur_out$cur_limit$CD99, as.numeric(quantile(unlist(lapply(pancreasImages, function(x){as.numeric(x[,,"CD99"])})), 
+                                                             probs = c(0,1))))
+    expect_equal(cur_out$cur_limit$CDH, as.numeric(quantile(unlist(lapply(pancreasImages, function(x){as.numeric(x[,,"CDH"])})), 
+                                                            probs = c(0,1))))
+    cur_out <- cur_out$imgs
 
     # Compare to EBImage
     H3_dist <- unlist(lapply(getChannels(pancreasImages, "H3"), as.numeric))
@@ -443,6 +491,15 @@ test_that("images can be coloured by features.", {
     expect_silent(cur_out <- .colourImageByFeature(image = pancreasImages, colour_by = colour_by,
                                                    bcg = list(H3 = c(0,1,1), CD99 = c(0,1,1), CDH = c(0,1,1)),
                                                    cur_colour = cur_col, plottingParam = plottingParam))
+    
+    expect_true(is.list(cur_out))
+    expect_equal(cur_out$cur_limit$H3, as.numeric(quantile(unlist(lapply(pancreasImages, function(x){as.numeric(x[,,colour_by])})), 
+                                                           probs = c(0,1))))
+    expect_equal(cur_out$cur_limit$CD99, as.numeric(quantile(unlist(lapply(pancreasImages, function(x){as.numeric(x[,,colour_by])})), 
+                                                             probs = c(0,1))))
+    expect_equal(cur_out$cur_limit$CDH, as.numeric(quantile(unlist(lapply(pancreasImages, function(x){as.numeric(x[,,colour_by])})), 
+                                                            probs = c(0,1))))
+    cur_out <- cur_out$imgs
 
     all_dist <- unlist(lapply(getChannels(pancreasImages, colour_by), as.numeric))
     cur_img <- getChannels(pancreasImages[1], c("H3", "CD99", "CDH"))
@@ -481,6 +538,15 @@ test_that("images can be coloured by features.", {
     expect_silent(cur_out <- .colourImageByFeature(image = pancreasImages, colour_by = colour_by,
                                                    bcg = list(H3 = c(0,0.5,1), CD99 = c(0,1,2), CDH = c(10,1,1)),
                                                    cur_colour = cur_col, plottingParam = plottingParam))
+    
+    expect_true(is.list(cur_out))
+    expect_equal(cur_out$cur_limit$H3, as.numeric(quantile(unlist(lapply(pancreasImages, function(x){as.numeric(x[,,"H3"])})), 
+                                                           probs = c(0,1))))
+    expect_equal(cur_out$cur_limit$CD99, as.numeric(quantile(unlist(lapply(pancreasImages, function(x){as.numeric(x[,,"CD99"])})), 
+                                                             probs = c(0,1))))
+    expect_equal(cur_out$cur_limit$CDH, as.numeric(quantile(unlist(lapply(pancreasImages, function(x){as.numeric(x[,,"CDH"])})), 
+                                                            probs = c(0,1))))
+    cur_out <- cur_out$imgs
 
     # Compare to EBImage
     H3_dist <- unlist(lapply(getChannels(pancreasImages, "H3"), as.numeric))
@@ -529,13 +595,18 @@ test_that("images can be outlined by metadata.", {
     expect_silent(out_img <- .colourImageByFeature(image = pancreasImages, colour_by = colour_by,
                                                    bcg = list(H3 = c(0,1,1), CD99 = c(0,1,1), CDH = c(0,1,1)),
                                                    cur_colour = cur_col, plottingParam = plottingParam))
+    out_img <- out_img$imgs
 
     cur_col <- c(celltype_A = "red", celltype_B = "green", celltype_C = "blue")
 
     expect_silent(cur_out <- .outlineImageByMeta(object = pancreasSCE, mask = pancreasMasks,
                                                  out_img = out_img, cell_id = "CellNb", img_id = "ImageNb",
                                                  outline_by = "CellType",
-                                                 cur_colour = cur_col, missing_colour = "grey"))
+                                                 cur_colour = cur_col))
+    
+    expect_true(is.list(cur_out))
+    expect_true(is.null(cur_out$cur_limit))
+    cur_out <- cur_out$imgs
 
     # Compare to EBImage
     cur_img <- out_img[[1]]
@@ -586,15 +657,23 @@ test_that("images can be outlined by metadata.", {
     expect_silent(cur_out <- .outlineImageByMeta(object = pancreasSCE, mask = pancreasMasks,
                                                  out_img = out_img, cell_id = "CellNb", img_id = "ImageNb",
                                                  outline_by = "Area",
-                                                 cur_colour = cur_col, missing_colour = "grey"))
+                                                 cur_colour = cur_col))
 
+    expect_true(is.list(cur_out))
+    expect_equal(cur_out$cur_limit, list(Area = c(2, 200)))
+    cur_out <- cur_out$imgs
+    
     # Test for completely continous scale
     cur_col <- c("blue", "red")
 
     expect_silent(cur_out <- .outlineImageByMeta(object = pancreasSCE, mask = pancreasMasks,
                                                  out_img = out_img, cell_id = "CellNb", img_id = "ImageNb",
                                                  outline_by = "Pos_X",
-                                                 cur_colour = cur_col, missing_colour = "grey"))
+                                                 cur_colour = cur_col))
+    expect_true(is.list(cur_out))
+    expect_equal(cur_out$cur_limit, list(Pos_X = as.numeric(quantile(pancreasSCE$Pos_X, probs = c(0, 1)))))
+    cur_out <- cur_out$imgs
+
 })
 
 test_that("colours can be selected.", {
@@ -778,25 +857,33 @@ test_that("colour vector creation works.", {
     expect_silent(cur_out <- .createColourVector(object = pancreasSCE,colour_by = "CD99",
                                    exprs_values = "counts", cur_colour = list(CD99 = c("black", "red")),
                                    plottingParam = list(scale = TRUE)))
-    expect_s4_class(cur_out, "SingleCellExperiment")
-    expect_true("CYTO_COLOUR" %in% names(int_colData(cur_out)))
+    expect_true(is.list(cur_out))
+    expect_s4_class(cur_out$object, "SingleCellExperiment")
+    expect_true("CYTO_COLOUR" %in% names(int_colData(cur_out$object)))
+    expect_equal(cur_out$cur_out, list(CD99 = as.numeric(quantile(counts(pancreasSCE)["CD99",], probs = c(0,1)))))
 
     expect_silent(cur_out <- .createColourVector(object = pancreasSCE,colour_by = c("H3", "CD99"),
                                                  exprs_values = "counts",
                                                  cur_colour = list(CD99 = c("black", "red"),
                                                                    H3 = c("black", "green")),
                                                  plottingParam = list(scale = TRUE)))
-    expect_s4_class(cur_out, "SingleCellExperiment")
-    expect_true("CYTO_COLOUR" %in% names(int_colData(cur_out)))
-
+    expect_true(is.list(cur_out))
+    expect_s4_class(cur_out$object, "SingleCellExperiment")
+    expect_true("CYTO_COLOUR" %in% names(int_colData(cur_out$object)))
+    expect_equal(cur_out$cur_out, list(H3 = as.numeric(quantile(counts(pancreasSCE)["H3",], probs = c(0,1))),
+        CD99 = as.numeric(quantile(counts(pancreasSCE)["CD99",], probs = c(0,1)))))
+    
     expect_silent(cur_out <- .createColourVector(object = pancreasSCE,colour_by = c("H3", "CD99"),
                                                  exprs_values = "exprs",
                                                  cur_colour = list(CD99 = c("black", "red"),
                                                                    H3 = c("black", "green")),
                                                  plottingParam = list(scale = TRUE)))
-    expect_s4_class(cur_out, "SingleCellExperiment")
-    expect_true("CYTO_COLOUR" %in% names(int_colData(cur_out)))
-
+    expect_true(is.list(cur_out))
+    expect_s4_class(cur_out$object, "SingleCellExperiment")
+    expect_true("CYTO_COLOUR" %in% names(int_colData(cur_out$object)))
+    expect_equal(cur_out$cur_out, list(H3 = as.numeric(quantile(assay(pancreasSCE, "exprs")["H3",], probs = c(0,1))),
+                                       CD99 = as.numeric(quantile(assay(pancreasSCE, "exprs")["CD99",], probs = c(0,1)))))
+    
     # Generate example sce
     cur_test <- SingleCellExperiment(assay = list(counts = matrix(c(1:3, 1:3, 1:3, 1:3),
                                                                   ncol = 3,byrow = TRUE)))
@@ -813,9 +900,11 @@ test_that("colour vector creation works.", {
     cur_col <- col2rgb("red") + col2rgb("green") + col2rgb("blue") + col2rgb("magenta")
     cur_col <- (cur_col / max(cur_col)) * 255
 
-    expect_equal(int_colData(cur_out)$CYTO_COLOUR[1], "#000000")
-    expect_equal(as.numeric(col2rgb(int_colData(cur_out)$CYTO_COLOUR[2])), as.numeric(cur_col/2), tolerance = 0.5)
-    expect_equal(as.numeric(col2rgb(int_colData(cur_out)$CYTO_COLOUR[3])), as.numeric(cur_col), tolerance = 0.5)
+    expect_equal(cur_out$cur_out, list(test1 = c(1,3), test2 = c(1,3), test3 = c(1,3), test4 = c(1,3)))
+    
+    expect_equal(int_colData(cur_out$object)$CYTO_COLOUR[1], "#000000")
+    expect_equal(as.numeric(col2rgb(int_colData(cur_out$object)$CYTO_COLOUR[2])), as.numeric(cur_col/2), tolerance = 0.5)
+    expect_equal(as.numeric(col2rgb(int_colData(cur_out$object)$CYTO_COLOUR[3])), as.numeric(cur_col), tolerance = 0.5)
 
 })
 
@@ -828,6 +917,7 @@ test_that("images can be displayed.", {
                                      bcg = list(CD99 = c(0,1,1)), cur_colour = list(CD99 = c("black", "red")),
                                      plottingParam = list(scale = TRUE))
     plottingParam <- .plottingParam(dotArgs = list(), image = pancreasImages)
+    cur_limits <- list(colour_by = out_img$cur_limit)
 
     expect_silent(cur_out <- .displayImages(object = pancreasSCE,
                    image = pancreasImages,
@@ -835,10 +925,10 @@ test_that("images can be displayed.", {
                    outline_by = NULL,
                    colour_by = "CD99",
                    mask = NULL,
-                   out_img = out_img,
+                   out_img = out_img$imgs,
                    img_id = NULL,
                    cur_col = list(colour_by = list(CD99 = c("black", "red"))),
-                   plottingParam = plottingParam))
+                   plottingParam = plottingParam, cur_limits = cur_limits))
     expect_true(is.null(cur_out))
 
     plottingParam$legend <- NULL
@@ -848,10 +938,10 @@ test_that("images can be displayed.", {
                                             outline_by = NULL,
                                             colour_by = "CD99",
                                             mask = NULL,
-                                            out_img = out_img,
+                                            out_img = out_img$imgs,
                                             img_id = NULL,
                                             cur_col = list(colour_by = list(CD99 = c("black", "red"))),
-                                            plottingParam = plottingParam))
+                                            plottingParam = plottingParam, cur_limits = cur_limits))
     expect_true(is.null(cur_out))
 
     plottingParam$legend <- NULL
@@ -861,10 +951,10 @@ test_that("images can be displayed.", {
                                             outline_by = NULL,
                                             colour_by = "CD99",
                                             mask = NULL,
-                                            out_img = out_img,
+                                            out_img = out_img$imgs,
                                             img_id = NULL,
                                             cur_col = list(colour_by = list(CD99 = c("black", "red"))),
-                                            plottingParam = plottingParam))
+                                            plottingParam = plottingParam, cur_limits = cur_limits))
     expect_true(is.null(cur_out))
 
     plottingParam <- .plottingParam(dotArgs = list(), image = pancreasImages)
@@ -875,10 +965,10 @@ test_that("images can be displayed.", {
                                             outline_by = NULL,
                                             colour_by = "CD99",
                                             mask = NULL,
-                                            out_img = out_img,
+                                            out_img = out_img$imgs,
                                             img_id = NULL,
                                             cur_col = list(colour_by = list(CD99 = c("black", "red"))),
-                                            plottingParam = plottingParam))
+                                            plottingParam = plottingParam, cur_limits = cur_limits))
     expect_true(is(cur_out, "recordedplot"))
 
     plottingParam <- .plottingParam(dotArgs = list(), image = pancreasImages)
@@ -890,10 +980,10 @@ test_that("images can be displayed.", {
                                             outline_by = NULL,
                                             colour_by = "CD99",
                                             mask = NULL,
-                                            out_img = out_img,
+                                            out_img = out_img$imgs,
                                             img_id = NULL,
                                             cur_col = list(colour_by = list(CD99 = c("black", "red"))),
-                                            plottingParam = plottingParam))
+                                            plottingParam = plottingParam, cur_limits = cur_limits))
     expect_true(is(cur_out, "list"))
     expect_length(cur_out, 4)
     expect_equal(names(cur_out), c("legend", "E34_imc", "G01_imc", "J02_imc"))
@@ -913,6 +1003,11 @@ test_that("legend can be plotted.", {
                                     H3 = c("black", "green"),
                                     CDH = c("black", "blue"),
                                     CD8a = c("black", "cyan")))
+    out_img <- .colourImageByFeature(image = pancreasImages, colour_by = colour_by,
+                                     bcg = NULL, cur_colour = cur_col$colour_by,
+                                     plottingParam = list(scale = TRUE))
+    plottingParam <- .plottingParam(dotArgs = list(), image = pancreasImages)
+    cur_limits <- list(colour_by = out_img$cur_limit)
 
     x_len <- 100
     y_len <- 100
@@ -922,6 +1017,7 @@ test_that("legend can be plotted.", {
 
     plot(c(0, x_len), c(0, y_len), type="n", xlab="", ylab="",
          asp = 1, ylim = rev(c(0, y_len)))
+    
 
     expect_silent(.plotLegend(object = pancreasSCE,
                 image = pancreasImages,
@@ -931,7 +1027,7 @@ test_that("legend can be plotted.", {
                 m_width = x_len,
                 m_height = y_len,
                 cur_col = cur_col,
-                plottingParam))
+                plottingParam, cur_limits = cur_limits))
 
     x_len <- 1000
     y_len <- 1000
@@ -950,7 +1046,7 @@ test_that("legend can be plotted.", {
                               m_width = x_len,
                               m_height = y_len,
                               cur_col = cur_col,
-                              plottingParam))
+                              plottingParam, cur_limits = cur_limits))
 
     x_len <- 2000
     y_len <- 2000
@@ -969,13 +1065,33 @@ test_that("legend can be plotted.", {
                               m_width = x_len,
                               m_height = y_len,
                               cur_col = cur_col,
-                              plottingParam))
+                              plottingParam, cur_limits = cur_limits))
+    
+    x_len <- 20
+    y_len <- 20
+    
+    par(bty="n", mai=c(0,0,0,0), xaxs="i",
+        yaxs="i", xaxt="n", yaxt="n", col = "white")
+    
+    plot(c(0, x_len), c(0, y_len), type="n", xlab="", ylab="",
+         asp = 1, ylim = rev(c(0, y_len)))
+    
+    expect_silent(.plotLegend(object = pancreasSCE,
+                              image = pancreasImages,
+                              exprs_values = "counts",
+                              outline_by = NULL,
+                              colour_by = colour_by,
+                              m_width = x_len,
+                              m_height = y_len,
+                              cur_col = cur_col,
+                              plottingParam, cur_limits = cur_limits))
 
     plottingParam <- .plottingParam(dotArgs = list(), image = pancreasImages)
     colour_by = "CellType"
     cur_col = list(colour_by = list(CellType = c(celltype_A = "red",
                                                  celltype_B = "blue",
                                                  celltype_C = "green")))
+    cur_limits <- list(colour_by = NULL)
 
     x_len <- 100
     y_len <- 100
@@ -994,7 +1110,7 @@ test_that("legend can be plotted.", {
                               m_width = x_len,
                               m_height = y_len,
                               cur_col = cur_col,
-                              plottingParam))
+                              plottingParam, cur_limits = cur_limits))
 
     x_len <- 1000
     y_len <- 1000
@@ -1013,7 +1129,7 @@ test_that("legend can be plotted.", {
                               m_width = x_len,
                               m_height = y_len,
                               cur_col = cur_col,
-                              plottingParam))
+                              plottingParam, cur_limits = cur_limits))
 
     x_len <- 2000
     y_len <- 2000
@@ -1032,7 +1148,7 @@ test_that("legend can be plotted.", {
                               m_width = x_len,
                               m_height = y_len,
                               cur_col = cur_col,
-                              plottingParam))
+                              plottingParam, cur_limits = cur_limits))
 
     plottingParam <- .plottingParam(dotArgs = list(), image = pancreasImages)
     colour_by = "CellType"
@@ -1044,6 +1160,8 @@ test_that("legend can be plotted.", {
                                                  celltype_B = "magenta",
                                                  celltype_C = "cyan")))
 
+    cur_limits <- list(colour_by = NULL, outline_by = NULL)
+    
     x_len <- 100
     y_len <- 100
 
@@ -1061,7 +1179,7 @@ test_that("legend can be plotted.", {
                               m_width = x_len,
                               m_height = y_len,
                               cur_col = cur_col,
-                              plottingParam))
+                              plottingParam, cur_limits = cur_limits))
 
     x_len <- 1000
     y_len <- 1000
@@ -1080,7 +1198,7 @@ test_that("legend can be plotted.", {
                               m_width = x_len,
                               m_height = y_len,
                               cur_col = cur_col,
-                              plottingParam))
+                              plottingParam, cur_limits = cur_limits))
 
     x_len <- 2000
     y_len <- 2000
@@ -1099,7 +1217,74 @@ test_that("legend can be plotted.", {
                               m_width = x_len,
                               m_height = y_len,
                               cur_col = cur_col,
-                              plottingParam))
+                              plottingParam, cur_limits = cur_limits))
+    
+    # Continous scale
+    plottingParam <- .plottingParam(dotArgs = list(), image = pancreasMasks)
+    colour_by = "Area"
+    outline_by = "Area"
+    cur_col = list(colour_by = list(Area = inferno(100)),
+                   outline_by = list(Area = viridis(100)))
+    
+    cur_limits <- list(colour_by = list(Area = c(min(pancreasSCE$Area), max(pancreasSCE$Area))),
+                       outline_by = list(Area = c(min(pancreasSCE$Area), max(pancreasSCE$Area))))
+    
+    x_len <- 100
+    y_len <- 100
+    
+    par(bty="n", mai=c(0,0,0,0), xaxs="i",
+        yaxs="i", xaxt="n", yaxt="n", col = "white")
+    
+    plot(c(0, x_len), c(0, y_len), type="n", xlab="", ylab="",
+         asp = 1, ylim = rev(c(0, y_len)))
+    
+    expect_silent(.plotLegend(object = pancreasSCE,
+                              image = NULL,
+                              exprs_values = "counts",
+                              outline_by = outline_by,
+                              colour_by = colour_by,
+                              m_width = x_len,
+                              m_height = y_len,
+                              cur_col = cur_col,
+                              plottingParam, cur_limits = cur_limits))
+    
+    x_len <- 1000
+    y_len <- 1000
+    
+    par(bty="n", mai=c(0,0,0,0), xaxs="i",
+        yaxs="i", xaxt="n", yaxt="n", col = "white")
+    
+    plot(c(0, x_len), c(0, y_len), type="n", xlab="", ylab="",
+         asp = 1, ylim = rev(c(0, y_len)))
+    
+    expect_silent(.plotLegend(object = pancreasSCE,
+                              image = NULL,
+                              exprs_values = "counts",
+                              outline_by = outline_by,
+                              colour_by = colour_by,
+                              m_width = x_len,
+                              m_height = y_len,
+                              cur_col = cur_col,
+                              plottingParam, cur_limits = cur_limits))
+    
+    x_len <- 2000
+    y_len <- 2000
+    
+    par(bty="n", mai=c(0,0,0,0), xaxs="i",
+        yaxs="i", xaxt="n", yaxt="n", col = "white")
+    
+    plot(c(0, x_len), c(0, y_len), type="n", xlab="", ylab="",
+         asp = 1, ylim = rev(c(0, y_len)))
+    
+    expect_silent(.plotLegend(object = pancreasSCE,
+                              image = NULL,
+                              exprs_values = "counts",
+                              outline_by = outline_by,
+                              colour_by = colour_by,
+                              m_width = x_len,
+                              m_height = y_len,
+                              cur_col = cur_col,
+                              plottingParam, cur_limits = cur_limits))
 
 
 })

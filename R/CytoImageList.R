@@ -44,12 +44,16 @@
 #'
 #' @seealso
 #' \code{\linkS4class{Image}}, for further image analysis tools.
+#' 
 #' \code{\linkS4class{SimpleList}}, for basics functions to handle SimpleList
 #' objects
+#' 
 #' \code{?\link{loadImages}}, for reading images into a CytoImageList
 #' object
+#' 
 #' \code{?"\link{CytoImageList-naming}"}, for setting and getting image and
 #' channel names
+#' 
 #' \code{?"\link{CytoImageList-subsetting}"}, for subsetting and
 #' accessor functions
 #'

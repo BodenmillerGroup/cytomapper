@@ -5,10 +5,10 @@ package: "`r BiocStyle::pkg_ver('cytomapper')`"
 author:
 - name: Nils Eling
   affiliation: Department for Quantitative Biomedicine, University of Zurich
-  email: nils.eling@dqbm.uzh.ch.com
+  email: nils.eling@dqbm.uzh.ch
 - name: Nicolas Damond
   affiliation: Department for Quantitative Biomedicine, University of Zurich
-  email: nicolas.damond@dqbm.uzh.ch.com
+  email: nicolas.damond@dqbm.uzh.ch
 output:
     BiocStyle::html_document:
         toc_float: yes
@@ -43,7 +43,7 @@ library(cytomapper)
 
 # Introduction
 
-This vignette gives an introduction to displaying highly multiplexed imaging
+This vignette gives an introduction to displaying highly-multiplexed imaging
 cytometry data with the `cytomapper` package. As an example, these instructions
 display imaging mass cytometry (IMC) data. However, other imaging cytometry
 approaches including multiplexed ion beam imaging (MIBI) [@angelo2014mibi],
@@ -52,9 +52,9 @@ indirect immunofluorescence imaging (4i) [@gut20184i], which produce pixel-level
 intensities and optionally segmentation masks can be displayed using
 `cytomapper`.
 
-IMC [@giesen2014imc] is a multiplexed imaging approach to measure spatial
+IMC [@giesen2014imc] is a multiplexed imaging cytometry approach to measure spatial
 protein abundance. In IMC, tissue sections are stained with a mix of
-$\tilde{}40$ metal-conjugated antibodies prior to laser ablation with $1\mu{}m$
+around 40 metal-conjugated antibodies prior to laser ablation with $1\mu{}m$
 resolution. The ablated material is transferred to a mass cytometer for
 time-of-flight detection of the metal ions [@giesen2014imc][@mavropoulosimc]. In
 that way, hundreds of images (usually with an image size of around 1mm x 1mm)
@@ -70,10 +70,9 @@ information.
 
 Cell-level expression and metadata can be processed and read into a
 `SingleCellExperiment` class object. For more information on the
-`SingleCellExperiment` object and how to create it, please see the `r
-Biocpkg("SingleCellExperiment")` package and the [Orchestrating Single-Cell
-Analysis with
-Bioconductor](https://osca.bioconductor.org/data-infrastructure.html#the-singlecellexperiment-class)
+`SingleCellExperiment` object and how to create it, please see the 
+`r Biocpkg("SingleCellExperiment")` package and the 
+[Orchestrating Single-Cell Analysis with Bioconductor](https://osca.bioconductor.org/data-infrastructure.html#the-singlecellexperiment-class)
 workflow.
 
 The `cytomapper` package provides a new `CytoImageList` class as a container for
@@ -84,16 +83,16 @@ The main functions of this package include `plotCells` and `plotPixels`. The
 `plotCells` function requires the following object inputs to display cell-level
 information (expression and metadata):
 
-1. a SingleCellExperiment object, which contains the cells' counts and metadata
-2. a CytoImageList object containing the segmentation mask per image
+1. a `SingleCellExperiment` object, which contains the cells' counts and metadata
+2. a `CytoImageList` object containing the segmentation masks
 
 The `plotPixels` function requires the following object inputs to display
 pixel-level expression information:
 
 1. a `CytoImageList` object containing the pixel-level information per channel
 2. (optionally) a `SingleCellExperiment` object, which contains the cells'
-counts and metadata 2. (optionally) a `CytoImageList` object containing the
-segmentation mask per image
+counts and metadata 
+3. (optionally) a `CytoImageList` object containing the segmentation masks
 
 # Quick start {#QuickStart}
 
@@ -110,7 +109,7 @@ data(pancreasMasks)
 ```
 
 The `CytoImageList` object containing pixel-level intensities representing the
-ion counts for five proteins can be displayed using the `plotPixel` function:
+ion counts for five proteins can be displayed using the `plotPixels` function:
 
 ```{r quickstart-plotPixels}
 plotPixels(image = pancreasImages, colour_by = c("H3", "CD99", "CDH"))
@@ -119,7 +118,7 @@ plotPixels(image = pancreasImages, colour_by = c("H3", "CD99", "CDH"))
 For more details on image normalization, cell outlining, and other pixel-level
 manipulations, refer to the [Plotting pixel information](#PixelInfo) section.
 
-The `CytoImageList` object containing segmentation masks that represent the cell
+The `CytoImageList` object containing segmentation masks, which represent cell
 areas on the image can be displayed using the `plotCells` function. Only the
 segmentation masks are plotted when no other parameters are specified.
 
@@ -131,7 +130,8 @@ plotCells(mask = pancreasMasks, object = pancreasSCE,
             cell_id = "CellNb", img_id = "ImageNb", colour_by = "CD99",
             outline_by = "CellType")
 plotCells(mask = pancreasMasks, object = pancreasSCE,
-            cell_id = "CellNb", img_id = "ImageNb", colour_by = "CellType")
+            cell_id = "CellNb", img_id = "ImageNb", 
+            colour_by = "CellType")
 ```
 
 For more information on the data formats and requirements, refer to the
@@ -140,9 +140,9 @@ following section. More details on the `plotCells` function are provided in the
 
 # Data formats {#DataFormats}
 
-The `cytomapper` package combines objects of the `r
-Biocpkg("SingleCellExperiment")` class and the `CytoImageList` class (provided
-in `cytomapper`) to visualize cell- and pixel-level information.
+The `cytomapper` package combines objects of the 
+`r Biocpkg("SingleCellExperiment")` class and the `CytoImageList` class 
+(provided in `cytomapper`) to visualize cell- and pixel-level information.
 
 In the main functions of the package, `image` refers to a `CytoImageList` object
 containing one or multiple multi-channel images where each channel represents
@@ -162,8 +162,8 @@ objects, two slots need to be specified:
 object) entry that contains the image identifiers. These image ids have to match
 between the `SingleCellExperiment` object and the `CytoImageList` object.
 * `cell_id`: a single character indicating the `colData` entry that contains the
-cell identifiers. **These should be integer values corresponding to pixel-values
-in the segmentation masks**.
+cell identifiers. These should be integer values corresponding to pixel-values
+in the segmentation masks.
 
 The `img_id` and `cell_id` entry in the `SingleCellExperiment` object need to be
 accessible via:
@@ -182,10 +182,9 @@ mcols(pancreasMasks)[,"ImageNb"]
 
 For more information on the `CytoImageList` class, please refer to the section
 [The CytoImageList object](#CytoImageList). For more information on the
-`SingleCellExperiment` object and how to create it, please see the `r
-Biocpkg("SingleCellExperiment")` package and the [Orchestrating Single-Cell
-Analysis with
-Bioconductor](https://osca.bioconductor.org/data-infrastructure.html#the-singlecellexperiment-class)
+`SingleCellExperiment` object and how to create it, please see the 
+`r Biocpkg("SingleCellExperiment")` package and the [Orchestrating Single-Cell
+Analysis with Bioconductor](https://osca.bioconductor.org/data-infrastructure.html#the-singlecellexperiment-class)
 workflow.
 
 ## The provided toy dataset {#ToyData}
@@ -195,7 +194,7 @@ containing 3 images of $100\mu{m}$ x $100\mu{m}$ dimensions (100 x 100 pixels).
 The dataset contains 362 segmented cells and the expression values for 5
 proteins: H3, CD99, PIN, CD8a, and CDH It represents a small subset of the data
 presented in [A Map of Human Type 1 Diabetes Progression by Imaging Mass
-Cytometry](Ahttps://www.cell.com/cell-metabolism/fulltext/S1550-4131(18)30691-0?_returnURL=https%3A%2F%2Flinkinghub.elsevier.com%2Fretrieve%2Fpii%2FS1550413118306910%3Fshowall%3Dtrue).
+Cytometry](https://www.cell.com/cell-metabolism/fulltext/S1550-4131(18)30691-0?_returnURL=https%3A%2F%2Flinkinghub.elsevier.com%2Fretrieve%2Fpii%2FS1550413118306910%3Fshowall%3Dtrue).
 
 This dataset was generated using imaging mass cytometry [@giesen2014imc]. Raw
 output files (in .mcd format) were processed using the [IMC segmentation
@@ -207,8 +206,8 @@ marker intensity per cell and per marker, the cells' position and size
 measurements.
 
 Pixel-level intensities for all 5 markers (5 channels) are stored in the
-`pancreasImages` object. Entires to the `CytoImageList` object and the rownames
-of the object match: E34_imc, G01_imc, and J02_imc The `elementMetadata` slot
+`pancreasImages` object. Entries to the `CytoImageList` object and the rownames
+of `elementMetadata` match: E34_imc, G01_imc, and J02_imc. The `elementMetadata` slot
 (accesible via the `mcols()` function) contains the image identifiers.
 
 ```{r pancreasImages}
@@ -325,9 +324,9 @@ all_masks <- scaleImages(all_masks, 2^16-1)
 head(unique(as.numeric(all_masks[[1]])))
 ```
 
-In this case, the multi-channel images are not affected by this scaling factor.
-The final `all_masks` object corresponds to the `pancreasMasks` object provided
-by `cytomapper`.
+For this toy dataset, the multi-channel images are not affected by this scaling 
+factor. The final `all_masks` object corresponds to the `pancreasMasks` object 
+provided by `cytomapper`.
 
 ## Add channel names
 
@@ -347,9 +346,9 @@ start section](#QuickStart).
 The `cytomapper` package provides a new `CytoImageList` class, which inherits
 from the [`SimpleList`
 class](https://rdrr.io/bioc/S4Vectors/man/SimpleList-class.html). Each entry to
-the `CytoImageList` object is an `Image` class object defined in the `r
-BiocStyle::Biocpkg("EBImage")` package. A `CytoImageList` object is restricted
-to the following entries:
+the `CytoImageList` object is an `Image` class object defined in the 
+`r BiocStyle::Biocpkg("EBImage")` package. A `CytoImageList` object is 
+restricted to the following entries:
 
 * all images need to have the same number of channels
 * the order/naming of channels need to be the same across all images
@@ -475,9 +474,9 @@ object, the `r Biocpkg("S4Vectors")` package provides the `endoapply` function.
 While the `lapply` function returns a `list` object, the `endoapply` function
 provides an object of the same class of the input object.
 
-This allows the user to apply all functions provided by the `r
-Biocpkg("EBImage")` package to individual entries within the `CytoImageList`
-object:
+This allows the user to apply all functions provided by the 
+`r Biocpkg("EBImage")` package to individual entries within 
+the `CytoImageList` object:
 
 ```{r endoapply-example}
 data("pancreasImages")
@@ -506,9 +505,7 @@ provides a function for image normalization.
 The `normalize` function provided in the `cytomapper` package internally calls
 the `normalize` function of the `r Biocpkg("EBImage")` package. The main
 difference between the two functions is the option to scale per image or
-globally in the `cytomapper` package. Furthermore, the `cytomapper` package
-`normalize` function (see `?'normalize,CytoImageList-method'`) allows the user
-to define a clipping range based on percentiles.
+globally in the `cytomapper` package (see `?'normalize,CytoImageList-method'`).
 
 By default, the `normalize` function linearly scales the images channel-wise
 across all images and returns values between 0 and 1 (or the chosen `ft` range):
@@ -813,18 +810,19 @@ two entries: `plot` and/or `images`.
 
 The `display` parameter supports the entries `display = "all"` (default), which
 displays images in a grid-like fashion and `display = "single"`, which display
-images individually:
+images individually.
 
 If the `return_plot` parameter is set to `TRUE`, `cytomapper` internally calls
 the `recordPlot` function and returns a plot object. The user can additionally
 set `display = "single"` to get a list of plots returned.
 
 If the `return_images` parameter is set to `TRUE`, `cytomapper` returns a
-`SimpleList` object containing three-colour (red, green. blue) `Image` objects.
+`SimpleList` object containing three-colour (red, green, blue) `Image` objects.
 
 ```{r return_plot}
 cur_out <- plotPixels(pancreasImages, colour_by = c("H3", "CD99", "CDH"),
-                return_plot = TRUE, return_images = TRUE, display = "single")
+                return_plot = TRUE, return_images = TRUE, 
+                display = "single")
 ```
 
 The returned plot objects now allows the plotting of individual images:
@@ -853,12 +851,15 @@ be a character representing a valid file name ending with `.png`, `.tiff` or
 resolution of the final image.
 
 When setting `display = "single"`, the `cytomapper` package will save individual
-images in individual files.
+images in individual files. The filename will be altered to the form 
+`filename_x.png` where `x` is the position of the image in the `CytoImageList`
+object or `legend`.
 
 # Acknowledgements
 
 We want to thank the [Bodenmiller laboratory](http://www.bodenmillerlab.org) for
-feedback on the package and its functionality.
+feedback on the package and its functionality. 
+Special thanks goes to Daniel Schulz and Jana Fischer for testing the package.
 
 # Contributions
 

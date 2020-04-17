@@ -20,7 +20,7 @@
 #' to colour individual cells. Cells can be coloured by single
 #' \code{colData(object)} entries or by up to six features.
 #' @param outline_by single character indicating the \code{colData(object)}
-#'   entry by which to outline individual cells
+#'   entry by which to outline individual cells.
 #' @param exprs_values single character indicating which \code{assay(object)}
 #' entry to use when visualizing feature counts.
 #' @param colour a list with names matching the entries to \code{colour_by}
@@ -32,14 +32,15 @@
 #' @param ... Further arguments passed to \code{?"\link{plotting-param}"}
 #'
 #' @section Segmentation mask object:
-#' For the \code{plotCells} function, \code{mask} refers to a
+#' In the \code{plotCells} function, \code{mask} refers to a
 #' \code{\linkS4class{CytoImageList}} object that contains a single or multiple
 #' segmentation masks in form of individual \code{\linkS4class{Image}} objects.
 #' The function assumes that each object in the segmentation mask is a cell.
 #' The key features of such masks include:
 #' \itemize{
 #'     \item each Image object contains only one channel
-#'     \item pixel values are integers indicating the cells' IDs
+#'     \item pixel values are integers indicating the cells' IDs or 
+#'     0 (background)
 #' }
 #'
 #' @section Linking SingleCellExperiment and CytoImageList objects:
@@ -85,7 +86,7 @@
 #'
 #' @seealso For further plotting parameters see \code{?"\link{plotting-param}"}
 #'
-#' @return a list if return_images and/or return_plot is TRUE
+#' @return a list if \code{return_images} and/or \code{return_plot} is TRUE
 #' (see \code{?"\link{plotting-param}"}).
 #' \itemize{
 #' \item \code{plot}: a single plot object (\code{display = "all"}) or a list
@@ -149,27 +150,27 @@ plotCells <- function(
 
     # Object checks
     .valid.mask(mask, img_id)
-    if(!is.null(object)){
+    if (!is.null(object)) {
         .valid.sce(object, img_id, cell_id, exprs_values)
         .valid.matchObjects.plotCells(object, mask, img_id)
 
-        if(is.null(img_id) || is.null(cell_id)){
+        if (is.null(img_id) || is.null(cell_id)) {
             stop("Please provide an 'img_id' and 'cell_id' entry.")
         }
     }
 
     # Argument checks
     # Check colour_by argument
-    if (!is.null(colour_by)){
+    if (!is.null(colour_by)) {
         .valid.colour_by(colour_by, object, image = NULL,
                 call.arg = "plotCells")
     }
     # Check outline_by argument
-    if(!is.null(outline_by)){
+    if (!is.null(outline_by)) {
         .valid.outline_by(outline_by, object, mask, image = NULL)
     }
     # Check colour argument
-    if(!is.null(colour)){
+    if (!is.null(colour)) {
         .valid.colour(colour, colour_by, outline_by, object, image = NULL)
     }
 
@@ -178,20 +179,23 @@ plotCells <- function(
     plottingParam <- .plottingParam(dotArgs, image = mask)
 
     cur_col <- list()
+    cur_limits <- list()
 
     # Colour the masks
     # Here, a SimpleList is returned that allows storing colour Images
-    if(!is.null(colour_by)){
+    if (!is.null(colour_by)) {
         # Select the colours
         cur_col$colour_by <- .selectColours(object, colour_by, colour,
                                     call.arg = "colour_by")
 
-        if(all(colour_by %in% colnames(colData(object)))){
+        if (all(colour_by %in% colnames(colData(object)))) {
             # Colouring by metadata
             out_img <- .colourMaskByMeta(object, mask, cell_id, img_id,
                                     colour_by, cur_col$colour_by[[1]],
                                     plottingParam$missing_colour,
                                     plottingParam$background_colour)
+            cur_limits$colour_by <- out_img$cur_limit
+            out_img <- out_img$imgs
         } else {
             # Colouring by features
             out_img <- .colourMaskByFeature(object, mask, cell_id, img_id,
@@ -200,44 +204,51 @@ plotCells <- function(
                                             plottingParam$missing_colour,
                                             plottingParam$background_colour,
                                             plottingParam)
+            cur_limits$colour_by <- out_img$cur_limit
+            out_img <- out_img$imgs
         }
     } else {
         out_img <- endoapply(mask, function(x){
             x[x == 0L] <- plottingParam$background_colour
             x <- replace(x, which(x != plottingParam$background_colour),
                     plottingParam$missing_colour)
-            x
+            Image(x)
         })
         out_img <- as(out_img, "SimpleList")
+        cur_limits$colour_by <- NULL
     }
 
     # Add outline
-    if(!is.null(outline_by)){
+    if (!is.null(outline_by)) {
         cur_col$outline_by <- .selectColours(object, outline_by, colour,
                                         call.arg = "outline_by")
         out_img <- .outlineImageByMeta(object, mask, out_img, cell_id, img_id,
                                         outline_by, cur_col$outline_by[[1]])
+        cur_limits$outline_by <- out_img$cur_limit
+        out_img <- out_img$imgs
     }
 
     # Plot images
-    cur_plot <- .displayImages(object, image = NULL, exprs_values, outline_by,
-                    colour_by,  mask, out_img, img_id,
-                    cur_col, plottingParam)
+    cur_plot <- .displayImages(object = object, image = NULL, 
+                    exprs_values = exprs_values, outline_by = outline_by,
+                    colour_by = colour_by,  mask = mask, out_img = out_img, 
+                    img_id = img_id, cur_col = cur_col, 
+                    plottingParam = plottingParam, cur_limits = cur_limits)
 
     return_objects <- NULL
 
-    if(!is.null(cur_plot)){
+    if (!is.null(cur_plot)) {
         return_objects <- as.list(return_objects)
         return_objects$plot <- cur_plot
     }
 
-    if(plottingParam$return_images){
+    if (plottingParam$return_images) {
         return_objects <- as.list(return_objects)
         out_img <- endoapply(out_img, Image)
         return_objects$images <- out_img
     }
 
-    if(!is.null(return_objects)){
+    if (!is.null(return_objects)) {
         return(return_objects)
     }
 }

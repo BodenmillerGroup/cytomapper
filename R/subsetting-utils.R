@@ -28,9 +28,9 @@
 #' entry.
 #'
 #' \describe{
-#' \item{\code{getImages(x, i)}:}{Returns image(s) indicated by \code{i} of
+#' \item{\code{getImages(x, i)}}{Returns image(s) indicated by \code{i} of
 #' the CytoImageList object \code{x}}
-#' \item{\code{setImages(x, i) <- value}:}{Replaces the image(s) indicated by
+#' \item{\code{setImages(x, i) <- value}}{Replaces the image(s) indicated by
 #' \code{i} of the CytoImageList object \code{x} with \code{value}. For this,
 #' \code{value} needs to have the same length as \code{i}}
 #' }
@@ -41,7 +41,7 @@
 #' performed (see \code{?\link{List}} for S4Vectors subsetting functionality).
 #' However, these operations do not change element names during replacment
 #' calls. The \code{setImages()} function makes sure that element names are
-#' replaced if \code{value} is named or of \code{i} is a character or vector of
+#' replaced if \code{value} is named or if \code{i} is a character or vector of
 #' characters.
 #'
 #' @section Getting and setting channels:
@@ -54,9 +54,9 @@
 #' identical to \code{length(i)}.
 #'
 #' \describe{
-#' \item{\code{getChannels(x, i)}:}{Returns channel(s) indicated by \code{i} of
+#' \item{\code{getChannels(x, i)}}{Returns channel(s) indicated by \code{i} of
 #' the CytoImageList object \code{x}}
-#' \item{\code{setChannels(x, i) <- value}:}{Replaces the channel(s) indicated
+#' \item{\code{setChannels(x, i) <- value}}{Replaces the channel(s) indicated
 #' by \code{i} of the CytoImageList object \code{x} with \code{value}. For this,
 #' \code{value} needs to have the same length as \code{i} and the same
 #' number of channels as \code{length(i)}.}
@@ -70,7 +70,7 @@
 #' Merging images is possible by merging two or more CytoImageList objects via:
 #'
 #' \describe{
-#' \item{\code{c(x,y)}:}{Returns an composite CytoImageList object with
+#' \item{\code{c(x, y)}}{Returns an composite CytoImageList object with
 #' elements of both CytoImageList objects \code{x} and \code{y}.
 #' More than two CytoImageList objects can be merged in that way.}
 #' }
@@ -79,7 +79,7 @@
 #' Merging channels is possible via:
 #'
 #' \describe{
-#' \item{\code{mergeChannels(x,y)}:}{Returns a CytoImageList in which
+#' \item{\code{mergeChannels(x, y)}:}{Returns a CytoImageList in which
 #' the channels of the CytoImageList object \code{y} have been appended
 #' to the channels of the CytoImageList object \code{x}.
 #' Only channels of two CytoImageList objects can be merged in that way.}

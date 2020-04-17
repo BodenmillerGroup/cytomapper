@@ -34,7 +34,9 @@ test_that("Merging works on CytoImageList object.", {
   expect_identical(test.list[[3]], pancreasImages[[2]])
 
   ## Should fail due to duplicated names
-  expect_error(test.list <- c(pancreasImages, pancreasImages))
+  expect_error(test.list <- c(pancreasImages, pancreasImages),
+               regexp = "Only unique entries allowed in a CytoImageList object.",
+               fixed = TRUE)
 
   # Merge channels
   channels1 <- getChannels(pancreasImages, 1:2)

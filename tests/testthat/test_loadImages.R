@@ -17,6 +17,7 @@ test_that("loadImages function reads in correct objects.", {
   expect_s4_class(cur_file, "CytoImageList")
   
   expect_silent(cur_file <- scaleImages(cur_file, 2^16-1))
+
   expect_silent(plotCells(cur_file))
 
   # Pattern

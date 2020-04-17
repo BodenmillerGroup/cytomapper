@@ -153,6 +153,7 @@ test_that("plotting-param: background_colour can be set.", {
 
   # Works
   expect_silent(plotCells(pancreasMasks, background_colour = "white"))
+  expect_silent(plotCells(pancreasMasks, background_colour = "red"))
 
   # Error
   expect_error(plotCells(pancreasMasks, background_colour = "test"),

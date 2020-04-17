@@ -9,7 +9,7 @@
 \alias{normalize,CytoImageList-method}
 \title{Manipulating CytoImageList objects}
 \value{
-A CytoImageList object containing the manipulated Images
+A CytoImageList object containing the manipulated Images.
 }
 \description{
 Methods to change pixel values in CytoImageList objects. In the
@@ -22,8 +22,8 @@ In some cases, images need to be scaled by a constant
 (e.g. 2^16-1 = 65535) \code{value} to revert them back to the original
 pixel values after reading them in.
 \describe{
-\item{\code{scaleImages(object, value)}:}{Scales all images in the
-\linkS4class{CytoImageList} object \code{object} by \code{value}.}
+\item{\code{scaleImages(object, value)}}{Scales all images in the
+\linkS4class{CytoImageList} \code{object} by \code{value}.}
 }
 }
 
@@ -32,13 +32,12 @@ pixel values after reading them in.
 Linear scaling of the intensity values of each \linkS4class{Image} contained
 in a \linkS4class{CytoImageList} \code{object} to a specific range. Images
 can either be scaled to the minimum/maximum value per channel or across all
-channels (default \code{separateChannels = TRUE}). Also, Images can be scaled
+channels (default \code{separateChannels = TRUE}). Also, images can be scaled
 to the minimum/maximum value per image or across all images (default
 \code{separateImages = FALSE}). The latter allows the visual comparison of
 intensity values across images.
 
 To clip the images before normalization, the \code{inputRange} can be set.
-Explain in more detail...
 
 \code{normalize(object, separateChannels = TRUE, separateImages = FALSE,
 ft = c(0, 1), inputRange = NULL)}:
@@ -86,5 +85,5 @@ plotPixels(x, colour_by = c("H3", "CD99"))
 \code{\link[EBImage]{normalize}} for details on Image normalization
 }
 \author{
-Nils Eling \email{nils.eling@dqbm.uzh.ch}
+Nils Eling (\email{nils.eling@dqbm.uzh.ch})
 }

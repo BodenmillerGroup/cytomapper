@@ -8,27 +8,27 @@
 #' individual images.
 #'
 #' @section Setting and getting the channel names:
-#' In the following code, \code{x} is either a \linkS4class{CytoImageList}
+#' In the following code, \code{x} is a \linkS4class{CytoImageList}
 #' object containing one or multiple channels. The channel
 #' names can be replaced by \code{value}, which contains a character vector of
 #' the same length as the number of channels in the images.
 #' \describe{
-#' \item{\code{channelNames(x)}:}{Returns the names of all channels stored in
+#' \item{\code{channelNames(x)}}{Returns the names of all channels stored in
 #' \code{x}}
-#' \item{\code{channelNames(x) <- value}:}{Replaces the channel names of
+#' \item{\code{channelNames(x) <- value}}{Replaces the channel names of
 #' \code{x} with \code{values}. For this, \code{value} needs to have the same
 #' length as the number of channels in \code{x}}
 #' }
 #'
 #' @section Setting and getting the image names:
-#' Here, \code{x} is either a \linkS4class{CytoImageList} object. The element
+#' Here, \code{x} is a \linkS4class{CytoImageList} object. The element
 #' names can be replaced by \code{value}, which contains a character vector of
 #' the same length as the number of images. In case of the CytoImageList object,
 #' elements are always images.
 #' \describe{
-#' \item{\code{names(x)}:}{Returns the names of all images stored in \code{x}}
-#' \item{\code{names(x) <- value}:}{Replaces the image names of
-#' \code{x} with \code{values}. For this, \code{value} needs to have the same
+#' \item{\code{names(x)}}{Returns the names of all images stored in \code{x}}
+#' \item{\code{names(x) <- value}}{Replaces the image names of
+#' \code{x} with \code{value}. For this, \code{value} needs to have the same
 #' length as \code{x}}
 #' }
 #'
@@ -53,7 +53,7 @@
 #' @docType methods
 #'
 #' @author
-#' Nils Eling \email{nils.eling@@dqbm.uzh.ch}
+#' Nils Eling (\email{nils.eling@@dqbm.uzh.ch})
 NULL
 
 #' @export
@@ -124,21 +124,20 @@ setReplaceMethod("names",
 #' (e.g. 2^16-1 = 65535) \code{value} to revert them back to the original
 #' pixel values after reading them in.
 #' \describe{
-#' \item{\code{scaleImages(object, value)}:}{Scales all images in the
-#' \linkS4class{CytoImageList} object \code{object} by \code{value}.}
+#' \item{\code{scaleImages(object, value)}}{Scales all images in the
+#' \linkS4class{CytoImageList} \code{object} by \code{value}.}
 #' }
 #'
 #' @section Image normalization:
 #' Linear scaling of the intensity values of each \linkS4class{Image} contained
 #' in a \linkS4class{CytoImageList} \code{object} to a specific range. Images
 #' can either be scaled to the minimum/maximum value per channel or across all
-#' channels (default \code{separateChannels = TRUE}). Also, Images can be scaled
+#' channels (default \code{separateChannels = TRUE}). Also, images can be scaled
 #' to the minimum/maximum value per image or across all images (default
 #' \code{separateImages = FALSE}). The latter allows the visual comparison of
 #' intensity values across images.
 #'
 #' To clip the images before normalization, the \code{inputRange} can be set.
-#' Explain in more detail...
 #'
 #' \code{normalize(object, separateChannels = TRUE, separateImages = FALSE,
 #' ft = c(0, 1), inputRange = NULL)}:
@@ -156,7 +155,7 @@ setReplaceMethod("names",
 #' \code{\link[EBImage]{normalize}}).}
 #' }
 #'
-#' @return A CytoImageList object containing the manipulated Images
+#' @return A CytoImageList object containing the manipulated Images.
 #'
 #' @examples
 #' data(pancreasImages)
@@ -190,7 +189,7 @@ setReplaceMethod("names",
 #'
 #' @docType methods
 #'
-#' @author Nils Eling \email{nils.eling@@dqbm.uzh.ch}
+#' @author Nils Eling (\email{nils.eling@@dqbm.uzh.ch})
 NULL
 
 #' @export
