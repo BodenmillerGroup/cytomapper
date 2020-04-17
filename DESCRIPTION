@@ -1,5 +1,5 @@
 Package: cytomapper
-Version: 0.99.5
+Version: 0.99.6
 Title: Visualization of highly multiplexed imaging cytometry data in R
 Description: 
     Highly multiplexed imaging cytometry acquires the single-cell expression of
@@ -22,7 +22,7 @@ Authors@R:
       comment = c(ORCID = "0000-0003-3027-8989")))
 License: GPL (>= 2)
 Depends:
-    R (>= 3.6),
+    R (>= 4.0),
     EBImage,
     SingleCellExperiment,
     methods

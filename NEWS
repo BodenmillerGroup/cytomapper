@@ -102,3 +102,9 @@ Changes in version 0.99.5 (2020-04-10):
 + Unit tests on all hidden functions
 + Account for over-saturation when merging colours
 
+Changes in version 0.99.5 (2020-04-17):
+
++ Fixed labelling of colour legends
++ Corrected typos in docs and vignette
++ Avoid recalculation of min/max values in legend function
+
