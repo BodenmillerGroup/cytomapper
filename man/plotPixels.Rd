@@ -19,7 +19,7 @@ plotPixels(
 }
 \arguments{
 \item{image}{a \code{\linkS4class{CytoImageList}} object containing single or
-multi-channel \code{\linkS4class{Image}} objects (see details below)}
+multi-channel \code{\linkS4class{Image}} objects (see details below).}
 
 \item{object}{an optional \code{\linkS4class{SingleCellExperiment}} object.}
 
@@ -55,7 +55,7 @@ Default is c(0,1,1).}
 \item{colour}{a list with names matching the entries to \code{colour_by}
 and/or \code{outline_by}. When setting the colour for continous features,
 at least two colours need to be provided indicating the colours for minimum
-and maximum values. When colouring discrete vectors, a colour for each
+and maximum values. When outlining by discrete values, a colour for each
 unique entry needs to be provided (see section 'Setting the colours' and
 examples)}
 
@@ -80,7 +80,7 @@ on metadata.
 }
 \section{Multi-channel image and segmentation mask objects}{
 
-For the \code{plotPixels} function, \code{image} refers to a
+In the \code{plotPixels} function, \code{image} refers to a
 \code{\linkS4class{CytoImageList}} object that contains a single or multiple
 single- or multi-channel \code{\linkS4class{Image}} objects. Up to six
 channels can be overlayed to generate a composite image. When outlining
@@ -115,7 +115,7 @@ of the object must correspond to the entries to \code{colour_by} and/or
 \code{outline_by}. When setting the colours for continous expression values
 or continous metadata entries, a vector of at least two colours need to be
 specified. These colours will be passed onto \code{\link{colorRampPalette}}
-for interpolation. Cells can be outlined by discrete metadata entries wh en
+for interpolation. Cells can be outlined by discrete metadata entries when
 specifying a named vector in which each entry corresponds to a unique entry
 to the metadata vector.
 }
@@ -140,7 +140,7 @@ When plotting pixel intensities, colours are scaled to the minimum and
 maximum per channel across all images that are being displayed. Therefore,
 when subsetting images, displayed intensities might change. However, the
 colour legend will display the correct numeric minimum and maximum pixel
-intensity.
+intensity across all displayed images per channel.
 }
 
 \examples{
@@ -176,7 +176,7 @@ plotPixels(pancreasImages, colour_by = c("CD99", "CDH"),
 \seealso{
 For further plotting parameters see \code{?"\link{plotting-param}"}.
 For instructions on how to normalize images see
-\code{\link[EBImage]{normalize}}.
+\code{\link{normalize}}.
 }
 \author{
 Nils Eling (\email{nils.eling@dqbm.uzh.ch})

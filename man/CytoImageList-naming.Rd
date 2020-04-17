@@ -16,14 +16,14 @@ individual images.
 }
 \section{Setting and getting the channel names}{
 
-In the following code, \code{x} is either a \linkS4class{CytoImageList}
+In the following code, \code{x} is a \linkS4class{CytoImageList}
 object containing one or multiple channels. The channel
 names can be replaced by \code{value}, which contains a character vector of
 the same length as the number of channels in the images.
 \describe{
-\item{\code{channelNames(x)}:}{Returns the names of all channels stored in
+\item{\code{channelNames(x)}}{Returns the names of all channels stored in
 \code{x}}
-\item{\code{channelNames(x) <- value}:}{Replaces the channel names of
+\item{\code{channelNames(x) <- value}}{Replaces the channel names of
 \code{x} with \code{values}. For this, \code{value} needs to have the same
 length as the number of channels in \code{x}}
 }
@@ -31,14 +31,14 @@ length as the number of channels in \code{x}}
 
 \section{Setting and getting the image names}{
 
-Here, \code{x} is either a \linkS4class{CytoImageList} object. The element
+Here, \code{x} is a \linkS4class{CytoImageList} object. The element
 names can be replaced by \code{value}, which contains a character vector of
 the same length as the number of images. In case of the CytoImageList object,
 elements are always images.
 \describe{
-\item{\code{names(x)}:}{Returns the names of all images stored in \code{x}}
-\item{\code{names(x) <- value}:}{Replaces the image names of
-\code{x} with \code{values}. For this, \code{value} needs to have the same
+\item{\code{names(x)}}{Returns the names of all images stored in \code{x}}
+\item{\code{names(x) <- value}}{Replaces the image names of
+\code{x} with \code{value}. For this, \code{value} needs to have the same
 length as \code{x}}
 }
 }
@@ -56,5 +56,5 @@ names(pancreasImages) <- paste0("image", 1:3)
 
 }
 \author{
-Nils Eling \email{nils.eling@dqbm.uzh.ch}
+Nils Eling (\email{nils.eling@dqbm.uzh.ch})
 }

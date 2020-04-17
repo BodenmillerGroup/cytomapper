@@ -7,7 +7,7 @@
 #' on metadata.
 #'
 #' @param image a \code{\linkS4class{CytoImageList}} object containing single or
-#' multi-channel \code{\linkS4class{Image}} objects (see details below)
+#' multi-channel \code{\linkS4class{Image}} objects (see details below).
 #' @param object an optional \code{\linkS4class{SingleCellExperiment}} object.
 #' @param mask an optional \code{\linkS4class{CytoImageList}} object containing
 #' segmentaion masks in form of single-channel \code{\linkS4class{Image}}
@@ -35,13 +35,13 @@
 #' @param colour a list with names matching the entries to \code{colour_by}
 #' and/or \code{outline_by}. When setting the colour for continous features,
 #' at least two colours need to be provided indicating the colours for minimum
-#' and maximum values. When colouring discrete vectors, a colour for each
+#' and maximum values. When outlining by discrete values, a colour for each
 #' unique entry needs to be provided (see section 'Setting the colours' and
 #' examples)
 #' @param ... Further arguments passed to  \code{?"\link{plotting-param}"}
 #'
 #' @section Multi-channel image and segmentation mask objects:
-#' For the \code{plotPixels} function, \code{image} refers to a
+#' In the \code{plotPixels} function, \code{image} refers to a
 #' \code{\linkS4class{CytoImageList}} object that contains a single or multiple
 #' single- or multi-channel \code{\linkS4class{Image}} objects. Up to six
 #' channels can be overlayed to generate a composite image. When outlining
@@ -72,7 +72,7 @@
 #' \code{outline_by}. When setting the colours for continous expression values
 #' or continous metadata entries, a vector of at least two colours need to be
 #' specified. These colours will be passed onto \code{\link{colorRampPalette}}
-#' for interpolation. Cells can be outlined by discrete metadata entries wh en
+#' for interpolation. Cells can be outlined by discrete metadata entries when
 #' specifying a named vector in which each entry corresponds to a unique entry
 #' to the metadata vector.
 #'
@@ -91,12 +91,12 @@
 #' maximum per channel across all images that are being displayed. Therefore,
 #' when subsetting images, displayed intensities might change. However, the
 #' colour legend will display the correct numeric minimum and maximum pixel
-#' intensity.
+#' intensity across all displayed images per channel.
 #'
 #' @seealso
 #' For further plotting parameters see \code{?"\link{plotting-param}"}.
 #' For instructions on how to normalize images see
-#' \code{\link[EBImage]{normalize}}.
+#' \code{\link{normalize}}.
 #'
 #' @return a list if \code{return_images} and/or \code{return_plot}
 #' is TRUE (see \code{?"\link{plotting-param}"}).

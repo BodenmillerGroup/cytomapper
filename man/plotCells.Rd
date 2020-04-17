@@ -38,7 +38,7 @@ to colour individual cells. Cells can be coloured by single
 \code{colData(object)} entries or by up to six features.}
 
 \item{outline_by}{single character indicating the \code{colData(object)}
-entry by which to outline individual cells}
+entry by which to outline individual cells.}
 
 \item{exprs_values}{single character indicating which \code{assay(object)}
 entry to use when visualizing feature counts.}
@@ -53,7 +53,7 @@ examples)}
 \item{...}{Further arguments passed to \code{?"\link{plotting-param}"}}
 }
 \value{
-a list if return_images and/or return_plot is TRUE
+a list if \code{return_images} and/or \code{return_plot} is TRUE
 (see \code{?"\link{plotting-param}"}).
 \itemize{
 \item \code{plot}: a single plot object (\code{display = "all"}) or a list
@@ -69,14 +69,15 @@ colour cells by marker expression or metadata.
 }
 \section{Segmentation mask object}{
 
-For the \code{plotCells} function, \code{mask} refers to a
+In the \code{plotCells} function, \code{mask} refers to a
 \code{\linkS4class{CytoImageList}} object that contains a single or multiple
 segmentation masks in form of individual \code{\linkS4class{Image}} objects.
 The function assumes that each object in the segmentation mask is a cell.
 The key features of such masks include:
 \itemize{
     \item each Image object contains only one channel
-    \item pixel values are integers indicating the cells' IDs
+    \item pixel values are integers indicating the cells' IDs or 
+    0 (background)
 }
 }
 
