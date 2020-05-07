@@ -13,6 +13,10 @@ inst/extdata/pancreas_images.rds
 inst/extdata/pancreas_masks.rds
 inst/extdata/pancreas_sce.rds
 
+inst/scripts/pancreas_images.rds
+inst/scripts/pancreas_masks.rds
+inst/scripts/pancreas_sce.rds
+
 # Temporary files downloaded by the "LoadPancreasData.Rmd" and "LoadPancreasImages.Rmd" scripts
 inst/extdata/CellSubset.csv
 inst/extdata/All_Image.csv
@@ -22,3 +26,12 @@ inst/extdata/Panel.csv
 inst/extdata/ChannelMass.csv
 inst/extdata/*_full_clean.tiff
 inst/extdata/*_full_mask.tiff
+
+inst/scripts/CellSubset.csv
+inst/scripts/All_Image.csv
+inst/scripts/CellTypes.csv
+inst/scripts/Donors.csv
+inst/scripts/Panel.csv
+inst/scripts/ChannelMass.csv
+inst/scripts/*_full_clean.tiff
+inst/scripts/*_full_mask.tiff
