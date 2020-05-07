@@ -1,0 +1,229 @@
+---
+title: "LoadPancreasData"
+author: "Nicolas Damond"
+date: "`r Sys.Date()`"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+knitr::opts_knit$set(root.dir = file.path("..", "extdata"))
+```
+
+
+# Script to download single-cell data from the pancreas IMC dataset and format the data as a SingleCellExperiment object
+
+- Publication: [Damond et al. A Map of Human Type 1 Diabetes Progression by Imaging Mass Cytometry. Cell Metab. 2019 Mar 5;29(3):755-768](https://www.ncbi.nlm.nih.gov/pmc/articles/PMC6821395)
+- Dataset: [accessible from Mendeley Data](http://dx.doi.org/10.17632/cydmwsfztj.2)
+
+```{r load-packages, message=FALSE}
+library(S4Vectors)
+library(SingleCellExperiment)
+library(cytomapper)
+```
+
+# Read-in single-cell data
+
+Here, a subset of single-cell data, corresponding to 100 images from the full dataset is downloaded.
+
+```{r download-cell-data}
+# Download the zipped folder image and unzip it
+url.cells <- ("https://data.mendeley.com/datasets/cydmwsfztj/2/files/f1e3b8dc-56be-4172-bbc4-3a6f9de97563/CellSubset.zip?dl=1")
+download.file(url.cells, destfile = "CellSubset.zip")
+unzip("CellSubset.zip")
+file.remove("CellSubset.zip")
+
+# Read-in the data
+cells <- read.csv("CellSubset.csv", stringsAsFactors = FALSE)
+
+# Order the dataset by ImageNumber and ObjectNumber
+cells <- cells[order(cells$ImageNumber, cells$ObjectNumber), ]
+```
+
+# Read-in Image metadata
+
+```{r download-image-metadata}
+# Download the zipped folder image and unzip it
+url.image <- ("https://data.mendeley.com/datasets/cydmwsfztj/2/files/0b236273-d21b-4566-84a2-f1c56324a900/Image.zip?dl=1")
+download.file(url.image, destfile = "Image.zip")
+unzip("Image.zip")
+file.remove("Image.zip")
+
+# Read-in the data
+image <- read.csv("All_Image.csv", stringsAsFactors = FALSE)
+```
+
+# Read-in cell type information
+
+```{r download-celltypes}
+# Download the zipped folder image and unzip it
+url.celltypes <- ("https://data.mendeley.com/datasets/cydmwsfztj/2/files/59e8da72-5bfe-4289-b95b-28348a6e1222/CellTypes.zip?dl=1")
+download.file(url.celltypes, destfile = "CellTypes.zip")
+unzip("CellTypes.zip")
+file.remove("CellTypes.zip")
+
+# Read-in the data
+celltypes <- read.csv("CellTypes.csv", stringsAsFactors = FALSE)
+```
+
+# Read-in donor information
+
+```{r download-donor-info}
+# Download the zipped folder image and unzip it
+url.donors <- ("https://data.mendeley.com/datasets/cydmwsfztj/2/files/9074990e-1b93-4c79-8c49-1db01a66398b/Donors.zip?dl=1")
+download.file(url.donors, destfile = "Donors.zip")
+unzip("Donors.zip")
+file.remove("Donors.zip")
+
+# Read-in the data
+donors <- read.csv("Donors.csv", stringsAsFactors = FALSE)
+```
+
+# Load relevant cell-specific metadata
+
+```{r cell-metadata}
+cell.metadata <- DataFrame(ImageNumber = cells$ImageNumber,
+                           CellNumber = cells$ObjectNumber,
+                           Pos_X = cells$Location_Center_X,
+                           Pos_Y = cells$Location_Center_Y,
+                           ParentIslet = cells$Parent_Islets,
+                           ClosestIslet = cells$Parent_ExpandedIslets,
+                           Area = cells$AreaShape_Area,
+                           NbNeighbours = cells$Neighbors_NumberOfNeighbors_3)
+```
+
+# Load relevant image-specific metadata
+
+```{r image-metadata}
+image.metadata <- DataFrame(ImageNumber = image$ImageNumber,
+                            ImageFullName = image$FileName_CleanStack,
+                            slide = image$Metadata_Slide,
+                            width = image$Width_CleanStack,
+                            height = image$Height_CleanStack)
+```
+
+# Merge cell and image metadata
+
+```{r merge-metadata}
+cell.metadata <- merge(cell.metadata, image.metadata, by="ImageNumber")
+```
+
+# Add image names
+
+This information is used by `cytomapper` to match single-cell data with images and masks
+
+```{r add-image-names}
+cell.metadata$ImageName <- sub("_a0_full_clean.tiff", "", cell.metadata$ImageFullName)
+```
+
+# Import cell types
+
+```{r import-cell-types}
+# Add cell ids to cell metadata (format: "ImageName_CellNumber")
+cell.metadata$id <- paste(cell.metadata$ImageName, cell.metadata$CellNumber, sep="_")
+
+# Merge cell metadata and cell type information
+cell.metadata <- merge(cell.metadata,
+                       celltypes[, c("id", "CellCat", "CellType")],
+                       by="id")
+```
+
+# Import donor metadata
+
+```{r import-donors-info}
+cell.metadata <- merge(cell.metadata, donors, by="slide")
+```
+
+# Order the cell metadata dataset and add rownames
+
+```{r cell-rownames}
+# Rows are ordered by ImageNumber and CellNumber
+cell.metadata <- cell.metadata[order(cell.metadata$ImageNumber, cell.metadata$CellNumber), ]
+
+# Cell ids are used as row names
+rownames(cell.metadata) <- cell.metadata$id
+```
+
+# Load panel data
+
+The panel contains antibody-related metadata.
+The channel-mass file is used to match panel information and image stack slices.
+
+```{r load-panel}
+# Import panel
+url.panel <- ("https://data.mendeley.com/datasets/cydmwsfztj/2/files/2f9fecfc-b98f-4937-bc38-ae1b959bd74d/Panel.csv?dl=1")
+download.file(url.panel, destfile = "panel.csv")
+panel <- read.csv("panel.csv")
+
+# Import channel-mass file
+url.channelmass <- ("https://data.mendeley.com/datasets/cydmwsfztj/2/files/704312eb-377c-42e2-8227-44bb9aca0fb3/ChannelMass.csv?dl=1")
+download.file(url.channelmass, destfile = "ChannelMass.csv")
+channel.mass <- read.csv("ChannelMass.csv", header = FALSE)
+```
+
+# Select relevant channels and match them with image stack slices
+
+```{r arrange-panel}
+# Match panel and stack slice information
+panel <- panel[panel$full == 1,]
+panel <- panel[match(channel.mass[,1], panel$MetalTag),]
+
+# Add short protein names as panel rownames
+rownames(panel) <- panel$shortname
+```
+
+# Load single cell measurements
+
+Here, we import the mean intensity per cell
+
+```{r select-counts}
+cur_counts <- cells[, grepl("Intensity_MeanIntensity_CleanStack", colnames(cells))]
+```
+
+# Reorder the counts channels (based on channel number)
+
+```{r reorder-counts}
+channelNumber <- as.numeric(sub("^.*_c", "", colnames(cur_counts)))
+cur_counts <- cur_counts[, order(channelNumber, decreasing = FALSE)]
+```
+
+# Create the SingleCellExperiment (SCE) object
+
+```{r create-SCE}
+sce <- SingleCellExperiment(assays = list(counts = t(as.matrix(cur_counts))))
+```
+
+# Add transformed counts as a new assay
+
+exprs = asinh-transformed counts
+
+```{r transform-counts}
+assay(sce, "exprs") <- asinh(counts(sce)/1)
+```
+
+# Set dimnames
+
+```{r dimnames-SCE}
+rownames(sce) <- rownames(panel)
+colnames(sce) <- rownames(cell.metadata)
+```
+
+# Store metadata in the SCE object
+```{r store-metadata}
+colData(sce) <- cell.metadata
+rowData(sce) <- panel
+sce
+```
+
+# Save SCE
+
+```{r save-SCE}
+saveRDS(sce, "pancreas_sce.rds")
+```
+
+# Delete unneeded CSV files from the extdata directory
+
+```{r clean-up, message = FALSE}
+file.remove("All_Image.csv", "CellSubset.csv", "CellTypes.csv", "Donors.csv", "panel.csv", "ChannelMass.csv")
+```
+

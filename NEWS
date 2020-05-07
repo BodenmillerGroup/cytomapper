@@ -1,53 +1,110 @@
-2020-01-16: Initial commit
-- Creation of the SingleCellMapper
-- version 0.1.0
+Changes in version 0.1.0 (2020-01-16):
 
-2020-01-28: Expansion of package information
-- Created NEWS and DESCRIPTION file
++ Initial commit
++ Creation of the SingleCellMapper package
++ Created inst/extdata folder with example images and data
++ Build the ImageList class
++ Created first unit tests for ImageList constructor
++ test
 
-2020-01-31: Added example data
-- Created inst/extdata folder with example images and data
+Changes in version 0.1.1 (2020-02-02):
 
-2020-02-01: ImageList class and preparation for install
-- Moved scripts to prepare data to own repository
-- Build the ImageList class
-- Created first unit tests for ImageList constructor
++ Simplified structure of loadImages function
++ Created validity checks for path and file inputs
++ Fixed bugs to pass R CMD check
++ test
 
-2020-02-02: loadImages function
-- version bump 0.1.1
-- Simplified structure of loadImages function
-- Created validity checks for path and file inputs
-- Fixed bugs to pass 'R CMD check'
+Changes in version 0.1.2 (2020-02-03):
 
-2020-02-03: channelNames function
-- version bump 0.1.2
-- channelNames generic function for Image and ImageList object
++ channelNames generic function for Image and ImageList object
++ Reduced the size of example data
++ Wrote docs on data
 
-2020-02-04: Correction of example data
-- Reduced the size of example data
-- Wrote docs on data
+Changes in version 0.1.3 (2020-02-16):
 
-2020-02-16: Full docs and tests on:
++ Full docs and tests on:
 - ImageList-naming
 - ImageList-subsetting
-- version bump 0.1.3
 
-2020-02-16: Full docs and test on:
+Changes in version 0.1.4 (2020-02-16):
+
++ Full docs and test on:
 - loadImages
 - ImageList-class
-- version bump 0.1.4
 
-2020-03-03: Working functions:
-- plotCells
-- plotPixels
-- version bump 0.1.5
+Changes in version 0.1.5 (2020-03-03):
 
-2020-03-06: Added options for scale_bar and image_title:
-- Options for further customization of scale_bar
-- Options for image_title customization
-- Started vignette draft
++ plotCells function
++ plotPixels function
++ Options for further customization of scale_bar
++ Options for image_title customization
++ Started vignette draft
 
-2020-03-10: Unit tests on plotCells and plotPixels
-- Improved setting colours
-- Rewrite to reduce validity checks
-- version bump 0.1.6
+Changes in version 0.1.6 (2020-03-10):
+
++ Unit tests on plotCells and plotPixels
++ Improved setting colours
++ Rewrite to reduce validity checks
+
+Changes in version 0.1.7 (2020-03-17):
+
++ Added scaleImages and normalize functions
++ Expanded shared parameters for plotPixels and plotCells
+
+Changes in version 0.1.8 (2020-03-18):
+
++ Option to remove legend
++ Cleaned up representation of legend on plot
+
+Changes in version 0.1.9 (2020-03-20):
+
++ scale, return_plot, return_images, legend, margin, display parameters
++ Finalised unit tests
+
+Changes in version 0.1.10 (2020-03-21):
+
++ interpolate parameter
++ Bug fix to achieve correct aspect ratios
+
+Changes in version 0.1.11 (2020-03-24):
+
++ Complete documentation of all package functions
+
+Changes in version 0.1.12 (2020-03-25):
+
++ Renamed package from SingleCellMapper to cytomapper
++ Renamed ImageList class to CytoImageList class
+
+Changes in version 0.1.13 (2020-03-28):
+
++ Full vignette and correction to docs
+
+Changes in version 0.99.0 (2020-03-30):
+
++ Formatted the package for Bioconductor submission
+
+Changes in version 0.99.4 (2020-04-01):
+
++ Fixed docs to pass checks on Windows
+
+Changes in version 0.99.4 (2020-04-01):
+
++ Aesthetic changes to scale bar, image title and legend title
++ Removed channelNames as Image generic
++ removed exported plot method
+
+Changes in version 0.99.5 (2020-04-10):
+
++ Added script to generate the toy dataset
++ Modified the toy dataset
++ Added more explanation on datasets to vignette
++ Bug fixes when colouring cells
++ Unit tests on all hidden functions
++ Account for over-saturation when merging colours
+
+Changes in version 0.99.5 (2020-04-17):
+
++ Fixed labelling of colour legends
++ Corrected typos in docs and vignette
++ Avoid recalculation of min/max values in legend function
+

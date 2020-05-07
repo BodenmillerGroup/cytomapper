@@ -1,4 +1,4 @@
 library(testthat)
-library(SingleCellMapper)
+library(cytomapper)
 
-test_check("SingleCellMapper")
+test_check("cytomapper")

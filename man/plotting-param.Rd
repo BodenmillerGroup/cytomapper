@@ -2,32 +2,211 @@
 % Please edit documentation in R/plotting-param.R
 \name{plotting-param}
 \alias{plotting-param}
-\title{Further plotting parameters for the SingleCellMapper package}
+\title{Further plotting parameters for the cytomapper package}
 \arguments{
-\item{missing_colour}{TODO}
+\item{missing_colour}{a single character specifying a valid colour. Cells
+that are not contained in the SingleCellExperiment object will be coloured
+based on \code{missing_colour}. In the \code{\link{plotPixels}} function,
+\code{missing_colour} defines the outline of the cells if \code{outline_by}
+is not set.}
 
-\item{scale_bar}{TODO}
+\item{background_colour}{(only \code{\link{plotCells}}) a single character
+specifying a valid colour that is set as the background of the image.}
 
-\item{image_title}{TODO}
+\item{scale_bar}{a list specifying features of the scale bar. One or multiple
+of the following entries are supported:
+\itemize{
+\item \code{length}: numeric length in pixels (default 20\% of the largest
+image width).
+\item \code{label}: single character specifying the scale bar label.
+\item \code{cex}: numeric value indicating the size of the scale bar label.
+\item \code{lwidth}: numeric value indicating the line width of the scale bar
+in pixels. By default, the line width is adjusted relative to the maximum
+height of the images.
+\item \code{colour}: single character specifying the colour of scale bar and
+label (default "white").
+\item \code{position}: position of scale bar. Supported values: "topleft",
+"topright", "bottomleft", "bottomright" (default "bottomright").
+\item \code{margin}: vector of two numeric entries specifying the x and y
+margin between image boundary and the scale bar (default c(10,10)).
+\item \code{frame}: either "all" to display scale bar on all images or a
+single number specifying the image for which the scale bar should be
+displayed (default "all").
+}
+Plotting of the scale bar is suppressed if set to \code{NULL}.}
+
+\item{image_title}{a list specifying features of the image titles. One or
+multiple of the following entries are supported:
+\itemize{
+\item \code{text}: character vector of image titles. Same length as the
+\code{CytoImageList} object.
+\item \code{position}: single character specifying the position of the
+title. Supported entries: "top", "bottom", "topleft", "bottomleft",
+"topright", "bottomright" (default "top").
+\item \code{colour}: single character specifying the colour of image title
+(default "white").
+\item \code{margin}: vector of two numeric entries specifying the x and y
+margin between image boundary and the image title (default c(10,10)).
+\item \code{font}: numeric entry specifying the font of the image title
+(default 1, see \code{\link{par}} for details)
+\item \code{cex}: numeric value indicating the size of the image title.
+}
+Plotting of the image title is suppressed if set to \code{NULL}.}
+
+\item{save_plot}{a list specifying how to save the plot. One or multiple
+of the following entries are supported:
+\itemize{
+\item \code{filename}: single character specifying a valid file name.
+The file extension specifies the format in which the file is saved.
+Supported formats are: jpeg, tiff and png. If \code{display = "single"},
+each image will be written in an individual file. The file names obtain
+a "_x" ending where x indicates the position of the image in the
+\code{CytoImageList} object or "legend".
+\item \code{scale}: by default the height and width of the saved image is
+defined by the maximum image size times the number of rows and number of
+columns. This resolution is often not sufficient to clearly display the
+text. The \code{scale} parameter can be set to increase the resolution of
+the image while keeping the text size constant (default 1 but can be
+increased for optimal results).
+}}
+
+\item{return_plot}{logical indicating whether to return the plot (see
+\code{\link[grDevices]{recordPlot}} for more infos).}
+
+\item{return_images}{logical indicating whether to return the coloured images
+in form of a \code{\linkS4class{SimpleList}} object. Each entry to this
+list is a three-colour \code{\linkS4class{Image}} object. However, the
+image title and scale bar are not retained.}
+
+\item{legend}{a list specifying features of the legend. One or multiple
+of the following entries are supported:
+\itemize{
+\item \code{colour_by.title.font}: numeric entry specifying the font of the
+legend title for features specified by \code{colour_by}.
+\item \code{colour_by.title.cex}: numeric entry specifying the size of the
+legend title for features specified by \code{colour_by}.
+\item \code{colour_by.labels.cex}: numeric entry specifying the size of the
+legend labels for features specified by \code{colour_by}.
+\item \code{colour_by.legend.cex}: (only discrete features) numeric entry
+specifying the size of the legend for features specified by
+\code{colour_by}.
+\item \code{outline_by.title.font}: numeric entry specifying the font of the
+legend title for features specified by \code{outline_by}.
+\item \code{outline_by.title.cex}: numeric entry specifying the size of the
+legend title for features specified by \code{outline_by}.
+\item \code{outline_by.labels.cex}: numeric entry specifying the size of the
+legend labels for features specified by \code{outline_by}.
+\item \code{outline_by.legend.cex}: (only discrete features) numeric entry
+specifying the size of the legend for features specified by
+\code{outline_by}.
+\item \code{margin}: numeric value indicating the margin (in pixels) between 
+the legends and the outer boundary (default 2)
+}
+Plotting of the legend is suppressed if set to \code{NULL}.}
+
+\item{margin}{numeric value indicating the gap (in pixels) between 
+individual images (default 0).}
+
+\item{display}{one of two possible values: "all" or "single". When set to
+"all", all images are displayed at once in a grid-like fashion. When
+set to "single", individual images are plotted in single graphics devices.
+The second option is useful when saving individual images in pdf format or
+when displaying in Rmarkdown files.}
+
+\item{scale}{logical indicating whether to scale each feature individually to
+its minimum/maximum across the SingleCellExperiment object (see
+\code{\link{plotCells}}) or across all displayed images (see
+\code{\link{plotCells}}). If set to \code{FALSE} each value is displayed
+relative to the maximum of all selected features.}
+
+\item{interpolate}{a logical indicating whether to apply
+linear interpolation to the image when drawing (see
+\code{\link[graphics]{rasterImage}}) (default TRUE).}
 }
 \value{
-TODO
+a list if \code{return_images} and/or \code{return_plot} is TRUE.
+\itemize{
+\item \code{plot}: a single plot object (\code{display = "all"}) or a list
+of plot objects (\code{display = "single"})
+\item \code{images}: a \code{\linkS4class{SimpleList}} object containing
+three-colour \code{\linkS4class{Image}} objects.
+}
 }
 \description{
-TODO
+The \code{\link{plotCells}} and \code{\link{plotPixels}} functions share a
+number of parameter that can be set to change the visual representation of
+plotted images.
 }
-\section{Setting further parameters}{
-
-TODO
-# legend list(title, size) also allow NULL
-# return_plot TODO
-# return_images TODO
-# save_images TODO
-}
-
 \examples{
-# TODO
+data("pancreasImages")
+data("pancreasMasks")
+data("pancreasSCE")
 
+# Setting missing colour
+plotCells(pancreasMasks, missing_colour = "blue")
+
+# Setting background colour
+plotCells(pancreasMasks, background_colour = "blue")
+
+# Setting the scale bar
+plotCells(pancreasMasks, scale_bar = list(length = 10,
+                                        cex = 2,
+                                        lwidth = 10,
+                                        colour = "red",
+                                        position = "bottomleft",
+                                        margin = c(5,5),
+                                        frame = 3))
+
+# Setting the image title
+plotCells(pancreasMasks,
+            image_title = list(text = c("image1", "image2", "image3"),
+                                position = "topleft",
+                                colour = "blue",
+                                margin = c(0,5),
+                                font = 2,
+                                cex = 2))
+
+# Return plot
+cur_out <- plotPixels(pancreasImages, return_plot = TRUE)
+cur_out$plot
+
+# Return images
+cur_out <- plotPixels(pancreasImages, return_images = TRUE)
+cur_out$images
+
+# Setting the legend
+plotCells(pancreasMasks, object = pancreasSCE,
+            img_id = "ImageNb", cell_id = "CellNb",
+            colour_by = c("CD99", "CDH"),
+            outline_by = "CellType",
+            legend = list(colour_by.title.font = 0.5,
+                        colour_by.title.cex = 0.5,
+                        colour_by.labels.cex = 0.5,
+                        outline_by.legend.cex = 0.5,
+                        margin = 0))
+
+# Setting the margin between images
+plotPixels(pancreasImages, margin = 3)
+
+# Displaying individual images
+plotPixels(pancreasImages, display = "single")
+
+# Supress scaling
+plotPixels(pancreasImages, colour_by = c("CD99", "PIN"),
+            scale = TRUE)
+plotPixels(pancreasImages, colour_by = c("CD99", "PIN"),
+            scale = FALSE)
+
+# Suppress interpolation
+plotPixels(pancreasImages, colour_by = c("CD99", "PIN"),
+            interpolate = TRUE)
+plotPixels(pancreasImages, colour_by = c("CD99", "PIN"),
+            interpolate = FALSE)
+
+}
+\seealso{
+\code{\link{plotCells}} and \code{\link{plotPixels}}
+for the main plotting functions
 }
 \author{
 Nils Eling (\email{nils.eling@dqbm.uzh.ch})

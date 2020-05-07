@@ -11,53 +11,175 @@ plotPixels(
   cell_id = NULL,
   img_id = NULL,
   colour_by = NULL,
-  bcg = NULL,
   outline_by = NULL,
-  subset_images = NULL,
+  bcg = NULL,
   colour = NULL,
   ...
 )
 }
 \arguments{
-\item{image}{an \code{\linkS4class{ImageList}} object containing single or
-multi-channel \code{\linkS4class{Image}} objects (see Details)}
+\item{image}{a \code{\linkS4class{CytoImageList}} object containing single or
+multi-channel \code{\linkS4class{Image}} objects (see details below).}
 
-\item{object}{(optional) an \code{\linkS4class{SingleCellExperiment}} object.}
+\item{object}{an optional \code{\linkS4class{SingleCellExperiment}} object.}
 
-\item{mask}{(optional) an \code{\linkS4class{ImageList}} object containing
-single-channel \code{\linkS4class{Image}} objects}
+\item{mask}{an optional \code{\linkS4class{CytoImageList}} object containing
+segmentaion masks in form of single-channel \code{\linkS4class{Image}}
+objects (see details below)}
 
-\item{cell_id}{(optional) character specifying the \code{colData(object)}, in which the
-integer cell IDs are stored}
+\item{cell_id}{character specifying the \code{colData(object)} entry, in
+which the integer cell IDs are stored. These IDs should match the integer
+pixel values in the segmentation mask object.}
 
-\item{img_id}{(optional)}
+\item{img_id}{character specifying the \code{colData(object)},
+\code{mcols(image)} and \code{mcols(mask)} entry, in which the image IDs
+are stored (see section 'Linking the \code{SingleCellExperiment} and
+\code{CytoImageList} objects' below)}
 
-\item{colour_by}{TODO}
+\item{colour_by}{character or character vector specifying the features
+(contained in \code{channelNames(image)}) used to colour individual cells.
+Pixels can be coloured by up to six features.}
 
-\item{bcg}{brightness/contrast/gamma list("H3" = c(0,1,1))}
+\item{outline_by}{single character indicating the \code{colData(object)}
+entry by which to outline individual cells}
 
-\item{outline_by}{(optional)}
+\item{bcg}{a list with names matching the entries to \code{colour_by}. Each
+entry contains a numeric vector of three entries:
+\enumerate{
+    \item brightness value added to the specified channel
+    \item contrast value multiplied with the specified channel
+    \item gamma value (channel is exponentiated by this value)
+}
+Default is c(0,1,1).}
 
-\item{subset_images}{TODO Note that Masks and Images need to have same names or same IDs}
-
-\item{colour}{TODO}
+\item{colour}{a list with names matching the entries to \code{colour_by}
+and/or \code{outline_by}. When setting the colour for continous features,
+at least two colours need to be provided indicating the colours for minimum
+and maximum values. When outlining by discrete values, a colour for each
+unique entry needs to be provided (see section 'Setting the colours' and
+examples)}
 
 \item{...}{Further arguments passed to  \code{?"\link{plotting-param}"}}
 }
 \value{
-TODO
+a list if \code{return_images} and/or \code{return_plot}
+is TRUE (see \code{?"\link{plotting-param}"}).
+\itemize{
+\item \code{plot}: a single plot object (\code{display = "all"}) or a list
+of plot objects (\code{display = "single"})
+\item \code{images}: a \code{\linkS4class{SimpleList}} object containing
+three-colour \code{\linkS4class{Image}} objects.
+}
 }
 \description{
-This function takes a \code{\linkS4class{ImageList}} object to colour pixels
-by marker expression. Additionally, a \code{\linkS4class{SingleCellExperiment}}
-object and \code{\linkS4class{ImageList}} object containing segmentation masks
-can be provided to outline cells based on metadata.
+This function takes a \code{\linkS4class{CytoImageList}} object to colour
+pixels by marker expression. Additionally, a
+\code{\linkS4class{SingleCellExperiment}} object and \code{CytoImageList}
+object containing segmentation masks can be provided to outline cells based
+on metadata.
 }
+\section{Multi-channel image and segmentation mask objects}{
+
+In the \code{plotPixels} function, \code{image} refers to a
+\code{\linkS4class{CytoImageList}} object that contains a single or multiple
+single- or multi-channel \code{\linkS4class{Image}} objects. Up to six
+channels can be overlayed to generate a composite image. When outlining
+cells, a \code{\linkS4class{SingleCellExperiment}} object and
+\code{\linkS4class{CytoImageList}} object containing segmentation masks must
+be provided. The function assumes that each object in the segmentation mask
+is a cell. The key features of such segmentation masks include:
+\itemize{
+    \item each Image object contains only one channel
+    \item pixel values are integers indicating the cells' IDs
+}
+}
+
+\section{Linking  SingleCellExperiment and CytoImageList objects}{
+
+To outline individual cells contained in the segmentation masks based on
+metadata stored in the SingleCellExperiment object, an \code{img_id} and
+\code{cell_id} entry needs to be provided. Image IDs are matched between the
+\code{SingleCellExperiment} and \code{CytoImageList} objects via entries to
+the \code{colData(object)[,img_id]}, \code{mcols(image)[,img_id]} and the
+\code{mcols(image)[,img_id]} slots. Cell IDs are matched between the
+\code{SingleCellExperiment} and \code{CytoImageList} object via entries to
+\code{colData(object)[,cell_id]} and the integer values of the segmentation
+masks.
+}
+
+\section{Setting the colours}{
+
+By default, features and metadata are coloured based on internally-set
+colours. To set new colours, a \code{list} object must be provided. The names
+of the object must correspond to the entries to \code{colour_by} and/or
+\code{outline_by}. When setting the colours for continous expression values
+or continous metadata entries, a vector of at least two colours need to be
+specified. These colours will be passed onto \code{\link{colorRampPalette}}
+for interpolation. Cells can be outlined by discrete metadata entries when
+specifying a named vector in which each entry corresponds to a unique entry
+to the metadata vector.
+}
+
+\section{Subsetting the \code{CytoImageList} objects}{
+
+The \code{CytoImageList} object(s) can be subsetted before calling the
+\code{plotPixels} function. In that case, only the selected images are
+displayed.
+}
+
+\section{Subsetting the \code{SingleCellExperiment} object}{
+
+The \code{SingleCellExperiment} object can be subsetted before calling the
+\code{plotPixels} function. In that case, only cells contained in the
+\code{SingleCellExperiment} object are outlined.
+}
+
+\section{Colour scaling}{
+
+When plotting pixel intensities, colours are scaled to the minimum and
+maximum per channel across all images that are being displayed. Therefore,
+when subsetting images, displayed intensities might change. However, the
+colour legend will display the correct numeric minimum and maximum pixel
+intensity across all displayed images per channel.
+}
+
 \examples{
-# TODO
+data(pancreasMasks)
+data(pancreasImages)
+data(pancreasSCE)
+
+# Visualize the images - by default the first channel
+plotPixels(pancreasImages)
+
+# Colour the channels
+plotPixels(pancreasImages, colour_by = c("CD99", "CDH"))
+
+# Outline the cells based on metadata
+plotPixels(pancreasImages, object = pancreasSCE, mask = pancreasMasks,
+            img_id = "ImageNb", cell_id = "CellNb",
+            colour_by = c("CD99", "CDH"), outline_by = "CellType")
+
+# Enhance individual channels
+plotPixels(pancreasImages, colour_by = c("CD99", "CDH"),
+            bcg = list(CD99 = c(0, 2, 1)))
+
+# Subset the images
+cur_images <- getImages(pancreasImages, 1:2)
+plotPixels(cur_images, colour_by = c("CD99", "CDH"))
+
+# Set colour
+plotPixels(pancreasImages, colour_by = c("CD99", "CDH"),
+            colour = list(CD99 = c("black", "green"),
+                            CDH = c("black", "blue")))
 
 }
+\seealso{
+For further plotting parameters see \code{?"\link{plotting-param}"}.
+For instructions on how to normalize images see
+\code{\link{normalize}}.
+}
 \author{
-Nils Eling \email{nils.eling@dqbm.uzh.ch},
-Nicolas Damond \email{nicolas.damond@dqbm.uzh.ch}
+Nils Eling (\email{nils.eling@dqbm.uzh.ch})
+
+Nicolas Damond (\email{nicolas.damond@dqbm.uzh.ch})
 }

@@ -1,36 +1,28 @@
-Package: SingleCellMapper
-Version: 0.1.6
-Date: 2020-03-10
-Title: Visualization of multiplexed, spatial single-cell data 
+Package: cytomapper
+Version: 0.99.6
+Title: Visualization of highly multiplexed imaging cytometry data in R
 Description: 
-    In recent years, multiplexed imaging approaches have been developed 
-    to aquire single-cell read-outs (e.g. RNA or proteins) in a spatially 
-    resolved fashion. These information can therefore be visualized across
-    multiple length-scales. First, pixel-level information d isplays the 
-    most resolved features within the images. Second, after segementation
-    the cells' expression values can be visualized on segmented cell areas.
-    Last, these technologies allow the detection and visualization  of 
-    cellular super-structures such as stroma/tumour compartments or 
-    pancreatic islets. These information are stored in image stacks where each
-    individual image contains the pixel-level information of individual channels 
-    (individual protein or RNA species).
-    This package contains functions for the visualization of multiplexed 
-    read-outs of spatially resolved single-cell technologies on images.
-    It requires three data objects for visualization: 1. a SingleCellExperiment
-    object which contains the cells' counts and metadata, 2. an ImageList or 
-    Image object containing the pixel-level information per channel and/or 
-    3. an ImageList or Image object containing the segemntation mask per image.
-    The main functionality of this package includes the individual or multiplexed 
-    visualization of pixel- and cell-level information for all aquired read-outs.
-    Furthermore, it allows the visualization of user-defined metadata.
+    Highly multiplexed imaging cytometry acquires the single-cell expression of
+    selected proteins in a spatially-resolved fashion. These measurements can be
+    visualized across multiple length-scales. First, pixel-level intensities
+    represent the spatial distributions of feature expression with highest
+    resolution. Second, after segmentation, expression values or cell-level
+    metadata (e.g. cell-type information) can be visualized on segmented cell
+    areas. This package contains functions for the visualization of multiplexed
+    read-outs and cell-level information obtained by multiplexed imaging
+    cytometry. The main functions of this package allow 1. the visualization of
+    pixel-level information across multiple channels and 2. the display of
+    cell-level information (expression and/or metadata) on segmentation masks.
 Authors@R: 
-    c(person("Nicolas", "Damond", role = c("aut", "cre"), 
-      email = "nicolas.damond@dqbm.uzh.ch"))
     c(person("Nils", "Eling", role = c("aut", "cre"), 
-      email = "nils.eling@dqbm.uzh.ch"))
+      email = "nils.eling@dqbm.uzh.ch",
+      comment = c(ORCID = "0000-0002-4711-1176")),
+      person("Nicolas", "Damond", role = c("aut"), 
+      email = "nicolas.damond@dqbm.uzh.ch", 
+      comment = c(ORCID = "0000-0003-3027-8989")))
 License: GPL (>= 2)
 Depends:
-    R (>= 3.6),
+    R (>= 4.0),
     EBImage,
     SingleCellExperiment,
     methods
@@ -42,15 +34,17 @@ Imports:
     SummarizedExperiment,
     tools,
     graphics,
-    raster
+    raster,
+    grDevices,
+    stats
 Suggests:
     BiocStyle,
     knitr,
     rmarkdown,
     testthat
-biocViews: ImmunoOncology, Software, SingleCell, Imaging
+biocViews: ImmunoOncology, Software, SingleCell, OneChannel, TwoChannel, MultipleComparison, Normalization, DataImport
 VignetteBuilder: knitr
-URL: https://github.com/BodenmillerGroup/SingleCellMapper
-BugReports: https://github.com/BodenmillerGroup/SingleCellMapper/issues
-RoxygenNote: 7.0.2
+URL: https://github.com/BodenmillerGroup/cytomapper
+BugReports: https://github.com/BodenmillerGroup/cytomapper/issues
+RoxygenNote: 7.1.0
 Encoding: UTF-8
