@@ -1,5 +1,5 @@
 Package: cytomapper
-Version: 0.99.6
+Version: 1.1.0
 Title: Visualization of highly multiplexed imaging cytometry data in R
 Description: 
     Highly multiplexed imaging cytometry acquires the single-cell expression of
