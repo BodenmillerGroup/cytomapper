@@ -35,7 +35,7 @@ launchShiny <- function(object,
     .valid.image(image, img_id)
   }
 
-iSEE_ui <- fluidPage(
+shiny_ui <- fluidPage(
   # Stylize front-end
   tags$style(type='text/css', ".select-input { font-size: 12px; line-height: 12px;} .select-dropdown { font-size: 12px; line-height: 12px; }"),
 
@@ -96,11 +96,11 @@ iSEE_ui <- fluidPage(
   )
 )
 
-iSEE_server <- function(input, output, session) {
+shiny_server <- function(input, output, session) {
     .initialize_server(object, mask, image, cell_id, img_id, input, output, session)
 }
 
-shinyApp(ui=function(request) iSEE_ui, server=iSEE_server)
+shinyApp(ui=function(request) shiny_ui, server=shiny_server)
 }
 
 .scaling <- function(x){(x - min(x))/(max(x) - min(x))}
@@ -365,6 +365,11 @@ shinyApp(ui=function(request) iSEE_ui, server=iSEE_server)
   })
 
   createPlot.reducedDim_expression <- eventReactive(input$goButton, {
+      
+    if (length(reducedDimNames(pancreasSCE)) == 0) {
+        return(NULL)
+    }
+      
     # Read in selected values
     marker1 <- input$Marker_1
     marker2 <- input$Marker_2
@@ -540,13 +545,13 @@ shinyApp(ui=function(request) iSEE_ui, server=iSEE_server)
     if(is.na(markerB)){
 
       if(is.null(image)){
-        plotCells(object = cur_object,
-                  mask = mask,
-                  cell_id = cell_id,
-                  img_id = img_id,
-                  colour_by = markerA,
-                  subset_images = sample,
-                  exprs_values = cur_assay)
+            cur_mask <- mask[mcols(mask)[,img_id] == sample]
+            plotCells(object = cur_object,
+                    mask = cur_mask,
+                    cell_id = cell_id,
+                    img_id = img_id,
+                    colour_by = markerA,,
+                    exprs_values = cur_assay)
       } else {
         # TODO
       }
@@ -554,13 +559,13 @@ shinyApp(ui=function(request) iSEE_ui, server=iSEE_server)
     }
     else{
       if(is.null(image)){
-        plotCells(object = cur_object,
-                  mask = mask,
-                  cell_id = cell_id,
-                  img_id = img_id,
-                  colour_by = c(markerA, markerB),
-                  subset_images = sample,
-                  exprs_values = cur_assay)
+            cur_mask <- mask[mcols(mask)[,img_id] == sample]
+            plotCells(object = cur_object,
+                    mask = cur_mask,
+                    cell_id = cell_id,
+                    img_id = img_id,
+                    colour_by = c(markerA, markerB),
+                    exprs_values = cur_assay)
       } else {
         # TODO
       }
@@ -649,13 +654,13 @@ shinyApp(ui=function(request) iSEE_ui, server=iSEE_server)
                                               cur_selection$cell_ID,"selected"] <- as.character(cur_selection$selected_)
 
     if(is.null(image)){
-      plotCells(object = cur_object,
-                mask = mask,
-                cell_id = cell_id,
-                img_id = img_id,
-                colour_by = "selected",
-                subset_images = sample,
-                colour = list(selected = c("TRUE" = "dark red", "FALSE" = "gray")))
+        cur_mask <- mask[mcols(mask)[,img_id] == sample] 
+        plotCells(object = cur_object,
+                    mask = cur_mask,
+                    cell_id = cell_id,
+                    img_id = img_id,
+                    colour_by = "selected",
+                    colour = list(selected = c("TRUE" = "dark red", "FALSE" = "gray")))
     } else {
       # TODO
     }
