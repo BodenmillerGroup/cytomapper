@@ -366,7 +366,7 @@ shinyApp(ui=function(request) shiny_ui, server=shiny_server)
 
   createPlot.reducedDim_expression <- eventReactive(input$goButton, {
       
-    if (length(reducedDimNames(pancreasSCE)) == 0) {
+    if (length(reducedDimNames(object)) == 0) {
         return(NULL)
     }
       
