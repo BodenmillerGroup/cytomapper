@@ -681,7 +681,7 @@ shinyApp(ui=function(request) shiny_ui, server=shiny_server)
                 mask = cur_mask,
                 cell_id = cell_id,
                 img_id = img_id,
-                outline_by = "selected",
+                colour_by = "selected",
                 colour = list(selected = c("TRUE" = "dark red", "FALSE" = "gray")))
     }
   })
