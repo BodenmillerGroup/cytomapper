@@ -550,7 +550,6 @@ shinyApp(ui=function(request) shiny_ui, server=shiny_server)
                     mask = cur_mask,
                     cell_id = cell_id,
                     img_id = img_id,
-                    colour_by = markerA,,
                     colour_by = markerA,
                     exprs_values = cur_assay)
       } else {
@@ -677,7 +676,7 @@ shinyApp(ui=function(request) shiny_ui, server=shiny_server)
                     colour_by = "selected",
                     colour = list(selected = c("TRUE" = "dark red", "FALSE" = "gray")))
     } else {
-      # TODO
+      cur_mask <- mask[mcols(mask)[,img_id] == sample]
       plotCells(object = cur_object,
                 mask = cur_mask,
                 cell_id = cell_id,
