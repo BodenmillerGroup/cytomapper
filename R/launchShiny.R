@@ -20,80 +20,28 @@
 #' @export
 #' @import ggplot2
 #' @import shiny
+#' @importFrom shinydashboard dashboardPage
 #' @importFrom ggridges geom_density_ridges2
 launchShiny <- function(object,
-                       mask,
-                       image = NULL,
-                       cell_id = NULL,
-                       img_id = NULL) {
-  # Object checks
-  .valid.sce(object, img_id, cell_id, exprs_values = NULL)
-  if(!is.null(mask)){
-    .valid.mask(mask, img_id)
-  }
-  if(!is.null(image)){
-    .valid.image(image, img_id)
-  }
+                        mask,
+                        image = NULL,
+                        cell_id = NULL,
+                        img_id = NULL) {
+    # Object checks
+    .valid.sce(object, img_id, cell_id, exprs_values = NULL)
+    
+    if (!is.null(mask)) {
+        .valid.mask(mask, img_id)
+    }
+    
+    if (!is.null(image)) {
+        .valid.image(image, img_id)
+    }
 
-shiny_ui <- fluidPage(
-  # Stylize front-end
-  tags$style(type='text/css', ".select-input { font-size: 12px; line-height: 12px;} .select-dropdown { font-size: 12px; line-height: 12px; }"),
-
-  # Application title
-  titlePanel("Shiny app to visualize gated cells on images"),
-
-  sidebarLayout(
-    sidebarPanel(
-      helpText("This Shiny App visualizes protein abundance on reduced dimensions and images.",
-               "It further visualizes the counts on images and allows gating of cells."),
-      selectizeInput("Marker_1", label = "Select marker 1", choices = NULL, options =
-                       list(placeholder = 'Select a marker name', maxItems = 1)),
-      helpText("Please select the protein marker you would like to visualize.",
-               "When only selecting the first marker, the distribution of ion counts are shown."),
-      selectizeInput("Marker_2", label = "Select marker 2", choices = NULL, options =
-                       list(placeholder = NULL, maxItems = 1)),
-      selectizeInput("Marker_3", label = "Select marker 3", choices = NULL, options =
-                       list(placeholder = NULL, maxItems = 1)),
-      selectizeInput("Marker_4", label = "Select marker 4", choices = NULL, options =
-                       list(placeholder = NULL, maxItems = 1)),
-      selectizeInput("Marker_5", label = "Select marker 5", choices = NULL, options =
-                       list(placeholder = NULL, maxItems = 1)),
-      selectizeInput("Marker_6", label = "Select marker 6", choices = NULL, options =
-                       list(placeholder = NULL, maxItems = 1)),
-      selectizeInput("sample", label = "Select sample",
-                     choices = NULL,
-                     options = list(placeholder = 'Select a condition', maxItems = 1)),
-      helpText("Please select one sample and ROI for visualization."),
-      selectizeInput("assay", label = "Select which assay to display",
-                     choices = NULL, options =
-                       list(placeholder = 'Select an assay', maxItems = 1)),
-      helpText("Here, you can select from which assay to display the counts"),
-      selectizeInput("reducedDim", label = "Select which reduced dimension to display",
-                     choices = NULL, options =
-                       list(placeholder = 'Select a reduced dimension', maxItems = 1)),
-      helpText("Please select the reduced dimension to display"),
-      actionButton("goButton", "Go!"),
-
-      downloadButton("downloadData", "Download")
-    ),
-
-    mainPanel(
-      tabPanel("Plot",
-               fluidRow(column(6, plotOutput("scatter1", brush = "plot_brush1"),
-                               verbatimTextOutput("info1")),
-                        column(6, plotOutput("scatter2", brush = "plot_brush2"),
-                               verbatimTextOutput("info2"))),
-               fluidRow(column(6, plotOutput("scatter3", brush = "plot_brush3"),
-                               verbatimTextOutput("info3")),
-                        column(6, plotOutput("reducedDim_expression"))),
-               fluidRow(
-                 splitLayout(cellWidths = c("50%", "50%"),
-                             plotOutput("image_expression"),
-                             plotOutput("image_selection"))
-               ),
-      )
-    )
-  )
+shiny_ui <- dashboardPage(
+    header = .cytomapper_header(),
+    sidebar = .cytomapper_sidebar(),
+    body = .cytomapper_body(),
 )
 
 shiny_server <- function(input, output, session) {
