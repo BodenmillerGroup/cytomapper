@@ -41,7 +41,6 @@
                                choices = NULL, options =
                                    list(placeholder = 'Select a reduced dimension', maxItems = 1)),
         helpText("Please select the reduced dimension to display"),
-        actionButton("goButton", "Go!"),
                 
         downloadButton("downloadData", "Download")
         )
