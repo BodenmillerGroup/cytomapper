@@ -3,9 +3,46 @@
 # -----------------------------------------------------------------------------
 
 # Create the application header
-#' @importFrom shinydashboard dashboardHeader
+#' @importFrom utils packageVersion
 .cytomapper_header <- function(){
-    cm_head <- dashboardHeader(title = "cytomapper gating")
+    cm_head <- dashboardHeader(
+        title = paste0("cytomapper v",
+                        packageVersion("cytomapper")),
+        dropdownMenu(
+            notificationItem(
+                text = downloadButton(
+                    outputId = "downloadData",       
+                    label = "Download selection"
+                ),
+                icon = icon(""),
+                status = "info"
+            ),
+            type = "tasks",
+            icon = icon("fas fa-download"),
+            badgeStatus = NULL,
+            headerText = ""),
+        dropdownMenu(
+            notificationItem(
+                text = actionButton(
+                    inputId = "SessionInfo",       
+                    label = "Session Info"
+                ),
+                icon = icon(""),
+                status = "info"
+            ),
+            notificationItem(
+                text = actionButton(
+                    inputId = "Help",       
+                    label = "Help"
+                ),
+                icon = icon(""),
+                status = "info"
+            ),
+            type = "tasks",
+            icon = icon("fas fa-question"),
+            badgeStatus = NULL,
+            headerText = "")
+        )
     return(cm_head)
     }
 
@@ -13,12 +50,8 @@
 #' @importFrom shinydashboard dashboardSidebar
 .cytomapper_sidebar <- function(){
     cm_side <- dashboardSidebar(
-        helpText("This Shiny App visualizes protein abundance on reduced dimensions and images.",
-                         "It further visualizes the counts on images and allows gating of cells."),
         selectizeInput("Marker_1", label = "Select marker 1", choices = NULL, options =
                                    list(placeholder = 'Select a marker name', maxItems = 1)),
-        helpText("Please select the protein marker you would like to visualize.",
-                         "When only selecting the first marker, the distribution of ion counts are shown."),
         selectizeInput("Marker_2", label = "Select marker 2", choices = NULL, options =
                                    list(placeholder = NULL, maxItems = 1)),
         selectizeInput("Marker_3", label = "Select marker 3", choices = NULL, options =
@@ -32,17 +65,12 @@
         selectizeInput("sample", label = "Select sample",
                                choices = NULL,
                                options = list(placeholder = 'Select a condition', maxItems = 1)),
-        helpText("Please select one sample and ROI for visualization."),
         selectizeInput("assay", label = "Select which assay to display",
                                choices = NULL, options =
                                    list(placeholder = 'Select an assay', maxItems = 1)),
-        helpText("Here, you can select from which assay to display the counts"),
         selectizeInput("reducedDim", label = "Select which reduced dimension to display",
                                choices = NULL, options =
-                                   list(placeholder = 'Select a reduced dimension', maxItems = 1)),
-        helpText("Please select the reduced dimension to display"),
-                
-        downloadButton("downloadData", "Download")
+                                   list(placeholder = 'Select a reduced dimension', maxItems = 1))
         )
     
     return(cm_side)

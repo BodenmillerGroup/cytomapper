@@ -12,6 +12,42 @@
 # Function to perform min max scaling
 .scaling <- function(x){(x - min(x))/(max(x) - min(x))}
 
+# Generate help text
+.general_help <- function(){
+    pre(
+        h2("Using this Shiny app"),
+        p("To use this shiny..."),
+        h2("Selecting the markers"),
+        p("Select the markers..."),
+        h2("Visualization on the images"),
+        p("The selected cells can be seen on the images")
+    )
+}
+
+# Create general observers for header
+.create_general_observer <- function(input, si){
+    
+    # Return session info
+    observeEvent(input$SessionInfo, {
+        showModal(modalDialog(
+            pre(paste(capture.output(si), collapse = "\n")),
+            size="l",fade=TRUE,
+            footer=NULL, easyClose=TRUE,
+            title = "Session Info",
+        ))
+    })
+    
+    # Return helptext
+    observeEvent(input$Help, {
+        showModal(modalDialog(
+            .general_help(),
+            size="l",fade=TRUE,
+            footer=NULL, easyClose=TRUE,
+            title = "Help",
+        ))
+    })
+}
+
 # Create the server
 .cytomapper_server <- function(object, mask, image, cell_id, img_id,
                                input, output, session, ...)
@@ -48,6 +84,10 @@
     updateSelectizeInput(session, 'Marker_6',
                          choices = rownames(object),
                          server = TRUE, selected = "")
+    
+    # Session info observer
+    cur_sessionInfo <- sessionInfo()
+    .create_general_observer(input, si = cur_sessionInfo)
     
     #### Visualize marker expression
     createPlot.scatter1 <- renderPlot({
@@ -755,9 +795,7 @@
     })
     
     output$downloadData <- downloadHandler(
-        filename = function() {
-            paste("cell_type", ".csv", sep = "")
-        },
+        filename = "cell_type.csv",
         content = function(file) {
             write.csv(datasetInput(), file, row.names = FALSE)
         }

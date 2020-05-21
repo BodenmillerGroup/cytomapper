@@ -21,7 +21,7 @@
 #' @export
 #' @import ggplot2
 #' @import shiny
-#' @importFrom shinydashboard dashboardPage
+#' @import shinydashboard
 #' @importFrom ggridges geom_density_ridges2
 cytomapperShiny <- function(object,
                         mask,
