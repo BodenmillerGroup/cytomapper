@@ -73,11 +73,9 @@
                            choices = NULL,
                            options = list(placeholder = 'Select a condition', maxItems = 1)),
             selectizeInput("assay", label = "Select which assay to display",
-                           choices = NULL, options =
-                               list(placeholder = 'Select an assay', maxItems = 1)),
+                           choices = NULL, options = list(placeholder = 'Select an assay', maxItems = 1)),
             selectizeInput("reducedDim", label = "Select which reduced dimension to display",
-                           choices = NULL, options =
-                               list(placeholder = 'Select a reduced dimension', maxItems = 1)),
+                           choices = NULL, options = list(placeholder = 'Select a reduced dimension', maxItems = 1)),
             id = "sidebar"
             )
         )
