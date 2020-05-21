@@ -50,46 +50,67 @@
 #' @importFrom shinydashboard dashboardSidebar
 .cytomapper_sidebar <- function(){
     cm_side <- dashboardSidebar(
-        selectizeInput("Marker_1", label = "Select marker 1", choices = NULL, options =
-                                   list(placeholder = 'Select a marker name', maxItems = 1)),
-        selectizeInput("Marker_2", label = "Select marker 2", choices = NULL, options =
-                                   list(placeholder = NULL, maxItems = 1)),
-        selectizeInput("Marker_3", label = "Select marker 3", choices = NULL, options =
-                                   list(placeholder = NULL, maxItems = 1)),
-        selectizeInput("Marker_4", label = "Select marker 4", choices = NULL, options =
-                                   list(placeholder = NULL, maxItems = 1)),
-        selectizeInput("Marker_5", label = "Select marker 5", choices = NULL, options =
-                                   list(placeholder = NULL, maxItems = 1)),
-        selectizeInput("Marker_6", label = "Select marker 6", choices = NULL, options =
-                                   list(placeholder = NULL, maxItems = 1)),
-        selectizeInput("sample", label = "Select sample",
-                               choices = NULL,
-                               options = list(placeholder = 'Select a condition', maxItems = 1)),
-        selectizeInput("assay", label = "Select which assay to display",
-                               choices = NULL, options =
-                                   list(placeholder = 'Select an assay', maxItems = 1)),
-        selectizeInput("reducedDim", label = "Select which reduced dimension to display",
-                               choices = NULL, options =
-                                   list(placeholder = 'Select a reduced dimension', maxItems = 1))
+        
+        sidebarMenu(
+            menuItem("Plots",
+                h3("Plot 1"),
+                selectizeInput("Marker_1", label = "Select marker 1", choices = NULL,
+                               options = list(placeholder = 'Select a marker name', maxItems = 1)),
+                selectizeInput("Marker_2", label = "Select marker 2", choices = NULL, 
+                               options = list(placeholder = NULL, maxItems = 1)),
+                h3("Plot 2"),
+                selectizeInput("Marker_3", label = "Select marker 3", choices = NULL,
+                               options = list(placeholder = 'Select a marker name', maxItems = 1)),
+                selectizeInput("Marker_4", label = "Select marker 4", choices = NULL, 
+                               options = list(placeholder = NULL, maxItems = 1)),
+                h3("Plot 3"),
+                selectizeInput("Marker_1", label = "Select marker 5", choices = NULL,
+                               options = list(placeholder = 'Select a marker name', maxItems = 1)),
+                selectizeInput("Marker_2", label = "Select marker 6", choices = NULL, 
+                               options = list(placeholder = NULL, maxItems = 1)),
+                icon = icon("far fa-chart-bar"), startExpanded = TRUE),
+            selectizeInput("sample", label = "Select sample",
+                           choices = NULL,
+                           options = list(placeholder = 'Select a condition', maxItems = 1)),
+            selectizeInput("assay", label = "Select which assay to display",
+                           choices = NULL, options =
+                               list(placeholder = 'Select an assay', maxItems = 1)),
+            selectizeInput("reducedDim", label = "Select which reduced dimension to display",
+                           choices = NULL, options =
+                               list(placeholder = 'Select a reduced dimension', maxItems = 1)),
+            id = "sidebar"
+            )
         )
     
     return(cm_side)
+    
     }
 
 # Create the main body
 #' @importFrom shinydashboard dashboardBody
 .cytomapper_body <- function(){
     cm_body <- dashboardBody(
-        fluidRow(column(6, plotOutput("scatter1", brush = "plot_brush1"),
-                        verbatimTextOutput("info1")),
-                 column(6, plotOutput("scatter2", brush = "plot_brush2"),
-                        verbatimTextOutput("info2"))),
-        fluidRow(column(6, plotOutput("scatter3", brush = "plot_brush3"),
-                        verbatimTextOutput("info3")),
-                 column(6, plotOutput("reducedDim_expression"))),
-        fluidRow(splitLayout(cellWidths = c("50%", "50%"),
-                             plotOutput("image_expression"),
-                             plotOutput("image_selection")))
+        fluidRow(box(plotOutput("scatter1", brush = "plot_brush1"),
+                        verbatimTextOutput("info1"),
+                     title = "Plot 1", status = "primary",
+                     width = 6),
+                 box(plotOutput("scatter2", brush = "plot_brush2"),
+                     verbatimTextOutput("info2"),
+                     title = "Plot 2", status = "primary",
+                     width = 6)),
+        fluidRow(box(plotOutput("scatter3", brush = "plot_brush3"),
+                      verbatimTextOutput("info3"),
+                      title = "Plot 3", status = "primary",
+                      width = 6),
+                 box(plotOutput("reducedDim_expression"),
+                     title = "Reduced dimensions", status = "primary",
+                     width = 6)),
+        fluidRow(box(plotOutput("image_expression"), 
+                     title = "Expression", status = "primary",
+                     width = 6),
+                 box(plotOutput("image_selection"), 
+                     title = "Selection", status = "primary",
+                     width = 6))
         )
     return(cm_body)
     }

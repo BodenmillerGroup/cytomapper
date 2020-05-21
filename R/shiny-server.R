@@ -48,6 +48,9 @@
     })
 }
 
+# Create scatter plots
+
+
 # Create the server
 .cytomapper_server <- function(object, mask, image, cell_id, img_id,
                                input, output, session, ...)
