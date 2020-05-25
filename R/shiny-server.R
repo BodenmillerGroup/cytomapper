@@ -49,66 +49,67 @@
 }
 
 # Create scatter plots
-.createScatter <- function(object, markers, sample, assay, img_id, ranges){
+.createScatter <- function(object, markers, sample, assay, ranges, brush){
     renderPlot({
-        
         # Build data frame for visualization
-        cur_df <- assay(object, assay)[,colData(object)[,img_id] == sample]
-        cur_df$sample <- sample
+        cur_df <- t(assay(object(), assay()))
+        cur_df$sample <- sample()
         
-        if(markers[2] == ""){
+        if(markers[[2]]() == ""){
 
             # Distributions of marker proteins
             ggplot(cur_df) +
-                geom_density(aes_(x = as.name(markers[1])), 
+                geom_density(aes_(x = as.name(markers[[1]]())), 
                              show.legend = FALSE) +
                 theme(axis.text.y = element_blank(),
                       panel.background = element_blank()) +
                 ylab("") +
-                xlim(c(ranges[markers[1],1], ranges[markers[1],2]))
-        }
-        else{
-            ggplot(cur_df) +
-                geom_point(aes_(as.name(markers[1]), as.name(markers[2])), 
-                           show.legend = FALSE) +
-                ylab(markers[2]) +
-                theme_minimal() + xlab(markers[1]) +
-                ylim(c(ranges[markers[2],1], ranges[markers[2],2])) +
-                xlim(c(ranges[markers[1],1], ranges[markers[1],2]))
+                xlim(c(ranges()[markers[[1]](),1], ranges()[markers[[1]](),2]))
             
+        } else {
+            ggplot(cur_df) +
+                geom_point(aes_(as.name(markers[[1]]()), as.name(markers[[2]]())), 
+                           show.legend = FALSE) +
+                ylab(markers[[2]]()) +
+                theme_minimal() + xlab(markers[1]) +
+                ylim(c(ranges()[markers[[2]](),1], ranges()[markers[[2]](),2])) +
+                xlim(c(ranges()[markers[[1]](),1], ranges()[markers[[1]](),2]))
         }
     })
 }
 
-.brushObject <- function(object, markers, sample, assay, 
-                         img_id, brush){
-    # Generate the data.frame
-    cur_df <- assay(object, assay)[,colData(object)[,img_id] == sample]
-    cur_df$sample <- sample
+.brushObject <- function(object, markers, sample, assay, brush){
     
-    # Brush the data.frame
-    cur_selection <- brushedPoints(cur_df, brush, allRows = TRUE)
+    reactive({
+        # Build data frame 
+        cur_df <- t(assay(object(), assay()))
+        cur_df$sample <- sample()
     
-    # Save the Gate
-    cur_gate <- list()
-    cur_gate$gate <- matrix(data = c(brush$xmin, brush$xmax, 
-                                brush$ymin, brush$ymax),
-                       nrow = 2, ncol = 2,
-                       byrow = TRUE,
-                       dimnames = list(markers, c("min", "max")))
-    cur_gate$exprs_values <- assay
+        # Brush the data.frame
+        cur_selection <- brushedPoints(cur_df, brush(), allRows = TRUE)
     
-    # Saved gates
-    all_gates <- names(metadata(object))[grepl("cytomapper_gate", names(metadata(object)))]
-    if (is.null(all_gates)) {
-        metadata(object)$cytomapper_gate_1 <- cur_gate
-    } else {
-        cur_num <- as.numeric(vapply(all_gates, FUN = function(x){unlist(strsplit(x, split = "_"))[3]}, 
-                                     FUN.VALUE = character(1)))
-        metadata(object)[[paste0("cytomapper_gate_", max(cur_num) + 1)]] <- cur_gate
-    }
+        # Save the Gate
+        cur_gate <- list()
+        cur_gate$gate <- matrix(data = c(brush()$xmin, brush()$xmax, 
+                                    brush()$ymin, brush()$ymax),
+                           nrow = 2, ncol = 2,
+                           byrow = TRUE,
+                           dimnames = list(c(markers[[1]](), markers[[2]]()), c("min", "max")))
+        cur_gate$exprs_values <- assay()
+        cur_gate$img_id <- sample()
     
-    return(object[,cur_selection$selected_])
+        # Saved gates
+        all_gates <- names(metadata(object()))[grepl("cytomapper_gate", names(metadata(object())))]
+        if (is.null(all_gates)) {
+            metadata(object())$cytomapper_gate_1 <- cur_gate
+        } else {
+            cur_num <- as.numeric(vapply(all_gates, FUN = function(x){unlist(strsplit(x, split = "_"))[3]}, 
+                                         FUN.VALUE = character(1)))
+            metadata(object())[[paste0("cytomapper_gate_", max(cur_num) + 1)]] <- cur_gate
+        }
+    
+        return(object()[,cur_selection$selected_])
+    })
     
 }
 
@@ -165,70 +166,71 @@
         })
     cur_object <- reactive({object[,colData(object)[,img_id] == cur_sample()]})
     
+    # Markers
+    cur_marker1 <- reactive({input$Marker_1})
+    cur_marker2 <- reactive({input$Marker_2})
+    cur_marker3 <- reactive({input$Marker_3})
+    cur_marker4 <- reactive({input$Marker_4})
+    cur_marker5 <- reactive({input$Marker_5})
+    cur_marker6 <- reactive({input$Marker_6})
+    
+    # Brushes
+    brush1 <- reactive({input$plot_brush1})
+    brush2 <- reactive({input$plot_brush2})
+    brush3 <- reactive({input$plot_brush3})
     
     # Session info observer
     cur_sessionInfo <- sessionInfo()
     .create_general_observer(input, si = cur_sessionInfo)
     
     # First scatter plot
-    cur_marker1 <- reactive({input$Marker_1})
-    cur_marker2 <- reactive({input$Marker_2})
     output$scatter1 <- .createScatter(object = cur_object, 
-                                     markers = c(cur_marker1, cur_marker2), 
-                                     sample = sample,
-                                     assay = assay,
-                                     img_id = img_id,
-                                     ranges = cur_ranges[c(c(cur_marker1, cur_marker2)),])
+                                markers = list(cur_marker1, cur_marker2), 
+                                sample = cur_sample,
+                                assay = cur_assay,
+                                ranges = cur_ranges)
     
-    # Select SCE
-    cur_brush <- reactive({input$plot_brush1})
-    cur_object <- .brushObject(object = cur_object, 
-                               markers = c(cur_marker1, cur_marker2), 
-                               sample = sample,
-                               assay = assay,
-                               img_id = img_id,
-                               brush = cur_brush)
+    # Brushing 1
+    cur_object1 <- .brushObject(object = cur_object,
+                                markers = list(cur_marker1, cur_marker2), 
+                                sample = cur_sample,
+                                assay = cur_assay,
+                                brush = brush1)
+    
     
     output$info1 <- renderText({
         paste0(
-            "Selection: ", .brushRange(input$plot_brush1)
+            "Selection: ", .brushRange(brush1)
         )
     })
     
     # Second scatter plot
-    if (!is.null(metadata(cur_object)$cytomapper_gate1)) {
-        if (input$Marker_3 != "") {
-            cur_marker1 <- reactive({input$Marker_3})
-            cur_marker2 <- reactive({input$Marker_4})
-            output$scatter1 <- .createScatter(object = cur_object, 
-                                        markers = c(cur_marker1, cur_marker2), 
-                                        sample = sample,
-                                        assay = assay,
-                                        img_id = img_id,
-                                        ranges = cur_ranges[c(c(cur_marker1, cur_marker2)),])
-    
+    observe({
+        if (!is.null(input$plot_brush1) && input$Marker_3 != "") {
+            output$scatter2 <- .createScatter(object = cur_object1, 
+                                              markers = list(cur_marker3, cur_marker4), 
+                                              sample = cur_sample,
+                                              assay = cur_assay,
+                                              ranges = cur_ranges)
+                
             # Select SCE
-            cur_brush <- reactive({input$plot_brush2})
-            cur_object <- .brushObject(object = cur_object, 
-                                markers = c(cur_marker1, cur_marker2), 
-                                sample = sample,
-                                assay = assay,
-                                img_id = img_id,
-                                brush = cur_brush)
-            
+            cur_object2 <- .brushObject(object = cur_object,
+                                        markers = list(cur_marker3, cur_marker4), 
+                                        sample = cur_sample,
+                                        assay = cur_assay,
+                                        brush = brush2)
+                
             output$info2 <- renderText({
                 paste0(
                     "Selection: ", .brushRange(input$plot_brush2)
                 )
             })
-        }
-    }
+        }  
+    })
     
     # Third scatter plot
     if (!is.null(metadata(cur_object)$cytomapper_gate2)) {
         if (input$Marker_5 != "") {
-            cur_marker1 <- reactive({input$Marker_5})
-            cur_marker2 <- reactive({input$Marker_6})
             output$scatter1 <- .createScatter(object = cur_object, 
                                           markers = c(cur_marker1, cur_marker2), 
                                           sample = sample,
@@ -252,29 +254,6 @@
             })
         }
     }
-    
-    
-    # Reduced dimensions plot
-    output$reducedDim_expression <- renderPlot({
-        
-        if (!is.null(reducedDim(object, cur_rd))) {
-            sample_object <- object[,colData(object)[,img_id] == cur_sample]
-            sample_df <- reducedDim(object, cur_rd)
-            colnames(sample_df) <- c(paste(cur_rd, "1"), paste(cur_rd, "2"))
-            cur_object_df <- reducedDim(cur_object, cur_rd)
-            colnames(cur_object_df) <- c(paste(cur_rd, "1"), paste(cur_rd, "2"))
-            
-            ggplot() +
-                geom_point(aes_(as.name(paste(cur_rd, "1")),
-                                paste(cur_rd, "2")), data = sample_df,
-                           colour = "gray") +
-                geom_point(aes_(as.name(paste(cur_rd, "1")),
-                                paste(cur_rd, "2")), data = cur_object_df,
-                           colour = "dark red") 
-        } else {
-            return(NULL)
-        }
-    })
     
     output$image_expression <- renderPlot({
         
