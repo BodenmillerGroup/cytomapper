@@ -49,11 +49,11 @@
 }
 
 # Create scatter plots
-.createScatter <- function(object, markers, sample, assay, ranges, brush){
+.createScatter <- function(object, markers, cur_sample, cur_assay, ranges, brush){
     renderPlot({
         # Build data frame for visualization
-        cur_df <- t(assay(object(), assay()))
-        cur_df$sample <- sample()
+        cur_df <- as.data.frame(t(assay(object(), cur_assay())))
+        cur_df$sample <- cur_sample()
         
         if(markers[[2]]() == ""){
 
@@ -71,19 +71,19 @@
                 geom_point(aes_(as.name(markers[[1]]()), as.name(markers[[2]]())), 
                            show.legend = FALSE) +
                 ylab(markers[[2]]()) +
-                theme_minimal() + xlab(markers[1]) +
+                theme_minimal() + 
                 ylim(c(ranges()[markers[[2]](),1], ranges()[markers[[2]](),2])) +
                 xlim(c(ranges()[markers[[1]](),1], ranges()[markers[[1]](),2]))
         }
     })
 }
 
-.brushObject <- function(object, markers, sample, assay, brush){
+.brushObject <- function(object, markers, cur_sample, cur_assay, brush){
     
     reactive({
         # Build data frame 
-        cur_df <- t(assay(object(), assay()))
-        cur_df$sample <- sample()
+        cur_df <- as.data.frame(t(assay(object(), cur_assay())))
+        cur_df$sample <- cur_sample()
     
         # Brush the data.frame
         cur_selection <- brushedPoints(cur_df, brush(), allRows = TRUE)
@@ -95,8 +95,8 @@
                            nrow = 2, ncol = 2,
                            byrow = TRUE,
                            dimnames = list(c(markers[[1]](), markers[[2]]()), c("min", "max")))
-        cur_gate$exprs_values <- assay()
-        cur_gate$img_id <- sample()
+        cur_gate$exprs_values <- cur_assay()
+        cur_gate$img_id <- cur_sample()
     
         # Saved gates
         all_gates <- names(metadata(object()))[grepl("cytomapper_gate", names(metadata(object())))]
@@ -186,21 +186,20 @@
     # First scatter plot
     output$scatter1 <- .createScatter(object = cur_object, 
                                 markers = list(cur_marker1, cur_marker2), 
-                                sample = cur_sample,
-                                assay = cur_assay,
+                                cur_sample = cur_sample,
+                                cur_assay = cur_assay,
                                 ranges = cur_ranges)
     
     # Brushing 1
     cur_object1 <- .brushObject(object = cur_object,
                                 markers = list(cur_marker1, cur_marker2), 
-                                sample = cur_sample,
-                                assay = cur_assay,
+                                cur_sample = cur_sample,
+                                cur_assay = cur_assay,
                                 brush = brush1)
-    
     
     output$info1 <- renderText({
         paste0(
-            "Selection: ", .brushRange(brush1)
+            "Selection: ", .brushRange(brush1())
         )
     })
     
@@ -209,15 +208,15 @@
         if (!is.null(input$plot_brush1) && input$Marker_3 != "") {
             output$scatter2 <- .createScatter(object = cur_object1, 
                                               markers = list(cur_marker3, cur_marker4), 
-                                              sample = cur_sample,
-                                              assay = cur_assay,
+                                              cur_sample = cur_sample,
+                                              cur_assay = cur_assay,
                                               ranges = cur_ranges)
                 
             # Select SCE
-            cur_object2 <- .brushObject(object = cur_object,
+            cur_object2 <- .brushObject(object = cur_object1,
                                         markers = list(cur_marker3, cur_marker4), 
-                                        sample = cur_sample,
-                                        assay = cur_assay,
+                                        cur_sample = cur_sample,
+                                        cur_assay = cur_assay,
                                         brush = brush2)
                 
             output$info2 <- renderText({
@@ -229,31 +228,28 @@
     })
     
     # Third scatter plot
-    if (!is.null(metadata(cur_object)$cytomapper_gate2)) {
-        if (input$Marker_5 != "") {
-            output$scatter1 <- .createScatter(object = cur_object, 
-                                          markers = c(cur_marker1, cur_marker2), 
-                                          sample = sample,
-                                          assay = assay,
-                                          img_id = img_id,
-                                          ranges = cur_ranges[c(c(cur_marker1, cur_marker2)),])
-        
+    observe({
+        if (!is.null(input$plot_brush2) && input$Marker_5 != "") {
+            output$scatter3 <- .createScatter(object = cur_object2, 
+                                              markers = list(cur_marker5, cur_marker6), 
+                                              cur_sample = cur_sample,
+                                              cur_assay = cur_assay,
+                                              ranges = cur_ranges)
+            
             # Select SCE
-            cur_brush <- reactive({input$plot_brush3})
-            cur_object <- .brushObject(object = cur_object, 
-                                   markers = c(cur_marker1, cur_marker2), 
-                                   sample = sample,
-                                   assay = assay,
-                                   img_id = img_id,
-                                   brush = cur_brush)
+            cur_object3 <- .brushObject(object = cur_object2,
+                                        markers = list(cur_marker5, cur_marker6), 
+                                        cur_sample = cur_sample,
+                                        cur_assay = cur_assay,
+                                        brush = brush2)
             
             output$info3 <- renderText({
                 paste0(
                     "Selection: ", .brushRange(input$plot_brush3)
                 )
             })
-        }
-    }
+        }  
+    })
     
     output$image_expression <- renderPlot({
         
