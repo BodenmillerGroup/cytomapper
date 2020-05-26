@@ -49,11 +49,11 @@
 }
 
 # Create interactive observers
-.create_interactive_observer <- function(object, img_id, input, rValues){
+.create_interactive_observer <- function(object, img_id, input, rValues, objValues){
     
     # Select first object
     observeEvent(input$sample, {
-        rValues$object <- object[,colData(object)[,img_id] == input$sample]
+        objValues$object1 <- object[,colData(object)[,img_id] == input$sample]
     }, ignoreInit = TRUE)
     
     observeEvent(input$assay, {
@@ -99,10 +99,11 @@
             updateSelectizeInput(session, paste0("Marker_", cur_val),
                                  choices = markers,
                                  server = TRUE,
-                                 selected = markers[1])
+                                 selected = "")
             updateSelectizeInput(session, paste0("Marker_", cur_val + 1),
                                  choices = markers,
-                                 server = TRUE, selected = "")
+                                 server = TRUE, 
+                                 selected = "")
         }
     })
 }
@@ -153,13 +154,15 @@
 }
 
 # Create scatter plots
-.createScatter <- function(input, rValues, markers){
+.createScatter <- function(input, rValues, objValues, iter, markers){
     renderPlot({
         
-        req(rValues$object, rValues$ranges, input$assay, markers[[1]]())
+        req(rValues$ranges, objValues[[paste0("object", iter)]], 
+            input$assay, markers[[1]]())
         
         # Build data frame for visualization
-        cur_df <- as.data.frame(t(assay(rValues$object, input$assay)))
+        cur_df <- as.data.frame(t(assay(objValues[[paste0("object", iter)]], 
+                                         input$assay)))
         cur_df$sample <- input$sample
         
         if(markers[[2]]() != ""){
@@ -236,11 +239,12 @@
     .create_general_observer(input, si = cur_sessionInfo)
     
     # Save some variables used throught the app
-    rValues <- reactiveValues(object = NULL,
-                              ranges = NULL,
+    rValues <- reactiveValues(ranges = NULL,
                               plotCount = 1)
+    # Reactive object list to store selected cells
+    objValues <- reactiveValues(object1 = NULL)
     
-    .create_interactive_observer(object, img_id, input, rValues)
+    .create_interactive_observer(object, img_id, input, rValues, objValues)
     
     # Create updateSelectizeInput objects
     .create_updateSelectizeInput(object, img_id, rValues, session)
@@ -251,18 +255,35 @@
     # Dynamically generate scatter plots
     output$AdditionalPlots_main <- .addPlots_main(rValues)
     
+    # Create scatter plots
+    observe({
+        for (i in seq_len(rValues$plotCount)) {
+            cur_val <- (i * 2) - 1
+            if (i > 1) {
+                if (is.null(input[[paste0("plot_brush", i - 1)]]) || 
+                    input[[paste0("Marker_", cur_val)]] == "") {
+                    next
+                }
+            }
+            cur_marker1 <- reactive({input[[paste0("Marker_", cur_val)]]})
+            cur_marker2 <- reactive({input[[paste0("Marker_", cur_val + 1)]]})
+            output[[paste0("scatter", i)]] <- .createScatter(input, rValues, objValues, iter = i, 
+                           markers = list(cur_marker1, cur_marker2))
+        }
+    })
+    
     
     # First scatter plot
-    cur_marker1 <- reactive({input$Marker_1})
-    cur_marker2 <- reactive({input$Marker_2})
-    output$scatter1 <- .createScatter(input, rValues, 
-                            markers = list(cur_marker1, cur_marker2))
-    
+    #cur_marker1 <- reactive({input$Marker_1})
+    #cur_marker2 <- reactive({input$Marker_2})
+    #output$scatter1 <- .createScatter(input, rValues, 
+    #                        markers = list(cur_marker1, cur_marker2))
+#    
     # Brushing 1
-    cur_brush1 <- reactive({input$plot_brush1})
-    .brushObject(input, rValues,
-                 markers = list(cur_marker1, cur_marker2), 
-                 brush = cur_brush1)
+    #cur_brush1 <- reactive({input$plot_brush1})
+    #.brushObject(input, rValues,
+    #             markers = list(cur_marker1, cur_marker2), 
+    #             brush = cur_brush1)
     
     #output$info1 <- renderText({
     #    paste0(
