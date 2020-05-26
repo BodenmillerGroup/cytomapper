@@ -48,6 +48,110 @@
     })
 }
 
+# Create interactive observers
+.create_interactive_observer <- function(object, img_id, input, rValues){
+    
+    # Select first object
+    observeEvent(input$sample, {
+        rValues$object <- object[,colData(object)[,img_id] == input$sample]
+    }, ignoreInit = TRUE)
+    
+    observeEvent(input$assay, {
+        cur_ranges <- rowRanges(assay(object, input$assay))
+        rownames(cur_ranges) <- rownames(object)
+        rValues$ranges <- cur_ranges
+    }, ignoreInit = TRUE)
+    
+    # Observe plot counter
+    observeEvent(input$add_plot, {
+        rValues$plotCount <- rValues$plotCount + 1
+    })
+    
+    # Smallest number should be 1
+    observeEvent(input$remove_plot, {
+        rValues$plotCount <- rValues$plotCount - 1
+        if (rValues$plotCount < 1) {
+            rValues$plotCount <- 1
+        }
+    })
+}
+
+# Create updateSelectizeInput objects
+.create_updateSelectizeInput <- function(object, img_id, rValues, session){
+    # Store image IDs and marker names
+    img_IDs <- colData(object)[,img_id]
+    markers <- rownames(object)
+    
+    updateSelectizeInput(session, inputId = "sample",
+                         choices = unique(img_IDs),
+                         selected = unique(img_IDs)[1])
+    updateSelectizeInput(session, inputId = "assay",
+                         choices = assayNames(object),
+                         server = TRUE,
+                         selected = assayNames(object)[1])
+    updateSelectizeInput(session, inputId = "reducedDim",
+                         choices = reducedDimNames(object),
+                         server = TRUE,
+                         selected = reducedDimNames(object)[1])
+    observe({
+        for (i in seq_len(rValues$plotCount)) {
+            cur_val <- (i * 2) - 1
+            updateSelectizeInput(session, paste0("Marker_", cur_val),
+                                 choices = markers,
+                                 server = TRUE,
+                                 selected = markers[1])
+            updateSelectizeInput(session, paste0("Marker_", cur_val + 1),
+                                 choices = markers,
+                                 server = TRUE, selected = "")
+        }
+    })
+}
+
+# Create selectInput options in sidebar
+.addPlots_sidebar <- function(rValues) {
+    renderUI({
+        lapply(seq_len(rValues$plotCount), function(cur_plot) {
+            cur_val <- (cur_plot * 2) - 1
+            wellPanel(
+                h3(paste("Plot", cur_plot), style = "color: black"),
+                selectizeInput(paste0("Marker_", cur_val), 
+                               label = span(paste("Select marker", cur_val), 
+                                            style = "color: black; padding-top: 0px"), 
+                               choices = NULL,
+                               options = list(placeholder = 'Select a marker name', 
+                                              maxItems = 1)),
+                selectizeInput(paste0("Marker_", cur_val + 1), 
+                               label = span(paste("Select marker", cur_val + 1), 
+                                            style = "color: black; padding-top: 0px"), 
+                               choices = NULL,
+                               options = list(placeholder = 'Select a marker name', 
+                                              maxItems = 1)), 
+                style = "background-color: lightblue; padding-bottom: 0px; padding-top: 0px")
+        })
+    })
+}
+
+.addPlots_main <- function(rValues) {
+    
+    renderUI({
+        cur_row <- ceiling(rValues$plotCount / 3)
+        # Generate boxes
+        box_list <- lapply(seq_len(rValues$plotCount), function(cur_plot) {
+            box(plotOutput(paste0("scatter", cur_plot), 
+                           brush = paste0("plot_brush", cur_plot)),
+                verbatimTextOutput(paste0("info", cur_plot)),
+                title = paste("Plot", cur_plot), 
+                status = "primary",
+                width = 4)
+            })
+        
+        lapply(seq_len(cur_row), function(cr) {
+            cur_val <- (cr * 3) - 2
+            fluidRow(box_list[seq.int(cur_val, cur_val + 2)])
+        })
+    })
+}
+
 # Create scatter plots
 .createScatter <- function(input, rValues, markers){
     renderPlot({
@@ -127,58 +231,26 @@
 .cytomapper_server <- function(object, mask, image, cell_id, img_id,
                                input, output, session, ...)
 {
-    
-    # Store image IDs and marker names
-    img_IDs <- colData(object)[,img_id]
-    markers <- rownames(object)
-    
-    updateSelectizeInput(session, 'sample',
-                         choices = unique(img_IDs),
-                         selected = unique(img_IDs)[1])
-    updateSelectizeInput(session, 'assay',
-                         choices = assayNames(object),
-                         server = TRUE,
-                         selected = assayNames(object)[1])
-    updateSelectizeInput(session, 'reducedDim',
-                         choices = reducedDimNames(object),
-                         server = TRUE,
-                         selected = reducedDimNames(object)[1])
-    updateSelectizeInput(session, 'Marker_1',
-                         choices = markers,
-                         server = TRUE,
-                         selected = markers[1])
-    updateSelectizeInput(session, 'Marker_2',
-                         choices = markers,
-                         server = TRUE, selected = "")
-    updateSelectizeInput(session, 'Marker_3',
-                         choices = markers,
-                         server = TRUE, selected = "")
-    updateSelectizeInput(session, 'Marker_4',
-                         choices = markers,
-                         server = TRUE, selected = "")
-    updateSelectizeInput(session, 'Marker_5',
-                         choices = markers,
-                         server = TRUE, selected = "")
-    updateSelectizeInput(session, 'Marker_6',
-                         choices = markers,
-                         server = TRUE, selected = "")
-    
-    # Save some variables used throught the app
-    rValues <- reactiveValues()
-    
-    observeEvent(input$sample, {
-        rValues$object <- object[,colData(object)[,img_id] == input$sample]
-    }, ignoreInit = TRUE)
-    
-    observeEvent(input$assay, {
-        cur_ranges <- rowRanges(assay(object, input$assay))
-        rownames(cur_ranges) <- rownames(object)
-        rValues$ranges <- cur_ranges
-    }, ignoreInit = TRUE)
-    
     # Session info observer
     cur_sessionInfo <- sessionInfo()
     .create_general_observer(input, si = cur_sessionInfo)
+    
+    # Save some variables used throught the app
+    rValues <- reactiveValues(object = NULL,
+                              ranges = NULL,
+                              plotCount = 1)
+    
+    .create_interactive_observer(object, img_id, input, rValues)
+    
+    # Create updateSelectizeInput objects
+    .create_updateSelectizeInput(object, img_id, rValues, session)
+    
+    # Dynamically generate wellPanels
+    output$AdditionalPlots_sidebar <- .addPlots_sidebar(rValues)
+    
+    # Dynamically generate scatter plots
+    output$AdditionalPlots_main <- .addPlots_main(rValues)
+    
     
     # First scatter plot
     cur_marker1 <- reactive({input$Marker_1})

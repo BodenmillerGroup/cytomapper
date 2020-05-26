@@ -53,14 +53,7 @@
         
         sidebarMenu(
             menuItem("Plots",
-                wellPanel(
-                    h3("Plot 1", style = "color: black"),
-                    tags$style("#Marker_1 {color: black}"),
-                    selectizeInput("Marker_1", label = span("Select marker 1", style = "color: black; padding-top: 0px"), choices = NULL,
-                                   options = list(placeholder = 'Select a marker name', maxItems = 1)),
-                    selectizeInput("Marker_2", label = span("Select marker 2", style = "color: black; padding-top: 0px"), choices = NULL, 
-                                   options = list(placeholder = NULL, maxItems = 1)), 
-                    style = "background-color: lightblue; padding-bottom: 0px; padding-top: 0px"),
+                uiOutput("AdditionalPlots_sidebar"),
                 actionButton(inputId = "add_plot", label = "Add plot", icon = icon("fas fa-plus"), 
                              style = "background-color: #059948; color: white; border-color: #059948"),
                 actionButton(inputId = "remove_plot", label = "Remove plot", icon = icon("fas fa-minus"), 
@@ -85,18 +78,7 @@
 #' @importFrom shinydashboard dashboardBody
 .cytomapper_body <- function(){
     cm_body <- dashboardBody(
-        fluidRow(box(plotOutput("scatter1", brush = "plot_brush1"),
-                        verbatimTextOutput("info1"),
-                     title = "Plot 1", status = "primary",
-                     width = 4),
-                 box(plotOutput("scatter2", brush = "plot_brush2"),
-                     verbatimTextOutput("info2"),
-                     title = "Plot 2", status = "primary",
-                     width = 4),
-                 box(plotOutput("scatter3", brush = "plot_brush3"),
-                     verbatimTextOutput("info3"),
-                     title = "Plot 3", status = "primary",
-                     width = 4)),
+        uiOutput("AdditionalPlots_main"),
         fluidRow(box(plotOutput("image_expression"), 
                      title = "Expression", status = "primary",
                      width = 6),
