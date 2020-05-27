@@ -158,8 +158,8 @@
     renderPlot({
         cur_val <- (iter * 2) - 1
         
-        req(rValues$ranges, objValues$object1, 
-            input$assay, input$Marker_1)
+        req(rValues$ranges, objValues[[paste0("object", iter)]], 
+            input$assay, input[[paste0("Marker_", cur_val)]])
         
         # Build data frame for visualization
         cur_df <- as.data.frame(t(assay(objValues[[paste0("object", iter)]], 
@@ -195,35 +195,35 @@
     })
 }
 
-.brushObject <- function(input, objValues, iter = i){
+.brushObject <- function(input, objValues, iter){
     
-    observe({
-        cur_val <- (iter * 2) - 1
-        req(objValues[[paste0("object", iter)]], 
-            input$assay, input[[paste0("Makrer_", cur_val)]], 
-            input[[paste0("plot_brush", iter)]])
+    cur_val <- (iter * 2) - 1
         
-        # Build data frame 
-        cur_df <- as.data.frame(t(assay(objValues[[paste0("object", iter)]], input$assay)))
-        cur_df$sample <- input$sample
-    
-        # Brush the data.frame
-        cur_selection <- brushedPoints(cur_df, input[[paste0("plot_brush", iter)]], allRows = TRUE)
+    req(objValues[[paste0("object", iter)]], 
+        input$assay, input[[paste0("Marker_", cur_val)]], 
+        input[[paste0("plot_brush", iter)]])
         
-        # Save the Gate
-        cur_gate <- list()
-        cur_gate$gate <- matrix(data = c(input[[paste0("plot_brush", iter)]]$xmin, 
-                                         input[[paste0("plot_brush", iter)]]$xmax, 
-                                         input[[paste0("plot_brush", iter)]]$ymin, 
-                                         input[[paste0("plot_brush", iter)]]$ymax),
-                           nrow = 2, ncol = 2,
-                           byrow = TRUE,
-                           dimnames = list(c(input[[paste0("Makrer_", cur_val)]], 
-                                             input[[paste0("Makrer_", cur_val + 1)]]), c("min", "max")))
-        cur_gate$exprs_values <- input$assay
-        cur_gate$img_id <- input$sample
+    # Build data frame 
+    cur_df <- as.data.frame(t(assay(objValues[[paste0("object", iter)]], input$assay)))
+    cur_df$sample <- input$sample
     
-        # Saved gates
+    # Brush the data.frame
+    cur_selection <- brushedPoints(cur_df, input[[paste0("plot_brush", iter)]], allRows = TRUE)
+        
+    # Save the Gate
+    cur_gate <- list()
+    cur_gate$gate <- matrix(data = c(input[[paste0("plot_brush", iter)]]$xmin, 
+                                     input[[paste0("plot_brush", iter)]]$xmax, 
+                                     input[[paste0("plot_brush", iter)]]$ymin, 
+                                     input[[paste0("plot_brush", iter)]]$ymax),
+                       nrow = 2, ncol = 2,
+                       byrow = TRUE,
+                       dimnames = list(c(input[[paste0("Makrer_", cur_val)]], 
+                                         input[[paste0("Makrer_", cur_val + 1)]]), c("min", "max")))
+    cur_gate$exprs_values <- input$assay
+    cur_gate$img_id <- input$sample
+    
+    # Saved gates
         #all_gates <- names(metadata(rValues$object))[grepl("cytomapper_gate", names(metadata(rValues$object)))]
         #if (is.null(all_gates)) {
         #    metadata(rValues$object)$cytomapper_gate_1 <- cur_gate
@@ -233,8 +233,7 @@
         #    metadata(rValues$object)[[paste0("cytomapper_gate_", max(cur_num) + 1)]] <- cur_gate
         #}
         
-        objValues[[paste0("object", iter + 1)]] <- objValues[[paste0("object", iter + 1)]][,cur_selection$selected_]
-    })
+    objValues[[paste0("object", iter + 1)]] <- objValues[[paste0("object", iter)]][,cur_selection$selected_]
     
 }
 
@@ -267,25 +266,55 @@
     
     # Create scatter plots
     observe({
-        for (i in seq_len(rValues$plotCount)) {
-            cur_val <- (i * 2) - 1
-            if (i > 1) {
-                if (is.null(input[[paste0("plot_brush", i - 1)]]) || 
-                    input[[paste0("Marker_", cur_val)]] == "") {
-                    break
-                }
-            } 
+        
+        lapply(seq_len(rValues$plotCount), function(x){
+            cur_val <- (x * 2) - 1
             
-            local({
-                cur_i <- i
-                cur_val <- (cur_i * 2) - 1
+            if (x > 1) {
+                    if (is.null(input[[paste0("plot_brush", x - 1)]]) || 
+                        input[[paste0("Marker_", cur_val)]] == "") {
+                        output[[paste0("scatter", x)]] <- NULL
+                    } else {
+                        output[[paste0("scatter", x)]] <- .createScatter(input, rValues, objValues, 
+                                                                         iter = x)
+                        .brushObject(input, objValues, iter = x)
+                    }
+            } else {
+                output[[paste0("scatter", x)]] <- .createScatter(input, rValues, objValues, 
+                                                                 iter = x)
+                .brushObject(input, objValues, iter = x)
+            }
+            
+            
+        })
+        #for (i in seq_len(rValues$plotCount)) {
+        #    cur_val <- (i * 2) - 1
+        #    if (i > 1) {
+        #        if (is.null(input[[paste0("plot_brush", i - 1)]]) || 
+        #            input[[paste0("Marker_", cur_val)]] == "") {
+        #            break
+        #        }
+        #    } 
+            
+        #    local({
+        #        cur_i <- i
+        #        cur_val <- (cur_i * 2) - 1
+        #        
+        #        if (i > 1) {
+        #            if (is.null(input[[paste0("plot_brush", i - 1)]]) || 
+        #                input[[paste0("Marker_", cur_val)]] == "") {
+        #                break
+        #            }
+        #        } 
+                
+        #        browser()
 
-                output[[paste0("scatter", i)]] <- .createScatter(input, rValues, objValues, 
-                                                             iter = cur_i) 
-            
-                .brushObject(input, objValues, iter = cur_i)
-            })
-        }
+        #        output[[paste0("scatter", i)]] <- .createScatter(input, rValues, objValues, 
+        #                                                     iter = cur_i) 
+        #    
+        #        .brushObject(input, objValues, iter = cur_i)
+        #    })
+        #}
     })
     
     # Brushing 1
