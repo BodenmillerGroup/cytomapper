@@ -77,7 +77,7 @@
 }
 
 # Create updateSelectizeInput objects
-.create_updateSelectizeInput <- function(object, img_id, rValues, session){
+.create_updateSelectizeInput <- function(object, img_id, rValues, input, session){
     # Store image IDs and marker names
     img_IDs <- colData(object)[,img_id]
     markers <- rownames(object)
@@ -93,17 +93,32 @@
                          choices = reducedDimNames(object),
                          server = TRUE,
                          selected = reducedDimNames(object)[1])
-    observe({
+    observeEvent(rValues$plotCount, {
+        
         for (i in seq_len(rValues$plotCount)) {
             cur_val <- (i * 2) - 1
+            
+            # Select initial markers
+            if (is.null(input[[paste0("Marker_", cur_val)]])) {
+                cur_marker_1 <- ""
+            } else {
+                cur_marker_1 <- input[[paste0("Marker_", cur_val)]]
+            }
+            
+            if (is.null(input[[paste0("Marker_", cur_val + 1)]])) {
+                cur_marker_2 <- ""
+            } else {
+                cur_marker_2 <- input[[paste0("Marker_", cur_val + 1)]]
+            }
+            
             updateSelectizeInput(session, paste0("Marker_", cur_val),
                                  choices = markers,
                                  server = TRUE,
-                                 selected = "")
+                                 selected = cur_marker_1)
             updateSelectizeInput(session, paste0("Marker_", cur_val + 1),
                                  choices = markers,
                                  server = TRUE, 
-                                 selected = "")
+                                 selected = cur_marker_2)
         }
     })
 }
@@ -139,7 +154,7 @@
         # Generate boxes
         box_list <- lapply(seq_len(rValues$plotCount), function(cur_plot) {
             box(plotOutput(paste0("scatter", cur_plot), 
-                           brush = paste0("plot_brush", cur_plot)),
+                           brush = brushOpts(paste0("plot_brush", cur_plot))),
                 verbatimTextOutput(paste0("info", cur_plot)),
                 title = paste("Plot", cur_plot), 
                 status = "primary",
@@ -250,7 +265,7 @@
     .create_interactive_observer(object, img_id, input, rValues, objValues)
     
     # Create updateSelectizeInput objects
-    .create_updateSelectizeInput(object, img_id, rValues, session)
+    .create_updateSelectizeInput(object, img_id, rValues, input, session)
     
     # Dynamically generate wellPanels
     output$AdditionalPlots_sidebar <- .addPlots_sidebar(rValues)
@@ -265,17 +280,23 @@
             cur_val <- (x * 2) - 1
             
             if (x > 1) {
-                    if (is.null(input[[paste0("plot_brush", x - 1)]]) || 
-                        input[[paste0("Marker_", cur_val)]] == "") {
+                    if (is.null(input[[paste0("plot_brush", x - 1)]])) {
                         output[[paste0("scatter", x)]] <- NULL
                     } else {
                         output[[paste0("scatter", x)]] <- .createScatter(input, rValues, objValues, 
                                                                          iter = x)
+                        output[[paste0("info", x)]] <- renderText({
+                            paste0("Selection: ", .brushRange(input[[paste0("plot_brush", x)]]))
+                        })
                         .brushObject(input, objValues, iter = x)
                     }
             } else {
+                
                 output[[paste0("scatter", x)]] <- .createScatter(input, rValues, objValues, 
                                                                  iter = x)
+                output[[paste0("info", x)]] <- renderText({
+                    paste0("Selection: ", .brushRange(input[[paste0("plot_brush", x)]]))
+                })
                 .brushObject(input, objValues, iter = x)
             }
             
