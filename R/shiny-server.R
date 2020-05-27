@@ -223,17 +223,11 @@
     cur_gate$exprs_values <- input$assay
     cur_gate$img_id <- input$sample
     
-    # Saved gates
-        #all_gates <- names(metadata(rValues$object))[grepl("cytomapper_gate", names(metadata(rValues$object)))]
-        #if (is.null(all_gates)) {
-        #    metadata(rValues$object)$cytomapper_gate_1 <- cur_gate
-        #} else {
-        #    cur_num <- as.numeric(vapply(all_gates, FUN = function(x){unlist(strsplit(x, split = "_"))[3]}, 
-        #                                 FUN.VALUE = character(1)))
-        #    metadata(rValues$object)[[paste0("cytomapper_gate_", max(cur_num) + 1)]] <- cur_gate
-        #}
+    # Save gates
+    next_obj <- objValues[[paste0("object", iter)]]
+    metadata(next_obj)[[paste0("cytomapper_gate_", iter)]] <- cur_gate
         
-    objValues[[paste0("object", iter + 1)]] <- objValues[[paste0("object", iter)]][,cur_selection$selected_]
+    objValues[[paste0("object", iter + 1)]] <- next_obj[,cur_selection$selected_]
     
 }
 
@@ -287,85 +281,7 @@
             
             
         })
-        #for (i in seq_len(rValues$plotCount)) {
-        #    cur_val <- (i * 2) - 1
-        #    if (i > 1) {
-        #        if (is.null(input[[paste0("plot_brush", i - 1)]]) || 
-        #            input[[paste0("Marker_", cur_val)]] == "") {
-        #            break
-        #        }
-        #    } 
-            
-        #    local({
-        #        cur_i <- i
-        #        cur_val <- (cur_i * 2) - 1
-        #        
-        #        if (i > 1) {
-        #            if (is.null(input[[paste0("plot_brush", i - 1)]]) || 
-        #                input[[paste0("Marker_", cur_val)]] == "") {
-        #                break
-        #            }
-        #        } 
-                
-        #        browser()
-
-        #        output[[paste0("scatter", i)]] <- .createScatter(input, rValues, objValues, 
-        #                                                     iter = cur_i) 
-        #    
-        #        .brushObject(input, objValues, iter = cur_i)
-        #    })
-        #}
     })
-    
-    # Brushing 1
-    #cur_brush1 <- reactive({input$plot_brush1})
-    #.brushObject(input, rValues,
-    #             markers = list(cur_marker1, cur_marker2), 
-    #             brush = cur_brush1)
-    
-    #output$info1 <- renderText({
-    #    paste0(
-    #        "Selection: ", .brushRange(input$plot_brush1)
-    #    )
-    #})
-    
-    # Second scatter plot
-    #observe({
-    #    if (!is.null(input$plot_brush1) && input$Marker_3 != "") {
-    #        output$scatter2 <- .createScatter(input, rValues, 
-    #                                          markers = c(input$Marker_3, input$Marker_4))
-    #            
-    #        # Select SCE
-    #        .brushObject(input, rValues,
-    #                     markers = c(input$Marker_3, input$Marker_4), 
-    #                     brush = input$plot_brush2)
-    #            
-    #        output$info2 <- renderText({
-    #            paste0(
-    #                "Selection: ", .brushRange(input$plot_brush2)
-    #            )
-    #        })
-    #    }  
-    #})
-    
-    # Third scatter plot
-    #observe({
-    #    if (!is.null(input$plot_brush2) && input$Marker_5 != "") {
-    #        output$scatter3 <- .createScatter(input, rValues, 
-    #                                          markers = c(input$Marker_5, input$Marker_6))
-    #        
-    #        # Select SCE
-    #        .brushObject(input, rValues,
-    #                     markers = c(input$Marker_5, input$Marker_6), 
-    #                     brush = input$plot_brush3)
-    #        
-    #        output$info3 <- renderText({
-    #            paste0(
-    #                "Selection: ", .brushRange(input$plot_brush3)
-    #            )
-    #        })
-    #    }  
-    #})
     
     output$image_expression <- renderPlot({
         
