@@ -2,6 +2,14 @@
 # Helper functions to modify the server side of the shiny app
 # -----------------------------------------------------------------------------
 
+# Function to generate colours
+.create_colours <- function(x){
+    cur_col <- c("#70C389", "#39BEB4", "#3F85A7", "#494579", "#5B1C55",
+                 "#971B4B", "#C81F43", "#F26738", "#F79C1D", "#F7CD0F",
+                 "#EBE24A", "#B4D55A")
+    return(cur_col[x])
+}
+
 # Function to report gate bounds
 .brushRange <- function(brush) {
     if(is.null(brush)) return("NULL\n")
@@ -134,15 +142,17 @@
                                label = span(paste("Select marker", cur_val), 
                                             style = "color: black; padding-top: 0px"), 
                                choices = NULL,
-                               options = list(placeholder = 'Select a marker name', 
+                               options = list(placeholder = 'Select marker', 
                                               maxItems = 1)),
                 selectizeInput(paste0("Marker_", cur_val + 1), 
                                label = span(paste("Select marker", cur_val + 1), 
                                             style = "color: black; padding-top: 0px"), 
                                choices = NULL,
-                               options = list(placeholder = 'Select a marker name', 
+                               options = list(placeholder = 'Select marker', 
                                               maxItems = 1)), 
-                style = "background-color: lightblue; padding-bottom: 0px; padding-top: 0px")
+                style = paste0("background-color: ", .create_colours(cur_plot), 
+                               "; border-color: ", .create_colours(cur_plot),
+                               "; padding-bottom: 0px; padding-top: 0px"))
         })
     })
 }
@@ -154,7 +164,9 @@
         # Generate boxes
         box_list <- lapply(seq_len(rValues$plotCount), function(cur_plot) {
             box(plotOutput(paste0("scatter", cur_plot), 
-                           brush = brushOpts(paste0("plot_brush", cur_plot))),
+                           brush = brushOpts(paste0("plot_brush", cur_plot),
+                                             fill = .create_colours(cur_plot),
+                                             stroke = .create_colours(cur_plot))),
                 verbatimTextOutput(paste0("info", cur_plot)),
                 title = paste("Plot", cur_plot), 
                 status = "primary",
