@@ -13,8 +13,8 @@
 # Function to report gate bounds
 .brushRange <- function(brush) {
     if(is.null(brush)) return("NULL\n")
-    paste0("xmin = ", round(brush$xmin, 2), " xmax = ", round(brush$xmax, 2),
-           "ymin = ", round(brush$ymin, 2), " ymax = ", round(brush$ymax, 2))
+    paste0("xmin = ", round(brush$xmin, 1), " xmax = ", round(brush$xmax, 1),
+           " ymin = ", round(brush$ymin, 1), " ymax = ", round(brush$ymax, 1))
 }
 
 # Function to perform min max scaling
@@ -57,7 +57,8 @@
 }
 
 # Create interactive observers
-.create_interactive_observer <- function(object, img_id, input, rValues, objValues, markValues){
+.create_interactive_observer <- function(object, img_id, input, rValues, 
+                                         objValues, markValues, brushValues){
     
     # Select first object
     observeEvent(input$sample, {
@@ -77,6 +78,13 @@
         }
     })
     
+    # Observe brush change
+    observe({
+        for (i in grep("plot_brush", names(input), value = TRUE)) {
+            brushValues[[i]] <- input[[i]]
+        }
+    })
+    
     # Observe plot counter
     observeEvent(input$add_plot, {
         rValues$plotCount <- rValues$plotCount + 1
@@ -86,6 +94,8 @@
         markValues[[paste0("Marker_", max_val + 1)]] <- NULL
         
         objValues[[paste0("object", rValues$plotCount)]] <- NULL
+        
+        brushValues[[paste0("plot_brush", rValues$plotCount)]] <- NULL
     })
     
     # Smallest number should be 1
@@ -100,6 +110,8 @@
         markValues[[paste0("Marker_", max_val + 1)]] <- NULL
         
         objValues[[paste0("object", rValues$plotCount + 1)]] <- NULL
+        
+        brushValues[[paste0("plot_brush", rValues$plotCount + 1)]] <- NULL
     })
 }
 
@@ -182,6 +194,7 @@
         cur_row <- ceiling(rValues$plotCount / 3)
         # Generate boxes
         box_list <- lapply(seq_len(rValues$plotCount), function(cur_plot) {
+            
             box(plotOutput(paste0("scatter", cur_plot), 
                            brush = brushOpts(paste0("plot_brush", cur_plot),
                                              fill = .create_colours(cur_plot),
@@ -241,27 +254,27 @@
     })
 }
 
-.brushObject <- function(input, objValues, markValues, iter){
+.brushObject <- function(input, objValues, markValues, brushValues, iter){
     
     cur_val <- (iter * 2) - 1
         
     req(objValues[[paste0("object", iter)]], 
         input$assay, markValues[[paste0("Marker_", cur_val)]], 
-        input[[paste0("plot_brush", iter)]])
+        brushValues[[paste0("plot_brush", iter)]])
         
     # Build data frame 
     cur_df <- as.data.frame(t(assay(objValues[[paste0("object", iter)]], input$assay)))
     cur_df$sample <- input$sample
     
     # Brush the data.frame
-    cur_selection <- brushedPoints(cur_df, input[[paste0("plot_brush", iter)]], allRows = TRUE)
+    cur_selection <- brushedPoints(cur_df, brushValues[[paste0("plot_brush", iter)]], allRows = TRUE)
         
     # Save the Gate
     cur_gate <- list()
-    cur_gate$gate <- matrix(data = c(input[[paste0("plot_brush", iter)]]$xmin, 
-                                     input[[paste0("plot_brush", iter)]]$xmax, 
-                                     input[[paste0("plot_brush", iter)]]$ymin, 
-                                     input[[paste0("plot_brush", iter)]]$ymax),
+    cur_gate$gate <- matrix(data = c(brushValues[[paste0("plot_brush", iter)]]$xmin, 
+                                     brushValues[[paste0("plot_brush", iter)]]$xmax, 
+                                     brushValues[[paste0("plot_brush", iter)]]$ymin, 
+                                     brushValues[[paste0("plot_brush", iter)]]$ymax),
                        nrow = 2, ncol = 2,
                        byrow = TRUE,
                        dimnames = list(c(markValues[[paste0("Marker_", cur_val)]], 
@@ -297,7 +310,10 @@
     markValues <- reactiveValues(Marker_1 = NULL,
                                  Marker_2 = NULL)
     
-    .create_interactive_observer(object, img_id, input, rValues, objValues, markValues)
+    # Reactive object for brush values
+    brushValues <- reactiveValues(plot_brush1 = NULL)
+    
+    .create_interactive_observer(object, img_id, input, rValues, objValues, markValues, brushValues)
     
     # Create updateSelectizeInput objects
     .create_updateSelectizeInput(object, img_id, rValues, input, session, markValues)
@@ -320,19 +336,21 @@
                     } else {
                         output[[paste0("scatter", x)]] <- .createScatter(input, rValues, objValues, markValues,
                                                                          iter = x)
+                        
                         output[[paste0("info", x)]] <- renderText({
-                            paste0("Selection: ", .brushRange(input[[paste0("plot_brush", x)]]))
+                            paste0("Selection: ", .brushRange(brushValues[[paste0("plot_brush", x)]]))
                         })
-                        .brushObject(input, objValues, markValues, iter = x)
+                        
+                        .brushObject(input, objValues, markValues, brushValues, iter = x)
                     }
             } else {
                 
                 output[[paste0("scatter", x)]] <- .createScatter(input, rValues, objValues, markValues,
                                                                  iter = x)
                 output[[paste0("info", x)]] <- renderText({
-                    paste0("Selection: ", .brushRange(input[[paste0("plot_brush", x)]]))
+                    paste0("Selection: ", .brushRange(brushValues[[paste0("plot_brush", x)]]))
                 })
-                .brushObject(input, objValues, markValues, iter = x)
+                .brushObject(input, objValues, markValues, brushValues, iter = x)
             }
             
             
@@ -392,6 +410,9 @@
     })
 
     output$downloadData <- downloadHandler(
+        # Add session info
+        # Add date
+        
         #filename = "gated_sce.rds",
         #content = function(filename) {
         #    saveRDS(cur_object, filename)
