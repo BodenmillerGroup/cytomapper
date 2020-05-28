@@ -84,6 +84,8 @@
         max_val <- ((rValues$plotCount) * 2) - 1
         markValues[[paste0("Marker_", max_val)]] <- NULL
         markValues[[paste0("Marker_", max_val + 1)]] <- NULL
+        
+        objValues[[paste0("object", rValues$plotCount)]] <- NULL
     })
     
     # Smallest number should be 1
@@ -96,6 +98,8 @@
         max_val <- ((rValues$plotCount + 1) * 2) - 1
         markValues[[paste0("Marker_", max_val)]] <- NULL
         markValues[[paste0("Marker_", max_val + 1)]] <- NULL
+        
+        objValues[[paste0("object", rValues$plotCount + 1)]] <- NULL
     })
 }
 
@@ -196,53 +200,53 @@
 }
 
 # Create scatter plots
-.createScatter <- function(input, rValues, objValues, iter){
+.createScatter <- function(input, rValues, objValues, markValues, iter){
     renderPlot({
         cur_val <- (iter * 2) - 1
         
         req(rValues$ranges, objValues[[paste0("object", iter)]], 
-            input$assay, input[[paste0("Marker_", cur_val)]])
+            input$assay, markValues[[paste0("Marker_", cur_val)]])
         
         # Build data frame for visualization
         cur_df <- as.data.frame(t(assay(objValues[[paste0("object", iter)]], 
                                          input$assay)))
         cur_df$sample <- input$sample
         
-        if(input[[paste0("Marker_", cur_val + 1)]] != ""){
+        if(markValues[[paste0("Marker_", cur_val + 1)]] != ""){
 
             # Scatter plot    
             ggplot(cur_df) +
-                geom_point(aes_(as.name(input[[paste0("Marker_", cur_val)]]), 
-                                as.name(input[[paste0("Marker_", cur_val + 1)]])), 
+                geom_point(aes_(as.name(markValues[[paste0("Marker_", cur_val)]]), 
+                                as.name(markValues[[paste0("Marker_", cur_val + 1)]])), 
                            show.legend = FALSE) +
                 ylab(input[[paste0("Marker_", cur_val + 1)]]) +
                 theme_minimal() + 
-                ylim(c(rValues$ranges[input[[paste0("Marker_", cur_val + 1)]], 1], 
-                       rValues$ranges[input[[paste0("Marker_", cur_val + 1)]], 2])) +
-                xlim(c(rValues$ranges[input[[paste0("Marker_", cur_val)]], 1], 
-                       rValues$ranges[input[[paste0("Marker_", cur_val)]], 2]))
+                ylim(c(rValues$ranges[markValues[[paste0("Marker_", cur_val + 1)]], 1], 
+                       rValues$ranges[markValues[[paste0("Marker_", cur_val + 1)]], 2])) +
+                xlim(c(rValues$ranges[markValues[[paste0("Marker_", cur_val)]], 1], 
+                       rValues$ranges[markValues[[paste0("Marker_", cur_val)]], 2]))
             
         } else {
             
             # Distributions of marker proteins
             ggplot(cur_df) +
-                geom_density(aes_(x = as.name(input[[paste0("Marker_", cur_val)]])), 
+                geom_density(aes_(x = as.name(markValues[[paste0("Marker_", cur_val)]])), 
                              show.legend = FALSE) +
                 theme(axis.text.y = element_blank(),
                       panel.background = element_blank()) +
                 ylab("") +
-                xlim(c(rValues$ranges[input[[paste0("Marker_", cur_val)]], 1], 
-                       rValues$ranges[input[[paste0("Marker_", cur_val)]], 2]))
+                xlim(c(rValues$ranges[markValues[[paste0("Marker_", cur_val)]], 1], 
+                       rValues$ranges[markValues[[paste0("Marker_", cur_val)]], 2]))
         }
     })
 }
 
-.brushObject <- function(input, objValues, iter){
+.brushObject <- function(input, objValues, markValues, iter){
     
     cur_val <- (iter * 2) - 1
         
     req(objValues[[paste0("object", iter)]], 
-        input$assay, input[[paste0("Marker_", cur_val)]], 
+        input$assay, markValues[[paste0("Marker_", cur_val)]], 
         input[[paste0("plot_brush", iter)]])
         
     # Build data frame 
@@ -260,8 +264,8 @@
                                      input[[paste0("plot_brush", iter)]]$ymax),
                        nrow = 2, ncol = 2,
                        byrow = TRUE,
-                       dimnames = list(c(input[[paste0("Makrer_", cur_val)]], 
-                                         input[[paste0("Makrer_", cur_val + 1)]]), c("min", "max")))
+                       dimnames = list(c(markValues[[paste0("Marker_", cur_val)]], 
+                                         markValues[[paste0("Marker_", cur_val + 1)]]), c("min", "max")))
     cur_gate$exprs_values <- input$assay
     cur_gate$img_id <- input$sample
     
@@ -314,21 +318,21 @@
                     if (is.null(input[[paste0("plot_brush", x - 1)]])) {
                         output[[paste0("scatter", x)]] <- NULL
                     } else {
-                        output[[paste0("scatter", x)]] <- .createScatter(input, rValues, objValues, 
+                        output[[paste0("scatter", x)]] <- .createScatter(input, rValues, objValues, markValues,
                                                                          iter = x)
                         output[[paste0("info", x)]] <- renderText({
                             paste0("Selection: ", .brushRange(input[[paste0("plot_brush", x)]]))
                         })
-                        .brushObject(input, objValues, iter = x)
+                        .brushObject(input, objValues, markValues, iter = x)
                     }
             } else {
                 
-                output[[paste0("scatter", x)]] <- .createScatter(input, rValues, objValues, 
+                output[[paste0("scatter", x)]] <- .createScatter(input, rValues, objValues, markValues,
                                                                  iter = x)
                 output[[paste0("info", x)]] <- renderText({
                     paste0("Selection: ", .brushRange(input[[paste0("plot_brush", x)]]))
                 })
-                .brushObject(input, objValues, iter = x)
+                .brushObject(input, objValues, markValues, iter = x)
             }
             
             
