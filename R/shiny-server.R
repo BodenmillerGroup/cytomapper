@@ -57,7 +57,7 @@
 }
 
 # Create interactive observers
-.create_interactive_observer <- function(object, img_id, input, rValues, objValues){
+.create_interactive_observer <- function(object, img_id, input, rValues, objValues, markValues){
     
     # Select first object
     observeEvent(input$sample, {
@@ -70,9 +70,20 @@
         rValues$ranges <- cur_ranges
     }, ignoreInit = TRUE)
     
+    # Observe marker change
+    observe({
+        for (i in grep("Marker_", names(input), value = TRUE)) {
+            markValues[[i]] <- input[[i]]
+        }
+    })
+    
     # Observe plot counter
     observeEvent(input$add_plot, {
         rValues$plotCount <- rValues$plotCount + 1
+        
+        max_val <- ((rValues$plotCount) * 2) - 1
+        markValues[[paste0("Marker_", max_val)]] <- NULL
+        markValues[[paste0("Marker_", max_val + 1)]] <- NULL
     })
     
     # Smallest number should be 1
@@ -81,11 +92,15 @@
         if (rValues$plotCount < 1) {
             rValues$plotCount <- 1
         }
+        
+        max_val <- ((rValues$plotCount + 1) * 2) - 1
+        markValues[[paste0("Marker_", max_val)]] <- NULL
+        markValues[[paste0("Marker_", max_val + 1)]] <- NULL
     })
 }
 
 # Create updateSelectizeInput objects
-.create_updateSelectizeInput <- function(object, img_id, rValues, input, session){
+.create_updateSelectizeInput <- function(object, img_id, rValues, input, session, markValues){
     # Store image IDs and marker names
     img_IDs <- colData(object)[,img_id]
     markers <- rownames(object)
@@ -107,16 +122,16 @@
             cur_val <- (i * 2) - 1
             
             # Select initial markers
-            if (is.null(input[[paste0("Marker_", cur_val)]])) {
+            if (is.null(markValues[[paste0("Marker_", cur_val)]])) {
                 cur_marker_1 <- ""
             } else {
-                cur_marker_1 <- input[[paste0("Marker_", cur_val)]]
+                cur_marker_1 <- markValues[[paste0("Marker_", cur_val)]]
             }
             
-            if (is.null(input[[paste0("Marker_", cur_val + 1)]])) {
+            if (is.null(markValues[[paste0("Marker_", cur_val + 1)]])) {
                 cur_marker_2 <- ""
             } else {
-                cur_marker_2 <- input[[paste0("Marker_", cur_val + 1)]]
+                cur_marker_2 <- markValues[[paste0("Marker_", cur_val + 1)]]
             }
             
             updateSelectizeInput(session, paste0("Marker_", cur_val),
@@ -274,10 +289,14 @@
     # Reactive object list to store selected cells
     objValues <- reactiveValues(object1 = NULL)
     
-    .create_interactive_observer(object, img_id, input, rValues, objValues)
+    # Reactive object for marker names
+    markValues <- reactiveValues(Marker_1 = NULL,
+                                 Marker_2 = NULL)
+    
+    .create_interactive_observer(object, img_id, input, rValues, objValues, markValues)
     
     # Create updateSelectizeInput objects
-    .create_updateSelectizeInput(object, img_id, rValues, input, session)
+    .create_updateSelectizeInput(object, img_id, rValues, input, session, markValues)
     
     # Dynamically generate wellPanels
     output$AdditionalPlots_sidebar <- .addPlots_sidebar(rValues)
