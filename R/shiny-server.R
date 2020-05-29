@@ -313,6 +313,9 @@
     # Reactive object for brush values
     brushValues <- reactiveValues(plot_brush1 = NULL)
     
+    # Reactive object for plots
+    plotValues <- reactiveValues(scatter1 = NULL)
+    
     .create_interactive_observer(object, img_id, input, rValues, objValues, markValues, brushValues)
     
     # Create updateSelectizeInput objects
@@ -345,8 +348,14 @@
                     }
             } else {
                 
-                output[[paste0("scatter", x)]] <- .createScatter(input, rValues, objValues, markValues,
-                                                                 iter = x)
+                if (is.null(plotValues[[paste0("scatter", x)]])) {
+                    plotValues[[paste0("scatter", x)]] <- .createScatter(input, rValues, objValues, markValues,
+                                                                         iter = x)
+                    output[[paste0("scatter", x)]] <- plotValues[[paste0("scatter", x)]]
+                } else {
+                    output[[paste0("scatter", x)]] <- plotValues[[paste0("scatter", x)]]
+                }
+                
                 output[[paste0("info", x)]] <- renderText({
                     paste0("Selection: ", .brushRange(brushValues[[paste0("plot_brush", x)]]))
                 })
@@ -409,36 +418,67 @@
     
     output$image_selection <- renderPlot({
         
-        #for (i in rev(names(objValues))) {
-        #    if (!is.null(objValues[[i]])) {
-        #        cur_object <- objValues[[i]]
-        #        break
-        #    }
-        #}
+        cur_val <- (rValues$plotCount * 2) - 1
         
-        #cur_object$selected <- TRUE
-        #if(is.null(image)){
-        #    cur_mask <- mask[mcols(mask)[,img_id] == sample] 
-        #    plotCells(object = cur_object,
-        #              mask = cur_mask,
-        #              cell_id = cell_id,
-        #              img_id = img_id,
-        #              colour_by = "selected",
-        #              colour = list(selected = c("TRUE" = "dark red", "FALSE" = "gray")),
-        #              ...)
-        #} else {
-        #    cur_mask <- mask[mcols(mask)[,img_id] == sample]
-        #    cur_image <- image[mcols(image)[,img_id] == sample]
-        #    plotPixels(image = cur_image,
-        #              object = cur_object,
-        #              mask = cur_mask,
-        #              cell_id = cell_id,
-        #              img_id = img_id,
-        #              colour_by = "selected",
-        #              colour = list(selected = c("TRUE" = "dark red", "FALSE" = "gray")),
-        #              ...)
-        #}
-        #cur_object$selected <- NULL
+        req(markValues$Marker_1, brushValues$plot_brush1)
+        
+        if (rValues$plotCount > 1) {
+            if (!is.null(brushValues[[paste0("plot_brush", rValues$plotCount - 1)]]) &&
+                markValues[[paste0("Marker_", cur_val)]] != "") {
+                if (markValues[[paste0("Marker_", cur_val + 1)]] == "") {
+                    cur_markers <- markValues[[paste0("Marker_", cur_val)]]
+                } else {
+                    cur_markers <- c(markValues[[paste0("Marker_", cur_val)]], 
+                                     markValues[[paste0("Marker_", cur_val + 1)]])
+                }
+            } else {
+                if (markValues[[paste0("Marker_", cur_val - 1)]] == "") {
+                    cur_markers <- markValues[[paste0("Marker_", cur_val - 2)]]
+                } else {
+                    cur_markers <- c(markValues[[paste0("Marker_", cur_val - 2)]], 
+                                     markValues[[paste0("Marker_", cur_val - 1)]])
+                } 
+            }
+        } else {
+            if (markValues[[paste0("Marker_", cur_val + 1)]] == "") {
+                cur_markers <- markValues[[paste0("Marker_", cur_val)]]
+            } else {
+                cur_markers <- c(markValues[[paste0("Marker_", cur_val)]], 
+                                 markValues[[paste0("Marker_", cur_val + 1)]])
+            }
+        }
+        
+        for (i in rev(names(objValues))) {
+            if (!is.null(objValues[[i]])) {
+                cur_object <- objValues[[i]]
+                cur_object$selected <- TRUE
+                break
+            }
+        }
+        
+        if (is.null(image)) {
+            cur_mask <- mask[mcols(mask)[,img_id] == input$sample] 
+            plotCells(object = cur_object,
+                      mask = cur_mask,
+                      cell_id = cell_id,
+                      img_id = img_id,
+                      colour_by = "selected",
+                      colour = list(selected = c("TRUE" = "dark red", "FALSE" = "gray")),
+                      ...)
+        } else {
+            cur_mask <- mask[mcols(mask)[,img_id] == input$sample]
+            cur_image <- image[mcols(image)[,img_id] == input$sample]
+            plotPixels(image = cur_image,
+                      object = cur_object,
+                      mask = cur_mask,
+                      cell_id = cell_id,
+                      img_id = img_id,
+                      colour_by = cur_markers,
+                      outline_by = "selected",
+                      colour = list(selected = c("TRUE" = "gray", "FALSE" = "gray")),
+                      ...)
+        }
+
     })
 
     output$downloadData <- downloadHandler(
