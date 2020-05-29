@@ -359,27 +359,45 @@
     
     output$image_expression <- renderPlot({
         
-        #if (cur_marker2 == "") {
-        #    cur_markers <- cur_marker1
-        #} else {
-        #    cur_markers <- c(cur_marker1, cur_marker2)
-        #}
+        req(rValues$plotCount)
         
-        #if (is.null(image)) {
-        #    cur_mask <- mask[mcols(mask)[,img_id] == cur_sample]
-        #    plotCells(object = cur_object,
-        #              mask = cur_mask,
-        #              cell_id = cell_id,
-        #              img_id = img_id,
-        #              colour_by = cur_markers,
-        #              exprs_values = cur_assay,
-        #              ...)
-        #} else {
-        #    cur_image <- image[mcols(image)[,img_id] == sample]
-        #    plotPixels(image = cur_image,
-        #               colour_by = cur_markers,
-        #               ...)
-        #}
+        cur_val <- (rValues$plotCount * 2) - 1
+        
+        req(markValues[[paste0("Marker_", cur_val)]])
+        
+        if (rValues$plotCount > 1) {
+            req(brushValues[[paste0("plot_brush", cur_val - 1)]])
+        }
+        
+        if (markValues[[paste0("Marker_", cur_val + 1)]] == "") {
+            cur_markers <- markValues[[paste0("Marker_", cur_val)]]
+        } else {
+            cur_markers <- c(markValues[[paste0("Marker_", cur_val)]], 
+                             markValues[[paste0("Marker_", cur_val + 1)]])
+        }
+        
+        for (i in rev(names(objValues))) {
+            if (!is.null(objValues[[i]])) {
+                cur_object <- objValues[[i]]
+                break
+            }
+        }
+        
+        if (is.null(image)) {
+            cur_mask <- mask[mcols(mask)[,img_id] == input$sample]
+            plotCells(object = cur_object,
+                      mask = cur_mask,
+                      cell_id = cell_id,
+                      img_id = img_id,
+                      colour_by = cur_markers,
+                      exprs_values = input$assay,
+                      ...)
+        } else {
+            cur_image <- image[mcols(image)[,img_id] == input$sample]
+            plotPixels(image = cur_image,
+                       colour_by = cur_markers,
+                       ...)
+        }
         
     })
     
