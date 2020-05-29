@@ -359,33 +359,39 @@
     
     output$image_expression <- renderPlot({
         
-        req(rValues$plotCount)
-        
         cur_val <- (rValues$plotCount * 2) - 1
         
-        req(markValues[[paste0("Marker_", cur_val)]])
+        req(markValues$Marker_1)
         
         if (rValues$plotCount > 1) {
-            req(brushValues[[paste0("plot_brush", cur_val - 1)]])
-        }
-        
-        if (markValues[[paste0("Marker_", cur_val + 1)]] == "") {
-            cur_markers <- markValues[[paste0("Marker_", cur_val)]]
+            if (!is.null(brushValues[[paste0("plot_brush", rValues$plotCount - 1)]]) &&
+                markValues[[paste0("Marker_", cur_val)]] != "") {
+                if (markValues[[paste0("Marker_", cur_val + 1)]] == "") {
+                    cur_markers <- markValues[[paste0("Marker_", cur_val)]]
+                } else {
+                    cur_markers <- c(markValues[[paste0("Marker_", cur_val)]], 
+                                     markValues[[paste0("Marker_", cur_val + 1)]])
+                }
+            } else {
+                if (markValues[[paste0("Marker_", cur_val - 1)]] == "") {
+                    cur_markers <- markValues[[paste0("Marker_", cur_val - 2)]]
+                } else {
+                    cur_markers <- c(markValues[[paste0("Marker_", cur_val - 2)]], 
+                                     markValues[[paste0("Marker_", cur_val - 1)]])
+                } 
+            }
         } else {
-            cur_markers <- c(markValues[[paste0("Marker_", cur_val)]], 
-                             markValues[[paste0("Marker_", cur_val + 1)]])
-        }
-        
-        for (i in rev(names(objValues))) {
-            if (!is.null(objValues[[i]])) {
-                cur_object <- objValues[[i]]
-                break
+            if (markValues[[paste0("Marker_", cur_val + 1)]] == "") {
+                cur_markers <- markValues[[paste0("Marker_", cur_val)]]
+            } else {
+                cur_markers <- c(markValues[[paste0("Marker_", cur_val)]], 
+                                 markValues[[paste0("Marker_", cur_val + 1)]])
             }
         }
         
         if (is.null(image)) {
             cur_mask <- mask[mcols(mask)[,img_id] == input$sample]
-            plotCells(object = cur_object,
+            plotCells(object = objValues$object1,
                       mask = cur_mask,
                       cell_id = cell_id,
                       img_id = img_id,
@@ -402,6 +408,14 @@
     })
     
     output$image_selection <- renderPlot({
+        
+        #for (i in rev(names(objValues))) {
+        #    if (!is.null(objValues[[i]])) {
+        #        cur_object <- objValues[[i]]
+        #        break
+        #    }
+        #}
+        
         #cur_object$selected <- TRUE
         #if(is.null(image)){
         #    cur_mask <- mask[mcols(mask)[,img_id] == sample] 
