@@ -313,9 +313,6 @@
     # Reactive object for brush values
     brushValues <- reactiveValues(plot_brush1 = NULL)
     
-    # Reactive object for plots
-    plotValues <- reactiveValues(scatter1 = NULL)
-    
     .create_interactive_observer(object, img_id, input, rValues, objValues, markValues, brushValues)
     
     # Create updateSelectizeInput objects
@@ -347,14 +344,9 @@
                         .brushObject(input, objValues, markValues, brushValues, iter = x)
                     }
             } else {
-                
-                if (is.null(plotValues[[paste0("scatter", x)]])) {
-                    plotValues[[paste0("scatter", x)]] <- .createScatter(input, rValues, objValues, markValues,
+            
+                output[[paste0("scatter", x)]] <- .createScatter(input, rValues, objValues, markValues,
                                                                          iter = x)
-                    output[[paste0("scatter", x)]] <- plotValues[[paste0("scatter", x)]]
-                } else {
-                    output[[paste0("scatter", x)]] <- plotValues[[paste0("scatter", x)]]
-                }
                 
                 output[[paste0("info", x)]] <- renderText({
                     paste0("Selection: ", .brushRange(brushValues[[paste0("plot_brush", x)]]))
