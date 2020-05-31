@@ -325,38 +325,48 @@
     output$AdditionalPlots_main <- .addPlots_main(rValues)
     
     # Create scatter plots
-    observe({
-        
-        lapply(seq_len(rValues$plotCount), function(x){
-            cur_val <- (x * 2) - 1
-            
-            if (x > 1) {
-                    if (is.null(input[[paste0("plot_brush", x - 1)]])) {
-                        output[[paste0("scatter", x)]] <- NULL
-                    } else {
-                        output[[paste0("scatter", x)]] <- .createScatter(input, rValues, objValues, markValues,
-                                                                         iter = x)
-                        
-                        output[[paste0("info", x)]] <- renderText({
-                            paste0("Selection: ", .brushRange(brushValues[[paste0("plot_brush", x)]]))
-                        })
-                        
-                        .brushObject(input, objValues, markValues, brushValues, iter = x)
-                    }
-            } else {
-            
-                output[[paste0("scatter", x)]] <- .createScatter(input, rValues, objValues, markValues,
-                                                                         iter = x)
-                
-                output[[paste0("info", x)]] <- renderText({
-                    paste0("Selection: ", .brushRange(brushValues[[paste0("plot_brush", x)]]))
-                })
-                .brushObject(input, objValues, markValues, brushValues, iter = x)
-            }
-            
-            
-        })
+    output$scatter1 <- .createScatter(input, rValues, objValues, markValues, iter = 1)
+    
+    observeEvent(input$add_plot, {
+        output[[paste0("scatter", rValues$plotCount)]] <- .createScatter(input, rValues, objValues, markValues, iter = rValues$plotCount)
     })
+    
+    observeEvent(input$remove_plot, {
+        output[[paste0("scatter", rValues$plotCount + 1)]] <- NULL
+    })
+    
+    #observe({
+        
+    #    lapply(seq_len(rValues$plotCount), function(x){
+    #        cur_val <- (x * 2) - 1
+            
+    #        if (x > 1) {
+    #                if (is.null(input[[paste0("plot_brush", x - 1)]])) {
+    #                    output[[paste0("scatter", x)]] <- NULL
+    #                } else {
+    #                    output[[paste0("scatter", x)]] <- .createScatter(input, rValues, objValues, markValues,
+    #                                                                     iter = x)
+                        
+    #                    output[[paste0("info", x)]] <- renderText({
+    #                        paste0("Selection: ", .brushRange(brushValues[[paste0("plot_brush", x)]]))
+    #                    })
+                        
+    #                    .brushObject(input, objValues, markValues, brushValues, iter = x)
+    #                }
+    #        } else {
+            
+    #            output[[paste0("scatter", x)]] <- .createScatter(input, rValues, objValues, markValues,
+    #                                                                     iter = x)
+                
+    #            output[[paste0("info", x)]] <- renderText({
+    #                paste0("Selection: ", .brushRange(brushValues[[paste0("plot_brush", x)]]))
+    #            })
+    #            .brushObject(input, objValues, markValues, brushValues, iter = x)
+    #        }
+            
+            
+    #    })
+    #})
     
     output$image_expression <- renderPlot({
         
