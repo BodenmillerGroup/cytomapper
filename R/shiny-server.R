@@ -87,6 +87,7 @@
     
     # Observe plot counter
     observeEvent(input$add_plot, {
+        
         rValues$plotCount <- rValues$plotCount + 1
         
         max_val <- ((rValues$plotCount) * 2) - 1
@@ -188,7 +189,7 @@
     })
 }
 
-.addPlots_main <- function(rValues) {
+.addPlots_main <- function(rValues, input) {
     
     renderUI({
         cur_row <- ceiling(rValues$plotCount / 3)
@@ -322,18 +323,54 @@
     output$AdditionalPlots_sidebar <- .addPlots_sidebar(rValues)
     
     # Dynamically generate scatter plots
-    output$AdditionalPlots_main <- .addPlots_main(rValues)
+    output$AdditionalPlots_main <- .addPlots_main(rValues, input)
     
     # Create scatter plots
-    output$scatter1 <- .createScatter(input, rValues, objValues, markValues, iter = 1)
-    
-    observeEvent(input$add_plot, {
-        output[[paste0("scatter", rValues$plotCount)]] <- .createScatter(input, rValues, objValues, markValues, iter = rValues$plotCount)
+    output$scatter1 <- renderPlot({
+        
+        req(rValues$ranges, objValues$object1, 
+            input$assay, markValues$Marker_1)
+        
+        # Build data frame for visualization
+        cur_df <- as.data.frame(t(assay(objValues$object1, 
+                                        input$assay)))
+        cur_df$sample <- input$sample
+        
+        if(markValues$Marker_2 != ""){
+            
+            # Scatter plot    
+            ggplot(cur_df) +
+                geom_point(aes_(as.name(markValues$Marker_1), 
+                                as.name(markValues$Marker_2)), 
+                           show.legend = FALSE) +
+                ylab(markValues$Marker_2) +
+                theme_minimal() + 
+                ylim(c(rValues$ranges[markValues$Marker_2, 1], 
+                       rValues$ranges[markValues$Marker_2, 2])) +
+                xlim(c(rValues$ranges[markValues$Marker_1, 1], 
+                       rValues$ranges[markValues$Marker_1, 2]))
+            
+        } else {
+            
+            # Distributions of marker proteins
+            ggplot(cur_df) +
+                geom_density(aes_(x = as.name(markValues$Marker_1)), 
+                             show.legend = FALSE) +
+                theme(axis.text.y = element_blank(),
+                      panel.background = element_blank()) +
+                ylab("") +
+                xlim(c(rValues$ranges[markValues$Marker_1, 1], 
+                       rValues$ranges[markValues$Marker_1, 2]))
+        }
     })
     
-    observeEvent(input$remove_plot, {
-        output[[paste0("scatter", rValues$plotCount + 1)]] <- NULL
-    })
+    #observeEvent(input$add_plot, {
+    #    output[[paste0("scatter", rValues$plotCount)]] <- .createScatter(input, rValues, objValues, markValues, iter = rValues$plotCount)
+    #})
+    
+    #observeEvent(input$remove_plot, {
+    #    output[[paste0("scatter", rValues$plotCount + 1)]] <- NULL
+    #})
     
     #observe({
         
