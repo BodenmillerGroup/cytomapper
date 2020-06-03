@@ -94,7 +94,7 @@
         markValues[[paste0("Marker_", max_val)]] <- NULL
         markValues[[paste0("Marker_", max_val + 1)]] <- NULL
         
-        objValues[[paste0("object", rValues$plotCount)]] <- NULL
+        objValues[[paste0("object", rValues$plotCount + 1)]] <- NULL
         
         brushValues[[paste0("plot_brush", rValues$plotCount)]] <- NULL
     })
@@ -110,7 +110,7 @@
         markValues[[paste0("Marker_", max_val)]] <- NULL
         markValues[[paste0("Marker_", max_val + 1)]] <- NULL
         
-        objValues[[paste0("object", rValues$plotCount + 1)]] <- NULL
+        objValues[[paste0("object", rValues$plotCount + 2)]] <- NULL
         
         brushValues[[paste0("plot_brush", rValues$plotCount + 1)]] <- NULL
     })
@@ -229,7 +229,7 @@
         if(markValues[[paste0("Marker_", cur_val + 1)]] != ""){
 
             # Scatter plot    
-            ggplot(cur_df) +
+            p <- ggplot(cur_df) +
                 geom_point(aes_(as.name(markValues[[paste0("Marker_", cur_val)]]), 
                                 as.name(markValues[[paste0("Marker_", cur_val + 1)]])), 
                            show.legend = FALSE) +
@@ -239,6 +239,19 @@
                        rValues$ranges[markValues[[paste0("Marker_", cur_val + 1)]], 2])) +
                 xlim(c(rValues$ranges[markValues[[paste0("Marker_", cur_val)]], 1], 
                        rValues$ranges[markValues[[paste0("Marker_", cur_val)]], 2]))
+            
+            if (!is.null(objValues[[paste0("object", iter + 1)]])) {
+                
+                cur_df_1 <- as.data.frame(t(assay(objValues[[paste0("object", iter + 1)]], 
+                                                  input$assay)))
+                cur_df_1$sample <- input$sample
+                
+                p <- p + geom_point(aes_(as.name(markValues[[paste0("Marker_", cur_val)]]), 
+                                         as.name(markValues[[paste0("Marker_", cur_val + 1)]])), 
+                                    show.legend = FALSE, data = cur_df_1, colour = "red")
+            }
+            
+            p
             
         } else {
             
@@ -325,52 +338,21 @@
     # Dynamically generate scatter plots
     output$AdditionalPlots_main <- .addPlots_main(rValues, input)
     
-    # Create scatter plots
-    output$scatter1 <- renderPlot({
-        
-        req(rValues$ranges, objValues$object1, 
-            input$assay, markValues$Marker_1)
-        
-        # Build data frame for visualization
-        cur_df <- as.data.frame(t(assay(objValues$object1, 
-                                        input$assay)))
-        cur_df$sample <- input$sample
-        
-        if(markValues$Marker_2 != ""){
-            
-            # Scatter plot    
-            ggplot(cur_df) +
-                geom_point(aes_(as.name(markValues$Marker_1), 
-                                as.name(markValues$Marker_2)), 
-                           show.legend = FALSE) +
-                ylab(markValues$Marker_2) +
-                theme_minimal() + 
-                ylim(c(rValues$ranges[markValues$Marker_2, 1], 
-                       rValues$ranges[markValues$Marker_2, 2])) +
-                xlim(c(rValues$ranges[markValues$Marker_1, 1], 
-                       rValues$ranges[markValues$Marker_1, 2]))
-            
-        } else {
-            
-            # Distributions of marker proteins
-            ggplot(cur_df) +
-                geom_density(aes_(x = as.name(markValues$Marker_1)), 
-                             show.legend = FALSE) +
-                theme(axis.text.y = element_blank(),
-                      panel.background = element_blank()) +
-                ylab("") +
-                xlim(c(rValues$ranges[markValues$Marker_1, 1], 
-                       rValues$ranges[markValues$Marker_1, 2]))
-        }
+    output$scatter1 <- .createScatter(input, rValues, objValues, markValues, iter = 1)
+    
+    observe({
+        .brushObject(input, objValues, markValues, brushValues, iter = 1)
     })
     
-    #observeEvent(input$add_plot, {
-    #    output[[paste0("scatter", rValues$plotCount)]] <- .createScatter(input, rValues, objValues, markValues, iter = rValues$plotCount)
-    #})
+    observe({
+        output[[paste0("scatter", rValues$plotCount)]] <- .createScatter(input, rValues, objValues, markValues, 
+                                                                         iter = rValues$plotCount)
+        .brushObject(input, objValues, markValues, brushValues, iter = rValues$plotCount)
+    })
     
-    #observeEvent(input$remove_plot, {
-    #    output[[paste0("scatter", rValues$plotCount + 1)]] <- NULL
-    #})
+    observeEvent(input$remove_plot, {
+        output[[paste0("scatter", rValues$plotCount + 1)]] <- NULL
+    })
     
     #observe({
         
@@ -412,7 +394,7 @@
         req(markValues$Marker_1)
         
         if (rValues$plotCount > 1) {
-            if (!is.null(brushValues[[paste0("plot_brush", rValues$plotCount - 1)]]) &&
+            if (!is.null(objValues[[paste0("object", rValues$plotCount)]]) &&
                 markValues[[paste0("Marker_", cur_val)]] != "") {
                 if (markValues[[paste0("Marker_", cur_val + 1)]] == "") {
                     cur_markers <- markValues[[paste0("Marker_", cur_val)]]
@@ -459,10 +441,10 @@
         
         cur_val <- (rValues$plotCount * 2) - 1
         
-        req(markValues$Marker_1, brushValues$plot_brush1)
+        req(markValues$Marker_1, objValues$object2)
         
         if (rValues$plotCount > 1) {
-            if (!is.null(brushValues[[paste0("plot_brush", rValues$plotCount - 1)]]) &&
+            if (!is.null(objValues[[paste0("object", rValues$plotCount)]]) &&
                 markValues[[paste0("Marker_", cur_val)]] != "") {
                 if (markValues[[paste0("Marker_", cur_val + 1)]] == "") {
                     cur_markers <- markValues[[paste0("Marker_", cur_val)]]
@@ -487,13 +469,22 @@
             }
         }
         
-        for (i in rev(names(objValues))) {
-            if (!is.null(objValues[[i]])) {
-                cur_object <- objValues[[i]]
-                cur_object$selected <- TRUE
-                break
-            }
-        }
+        cur_object <- reactiveValuesToList(objValues)
+        cur_object <- cur_object[!unlist(lapply(cur_object, is.null))]
+        cur_object <- cur_object[[paste0("object", length(cur_object))]]
+        
+        cur_object$selected <- TRUE
+        
+        #for (i in rev(names(objValues))) {
+        #
+        #    cur_i <<- i
+        #    
+        #    if (!is.null(objValues[[cur_i]])) {
+        #        cur_object <- objValues[[cur_i]]
+        #        cur_object$selected <- TRUE
+        #        break
+        #    }
+        #}
         
         if (is.null(image)) {
             cur_mask <- mask[mcols(mask)[,img_id] == input$sample] 
