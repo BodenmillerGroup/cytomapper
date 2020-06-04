@@ -198,10 +198,9 @@
             
             cur_val <- (cur_plot * 2) - 1
             
-            req(markValues$Marker_1)
-            
             # Create brush options
-            if (markValues[[paste0("Marker_", cur_val + 1)]] == "") {
+            if (!is.null( markValues[[paste0("Marker_", cur_val + 1)]]) &&
+                markValues[[paste0("Marker_", cur_val + 1)]] == "") {
                 cur_brush_opts <- brushOpts(paste0("plot_brush", cur_plot),
                                             fill = .create_colours(cur_plot),
                                             stroke = .create_colours(cur_plot),
@@ -361,12 +360,6 @@
     # Dynamically generate scatter plots
     output$AdditionalPlots_main <- .addPlots_main(rValues, markValues, input)
     
-    output$scatter1 <- .createScatter(input, rValues, objValues, markValues, iter = 1)
-    
-    observe({
-        .brushObject(input, objValues, markValues, brushValues, iter = 1)
-    })
-    
     observe({
         output[[paste0("scatter", rValues$plotCount)]] <- .createScatter(input, rValues, objValues, markValues, 
                                                                          iter = rValues$plotCount)
@@ -377,39 +370,6 @@
         output[[paste0("scatter", rValues$plotCount + 1)]] <- NULL
     })
     
-    #observe({
-        
-    #    lapply(seq_len(rValues$plotCount), function(x){
-    #        cur_val <- (x * 2) - 1
-            
-    #        if (x > 1) {
-    #                if (is.null(input[[paste0("plot_brush", x - 1)]])) {
-    #                    output[[paste0("scatter", x)]] <- NULL
-    #                } else {
-    #                    output[[paste0("scatter", x)]] <- .createScatter(input, rValues, objValues, markValues,
-    #                                                                     iter = x)
-                        
-    #                    output[[paste0("info", x)]] <- renderText({
-    #                        paste0("Selection: ", .brushRange(brushValues[[paste0("plot_brush", x)]]))
-    #                    })
-                        
-    #                    .brushObject(input, objValues, markValues, brushValues, iter = x)
-    #                }
-    #        } else {
-            
-    #            output[[paste0("scatter", x)]] <- .createScatter(input, rValues, objValues, markValues,
-    #                                                                     iter = x)
-                
-    #            output[[paste0("info", x)]] <- renderText({
-    #                paste0("Selection: ", .brushRange(brushValues[[paste0("plot_brush", x)]]))
-    #            })
-    #            .brushObject(input, objValues, markValues, brushValues, iter = x)
-    #        }
-            
-            
-    #    })
-    #})
-    
     output$image_expression <- renderPlot({
         
         cur_val <- (rValues$plotCount * 2) - 1
@@ -418,6 +378,7 @@
         
         if (rValues$plotCount > 1) {
             if (!is.null(objValues[[paste0("object", rValues$plotCount)]]) &&
+                !is.null(markValues[[paste0("Marker_", cur_val)]]) &&
                 markValues[[paste0("Marker_", cur_val)]] != "") {
                 if (markValues[[paste0("Marker_", cur_val + 1)]] == "") {
                     cur_markers <- markValues[[paste0("Marker_", cur_val)]]
@@ -468,6 +429,7 @@
         
         if (rValues$plotCount > 1) {
             if (!is.null(objValues[[paste0("object", rValues$plotCount)]]) &&
+                !is.null(markValues[[paste0("Marker_", cur_val)]]) &&
                 markValues[[paste0("Marker_", cur_val)]] != "") {
                 if (markValues[[paste0("Marker_", cur_val + 1)]] == "") {
                     cur_markers <- markValues[[paste0("Marker_", cur_val)]]

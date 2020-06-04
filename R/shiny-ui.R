@@ -62,7 +62,7 @@
     cm_side <- dashboardSidebar(
         
         sidebarMenu(
-            menuItem("Genral controls",
+            menuItem("General controls",
                      selectizeInput("sample", label = "Select sample",
                                     choices = NULL,
                                     options = list(placeholder = 'Select a condition', maxItems = 1)),
