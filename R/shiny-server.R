@@ -189,17 +189,32 @@
     })
 }
 
-.addPlots_main <- function(rValues, input) {
+.addPlots_main <- function(rValues, markValues, input) {
     
     renderUI({
         cur_row <- ceiling(rValues$plotCount / 3)
         # Generate boxes
         box_list <- lapply(seq_len(rValues$plotCount), function(cur_plot) {
             
+            cur_val <- (cur_plot * 2) - 1
+            
+            req(markValues$Marker_1)
+            
+            # Create brush options
+            if (markValues[[paste0("Marker_", cur_val + 1)]] == "") {
+                cur_brush_opts <- brushOpts(paste0("plot_brush", cur_plot),
+                                            fill = .create_colours(cur_plot),
+                                            stroke = .create_colours(cur_plot),
+                                            direction = "x")
+            } else {
+                cur_brush_opts <- brushOpts(paste0("plot_brush", cur_plot),
+                                            fill = .create_colours(cur_plot),
+                                            stroke = .create_colours(cur_plot),
+                                            direction = "xy")
+            }
+            
             box(plotOutput(paste0("scatter", cur_plot), 
-                           brush = brushOpts(paste0("plot_brush", cur_plot),
-                                             fill = .create_colours(cur_plot),
-                                             stroke = .create_colours(cur_plot))),
+                           brush = cur_brush_opts),
                 verbatimTextOutput(paste0("info", cur_plot)),
                 title = paste("Plot", cur_plot), 
                 status = "primary",
@@ -261,7 +276,6 @@
                              show.legend = FALSE) +
                 theme(axis.text.y = element_blank(),
                       panel.background = element_blank()) +
-                ylab("") +
                 xlim(c(rValues$ranges[markValues[[paste0("Marker_", cur_val)]], 1], 
                        rValues$ranges[markValues[[paste0("Marker_", cur_val)]], 2]))
         }
@@ -285,14 +299,23 @@
         
     # Save the Gate
     cur_gate <- list()
-    cur_gate$gate <- matrix(data = c(brushValues[[paste0("plot_brush", iter)]]$xmin, 
-                                     brushValues[[paste0("plot_brush", iter)]]$xmax, 
-                                     brushValues[[paste0("plot_brush", iter)]]$ymin, 
-                                     brushValues[[paste0("plot_brush", iter)]]$ymax),
+    if (brushValues[[paste0("plot_brush", iter)]]$direction == "x") {
+        gate <- matrix(data = c(brushValues[[paste0("plot_brush", iter)]]$xmin, 
+                                brushValues[[paste0("plot_brush", iter)]]$xmax),
+                       nrow = 1, ncol = 2,
+                       byrow = TRUE,
+                       dimnames = list(c(markValues[[paste0("Marker_", cur_val)]]), c("min", "max")))
+    } else {
+        gate <- matrix(data = c(brushValues[[paste0("plot_brush", iter)]]$xmin, 
+                                brushValues[[paste0("plot_brush", iter)]]$xmax, 
+                                brushValues[[paste0("plot_brush", iter)]]$ymin, 
+                                brushValues[[paste0("plot_brush", iter)]]$ymax),
                        nrow = 2, ncol = 2,
                        byrow = TRUE,
                        dimnames = list(c(markValues[[paste0("Marker_", cur_val)]], 
                                          markValues[[paste0("Marker_", cur_val + 1)]]), c("min", "max")))
+    }
+    cur_gate$gate <- gate
     cur_gate$exprs_values <- input$assay
     cur_gate$img_id <- input$sample
     
@@ -336,7 +359,7 @@
     output$AdditionalPlots_sidebar <- .addPlots_sidebar(rValues)
     
     # Dynamically generate scatter plots
-    output$AdditionalPlots_main <- .addPlots_main(rValues, input)
+    output$AdditionalPlots_main <- .addPlots_main(rValues, markValues, input)
     
     output$scatter1 <- .createScatter(input, rValues, objValues, markValues, iter = 1)
     
@@ -475,16 +498,11 @@
         
         cur_object$selected <- TRUE
         
-        #for (i in rev(names(objValues))) {
-        #
-        #    cur_i <<- i
-        #    
-        #    if (!is.null(objValues[[cur_i]])) {
-        #        cur_object <- objValues[[cur_i]]
-        #        cur_object$selected <- TRUE
-        #        break
-        #    }
-        #}
+        # Add session info
+        metadata(cur_object)$SessionInfo <- sessionInfo()
+        
+        # Add date
+        metadata(cur_object)$GatingDate <- Sys.Date()
         
         if (is.null(image)) {
             cur_mask <- mask[mcols(mask)[,img_id] == input$sample] 
@@ -512,13 +530,20 @@
     })
 
     output$downloadData <- downloadHandler(
-        # Add session info
-        # Add date
-        
-        #filename = "gated_sce.rds",
-        #content = function(filename) {
-        #    saveRDS(cur_object, filename)
-        #}
+        filename = "gated_sce.rds",
+        content = function(file){
+            cur_object <- reactiveValuesToList(objValues)
+            cur_object <- cur_object[!unlist(lapply(cur_object, is.null))]
+            cur_object <- cur_object[[paste0("object", length(cur_object))]]
+            
+            # Add session info
+            metadata(cur_object)$SessionInfo <- sessionInfo()
+            
+            # Add date
+            metadata(cur_object)$GatingDate <- Sys.Date()
+            
+            saveRDS(cur_object, file)
+        }
     )
 }
 
