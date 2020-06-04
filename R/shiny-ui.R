@@ -10,14 +10,22 @@
                         packageVersion("cytomapper")),
         dropdownMenu(
             notificationItem(
+                text = textInput(inputId = "labelCellsBy",
+                            label = "Cell label",
+                            value = "Cell-Type"),
+                icon = icon(""),
+                status = "info"
+            ),
+            notificationItem(
                 text = downloadButton(
                     outputId = "downloadData",       
-                    label = "Download selection"
+                    label = "Download selection",
+                    style = "background-color: #3C8DBC; color: white; border-color: #7EA6F8"
                 ),
                 icon = icon(""),
                 status = "info"
             ),
-            type = "tasks",
+            type = "notification",
             icon = icon("fas fa-download"),
             badgeStatus = NULL,
             headerText = ""),
@@ -25,7 +33,8 @@
             notificationItem(
                 text = actionButton(
                     inputId = "SessionInfo",       
-                    label = "Session Info"
+                    label = "Session Info",
+                    style = "background-color: #3C8DBC; color: white; border-color: #3C8DBC"
                 ),
                 icon = icon(""),
                 status = "info"
@@ -33,7 +42,8 @@
             notificationItem(
                 text = actionButton(
                     inputId = "Help",       
-                    label = "Help"
+                    label = "Help",
+                    style = "background-color: #3C8DBC; color: white; border-color: #3C8DBC"
                 ),
                 icon = icon(""),
                 status = "info"
@@ -52,6 +62,16 @@
     cm_side <- dashboardSidebar(
         
         sidebarMenu(
+            menuItem("Genral controls",
+                     selectizeInput("sample", label = "Select sample",
+                                    choices = NULL,
+                                    options = list(placeholder = 'Select a condition', maxItems = 1)),
+                     selectizeInput("assay", label = "Select which assay to display",
+                                    choices = NULL, options = list(placeholder = 'Select an assay', maxItems = 1)),
+                     selectizeInput("reducedDim", label = "Select which reduced dimension to display",
+                                    choices = NULL, options = list(placeholder = 'Select an embedding', maxItems = 1)),
+                     icon = icon("fas fa-sliders-h"), 
+                     startExpanded = TRUE),
             menuItem("Plots",
                 uiOutput("AdditionalPlots_sidebar"),
                 actionButton(inputId = "add_plot", label = "Add plot", icon = icon("fas fa-plus"), 
@@ -59,13 +79,6 @@
                 actionButton(inputId = "remove_plot", label = "Remove plot", icon = icon("fas fa-minus"), 
                              style = "background-color: #D61632; color: white; border-color: #D61632"),
                 icon = icon("far fa-chart-bar"), startExpanded = TRUE),
-            selectizeInput("sample", label = "Select sample",
-                           choices = NULL,
-                           options = list(placeholder = 'Select a condition', maxItems = 1)),
-            selectizeInput("assay", label = "Select which assay to display",
-                           choices = NULL, options = list(placeholder = 'Select an assay', maxItems = 1)),
-            selectizeInput("reducedDim", label = "Select which reduced dimension to display",
-                           choices = NULL, options = list(placeholder = 'Select an embedding', maxItems = 1)),
             id = "sidebar"
             )
         )

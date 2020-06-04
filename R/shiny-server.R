@@ -530,11 +530,15 @@
     })
 
     output$downloadData <- downloadHandler(
-        filename = "gated_sce.rds",
+        filename = function(){
+            paste0(input$labelCellsBy, ".rds")
+            },
         content = function(file){
             cur_object <- reactiveValuesToList(objValues)
             cur_object <- cur_object[!unlist(lapply(cur_object, is.null))]
             cur_object <- cur_object[[paste0("object", length(cur_object))]]
+            
+            cur_object$CellLabel <- input$labelCellsBy
             
             # Add session info
             metadata(cur_object)$SessionInfo <- sessionInfo()
