@@ -283,8 +283,12 @@
     # Save gates
     next_obj <- objValues[[paste0("object", iter)]]
     metadata(next_obj)[[paste0("cytomapper_gate_", iter)]] <- cur_gate
-        
-    objValues[[paste0("object", iter + 1)]] <- next_obj[,cur_selection$selected_]
+    
+    if (sum(cur_selection$selected_) > 0) {
+        objValues[[paste0("object", iter + 1)]] <- next_obj[,cur_selection$selected_]
+    } else {
+        objValues[[paste0("object", iter + 1)]] <- NULL
+    }
     
 }
 
