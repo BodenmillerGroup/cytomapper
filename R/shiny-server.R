@@ -58,7 +58,7 @@
 
 # Create interactive observers
 .create_interactive_observer <- function(object, img_id, input, rValues, 
-                                         objValues, markValues, brushValues){
+                                         objValues, markValues){
     
     # Select first object
     observeEvent(input$sample, {
@@ -78,46 +78,20 @@
         }
     })
     
-    # Observe brush change
-    observe({
-        for (i in grep("plot_brush", names(input), value = TRUE)) {
-            brushValues[[i]] <- input[[i]]
-        }
+    # Observe slider change
+    observeEvent(input$plotCount, {
+        
+        objValues <- reactiveValues(object1 = objValues$object1)
+        
+        # Reactive object for marker names
+        markValues <- reactiveValues(Marker_1 = NULL,
+                                     Marker_2 = NULL)
     })
-    
-    # Observe plot counter
-    observeEvent(input$add_plot, {
-        
-        rValues$plotCount <- rValues$plotCount + 1
-        
-        max_val <- ((rValues$plotCount) * 2) - 1
-        markValues[[paste0("Marker_", max_val)]] <- NULL
-        markValues[[paste0("Marker_", max_val + 1)]] <- NULL
-        
-        objValues[[paste0("object", rValues$plotCount + 1)]] <- NULL
-        
-        brushValues[[paste0("plot_brush", rValues$plotCount)]] <- NULL
-    })
-    
-    # Smallest number should be 1
-    observeEvent(input$remove_plot, {
-        rValues$plotCount <- rValues$plotCount - 1
-        if (rValues$plotCount < 1) {
-            rValues$plotCount <- 1
-        }
-        
-        max_val <- ((rValues$plotCount + 1) * 2) - 1
-        markValues[[paste0("Marker_", max_val)]] <- NULL
-        markValues[[paste0("Marker_", max_val + 1)]] <- NULL
-        
-        objValues[[paste0("object", rValues$plotCount + 2)]] <- NULL
-        
-        brushValues[[paste0("plot_brush", rValues$plotCount + 1)]] <- NULL
-    })
+
 }
 
 # Create updateSelectizeInput objects
-.create_updateSelectizeInput <- function(object, img_id, rValues, input, session, markValues){
+.create_updateSelectizeInput <- function(object, img_id, input, session, markValues){
     # Store image IDs and marker names
     img_IDs <- colData(object)[,img_id]
     markers <- rownames(object)
@@ -133,40 +107,27 @@
                          choices = reducedDimNames(object),
                          server = TRUE,
                          selected = reducedDimNames(object)[1])
-    observeEvent(rValues$plotCount, {
+    observeEvent(input$plotCount, {
         
-        for (i in seq_len(rValues$plotCount)) {
+        for (i in seq_len(input$plotCount)) {
             cur_val <- (i * 2) - 1
-            
-            # Select initial markers
-            if (is.null(markValues[[paste0("Marker_", cur_val)]])) {
-                cur_marker_1 <- ""
-            } else {
-                cur_marker_1 <- markValues[[paste0("Marker_", cur_val)]]
-            }
-            
-            if (is.null(markValues[[paste0("Marker_", cur_val + 1)]])) {
-                cur_marker_2 <- ""
-            } else {
-                cur_marker_2 <- markValues[[paste0("Marker_", cur_val + 1)]]
-            }
             
             updateSelectizeInput(session, paste0("Marker_", cur_val),
                                  choices = markers,
                                  server = TRUE,
-                                 selected = cur_marker_1)
+                                 selected = "")
             updateSelectizeInput(session, paste0("Marker_", cur_val + 1),
                                  choices = markers,
                                  server = TRUE, 
-                                 selected = cur_marker_2)
+                                 selected = "")
         }
     })
 }
 
 # Create selectInput options in sidebar
-.addPlots_sidebar <- function(rValues) {
+.addPlots_sidebar <- function(input) {
     renderUI({
-        lapply(seq_len(rValues$plotCount), function(cur_plot) {
+        lapply(seq_len(input$plotCount), function(cur_plot) {
             cur_val <- (cur_plot * 2) - 1
             wellPanel(
                 h3(paste("Plot", cur_plot), style = "color: black"),
@@ -189,12 +150,12 @@
     })
 }
 
-.addPlots_main <- function(rValues, markValues, input) {
+.addPlots_main <- function(markValues, input) {
     
     renderUI({
-        cur_row <- ceiling(rValues$plotCount / 3)
+        cur_row <- ceiling(input$plotCount / 3)
         # Generate boxes
-        box_list <- lapply(seq_len(rValues$plotCount), function(cur_plot) {
+        box_list <- lapply(seq_len(input$plotCount), function(cur_plot) {
             
             cur_val <- (cur_plot * 2) - 1
             
@@ -230,6 +191,7 @@
 # Create scatter plots
 .createScatter <- function(input, rValues, objValues, markValues, iter){
     renderPlot({
+        
         cur_val <- (iter * 2) - 1
         
         req(rValues$ranges, objValues[[paste0("object", iter)]], 
@@ -281,34 +243,34 @@
     })
 }
 
-.brushObject <- function(input, objValues, markValues, brushValues, iter){
+.brushObject <- function(input, objValues, markValues, iter){
     
     cur_val <- (iter * 2) - 1
         
     req(objValues[[paste0("object", iter)]], 
         input$assay, markValues[[paste0("Marker_", cur_val)]], 
-        brushValues[[paste0("plot_brush", iter)]])
+        input[[paste0("plot_brush", iter)]])
         
     # Build data frame 
     cur_df <- as.data.frame(t(assay(objValues[[paste0("object", iter)]], input$assay)))
     cur_df$sample <- input$sample
     
     # Brush the data.frame
-    cur_selection <- brushedPoints(cur_df, brushValues[[paste0("plot_brush", iter)]], allRows = TRUE)
+    cur_selection <- brushedPoints(cur_df, input[[paste0("plot_brush", iter)]], allRows = TRUE)
         
     # Save the Gate
     cur_gate <- list()
-    if (brushValues[[paste0("plot_brush", iter)]]$direction == "x") {
-        gate <- matrix(data = c(brushValues[[paste0("plot_brush", iter)]]$xmin, 
-                                brushValues[[paste0("plot_brush", iter)]]$xmax),
+    if (input[[paste0("plot_brush", iter)]]$direction == "x") {
+        gate <- matrix(data = c(input[[paste0("plot_brush", iter)]]$xmin, 
+                                input[[paste0("plot_brush", iter)]]$xmax),
                        nrow = 1, ncol = 2,
                        byrow = TRUE,
                        dimnames = list(c(markValues[[paste0("Marker_", cur_val)]]), c("min", "max")))
     } else {
-        gate <- matrix(data = c(brushValues[[paste0("plot_brush", iter)]]$xmin, 
-                                brushValues[[paste0("plot_brush", iter)]]$xmax, 
-                                brushValues[[paste0("plot_brush", iter)]]$ymin, 
-                                brushValues[[paste0("plot_brush", iter)]]$ymax),
+        gate <- matrix(data = c(input[[paste0("plot_brush", iter)]]$xmin, 
+                                input[[paste0("plot_brush", iter)]]$xmax, 
+                                input[[paste0("plot_brush", iter)]]$ymin, 
+                                input[[paste0("plot_brush", iter)]]$ymax),
                        nrow = 2, ncol = 2,
                        byrow = TRUE,
                        dimnames = list(c(markValues[[paste0("Marker_", cur_val)]], 
@@ -337,8 +299,8 @@
     .create_general_observer(input, si = cur_sessionInfo)
     
     # Save some variables used throught the app
-    rValues <- reactiveValues(ranges = NULL,
-                              plotCount = 1)
+    rValues <- reactiveValues(ranges = NULL)
+    
     # Reactive object list to store selected cells
     objValues <- reactiveValues(object1 = NULL)
     
@@ -346,61 +308,39 @@
     markValues <- reactiveValues(Marker_1 = NULL,
                                  Marker_2 = NULL)
     
-    # Reactive object for brush values
-    brushValues <- reactiveValues(plot_brush1 = NULL)
-    
-    .create_interactive_observer(object, img_id, input, rValues, objValues, markValues, brushValues)
+    .create_interactive_observer(object, img_id, input, rValues, objValues, markValues)
     
     # Create updateSelectizeInput objects
-    .create_updateSelectizeInput(object, img_id, rValues, input, session, markValues)
+    .create_updateSelectizeInput(object, img_id, input, session, markValues)
     
     # Dynamically generate wellPanels
-    output$AdditionalPlots_sidebar <- .addPlots_sidebar(rValues)
+    output$AdditionalPlots_sidebar <- .addPlots_sidebar(input)
     
     # Dynamically generate scatter plots
-    output$AdditionalPlots_main <- .addPlots_main(rValues, markValues, input)
+    output$AdditionalPlots_main <- .addPlots_main(markValues, input)
     
     observe({
-        output[[paste0("scatter", rValues$plotCount)]] <- .createScatter(input, rValues, objValues, markValues, 
-                                                                         iter = rValues$plotCount)
-        .brushObject(input, objValues, markValues, brushValues, iter = rValues$plotCount)
-    })
-    
-    observeEvent(input$remove_plot, {
-        output[[paste0("scatter", rValues$plotCount + 1)]] <- NULL
+        
+        lapply(seq_len(input$plotCount), function(cur_i){
+            output[[paste0("scatter", cur_i)]] <- .createScatter(input, rValues, objValues, markValues, 
+                                                             iter = cur_i)
+            .brushObject(input, objValues, markValues, iter = cur_i)
+        })
+
     })
     
     output$image_expression <- renderPlot({
         
-        cur_val <- (rValues$plotCount * 2) - 1
-        
         req(markValues$Marker_1)
         
-        if (rValues$plotCount > 1) {
-            if (!is.null(objValues[[paste0("object", rValues$plotCount)]]) &&
-                !is.null(markValues[[paste0("Marker_", cur_val)]]) &&
-                markValues[[paste0("Marker_", cur_val)]] != "") {
-                if (markValues[[paste0("Marker_", cur_val + 1)]] == "") {
-                    cur_markers <- markValues[[paste0("Marker_", cur_val)]]
-                } else {
-                    cur_markers <- c(markValues[[paste0("Marker_", cur_val)]], 
-                                     markValues[[paste0("Marker_", cur_val + 1)]])
-                }
-            } else {
-                if (markValues[[paste0("Marker_", cur_val - 1)]] == "") {
-                    cur_markers <- markValues[[paste0("Marker_", cur_val - 2)]]
-                } else {
-                    cur_markers <- c(markValues[[paste0("Marker_", cur_val - 2)]], 
-                                     markValues[[paste0("Marker_", cur_val - 1)]])
-                } 
-            }
+        cur_markers <- reactiveValuesToList(markValues)
+        cur_markers <- cur_markers[unlist(lapply(cur_markers, function(x){x != ""}))]
+        
+        if (length(cur_markers) %% 2 == 0) {
+            cur_markers <- c(cur_markers[[paste0("Marker_", length(cur_markers) - 1)]],
+                             cur_markers[[paste0("Marker_", length(cur_markers))]])
         } else {
-            if (markValues[[paste0("Marker_", cur_val + 1)]] == "") {
-                cur_markers <- markValues[[paste0("Marker_", cur_val)]]
-            } else {
-                cur_markers <- c(markValues[[paste0("Marker_", cur_val)]], 
-                                 markValues[[paste0("Marker_", cur_val + 1)]])
-            }
+            cur_markers <- cur_markers[[paste0("Marker_", length(cur_markers))]]
         }
         
         if (is.null(image)) {
@@ -423,35 +363,18 @@
     
     output$image_selection <- renderPlot({
         
-        cur_val <- (rValues$plotCount * 2) - 1
+        cur_val <- (input$plotCount * 2) - 1
         
         req(markValues$Marker_1, objValues$object2)
         
-        if (rValues$plotCount > 1) {
-            if (!is.null(objValues[[paste0("object", rValues$plotCount)]]) &&
-                !is.null(markValues[[paste0("Marker_", cur_val)]]) &&
-                markValues[[paste0("Marker_", cur_val)]] != "") {
-                if (markValues[[paste0("Marker_", cur_val + 1)]] == "") {
-                    cur_markers <- markValues[[paste0("Marker_", cur_val)]]
-                } else {
-                    cur_markers <- c(markValues[[paste0("Marker_", cur_val)]], 
-                                     markValues[[paste0("Marker_", cur_val + 1)]])
-                }
-            } else {
-                if (markValues[[paste0("Marker_", cur_val - 1)]] == "") {
-                    cur_markers <- markValues[[paste0("Marker_", cur_val - 2)]]
-                } else {
-                    cur_markers <- c(markValues[[paste0("Marker_", cur_val - 2)]], 
-                                     markValues[[paste0("Marker_", cur_val - 1)]])
-                } 
-            }
+        cur_markers <- reactiveValuesToList(markValues)
+        cur_markers <- cur_markers[unlist(lapply(cur_markers, function(x){x != ""}))]
+        
+        if (length(cur_markers) %% 2 == 0) {
+            cur_markers <- c(cur_markers[[paste0("Marker_", length(cur_markers) - 1)]],
+                             cur_markers[[paste0("Marker_", length(cur_markers))]])
         } else {
-            if (markValues[[paste0("Marker_", cur_val + 1)]] == "") {
-                cur_markers <- markValues[[paste0("Marker_", cur_val)]]
-            } else {
-                cur_markers <- c(markValues[[paste0("Marker_", cur_val)]], 
-                                 markValues[[paste0("Marker_", cur_val + 1)]])
-            }
+            cur_markers <- cur_markers[[paste0("Marker_", length(cur_markers))]]
         }
         
         cur_object <- reactiveValuesToList(objValues)

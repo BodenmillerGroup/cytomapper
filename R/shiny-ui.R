@@ -63,6 +63,8 @@
         
         sidebarMenu(
             menuItem("General controls",
+                     sliderInput("plotCount", label = "Select number of plots",
+                                    min = 1, max = 12, value = 1),
                      selectizeInput("sample", label = "Select sample",
                                     choices = NULL,
                                     options = list(placeholder = 'Select a condition', maxItems = 1)),
@@ -74,10 +76,6 @@
                      startExpanded = TRUE),
             menuItem("Plots",
                 uiOutput("AdditionalPlots_sidebar"),
-                actionButton(inputId = "add_plot", label = "Add plot", icon = icon("fas fa-plus"), 
-                             style = "background-color: #059948; color: white; border-color: #059948"),
-                actionButton(inputId = "remove_plot", label = "Remove plot", icon = icon("fas fa-minus"), 
-                             style = "background-color: #D61632; color: white; border-color: #D61632"),
                 icon = icon("far fa-chart-bar"), startExpanded = TRUE),
             id = "sidebar"
             )
