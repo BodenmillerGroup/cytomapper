@@ -197,6 +197,10 @@
         req(rValues$ranges, objValues[[paste0("object", iter)]], 
             input$assay, markValues[[paste0("Marker_", cur_val)]])
         
+        if (iter > 1 && is.null(input[[paste0("plot_brush", iter - 1)]])) {
+            return(NULL)
+        }
+        
         # Build data frame for visualization
         cur_df <- as.data.frame(t(assay(objValues[[paste0("object", iter)]], 
                                          input$assay)))
