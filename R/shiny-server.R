@@ -12,9 +12,15 @@
 
 # Function to report gate bounds
 .brushRange <- function(brush) {
-    if(is.null(brush)) return("NULL\n")
-    paste0("xmin = ", round(brush$xmin, 1), " xmax = ", round(brush$xmax, 1),
-           " ymin = ", round(brush$ymin, 1), " ymax = ", round(brush$ymax, 1))
+    if (is.null(brush)) {
+        return(NULL) 
+    }
+    if (brush$direction == "xy") {
+        paste0("xmin = ", round(brush$xmin, 1), " xmax = ", round(brush$xmax, 1),
+               " ymin = ", round(brush$ymin, 1), " ymax = ", round(brush$ymax, 1))
+    } else {
+        paste0("xmin = ", round(brush$xmin, 1), " xmax = ", round(brush$xmax, 1))
+    }
 }
 
 # Function to perform min max scaling
@@ -329,11 +335,20 @@
     
     observe({
         
-        lapply(seq_len(input$plotCount), function(cur_i){
-            output[[paste0("scatter", cur_i)]] <- .createScatter(input, rValues, objValues, markValues, 
-                                                             iter = cur_i)
-            .brushObject(input, objValues, markValues, iter = cur_i)
-        })
+        for (i in seq_len(input$plotCount)) {
+            local({
+                cur_i <- i
+                
+                output[[paste0("scatter", cur_i)]] <- .createScatter(input, rValues, objValues, markValues, 
+                                                                     iter = cur_i)
+                
+                .brushObject(input, objValues, markValues, iter = cur_i) 
+                
+                output[[paste0("info", cur_i)]] <- renderText({
+                    paste0("Selection: ", .brushRange(input[[paste0("plot_brush", cur_i)]]))
+                })
+            })
+        }
 
     })
     
