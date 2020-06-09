@@ -73,12 +73,6 @@
         rownames(cur_ranges) <- rownames(object)
         rValues$ranges <- cur_ranges
     }, ignoreInit = TRUE)
-    
-    # Observe slider change
-    observeEvent(input$plotCount, {
-        
-        objValues <- reactiveValues(object1 = objValues$object1)
-    })
 
 }
 
@@ -180,8 +174,56 @@
     })
 }
 
+.brushObject <- function(input, session, objValues, iter){
+    
+    cur_val <- (iter * 2) - 1
+    
+    #req(objValues[[paste0("object", iter)]], 
+    #    input$assay, input[[paste0("Marker_", cur_val)]])
+    
+    # Build data frame 
+    cur_df <- as.data.frame(t(assay(objValues[[paste0("object", iter)]], input$assay)))
+    cur_df$sample <- input$sample
+    
+    # Brush the data.frame
+    cur_selection <- brushedPoints(cur_df, input[[paste0("plot_brush", iter)]], allRows = TRUE)
+    
+    # Save the Gate
+    cur_gate <- list()
+    if (input[[paste0("plot_brush", iter)]]$direction == "x") {
+        gate <- matrix(data = c(input[[paste0("plot_brush", iter)]]$xmin, 
+                                input[[paste0("plot_brush", iter)]]$xmax),
+                       nrow = 1, ncol = 2,
+                       byrow = TRUE,
+                       dimnames = list(c(input[[paste0("Marker_", cur_val)]]), c("min", "max")))
+    } else {
+        gate <- matrix(data = c(input[[paste0("plot_brush", iter)]]$xmin, 
+                                input[[paste0("plot_brush", iter)]]$xmax, 
+                                input[[paste0("plot_brush", iter)]]$ymin, 
+                                input[[paste0("plot_brush", iter)]]$ymax),
+                       nrow = 2, ncol = 2,
+                       byrow = TRUE,
+                       dimnames = list(c(input[[paste0("Marker_", cur_val)]], 
+                                         input[[paste0("Marker_", cur_val + 1)]]), c("min", "max")))
+    }
+    cur_gate$gate <- gate
+    cur_gate$exprs_values <- input$assay
+    cur_gate$img_id <- input$sample
+    
+    # Save gates
+    next_obj <- objValues[[paste0("object", iter)]]
+    metadata(next_obj)[[paste0("cytomapper_gate_", iter)]] <- cur_gate
+    
+    if (sum(cur_selection$selected_) > 0) {
+        objValues[[paste0("object", iter + 1)]] <- next_obj[,cur_selection$selected_]
+    } else {
+        objValues[[paste0("object", iter + 1)]] <- NULL
+    }
+    
+}
+
 # Create scatter plots
-.createScatter <- function(input, rValues, objValues, iter){
+.createScatter <- function(input, session, rValues, objValues, iter){
     renderPlot({
         
         cur_val <- (iter * 2) - 1
@@ -191,6 +233,20 @@
         
         if (iter > 1 && is.null(input[[paste0("plot_brush", iter - 1)]])) {
             return(NULL)
+        }
+        
+        if (is.null(input[[paste0("plot_brush", iter)]])) {
+            
+            # Remove all objects higher than iter
+            lapply(seq_len(length(reactiveValuesToList(objValues))), function(cur_obj){
+                if (cur_obj > iter) {
+                    objValues[[paste0("object", cur_obj)]] <- NULL
+                    session$resetBrush(paste0("plot_brush", cur_obj))
+                }
+            })
+            
+        } else {
+            .brushObject(input, session, objValues, iter = iter) 
         }
         
         # Build data frame for visualization
@@ -239,59 +295,6 @@
     })
 }
 
-.brushObject <- function(input, objValues, iter){
-    
-    cur_val <- (iter * 2) - 1
-        
-    req(objValues[[paste0("object", iter)]], 
-        input$assay, input[[paste0("Marker_", cur_val)]])
-    
-    if (is.null(input[[paste0("plot_brush", iter)]])) {
-        objValues[[paste0("object", iter + 1)]] <- NULL
-        req(input[[paste0("plot_brush", iter)]])
-    }
-        
-    # Build data frame 
-    cur_df <- as.data.frame(t(assay(objValues[[paste0("object", iter)]], input$assay)))
-    cur_df$sample <- input$sample
-    
-    # Brush the data.frame
-    cur_selection <- brushedPoints(cur_df, input[[paste0("plot_brush", iter)]], allRows = TRUE)
-        
-    # Save the Gate
-    cur_gate <- list()
-    if (input[[paste0("plot_brush", iter)]]$direction == "x") {
-        gate <- matrix(data = c(input[[paste0("plot_brush", iter)]]$xmin, 
-                                input[[paste0("plot_brush", iter)]]$xmax),
-                       nrow = 1, ncol = 2,
-                       byrow = TRUE,
-                       dimnames = list(c(input[[paste0("Marker_", cur_val)]]), c("min", "max")))
-    } else {
-        gate <- matrix(data = c(input[[paste0("plot_brush", iter)]]$xmin, 
-                                input[[paste0("plot_brush", iter)]]$xmax, 
-                                input[[paste0("plot_brush", iter)]]$ymin, 
-                                input[[paste0("plot_brush", iter)]]$ymax),
-                       nrow = 2, ncol = 2,
-                       byrow = TRUE,
-                       dimnames = list(c(input[[paste0("Marker_", cur_val)]], 
-                                         input[[paste0("Marker_", cur_val + 1)]]), c("min", "max")))
-    }
-    cur_gate$gate <- gate
-    cur_gate$exprs_values <- input$assay
-    cur_gate$img_id <- input$sample
-    
-    # Save gates
-    next_obj <- objValues[[paste0("object", iter)]]
-    metadata(next_obj)[[paste0("cytomapper_gate_", iter)]] <- cur_gate
-    
-    if (sum(cur_selection$selected_) > 0) {
-        objValues[[paste0("object", iter + 1)]] <- next_obj[,cur_selection$selected_]
-    } else {
-        objValues[[paste0("object", iter + 1)]] <- NULL
-    }
-    
-}
-
 # Create the server
 #' @importFrom DelayedArray rowRanges
 #' @importFrom SummarizedExperiment assay
@@ -322,10 +325,8 @@
     observe({
         
         lapply(seq_len(input$plotCount), function(cur_plot){
-            output[[paste0("scatter", cur_plot)]] <- .createScatter(input, rValues, objValues, 
+            output[[paste0("scatter", cur_plot)]] <- .createScatter(input, session, rValues, objValues, 
                                                                  iter = cur_plot)
-            
-            .brushObject(input, objValues, iter = cur_plot) 
             
             output[[paste0("info", cur_plot)]] <- renderText({
                 paste0("Selection: ", .brushRange(input[[paste0("plot_brush", cur_plot)]]))
