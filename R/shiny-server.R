@@ -23,9 +23,6 @@
     }
 }
 
-# Function to perform min max scaling
-.scaling <- function(x){(x - min(x))/(max(x) - min(x))}
-
 # Generate help text
 .general_help <- function(){
     pre(
@@ -64,7 +61,7 @@
 
 # Create interactive observers
 .create_interactive_observer <- function(object, img_id, input, rValues, 
-                                         objValues, markValues){
+                                         objValues){
     
     # Select first object
     observeEvent(input$sample, {
@@ -77,27 +74,16 @@
         rValues$ranges <- cur_ranges
     }, ignoreInit = TRUE)
     
-    # Observe marker change
-    observe({
-        for (i in grep("Marker_", names(input), value = TRUE)) {
-            markValues[[i]] <- input[[i]]
-        }
-    })
-    
     # Observe slider change
     observeEvent(input$plotCount, {
         
         objValues <- reactiveValues(object1 = objValues$object1)
-        
-        # Reactive object for marker names
-        markValues <- reactiveValues(Marker_1 = NULL,
-                                     Marker_2 = NULL)
     })
 
 }
 
 # Create updateSelectizeInput objects
-.create_updateSelectizeInput <- function(object, img_id, input, session, markValues){
+.create_updateSelectizeInput <- function(object, img_id, input, session){
     # Store image IDs and marker names
     img_IDs <- colData(object)[,img_id]
     markers <- rownames(object)
@@ -156,7 +142,7 @@
     })
 }
 
-.addPlots_main <- function(markValues, input) {
+.addPlots_main <- function(input) {
     
     renderUI({
         cur_row <- ceiling(input$plotCount / 3)
@@ -166,8 +152,8 @@
             cur_val <- (cur_plot * 2) - 1
             
             # Create brush options
-            if (!is.null( markValues[[paste0("Marker_", cur_val + 1)]]) &&
-                markValues[[paste0("Marker_", cur_val + 1)]] == "") {
+            if (!is.null(input[[paste0("Marker_", cur_val + 1)]]) &&
+                input[[paste0("Marker_", cur_val + 1)]] == "") {
                 cur_brush_opts <- brushOpts(paste0("plot_brush", cur_plot),
                                             fill = .create_colours(cur_plot),
                                             stroke = .create_colours(cur_plot),
@@ -195,13 +181,13 @@
 }
 
 # Create scatter plots
-.createScatter <- function(input, rValues, objValues, markValues, iter){
+.createScatter <- function(input, rValues, objValues, iter){
     renderPlot({
         
         cur_val <- (iter * 2) - 1
         
         req(rValues$ranges, objValues[[paste0("object", iter)]], 
-            input$assay, markValues[[paste0("Marker_", cur_val)]])
+            input$assay, input[[paste0("Marker_", cur_val)]])
         
         if (iter > 1 && is.null(input[[paste0("plot_brush", iter - 1)]])) {
             return(NULL)
@@ -212,19 +198,19 @@
                                          input$assay)))
         cur_df$sample <- input$sample
         
-        if(markValues[[paste0("Marker_", cur_val + 1)]] != ""){
+        if(input[[paste0("Marker_", cur_val + 1)]] != ""){
 
             # Scatter plot    
             p <- ggplot(cur_df) +
-                geom_point(aes_(as.name(markValues[[paste0("Marker_", cur_val)]]), 
-                                as.name(markValues[[paste0("Marker_", cur_val + 1)]])), 
+                geom_point(aes_(as.name(input[[paste0("Marker_", cur_val)]]), 
+                                as.name(input[[paste0("Marker_", cur_val + 1)]])), 
                            show.legend = FALSE) +
                 ylab(input[[paste0("Marker_", cur_val + 1)]]) +
                 theme_minimal() + 
-                ylim(c(rValues$ranges[markValues[[paste0("Marker_", cur_val + 1)]], 1], 
-                       rValues$ranges[markValues[[paste0("Marker_", cur_val + 1)]], 2])) +
-                xlim(c(rValues$ranges[markValues[[paste0("Marker_", cur_val)]], 1], 
-                       rValues$ranges[markValues[[paste0("Marker_", cur_val)]], 2]))
+                ylim(c(rValues$ranges[input[[paste0("Marker_", cur_val + 1)]], 1], 
+                       rValues$ranges[input[[paste0("Marker_", cur_val + 1)]], 2])) +
+                xlim(c(rValues$ranges[input[[paste0("Marker_", cur_val)]], 1], 
+                       rValues$ranges[input[[paste0("Marker_", cur_val)]], 2]))
             
             if (!is.null(objValues[[paste0("object", iter + 1)]])) {
                 
@@ -232,8 +218,8 @@
                                                   input$assay)))
                 cur_df_1$sample <- input$sample
                 
-                p <- p + geom_point(aes_(as.name(markValues[[paste0("Marker_", cur_val)]]), 
-                                         as.name(markValues[[paste0("Marker_", cur_val + 1)]])), 
+                p <- p + geom_point(aes_(as.name(input[[paste0("Marker_", cur_val)]]), 
+                                         as.name(input[[paste0("Marker_", cur_val + 1)]])), 
                                     show.legend = FALSE, data = cur_df_1, colour = "red")
             }
             
@@ -243,23 +229,27 @@
             
             # Distributions of marker proteins
             ggplot(cur_df) +
-                geom_density(aes_(x = as.name(markValues[[paste0("Marker_", cur_val)]])), 
+                geom_density(aes_(x = as.name(input[[paste0("Marker_", cur_val)]])), 
                              show.legend = FALSE) +
                 theme(axis.text.y = element_blank(),
                       panel.background = element_blank()) +
-                xlim(c(rValues$ranges[markValues[[paste0("Marker_", cur_val)]], 1], 
-                       rValues$ranges[markValues[[paste0("Marker_", cur_val)]], 2]))
+                xlim(c(rValues$ranges[input[[paste0("Marker_", cur_val)]], 1], 
+                       rValues$ranges[input[[paste0("Marker_", cur_val)]], 2]))
         }
     })
 }
 
-.brushObject <- function(input, objValues, markValues, iter){
+.brushObject <- function(input, objValues, iter){
     
     cur_val <- (iter * 2) - 1
         
     req(objValues[[paste0("object", iter)]], 
-        input$assay, markValues[[paste0("Marker_", cur_val)]], 
-        input[[paste0("plot_brush", iter)]])
+        input$assay, input[[paste0("Marker_", cur_val)]])
+    
+    if (is.null(input[[paste0("plot_brush", iter)]])) {
+        objValues[[paste0("object", iter + 1)]] <- NULL
+        req(input[[paste0("plot_brush", iter)]])
+    }
         
     # Build data frame 
     cur_df <- as.data.frame(t(assay(objValues[[paste0("object", iter)]], input$assay)))
@@ -275,7 +265,7 @@
                                 input[[paste0("plot_brush", iter)]]$xmax),
                        nrow = 1, ncol = 2,
                        byrow = TRUE,
-                       dimnames = list(c(markValues[[paste0("Marker_", cur_val)]]), c("min", "max")))
+                       dimnames = list(c(input[[paste0("Marker_", cur_val)]]), c("min", "max")))
     } else {
         gate <- matrix(data = c(input[[paste0("plot_brush", iter)]]$xmin, 
                                 input[[paste0("plot_brush", iter)]]$xmax, 
@@ -283,8 +273,8 @@
                                 input[[paste0("plot_brush", iter)]]$ymax),
                        nrow = 2, ncol = 2,
                        byrow = TRUE,
-                       dimnames = list(c(markValues[[paste0("Marker_", cur_val)]], 
-                                         markValues[[paste0("Marker_", cur_val + 1)]]), c("min", "max")))
+                       dimnames = list(c(input[[paste0("Marker_", cur_val)]], 
+                                         input[[paste0("Marker_", cur_val + 1)]]), c("min", "max")))
     }
     cur_gate$gate <- gate
     cur_gate$exprs_values <- input$assay
@@ -318,45 +308,55 @@
     # Reactive object list to store selected cells
     objValues <- reactiveValues(object1 = NULL)
     
-    # Reactive object for marker names
-    markValues <- reactiveValues(Marker_1 = NULL,
-                                 Marker_2 = NULL)
-    
-    .create_interactive_observer(object, img_id, input, rValues, objValues, markValues)
+    .create_interactive_observer(object, img_id, input, rValues, objValues)
     
     # Create updateSelectizeInput objects
-    .create_updateSelectizeInput(object, img_id, input, session, markValues)
+    .create_updateSelectizeInput(object, img_id, input, session)
     
     # Dynamically generate wellPanels
     output$AdditionalPlots_sidebar <- .addPlots_sidebar(input)
     
     # Dynamically generate scatter plots
-    output$AdditionalPlots_main <- .addPlots_main(markValues, input)
+    output$AdditionalPlots_main <- .addPlots_main(input)
     
     observe({
         
-        for (i in seq_len(input$plotCount)) {
-            local({
-                cur_i <- i
-                
-                output[[paste0("scatter", cur_i)]] <- .createScatter(input, rValues, objValues, markValues, 
-                                                                     iter = cur_i)
-                
-                .brushObject(input, objValues, markValues, iter = cur_i) 
-                
-                output[[paste0("info", cur_i)]] <- renderText({
-                    paste0("Selection: ", .brushRange(input[[paste0("plot_brush", cur_i)]]))
-                })
+        lapply(seq_len(input$plotCount), function(cur_plot){
+            output[[paste0("scatter", cur_plot)]] <- .createScatter(input, rValues, objValues, 
+                                                                 iter = cur_plot)
+            
+            .brushObject(input, objValues, iter = cur_plot) 
+            
+            output[[paste0("info", cur_plot)]] <- renderText({
+                paste0("Selection: ", .brushRange(input[[paste0("plot_brush", cur_plot)]]))
             })
-        }
+        })
+        
+        #for (i in seq_len(input$plotCount)) {
+        #    local({
+        #        cur_i <- i
+        #        
+        #        browser()
+        #        
+        #        output[[paste0("scatter", cur_i)]] <- .createScatter(input, rValues, objValues, 
+        #                                                             iter = cur_i)
+        #        
+        #        .brushObject(input, objValues, iter = cur_i) 
+        #        
+        #        output[[paste0("info", cur_i)]] <- renderText({
+        #            paste0("Selection: ", .brushRange(input[[paste0("plot_brush", cur_i)]]))
+        #        })
+        #   })
+       #}
 
     })
     
     output$image_expression <- renderPlot({
         
-        req(markValues$Marker_1)
+        req(input$Marker_1)
         
-        cur_markers <- reactiveValuesToList(markValues)
+        cur_markers <- reactiveValuesToList(input)
+        cur_markers <- cur_markers[grepl("Marker_", names(cur_markers))]
         cur_markers <- cur_markers[unlist(lapply(cur_markers, function(x){x != ""}))]
         
         if (length(cur_markers) %% 2 == 0) {
@@ -388,9 +388,10 @@
         
         cur_val <- (input$plotCount * 2) - 1
         
-        req(markValues$Marker_1, objValues$object2)
+        req(input$Marker_1, objValues$object2)
         
-        cur_markers <- reactiveValuesToList(markValues)
+        cur_markers <- reactiveValuesToList(input)
+        cur_markers <- cur_markers[grepl("Marker_", names(cur_markers))]
         cur_markers <- cur_markers[unlist(lapply(cur_markers, function(x){x != ""}))]
         
         if (length(cur_markers) %% 2 == 0) {
