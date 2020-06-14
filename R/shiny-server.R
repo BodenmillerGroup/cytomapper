@@ -60,8 +60,7 @@
 }
 
 # Create interactive observers
-.create_interactive_observer <- function(object, img_id, input, rValues, 
-                                         objValues){
+.create_interactive_observer <- function(object, img_id, input, rValues, objValues){
     
     # Select first object
     observeEvent(input$sample, {
@@ -93,6 +92,14 @@
                          choices = reducedDimNames(object),
                          server = TRUE,
                          selected = reducedDimNames(object)[1])
+    updateSelectizeInput(session, "exprs_marker_1",
+                         choices = markers,
+                         server = TRUE,
+                         selected = "")
+    updateSelectizeInput(session, "exprs_marker_2",
+                        choices = markers,
+                        server = TRUE,
+                        selected = "")
     observeEvent(input$plotCount, {
         
         for (i in seq_len(input$plotCount)) {
@@ -151,12 +158,14 @@
                 cur_brush_opts <- brushOpts(paste0("plot_brush", cur_plot),
                                             fill = .create_colours(cur_plot),
                                             stroke = .create_colours(cur_plot),
-                                            direction = "x")
+                                            direction = "x",
+                                            resetOnNew = FALSE)
             } else {
                 cur_brush_opts <- brushOpts(paste0("plot_brush", cur_plot),
                                             fill = .create_colours(cur_plot),
                                             stroke = .create_colours(cur_plot),
-                                            direction = "xy")
+                                            direction = "xy",
+                                            resetOnNew = FALSE)
             }
             
             box(plotOutput(paste0("scatter", cur_plot), 
@@ -292,6 +301,31 @@
     })
 }
 
+# Helper function to select markers
+.select_markers <- function(input){
+    if (input$exprs_marker_1 != "") {
+        if (input$exprs_marker_2 != "") {
+            cur_markers <- c(input$exprs_marker_1, input$exprs_marker_2)
+        } else {
+            cur_markers <- input$exprs_marker_1
+        }
+    } else {
+        cur_markers <- reactiveValuesToList(input)
+        cur_markers <- cur_markers[grepl("Marker_", names(cur_markers))]
+        cur_markers <- cur_markers[unlist(lapply(cur_markers, function(x){x != ""}))]
+        
+        if (length(cur_markers) %% 2 == 0) {
+            cur_markers <- c(cur_markers[[paste0("Marker_", length(cur_markers) - 1)]],
+                             cur_markers[[paste0("Marker_", length(cur_markers))]])
+        } else {
+            cur_markers <- cur_markers[[paste0("Marker_", length(cur_markers))]]
+        }
+    }
+    
+    return(cur_markers)
+}
+
+
 # Create the server
 #' @importFrom DelayedArray rowRanges
 #' @importFrom SummarizedExperiment assay
@@ -321,8 +355,6 @@
     
     observe({
         
-        browser()
-        
         lapply(seq_len(input$plotCount), function(cur_plot){
             output[[paste0("scatter", cur_plot)]] <- .createScatter(input, session, rValues, objValues, 
                                                                  iter = cur_plot)
@@ -338,16 +370,7 @@
         
         req(input$Marker_1)
         
-        cur_markers <- reactiveValuesToList(input)
-        cur_markers <- cur_markers[grepl("Marker_", names(cur_markers))]
-        cur_markers <- cur_markers[unlist(lapply(cur_markers, function(x){x != ""}))]
-        
-        if (length(cur_markers) %% 2 == 0) {
-            cur_markers <- c(cur_markers[[paste0("Marker_", length(cur_markers) - 1)]],
-                             cur_markers[[paste0("Marker_", length(cur_markers))]])
-        } else {
-            cur_markers <- cur_markers[[paste0("Marker_", length(cur_markers))]]
-        }
+        cur_markers <- .select_markers(input)
         
         if (is.null(image)) {
             cur_mask <- mask[mcols(mask)[,img_id] == input$sample]
@@ -373,16 +396,7 @@
         
         req(input$Marker_1, objValues$object2)
         
-        cur_markers <- reactiveValuesToList(input)
-        cur_markers <- cur_markers[grepl("Marker_", names(cur_markers))]
-        cur_markers <- cur_markers[unlist(lapply(cur_markers, function(x){x != ""}))]
-        
-        if (length(cur_markers) %% 2 == 0) {
-            cur_markers <- c(cur_markers[[paste0("Marker_", length(cur_markers) - 1)]],
-                             cur_markers[[paste0("Marker_", length(cur_markers))]])
-        } else {
-            cur_markers <- cur_markers[[paste0("Marker_", length(cur_markers))]]
-        }
+        cur_markers <- .select_markers(input)
         
         cur_object <- reactiveValuesToList(objValues)
         cur_object <- cur_object[!unlist(lapply(cur_object, is.null))]
