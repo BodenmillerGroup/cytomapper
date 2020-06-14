@@ -178,9 +178,6 @@
     
     cur_val <- (iter * 2) - 1
     
-    #req(objValues[[paste0("object", iter)]], 
-    #    input$assay, input[[paste0("Marker_", cur_val)]])
-    
     # Build data frame 
     cur_df <- as.data.frame(t(assay(objValues[[paste0("object", iter)]], input$assay)))
     cur_df$sample <- input$sample
@@ -227,7 +224,7 @@
     renderPlot({
         
         cur_val <- (iter * 2) - 1
-        
+
         req(rValues$ranges, objValues[[paste0("object", iter)]], 
             input$assay, input[[paste0("Marker_", cur_val)]])
         
@@ -324,6 +321,8 @@
     
     observe({
         
+        browser()
+        
         lapply(seq_len(input$plotCount), function(cur_plot){
             output[[paste0("scatter", cur_plot)]] <- .createScatter(input, session, rValues, objValues, 
                                                                  iter = cur_plot)
@@ -332,23 +331,6 @@
                 paste0("Selection: ", .brushRange(input[[paste0("plot_brush", cur_plot)]]))
             })
         })
-        
-        #for (i in seq_len(input$plotCount)) {
-        #    local({
-        #        cur_i <- i
-        #        
-        #        browser()
-        #        
-        #        output[[paste0("scatter", cur_i)]] <- .createScatter(input, rValues, objValues, 
-        #                                                             iter = cur_i)
-        #        
-        #        .brushObject(input, objValues, iter = cur_i) 
-        #        
-        #        output[[paste0("info", cur_i)]] <- renderText({
-        #            paste0("Selection: ", .brushRange(input[[paste0("plot_brush", cur_i)]]))
-        #        })
-        #   })
-       #}
 
     })
     
@@ -369,7 +351,7 @@
         
         if (is.null(image)) {
             cur_mask <- mask[mcols(mask)[,img_id] == input$sample]
-            plotCells(object = objValues$object1,
+            plotCells(object = object,
                       mask = cur_mask,
                       cell_id = cell_id,
                       img_id = img_id,
