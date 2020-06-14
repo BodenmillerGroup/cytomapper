@@ -102,12 +102,12 @@
                                     choices = NULL,
                                     options = list(placeholder = '', 
                                                    maxItems = 1))),
-                     plotOutput("image_expression"), 
+                     plotOutput("image_expression", height = "300px"), 
                      title = "Expression", status = "primary",
-                     width = 6),
+                     width = 6, height = "500px"),
                  box(plotOutput("image_selection"), 
                      title = "Selection", status = "primary",
-                     width = 6))
+                     width = 6, height = "500px"))
         )
     return(cm_body)
     }

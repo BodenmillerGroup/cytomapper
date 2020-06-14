@@ -310,6 +310,9 @@
             cur_markers <- input$exprs_marker_1
         }
     } else {
+        
+        req(input$Marker_1)
+        
         cur_markers <- reactiveValuesToList(input)
         cur_markers <- cur_markers[grepl("Marker_", names(cur_markers))]
         cur_markers <- cur_markers[unlist(lapply(cur_markers, function(x){x != ""}))]
@@ -368,8 +371,6 @@
     
     output$image_expression <- renderPlot({
         
-        req(input$Marker_1)
-        
         cur_markers <- .select_markers(input)
         
         if (is.null(image)) {
@@ -394,7 +395,7 @@
         
         cur_val <- (input$plotCount * 2) - 1
         
-        req(input$Marker_1, objValues$object2)
+        req(objValues$object2)
         
         cur_markers <- .select_markers(input)
         
