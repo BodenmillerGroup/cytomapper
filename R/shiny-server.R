@@ -42,8 +42,8 @@
     observeEvent(input$SessionInfo, {
         showModal(modalDialog(
             pre(paste(capture.output(si), collapse = "\n")),
-            size="l",fade=TRUE,
-            footer=NULL, easyClose=TRUE,
+            size = "l",fade = TRUE,
+            footer = NULL, easyClose = TRUE,
             title = "Session Info",
         ))
     })
@@ -52,8 +52,8 @@
     observeEvent(input$Help, {
         showModal(modalDialog(
             .general_help(),
-            size="l",fade=TRUE,
-            footer=NULL, easyClose=TRUE,
+            size = "l",fade = TRUE,
+            footer = NULL, easyClose = TRUE,
             title = "Help",
         ))
     })
@@ -88,10 +88,6 @@
                          choices = assayNames(object),
                          server = TRUE,
                          selected = assayNames(object)[1])
-    updateSelectizeInput(session, inputId = "reducedDim",
-                         choices = reducedDimNames(object),
-                         server = TRUE,
-                         selected = reducedDimNames(object)[1])
     updateSelectizeInput(session, "exprs_marker_1",
                          choices = markers,
                          server = TRUE,

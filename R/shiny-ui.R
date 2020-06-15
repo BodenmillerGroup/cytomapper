@@ -70,8 +70,6 @@
                                     options = list(placeholder = 'Select a condition', maxItems = 1)),
                      selectizeInput("assay", label = "Select which assay to display",
                                     choices = NULL, options = list(placeholder = 'Select an assay', maxItems = 1)),
-                     selectizeInput("reducedDim", label = "Select which reduced dimension to display",
-                                    choices = NULL, options = list(placeholder = 'Select an embedding', maxItems = 1)),
                      icon = icon("fas fa-sliders-h"), 
                      startExpanded = TRUE),
             menuItem("Plots",
