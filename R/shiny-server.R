@@ -149,20 +149,11 @@
             cur_val <- (cur_plot * 2) - 1
             
             # Create brush options
-            if (!is.null(input[[paste0("Marker_", cur_val + 1)]]) &&
-                input[[paste0("Marker_", cur_val + 1)]] == "") {
-                cur_brush_opts <- brushOpts(paste0("plot_brush", cur_plot),
-                                            fill = .create_colours(cur_plot),
-                                            stroke = .create_colours(cur_plot),
-                                            direction = "x",
-                                            resetOnNew = FALSE)
-            } else {
-                cur_brush_opts <- brushOpts(paste0("plot_brush", cur_plot),
-                                            fill = .create_colours(cur_plot),
-                                            stroke = .create_colours(cur_plot),
-                                            direction = "xy",
-                                            resetOnNew = FALSE)
-            }
+            cur_brush_opts <- brushOpts(paste0("plot_brush", cur_plot),
+                                        fill = .create_colours(cur_plot),
+                                        stroke = .create_colours(cur_plot),
+                                        direction = "xy",
+                                        resetOnNew = FALSE)
             
             box(plotOutput(paste0("scatter", cur_plot), 
                            brush = cur_brush_opts),
@@ -197,7 +188,7 @@
                                 input[[paste0("plot_brush", iter)]]$xmax),
                        nrow = 1, ncol = 2,
                        byrow = TRUE,
-                       dimnames = list(c(input[[paste0("Marker_", cur_val)]]), c("min", "max")))
+                       dimnames = list(input[[paste0("plot_brush", iter)]]$mapping$x, c("min", "max")))
     } else {
         gate <- matrix(data = c(input[[paste0("plot_brush", iter)]]$xmin, 
                                 input[[paste0("plot_brush", iter)]]$xmax, 
@@ -205,8 +196,8 @@
                                 input[[paste0("plot_brush", iter)]]$ymax),
                        nrow = 2, ncol = 2,
                        byrow = TRUE,
-                       dimnames = list(c(input[[paste0("Marker_", cur_val)]], 
-                                         input[[paste0("Marker_", cur_val + 1)]]), c("min", "max")))
+                       dimnames = list(c(input[[paste0("plot_brush", iter)]]$mapping$x, 
+                                         input[[paste0("plot_brush", iter)]]$mapping$y), c("min", "max")))
     }
     cur_gate$gate <- gate
     cur_gate$exprs_values <- input$assay
@@ -225,7 +216,7 @@
 }
 
 # Create scatter plots
-.createScatter <- function(input, session, rValues, objValues, iter){
+.createScatter <- function(input, session, rValues, objValues, iter, img_id, cell_id){
     renderPlot({
         
         cur_val <- (iter * 2) - 1
@@ -285,15 +276,18 @@
             
         } else {
             
-            # Distributions of marker proteins
             ggplot(cur_df) +
-                geom_density(aes_(x = as.name(input[[paste0("Marker_", cur_val)]])), 
-                             show.legend = FALSE) +
-                theme(axis.text.y = element_blank(),
-                      panel.background = element_blank()) +
-                xlim(c(rValues$ranges[input[[paste0("Marker_", cur_val)]], 1], 
-                       rValues$ranges[input[[paste0("Marker_", cur_val)]], 2]))
+                    geom_quasirandom(aes_(x = quote(sample),
+                                          y = as.name(input[[paste0("Marker_", cur_val)]])), 
+                                     show.legend = FALSE) + 
+                    theme(axis.text.x = element_blank(),
+                          panel.background = element_blank()) +
+                    ylim(c(rValues$ranges[input[[paste0("Marker_", cur_val)]], 1], 
+                           rValues$ranges[input[[paste0("Marker_", cur_val)]], 2])) 
+            
         }
+        
+        
     })
 }
 
@@ -356,7 +350,7 @@
         
         lapply(seq_len(input$plotCount), function(cur_plot){
             output[[paste0("scatter", cur_plot)]] <- .createScatter(input, session, rValues, objValues, 
-                                                                 iter = cur_plot)
+                                                                 iter = cur_plot, img_id = img_id, cell_id = cell_id)
             
             output[[paste0("info", cur_plot)]] <- renderText({
                 paste0("Selection: ", .brushRange(input[[paste0("plot_brush", cur_plot)]]))
