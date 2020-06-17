@@ -36,7 +36,14 @@ Imports:
     graphics,
     raster,
     grDevices,
-    stats
+    stats,
+    ggplot2,
+    ggbeeswarm,
+    svgPanZoom,
+    svglite,
+    shiny,
+    shinydashboard,
+    ggridges
 Suggests:
     BiocStyle,
     knitr,
