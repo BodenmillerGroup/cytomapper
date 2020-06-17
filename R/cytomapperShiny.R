@@ -23,7 +23,6 @@
 #' @import ggbeeswarm
 #' @import svgPanZoom
 #' @import svglite
-#' @import leaflet
 #' @import shiny
 #' @import shinydashboard
 #' @importFrom ggridges geom_density_ridges2
