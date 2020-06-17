@@ -275,7 +275,7 @@
             p
             
         } else {
-            
+
             ggplot(cur_df) +
                     geom_quasirandom(aes_(x = quote(sample),
                                           y = as.name(input[[paste0("Marker_", cur_val)]])), 
@@ -286,8 +286,6 @@
                            rValues$ranges[input[[paste0("Marker_", cur_val)]], 2])) 
             
         }
-        
-        
     })
 }
 
@@ -296,11 +294,13 @@
     if (input$exprs_marker_1 != "") {
         if (input$exprs_marker_2 != "") {
             cur_markers <- c(input$exprs_marker_1, input$exprs_marker_2)
-        } else {
+        } 
+        else{
             cur_markers <- input$exprs_marker_1
         }
-    } else {
-        
+    } 
+    else {
+
         req(input$Marker_1)
         
         cur_markers <- reactiveValuesToList(input)
@@ -381,7 +381,7 @@
         
     })
     
-    output$image_selection <- renderPlot({
+    output$image_selection <- renderSvgPanZoom({
         
         cur_val <- (input$plotCount * 2) - 1
         
@@ -403,25 +403,35 @@
         
         if (is.null(image)) {
             cur_mask <- mask[mcols(mask)[,img_id] == input$sample] 
-            plotCells(object = cur_object,
+            svgPanZoom(svglite:::inlineSVG(
+                plotCells(object = cur_object,
                       mask = cur_mask,
                       cell_id = cell_id,
                       img_id = img_id,
                       colour_by = "selected",
                       colour = list(selected = c("TRUE" = "dark red", "FALSE" = "gray")),
+                      legend = NULL,
                       ...)
+                )
+            )
+            
         } else {
             cur_mask <- mask[mcols(mask)[,img_id] == input$sample]
             cur_image <- image[mcols(image)[,img_id] == input$sample]
-            plotPixels(image = cur_image,
+            svgPanZoom(svglite:::inlineSVG(
+                plotPixels(image = cur_image,
                       object = cur_object,
                       mask = cur_mask,
                       cell_id = cell_id,
                       img_id = img_id,
                       colour_by = cur_markers,
                       outline_by = "selected",
-                      colour = list(selected = c("TRUE" = "gray", "FALSE" = "gray")),
+                      colour = list(selected = c("TRUE" = "white", "FALSE" = "gray")),
+                      legend = NULL,
                       ...)
+                )
+            )
+            
         }
 
     })
