@@ -80,7 +80,7 @@
     # Store image IDs and marker names
     img_IDs <- colData(object)[,img_id]
     markers <- rownames(object)
-    
+
     updateSelectizeInput(session, inputId = "sample",
                          choices = unique(img_IDs),
                          selected = unique(img_IDs)[1])
@@ -217,6 +217,7 @@
 
 # Create scatter plots
 .createScatter <- function(input, session, rValues, objValues, iter, img_id, cell_id){
+
     renderPlot({
         
         cur_val <- (iter * 2) - 1
@@ -318,6 +319,20 @@
     return(cur_markers)
 }
 
+# Helper function to define bcg parameter when using plotPixels()
+.select_contrast <- function(input){
+    cur_markers <- .select_markers(input)
+    if (length(cur_markers) == 1){
+        cur_bcg = list(c(0,input$contrast_marker_1,1))
+        names(cur_bcg) <- cur_markers[1]
+    }
+    if (length(cur_markers) > 1){
+        cur_bcg = list(c(0,input$contrast_marker_1,1), c(0,input$contrast_marker_2,1))
+        names(cur_bcg) <- cur_markers[1:2]
+    }
+    return(cur_bcg)
+}
+
 
 # Create the server
 #' @importFrom DelayedArray rowRanges
@@ -329,6 +344,19 @@
     cur_sessionInfo <- sessionInfo()
     .create_general_observer(input, si = cur_sessionInfo)
     
+    # Sample change observer - change tab if sample changes
+    observeEvent(input$sample, {
+        updateTabsetPanel(session, "tabbox1",
+                          selected = "tab1"
+        )
+    })
+    
+    # remove contrast input if no image is provided
+    if(is.null(image)){
+        removeUI(selector = "div:has(> #contrast_marker_1)")
+        removeUI(selector = "div:has(> #contrast_marker_2)")
+       }
+
     # Save some variables used throught the app
     rValues <- reactiveValues(ranges = NULL)
     
@@ -359,24 +387,28 @@
 
     })
     
-    output$image_expression <- renderPlot({
+    output$image_expression <- renderSvgPanZoom({
         
         cur_markers <- .select_markers(input)
+        cur_bcg <- .select_contrast(input)
         
         if (is.null(image)) {
             cur_mask <- mask[mcols(mask)[,img_id] == input$sample]
-            plotCells(object = object,
+            svgPanZoom(svglite:::inlineSVG(
+                plotCells(object = object,
                       mask = cur_mask,
                       cell_id = cell_id,
                       img_id = img_id,
                       colour_by = cur_markers,
                       exprs_values = input$assay,
-                      ...)
+                      ...)))
         } else {
             cur_image <- image[mcols(image)[,img_id] == input$sample]
-            plotPixels(image = cur_image,
+            svgPanZoom(svglite:::inlineSVG(
+                plotPixels(image = cur_image,
                        colour_by = cur_markers,
-                       ...)
+                       bcg = cur_bcg, 
+                       ...)))
         }
         
     })
@@ -388,7 +420,8 @@
         req(objValues$object2)
         
         cur_markers <- .select_markers(input)
-        
+        cur_bcg <- .select_contrast(input)
+
         cur_object <- reactiveValuesToList(objValues)
         cur_object <- cur_object[!unlist(lapply(cur_object, is.null))]
         cur_object <- cur_object[[paste0("object", length(cur_object))]]
@@ -427,7 +460,8 @@
                       colour_by = cur_markers,
                       outline_by = "selected",
                       colour = list(selected = c("TRUE" = "white", "FALSE" = "gray")),
-                      legend = NULL,
+                      legend = NULL, 
+                      bcg = cur_bcg,
                       ...)
                 )
             )
@@ -457,4 +491,3 @@
         }
     )
 }
-
