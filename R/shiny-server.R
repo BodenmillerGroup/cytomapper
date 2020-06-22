@@ -245,7 +245,7 @@
                                          input$assay)))
         cur_df$sample <- input$sample
         
-        if(input[[paste0("Marker_", cur_val + 1)]] != ""){
+        if (input[[paste0("Marker_", cur_val + 1)]] != "") {
 
             # Scatter plot    
             p <- ggplot(cur_df) +
@@ -270,36 +270,35 @@
                                     show.legend = FALSE, data = cur_df_1, colour = "red")
             }
             
-            p
+            return(p)
             
         } else {
             
+            p <- ggplot(cur_df) +
+                geom_quasirandom(aes_(x = quote(sample),
+                                      y = as.name(input[[paste0("Marker_", cur_val)]])), 
+                                 show.legend = FALSE) + 
+                theme(axis.text.x = element_blank(),
+                      panel.background = element_blank()) +
+                ylim(c(rValues$ranges[input[[paste0("Marker_", cur_val)]], 1], 
+                       rValues$ranges[input[[paste0("Marker_", cur_val)]], 2])) 
+            
             if (!is.null(objValues[[paste0("object", iter + 1)]])) {
                 
-                cur_df$selected <- colData(objValues[[paste0("object", iter)]])[,cell_id] %in%  
+                cur_df$selected <- colData(objValues[[paste0("object", iter)]])[,cell_id] %in%
                     colData(objValues[[paste0("object", iter + 1)]])[,cell_id]
                 
-                ggplot(cur_df) +
-                        geom_quasirandom(aes_(x = quote(sample),
-                                              y = as.name(input[[paste0("Marker_", cur_val)]]),
-                                              colour = quote(selected)), 
-                                         show.legend = FALSE) + 
-                        theme(axis.text.x = element_blank(),
-                             panel.background = element_blank()) +
-                        ylim(c(rValues$ranges[input[[paste0("Marker_", cur_val)]], 1], 
-                              rValues$ranges[input[[paste0("Marker_", cur_val)]], 2])) 
-                
-            } else {
-                
-                ggplot(cur_df) +
+                p <- p +
                     geom_quasirandom(aes_(x = quote(sample),
-                                          y = as.name(input[[paste0("Marker_", cur_val)]])), 
-                                     show.legend = FALSE) + 
-                    theme(axis.text.x = element_blank(),
-                          panel.background = element_blank()) +
-                    ylim(c(rValues$ranges[input[[paste0("Marker_", cur_val)]], 1], 
-                           rValues$ranges[input[[paste0("Marker_", cur_val)]], 2])) 
+                                          y = as.name(input[[paste0("Marker_", cur_val)]]),
+                                          colour = quote(selected)), 
+                                     show.legend = FALSE, data = cur_df) + 
+                    scale_colour_manual(values = c(`FALSE` = "black",
+                                                   `TRUE` = "red"))
+                
             }
+            
+            return(p)
             
         }
     })
