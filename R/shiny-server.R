@@ -183,22 +183,20 @@
     
     # Save the Gate
     cur_gate <- list()
-    if (input[[paste0("plot_brush", iter)]]$direction == "x") {
-        gate <- matrix(data = c(input[[paste0("plot_brush", iter)]]$xmin, 
-                                input[[paste0("plot_brush", iter)]]$xmax),
-                       nrow = 1, ncol = 2,
-                       byrow = TRUE,
-                       dimnames = list(input[[paste0("plot_brush", iter)]]$mapping$x, c("min", "max")))
-    } else {
-        gate <- matrix(data = c(input[[paste0("plot_brush", iter)]]$xmin, 
-                                input[[paste0("plot_brush", iter)]]$xmax, 
-                                input[[paste0("plot_brush", iter)]]$ymin, 
-                                input[[paste0("plot_brush", iter)]]$ymax),
-                       nrow = 2, ncol = 2,
-                       byrow = TRUE,
-                       dimnames = list(c(input[[paste0("plot_brush", iter)]]$mapping$x, 
-                                         input[[paste0("plot_brush", iter)]]$mapping$y), c("min", "max")))
+        
+    gate <- matrix(data = c(input[[paste0("plot_brush", iter)]]$xmin, 
+                            input[[paste0("plot_brush", iter)]]$xmax, 
+                            input[[paste0("plot_brush", iter)]]$ymin, 
+                            input[[paste0("plot_brush", iter)]]$ymax),
+                      nrow = 2, ncol = 2,
+                      byrow = TRUE,
+                      dimnames = list(c(input[[paste0("plot_brush", iter)]]$mapping$x, 
+                                        input[[paste0("plot_brush", iter)]]$mapping$y), c("min", "max")))
+    
+    if (rownames(gate)[1] == "sample") {
+        gate <- gate[-1,]
     }
+
     cur_gate$gate <- gate
     cur_gate$exprs_values <- input$assay
     cur_gate$img_id <- input$sample
@@ -276,7 +274,24 @@
             
         } else {
             
-            ggplot(cur_df) +
+            if (!is.null(objValues[[paste0("object", iter + 1)]])) {
+                
+                cur_df$selected <- colData(objValues[[paste0("object", iter)]])[,cell_id] %in%  
+                    colData(objValues[[paste0("object", iter + 1)]])[,cell_id]
+                
+                ggplot(cur_df) +
+                        geom_quasirandom(aes_(x = quote(sample),
+                                              y = as.name(input[[paste0("Marker_", cur_val)]]),
+                                              colour = quote(selected)), 
+                                         show.legend = FALSE) + 
+                        theme(axis.text.x = element_blank(),
+                             panel.background = element_blank()) +
+                        ylim(c(rValues$ranges[input[[paste0("Marker_", cur_val)]], 1], 
+                              rValues$ranges[input[[paste0("Marker_", cur_val)]], 2])) 
+                
+            } else {
+                
+                ggplot(cur_df) +
                     geom_quasirandom(aes_(x = quote(sample),
                                           y = as.name(input[[paste0("Marker_", cur_val)]])), 
                                      show.legend = FALSE) + 
@@ -284,6 +299,7 @@
                           panel.background = element_blank()) +
                     ylim(c(rValues$ranges[input[[paste0("Marker_", cur_val)]], 1], 
                            rValues$ranges[input[[paste0("Marker_", cur_val)]], 2])) 
+            }
             
         }
     })
