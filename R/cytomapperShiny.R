@@ -2,14 +2,15 @@
 #'
 #' TODO
 #'
-#' @param image an \code{\linkS4class{ImageList}} object containing single or
+#' @param image (optional) an \code{\linkS4class{ImageList}} object containing single or
 #'   multi-channel \code{\linkS4class{Image}} objects (see Details)
-#' @param object (optional) an \code{\linkS4class{SingleCellExperiment}} object.
-#' @param mask (optional) an \code{\linkS4class{ImageList}} object containing
+#' @param object an \code{\linkS4class{SingleCellExperiment}} object.
+#' @param mask an \code{\linkS4class{ImageList}} object containing
 #'   single-channel \code{\linkS4class{Image}} objects
-#' @param cell_id (optional) character specifying the \code{colData(object)}, in which the
+#' @param cell_id character specifying the \code{colData(object)}, in which the
 #'   integer cell IDs are stored
-#' @param img_id (optional)
+#' @param img_id character specifying the \code{colData(object)}, in which the
+#'   integer image IDs are stored
 #' @param ... Parameters passed onto \code{\link{plotCells}} or \code{\link{plotPixels}}
 #'
 #' @examples
