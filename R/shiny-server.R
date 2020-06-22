@@ -286,8 +286,6 @@
                            rValues$ranges[input[[paste0("Marker_", cur_val)]], 2])) 
             
         }
-        
-        
     })
 }
 
