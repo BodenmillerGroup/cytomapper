@@ -27,11 +27,11 @@
 .general_help <- function(){
     pre(
         h2("Using this Shiny app"),
-        p("To use this shiny..."),
-        h2("Selecting the markers"),
-        p("Select the markers..."),
+        p("Use the sidebar of the app to define how many plots and what markers you want to use to define your cell population of interest. If the provided SCE object has multiple assays available you can also "),
+        h2("Change the Assay"),
+        p(""),
         h2("Visualization on the images"),
-        p("The selected cells can be seen on the images")
+        p("The selected cells can be seen on the images in the `Image` Tab. Double-click either on the `Expression` or `Selection` image to zoom-in.")
     )
 }
 
@@ -285,7 +285,6 @@
                           panel.background = element_blank()) +
                     ylim(c(rValues$ranges[input[[paste0("Marker_", cur_val)]], 1], 
                            rValues$ranges[input[[paste0("Marker_", cur_val)]], 2])) 
-            
         }
     })
 }
@@ -301,7 +300,6 @@
         }
     } 
     else {
-
         req(input$Marker_1)
         
         cur_markers <- reactiveValuesToList(input)
@@ -315,7 +313,6 @@
             cur_markers <- cur_markers[[paste0("Marker_", length(cur_markers))]]
         }
     }
-    
     return(cur_markers)
 }
 
@@ -332,7 +329,6 @@
     }
     return(cur_bcg)
 }
-
 
 # Create the server
 #' @importFrom DelayedArray rowRanges
@@ -384,7 +380,6 @@
                 paste0("Selection: ", .brushRange(input[[paste0("plot_brush", cur_plot)]]))
             })
         })
-
     })
     
     output$image_expression <- renderSvgPanZoom({
@@ -394,7 +389,7 @@
         
         if (is.null(image)) {
             cur_mask <- mask[mcols(mask)[,img_id] == input$sample]
-            svgPanZoom(svglite:::inlineSVG(
+            svgPanZoom(zoomScaleSensitivity = 0.4, svglite:::inlineSVG(
                 plotCells(object = object,
                       mask = cur_mask,
                       cell_id = cell_id,
@@ -402,15 +397,15 @@
                       colour_by = cur_markers,
                       exprs_values = input$assay,
                       ...)))
-        } else {
+        } 
+        else {
             cur_image <- image[mcols(image)[,img_id] == input$sample]
-            svgPanZoom(svglite:::inlineSVG(
+            svgPanZoom(zoomScaleSensitivity = 0.4, svglite:::inlineSVG(
                 plotPixels(image = cur_image,
                        colour_by = cur_markers,
                        bcg = cur_bcg, 
                        ...)))
         }
-        
     })
     
     output$image_selection <- renderSvgPanZoom({
@@ -436,22 +431,23 @@
         
         if (is.null(image)) {
             cur_mask <- mask[mcols(mask)[,img_id] == input$sample] 
-            svgPanZoom(svglite:::inlineSVG(
+            svgPanZoom(zoomScaleSensitivity = 0.4, svglite:::inlineSVG(
                 plotCells(object = cur_object,
-                      mask = cur_mask,
-                      cell_id = cell_id,
-                      img_id = img_id,
-                      colour_by = "selected",
-                      colour = list(selected = c("TRUE" = "dark red", "FALSE" = "gray")),
-                      legend = NULL,
-                      ...)
+                          mask = cur_mask,
+                          cell_id = cell_id,
+                          img_id = img_id,
+                          colour_by = "selected",
+                          colour = list(selected = c("TRUE" = "dark red", "FALSE" = "gray")),
+                          legend = NULL,
+                          ...)
                 )
             )
             
-        } else {
+        } 
+        else {
             cur_mask <- mask[mcols(mask)[,img_id] == input$sample]
             cur_image <- image[mcols(image)[,img_id] == input$sample]
-            svgPanZoom(svglite:::inlineSVG(
+            svgPanZoom(zoomScaleSensitivity = 0.4, svglite:::inlineSVG(
                 plotPixels(image = cur_image,
                       object = cur_object,
                       mask = cur_mask,
@@ -465,9 +461,7 @@
                       ...)
                 )
             )
-            
         }
-
     })
 
     output$downloadData <- downloadHandler(
