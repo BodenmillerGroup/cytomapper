@@ -57,7 +57,6 @@
     }
 
 # Create the side bar layout
-#' @importFrom shinydashboard dashboardSidebar
 .cytomapper_sidebar <- function(){
     cm_side <- dashboardSidebar(
         
@@ -84,8 +83,6 @@
     }
 
 # Create the main body
-#' @importFrom shinydashboard dashboardBody
-
 .cytomapper_body <- function(){
     cm_body <- dashboardBody(
         tabBox(width = 12, id = "tabbox1",

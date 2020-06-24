@@ -20,13 +20,9 @@
 #' Nils Eling \email{nils.eling@@dqbm.uzh.ch},
 #'
 #' @export
-#' @import ggplot2
-#' @import ggbeeswarm
-#' @import svgPanZoom
-#' @import svglite
+#' 
 #' @import shiny
 #' @import shinydashboard
-#' @importFrom ggridges geom_density_ridges2
 cytomapperShiny <- function(object,
                         mask,
                         image = NULL,
