@@ -358,6 +358,7 @@
 
 # Visualize marker expression on images
 #' @importFrom svgPanZoom svgPanZoom renderSvgPanZoom
+#' @importFrom svglite stringSVG
 .createImageExpression <- function(input, object, mask, image, img_id, cell_id, ...){
     renderSvgPanZoom({
         
@@ -387,6 +388,7 @@
 
 # Visualize selected cells on images
 #' @importFrom svgPanZoom svgPanZoom renderSvgPanZoom
+#' @importFrom svglite stringSVG
 #' @importFrom S4Vectors metadata
 .createImageSelection <- function(input, objValues, mask, image, img_id, cell_id, ...){
     renderSvgPanZoom({
