@@ -37,6 +37,7 @@
 }
 
 # Create general observers for header
+#' @importFrom utils capture.output
 .create_general_observer <- function(input, si){
     
     # Return session info
@@ -61,6 +62,7 @@
 }
 
 # Create interactive observers
+#' @importFrom matrixStats rowRanges
 .create_interactive_observer <- function(object, img_id, input, rValues, objValues){
     
     # Select first object
@@ -172,6 +174,8 @@
 }
 
 # Function to allow brushing
+#' @importFrom S4Vectors metadata
+#' @importFrom SummarizedExperiment metadata<-
 .brushObject <- function(input, session, objValues, iter){
     
     cur_val <- (iter * 2) - 1
@@ -353,7 +357,7 @@
 }
 
 # Visualize marker expression on images
-#' @importFrom svgPanZoom svgPanZoom
+#' @importFrom svgPanZoom svgPanZoom renderSvgPanZoom
 .createImageExpression <- function(input, object, mask, image, img_id, cell_id, ...){
     renderSvgPanZoom({
         
@@ -362,7 +366,7 @@
         
         if (is.null(image)) {
             cur_mask <- mask[mcols(mask)[,img_id] == input$sample]
-            svgPanZoom(zoomScaleSensitivity = 0.4, svglite:::inlineSVG(
+            svgPanZoom(zoomScaleSensitivity = 0.4, stringSVG(
                 plotCells(object = object,
                           mask = cur_mask,
                           cell_id = cell_id,
@@ -370,10 +374,9 @@
                           colour_by = cur_markers,
                           exprs_values = input$assay,
                           ...)))
-        } 
-        else {
+        } else {
             cur_image <- image[mcols(image)[,img_id] == input$sample]
-            svgPanZoom(zoomScaleSensitivity = 0.4, svglite:::inlineSVG(
+            svgPanZoom(zoomScaleSensitivity = 0.4, stringSVG(
                 plotPixels(image = cur_image,
                            colour_by = cur_markers,
                            bcg = cur_bcg, 
@@ -383,6 +386,8 @@
 }
 
 # Visualize selected cells on images
+#' @importFrom svgPanZoom svgPanZoom renderSvgPanZoom
+#' @importFrom S4Vectors metadata
 .createImageSelection <- function(input, objValues, mask, image, img_id, cell_id, ...){
     renderSvgPanZoom({
         
@@ -398,16 +403,10 @@
         cur_object <- cur_object[[paste0("object", length(cur_object))]]
         
         cur_object$selected <- TRUE
-        
-        # Add session info
-        metadata(cur_object)$SessionInfo <- sessionInfo()
-        
-        # Add date
-        metadata(cur_object)$GatingDate <- Sys.Date()
-        
+    
         if (is.null(image)) {
             cur_mask <- mask[mcols(mask)[,img_id] == input$sample] 
-            svgPanZoom(zoomScaleSensitivity = 0.4, svglite:::inlineSVG(
+            svgPanZoom(zoomScaleSensitivity = 0.4, stringSVG(
                 plotCells(object = cur_object,
                           mask = cur_mask,
                           cell_id = cell_id,
@@ -423,7 +422,7 @@
         else {
             cur_mask <- mask[mcols(mask)[,img_id] == input$sample]
             cur_image <- image[mcols(image)[,img_id] == input$sample]
-            svgPanZoom(zoomScaleSensitivity = 0.4, svglite:::inlineSVG(
+            svgPanZoom(zoomScaleSensitivity = 0.4, stringSVG(
                 plotPixels(image = cur_image,
                            object = cur_object,
                            mask = cur_mask,
@@ -443,6 +442,9 @@
 
 
 # Download the selected data
+#' @importFrom S4Vectors metadata
+#' @importFrom SummarizedExperiment metadata<-
+#' @importFrom utils sessionInfo
 .downloadSelection <- function(input, objValues){
     downloadHandler(
         filename = function(){

@@ -43,7 +43,8 @@ Imports:
     svgPanZoom,
     svglite,
     shiny,
-    shinydashboard
+    shinydashboard,
+    matrixStats
 Suggests:
     BiocStyle,
     knitr,

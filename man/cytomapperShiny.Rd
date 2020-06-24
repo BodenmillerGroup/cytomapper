@@ -7,18 +7,19 @@
 cytomapperShiny(object, mask, image = NULL, cell_id = NULL, img_id = NULL, ...)
 }
 \arguments{
-\item{object}{(optional) an \code{\linkS4class{SingleCellExperiment}} object.}
+\item{object}{an \code{\linkS4class{SingleCellExperiment}} object.}
 
-\item{mask}{(optional) an \code{\linkS4class{ImageList}} object containing
+\item{mask}{an \code{\linkS4class{CytoImageList}} object containing
 single-channel \code{\linkS4class{Image}} objects}
 
-\item{image}{an \code{\linkS4class{ImageList}} object containing single or
+\item{image}{(optional) an \code{\linkS4class{CytoImageList}} object containing single or
 multi-channel \code{\linkS4class{Image}} objects (see Details)}
 
-\item{cell_id}{(optional) character specifying the \code{colData(object)}, in which the
+\item{cell_id}{character specifying the \code{colData(object)}, in which the
 integer cell IDs are stored}
 
-\item{img_id}{(optional)}
+\item{img_id}{character specifying the \code{colData(object)}, in which the
+integer image IDs are stored}
 
 \item{...}{Parameters passed onto \code{\link{plotCells}} or \code{\link{plotPixels}}}
 }

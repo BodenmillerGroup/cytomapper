@@ -83,6 +83,7 @@
     }
 
 # Create the main body
+#' @importFrom svgPanZoom svgPanZoomOutput
 .cytomapper_body <- function(){
     cm_body <- dashboardBody(
         tabBox(width = 12, id = "tabbox1",

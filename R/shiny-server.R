@@ -2,7 +2,6 @@
 # Definition of the shiny server
 # -----------------------------------------------------------------------------
 
-#' @importFrom DelayedArray rowRanges
 #' @importFrom SummarizedExperiment assay
 .cytomapper_server <- function(object, mask, image, cell_id, img_id,
                                input, output, session, ...)
