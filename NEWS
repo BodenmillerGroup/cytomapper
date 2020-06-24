@@ -108,6 +108,9 @@ Changes in version 0.99.5 (2020-04-17):
 + Corrected typos in docs and vignette
 + Avoid recalculation of min/max values in legend function
 
+Changes in version 1.1.1 (2020-05-17):
++ Added shiny app to package 
+
 Changes in version 1.1.2 (2020-05-19):
 + Added image option to the Shiny (implementation of plotCells() function) 
 

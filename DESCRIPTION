@@ -19,7 +19,8 @@ Authors@R:
       comment = c(ORCID = "0000-0002-4711-1176")),
       person("Nicolas", "Damond", role = c("aut"), 
       email = "nicolas.damond@dqbm.uzh.ch", 
-      comment = c(ORCID = "0000-0003-3027-8989")))
+      comment = c(ORCID = "0000-0003-3027-8989")),
+      person("Tobias", "Hoch", role = c("ctb")))
 License: GPL (>= 2)
 Depends:
     R (>= 4.0),
@@ -42,8 +43,7 @@ Imports:
     svgPanZoom,
     svglite,
     shiny,
-    shinydashboard,
-    ggridges
+    shinydashboard
 Suggests:
     BiocStyle,
     knitr,
