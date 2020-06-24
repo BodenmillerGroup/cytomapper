@@ -27,11 +27,11 @@
 .general_help <- function(){
     pre(
         h2("Using this Shiny app"),
-        p("To use this shiny..."),
-        h2("Selecting the markers"),
-        p("Select the markers..."),
+        p("Use the sidebar of the app to define how many plots and what markers you want to use to define your cell population of interest. If the provided SCE object has multiple assays available you can also "),
+        h2("Change the Assay"),
+        p(""),
         h2("Visualization on the images"),
-        p("The selected cells can be seen on the images")
+        p("The selected cells can be seen on the images in the `Image` Tab. Double-click either on the `Expression` or `Selection` image to zoom-in.")
     )
 }
 
@@ -80,7 +80,7 @@
     # Store image IDs and marker names
     img_IDs <- colData(object)[,img_id]
     markers <- rownames(object)
-    
+
     updateSelectizeInput(session, inputId = "sample",
                          choices = unique(img_IDs),
                          selected = unique(img_IDs)[1])
@@ -215,6 +215,7 @@
 
 # Create scatter plots
 .createScatter <- function(input, session, rValues, objValues, iter, img_id, cell_id){
+
     renderPlot({
         
         cur_val <- (iter * 2) - 1
@@ -273,7 +274,7 @@
             return(p)
             
         } else {
-            
+          
             p <- ggplot(cur_df) +
                 geom_quasirandom(aes_(x = quote(sample),
                                       y = as.name(input[[paste0("Marker_", cur_val)]])), 
@@ -299,7 +300,7 @@
             }
             
             return(p)
-            
+           
         }
     })
 }
@@ -309,11 +310,12 @@
     if (input$exprs_marker_1 != "") {
         if (input$exprs_marker_2 != "") {
             cur_markers <- c(input$exprs_marker_1, input$exprs_marker_2)
-        } else {
+        } 
+        else{
             cur_markers <- input$exprs_marker_1
         }
-    } else {
-        
+    } 
+    else {
         req(input$Marker_1)
         
         cur_markers <- reactiveValuesToList(input)
@@ -327,10 +329,22 @@
             cur_markers <- cur_markers[[paste0("Marker_", length(cur_markers))]]
         }
     }
-    
     return(cur_markers)
 }
 
+# Helper function to define bcg parameter when using plotPixels()
+.select_contrast <- function(input){
+    cur_markers <- .select_markers(input)
+    if (length(cur_markers) == 1){
+        cur_bcg = list(c(0,input$contrast_marker_1,1))
+        names(cur_bcg) <- cur_markers[1]
+    }
+    if (length(cur_markers) > 1){
+        cur_bcg = list(c(0,input$contrast_marker_1,1), c(0,input$contrast_marker_2,1))
+        names(cur_bcg) <- cur_markers[1:2]
+    }
+    return(cur_bcg)
+}
 
 # Create the server
 #' @importFrom DelayedArray rowRanges
@@ -342,6 +356,19 @@
     cur_sessionInfo <- sessionInfo()
     .create_general_observer(input, si = cur_sessionInfo)
     
+    # Sample change observer - change tab if sample changes
+    observeEvent(input$sample, {
+        updateTabsetPanel(session, "tabbox1",
+                          selected = "tab1"
+        )
+    })
+    
+    # remove contrast input if no image is provided
+    if(is.null(image)){
+        removeUI(selector = "div:has(> #contrast_marker_1)")
+        removeUI(selector = "div:has(> #contrast_marker_2)")
+       }
+
     # Save some variables used throught the app
     rValues <- reactiveValues(ranges = NULL)
     
@@ -369,39 +396,43 @@
                 paste0("Selection: ", .brushRange(input[[paste0("plot_brush", cur_plot)]]))
             })
         })
-
     })
     
-    output$image_expression <- renderPlot({
+    output$image_expression <- renderSvgPanZoom({
         
         cur_markers <- .select_markers(input)
+        cur_bcg <- .select_contrast(input)
         
         if (is.null(image)) {
             cur_mask <- mask[mcols(mask)[,img_id] == input$sample]
-            plotCells(object = object,
+            svgPanZoom(zoomScaleSensitivity = 0.4, svglite:::inlineSVG(
+                plotCells(object = object,
                       mask = cur_mask,
                       cell_id = cell_id,
                       img_id = img_id,
                       colour_by = cur_markers,
                       exprs_values = input$assay,
-                      ...)
-        } else {
+                      ...)))
+        } 
+        else {
             cur_image <- image[mcols(image)[,img_id] == input$sample]
-            plotPixels(image = cur_image,
+            svgPanZoom(zoomScaleSensitivity = 0.4, svglite:::inlineSVG(
+                plotPixels(image = cur_image,
                        colour_by = cur_markers,
-                       ...)
+                       bcg = cur_bcg, 
+                       ...)))
         }
-        
     })
     
-    output$image_selection <- renderPlot({
+    output$image_selection <- renderSvgPanZoom({
         
         cur_val <- (input$plotCount * 2) - 1
         
         req(objValues$object2)
         
         cur_markers <- .select_markers(input)
-        
+        cur_bcg <- .select_contrast(input)
+
         cur_object <- reactiveValuesToList(objValues)
         cur_object <- cur_object[!unlist(lapply(cur_object, is.null))]
         cur_object <- cur_object[[paste0("object", length(cur_object))]]
@@ -416,27 +447,37 @@
         
         if (is.null(image)) {
             cur_mask <- mask[mcols(mask)[,img_id] == input$sample] 
-            plotCells(object = cur_object,
-                      mask = cur_mask,
-                      cell_id = cell_id,
-                      img_id = img_id,
-                      colour_by = "selected",
-                      colour = list(selected = c("TRUE" = "dark red", "FALSE" = "gray")),
-                      ...)
-        } else {
+            svgPanZoom(zoomScaleSensitivity = 0.4, svglite:::inlineSVG(
+                plotCells(object = cur_object,
+                          mask = cur_mask,
+                          cell_id = cell_id,
+                          img_id = img_id,
+                          colour_by = "selected",
+                          colour = list(selected = c("TRUE" = "dark red", "FALSE" = "gray")),
+                          legend = NULL,
+                          ...)
+                )
+            )
+            
+        } 
+        else {
             cur_mask <- mask[mcols(mask)[,img_id] == input$sample]
             cur_image <- image[mcols(image)[,img_id] == input$sample]
-            plotPixels(image = cur_image,
+            svgPanZoom(zoomScaleSensitivity = 0.4, svglite:::inlineSVG(
+                plotPixels(image = cur_image,
                       object = cur_object,
                       mask = cur_mask,
                       cell_id = cell_id,
                       img_id = img_id,
                       colour_by = cur_markers,
                       outline_by = "selected",
-                      colour = list(selected = c("TRUE" = "gray", "FALSE" = "gray")),
+                      colour = list(selected = c("TRUE" = "white", "FALSE" = "gray")),
+                      legend = NULL, 
+                      bcg = cur_bcg,
                       ...)
+                )
+            )
         }
-
     })
 
     output$downloadData <- downloadHandler(
@@ -460,4 +501,3 @@
         }
     )
 }
-
