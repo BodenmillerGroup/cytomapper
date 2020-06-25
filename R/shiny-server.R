@@ -38,7 +38,10 @@
     output$AdditionalPlots_sidebar <- .addPlots_sidebar(input)
     
     # Dynamically generate scatter plots
-    output$AdditionalPlots_main <- .addPlots_main(input)
+    output$AdditionalPlots_tab1 <- .addPlots_tab1(input)
+    
+    # Dynamically create image plot
+    output$AdditionalPlots_tab2 <- .addPlots_tab2(input, mask, image)
     
     observe({
         
@@ -52,9 +55,11 @@
         })
     })
     
-    output$image_expression <- .createImageExpression(input, object, mask, image, img_id, cell_id, ...)
+    if (!is.null(mask) || !is.null(image)) {
+        output$image_expression <- .createImageExpression(input, object, mask, image, img_id, cell_id, ...)
+        
+        output$image_selection <- .createImageSelection(input, objValues, mask, image, img_id, cell_id, ...)
+    }
     
-    output$image_selection <- .createImageSelection(input, objValues, mask, image, img_id, cell_id, ...)
-
     output$downloadData <- .downloadSelection(input, objValues)
 }

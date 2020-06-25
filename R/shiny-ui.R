@@ -87,36 +87,12 @@
 .cytomapper_body <- function(){
     cm_body <- dashboardBody(
         tabBox(width = 12, id = "tabbox1",
-            tabPanel(title = "Scatter Plots", value = "tab1", uiOutput("AdditionalPlots_main")),
-            tabPanel(title = "Images", value = "tab2", fluidRow(box(column(width = 6, selectizeInput("exprs_marker_1",
-                                                                                          label = span(paste("Select marker 1"), 
-                                                                                          style = "color: black; padding-top: 0px"), 
-                                                                                          choices = NULL,
-                                                                                          options = list(placeholder = '', 
-                                                                                                         maxItems = 1)),
-                                                                           numericInput("contrast_marker_1",
-                                                                        label = span(paste("Contrast Marker 1"), 
-                                                                                     style = "color: black; padding-top: 0px"),
-                                                                       value = 1)),
-                                                         column(width = 6, selectizeInput("exprs_marker_2",
-                                                                                          label = span(paste("Select marker 2"), 
-                                                                                                       style = "color: black; padding-top: 0px"), 
-                                                                                          choices = NULL,
-                                                                                          options = list(placeholder = '', 
-                                                                                                         maxItems = 1)),
-                                                                numericInput("contrast_marker_2",
-                                                                             label = span(paste("Contrast Marker 2"), 
-                                                                                          style = "color: black; padding-top: 0px"),
-                                                                             value = 1)),
-                                                    svgPanZoomOutput("image_expression", height = "300px"), 
-                                                         title = "Expression", status = "primary",
-                                                         width = 6, height = "550px"),
-                                                     box(svgPanZoomOutput("image_selection"), 
-                                                         title = "Selection", status = "primary",
-                                                         width = 6, height = "550px")))
+            tabPanel(title = "Scatter Plots", value = "tab1", uiOutput("AdditionalPlots_tab1")),
+            tabPanel(title = "Images", value = "tab2", uiOutput("AdditionalPlots_tab2")))
         )
-        )
+    
     return(cm_body)
+    
     }
 
 

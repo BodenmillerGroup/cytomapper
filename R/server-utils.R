@@ -142,7 +142,7 @@
     })
 }
 
-.addPlots_main <- function(input) {
+.addPlots_tab1 <- function(input) {
     
     renderUI({
         cur_row <- ceiling(input$plotCount / 3)
@@ -171,6 +171,44 @@
             fluidRow(box_list[seq.int(cur_val, cur_val + 2)])
         })
     })
+}
+
+.addPlots_tab2 <- function(input, mask, image) {
+    
+    if (is.null(mask) && is.null(image)) {
+        return(NULL)
+    }
+    
+    fluidRow(
+        box(
+            column(width = 6, 
+                selectizeInput("exprs_marker_1",
+                    label = span(paste("Select marker 1"), 
+                        style = "color: black; padding-top: 0px"), 
+                    choices = NULL,
+                    options = list(placeholder = '', maxItems = 1)),
+                numericInput("contrast_marker_1",
+                    label = span(paste("Contrast marker 1"), 
+                        style = "color: black; padding-top: 0px"),
+                    value = 1)),
+            column(width = 6, 
+                selectizeInput("exprs_marker_2",
+                    label = span(paste("Select marker 2"), 
+                        style = "color: black; padding-top: 0px"), 
+                    choices = NULL,
+                    options = list(placeholder = '', maxItems = 1)),
+                numericInput("contrast_marker_2",
+                    label = span(paste("Contrast marker 2"), 
+                        style = "color: black; padding-top: 0px"),
+                    value = 1)),
+            svgPanZoomOutput("image_expression", height = "300px"), 
+            title = "Expression", status = "primary",
+            width = 6, height = "550px"
+            ),
+        box(
+            svgPanZoomOutput("image_selection"), 
+            title = "Selection", status = "primary",
+            width = 6, height = "550px"))
 }
 
 # Function to allow brushing

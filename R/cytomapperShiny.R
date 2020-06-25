@@ -1,33 +1,47 @@
-#' Shiny app to gate cells on images
+#' Shiny application to visualise gated cells on images
 #'
+#' This shiny application allows users to gate cells based on their raw or
+#' transformed expression values and visualises gated cells on their corresponding
+#' images.
+#'
+#' @param object a \code{\linkS4class{SingleCellExperiment}} object.
+#' @param mask (optional) a \code{\linkS4class{CytoImageList}} containing single-channel
+#'   \code{\linkS4class{Image}} objects
+#' @param image (optional) a \code{\linkS4class{CytoImageList}} object
+#'   containing single or multi-channel \code{\linkS4class{Image}} objects.
+#' @param cell_id character specifying the \code{colData(object)} entry, in
+#'   which the integer cell IDs are stored. These IDs should match the integer
+#'   pixel values in the segmentation mask object.
+#' @param img_id character specifying the \code{colData(object)} and
+#'   \code{mcols(mask)} and/or \code{mcols(image)} entry, in which the image IDs
+#'   are stored.
+#' @param ... parameters passed to the \code{\link{plotCells}} or
+#'   \code{\link{plotPixels}} function.
+#'
+#' @section User inputs
+#'
+#' @section The user interface
 #' TODO
+#' 
+#' @section Download of gated cells
+#' 
+#' @section Getting further help 
 #'
-#' @param image (optional) an \code{\linkS4class{CytoImageList}} object containing single or
-#'   multi-channel \code{\linkS4class{Image}} objects (see Details)
-#' @param object an \code{\linkS4class{SingleCellExperiment}} object.
-#' @param mask an \code{\linkS4class{CytoImageList}} object containing
-#'   single-channel \code{\linkS4class{Image}} objects
-#' @param image (optional) an \code{\linkS4class{CytoImageList}} object containing single or
-#'   multi-channel \code{\linkS4class{Image}} objects (see Details)
-#' @param cell_id character specifying the \code{colData(object)}, in which the
-#'   integer cell IDs are stored
-#' @param img_id character specifying the \code{colData(object)}, in which the
-#'   integer image IDs are stored
-#' @param ... Parameters passed onto \code{\link{plotCells}} or \code{\link{plotPixels}}
+#' @seealso \code{\link{plotCells}} and \code{\link{plotPixels}} for the main
+#'   plotting function
 #'
 #' @examples
 #' # TODO
 #'
-#' @author
-#' Nils Eling \email{nils.eling@@dqbm.uzh.ch},
-#' 
+#' @author Nils Eling (\email{nils.eling@@dqbm.uzh.ch})
+#' @author Tobias Hoch (\email{tobias.hoch@@dqbm.uzh.ch})
 #' 
 #' @export
-#' 
+#'
 #' @import shiny
 #' @import shinydashboard
 cytomapperShiny <- function(object,
-                        mask,
+                        mask = NULL,
                         image = NULL,
                         cell_id = NULL,
                         img_id = NULL,
