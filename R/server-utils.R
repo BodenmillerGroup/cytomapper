@@ -91,14 +91,6 @@
                          choices = assayNames(object),
                          server = TRUE,
                          selected = assayNames(object)[1])
-    updateSelectizeInput(session, "exprs_marker_1",
-                         choices = markers,
-                         server = TRUE,
-                         selected = "")
-    updateSelectizeInput(session, "exprs_marker_2",
-                         choices = markers,
-                         server = TRUE,
-                         selected = "")
     observeEvent(input$plotCount, {
         
         for (i in seq_len(input$plotCount)) {
@@ -199,14 +191,16 @@
                     selectizeInput("exprs_marker_1",
                         label = span(paste("Select marker 1"), 
                             style = "color: black; padding-top: 0px"), 
-                        choices = NULL,
+                        choices = c(markers, ""),
+                        selected = "",
                         options = list(placeholder = '', maxItems = 1)),
                     contrast_input_1),
                 column(width = 6, 
                     selectizeInput("exprs_marker_2",
                         label = span(paste("Select marker 2"), 
                             style = "color: black; padding-top: 0px"), 
-                        choices = NULL,
+                        choices = c(markers, ""),
+                        selected = "",
                         options = list(placeholder = '', maxItems = 1)),
                     contrast_input_2),
                 svgPanZoomOutput("image_expression", height = "300px"), 
@@ -370,8 +364,7 @@
         else{
             cur_markers <- input$exprs_marker_1
         }
-    } 
-    else {
+    } else {
         req(input$Marker_1)
         
         cur_markers <- reactiveValuesToList(input)
