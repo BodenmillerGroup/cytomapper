@@ -16,12 +16,6 @@
                           selected = "tab1"
         )
     })
-    
-    # remove contrast input if no image is provided
-    if(is.null(image)){
-        removeUI(selector = "div:has(> #contrast_marker_1)")
-        removeUI(selector = "div:has(> #contrast_marker_2)")
-       }
 
     # Save some variables used throught the app
     rValues <- reactiveValues(ranges = NULL)
@@ -41,7 +35,7 @@
     output$AdditionalPlots_tab1 <- .addPlots_tab1(input)
     
     # Dynamically create image plot
-    output$AdditionalPlots_tab2 <- .addPlots_tab2(input, mask, image)
+    output$AdditionalPlots_tab2 <- .addPlots_tab2(input, object, mask, image)
     
     observe({
         

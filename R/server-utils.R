@@ -173,42 +173,52 @@
     })
 }
 
-.addPlots_tab2 <- function(input, mask, image) {
+.addPlots_tab2 <- function(input, object, mask, image) {
     
     if (is.null(mask) && is.null(image)) {
         return(NULL)
+    } else if (!is.null(image)) {
+        contrast_input_1 <- numericInput("contrast_marker_1",
+                                label = span(paste("Contrast marker 1"), 
+                                    style = "color: black; padding-top: 0px"),
+                                value = 1)
+        contrast_input_2 <- numericInput("contrast_marker_2",
+                                 label = span(paste("Contrast marker 2"), 
+                                    style = "color: black; padding-top: 0px"),
+                                 value = 1)
+    } else {
+        contrast_input_1 <- contrast_input_2 <- NULL
     }
     
-    fluidRow(
-        box(
-            column(width = 6, 
-                selectizeInput("exprs_marker_1",
-                    label = span(paste("Select marker 1"), 
-                        style = "color: black; padding-top: 0px"), 
-                    choices = NULL,
-                    options = list(placeholder = '', maxItems = 1)),
-                numericInput("contrast_marker_1",
-                    label = span(paste("Contrast marker 1"), 
-                        style = "color: black; padding-top: 0px"),
-                    value = 1)),
-            column(width = 6, 
-                selectizeInput("exprs_marker_2",
-                    label = span(paste("Select marker 2"), 
-                        style = "color: black; padding-top: 0px"), 
-                    choices = NULL,
-                    options = list(placeholder = '', maxItems = 1)),
-                numericInput("contrast_marker_2",
-                    label = span(paste("Contrast marker 2"), 
-                        style = "color: black; padding-top: 0px"),
-                    value = 1)),
-            svgPanZoomOutput("image_expression", height = "300px"), 
-            title = "Expression", status = "primary",
-            width = 6, height = "550px"
-            ),
-        box(
-            svgPanZoomOutput("image_selection"), 
-            title = "Selection", status = "primary",
-            width = 6, height = "550px"))
+    markers <- rownames(object)
+    
+    renderUI({
+        fluidRow(
+            box(
+                column(width = 6, 
+                    selectizeInput("exprs_marker_1",
+                        label = span(paste("Select marker 1"), 
+                            style = "color: black; padding-top: 0px"), 
+                        choices = NULL,
+                        options = list(placeholder = '', maxItems = 1)),
+                    contrast_input_1),
+                column(width = 6, 
+                    selectizeInput("exprs_marker_2",
+                        label = span(paste("Select marker 2"), 
+                            style = "color: black; padding-top: 0px"), 
+                        choices = NULL,
+                        options = list(placeholder = '', maxItems = 1)),
+                    contrast_input_2),
+                svgPanZoomOutput("image_expression", height = "300px"), 
+                title = "Expression", status = "primary",
+                width = 6, height = "550px"
+                ),
+            box(
+                svgPanZoomOutput("image_selection"), 
+                title = "Selection", status = "primary",
+                width = 6, height = "550px")
+            )
+    })
 }
 
 # Function to allow brushing
@@ -405,21 +415,25 @@
         
         if (is.null(image)) {
             cur_mask <- mask[mcols(mask)[,img_id] == input$sample]
-            svgPanZoom(zoomScaleSensitivity = 0.4, stringSVG(
-                plotCells(object = object,
-                          mask = cur_mask,
-                          cell_id = cell_id,
-                          img_id = img_id,
-                          colour_by = cur_markers,
-                          exprs_values = input$assay,
-                          ...)))
+            suppressMessages(
+                svgPanZoom(zoomScaleSensitivity = 0.4, stringSVG(
+                    plotCells(object = object,
+                            mask = cur_mask,
+                            cell_id = cell_id,
+                            img_id = img_id,
+                            colour_by = cur_markers,
+                            exprs_values = input$assay,
+                            ...)))
+            )
         } else {
             cur_image <- image[mcols(image)[,img_id] == input$sample]
-            svgPanZoom(zoomScaleSensitivity = 0.4, stringSVG(
-                plotPixels(image = cur_image,
-                           colour_by = cur_markers,
-                           bcg = cur_bcg, 
-                           ...)))
+            suppressMessages(
+                svgPanZoom(zoomScaleSensitivity = 0.4, stringSVG(
+                    plotPixels(image = cur_image,
+                            colour_by = cur_markers,
+                            bcg = cur_bcg, 
+                            ...)))
+            )
         }
     })
 }
@@ -446,35 +460,35 @@
     
         if (is.null(image)) {
             cur_mask <- mask[mcols(mask)[,img_id] == input$sample] 
-            svgPanZoom(zoomScaleSensitivity = 0.4, stringSVG(
-                plotCells(object = cur_object,
-                          mask = cur_mask,
-                          cell_id = cell_id,
-                          img_id = img_id,
-                          colour_by = "selected",
-                          colour = list(selected = c("TRUE" = "dark red", "FALSE" = "gray")),
-                          legend = NULL,
-                          ...)
-            )
+            suppressMessages(
+                svgPanZoom(zoomScaleSensitivity = 0.4, stringSVG(
+                    plotCells(object = cur_object,
+                              mask = cur_mask,
+                              cell_id = cell_id,
+                              img_id = img_id,
+                              colour_by = "selected",
+                              colour = list(selected = c("TRUE" = "dark red", "FALSE" = "gray")),
+                              legend = NULL,
+                              ...)))
             )
             
         } 
         else {
             cur_mask <- mask[mcols(mask)[,img_id] == input$sample]
             cur_image <- image[mcols(image)[,img_id] == input$sample]
-            svgPanZoom(zoomScaleSensitivity = 0.4, stringSVG(
-                plotPixels(image = cur_image,
-                           object = cur_object,
-                           mask = cur_mask,
-                           cell_id = cell_id,
-                           img_id = img_id,
-                           colour_by = cur_markers,
-                           outline_by = "selected",
-                           colour = list(selected = c("TRUE" = "white", "FALSE" = "gray")),
-                           legend = NULL, 
-                           bcg = cur_bcg,
-                           ...)
-            )
+            suppressMessages(
+                svgPanZoom(zoomScaleSensitivity = 0.4, stringSVG(
+                    plotPixels(image = cur_image,
+                               object = cur_object,
+                               mask = cur_mask,
+                               cell_id = cell_id,
+                               img_id = img_id,
+                               colour_by = cur_markers,
+                               outline_by = "selected",
+                               colour = list(selected = c("TRUE" = "white", "FALSE" = "gray")),
+                               legend = NULL, 
+                               bcg = cur_bcg,
+                               ...)))
             )
         }
     })
