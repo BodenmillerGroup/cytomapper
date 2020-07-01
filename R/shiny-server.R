@@ -16,6 +16,13 @@
                           selected = "tab1"
         )
     })
+    
+    # Assay change observer - change tab if assay changes
+    observeEvent(input$assay, {
+        updateTabsetPanel(session, "tabbox1",
+                          selected = "tab1"
+        )
+    })
 
     # Save some variables used throught the app
     rValues <- reactiveValues(ranges = NULL)
