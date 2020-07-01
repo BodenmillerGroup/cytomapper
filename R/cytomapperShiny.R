@@ -31,15 +31,36 @@
 #'
 #' @section The user interface
 #'
-#' @section Download of gated cells
+#' @section Download of gated cells:
+#' After cells were gated based on their expression values, the user can downloaded the selected cells in 
+#' the form of a \code{\linkS4class{SingleCellExperiment}} object saved in a RDS file. The object is a subset of the input 
+#' \code{\linkS4class{SingleCellExperiment}} object. The object contains a new column called 
+#' \code{CellLabel} stored in the \code{colData} of the \code{\linkS4class{SingleCellExperiment}} object. The new column
+#' contains a character defined by the user.
 #'
-#' @section Getting further help
+#' @section Getting further help:
+#' 
 #'
-#' @seealso \code{\link{plotCells}} and \code{\link{plotPixels}} for the main
-#'   plotting function
+#' @seealso \code{\link{plotCells}} and \code{\link{plotPixels}} for the main plotting function
 #'
-#' @examples
-#' # TODO
+#' @examples \code{
+#' # Load example data sets
+#' data("pancreasSCE")
+#' data("pancreasImages")
+#' data("pancreasMasks")
+#' 
+#' # Use shiny with SCE object, images and masks
+#' cytomapperShiny(pancreasSCE, pancreasMasks, pancreasImages, 
+#' cell_id = "CellNb", img_id = "ImageNb")
+#' 
+#' # Use shiny with SCE object and masks
+#' cytomapperShiny(pancreasSCE, pancreasMasks, 
+#' cell_id = "CellNb", img_id = "ImageNb")
+#' 
+#' # Use shiny with SCE object only
+#' cytomapperShiny(pancreasSCE, 
+#' cell_id = "CellNb", img_id = "ImageNb")
+#' }
 #'
 #' @author Nils Eling (\email{nils.eling@@dqbm.uzh.ch})
 #' @author Tobias Hoch (\email{tobias.hoch@@dqbm.uzh.ch})
