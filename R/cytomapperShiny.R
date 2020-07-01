@@ -18,7 +18,7 @@
 #' @param ... parameters passed to the \code{\link{plotCells}} or
 #'   \code{\link{plotPixels}} function.
 #'
-#' @section User inputs 
+#' @section User inputs: 
 #' This function requires at least a \code{\linkS4class{SingleCellExperiment}}
 #' input object. Gating is performed on cell-specific marker counts stored in
 #' the \code{assay} slots of the object. These can either be raw counts (usually
