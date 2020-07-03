@@ -108,13 +108,19 @@ Changes in version 0.99.5 (2020-04-17):
 + Corrected typos in docs and vignette
 + Avoid recalculation of min/max values in legend function
 
-Changes in version 1.1.1 (2020-05-17):
+Changes in version 1.1.1 (2020-07-3):
+
++ Images are no longer re-normalized after channel merging (> 3 channels)
++ Instead images are clipped at 1 leading to brighter colours
++ The same happens for colour merging when colouring masks by feature expression
+
+Changes in version 1.1.2 (2020-05-17):
 + Added shiny app to package 
 
-Changes in version 1.1.2 (2020-05-19):
+Changes in version 1.1.3 (2020-05-19):
 + Added image option to the Shiny (implementation of plotCells() function) 
 
-Changes in version 1.1.3 (2020-06-22):
+Changes in version 1.1.4 (2020-06-22):
 + Separate Shiny Body into two Tabs (Scatter Plots and Images)
 + Implement zoom-in functionality for Images
 + Add possibility to change contrast of Pixel Images
