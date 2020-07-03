@@ -108,3 +108,9 @@ Changes in version 0.99.5 (2020-04-17):
 + Corrected typos in docs and vignette
 + Avoid recalculation of min/max values in legend function
 
+Changes in version 1.1.1 (2020-07-3):
+
++ Images are no longer re-normalized after channel merging (> 3 channels)
++ Instead images are clipped at 1 leading to brighter colours
++ The same happens for colour merging when colouring masks by feature expression
+
