@@ -110,8 +110,8 @@
     # Hex colours to rgb
     col_ind <- apply(cur_col_df, 1, .mixColours)
     
-    # Rescale to account for additive colour mixing
-    col_ind <- col_ind / max(col_ind)
+    # Clip at 1 to be in line with pixel-merging
+    col_ind[col_ind > 1] <- 1
     
     # Convert to hex colour
     col_out <- apply(col_ind, 2, function(x){rgb(red = x[1], green = x[2], 
@@ -262,19 +262,6 @@
         cur_image <- Reduce("+", cur_frame_list)
 
         image[[i]] <- cur_image
-    }
-    
-    # Rescale images to account for additive colour merging
-    if (length(colour_by) > 1) {
-        cur_range <- vapply(X = image, FUN = quantile, 
-                            FUN.VALUE = numeric(2), probs = c(0, 1))
-        cur_min <- min(cur_range[1,])
-        cur_max <- max(cur_range[2,])
-        
-        if (cur_max > 1) {
-            image <- endoapply(image, normalize, separate = FALSE, 
-                                ft = c(0,1), inputRange = c(cur_min, cur_max))
-        }
     }
 
     return(list(imgs = image, cur_limit = cur_limit))
