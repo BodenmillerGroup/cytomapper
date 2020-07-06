@@ -63,7 +63,7 @@
 
 # Create interactive observers
 #' @importFrom matrixStats rowRanges
-.create_interactive_observer <- function(object, img_id, input, rValues, objValues){
+.create_interactive_observer <- function(object, img_id, input, session, rValues, objValues){
     
     # Select first object
     observeEvent(input$sample, {
@@ -71,9 +71,20 @@
     }, ignoreInit = TRUE)
     
     observeEvent(input$assay, {
+        # Save ranges
         cur_ranges <- rowRanges(assay(object, input$assay))
         rownames(cur_ranges) <- rownames(object)
         rValues$ranges <- cur_ranges
+        
+        # Reset gates and objects
+        lapply(seq_len(sum(grepl("plot_brush", names(input)))), function(cur_obj){
+            if (cur_obj > 1) {
+                objValues[[paste0("object", cur_obj)]] <- NULL 
+            }    
+            
+            session$resetBrush(paste0("plot_brush", cur_obj))
+        })
+        
     }, ignoreInit = TRUE)
     
 }

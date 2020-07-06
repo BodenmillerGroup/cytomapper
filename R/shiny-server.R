@@ -30,7 +30,7 @@
     # Reactive object list to store selected cells
     objValues <- reactiveValues(object1 = NULL)
     
-    .create_interactive_observer(object, img_id, input, rValues, objValues)
+    .create_interactive_observer(object, img_id, input, session, rValues, objValues)
     
     # Create updateSelectizeInput objects
     .create_updateSelectizeInput(object, img_id, input, session)
