@@ -326,6 +326,9 @@
         } else {
             
             p <- ggplot(cur_df) +
+                geom_violin(aes_(x = quote(sample),
+                                 y = as.name(input[[paste0("Marker_", cur_val)]])), 
+                            show.legend = FALSE) +
                 geom_quasirandom(aes_(x = quote(sample),
                                       y = as.name(input[[paste0("Marker_", cur_val)]])), 
                                  show.legend = FALSE) + 
