@@ -233,7 +233,9 @@
     
     cur_val <- (iter * 2) - 1
     
-    req(objValues[[paste0("object", iter)]])
+    if (is.null(objValues[[paste0("object", iter)]])) {
+        return(NULL)
+    }
     
     # Build data frame 
     cur_df <- as.data.frame(t(assay(objValues[[paste0("object", iter)]], input$assay)))
@@ -332,7 +334,8 @@
                         show.legend = FALSE) +
             geom_quasirandom(aes_(x = quote(sample),
                                   y = as.name(input[[paste0("Marker_", cur_val)]])), 
-                             show.legend = FALSE) + 
+                             show.legend = FALSE,
+                             groupOnX = TRUE) + 
             xlab(input$sample) +
             theme(axis.text.x = element_blank(),
                   panel.background = element_blank()) +
@@ -348,7 +351,8 @@
                 geom_quasirandom(aes_(x = quote(sample),
                                       y = as.name(input[[paste0("Marker_", cur_val)]]),
                                       colour = quote(selected)), 
-                                 show.legend = FALSE, data = cur_df) + 
+                                 show.legend = FALSE, data = cur_df,
+                                 groupOnX = TRUE) + 
                 scale_colour_manual(values = c(`FALSE` = "black",
                                                `TRUE` = "red"))
             
