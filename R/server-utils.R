@@ -233,6 +233,8 @@
     
     cur_val <- (iter * 2) - 1
     
+    req(objValues[[paste0("object", iter)]])
+    
     # Build data frame 
     cur_df <- as.data.frame(t(assay(objValues[[paste0("object", iter)]], input$assay)))
     cur_df$sample <- input$sample
@@ -272,6 +274,99 @@
     
 }
 
+# Scatter/violin plot helpers
+.plotScatter <- function(input, rValues, objValues, iter, cur_val){
+
+    if (!is.null(objValues[[paste0("object", iter)]])) {
+        cur_df <- as.data.frame(t(assay(objValues[[paste0("object", iter)]], 
+                                        input$assay)))
+        cur_df$sample <- input$sample
+        
+        p <- ggplot(cur_df) +
+            geom_point(aes_(as.name(input[[paste0("Marker_", cur_val)]]), 
+                            as.name(input[[paste0("Marker_", cur_val + 1)]])), 
+                       show.legend = FALSE) +
+            theme_minimal() + 
+            ylim(c(rValues$ranges[input[[paste0("Marker_", cur_val + 1)]], 1], 
+                   rValues$ranges[input[[paste0("Marker_", cur_val + 1)]], 2])) +
+            xlim(c(rValues$ranges[input[[paste0("Marker_", cur_val)]], 1], 
+                   rValues$ranges[input[[paste0("Marker_", cur_val)]], 2]))
+        
+        if (!is.null(objValues[[paste0("object", iter + 1)]])) {
+            
+            cur_df_1 <- as.data.frame(t(assay(objValues[[paste0("object", iter + 1)]], 
+                                              input$assay)))
+            cur_df_1$sample <- input$sample
+            
+            p <- p + geom_point(aes_(as.name(input[[paste0("Marker_", cur_val)]]), 
+                                     as.name(input[[paste0("Marker_", cur_val + 1)]])), 
+                                show.legend = FALSE, data = cur_df_1, colour = "red")
+        }
+        
+    } else {
+        p <- ggplot() +
+            ylim(c(rValues$ranges[input[[paste0("Marker_", cur_val + 1)]], 1], 
+                   rValues$ranges[input[[paste0("Marker_", cur_val + 1)]], 2])) +
+            xlim(c(rValues$ranges[input[[paste0("Marker_", cur_val)]], 1], 
+                   rValues$ranges[input[[paste0("Marker_", cur_val)]], 2])) +
+            xlab(input[[paste0("Marker_", cur_val)]]) +
+            ylab(input[[paste0("Marker_", cur_val + 1)]]) +
+            theme_minimal()
+    }
+    
+    return(p)
+    
+}
+
+# Violin plot helper
+.plotViolin <- function(input, rValues, objValues, iter, cur_val, cell_id){
+    
+    if (!is.null(objValues[[paste0("object", iter)]])) {
+        cur_df <- as.data.frame(t(assay(objValues[[paste0("object", iter)]], 
+                                        input$assay)))
+        cur_df$sample <- input$sample
+        
+        p <- ggplot(cur_df) +
+            geom_violin(aes_(x = quote(sample),
+                             y = as.name(input[[paste0("Marker_", cur_val)]])), 
+                        show.legend = FALSE) +
+            geom_quasirandom(aes_(x = quote(sample),
+                                  y = as.name(input[[paste0("Marker_", cur_val)]])), 
+                             show.legend = FALSE) + 
+            xlab(input$sample) +
+            theme(axis.text.x = element_blank(),
+                  panel.background = element_blank()) +
+            ylim(c(rValues$ranges[input[[paste0("Marker_", cur_val)]], 1], 
+                   rValues$ranges[input[[paste0("Marker_", cur_val)]], 2])) 
+        
+        if (!is.null(objValues[[paste0("object", iter + 1)]])) {
+            
+            cur_df$selected <- colData(objValues[[paste0("object", iter)]])[,cell_id] %in%
+                colData(objValues[[paste0("object", iter + 1)]])[,cell_id]
+            
+            p <- p +
+                geom_quasirandom(aes_(x = quote(sample),
+                                      y = as.name(input[[paste0("Marker_", cur_val)]]),
+                                      colour = quote(selected)), 
+                                 show.legend = FALSE, data = cur_df) + 
+                scale_colour_manual(values = c(`FALSE` = "black",
+                                               `TRUE` = "red"))
+            
+        }
+        
+    } else {
+        p <- ggplot() +
+            ylim(c(rValues$ranges[input[[paste0("Marker_", cur_val)]], 1], 
+                   rValues$ranges[input[[paste0("Marker_", cur_val)]], 2])) + 
+            ylab(input[[paste0("Marker_", cur_val)]]) +
+            xlab(input$sample) +
+            theme_minimal()
+    }
+        
+    return(p)
+        
+}
+
 # Create scatter plots
 #' @import ggplot2
 #' @importFrom ggbeeswarm geom_quasirandom
@@ -280,9 +375,14 @@
     renderPlot({
         
         cur_val <- (iter * 2) - 1
-        
-        req(rValues$ranges, objValues[[paste0("object", iter)]], 
-            input$assay, input[[paste0("Marker_", cur_val)]])
+
+        if (iter == 1) {
+            req(rValues$ranges, objValues$object1, 
+                input$assay, input$Marker_1)            
+        } else {
+            req(rValues$ranges, input[[paste0("plot_brush", iter - 1)]], 
+                input$assay, input[[paste0("Marker_", cur_val)]])
+        }
         
         if (iter > 1 && is.null(input[[paste0("plot_brush", iter - 1)]])) {
             return(NULL)
@@ -294,7 +394,7 @@
             lapply(seq_len(length(reactiveValuesToList(objValues))), function(cur_obj){
                 if (cur_obj > iter) {
                     objValues[[paste0("object", cur_obj)]] <- NULL
-                    session$resetBrush(paste0("plot_brush", cur_obj))
+                    #session$resetBrush(paste0("plot_brush", cur_obj))
                 }
             })
             
@@ -302,70 +402,14 @@
             .brushObject(input, session, objValues, iter = iter) 
         }
         
-        # Build data frame for visualization
-        cur_df <- as.data.frame(t(assay(objValues[[paste0("object", iter)]], 
-                                        input$assay)))
-        cur_df$sample <- input$sample
-        
+        # Plot scatter or violin
         if (input[[paste0("Marker_", cur_val + 1)]] != "") {
-            
-            # Scatter plot    
-            p <- ggplot(cur_df) +
-                geom_point(aes_(as.name(input[[paste0("Marker_", cur_val)]]), 
-                                as.name(input[[paste0("Marker_", cur_val + 1)]])), 
-                           show.legend = FALSE) +
-                ylab(input[[paste0("Marker_", cur_val + 1)]]) +
-                theme_minimal() + 
-                ylim(c(rValues$ranges[input[[paste0("Marker_", cur_val + 1)]], 1], 
-                       rValues$ranges[input[[paste0("Marker_", cur_val + 1)]], 2])) +
-                xlim(c(rValues$ranges[input[[paste0("Marker_", cur_val)]], 1], 
-                       rValues$ranges[input[[paste0("Marker_", cur_val)]], 2]))
-            
-            if (!is.null(objValues[[paste0("object", iter + 1)]])) {
-                
-                cur_df_1 <- as.data.frame(t(assay(objValues[[paste0("object", iter + 1)]], 
-                                                  input$assay)))
-                cur_df_1$sample <- input$sample
-                
-                p <- p + geom_point(aes_(as.name(input[[paste0("Marker_", cur_val)]]), 
-                                         as.name(input[[paste0("Marker_", cur_val + 1)]])), 
-                                    show.legend = FALSE, data = cur_df_1, colour = "red")
-            }
-            
-            return(p)
-            
+            p <- .plotScatter(input, rValues, objValues, iter, cur_val)
         } else {
-            
-            p <- ggplot(cur_df) +
-                geom_violin(aes_(x = quote(sample),
-                                 y = as.name(input[[paste0("Marker_", cur_val)]])), 
-                            show.legend = FALSE) +
-                geom_quasirandom(aes_(x = quote(sample),
-                                      y = as.name(input[[paste0("Marker_", cur_val)]])), 
-                                 show.legend = FALSE) + 
-                theme(axis.text.x = element_blank(),
-                      panel.background = element_blank()) +
-                ylim(c(rValues$ranges[input[[paste0("Marker_", cur_val)]], 1], 
-                       rValues$ranges[input[[paste0("Marker_", cur_val)]], 2])) 
-            
-            if (!is.null(objValues[[paste0("object", iter + 1)]])) {
-                
-                cur_df$selected <- colData(objValues[[paste0("object", iter)]])[,cell_id] %in%
-                    colData(objValues[[paste0("object", iter + 1)]])[,cell_id]
-                
-                p <- p +
-                    geom_quasirandom(aes_(x = quote(sample),
-                                          y = as.name(input[[paste0("Marker_", cur_val)]]),
-                                          colour = quote(selected)), 
-                                     show.legend = FALSE, data = cur_df) + 
-                    scale_colour_manual(values = c(`FALSE` = "black",
-                                                   `TRUE` = "red"))
-                
-            }
-            
-            return(p)
-            
+            p <- .plotViolin(input, rValues, objValues, iter, cur_val, cell_id)
         }
+        
+        return(p)
     })
 }
 
