@@ -86,7 +86,14 @@
         })
         
     }, ignoreInit = TRUE)
-    
+
+    # Plot change observer - change tab if number of plots ar changed
+    observeEvent(input$plotCount, {
+        updateTabsetPanel(session, "tabbox1",
+                          selected = "tab1"
+        )
+    })
+        
     # Sample change observer - change tab if sample changes
     observeEvent(input$sample, {
         updateTabsetPanel(session, "tabbox1",
@@ -507,6 +514,9 @@
 }
 
 # Helper function to select markers
+# By default, we want to display the expression of the marker on 
+# which gating was performed last.
+# The user can further select other markers for displaying
 .select_markers <- function(input){
     if (input$exprs_marker_1 != "") {
         if (input$exprs_marker_2 != "") {
@@ -516,17 +526,44 @@
             cur_markers <- input$exprs_marker_1
         }
     } else {
+        
         req(input$Marker_1)
         
-        cur_markers <- reactiveValuesToList(input)
-        cur_markers <- cur_markers[grepl("Marker_", names(cur_markers))]
+        cur_input <- reactiveValuesToList(input)
+        cur_markers <- cur_input[grepl("Marker_", names(cur_input))]
         cur_markers <- cur_markers[unlist(lapply(cur_markers, function(x){x != ""}))]
         
-        if (length(cur_markers) %% 2 == 0) {
-            cur_markers <- c(cur_markers[[paste0("Marker_", length(cur_markers) - 1)]],
-                             cur_markers[[paste0("Marker_", length(cur_markers))]])
+        # Subset markers to those of the last gate + 1
+        cur_brushes <- cur_input[grepl("plot_brush", names(cur_input))]
+        
+        if(length(cur_brushes) > 0) {
+            cur_brushes <- cur_brushes[!unlist(lapply(cur_brushes, is.null))]
+        }
+        
+        if (length(cur_brushes) > 0) {
+            max_brush <- max(as.numeric(sub("plot_brush", "", names(cur_brushes))))
+            
+            if (!is.null(input[[paste0("Marker_", ((max_brush + 1) * 2) - 1)]]) &&
+                input[[paste0("Marker_", ((max_brush + 1) * 2) - 1)]] != "") {
+                cur_markers <- cur_markers[names(cur_markers) == paste0("Marker_", ((max_brush + 1) * 2) - 1) |
+                                               names(cur_markers) == paste0("Marker_", (max_brush + 1) * 2)]
+            } else {
+                cur_markers <- cur_markers[names(cur_markers) == paste0("Marker_", ((max_brush) * 2) - 1) |
+                                               names(cur_markers) == paste0("Marker_", (max_brush) * 2)]
+            }
+        
         } else {
-            cur_markers <- cur_markers[[paste0("Marker_", length(cur_markers))]]
+            cur_markers <- cur_markers[names(cur_markers) == "Marker_1" |
+                                           names(cur_markers) == "Marker_2"]
+        }
+        
+        max_marker <- max(as.numeric(sub("Marker_", "", names(cur_markers))))
+        
+        if (max_marker %% 2 == 0) {
+            cur_markers <- c(cur_markers[[paste0("Marker_", max_marker - 1)]],
+                             cur_markers[[paste0("Marker_", max_marker)]])
+        } else {
+            cur_markers <- cur_markers[[paste0("Marker_", max_marker)]]
         }
     }
     return(cur_markers)
