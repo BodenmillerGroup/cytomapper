@@ -240,6 +240,28 @@
     })
 }
 
+# Helper function to clear objects
+.clearObjects <- function(objValues, iter){
+    lapply(seq_len(length(reactiveValuesToList(objValues))), function(cur_obj){
+        if (cur_obj > iter) {
+            objValues[[paste0("object", cur_obj)]] <- NULL
+        }
+    })
+}
+
+# Helper function to reset brush
+.clearBrush <- function(input, session, iter){
+    
+    cur_brushs <- reactiveValuesToList(input)
+    cur_brushs <- cur_brushs[grepl("plot_brush", names(cur_brushs))]
+    
+    lapply(seq_len(length(cur_brushs)), function(cur_obj){
+        if (cur_obj > iter) {
+            session$resetBrush(paste0("plot_brush", cur_obj))
+        }
+    })
+}
+
 # Function to allow brushing
 #' @importFrom S4Vectors metadata
 #' @importFrom SummarizedExperiment metadata<-
@@ -285,7 +307,11 @@
     if (sum(cur_selection$selected_) > 0) {
         objValues[[paste0("object", iter + 1)]] <- next_obj[,cur_selection$selected_]
     } else {
+        # Set next object to NULL
         objValues[[paste0("object", iter + 1)]] <- NULL
+        
+        # Clear all following objects
+        .clearObjects(objValues, iter)
     }
     
 }
@@ -428,13 +454,8 @@
         
         if (is.null(input[[paste0("plot_brush", iter)]])) {
             
-            # Remove all objects higher than iter
-            lapply(seq_len(length(reactiveValuesToList(objValues))), function(cur_obj){
-                if (cur_obj > iter) {
-                    objValues[[paste0("object", cur_obj)]] <- NULL
-                    #session$resetBrush(paste0("plot_brush", cur_obj))
-                }
-            })
+            .clearObjects(objValues, iter)
+            .clearBrush(input, session, iter)
             
         } else {
             .brushObject(input, session, objValues, iter = iter) 
