@@ -316,7 +316,7 @@
     
 }
 
-# Scatter/violin plot helpers
+# Scatter plot helpers
 .plotScatter <- function(input, rValues, objValues, iter, cur_val){
 
     if (!is.null(objValues[[paste0("object", iter)]])) {
@@ -377,33 +377,56 @@
                                         input$assay)))
         cur_df$sample <- input$sample
         
-        p <- ggplot(cur_df) +
-            geom_violin(aes_(x = quote(sample),
-                             y = as.name(input[[paste0("Marker_", cur_val)]])), 
-                        show.legend = FALSE) +
-            geom_quasirandom(aes_(x = quote(sample),
-                                  y = as.name(input[[paste0("Marker_", cur_val)]])), 
-                             show.legend = FALSE,
-                             groupOnX = TRUE) + 
-            xlab(input$sample) +
-            theme(axis.text.x = element_blank(),
-                  panel.background = element_blank()) +
-            ylim(c(rValues$ranges[input[[paste0("Marker_", cur_val)]], 1], 
-                   rValues$ranges[input[[paste0("Marker_", cur_val)]], 2])) 
+        # If fewer than 3 points are selected, we will use point instead of violin plots
+        if (nrow(cur_df) < 3) {
+            p <- ggplot(cur_df) +
+                geom_point(aes_(x = quote(sample),
+                                 y = as.name(input[[paste0("Marker_", cur_val)]])), 
+                            show.legend = FALSE) + 
+                xlab(input$sample) +
+                theme(axis.text.x = element_blank(),
+                      panel.background = element_blank()) +
+                ylim(c(rValues$ranges[input[[paste0("Marker_", cur_val)]], 1], 
+                       rValues$ranges[input[[paste0("Marker_", cur_val)]], 2])) 
+        } else {
+            p <- ggplot(cur_df) +
+                geom_violin(aes_(x = quote(sample),
+                                 y = as.name(input[[paste0("Marker_", cur_val)]])), 
+                            show.legend = FALSE) +
+                geom_quasirandom(aes_(x = quote(sample),
+                                      y = as.name(input[[paste0("Marker_", cur_val)]])), 
+                                 show.legend = FALSE,
+                                 groupOnX = TRUE) + 
+                xlab(input$sample) +
+                theme(axis.text.x = element_blank(),
+                      panel.background = element_blank()) +
+                ylim(c(rValues$ranges[input[[paste0("Marker_", cur_val)]], 1], 
+                       rValues$ranges[input[[paste0("Marker_", cur_val)]], 2])) 
+        }
         
         if (!is.null(objValues[[paste0("object", iter + 1)]])) {
             
             cur_df$selected <- colData(objValues[[paste0("object", iter)]])[,cell_id] %in%
                 colData(objValues[[paste0("object", iter + 1)]])[,cell_id]
             
-            p <- p +
-                geom_quasirandom(aes_(x = quote(sample),
-                                      y = as.name(input[[paste0("Marker_", cur_val)]]),
-                                      colour = quote(selected)), 
-                                 show.legend = FALSE, data = cur_df,
-                                 groupOnX = TRUE) + 
-                scale_colour_manual(values = c(`FALSE` = "black",
-                                               `TRUE` = "red"))
+            if (nrow(cur_df) < 3) {
+                p <- p +
+                    geom_point(aes_(x = quote(sample),
+                                          y = as.name(input[[paste0("Marker_", cur_val)]]),
+                                          colour = quote(selected)),,
+                                     show.legend = FALSE, data = cur_df) + 
+                    scale_colour_manual(values = c(`FALSE` = "black",
+                                                   `TRUE` = "red"))
+            } else {
+                p <- p +
+                    geom_quasirandom(aes_(x = quote(sample),
+                                          y = as.name(input[[paste0("Marker_", cur_val)]]),
+                                          colour = quote(selected)), 
+                                     show.legend = FALSE, data = cur_df,
+                                     groupOnX = TRUE) + 
+                    scale_colour_manual(values = c(`FALSE` = "black",
+                                                   `TRUE` = "red"))  
+            }
             
         }
         
