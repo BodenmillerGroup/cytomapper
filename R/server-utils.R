@@ -101,6 +101,17 @@
         )
     })
     
+    # Marker change observer - change tab if markers change
+    observeEvent({
+            lapply(seq_len(24), function(cur_mark){
+                input[[paste0("Marker_", cur_mark)]]
+            })
+        }, {
+        updateTabsetPanel(session, "tabbox1",
+                          selected = "tab1"
+        )
+    })
+    
 }
 
 # Create updateSelectizeInput objects
