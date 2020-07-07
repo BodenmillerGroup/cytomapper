@@ -373,7 +373,16 @@
         }
         
     } else {
-        p <- ggplot() +
+        
+        # We need to simulate a dataframe to allow brushing
+        cur_df <- data.frame(row.names = "ph")
+        cur_df[[input[[paste0("Marker_", cur_val)]]]] <- 1
+        cur_df$sample <- 1
+        
+        p <- ggplot(cur_df) +
+            geom_blank(aes_(x = quote(sample),
+                            y = as.name(input[[paste0("Marker_", cur_val)]])), 
+                       show.legend = FALSE) + 
             ylim(c(rValues$ranges[input[[paste0("Marker_", cur_val)]], 1], 
                    rValues$ranges[input[[paste0("Marker_", cur_val)]], 2])) + 
             ylab(input[[paste0("Marker_", cur_val)]]) +
