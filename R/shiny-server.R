@@ -9,20 +9,6 @@
     # Session info observer
     cur_sessionInfo <- sessionInfo()
     .create_general_observer(input, si = cur_sessionInfo)
-    
-    # Sample change observer - change tab if sample changes
-    observeEvent(input$sample, {
-        updateTabsetPanel(session, "tabbox1",
-                          selected = "tab1"
-        )
-    })
-    
-    # Assay change observer - change tab if assay changes
-    observeEvent(input$assay, {
-        updateTabsetPanel(session, "tabbox1",
-                          selected = "tab1"
-        )
-    })
 
     # Save some variables used throught the app
     rValues <- reactiveValues(ranges = NULL)

@@ -87,6 +87,20 @@
         
     }, ignoreInit = TRUE)
     
+    # Sample change observer - change tab if sample changes
+    observeEvent(input$sample, {
+        updateTabsetPanel(session, "tabbox1",
+                          selected = "tab1"
+        )
+    })
+    
+    # Assay change observer - change tab if assay changes
+    observeEvent(input$assay, {
+        updateTabsetPanel(session, "tabbox1",
+                          selected = "tab1"
+        )
+    })
+    
 }
 
 # Create updateSelectizeInput objects
