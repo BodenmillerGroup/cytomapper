@@ -385,9 +385,11 @@
                        show.legend = FALSE) + 
             ylim(c(rValues$ranges[input[[paste0("Marker_", cur_val)]], 1], 
                    rValues$ranges[input[[paste0("Marker_", cur_val)]], 2])) + 
+            xlim(c(0.5, 1.5)) + 
             ylab(input[[paste0("Marker_", cur_val)]]) +
             xlab(input$sample) +
-            theme_minimal()
+            theme(axis.text.x = element_blank(),
+                  panel.background = element_blank())
     }
         
     return(p)
