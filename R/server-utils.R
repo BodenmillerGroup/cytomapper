@@ -24,6 +24,28 @@
     }
 }
 
+# Helper function to clear objects
+.clearObjects <- function(objValues, iter){
+    lapply(seq_len(length(reactiveValuesToList(objValues))), function(cur_obj){
+        if (cur_obj > iter) {
+            objValues[[paste0("object", cur_obj)]] <- NULL
+        }
+    })
+}
+
+# Helper function to reset brush
+.clearBrush <- function(input, session, iter){
+    
+    cur_brushs <- reactiveValuesToList(input)
+    cur_brushs <- cur_brushs[grepl("plot_brush", names(cur_brushs))]
+    
+    lapply(seq_len(length(cur_brushs)), function(cur_obj){
+        if (cur_obj > iter) {
+            session$resetBrush(paste0("plot_brush", cur_obj))
+        }
+    })
+}
+
 # Generate help text
 .general_help <- function(){
     pre(
@@ -68,6 +90,11 @@
     # Select first object
     observeEvent(input$sample, {
         objValues$object1 <- object[,colData(object)[,img_id] == input$sample]
+        
+        updateTabsetPanel(session, "tabbox1",
+                          selected = "tab1"
+        )
+        
     }, ignoreInit = TRUE)
     
     observeEvent(input$assay, {
@@ -77,25 +104,17 @@
         rValues$ranges <- cur_ranges
         
         # Reset gates and objects
-        lapply(seq_len(sum(grepl("plot_brush", names(input)))), function(cur_obj){
-            if (cur_obj > 1) {
-                objValues[[paste0("object", cur_obj)]] <- NULL 
-            }    
-            
-            session$resetBrush(paste0("plot_brush", cur_obj))
-        })
+        .clearObjects(objValues, iter = 1)
+        .clearBrush(input, session, iter = 1)
         
     }, ignoreInit = TRUE)
 
     # Plot change observer - change tab if number of plots ar changed
     observeEvent(input$plotCount, {
-        updateTabsetPanel(session, "tabbox1",
-                          selected = "tab1"
-        )
-    })
+        # Reset gates and objects
+        .clearObjects(objValues, iter = 1)
+        .clearBrush(input, session, iter = 1)
         
-    # Sample change observer - change tab if sample changes
-    observeEvent(input$sample, {
         updateTabsetPanel(session, "tabbox1",
                           selected = "tab1"
         )
@@ -106,6 +125,10 @@
         updateTabsetPanel(session, "tabbox1",
                           selected = "tab1"
         )
+        
+        # Reset gates and objects
+        .clearObjects(objValues, iter = 1)
+        .clearBrush(input, session, iter = 1)
     })
     
     # Marker change observer - change tab if markers change
@@ -255,28 +278,6 @@
                 title = "Selection", status = "primary",
                 width = 6, height = "550px")
             )
-    })
-}
-
-# Helper function to clear objects
-.clearObjects <- function(objValues, iter){
-    lapply(seq_len(length(reactiveValuesToList(objValues))), function(cur_obj){
-        if (cur_obj > iter) {
-            objValues[[paste0("object", cur_obj)]] <- NULL
-        }
-    })
-}
-
-# Helper function to reset brush
-.clearBrush <- function(input, session, iter){
-    
-    cur_brushs <- reactiveValuesToList(input)
-    cur_brushs <- cur_brushs[grepl("plot_brush", names(cur_brushs))]
-    
-    lapply(seq_len(length(cur_brushs)), function(cur_obj){
-        if (cur_obj > iter) {
-            session$resetBrush(paste0("plot_brush", cur_obj))
-        }
     })
 }
 
