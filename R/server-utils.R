@@ -302,7 +302,7 @@
             geom_point(aes_(as.name(input[[paste0("Marker_", cur_val)]]), 
                             as.name(input[[paste0("Marker_", cur_val + 1)]])), 
                        show.legend = FALSE) +
-            theme_minimal() + 
+            theme(panel.background = element_blank()) + 
             ylim(c(rValues$ranges[input[[paste0("Marker_", cur_val + 1)]], 1], 
                    rValues$ranges[input[[paste0("Marker_", cur_val + 1)]], 2])) +
             xlim(c(rValues$ranges[input[[paste0("Marker_", cur_val)]], 1], 
@@ -320,14 +320,23 @@
         }
         
     } else {
-        p <- ggplot() +
+        
+        # We need to simulate a dataframe to allow brushing
+        cur_df <- data.frame(row.names = "ph")
+        cur_df[[input[[paste0("Marker_", cur_val)]]]] <- 1
+        cur_df[[input[[paste0("Marker_", cur_val + 1)]]]] <- 1
+        
+        p <- ggplot(cur_df) +
+            geom_blank(aes_(as.name(input[[paste0("Marker_", cur_val)]]), 
+                            as.name(input[[paste0("Marker_", cur_val + 1)]])),
+                       show.legend = FALSE) + 
             ylim(c(rValues$ranges[input[[paste0("Marker_", cur_val + 1)]], 1], 
                    rValues$ranges[input[[paste0("Marker_", cur_val + 1)]], 2])) +
             xlim(c(rValues$ranges[input[[paste0("Marker_", cur_val)]], 1], 
                    rValues$ranges[input[[paste0("Marker_", cur_val)]], 2])) +
             xlab(input[[paste0("Marker_", cur_val)]]) +
             ylab(input[[paste0("Marker_", cur_val + 1)]]) +
-            theme_minimal()
+            theme(panel.background = element_blank())
     }
     
     return(p)
