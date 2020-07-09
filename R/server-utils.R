@@ -383,9 +383,7 @@
             ylab(input[[paste0("Marker_", cur_val + 1)]]) +
             theme(panel.background = element_blank())
     }
-    
     return(p)
-    
 }
 
 # Violin plot helper
@@ -432,7 +430,7 @@
                 p <- p +
                     geom_point(aes_(x = quote(sample),
                                           y = as.name(input[[paste0("Marker_", cur_val)]]),
-                                          colour = quote(selected)),,
+                                          colour = quote(selected)),
                                      show.legend = FALSE, data = cur_df) + 
                     scale_colour_manual(values = c(`FALSE` = "black",
                                                    `TRUE` = "red"))
@@ -468,9 +466,7 @@
             theme(axis.text.x = element_blank(),
                   panel.background = element_blank())
     }
-        
     return(p)
-        
 }
 
 # Create scatter plots
