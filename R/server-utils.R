@@ -285,7 +285,6 @@
 #' @importFrom S4Vectors metadata
 #' @importFrom SummarizedExperiment metadata<-
 .brushObject <- function(input, session, objValues, iter){
-    
     cur_val <- (iter * 2) - 1
     
     if (is.null(objValues[[paste0("object", iter)]])) {
@@ -321,7 +320,17 @@
     
     # Save gates
     next_obj <- objValues[[paste0("object", iter)]]
-    metadata(next_obj)[[paste0("cytomapper_gate_", iter)]] <- cur_gate
+    
+    # check if metadata is a data.frame
+    if (inherits(metadata(next_obj), "list") == FALSE){
+      cur_meta <- list(metadata = metadata(next_obj))
+      cur_meta[[paste0("cytomapper_gate_", iter)]] <- cur_gate
+      metadata(next_obj) <- cur_meta
+    }
+    
+    else {
+      metadata(next_obj)[[paste0("cytomapper_gate_", iter)]] <- cur_gate
+    }
     
     if (sum(cur_selection$selected_) > 0) {
         objValues[[paste0("object", iter + 1)]] <- next_obj[,cur_selection$selected_]
@@ -389,7 +398,7 @@
 # Violin plot helper
 .plotViolin <- function(input, rValues, objValues, iter, cur_val, cell_id){
     
-    if (!is.null(objValues[[paste0("object", iter)]])) {
+    if (!is.null(objValues[[paste0("object", iter)]])) { 
         cur_df <- as.data.frame(t(assay(objValues[[paste0("object", iter)]], 
                                         input$assay)))
         cur_df$sample <- input$sample
