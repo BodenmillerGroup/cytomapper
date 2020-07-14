@@ -321,13 +321,12 @@
     # Save gates
     next_obj <- objValues[[paste0("object", iter)]]
     
-    # check if metadata is a data.frame
-    if (inherits(metadata(next_obj), "list") == FALSE){
+    if (!is.null(metadata(next_obj)) & iter == 1) {
       cur_meta <- list(metadata = metadata(next_obj))
       cur_meta[[paste0("cytomapper_gate_", iter)]] <- cur_gate
       metadata(next_obj) <- cur_meta
     }
-    
+  
     else {
       metadata(next_obj)[[paste0("cytomapper_gate_", iter)]] <- cur_gate
     }
