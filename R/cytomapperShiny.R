@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 #'Shiny application to visualise gated cells on images
 #'
 #'This shiny application allows users to gate cells based on their raw or
@@ -74,7 +75,6 @@
 #'  plotting function
 #'
 #' @examples 
-#' \code{
 #' ## Only run this example in interactive R sessions
 #' if (interactive()) {
 #'    # Load cytomapper
@@ -96,8 +96,7 @@
 #'    # Use shiny with SCE object only
 #'    cytomapperShiny(object = pancreasSCE,
 #'                    cell_id = "CellNb", img_id = "ImageNb")
-#'                    }
-#'                    }
+#'}
 #'
 #'@author Nils Eling (\email{nils.eling@@dqbm.uzh.ch})
 #'@author Tobias Hoch (\email{tobias.hoch@@dqbm.uzh.ch})
@@ -112,22 +111,21 @@ cytomapperShiny <- function(object,
                         cell_id = NULL,
                         img_id = NULL,
                         ...) {
-    
-    # Further checks for shiny:
-    # img_id needs to be specified even if image/mask is not specified
-    # Check if channelNames and rownames are correctly set.
-    # If image is specified, mask must also be specified
-    
     # Object checks
-    .valid.sce.shiny(object, img_id)
+    .valid.sce.shiny(object, img_id, image)
     
     if (!is.null(mask)) {
         .valid.sce(object, img_id, cell_id, exprs_values = NULL)
         .valid.mask(mask, img_id)
+        .valid.matchObjects.plotCells(object, mask, img_id)
     }
     
     if (!is.null(image)) {
+        if (is.null(mask)) {
+            stop("Please provide a mask object.")
+        }
         .valid.image(image, img_id)
+        .valid.matchObjects.plotPixels(object, mask, image, img_id)
     }
 
     shiny_ui <- dashboardPage(
@@ -136,7 +134,7 @@ cytomapperShiny <- function(object,
         body = .cytomapper_body(),
     )
 
-    shiny_server <- function(input, output, session, ...) {
+    shiny_server <- function(input, output, session) {
         .cytomapper_server(object, mask, image, cell_id, img_id, 
                            input, output, session, ...)
     }

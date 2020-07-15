@@ -9,7 +9,7 @@
     # Session info observer
     cur_sessionInfo <- sessionInfo()
     .create_general_observer(input, si = cur_sessionInfo)
-
+    
     # Save some variables used throught the app
     rValues <- reactiveValues(ranges = NULL)
     
