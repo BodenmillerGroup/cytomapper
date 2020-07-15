@@ -28,6 +28,8 @@
 #' the \code{colData} entry storing unique sample IDs.
 #' 
 #' If mask is specified
+#' 
+#' If image is specified - also specify mask
 #'
 #' @section The user interface
 #'
@@ -75,22 +77,21 @@ cytomapperShiny <- function(object,
                         cell_id = NULL,
                         img_id = NULL,
                         ...) {
-    
-    # Further checks for shiny:
-    # img_id needs to be specified even if image/mask is not specified
-    # Check if channelNames and rownames are correctly set.
-    # If image is specified, mask must also be specified
-    
     # Object checks
-    .valid.sce.shiny(object, img_id)
+    .valid.sce.shiny(object, img_id, image)
     
     if (!is.null(mask)) {
         .valid.sce(object, img_id, cell_id, exprs_values = NULL)
         .valid.mask(mask, img_id)
+        .valid.matchObjects.plotCells(object, mask, img_id)
     }
     
     if (!is.null(image)) {
+        if (is.null(mask)) {
+            stop("Please provide a mask object.")
+        }
         .valid.image(image, img_id)
+        .valid.matchObjects.plotPixels(object, mask, image, img_id)
     }
 
     shiny_ui <- dashboardPage(
