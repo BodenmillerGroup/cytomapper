@@ -273,15 +273,17 @@
                         selected = "",
                         options = list(placeholder = '', maxItems = 1)),
                     contrast_input_2),
-                svgPanZoomOutput("image_expression", height = "300px"), 
+                column(width = 12,
+                       svgPanZoomOutput("image_expression", height = "300px")), 
                 title = "Expression", status = "primary",
                 width = 6, height = "550px"
                 ),
             box(
-                svgPanZoomOutput("image_selection"), 
-                title = "Selection", status = "primary",
-                width = 6, height = "550px")
-            )
+                column(width = 12,
+                    svgPanZoomOutput("image_selection")), 
+                    title = "Selection", status = "primary",
+                    width = 6, height = "550px")
+                )
     })
 }
 
@@ -615,6 +617,12 @@
                             ...)))
             )
         } else {
+            
+            if (length(cur_markers) > 1) {
+                validate(need(cur_markers[1] != cur_markers[2],
+                              message = "Please specify two different markers"))   
+            }
+            
             cur_image <- image[mcols(image)[,img_id] == input$sample]
             suppressMessages(
                 svgPanZoom(zoomScaleSensitivity = 0.4, controlIconsEnabled = TRUE, stringSVG(
@@ -666,8 +674,13 @@
                               ...)))
             )
             
-        } 
-        else {
+        } else {
+            
+            if (length(cur_markers) > 1) {
+                validate(need(cur_markers[1] != cur_markers[2],
+                              message = "Please specify two different markers"))   
+            }
+            
             cur_image <- image[mcols(image)[,img_id] == input$sample]
             suppressMessages(
                 svgPanZoom(zoomScaleSensitivity = 0.4, controlIconsEnabled = TRUE, stringSVG(
