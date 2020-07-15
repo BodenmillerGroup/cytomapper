@@ -9,6 +9,9 @@ author:
 - name: Nicolas Damond
   affiliation: Department for Quantitative Biomedicine, University of Zurich
   email: nicolas.damond@dqbm.uzh.ch
+- name: Tobias Hoch
+  affiliation: Department for Quantitative Biomedicine, University of Zurich
+  email: tobias.hoch@dqbm.uzh.ch
 output:
     BiocStyle::html_document:
         toc_float: yes
@@ -855,6 +858,44 @@ images in individual files. The filename will be altered to the form
 `filename_x.png` where `x` is the position of the image in the `CytoImageList`
 object or `legend`.
 
+# Gating cells on images
+
+The `cytomapper` package provides the `cytomapperShiny` function to gate cells
+based on their expression values and visualizes selected cells on their
+corresponing images. This selection strategy can be useful if user-defined
+cell-type labels should be generated for cell-type classification. For details,
+please refer to the `?cytomapperShiny` manual or the `Help` button within the
+shiny application.
+
+In brief, the `cytomapperShiny` function takes a `SingleCellExperiment` and
+(optionally) either a `CytoImageList` segmentation mask or a segmentation mask
+AND a `CytoImageList` multi-channel image object as input. The user needs to
+further provide an `img_id` and `cell_id` entry (see [above](#DataFormats)).
+
+The user can specify the number of plots (maximal 12 plot, maximal 2 marker per
+plot), select the individual images (specified in the `img_id` entry) and the
+different `assay` slots of the `SingleCellExperiment` object. Furthermore, for
+each plot, up to two markers can be selected for visualziation and gating.
+Gating is performed in a hierarchical fashion meaning that only the selected
+cells are displayed on the following plot. As an example: if the user selects
+certain cells in `Plot 1`, the expression values of only those cells are
+displayed in `Plot 2` and so on. If the user selects only one marker, the
+expression values are displayed as violin/beeswarm plots; if two markers are
+specified, expression values are displayed as scatter plots.
+
+If the user provides a `CytoImageList` segmentation mask object, the `plotCells`
+function is called internally to visualize marker expression as well as the
+selected cells on the segmentation mask. Pixel-level information is diplayed if
+the user provides a `CytoImageList` multi-channel image object. In this setting,
+the user also needs to provide a segmentation mask object to outline the selected cells on
+the composite images.
+
+As a final step, the user can download the selected cells in form of a
+`SingleCellExperiment` object. Furthermore, the user can specify a label for the
+current selection. The gates are stored in the `metadata(object)` entry. **Of
+note:** the metadata that was stored in the original object can be accessed via
+`metadata(object)$metadata`.
+
 # Acknowledgements
 
 We want to thank the [Bodenmiller laboratory](http://www.bodenmillerlab.org) for
@@ -864,7 +905,8 @@ Special thanks goes to Daniel Schulz and Jana Fischer for testing the package.
 # Contributions
 
 Nicolas created the first version of `cytomapper` (named `IMCMapper`). Nils and
-Nicolas implemented and maintain the package.
+Nicolas implemented and maintain the package. Nils and Tobias implemented and
+maintain the `cytomapperShiny` function. 
 
 # Session info {.unnumbered}
 
