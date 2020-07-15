@@ -137,9 +137,13 @@
                 input[[paste0("Marker_", cur_mark)]]
             })
         }, {
-        updateTabsetPanel(session, "tabbox1",
-                          selected = "tab1"
-        )
+            updateTabsetPanel(session, "tabbox1",
+                              selected = "tab1"
+            )
+            
+            # Reset gates and objects
+            .clearObjects(objValues, iter = 1)
+            .clearBrush(input, session, iter = 1)
     })
     
 }
@@ -321,13 +325,11 @@
     # Save gates
     next_obj <- objValues[[paste0("object", iter)]]
     
-    if (!is.null(metadata(next_obj)) & iter == 1) {
+    if (!is.null(metadata(next_obj)) && iter == 1) {
       cur_meta <- list(metadata = metadata(next_obj))
       cur_meta[[paste0("cytomapper_gate_", iter)]] <- cur_gate
       metadata(next_obj) <- cur_meta
-    }
-  
-    else {
+    } else {
       metadata(next_obj)[[paste0("cytomapper_gate_", iter)]] <- cur_gate
     }
     
@@ -398,6 +400,7 @@
 .plotViolin <- function(input, rValues, objValues, iter, cur_val, cell_id){
     
     if (!is.null(objValues[[paste0("object", iter)]])) { 
+        
         cur_df <- as.data.frame(t(assay(objValues[[paste0("object", iter)]], 
                                         input$assay)))
         cur_df$sample <- input$sample
