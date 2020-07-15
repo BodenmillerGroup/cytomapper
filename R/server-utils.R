@@ -111,13 +111,13 @@
 
     # Plot change observer - change tab if number of plots ar changed
     observeEvent(input$plotCount, {
-        # Reset gates and objects
-        .clearObjects(objValues, iter = 1)
-        .clearBrush(input, session, iter = 1)
         
         updateTabsetPanel(session, "tabbox1",
-                          selected = "tab1"
-        )
+                          selected = "tab1")
+        
+        # Reset gates and objects
+        .clearObjects(objValues, iter = 1)
+        .clearBrush(input, session, iter = 0)
     })
     
     # Assay change observer - change tab if assay changes
