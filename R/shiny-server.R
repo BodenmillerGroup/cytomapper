@@ -10,7 +10,7 @@
     cur_sessionInfo <- sessionInfo()
     .create_general_observer(input, si = cur_sessionInfo)
 
-    # Save some variables used throught the app
+    # Save some variables used through the app
     rValues <- reactiveValues(ranges = NULL)
     
     # Reactive object list to store selected cells
@@ -43,9 +43,9 @@
     })
     
     if (!is.null(mask) || !is.null(image)) {
-        output$image_expression <- .createImageExpression(input, object, mask, image, img_id, cell_id, ...)
+        output$image_expression <- .createImageExpression(input, rValues, object, mask, image, img_id, cell_id, ...)
         
-        output$image_selection <- .createImageSelection(input, objValues, mask, image, img_id, cell_id, ...)
+        output$image_selection <- .createImageSelection(input, rValues, objValues, mask, image, img_id, cell_id, ...)
     }
     
     output$downloadData <- .downloadSelection(input, objValues)

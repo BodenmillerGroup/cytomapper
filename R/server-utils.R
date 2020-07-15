@@ -86,12 +86,56 @@
 # Create interactive observers
 #' @importFrom matrixStats rowRanges
 .create_interactive_observer <- function(object, img_id, input, session, rValues, objValues){
+  
+  # Next Image Observer
+  observeEvent(input$next.sample, {
+    img_IDs <- unique(colData(object)[,img_id])
+    cur_index <- match(input$sample, img_IDs)
+    updated_index <- ifelse(cur_index == length(img_IDs), 1, cur_index+1)
     
+    # return updated img_id and store in rValues
+    updated_sample <- img_IDs[updated_index]
+    objValues$object1 <- object[,colData(object)[,img_id] == updated_sample]
+    
+    updateSelectizeInput(session, inputId = "sample",
+                         choices = unique(img_IDs),
+                         selected = updated_sample)
+    
+    # update tab
+    updateTabsetPanel(session, "tabbox1",
+                      selected = "tab1"
+    )
+    
+    }, ignoreInit = TRUE)    
+  
+  # Previous Image Observer
+  observeEvent(input$previous.sample, {
+    img_IDs <- unique(colData(object)[,img_id])
+    cur_index <- match(input$sample, img_IDs)
+    updated_index <- ifelse(cur_index == 1,  length(img_IDs), cur_index-1)
+    
+    # return updated img_id
+    updated_sample <- img_IDs[updated_index]
+    objValues$object1 <- object[,colData(object)[,img_id] == updated_sample]
+    
+    updateSelectizeInput(session, inputId = "sample",
+                         choices = unique(img_IDs),
+                         selected = updated_sample)
+    
+    updateTabsetPanel(session, "tabbox1",
+                      selected = "tab1"
+    )
+  }, ignoreInit = TRUE)    
+  
+  
     # Select first object
     observeEvent(input$sample, {
-        objValues$object1 <- object[,colData(object)[,img_id] == input$sample]
-        
-        updateTabsetPanel(session, "tabbox1",
+      img_IDs <- unique(colData(object)[,img_id])
+      cur_index <- match(input$sample, img_IDs)
+      
+      objValues$object1 <- object[,colData(object)[,img_id] == input$sample]
+      
+      updateTabsetPanel(session, "tabbox1",
                           selected = "tab1"
         )
         
@@ -149,7 +193,7 @@
     # Store image IDs and marker names
     img_IDs <- colData(object)[,img_id]
     markers <- rownames(object)
-    
+
     updateSelectizeInput(session, inputId = "sample",
                          choices = unique(img_IDs),
                          selected = unique(img_IDs)[1])
@@ -286,7 +330,6 @@
 #' @importFrom SummarizedExperiment metadata<-
 .brushObject <- function(input, session, objValues, iter){
     cur_val <- (iter * 2) - 1
-    
     if (is.null(objValues[[paste0("object", iter)]])) {
         return(NULL)
     }
@@ -296,6 +339,7 @@
     cur_df$sample <- input$sample
     
     # Brush the data.frame
+    
     cur_selection <- brushedPoints(cur_df, input[[paste0("plot_brush", iter)]], allRows = TRUE)
     
     # Save the Gate
@@ -325,9 +369,7 @@
       cur_meta <- list(metadata = metadata(next_obj))
       cur_meta[[paste0("cytomapper_gate_", iter)]] <- cur_gate
       metadata(next_obj) <- cur_meta
-    }
-  
-    else {
+    } else {
       metadata(next_obj)[[paste0("cytomapper_gate_", iter)]] <- cur_gate
     }
     
@@ -350,7 +392,7 @@
         cur_df <- as.data.frame(t(assay(objValues[[paste0("object", iter)]], 
                                         input$assay)))
         cur_df$sample <- input$sample
-        
+
         p <- ggplot(cur_df) +
             geom_point(aes_(as.name(input[[paste0("Marker_", cur_val)]]), 
                             as.name(input[[paste0("Marker_", cur_val + 1)]])), 
@@ -504,7 +546,7 @@
             .clearBrush(input, session, iter)
             
         } else {
-            .brushObject(input, session, objValues, iter = iter) 
+            .brushObject(input, session, rValues, objValues, iter = iter) 
         }
         
         # Plot scatter or violin
@@ -526,8 +568,7 @@
     if (input$exprs_marker_1 != "") {
         if (input$exprs_marker_2 != "") {
             cur_markers <- c(input$exprs_marker_1, input$exprs_marker_2)
-        } 
-        else{
+        } else{
             cur_markers <- input$exprs_marker_1
         }
     } else {
@@ -595,9 +636,8 @@
 #' @importFrom svglite stringSVG
 .createImageExpression <- function(input, object, mask, image, img_id, cell_id, ...){
     renderSvgPanZoom({
-        
-        cur_markers <- .select_markers(input)
-        cur_bcg <- .select_contrast(input)
+      cur_markers <- .select_markers(input)
+      cur_bcg <- .select_contrast(input)
         
         if (is.null(image)) {
             cur_mask <- mask[mcols(mask)[,img_id] == input$sample]
@@ -630,9 +670,9 @@
 #' @importFrom S4Vectors metadata
 .createImageSelection <- function(input, objValues, mask, image, img_id, cell_id, ...){
     renderSvgPanZoom({
-        
+      
         cur_val <- (input$plotCount * 2) - 1
-        
+        req(input$sample)
         req(objValues$object2)
         
         cur_markers <- .select_markers(input)
@@ -643,7 +683,7 @@
         cur_object <- cur_object[[paste0("object", length(cur_object))]]
         
         cur_object$selected <- TRUE
-    
+        
         if (is.null(image)) {
             cur_mask <- mask[mcols(mask)[,img_id] == input$sample] 
             suppressMessages(
@@ -658,8 +698,7 @@
                               ...)))
             )
             
-        } 
-        else {
+        } else {
             cur_mask <- mask[mcols(mask)[,img_id] == input$sample]
             cur_image <- image[mcols(image)[,img_id] == input$sample]
             suppressMessages(
