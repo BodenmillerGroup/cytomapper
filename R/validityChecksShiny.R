@@ -1,5 +1,5 @@
 # Check sce validity for shiny
-.valid.sce.shiny <- function(object, img_id){
+.valid.sce.shiny <- function(object, img_id, image){
     if (!is(object, "SingleCellExperiment")) {
         stop("'object' is not of type 'SingleCellExperiment'.")
     }

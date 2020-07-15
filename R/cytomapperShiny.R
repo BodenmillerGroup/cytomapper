@@ -100,7 +100,7 @@ cytomapperShiny <- function(object,
         body = .cytomapper_body(),
     )
 
-    shiny_server <- function(input, output, session, ...) {
+    shiny_server <- function(input, output, session) {
         .cytomapper_server(object, mask, image, cell_id, img_id, 
                            input, output, session, ...)
     }
