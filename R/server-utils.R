@@ -636,7 +636,7 @@
         
         cur_val <- (input$plotCount * 2) - 1
         
-        req(objValues$object2)
+        req(input$plot_brush1)
         
         cur_markers <- .select_markers(input)
         cur_bcg <- .select_contrast(input)
@@ -646,9 +646,14 @@
         cur_object <- cur_object[[paste0("object", length(cur_object))]]
         
         cur_object$selected <- TRUE
+        
+        cur_mask <- mask[mcols(mask)[,img_id] == input$sample] 
+        
+        if (unique(mcols(cur_mask)[,img_id]) != unique(colData(cur_object)[,img_id])) {
+            return(NULL)
+        }
     
         if (is.null(image)) {
-            cur_mask <- mask[mcols(mask)[,img_id] == input$sample] 
             suppressMessages(
                 svgPanZoom(zoomScaleSensitivity = 0.4, controlIconsEnabled = TRUE, stringSVG(
                     plotCells(object = cur_object,
@@ -663,7 +668,6 @@
             
         } 
         else {
-            cur_mask <- mask[mcols(mask)[,img_id] == input$sample]
             cur_image <- image[mcols(image)[,img_id] == input$sample]
             suppressMessages(
                 svgPanZoom(zoomScaleSensitivity = 0.4, controlIconsEnabled = TRUE, stringSVG(
