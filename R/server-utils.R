@@ -607,7 +607,8 @@
         if (is.null(image)) {
             cur_mask <- mask[mcols(mask)[,img_id] == input$sample]
             suppressMessages(
-                svgPanZoom(zoomScaleSensitivity = 0.4, controlIconsEnabled = TRUE, stringSVG(
+                svgPanZoom(zoomScaleSensitivity = 0.4, maxZoom = 20,
+                           controlIconsEnabled = TRUE, stringSVG(
                     plotCells(object = object,
                             mask = cur_mask,
                             cell_id = cell_id,
@@ -625,10 +626,11 @@
             
             cur_image <- image[mcols(image)[,img_id] == input$sample]
             suppressMessages(
-                svgPanZoom(zoomScaleSensitivity = 0.4, controlIconsEnabled = TRUE, stringSVG(
+                svgPanZoom(zoomScaleSensitivity = 0.4, maxZoom = 20,
+                           controlIconsEnabled = TRUE, stringSVG(
                     plotPixels(image = cur_image,
                             colour_by = cur_markers,
-                            bcg = cur_bcg, 
+                            bcg = cur_bcg,
                             ...)))
             )
         }
@@ -663,7 +665,8 @@
     
         if (is.null(image)) {
             suppressMessages(
-                svgPanZoom(zoomScaleSensitivity = 0.4, controlIconsEnabled = TRUE, stringSVG(
+                svgPanZoom(zoomScaleSensitivity = 0.4, maxZoom = 20,
+                           controlIconsEnabled = TRUE, stringSVG(
                     plotCells(object = cur_object,
                               mask = cur_mask,
                               cell_id = cell_id,
@@ -683,7 +686,8 @@
             
             cur_image <- image[mcols(image)[,img_id] == input$sample]
             suppressMessages(
-                svgPanZoom(zoomScaleSensitivity = 0.4, controlIconsEnabled = TRUE, stringSVG(
+                svgPanZoom(zoomScaleSensitivity = 0.4, maxZoom = 20,
+                           controlIconsEnabled = TRUE, stringSVG(
                     plotPixels(image = cur_image,
                                object = cur_object,
                                mask = cur_mask,
