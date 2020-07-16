@@ -106,7 +106,7 @@ object will be converted to a list. It contains the original metadata
 \section{Passing further parameters}{
  
 To customise the visual output of \code{cytomapperShiny}, refer to
-\code{\link{'plotting-param'}}. Further arguments can be passed to the
+\code{\link{plotting-param}}. Further arguments can be passed to the
 \code{\link{plotCells}} and \code{\link{plotPixels}} function. As an example:
 To avoid interpolation of output images, set \code{interpolate = FALSE}.
 Passing the parameter \code{interpolate = FALSE} will make images less blurry,
