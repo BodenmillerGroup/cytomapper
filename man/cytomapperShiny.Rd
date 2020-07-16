@@ -17,14 +17,14 @@ cytomapperShiny(
 \item{object}{a \code{\linkS4class{SingleCellExperiment}} object.}
 
 \item{mask}{(optional) a \code{\linkS4class{CytoImageList}} containing
-single-channel \code{\linkS4class{Image}} objects}
+single-channel \code{\linkS4class{Image}} objects.}
 
 \item{image}{(optional) a \code{\linkS4class{CytoImageList}} object containing
 single or multi-channel \code{\linkS4class{Image}} objects.}
 
 \item{cell_id}{character specifying the \code{colData(object)} entry, in which
 the integer cell IDs are stored. These IDs should match the integer pixel
-values in the segmentation mask object.}
+values in the segmentation mask object (\code{mask}).}
 
 \item{img_id}{character specifying the \code{colData(object)} and
 \code{mcols(mask)} and/or \code{mcols(image)} entry, in which the image IDs
@@ -39,70 +39,91 @@ transformed expression values and visualises gated cells on their
 corresponding images.
 }
 \section{User inputs}{
- This function requires at least a
- \code{\linkS4class{SingleCellExperiment}} input object. Gating is performed
- on cell-specific marker counts stored in the \code{assay} slots of the
- object. These can either be raw counts (usually stored in the \code{counts}
- slot) or transformed/scaled counts stored in other assay slots. Gating can
- only be performed sample-wise; therefore, even if \code{mask} or
- \code{image} are not specified, \code{img_id} needs to point to the
- \code{colData} entry storing unique sample IDs.
 
- If mask is specified, marker expression values and selected cells will be
- visualised by using the \code{\link{plotCells}} function. To visualise
- pixel-level information with \code{\link{plotPixels}}, the user has to
- further provide multi-channel images stored in a \code{CytoImageList}.
+This function requires at least a \code{\linkS4class{SingleCellExperiment}}
+input object. Gating is performed on cell-specific marker counts stored in the
+\code{assay} slots of the object. These can either be raw counts (usually
+stored in the \code{counts} slot) or transformed/scaled counts stored in other
+assay slots. Gating can only be performed sample-wise; therefore, even if
+\code{mask} or \code{image} are not specified, \code{img_id} needs to point to
+the \code{colData} entry storing unique sample IDs.
+
+If mask is specified, marker expression values and selected cells will be
+visualised by using the \code{\link{plotCells}} function. To visualise
+pixel-level information with \code{\link{plotPixels}}, the user has to
+further provide multi-channel images stored in a \code{CytoImageList}.
 }
 
-\section{The user interface}{
- The UI is based on two tabs (\code{Scatter Plots} and
- \code{Images}) and a \code{General Control} panel. Using the control panel, the user
- can set the number of plots and the corresponding markers to define a cell
- population. A one-marker selection is displayed as jittered points, two
- markers are shown as scatter plot. To define a subset of cells, the user can
- draw gates on the plots. When using multiple plots, the gate applied in a plot
- will define the subset of cells displayed in the next plot. The number of plots, the marker selection and the applied
- gates will be transferred when switching between samples and assays.
+\section{The user interface (UI)}{
 
- Switching to the \code{Images} tab, the user can inspect marker expression levels
- and the result of the gating. This requires either \code{masks} or
- \code{images}. Depending on the input, the left image visualises the
- expression of the selected markers by using \code{\link{plotCells}} or
- \code{\link{plotPixels}}. Displayed markers can be changed using the
- dropdown menu. If \code{images} are provided, the user can change the
- contrast of the selected marker. The right image colors (\code{masks}) or
- outlines (\code{images}) gated cells. Both the left and the right image come
- with a zoom-in functionality.
+The UI's body is composed of two tabs (\emph{Scatter Plots} and
+\emph{Images}). The side bar contains the \emph{General Control} and
+\emph{Plots} panels. Both panels can be collapsed; however only one can be
+expanded again.. Using the control panel, the user can set the number of
+plots, which sample to display and which \code{assay} slot to use for plotting
+expression. The \emph{Plots} panel can be used to select up to two markers per
+plot. A one-marker selection is displayed as violin and jittered points, two
+markers are shown as scatter plot. To define a subset of cells, the user can
+draw gates on the plots. When using multiple plots, the gate applied in a plot
+will define the subset of cells displayed in the next plot. The number of
+plots, the marker selection and the applied gates will be transferred when
+switching between samples. When switching markers or assay slots, the gates
+will be removed.
 
- The header section of the shiny allows to hide the \code{General Control} panel,
- to download selected cells, or to display the \code{sessionInfo} output and
- the \code{Help} section.
+By switching to the \code{Images} tab, the user can inspect marker expression
+levels and the result of the gating. This requires either an entry to
+\code{mask} and (optionally) \code{image}. Depending on the input, the left
+image visualises the expression of the selected markers by using
+\code{\link{plotCells}} (if \code{mask} is supplied) or
+\code{\link{plotPixels}} (if \code{image} is supplied). Displayed markers can
+be changed using the dropdown menu. If \code{images} are provided, the user
+can change the contrast of the selected markers. The right image colors
+(\code{masks}) or outlines (\code{images}) gated cells. Both the left and the
+right image come with a zoom-in functionality.
+
+The header section of the shiny allows to hide the side bar, to download
+selected cells (see below), or to display the \code{sessionInfo} output and
+the \emph{Help} section (see below).
 }
 
 \section{Download of gated cells}{
- The user can download the cell selection in
- the form of a \code{\linkS4class{SingleCellExperiment}} object. The output
- is a subset of the input \code{\linkS4class{SingleCellExperiment}} object.
- The object contains a new \code{colData} entry containing the label of the
- subset defined by the user. The \code{metadata} slot of the
- \code{\linkS4class{SingleCellExperiment}} object will be converted to a
- list. It contains the original metadata, gating parameters,
- \code{sessionInfo()} output, and the date.
+ 
+The user can download the selected cells in form of a
+\code{\linkS4class{SingleCellExperiment}} object. The output is a subset of
+the input \code{SingleCellExperiment} object. The downloaded object (in form
+of a .rds file) contains a new \code{colData} entry containing the label of
+the subset defined by the user (using the \emph{Cell label} argument). The
+cell label is stored in \code{colData(object)$cytomapper_CellLabel}
+
+The \code{metadata} slot of the \code{\linkS4class{SingleCellExperiment}}
+object will be converted to a list. It contains the original metadata
+(\code{metadata(object)$metadata}), gating parameters (e.g.
+\code{metadata(object)$cytomapper_gate_1}), \code{sessionInfo()} output
+(\code{metadata(object)$cytomapper_SessionInfo}), and the date
+(\code{metadata(object)$cytomapper_GatingDate}).
 }
 
 \section{Passing further parameters}{
- To customise the visual output of
- cytomapperShiny, refer to \code{?'plotting-param'}. To avoid interpolation
- of output images, set \code{interpolate = FALSE}. Passing the parameter
- \code{interpolate = FALSE} will make images less blurry, which might be useful
- while using the zoom-in functionality of \code{cytomapperShiny} .
+ 
+To customise the visual output of \code{cytomapperShiny}, refer to
+\code{\link{'plotting-param'}}. Further arguments can be passed to the
+\code{\link{plotCells}} and \code{\link{plotPixels}} function. As an example:
+To avoid interpolation of output images, set \code{interpolate = FALSE}.
+Passing the parameter \code{interpolate = FALSE} will make images less blurry,
+which might be useful while using the zoom-in functionality of
+\code{cytomapperShiny} .
+}
+
+\section{Getting further help}{
+
+Please refer to the \emph{Help} section found when clicking the '?' button in
+the upper right corner. The \emph{Help} section contains a recommended
+workflow on how to use the app.
 }
 
 \examples{
-\code{
 ## Only run this example in interactive R sessions
 if (interactive()) {
-   # Load cytomapper
    library(cytomapper)
 
    # Load example data sets
@@ -121,13 +142,12 @@ if (interactive()) {
    # Use shiny with SCE object only
    cytomapperShiny(object = pancreasSCE,
                    cell_id = "CellNb", img_id = "ImageNb")
-                   }
-                   }
+}
 
 }
 \seealso{
 \code{\link{plotCells}} and \code{\link{plotPixels}} for the main
- plotting function
+plotting functions
 }
 \author{
 Nils Eling (\email{nils.eling@dqbm.uzh.ch})

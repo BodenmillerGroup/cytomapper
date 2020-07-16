@@ -718,13 +718,13 @@
             cur_object <- cur_object[!unlist(lapply(cur_object, is.null))]
             cur_object <- cur_object[[paste0("object", length(cur_object))]]
             
-            cur_object$CellLabel <- input$labelCellsBy
+            cur_object$cytomapper_CellLabel <- input$labelCellsBy
             
             # Add session info
-            metadata(cur_object)$SessionInfo <- sessionInfo()
+            metadata(cur_object)$cytomapper_SessionInfo <- sessionInfo()
             
             # Add date
-            metadata(cur_object)$GatingDate <- Sys.Date()
+            metadata(cur_object)$cytomapper_GatingDate <- Sys.Date()
             
             saveRDS(cur_object, file)
         }
