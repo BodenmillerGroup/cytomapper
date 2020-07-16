@@ -48,19 +48,46 @@
 
 # Generate help text
 .general_help <- function(){
-    pre(
-        h2("Using this Shiny app"),
-        p("Use the sidebar of the app to define how many plots and what markers you want to use to define your cell population of interest. If the provided SCE object has multiple assays available you can also "),
-        h2("Change the Assay"),
-        p(""),
-        h2("Visualization on the images"),
-        p("The selected cells can be seen on the images in the `Image` Tab. Double-click either on the `Expression` or `Selection` image to zoom-in.")
+    tagList(
+        h3("Using the Shiny application"),
+        p("This help page provides a recommended workflow on how to most efficiently use the app.",
+          "The workflow is solely a recommendation - the app provides full flexibility to change settings during each step.",
+          "To see the full documentation, please refer to the help page found at", em("?cytomapperShiny")),
+        h3("1. Select the number of plots"),
+        p("The slider under ", em("General controls"), " can be used to specify the number of plots on which to perform gating.",
+          "Up to two markers can be visualized per plot."),
+        h3("2. Select the sample"),
+        p("The ", em("assay"), " dropdown selection under ", em("General controls"), " allows the user to specify on",
+          "which assay entry to perform gating. In most cases, a log- or arcsinh-transformation can help to",  
+          "distinguish between 'positive' and 'negative' populations."),
+        h3("3. Select the markers"),
+        p("For each plot, up to two markers can be specified. If selecting a single marker, please specify", 
+          "this marker in the first of the two dropdown menus. A violin plot is used to visualize the expression",
+          "of a single marker while a scatter plot is used to visualize the expression of two markers."),
+        h3("4. Gate cells"),
+        p("When selecting cells in one plot, only those cells are visualized on the following plot.",
+          "Once markers, the assay or the number of plots are changed, gates are cleared."),
+        h3("5. Observe the selected cells"),
+        p("After gating, the selected cells are visualized on the corresponding images by switching to the ", 
+          em("Images"), " tab. Here, the left panel visualizes the marker expression of the last plot", 
+          "or the markers selected by the user. If a multi-channel image object is provided, the contrast",
+          "of the image can be changed. The right panel visualizes the selected cells either by filling in",
+          "the segmentation masks or by outlining the cells on the images."),
+        h3("6. Change samples"),
+        p("Samples can now be iteratively changed using the dropdown menu under ", em("General controls"), ".",
+          "The gates will remain on the plots and can be adjusted for each sample."),
+        h3("7. Save the selected cells"),
+        p("Finally, the selected cells can be saved by clicking the download button next to the '?' symbol.",
+          "The selected cells will be stored as a ", em("SingleCellExperiment"), " object in .rds format.",
+          "Per selection, the user can provide a ", em("Cell label"), " that will be stored",  
+          "in the ", em("colData"), " under the ", em("cytomapper_CellLabel"), " entry of the downloaded object.")
     )
 }
 
 # Create general observers for header
 #' @importFrom utils capture.output
 .create_general_observer <- function(input, si){
+    
     
     # Return session info
     observeEvent(input$SessionInfo, {

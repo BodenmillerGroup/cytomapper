@@ -94,11 +94,11 @@
 #'@seealso \code{\link{plotCells}} and \code{\link{plotPixels}} for the main
 #'plotting functions
 #'
+#'@return A Shiny app object for hierarchical gating of cells
+#'
 #'@examples 
 #'## Only run this example in interactive R sessions
 #'if (interactive()) {
-#'    library(cytomapper)
-#'
 #'    # Load example data sets
 #'    data("pancreasSCE")
 #'    data("pancreasImages")

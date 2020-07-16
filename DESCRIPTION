@@ -54,5 +54,5 @@ biocViews: ImmunoOncology, Software, SingleCell, OneChannel, TwoChannel, Multipl
 VignetteBuilder: knitr
 URL: https://github.com/BodenmillerGroup/cytomapper
 BugReports: https://github.com/BodenmillerGroup/cytomapper/issues
-RoxygenNote: 7.1.0
+RoxygenNote: 7.1.1
 Encoding: UTF-8

@@ -33,6 +33,9 @@ are stored.}
 \item{...}{parameters passed to the \code{\link{plotCells}} or
 \code{\link{plotPixels}} function.}
 }
+\value{
+A Shiny app object for hierarchical gating of cells
+}
 \description{
 This shiny application allows users to gate cells based on their raw or
 transformed expression values and visualises gated cells on their
@@ -124,8 +127,6 @@ workflow on how to use the app.
 \examples{
 ## Only run this example in interactive R sessions
 if (interactive()) {
-   library(cytomapper)
-
    # Load example data sets
    data("pancreasSCE")
    data("pancreasImages")
