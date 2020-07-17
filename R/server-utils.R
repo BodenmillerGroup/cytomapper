@@ -171,6 +171,7 @@
             # Reset gates and objects
             .clearObjects(objValues, iter = 1)
             .clearBrush(input, session, iter = 1)
+            
     })
     
 }
@@ -203,6 +204,7 @@
                                  selected = "")
         }
     })
+
 }
 
 # Create selectInput options in sidebar
@@ -282,14 +284,17 @@
     markers <- rownames(object)
     
     renderUI({
+        
+        cur_markers <- .select_markers(input)
+
         fluidRow(
-            box(
-                column(width = 6, 
+            box(helpText("Delete marker 1 to reset marker selection."),
+                column(width = 6,
                     selectizeInput("exprs_marker_1",
                         label = span(paste("Select marker 1"), 
                             style = "color: black; padding-top: 0px"), 
                         choices = c(markers, ""),
-                        selected = "",
+                        selected = cur_markers[1],
                         options = list(placeholder = '', maxItems = 1)),
                     contrast_input_1),
                 column(width = 6, 
@@ -297,20 +302,18 @@
                         label = span(paste("Select marker 2"), 
                             style = "color: black; padding-top: 0px"), 
                         choices = c(markers, ""),
-                        selected = "",
+                        selected = ifelse(length(cur_markers) > 1, cur_markers[2], ""),
                         options = list(placeholder = '', maxItems = 1)),
                     contrast_input_2),
                 column(width = 12,
                        svgPanZoomOutput("image_expression", height = "300px")), 
                 title = "Expression", status = "primary",
-                width = 6, height = "550px"
-                ),
+                width = 6, height = "550px"),
             box(
                 column(width = 12,
                     svgPanZoomOutput("image_selection")), 
-                    title = "Selection", status = "primary",
-                    width = 6, height = "550px")
-                )
+                    title = "Selection", id = "selection", status = "primary",
+                    width = 6, height = "550px"))
     })
 }
 
@@ -554,8 +557,9 @@
 # By default, we want to display the expression of the marker on 
 # which gating was performed last.
 # The user can further select other markers for displaying
-.select_markers <- function(input){
-    if (input$exprs_marker_1 != "") {
+.select_markers <- function(input, exprs_marker_update = TRUE){
+    if (exprs_marker_update && !is.null(input$exprs_marker_1) && 
+        input$exprs_marker_1 != "") {
         if (input$exprs_marker_2 != "") {
             cur_markers <- c(input$exprs_marker_1, input$exprs_marker_2)
         } 
@@ -633,17 +637,16 @@
         
         if (is.null(image)) {
             cur_mask <- mask[mcols(mask)[,img_id] == input$sample]
-            suppressMessages(
-                svgPanZoom(zoomScaleSensitivity = 0.4, maxZoom = 20,
-                           controlIconsEnabled = TRUE, stringSVG(
+            suppressMessages(svgPanZoom(stringSVG(
                     plotCells(object = object,
                             mask = cur_mask,
                             cell_id = cell_id,
                             img_id = img_id,
                             colour_by = cur_markers,
                             exprs_values = input$assay,
-                            ...)))
-            )
+                            ...)),
+                    zoomScaleSensitivity = 0.4, maxZoom = 20,
+                    controlIconsEnabled = TRUE, viewBox = FALSE))
         } else {
             
             if (length(cur_markers) > 1) {
@@ -652,14 +655,13 @@
             }
             
             cur_image <- image[mcols(image)[,img_id] == input$sample]
-            suppressMessages(
-                svgPanZoom(zoomScaleSensitivity = 0.4, maxZoom = 20,
-                           controlIconsEnabled = TRUE, stringSVG(
+            suppressMessages(svgPanZoom(stringSVG(
                     plotPixels(image = cur_image,
                             colour_by = cur_markers,
                             bcg = cur_bcg,
-                            ...)))
-            )
+                            ...)),
+                    zoomScaleSensitivity = 0.4, maxZoom = 20,
+                    controlIconsEnabled = TRUE, viewBox = FALSE))
         }
     })
 }
@@ -691,9 +693,7 @@
         }
     
         if (is.null(image)) {
-            suppressMessages(
-                svgPanZoom(zoomScaleSensitivity = 0.4, maxZoom = 20,
-                           controlIconsEnabled = TRUE, stringSVG(
+            suppressMessages(svgPanZoom(stringSVG(
                     plotCells(object = cur_object,
                               mask = cur_mask,
                               cell_id = cell_id,
@@ -701,8 +701,9 @@
                               colour_by = "selected",
                               colour = list(selected = c("TRUE" = "dark red", "FALSE" = "gray")),
                               legend = NULL,
-                              ...)))
-            )
+                              ...)), 
+                    zoomScaleSensitivity = 0.4, maxZoom = 20,
+                    controlIconsEnabled = TRUE, viewBox = FALSE))
             
         } else {
             
@@ -712,9 +713,7 @@
             }
             
             cur_image <- image[mcols(image)[,img_id] == input$sample]
-            suppressMessages(
-                svgPanZoom(zoomScaleSensitivity = 0.4, maxZoom = 20,
-                           controlIconsEnabled = TRUE, stringSVG(
+            suppressMessages(svgPanZoom(stringSVG(
                     plotPixels(image = cur_image,
                                object = cur_object,
                                mask = cur_mask,
@@ -725,8 +724,9 @@
                                colour = list(selected = c("TRUE" = "white", "FALSE" = "gray")),
                                legend = NULL, 
                                bcg = cur_bcg,
-                               ...)))
-            )
+                               ...)),
+                    zoomScaleSensitivity = 0.4, maxZoom = 20,
+                    controlIconsEnabled = TRUE, viewBox = FALSE))
         }
     })
 }

@@ -80,12 +80,13 @@
     
     return(cm_side)
     
-    }
+}
 
 # Create the main body
 #' @importFrom svgPanZoom svgPanZoomOutput
 .cytomapper_body <- function(){
     cm_body <- dashboardBody(
+        
         tabBox(width = 12, id = "tabbox1",
             tabPanel(title = "Scatter Plots", value = "tab1", uiOutput("AdditionalPlots_tab1")),
             tabPanel(title = "Images", value = "tab2", uiOutput("AdditionalPlots_tab2")))
