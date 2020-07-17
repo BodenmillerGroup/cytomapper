@@ -78,6 +78,17 @@ To see the full functionality in R type:
 ?plotCells
 ```
 
+**cytomapperShiny**
+
+This Shiny application allows gating of cells based on their expression values and visualises selected cells on their corresponding images. 
+
+It requires at least a `SingleCellExperiment` as input and optionally `CytoImageList` objects containing segmentation masks and multi-channel images.
+For full details, please refer to:
+
+```r
+?cytomapperShiny
+```
+
 ## Getting help
 
 For more information on processing imaging mass cytometry data, please refer to the [IMC Segmentation Pipeline](https://github.com/BodenmillerGroup/ImcSegmentationPipeline). 
