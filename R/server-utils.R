@@ -321,6 +321,7 @@
 #' @importFrom S4Vectors metadata
 #' @importFrom SummarizedExperiment metadata<-
 .brushObject <- function(input, session, objValues, iter){
+    
     cur_val <- (iter * 2) - 1
     
     if (is.null(objValues[[paste0("object", iter)]])) {
@@ -347,7 +348,7 @@
                                      input[[paste0("plot_brush", iter)]]$mapping$y), c("min", "max")))
     
     if (rownames(gate)[1] == "sample") {
-        gate <- gate[-1,]
+        gate <- gate[-1, , drop = FALSE]
     }
     
     cur_gate$gate <- gate
