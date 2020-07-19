@@ -110,6 +110,8 @@ vignette("cytomapper")
 
 [Nicolas Damond](https://github.com/ndamond)
 
+[Tobias Hoch](https://github.com/toobiwankenobi)
+
 
 ## References
 
