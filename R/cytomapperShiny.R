@@ -25,7 +25,8 @@
 #'stored in the \code{counts} slot) or transformed/scaled counts stored in other
 #'assay slots. Gating can only be performed sample-wise; therefore, even if
 #'\code{mask} or \code{image} are not specified, \code{img_id} needs to point to
-#'the \code{colData} entry storing unique sample IDs.
+#'the \code{colData} entry storing unique sample IDs. Furthermore, the
+#'\code{cell_id} entry is required to identify cells during hierarchical gating.
 #'
 #'If mask is specified, marker expression values and selected cells will be
 #'visualised by using the \code{\link{plotCells}} function. To visualise
@@ -62,7 +63,7 @@
 #'selected cells (see below), or to display the \code{sessionInfo} output and
 #'the \emph{Help} section (see below).
 #'
-#'@section Download of gated cells: 
+#'@section Download of gated cells:
 #'The user can download the selected cells in form of a
 #'\code{\linkS4class{SingleCellExperiment}} object. The output is a subset of
 #'the input \code{SingleCellExperiment} object. The downloaded object (in form
@@ -77,7 +78,7 @@
 #'(\code{metadata(object)$cytomapper_SessionInfo}), and the date
 #'(\code{metadata(object)$cytomapper_GatingDate}).
 #'
-#'@section Passing further parameters: 
+#'@section Passing further parameters:
 #'To customise the visual output of \code{cytomapperShiny}, refer to
 #'\code{\link{plotting-param}}. Further arguments can be passed to the
 #'\code{\link{plotCells}} and \code{\link{plotPixels}} function. As an example:
@@ -85,7 +86,7 @@
 #'Passing the parameter \code{interpolate = FALSE} will make images less blurry,
 #'which might be useful while using the zoom-in functionality of
 #'\code{cytomapperShiny} .
-#'  
+#'
 #'@section Getting further help:
 #'Please refer to the \emph{Help} section found when clicking the '?' button in
 #'the upper right corner. The \emph{Help} section contains a recommended
@@ -96,7 +97,7 @@
 #'
 #'@return A Shiny app object for hierarchical gating of cells
 #'
-#'@examples 
+#'@examples
 #'## Only run this example in interactive R sessions
 #'if (interactive()) {
 #'    # Load example data sets
@@ -131,14 +132,14 @@ cytomapperShiny <- function(object,
                         img_id = NULL,
                         ...) {
     # Object checks
-    .valid.sce.shiny(object, img_id, image)
-    
+    .valid.sce.shiny(object, img_id, cell_id, image)
+
     if (!is.null(mask)) {
         .valid.sce(object, img_id, cell_id, exprs_values = NULL)
         .valid.mask(mask, img_id)
         .valid.matchObjects.plotCells(object, mask, img_id)
     }
-    
+
     if (!is.null(image)) {
         if (is.null(mask)) {
             stop("Please provide a mask object.")
@@ -154,7 +155,7 @@ cytomapperShiny <- function(object,
     )
 
     shiny_server <- function(input, output, session) {
-        .cytomapper_server(object, mask, image, cell_id, img_id, 
+        .cytomapper_server(object, mask, image, cell_id, img_id,
                            input, output, session, ...)
     }
 

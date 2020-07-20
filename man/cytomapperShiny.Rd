@@ -49,7 +49,8 @@ input object. Gating is performed on cell-specific marker counts stored in the
 stored in the \code{counts} slot) or transformed/scaled counts stored in other
 assay slots. Gating can only be performed sample-wise; therefore, even if
 \code{mask} or \code{image} are not specified, \code{img_id} needs to point to
-the \code{colData} entry storing unique sample IDs.
+the \code{colData} entry storing unique sample IDs. Furthermore, the
+\code{cell_id} entry is required to identify cells during hierarchical gating.
 
 If mask is specified, marker expression values and selected cells will be
 visualised by using the \code{\link{plotCells}} function. To visualise
@@ -90,7 +91,7 @@ the \emph{Help} section (see below).
 }
 
 \section{Download of gated cells}{
- 
+
 The user can download the selected cells in form of a
 \code{\linkS4class{SingleCellExperiment}} object. The output is a subset of
 the input \code{SingleCellExperiment} object. The downloaded object (in form
@@ -107,7 +108,7 @@ object will be converted to a list. It contains the original metadata
 }
 
 \section{Passing further parameters}{
- 
+
 To customise the visual output of \code{cytomapperShiny}, refer to
 \code{\link{plotting-param}}. Further arguments can be passed to the
 \code{\link{plotCells}} and \code{\link{plotPixels}} function. As an example:

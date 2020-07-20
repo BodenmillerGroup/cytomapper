@@ -1,5 +1,5 @@
 # Check sce validity for shiny
-.valid.sce.shiny <- function(object, img_id, image){
+.valid.sce.shiny <- function(object, img_id, cell_id, image){
     if (!is(object, "SingleCellExperiment")) {
         stop("'object' is not of type 'SingleCellExperiment'.")
     }
@@ -7,6 +7,10 @@
     if (is.null(img_id)) {
         stop("Please provide an 'img_id' argument.\n",
              "Gating is only supported on individual samples.")
+    }
+
+    if (is.null(cell_id)) {
+        stop("Please provide a 'cell_id' argument.")
     }
 
     if (!is.character(img_id) || length(img_id) > 1) {
@@ -21,11 +25,11 @@
     if (!(img_id %in% colnames(colData(object)))) {
         stop("'img_id' not in 'colData(object)'.")
     }
-    
+
     if (is.null(rownames(object))) {
         stop("Please specify the rownames of the 'object'.")
     }
-    
+
     if (!is.null(image)) {
         if (is.null(channelNames(image))) {
             stop("Please specify the 'channelNames' of the 'image' object.")
