@@ -18,7 +18,7 @@
             ),
             notificationItem(
                 text = downloadButton(
-                    outputId = "downloadData",       
+                    outputId = "downloadData",
                     label = "Download selection",
                     style = "background-color: #3C8DBC; color: white; border-color: #7EA6F8"
                 ),
@@ -32,7 +32,7 @@
         dropdownMenu(
             notificationItem(
                 text = actionButton(
-                    inputId = "SessionInfo",       
+                    inputId = "SessionInfo",
                     label = "Session Info",
                     style = "background-color: #3C8DBC; color: white; border-color: #3C8DBC"
                 ),
@@ -41,7 +41,7 @@
             ),
             notificationItem(
                 text = actionButton(
-                    inputId = "Help",       
+                    inputId = "Help",
                     label = "Help",
                     style = "background-color: #3C8DBC; color: white; border-color: #3C8DBC"
                 ),
@@ -59,17 +59,16 @@
 # Create the side bar layout
 .cytomapper_sidebar <- function(){
     cm_side <- dashboardSidebar(
-        
+
         sidebarMenu(
             menuItem("General controls",
                      sliderInput("plotCount", label = "Select number of plots",
                                     min = 1, max = 12, value = 1),
-                     selectizeInput("sample", label = "Select sample",
-                                    choices = NULL,
-                                    options = list(placeholder = 'Select a condition', maxItems = 1)),
-                     selectizeInput("assay", label = "Select which assay to display",
-                                    choices = NULL, options = list(placeholder = 'Select an assay', maxItems = 1)),
-                     icon = icon("fas fa-sliders-h"), 
+                     selectInput("sample", label = "Select sample",
+                                    choices = NULL),
+                     selectInput("assay", label = "Select which assay to display",
+                                    choices = NULL),
+                     icon = icon("fas fa-sliders-h"),
                      startExpanded = TRUE),
             menuItem("Plots",
                 uiOutput("AdditionalPlots_sidebar"),
@@ -77,23 +76,23 @@
             id = "sidebar"
             )
         )
-    
+
     return(cm_side)
-    
+
 }
 
 # Create the main body
 #' @importFrom svgPanZoom svgPanZoomOutput
 .cytomapper_body <- function(){
     cm_body <- dashboardBody(
-        
+
         tabBox(width = 12, id = "tabbox1",
             tabPanel(title = "Scatter Plots", value = "tab1", uiOutput("AdditionalPlots_tab1")),
             tabPanel(title = "Images", value = "tab2", uiOutput("AdditionalPlots_tab2")))
         )
-    
+
     return(cm_body)
-    
+
     }
 
 

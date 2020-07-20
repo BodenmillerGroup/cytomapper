@@ -290,20 +290,18 @@
         fluidRow(
             box(helpText("Delete marker 1 to reset marker selection."),
                 column(width = 6,
-                    selectizeInput("exprs_marker_1",
+                    selectInput("exprs_marker_1",
                         label = span(paste("Select marker 1"),
                             style = "color: black; padding-top: 0px"),
                         choices = c(markers, ""),
-                        selected = cur_markers[1],
-                        options = list(placeholder = '', maxItems = 1)),
+                        selected = cur_markers[1]),
                     contrast_input_1),
                 column(width = 6,
-                    selectizeInput("exprs_marker_2",
+                    selectInput("exprs_marker_2",
                         label = span(paste("Select marker 2"),
                             style = "color: black; padding-top: 0px"),
                         choices = c(markers, ""),
-                        selected = ifelse(length(cur_markers) > 1, cur_markers[2], ""),
-                        options = list(placeholder = '', maxItems = 1)),
+                        selected = ifelse(length(cur_markers) > 1, cur_markers[2], "")),
                     contrast_input_2),
                 column(width = 12,
                        svgPanZoomOutput("image_expression", height = "300px")),
@@ -519,6 +517,8 @@
 .createScatter <- function(input, session, rValues, objValues, iter, img_id, cell_id){
 
     renderPlot({
+
+        req(input$sample)
 
         cur_val <- (iter * 2) - 1
 
