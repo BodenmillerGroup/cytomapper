@@ -42,6 +42,19 @@ test_that("cytomapperShiny: Standard input testing works", {
     expect_error(cytomapperShiny(object = pancreasSCE, image = cur_images, img_id = "ImageNb", cell_id = "CellNb"), 
                  regexp = "Please specify the 'channelNames' of the 'image' object.",
                  fixed = TRUE)
+    cur_obj <- pancreasSCE
+    metadata(cur_obj) <- data.frame()
+    expect_warning(cytomapperShiny(object = cur_obj, mask = pancreasMasks, image = pancreasImages, img_id = "ImageNb", cell_id = "CellNb"), 
+                   regexp = "metadata('object') will be stored as 'list' in the metadata slot of the output object.",
+                   fixed = TRUE)
+    
+    cur_images <- pancreasImages
+    cur_masks <- pancreasMasks
+    cur_images[1] <- NULL
+    cur_masks[1] <- NULL
+    expect_error(cytomapperShiny(object = pancreasSCE, image = cur_images, mask = cur_masks, img_id = "ImageNb", cell_id = "CellNb"), 
+                 regexp = "Please provide a unique image/mask for every sample stored in 'object'.",
+                 fixed = TRUE)
     
     # Pass
 })
