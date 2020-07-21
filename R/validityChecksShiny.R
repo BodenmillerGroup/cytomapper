@@ -12,6 +12,10 @@
     if (is.null(cell_id)) {
         stop("Please provide a 'cell_id' argument.")
     }
+    
+    if (!is.character(cell_id) || length(cell_id) > 1) {
+        stop("Invalid argument for 'cell_id'.")
+    }
 
     if (!is.character(img_id) || length(img_id) > 1) {
         stop("Invalid argument for 'img_id'.")
@@ -24,6 +28,10 @@
 
     if (!(img_id %in% colnames(colData(object)))) {
         stop("'img_id' not in 'colData(object)'.")
+    }
+    
+    if (!(cell_id %in% colnames(colData(object)))) {
+        stop("'cell_id' not in 'colData(object)'.")
     }
 
     if (is.null(rownames(object))) {
