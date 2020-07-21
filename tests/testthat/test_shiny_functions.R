@@ -15,13 +15,19 @@ test_that("cytomapperShiny: Standard input testing works", {
     expect_error(cytomapperShiny(object = pancreasSCE, img_id = 2, cell_id = "CellNb"), 
                  regexp = "Invalid argument for 'img_id'.",
                  fixed = TRUE)
-    expect_error(cytomapperShiny(object = pancreasSCE, img_id = "ImageNb"), 
-                 regexp = "Please provide a 'cell_id' argument.",
-                 fixed = TRUE)
-    
     expect_error(cytomapperShiny(object = pancreasSCE, img_id = "test", cell_id = "CellNb"), 
                  regexp = "'img_id' not in 'colData(object)'.",
                  fixed = TRUE)
+    expect_error(cytomapperShiny(object = pancreasSCE, img_id = "ImageNb"), 
+                 regexp = "Please provide a 'cell_id' argument.",
+                 fixed = TRUE)
+    expect_error(cytomapperShiny(object = pancreasSCE, cell_id = c("test", 2), img_id = "ImageNb"), 
+                 regexp = "Invalid argument for 'cell_id'.",
+                 fixed = TRUE)
+    expect_error(cytomapperShiny(object = pancreasSCE, cell_id = "test", img_id = "ImageNb"), 
+                 regexp = "'cell_id' not in 'colData(object)'.",
+                 fixed = TRUE)
+    
     cur_obj <- pancreasSCE
     rownames(cur_obj) <- NULL
     expect_error(cytomapperShiny(object = cur_obj, img_id = "ImageNb", cell_id = "CellNb"), 
