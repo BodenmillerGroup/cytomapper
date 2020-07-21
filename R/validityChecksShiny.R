@@ -1,5 +1,5 @@
 # Check sce validity for shiny
-.valid.sce.shiny <- function(object, img_id, cell_id, image){
+.valid.sce.shiny <- function(object, img_id, cell_id, image, mask){
     if (!is(object, "SingleCellExperiment")) {
         stop("'object' is not of type 'SingleCellExperiment'.")
     }
@@ -49,6 +49,15 @@
         }
         if (!identical(channelNames(image), rownames(object))) {
             stop("The 'channelNames' of the images need to match the rownames of the object.")
+        }
+        if (length(image) != length(unique(colData(object)[[img_id]]))) {
+            stop("Please provide a unique image/mask for every sample stored in 'object'.")
+        }
+    }
+    
+    if (!is.null(mask)) {
+        if (length(mask) != length(unique(colData(object)[[img_id]]))) {
+            stop("Please provide a unique image/mask for every sample stored in 'object'.")
         }
     }
 }
