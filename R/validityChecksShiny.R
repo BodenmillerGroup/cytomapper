@@ -3,6 +3,11 @@
     if (!is(object, "SingleCellExperiment")) {
         stop("'object' is not of type 'SingleCellExperiment'.")
     }
+    
+    if (!is(metadata(object), "list")) {
+        warning("metadata('object') is not of type 'list'.\n",
+        "metadata('object') will be stored as 'list' in the metadata slot of the output object.")
+    }
 
     if (is.null(img_id)) {
         stop("Please provide an 'img_id' argument.\n",
