@@ -14,8 +14,11 @@ test_that("header,sidebar,body creates expected HTML", {
                                                                               contrast_marker_2 = 1)
                                                             testthat_print(.cytomapper_header())
                                                             testthat_print(.cytomapper_sidebar())
-                                                            testthat_print(.addPlots_tab1())
-                                                            testthat_print(.addPlots_tab2())})
+                                                            testthat_print(.create_updateSelectizeInput)
+                                                            testthat_print(output$AdditionalPlots_sidebar)
+                                                            testthat_print(output$AdditionalPlots_tab1)
+                                                            testthat_print(output$AdditionalPlots_tab2)
+                                                            testthat_print(output$image_expression)})
   )
 })
 
