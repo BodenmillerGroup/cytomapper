@@ -21,7 +21,7 @@ jobs:
         run: |
           install.packages(c("remotes", "rcmdcheck"))
           remotes::install_deps(dependencies = TRUE, repos = BiocManager::repositories(), Ncpu = 2L)
-          remotes::install_cran("covr")
+          remotes::install_cran(c("covr", "shiny"))
         shell: Rscript {0}
         
       - name: Check
