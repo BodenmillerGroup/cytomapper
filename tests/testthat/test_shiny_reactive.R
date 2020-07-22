@@ -2,7 +2,7 @@ data("pancreasImages")
 data("pancreasMasks")
 data("pancreasSCE")
 
-testServer(app = cytomapperShiny(object = pancreasSCE, img_id = "ImageNb"), {
+testServer(app = cytomapperShiny(object = pancreasSCE, img_id = "ImageNb", cell_id = "CellNb"), {
     session$setInputs(sample = 1,
                       plotCount = 1)
     expect_equal(input$sample, 1)
