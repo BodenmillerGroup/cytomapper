@@ -132,7 +132,7 @@ cytomapperShiny <- function(object,
                         img_id = NULL,
                         ...) {
     # Object checks
-    .valid.sce.shiny(object, img_id, cell_id, image)
+    .valid.sce.shiny(object, img_id, cell_id, image, mask)
 
     if (!is.null(mask)) {
         .valid.sce(object, img_id, cell_id, exprs_values = NULL)
