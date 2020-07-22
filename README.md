@@ -1,5 +1,7 @@
 # cytomapper
 
+[![codecov](https://codecov.io/gh/BodenmillerGroup/cytomapper/branch/master/graph/badge.svg)](https://codecov.io/gh/BodenmillerGroup/cytomapper)
+
 R package to spatially visualize pixel- and cell-level information obtained from highly multiplexed imaging cytometry.
 
 ## Introduction
