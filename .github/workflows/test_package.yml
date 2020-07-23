@@ -9,7 +9,8 @@ on:
 jobs:
   R-CMD-check:
     runs-on: ubuntu-latest
-       container: docker pull rocker/r-ver:latest
+    container: docker pull rocker/r-ver:latest
+
     steps:
       - uses: actions/checkout@v2
 
