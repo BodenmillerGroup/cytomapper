@@ -9,10 +9,9 @@ on:
 jobs:
   R-CMD-check:
     runs-on: ubuntu-latest
-    
+       container: docker pull rocker/r-ver:latest
     steps:
       - uses: actions/checkout@v2
-      - uses: r-lib/actions/setup-r@master
 
       - name: Query dependencies
         run: |
