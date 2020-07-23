@@ -22,7 +22,7 @@ jobs:
       
       - name: Install system requirements
         run: |
-          sudo apt-get install zlib1g-dev libfftw3-dev
+          apt-get install zlib1g-dev libfftw3-dev
 
       - name: Install dependencies
         run: |
