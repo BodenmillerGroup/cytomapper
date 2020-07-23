@@ -164,7 +164,7 @@ test_that("plotting-param: background_colour can be set.", {
 test_that("plotting-param: save_plot can be set.", {
   data("pancreasImages")
     
-  skip_on_ci("Skip on CI")
+  skip_on_ci()
 
   cur_path <- tempdir()
   on.exit(unlink(cur_path))
@@ -686,6 +686,8 @@ test_that("plotting-param: images can be plotted individually.", {
 
   expect_silent(plotCells(pancreasMasks["E34_mask"],
                            display = "single"))
+  
+  skip_on_ci()
 
   # save_plot
   cur_path <- tempdir()
