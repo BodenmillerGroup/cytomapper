@@ -19,6 +19,10 @@ jobs:
           install.packages('remotes')
           saveRDS(remotes::dev_package_deps(dependencies = TRUE), ".github/depends.Rds", version = 2)
         shell: Rscript {0}        
+      
+      - name: Install system requirements
+        run: |
+          sudo apt-get install zlib1g-dev libfftw3-dev
 
       - name: Install dependencies
         run: |
