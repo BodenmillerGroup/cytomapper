@@ -163,6 +163,8 @@ test_that("plotting-param: background_colour can be set.", {
 
 test_that("plotting-param: save_plot can be set.", {
   data("pancreasImages")
+    
+  skip_on_ci("Skip on CI")
 
   cur_path <- tempdir()
   on.exit(unlink(cur_path))
