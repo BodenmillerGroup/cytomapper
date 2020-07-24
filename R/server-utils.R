@@ -69,8 +69,8 @@
           "Once markers, the assay or the number of plots are changed, gates are cleared."),
         h3("5. Observe the selected cells"),
         p("After gating, the selected cells are visualized on the corresponding images by switching to the ",
-          em("Images"), " tab. Here, the left panel visualizes the marker expression of the last plot",
-          "or the markers selected by the user. If a multi-channel image object is provided, the contrast",
+          em("Images"), " tab. By default, the first marker is selected. The user can change the displayed marker",
+          "or press reset marker to switch to the markers used for gating. If a multi-channel image object is provided, the contrast",
           "of the image can be changed. The right panel visualizes the selected cells either by filling in",
           "the segmentation masks or by outlining the cells on the images."),
         h3("6. Change samples"),
@@ -205,6 +205,18 @@
         }
     })
 
+    observeEvent(input$resetMarkers, {
+
+      cur_markers <- .select_markers(input, exprs_marker_update = FALSE)
+
+      updateSelectInput(session, "exprs_marker_1",
+                           choices = markers,
+                           selected = cur_markers[1])
+      updateSelectInput(session, "exprs_marker_2",
+                           choices = markers,
+                           selected = ifelse(length(cur_markers) > 1, cur_markers[2], ""))
+    })
+
 }
 
 # Create selectInput options in sidebar
@@ -285,23 +297,21 @@
 
     renderUI({
 
-        cur_markers <- .select_markers(input)
-
-        fluidRow(
-            box(helpText("Delete marker 1 to reset marker selection."),
-                column(width = 6,
+        fluidRow(box(column(width = 12,
+                            actionButton("resetMarkers", label = "Reset markers",
+                                         style = "background-color: #46EC46; color: black;")),
+              column(width = 6,
                     selectInput("exprs_marker_1",
                         label = span(paste("Select marker 1"),
-                            style = "color: black; padding-top: 0px"),
-                        choices = c(markers, ""),
-                        selected = cur_markers[1]),
+                            style = "color: black"),
+                        choices = markers),
                     contrast_input_1),
                 column(width = 6,
                     selectInput("exprs_marker_2",
                         label = span(paste("Select marker 2"),
-                            style = "color: black; padding-top: 0px"),
+                            style = "color: black"),
                         choices = c(markers, ""),
-                        selected = ifelse(length(cur_markers) > 1, cur_markers[2], "")),
+                        selected = ""),
                     contrast_input_2),
                 column(width = 12,
                        svgPanZoomOutput("image_expression", height = "300px")),
