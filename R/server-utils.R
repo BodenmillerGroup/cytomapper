@@ -16,12 +16,9 @@
     if (is.null(brush)) {
         return(NULL)
     }
-    if (brush$direction == "xy") {
-        paste0("xmin = ", round(brush$xmin, 1), " xmax = ", round(brush$xmax, 1),
-               " ymin = ", round(brush$ymin, 1), " ymax = ", round(brush$ymax, 1))
-    } else {
-        paste0("xmin = ", round(brush$xmin, 1), " xmax = ", round(brush$xmax, 1))
-    }
+    
+    paste0("xmin = ", round(brush$xmin, 1), " xmax = ", round(brush$xmax, 1),
+            " ymin = ", round(brush$ymin, 1), " ymax = ", round(brush$ymax, 1))
 }
 
 # Helper function to clear objects

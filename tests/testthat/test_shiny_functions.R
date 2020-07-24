@@ -58,3 +58,40 @@ test_that("cytomapperShiny: Standard input testing works", {
     
     # Pass
 })
+
+test_that("server-utils: auxiliary functions work", {
+    # Test colouring function
+    expect_equal(.create_colours(1), "#70C389")
+    expect_equal(.create_colours(2), "#39BEB4")
+    expect_equal(.create_colours(3), "#3F85A7") 
+    expect_equal(.create_colours(4), "#494579") 
+    expect_equal(.create_colours(5), "#5B1C55")
+    expect_equal(.create_colours(6), "#971B4B") 
+    expect_equal(.create_colours(7), "#C81F43") 
+    expect_equal(.create_colours(8), "#F26738") 
+    expect_equal(.create_colours(9), "#F79C1D") 
+    expect_equal(.create_colours(10), "#F7CD0F")
+    expect_equal(.create_colours(11), "#EBE24A") 
+    expect_equal(.create_colours(12), "#B4D55A")
+    expect_equal(.create_colours(13), NA)
+    
+    # Brush range
+    cur_brush <- NULL
+    expect_equal(.brushRange(cur_brush), NULL)
+    
+    cur_brush <- list(xmin = 1.2, xmax = 1.7,
+                      ymin = 1.0, ymax = 2.0)
+    expect_equal(.brushRange(cur_brush), "xmin = 1.2 xmax = 1.7 ymin = 1 ymax = 2")
+    
+    # General help
+    cur_out <-.general_help()
+    expect_length(cur_out, 16)
+    expect_equal(unlist(cur_out[[1]]$children), "Using the Shiny application")
+    expect_equal(unlist(cur_out[[3]]$children), "1. Select the number of plots")
+    expect_equal(unlist(cur_out[[5]]$children), "2. Select the sample")
+    expect_equal(unlist(cur_out[[7]]$children), "3. Select the markers")
+    expect_equal(unlist(cur_out[[9]]$children), "4. Gate cells")
+    expect_equal(unlist(cur_out[[11]]$children), "5. Observe the selected cells")
+    expect_equal(unlist(cur_out[[13]]$children), "6. Change samples")
+    expect_equal(unlist(cur_out[[15]]$children), "7. Save the selected cells")
+})
