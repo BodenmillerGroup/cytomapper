@@ -229,7 +229,24 @@ test_that("CytoImageList can be normalized", {
                max(imageData(pancreasImages[[2]])[,,4])/cur_max[4], tolerance = 1e-06)
   expect_equal(max(imageData(cur_images[[2]])[,,5]),
                max(imageData(pancreasImages[[2]])[,,5])/cur_max[5], tolerance = 1e-06)
-
+  
+  # Single frame
+  cur_img1 <- pancreasImages[[1]][,,1]
+  cur_img2 <- pancreasImages[[2]][,,1]
+  cur_img <- CytoImageList(cur_img1, cur_img2)
+  channelNames(cur_img) <- "H3"
+  
+  expect_silent(cur_images <- normalize(cur_img, separateImages = FALSE,
+                                        separateChannels = TRUE))
+  expect_silent(plotPixels(cur_images,
+                           colour_by = "H3"))
+  
+  cur_max <- max(max(cur_img1), max(cur_img2))
+  expect_equal(max(imageData(cur_images[[1]])[,,1]),
+               max(imageData(pancreasImages[[1]])[,,1])/cur_max, tolerance = 1e-06)
+  expect_equal(max(imageData(cur_images[[2]])[,,1]),
+               max(imageData(pancreasImages[[2]])[,,1])/cur_max, tolerance = 1e-06)
+  
   # Not Separate images
   # Not Separate channels
   expect_silent(cur_images <- normalize(pancreasImages, separateImages = FALSE,
