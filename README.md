@@ -3,25 +3,24 @@
 [![codecov](https://codecov.io/gh/BodenmillerGroup/cytomapper/branch/master/graph/badge.svg)](https://codecov.io/gh/BodenmillerGroup/cytomapper)
 [![Check](https://github.com/BodenmillerGroup/cytomapper/workflows/test_package/badge.svg)](https://github.com/BodenmillerGroup/cytomapper/actions?query=workflow%3Atest_package)
 
-R package to spatially visualize pixel- and cell-level information obtained from highly multiplexed imaging cytometry.
+R package to spatially visualize pixel- and cell-level information obtained from highly multiplexed imaging technologies.
 
 ## Introduction
 
-Highly multiplexed imaging cytometry acquires single-cell expression values of selected proteins in a spatially-resolved fashion. 
+Highly multiplexed imaging acquires single-cell expression values of selected proteins in a spatially-resolved fashion. 
 These measurements can be visualized across multiple length-scales. 
 First, pixel-level intensities represent the spatial distributions of feature expression with highest resolution. 
 Second, after segmentation, expression values or cell-level metadata (e.g. cell-type information) can be visualized on segmented cell areas. 
 This package contains functions for the visualization of multiplexed read-outs and cell-level information obtained by multiplexed imaging cytometry. 
-The main functions of this package allow 1. the visualization of pixel-level information across multiple channels and 2. the display of cell-level information (expression and/or metadata) on segmentation masks.
+The main functions of this package allow 1. the visualization of pixel-level information across multiple channels (`plotPixels`), 2. the display of cell-level information (expression and/or metadata) on segmentation masks (`plotCells`) and 3. gating + visualization of cells on images (`cytomapperShiny`).
 
 The `cytomapper` package provides toy data that were generated using imaging mass cytometry [1] taken from Damond _et al._ [2].
 For further instructions to process raw imaging mass cytometry data, please refer to the [IMC Segmentation Pipeline](https://github.com/BodenmillerGroup/ImcSegmentationPipeline) and the [histoCAT](https://github.com/BodenmillerGroup/histoCAT) as alternative visualization tool.
 
 ## Requirements
 
-The current implementation of `cytomapper` currently requires R version 4.0.
-
-The `cytomapper` package builds on data objects and functions contained in the [SingleCellExperiment](https://bioconductor.org/packages/release/bioc/html/SingleCellExperiment.html) and [EBImage](https://bioconductor.org/packages/release/bioc/html/EBImage.html) packages.
+The `cytomapper` package requires R version >= 4.0.
+It builds on data objects and functions contained in the [SingleCellExperiment](https://bioconductor.org/packages/release/bioc/html/SingleCellExperiment.html) and [EBImage](https://bioconductor.org/packages/release/bioc/html/EBImage.html) packages.
 Therefore, these packages need to be installed (see below).
 
 ## Installation
@@ -57,7 +56,7 @@ library(cytomapper)
 
 ## Functionality
 
-The `cytomapper` package offers two main functions: `plotPixels` and `plotCells`.
+The `cytomapper` package offers three main functions: `plotPixels`, `plotCells` and `cytomapperShiny`.
 
 **plotPixels**
 

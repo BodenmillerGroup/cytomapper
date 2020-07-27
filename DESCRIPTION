@@ -1,18 +1,19 @@
 Package: cytomapper
 Version: 1.1.2
-Title: Visualization of highly multiplexed imaging cytometry data in R
+Title: Visualisation of highly multiplexed imaging data in R
 Description: 
-    Highly multiplexed imaging cytometry acquires the single-cell expression of
+    Highly multiplexed imaging acquires the single-cell expression of
     selected proteins in a spatially-resolved fashion. These measurements can be
-    visualized across multiple length-scales. First, pixel-level intensities
+    visualised across multiple length-scales. First, pixel-level intensities
     represent the spatial distributions of feature expression with highest
     resolution. Second, after segmentation, expression values or cell-level
-    metadata (e.g. cell-type information) can be visualized on segmented cell
-    areas. This package contains functions for the visualization of multiplexed
+    metadata (e.g. cell-type information) can be visualised on segmented cell
+    areas. This package contains functions for the visualisation of multiplexed
     read-outs and cell-level information obtained by multiplexed imaging
-    cytometry. The main functions of this package allow 1. the visualization of
-    pixel-level information across multiple channels and 2. the display of
-    cell-level information (expression and/or metadata) on segmentation masks.
+    technologies. The main functions of this package allow 1. the visualisation of
+    pixel-level information across multiple channels, 2. the display of
+    cell-level information (expression and/or metadata) on segmentation masks 
+    and 3. gating and visualisation of single cells.
 Authors@R: 
     c(person("Nils", "Eling", role = c("aut", "cre"), 
       email = "nils.eling@dqbm.uzh.ch",
