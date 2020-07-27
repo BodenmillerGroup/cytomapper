@@ -39,3 +39,14 @@ test_that("Show function works.", {
     expect_equal(test[2], "names(3): E34_mask G01_mask J02_mask ")
     expect_equal(test[3], "Each image contains 1 channel")
 })
+
+test_that("Color testing works.", {
+    data(pancreasImages)
+    
+    test_img1 <- pancreasImages[[1]]
+    colorMode(test_img1) <- "Color"
+    test_img2 <- pancreasImages[[2]]    
+
+    expect_error(cur_CIL <- CytoImageList(test_img1, test_img2), 
+                 regexp = "Only Grayscale images are supported for CytoImageList objects.")    
+})
