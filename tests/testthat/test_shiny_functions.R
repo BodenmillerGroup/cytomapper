@@ -27,6 +27,10 @@ test_that("cytomapperShiny: Standard input testing works", {
     expect_error(cytomapperShiny(object = pancreasSCE, cell_id = "test", img_id = "ImageNb"), 
                  regexp = "'cell_id' not in 'colData(object)'.",
                  fixed = TRUE)
+    expect_error(cytomapperShiny(object = pancreasSCE, image = pancreasImages, 
+                                 cell_id = "CellNb", img_id = "ImageNb"), 
+                 regexp = "Please provide a mask object.",
+                 fixed = TRUE)
     
     cur_obj <- pancreasSCE
     rownames(cur_obj) <- NULL

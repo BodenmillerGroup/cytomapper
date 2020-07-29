@@ -153,10 +153,6 @@ plotCells <- function(
     if (!is.null(object)) {
         .valid.sce(object, img_id, cell_id, exprs_values)
         .valid.matchObjects.plotCells(object, mask, img_id)
-
-        if (is.null(img_id) || is.null(cell_id)) {
-            stop("Please provide an 'img_id' and 'cell_id' entry.")
-        }
     }
 
     # Argument checks
