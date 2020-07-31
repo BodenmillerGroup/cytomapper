@@ -1,4 +1,12 @@
+<img src="inst/imgs/cytomapper_sticker.png" align="right" alt="" width="120" />
+
 # cytomapper
+
+<!-- badges: start -->
+[![codecov](https://codecov.io/gh/BodenmillerGroup/cytomapper/branch/master/graph/badge.svg)](https://codecov.io/gh/BodenmillerGroup/cytomapper)
+[![build-check](https://github.com/BodenmillerGroup/cytomapper/workflows/build-checks/badge.svg)](https://github.com/BodenmillerGroup/cytomapper/actions?query=workflow%3Abuild-checks)
+[![docs](https://github.com/BodenmillerGroup/cytomapper/workflows/docs/badge.svg?branch=master)](https://github.com/BodenmillerGroup/cytomapper/actions?query=workflow%3Adocs)
+<!-- badges: end -->
 
 R package to spatially visualize pixel- and cell-level information obtained from highly multiplexed imaging cytometry.
 
@@ -78,6 +86,17 @@ To see the full functionality in R type:
 ?plotCells
 ```
 
+**cytomapperShiny**
+
+This Shiny application allows gating of cells based on their expression values and visualises selected cells on their corresponding images. 
+
+It requires at least a `SingleCellExperiment` as input and optionally `CytoImageList` objects containing segmentation masks and multi-channel images.
+For full details, please refer to:
+
+```r
+?cytomapperShiny
+```
+
 ## Getting help
 
 For more information on processing imaging mass cytometry data, please refer to the [IMC Segmentation Pipeline](https://github.com/BodenmillerGroup/ImcSegmentationPipeline). 
@@ -98,6 +117,8 @@ vignette("cytomapper")
 [Nils Eling](https://github.com/nilseling) nils.eling 'at' dqbm.uzh.ch
 
 [Nicolas Damond](https://github.com/ndamond)
+
+[Tobias Hoch](https://github.com/toobiwankenobi)
 
 
 ## References

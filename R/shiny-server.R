@@ -10,7 +10,7 @@
     cur_sessionInfo <- sessionInfo()
     .create_general_observer(input, si = cur_sessionInfo)
 
-    # Save some variables used through the app
+    # Save some variables used throught the app
     rValues <- reactiveValues(ranges = NULL)
     
     # Reactive object list to store selected cells
