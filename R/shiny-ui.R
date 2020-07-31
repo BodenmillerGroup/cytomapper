@@ -59,27 +59,29 @@
 # Create the side bar layout
 .cytomapper_sidebar <- function(){
     cm_side <- dashboardSidebar(
-
         sidebarMenu(
             menuItem("General controls",
                      sliderInput("plotCount", label = "Select number of plots",
                                  min = 1, max = 12, value = 1),
+                     fluidRow(align = "center", p("Select sample")),
                      fluidRow(
-                     div(style="display:inline-block", 
-                         actionButton("previous.sample",
-                                  width = "10px",
-                                  label = HTML("<span class='small'><i class='fas fa-arrow-circle-left fa-2x'></i></span>"),
-                                  style="float:left;background-color: transparent; color: white; border-color: transparent")), 
-                    div(style="display:inline-block;", 
-                         selectizeInput("sample", label = "Select sample",
-                                    choices = NULL,
-                                    width = "120px",
-                                    options = list(placeholder = 'Select a condition', maxItems = 1))),
-                     div(style="display:inline-block;", 
-                         actionButton("next.sample",
-                                      width = "10px",
-                                      label = HTML("<span class='small'><i class='fas fa-arrow-circle-right fa-2x'></i></span>"),
-                                      style="float:left;background-color: transparent; color: white; border-color: transparent"))),
+                         column(12, 
+                                div(style="display: inline-block;height:50px;", actionButton("previous.sample", label = NULL,
+                                                                                 icon = icon("arrow-circle-left"),
+                                                                                 style = "text-align:left",
+                                                                                 width = "50%")),
+                                
+                                div(style="display: inline-block;height:50px;", selectizeInput("sample", label = NULL,
+                                                                                   width = "100px",
+                                                                                   choices = NULL,
+                                                                                   options = list(placeholder = 'Select a condition', 
+                                                                                                  maxItems = 1))),
+                                div(style="display: inline-block;height:50px;", actionButton("next.sample", label = NULL,
+                                                                                 icon = icon("arrow-circle-right"),
+                                                                                 style = "text-align:left",
+                                                                                 width = "50%"))
+                                )
+                         ),
                      selectizeInput("assay", label = "Select which assay to display",
                                     choices = NULL, options = list(placeholder = 'Select an assay', maxItems = 1)),
                      icon = icon("fas fa-sliders-h"), 
