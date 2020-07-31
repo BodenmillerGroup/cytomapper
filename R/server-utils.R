@@ -86,25 +86,19 @@
 # Create interactive observers
 #' @importFrom matrixStats rowRanges
 .create_interactive_observer <- function(object, img_id, input, session, rValues, objValues){
-  
+
   # Next Image Observer
   observeEvent(input$next.sample, {
     img_IDs <- unique(colData(object)[,img_id])
     cur_index <- match(input$sample, img_IDs)
     updated_index <- ifelse(cur_index == length(img_IDs), 1, cur_index+1)
     
-    # return updated img_id and store in rValues
+    # return updated img_id 
     updated_sample <- img_IDs[updated_index]
-    objValues$object1 <- object[,colData(object)[,img_id] == updated_sample]
     
-    updateSelectizeInput(session, inputId = "sample",
+    updateSelectInput(session, inputId = "sample",
                          choices = unique(img_IDs),
                          selected = updated_sample)
-    
-    # update tab
-    updateTabsetPanel(session, "tabbox1",
-                      selected = "tab1"
-    )
     
     }, ignoreInit = TRUE)    
   
@@ -116,15 +110,12 @@
     
     # return updated img_id
     updated_sample <- img_IDs[updated_index]
-    objValues$object1 <- object[,colData(object)[,img_id] == updated_sample]
     
-    updateSelectizeInput(session, inputId = "sample",
+    updateSelectInput(session, inputId = "sample",
                          choices = unique(img_IDs),
                          selected = updated_sample)
-    
-    updateTabsetPanel(session, "tabbox1",
-                      selected = "tab1"
-    )
+
+  
   }, ignoreInit = TRUE)    
   
   
@@ -546,7 +537,7 @@
             .clearBrush(input, session, iter)
             
         } else {
-            .brushObject(input, session, rValues, objValues, iter = iter) 
+            .brushObject(input, session, objValues, iter = iter) 
         }
         
         # Plot scatter or violin
@@ -635,7 +626,7 @@
 #' @importFrom svgPanZoom svgPanZoom renderSvgPanZoom
 #' @importFrom svglite stringSVG
 .createImageExpression <- function(input, object, mask, image, img_id, cell_id, ...){
-    renderSvgPanZoom({
+  renderSvgPanZoom({
       cur_markers <- .select_markers(input)
       cur_bcg <- .select_contrast(input)
         
