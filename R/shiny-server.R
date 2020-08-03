@@ -9,7 +9,7 @@
     # Session info observer
     cur_sessionInfo <- sessionInfo()
     .create_general_observer(input, si = cur_sessionInfo)
-
+    
     # Save some variables used throught the app
     rValues <- reactiveValues(ranges = NULL)
     
@@ -44,7 +44,7 @@
     
     if (!is.null(mask) || !is.null(image)) {
         output$image_expression <- .createImageExpression(input, object, mask, image, img_id, cell_id, ...)
-
+        
         output$image_selection <- .createImageSelection(input, objValues, mask, image, img_id, cell_id, ...)
     }
     

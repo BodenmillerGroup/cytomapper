@@ -148,9 +148,6 @@
   
     # Select first object
     observeEvent(input$sample, {
-      img_IDs <- unique(colData(object)[,img_id])
-      cur_index <- match(input$sample, img_IDs)
-      
       objValues$object1 <- object[,colData(object)[,img_id] == input$sample]
       
       updateTabsetPanel(session, "tabbox1",
@@ -376,7 +373,6 @@
     cur_df$sample <- input$sample
 
     # Brush the data.frame
-    
     cur_selection <- brushedPoints(cur_df, input[[paste0("plot_brush", iter)]], allRows = TRUE)
 
     # Save the Gate
@@ -610,9 +606,7 @@
         if (input$exprs_marker_2 != "") {
             cur_markers <- c(input$exprs_marker_1, input$exprs_marker_2)
             }
-        
       else{
-
             cur_markers <- input$exprs_marker_1
         }
     } else {
@@ -679,7 +673,6 @@
 #' @importFrom svgPanZoom svgPanZoom renderSvgPanZoom
 #' @importFrom svglite stringSVG
 .createImageExpression <- function(input, object, mask, image, img_id, cell_id, ...){
-  
     renderSvgPanZoom({
 
         cur_markers <- .select_markers(input)
@@ -722,7 +715,6 @@
 #' @importFrom S4Vectors metadata
 .createImageSelection <- function(input, objValues, mask, image, img_id, cell_id, ...){
     renderSvgPanZoom({
-
 
         cur_val <- (input$plotCount * 2) - 1
 
