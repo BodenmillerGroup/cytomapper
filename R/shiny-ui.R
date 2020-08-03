@@ -59,16 +59,30 @@
 # Create the side bar layout
 .cytomapper_sidebar <- function(){
     cm_side <- dashboardSidebar(
-
         sidebarMenu(
             menuItem("General controls",
                      sliderInput("plotCount", label = "Select number of plots",
-                                    min = 1, max = 12, value = 1),
-                     selectInput("sample", label = "Select sample",
-                                    choices = NULL),
-                     selectInput("assay", label = "Select which assay to display",
-                                    choices = NULL),
-                     icon = icon("fas fa-sliders-h"),
+                                 min = 1, max = 12, value = 1),
+                     fluidRow(column(
+                         12, p(strong("Select sample")), style="padding-left:30px;")),
+                     fluidRow(column(2, 
+                         actionButton("previous.sample", label = NULL,
+                                      icon = icon("angle-left", class="fa-2x"),
+                                      style = "background-color:transparent;border-color:transparent;color:white;margin-left:0px;")),
+                         column(8, style="padding-left:0px;padding-right:0px;",
+                         selectizeInput("sample", label = NULL,
+                                        width = "100%",
+                                        choices = NULL,
+                                        options = list(placeholder = 'Select a sample', 
+                                                       maxItems = 1))),
+                         column(2,style="padding-left:0px;",
+                         actionButton("next.sample", label = NULL,
+                                      icon = icon(name = "angle-right", class="fa-2x"),
+                                      style = "background-color:transparent;border-color:transparent;color:white;margin-left:0px;padding-left:0px;"))),
+
+                     selectizeInput("assay", label = "Select which assay to display",
+                                    choices = NULL, options = list(placeholder = 'Select an assay', maxItems = 1)),
+                     icon = icon("fas fa-sliders-h"), 
                      startExpanded = TRUE),
             menuItem("Plots",
                 uiOutput("AdditionalPlots_sidebar"),
@@ -76,7 +90,7 @@
             id = "sidebar"
             )
         )
-
+    
     return(cm_side)
 
 }

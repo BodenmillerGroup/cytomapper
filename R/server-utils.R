@@ -114,11 +114,43 @@
 #' @importFrom matrixStats rowRanges
 .create_interactive_observer <- function(object, img_id, input, session, rValues, objValues){
 
+  # Next Image Observer
+  observeEvent(input$next.sample, {
+    img_IDs <- unique(colData(object)[,img_id])
+    cur_index <- match(input$sample, img_IDs)
+    updated_index <- ifelse(cur_index == length(img_IDs), 1, cur_index+1)
+    
+    # return updated img_id 
+    updated_sample <- img_IDs[updated_index]
+    
+    updateSelectInput(session, inputId = "sample",
+                         choices = unique(img_IDs),
+                         selected = updated_sample)
+    
+    }, ignoreInit = TRUE)    
+  
+  # Previous Image Observer
+  observeEvent(input$previous.sample, {
+    img_IDs <- unique(colData(object)[,img_id])
+    cur_index <- match(input$sample, img_IDs)
+    updated_index <- ifelse(cur_index == 1,  length(img_IDs), cur_index-1)
+    
+    # return updated img_id
+    updated_sample <- img_IDs[updated_index]
+    
+    updateSelectInput(session, inputId = "sample",
+                         choices = unique(img_IDs),
+                         selected = updated_sample)
+
+  
+  }, ignoreInit = TRUE)    
+  
+  
     # Select first object
     observeEvent(input$sample, {
-        objValues$object1 <- object[,colData(object)[,img_id] == input$sample]
-
-        updateTabsetPanel(session, "tabbox1",
+      objValues$object1 <- object[,colData(object)[,img_id] == input$sample]
+      
+      updateTabsetPanel(session, "tabbox1",
                           selected = "tab1"
         )
 
@@ -573,8 +605,8 @@
         input$exprs_marker_1 != "") {
         if (input$exprs_marker_2 != "") {
             cur_markers <- c(input$exprs_marker_1, input$exprs_marker_2)
-        }
-        else{
+    }
+    else{
             cur_markers <- input$exprs_marker_1
         }
     } else {
