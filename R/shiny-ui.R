@@ -61,11 +61,11 @@
     cm_side <- dashboardSidebar(
         sidebarMenu(
             menuItem("General controls",
-                     #fluidRow(align = "center", "Select number of plots"),
                      sliderInput("plotCount", label = "Select number of plots",
                                  min = 1, max = 12, value = 1),
-                     #fluidRow(align = "center", "Select sample"),
-                     fillRow(flex = c(1,1.5,1),
+                     fluidRow(column(
+                         12, p(strong("Select sample")), style="padding-left:30px;")),
+                     fillRow(flex = c(1,1.5,1), 
                          actionButton("previous.sample", label = NULL,
                                       icon = icon("angle-left", class="fa-2x"),
                                       style = "background-color:transparent;border-color:transparent;color:white"),
@@ -80,7 +80,6 @@
                      br(),
                      br(),
                      br(),
-                     #fluidRow(align = "center", "Select which assay to display"), 
                      selectizeInput("assay", label = "Select which assay to display",
                                     choices = NULL, options = list(placeholder = 'Select an assay', maxItems = 1)),
                      icon = icon("fas fa-sliders-h"), 
