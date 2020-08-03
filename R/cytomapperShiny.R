@@ -125,7 +125,6 @@
 #'
 #'@import shiny
 #'@import shinydashboard
-
 cytomapperShiny <- function(object,
                         mask = NULL,
                         image = NULL,

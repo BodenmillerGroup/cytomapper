@@ -605,8 +605,8 @@
         input$exprs_marker_1 != "") {
         if (input$exprs_marker_2 != "") {
             cur_markers <- c(input$exprs_marker_1, input$exprs_marker_2)
-            }
-      else{
+    }
+    else{
             cur_markers <- input$exprs_marker_1
         }
     } else {
