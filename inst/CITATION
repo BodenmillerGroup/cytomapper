@@ -1,0 +1,11 @@
+citEntry(entry = "article",
+  	author = {Eling, Nils and Damond, Nicolas and Hoch, Tobias and Bodenmiller, Bernd},
+  	title = {cytomapper: an R/Bioconductor package for visualisation of highly multiplexed imaging data},
+  	elocation-id = {2020.09.08.287516},
+	year = {2020},
+	doi = {10.1101/2020.09.08.287516},
+	publisher = {Cold Spring Harbor Laboratory},
+	abstract = {Highly multiplexed imaging technologies enable spatial profiling of dozens of biomarkers in situ. Standard data processing pipelines quantify cell-specific features and generate object segmentation masks as well as multi-channel images. Therefore, multiplexed imaging data can be visualised across two layers of information: pixel intensities represent the spatial expression of biomarkers across an image while segmented objects visualise cellular morphology, interactions and cell phenotypes in their microenvironment. Here we describe cytomapper, a computational tool that enables visualisation of pixel- and cell-level information obtained by multiplexed imaging. The package is written in the statistical programming language R, integrates with the image and single-cell analysis infrastructure of the Bioconductor project, and allows visualisation of single to hundreds of images in parallel. Using cytomapper, expression of multiple markers is displayed as composite images, segmentation masks are coloured based on cellular features, and selected cells can be outlined in images based on their cell type, among other functions. We illustrate the utility of cytomapper by analysing 100 images obtained by imaging mass cytometry from a cohort of type 1 diabetes patients and healthy individuals. In addition, cytomapper includes a Shiny application that allows hierarchical gating of cells based on marker expression and visualisation of selected cells in corresponding images. Together, cytomapper offers tools for diverse image and single-cell visualisation approaches and supports robust cell phenotyping via gating.Competing Interest StatementThe authors have declared no competing interest.},
+	URL = {https://www.bioconductor.org/packages/release/bioc/html/cytomapper.html},
+	eprint = {https://www.biorxiv.org/content/early/2020/09/09/2020.09.08.287516.full.pdf},
+	journal = {bioRxiv})
