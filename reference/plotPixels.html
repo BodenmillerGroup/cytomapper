@@ -121,7 +121,7 @@ on metadata." />
     </div>
 
     <div class="ref-description">
-    <p>This function takes a <code><a href='CytoImageList.html'>CytoImageList</a></code> object to colour
+    <p>This function takes a <code><a href='CytoImageList-class.html'>CytoImageList</a></code> object to colour
 pixels by marker expression. Additionally, a
 <code>SingleCellExperiment</code> object and <code>CytoImageList</code>
 object containing segmentation masks can be provided to outline cells based
@@ -129,16 +129,16 @@ on metadata.</p>
     </div>
 
     <pre class="usage"><span class='fu'>plotPixels</span>(
-  <span class='no'>image</span>,
-  <span class='kw'>object</span> <span class='kw'>=</span> <span class='kw'>NULL</span>,
-  <span class='kw'>mask</span> <span class='kw'>=</span> <span class='kw'>NULL</span>,
-  <span class='kw'>cell_id</span> <span class='kw'>=</span> <span class='kw'>NULL</span>,
-  <span class='kw'>img_id</span> <span class='kw'>=</span> <span class='kw'>NULL</span>,
-  <span class='kw'>colour_by</span> <span class='kw'>=</span> <span class='kw'>NULL</span>,
-  <span class='kw'>outline_by</span> <span class='kw'>=</span> <span class='kw'>NULL</span>,
-  <span class='kw'>bcg</span> <span class='kw'>=</span> <span class='kw'>NULL</span>,
-  <span class='kw'>colour</span> <span class='kw'>=</span> <span class='kw'>NULL</span>,
-  <span class='no'>...</span>
+  <span class='kw'>image</span>,
+  object = <span class='kw'>NULL</span>,
+  mask = <span class='kw'>NULL</span>,
+  cell_id = <span class='kw'>NULL</span>,
+  img_id = <span class='kw'>NULL</span>,
+  colour_by = <span class='kw'>NULL</span>,
+  outline_by = <span class='kw'>NULL</span>,
+  bcg = <span class='kw'>NULL</span>,
+  colour = <span class='kw'>NULL</span>,
+  <span class='kw'>...</span>
 )</pre>
 
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
@@ -146,7 +146,7 @@ on metadata.</p>
     <colgroup><col class="name" /><col class="desc" /></colgroup>
     <tr>
       <th>image</th>
-      <td><p>a <code><a href='CytoImageList.html'>CytoImageList</a></code> object containing single or
+      <td><p>a <code><a href='CytoImageList-class.html'>CytoImageList</a></code> object containing single or
 multi-channel <code>Image</code> objects (see details below).</p></td>
     </tr>
     <tr>
@@ -155,7 +155,7 @@ multi-channel <code>Image</code> objects (see details below).</p></td>
     </tr>
     <tr>
       <th>mask</th>
-      <td><p>an optional <code><a href='CytoImageList.html'>CytoImageList</a></code> object containing
+      <td><p>an optional <code><a href='CytoImageList-class.html'>CytoImageList</a></code> object containing
 segmentaion masks in form of single-channel <code>Image</code>
 objects (see details below)</p></td>
     </tr>
@@ -222,11 +222,11 @@ three-colour <code>Image</code> objects.</p></li>
     
 
 <p>In the <code>plotPixels</code> function, <code>image</code> refers to a
-<code><a href='CytoImageList.html'>CytoImageList</a></code> object that contains a single or multiple
+<code><a href='CytoImageList-class.html'>CytoImageList</a></code> object that contains a single or multiple
 single- or multi-channel <code>Image</code> objects. Up to six
 channels can be overlayed to generate a composite image. When outlining
 cells, a <code>SingleCellExperiment</code> object and
-<code><a href='CytoImageList.html'>CytoImageList</a></code> object containing segmentation masks must
+<code><a href='CytoImageList-class.html'>CytoImageList</a></code> object containing segmentation masks must
 be provided. The function assumes that each object in the segmentation mask
 is a cell. The key features of such segmentation masks include:</p><ul>
 <li><p>each Image object contains only one channel</p></li>
@@ -287,30 +287,40 @@ intensity across all displayed images per channel.</p>
     <div class='dont-index'><p>For further plotting parameters see <code>?"<a href='plotting-param.html'>plotting-param</a>"</code>.
 For instructions on how to normalize images see
 <code><a href='CytoImageList-manipulation.html'>normalize</a></code>.</p></div>
+    <h2 class="hasAnchor" id="author"><a class="anchor" href="#author"></a>Author</h2>
+
+    <p>Nils Eling (<a href='mailto:nils.eling@dqbm.uzh.ch'>nils.eling@dqbm.uzh.ch</a>)</p>
+<p>Nicolas Damond (<a href='mailto:nicolas.damond@dqbm.uzh.ch'>nicolas.damond@dqbm.uzh.ch</a>)</p>
 
     <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
-    <pre class="examples"><div class='input'><span class='fu'><a href='https://rdrr.io/r/utils/data.html'>data</a></span>(<span class='no'>pancreasMasks</span>)
-<span class='fu'><a href='https://rdrr.io/r/utils/data.html'>data</a></span>(<span class='no'>pancreasImages</span>)
-<span class='fu'><a href='https://rdrr.io/r/utils/data.html'>data</a></span>(<span class='no'>pancreasSCE</span>)
+    <pre class="examples"><div class='input'><span class='fu'><a href='https://rdrr.io/r/utils/data.html'>data</a></span>(<span class='kw'>pancreasMasks</span>)
+<span class='fu'><a href='https://rdrr.io/r/utils/data.html'>data</a></span>(<span class='kw'>pancreasImages</span>)
+<span class='fu'><a href='https://rdrr.io/r/utils/data.html'>data</a></span>(<span class='kw'>pancreasSCE</span>)
 
 <span class='co'># Visualize the images - by default the first channel</span>
-<span class='fu'>plotPixels</span>(<span class='no'>pancreasImages</span>)</div><div class='img'><img src='plotPixels-1.png' alt='' width='700' height='433' /></div><div class='input'>
+<span class='fu'>plotPixels</span>(<span class='kw'>pancreasImages</span>)
+</div><div class='img'><img src='plotPixels-1.png' alt='' width='700' height='433' /></div><div class='input'>
 <span class='co'># Colour the channels</span>
-<span class='fu'>plotPixels</span>(<span class='no'>pancreasImages</span>, <span class='kw'>colour_by</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span>(<span class='st'>"CD99"</span>, <span class='st'>"CDH"</span>))</div><div class='img'><img src='plotPixels-2.png' alt='' width='700' height='433' /></div><div class='input'>
+<span class='fu'>plotPixels</span>(<span class='kw'>pancreasImages</span>, colour_by = <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span>(<span class='st'>"CD99"</span>, <span class='st'>"CDH"</span>))
+</div><div class='img'><img src='plotPixels-2.png' alt='' width='700' height='433' /></div><div class='input'>
 <span class='co'># Outline the cells based on metadata</span>
-<span class='fu'>plotPixels</span>(<span class='no'>pancreasImages</span>, <span class='kw'>object</span> <span class='kw'>=</span> <span class='no'>pancreasSCE</span>, <span class='kw'>mask</span> <span class='kw'>=</span> <span class='no'>pancreasMasks</span>,
-            <span class='kw'>img_id</span> <span class='kw'>=</span> <span class='st'>"ImageNb"</span>, <span class='kw'>cell_id</span> <span class='kw'>=</span> <span class='st'>"CellNb"</span>,
-            <span class='kw'>colour_by</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span>(<span class='st'>"CD99"</span>, <span class='st'>"CDH"</span>), <span class='kw'>outline_by</span> <span class='kw'>=</span> <span class='st'>"CellType"</span>)</div><div class='img'><img src='plotPixels-3.png' alt='' width='700' height='433' /></div><div class='input'>
+<span class='fu'>plotPixels</span>(<span class='kw'>pancreasImages</span>, object = <span class='kw'>pancreasSCE</span>, mask = <span class='kw'>pancreasMasks</span>,
+            img_id = <span class='st'>"ImageNb"</span>, cell_id = <span class='st'>"CellNb"</span>,
+            colour_by = <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span>(<span class='st'>"CD99"</span>, <span class='st'>"CDH"</span>), outline_by = <span class='st'>"CellType"</span>)
+</div><div class='img'><img src='plotPixels-3.png' alt='' width='700' height='433' /></div><div class='input'>
 <span class='co'># Enhance individual channels</span>
-<span class='fu'>plotPixels</span>(<span class='no'>pancreasImages</span>, <span class='kw'>colour_by</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span>(<span class='st'>"CD99"</span>, <span class='st'>"CDH"</span>),
-            <span class='kw'>bcg</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span>(<span class='kw'>CD99</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span>(<span class='fl'>0</span>, <span class='fl'>2</span>, <span class='fl'>1</span>)))</div><div class='img'><img src='plotPixels-4.png' alt='' width='700' height='433' /></div><div class='input'>
+<span class='fu'>plotPixels</span>(<span class='kw'>pancreasImages</span>, colour_by = <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span>(<span class='st'>"CD99"</span>, <span class='st'>"CDH"</span>),
+            bcg = <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span>(CD99 = <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span>(<span class='fl'>0</span>, <span class='fl'>2</span>, <span class='fl'>1</span>)))
+</div><div class='img'><img src='plotPixels-4.png' alt='' width='700' height='433' /></div><div class='input'>
 <span class='co'># Subset the images</span>
-<span class='no'>cur_images</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='CytoImageList-subsetting.html'>getImages</a></span>(<span class='no'>pancreasImages</span>, <span class='fl'>1</span>:<span class='fl'>2</span>)
-<span class='fu'>plotPixels</span>(<span class='no'>cur_images</span>, <span class='kw'>colour_by</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span>(<span class='st'>"CD99"</span>, <span class='st'>"CDH"</span>))</div><div class='img'><img src='plotPixels-5.png' alt='' width='700' height='433' /></div><div class='input'>
+<span class='kw'>cur_images</span> <span class='op'>&lt;-</span> <span class='fu'><a href='CytoImageList-subsetting.html'>getImages</a></span>(<span class='kw'>pancreasImages</span>, <span class='fl'>1</span><span class='op'>:</span><span class='fl'>2</span>)
+<span class='fu'>plotPixels</span>(<span class='kw'>cur_images</span>, colour_by = <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span>(<span class='st'>"CD99"</span>, <span class='st'>"CDH"</span>))
+</div><div class='img'><img src='plotPixels-5.png' alt='' width='700' height='433' /></div><div class='input'>
 <span class='co'># Set colour</span>
-<span class='fu'>plotPixels</span>(<span class='no'>pancreasImages</span>, <span class='kw'>colour_by</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span>(<span class='st'>"CD99"</span>, <span class='st'>"CDH"</span>),
-            <span class='kw'>colour</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span>(<span class='kw'>CD99</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span>(<span class='st'>"black"</span>, <span class='st'>"green"</span>),
-                            <span class='kw'>CDH</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span>(<span class='st'>"black"</span>, <span class='st'>"blue"</span>)))</div><div class='img'><img src='plotPixels-6.png' alt='' width='700' height='433' /></div><div class='input'>
+<span class='fu'>plotPixels</span>(<span class='kw'>pancreasImages</span>, colour_by = <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span>(<span class='st'>"CD99"</span>, <span class='st'>"CDH"</span>),
+            colour = <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span>(CD99 = <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span>(<span class='st'>"black"</span>, <span class='st'>"green"</span>),
+                            CDH = <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span>(<span class='st'>"black"</span>, <span class='st'>"blue"</span>)))
+</div><div class='img'><img src='plotPixels-6.png' alt='' width='700' height='433' /></div><div class='input'>
 </div></pre>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="pkgdown-sidebar">
@@ -327,7 +337,7 @@ For instructions on how to normalize images see
 </div>
 
 <div class="pkgdown">
-  <p>Site built with <a href="https://pkgdown.r-lib.org/">pkgdown</a> 1.5.1.</p>
+  <p>Site built with <a href="https://pkgdown.r-lib.org/">pkgdown</a> 1.6.0.</p>
 </div>
 
       </footer>

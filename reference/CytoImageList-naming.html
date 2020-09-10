@@ -128,10 +128,10 @@ individual images.</p>
 
     
 
-<p>In the following code, <code>x</code> is a <a href='CytoImageList.html'>CytoImageList</a>
+<p>In the following code, <code>x</code> is a <a href='CytoImageList-class.html'>CytoImageList</a>
 object containing one or multiple channels. The channel
 names can be replaced by <code>value</code>, which contains a character vector of
-the same length as the number of channels in the images.</p><dl'>
+the same length as the number of channels in the images.</p><dl>
 <dt><code>channelNames(x)</code></dt><dd><p>Returns the names of all channels stored in
 <code>x</code></p></dd>
 <dt><code>channelNames(x) &lt;- value</code></dt><dd><p>Replaces the channel names of
@@ -144,10 +144,10 @@ length as the number of channels in <code>x</code></p></dd>
 
     
 
-<p>Here, <code>x</code> is a <a href='CytoImageList.html'>CytoImageList</a> object. The element
+<p>Here, <code>x</code> is a <a href='CytoImageList-class.html'>CytoImageList</a> object. The element
 names can be replaced by <code>value</code>, which contains a character vector of
 the same length as the number of images. In case of the CytoImageList object,
-elements are always images.</p><dl'>
+elements are always images.</p><dl>
 <dt><code><a href='https://rdrr.io/r/base/names.html'>names(x)</a></code></dt><dd><p>Returns the names of all images stored in <code>x</code></p></dd>
 <dt><code>names(x) &lt;- value</code></dt><dd><p>Replaces the image names of
 <code>x</code> with <code>value</code>. For this, <code>value</code> needs to have the same
@@ -155,15 +155,22 @@ length as <code>x</code></p></dd>
 
 </dl>
 
+    <h2 class="hasAnchor" id="author"><a class="anchor" href="#author"></a>Author</h2>
+
+    <p>Nils Eling (<a href='mailto:nils.eling@dqbm.uzh.ch'>nils.eling@dqbm.uzh.ch</a>)</p>
 
     <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
     <pre class="examples"><div class='input'><span class='fu'><a href='https://rdrr.io/r/utils/data.html'>data</a></span>(<span class='st'>"pancreasImages"</span>)
 
 <span class='co'># Get channel and image names</span>
-<span class='fu'>channelNames</span>(<span class='no'>pancreasImages</span>)</div><div class='output co'>#&gt; [1] "H3"   "CD99" "PIN"  "CD8a" "CDH" </div><div class='input'><span class='fu'><a href='https://rdrr.io/r/base/names.html'>names</a></span>(<span class='no'>pancreasImages</span>)</div><div class='output co'>#&gt; [1] "E34_imc" "G01_imc" "J02_imc"</div><div class='input'>
+<span class='fu'>channelNames</span>(<span class='kw'>pancreasImages</span>)
+</div><div class='output co'>#&gt; [1] "H3"   "CD99" "PIN"  "CD8a" "CDH" </div><div class='input'><span class='fu'><a href='https://rdrr.io/r/base/names.html'>names</a></span>(<span class='kw'>pancreasImages</span>)
+</div><div class='output co'>#&gt; [1] "E34_imc" "G01_imc" "J02_imc"</div><div class='input'>
 <span class='co'># Set channel and image names</span>
-<span class='fu'>channelNames</span>(<span class='no'>pancreasImages</span>) <span class='kw'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/base/paste.html'>paste0</a></span>(<span class='st'>"marker"</span>, <span class='fl'>1</span>:<span class='fl'>5</span>)
-<span class='fu'><a href='https://rdrr.io/r/base/names.html'>names</a></span>(<span class='no'>pancreasImages</span>) <span class='kw'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/base/paste.html'>paste0</a></span>(<span class='st'>"image"</span>, <span class='fl'>1</span>:<span class='fl'>3</span>)</div></pre>
+<span class='fu'>channelNames</span>(<span class='kw'>pancreasImages</span>) <span class='op'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/base/paste.html'>paste0</a></span>(<span class='st'>"marker"</span>, <span class='fl'>1</span><span class='op'>:</span><span class='fl'>5</span>)
+<span class='fu'><a href='https://rdrr.io/r/base/names.html'>names</a></span>(<span class='kw'>pancreasImages</span>) <span class='op'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/base/paste.html'>paste0</a></span>(<span class='st'>"image"</span>, <span class='fl'>1</span><span class='op'>:</span><span class='fl'>3</span>)
+
+</div></pre>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="pkgdown-sidebar">
     <nav id="toc" data-toggle="toc" class="sticky-top">
@@ -179,7 +186,7 @@ length as <code>x</code></p></dd>
 </div>
 
 <div class="pkgdown">
-  <p>Site built with <a href="https://pkgdown.r-lib.org/">pkgdown</a> 1.5.1.</p>
+  <p>Site built with <a href="https://pkgdown.r-lib.org/">pkgdown</a> 1.6.0.</p>
 </div>
 
       </footer>

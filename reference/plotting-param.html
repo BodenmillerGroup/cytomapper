@@ -279,6 +279,10 @@ three-colour <code>Image</code> objects.</p></li>
 
     <div class='dont-index'><p><code><a href='plotCells.html'>plotCells</a></code> and <code><a href='plotPixels.html'>plotPixels</a></code>
 for the main plotting functions</p></div>
+    <h2 class="hasAnchor" id="author"><a class="anchor" href="#author"></a>Author</h2>
+
+    <p>Nils Eling (<a href='mailto:nils.eling@dqbm.uzh.ch'>nils.eling@dqbm.uzh.ch</a>)</p>
+<p>Nicolas Damond (<a href='mailto:nicolas.damond@dqbm.uzh.ch'>nicolas.damond@dqbm.uzh.ch</a>)</p>
 
     <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
     <pre class="examples"><div class='input'><span class='fu'><a href='https://rdrr.io/r/utils/data.html'>data</a></span>(<span class='st'>"pancreasImages"</span>)
@@ -286,53 +290,67 @@ for the main plotting functions</p></div>
 <span class='fu'><a href='https://rdrr.io/r/utils/data.html'>data</a></span>(<span class='st'>"pancreasSCE"</span>)
 
 <span class='co'># Setting missing colour</span>
-<span class='fu'><a href='plotCells.html'>plotCells</a></span>(<span class='no'>pancreasMasks</span>, <span class='kw'>missing_colour</span> <span class='kw'>=</span> <span class='st'>"blue"</span>)</div><div class='img'><img src='plotting-param-1.png' alt='' width='700' height='433' /></div><div class='input'>
+<span class='fu'><a href='plotCells.html'>plotCells</a></span>(<span class='kw'>pancreasMasks</span>, missing_colour = <span class='st'>"blue"</span>)
+</div><div class='img'><img src='plotting-param-1.png' alt='' width='700' height='433' /></div><div class='input'>
 <span class='co'># Setting background colour</span>
-<span class='fu'><a href='plotCells.html'>plotCells</a></span>(<span class='no'>pancreasMasks</span>, <span class='kw'>background_colour</span> <span class='kw'>=</span> <span class='st'>"blue"</span>)</div><div class='img'><img src='plotting-param-2.png' alt='' width='700' height='433' /></div><div class='input'>
+<span class='fu'><a href='plotCells.html'>plotCells</a></span>(<span class='kw'>pancreasMasks</span>, background_colour = <span class='st'>"blue"</span>)
+</div><div class='img'><img src='plotting-param-2.png' alt='' width='700' height='433' /></div><div class='input'>
 <span class='co'># Setting the scale bar</span>
-<span class='fu'><a href='plotCells.html'>plotCells</a></span>(<span class='no'>pancreasMasks</span>, <span class='kw'>scale_bar</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span>(<span class='kw'>length</span> <span class='kw'>=</span> <span class='fl'>10</span>,
-                                        <span class='kw'>cex</span> <span class='kw'>=</span> <span class='fl'>2</span>,
-                                        <span class='kw'>lwidth</span> <span class='kw'>=</span> <span class='fl'>10</span>,
-                                        <span class='kw'>colour</span> <span class='kw'>=</span> <span class='st'>"red"</span>,
-                                        <span class='kw'>position</span> <span class='kw'>=</span> <span class='st'>"bottomleft"</span>,
-                                        <span class='kw'>margin</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span>(<span class='fl'>5</span>,<span class='fl'>5</span>),
-                                        <span class='kw'>frame</span> <span class='kw'>=</span> <span class='fl'>3</span>))</div><div class='img'><img src='plotting-param-3.png' alt='' width='700' height='433' /></div><div class='input'>
+<span class='fu'><a href='plotCells.html'>plotCells</a></span>(<span class='kw'>pancreasMasks</span>, scale_bar = <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span>(length = <span class='fl'>10</span>,
+                                        cex = <span class='fl'>2</span>,
+                                        lwidth = <span class='fl'>10</span>,
+                                        colour = <span class='st'>"red"</span>,
+                                        position = <span class='st'>"bottomleft"</span>,
+                                        margin = <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span>(<span class='fl'>5</span>,<span class='fl'>5</span>),
+                                        frame = <span class='fl'>3</span>))
+</div><div class='img'><img src='plotting-param-3.png' alt='' width='700' height='433' /></div><div class='input'>
 <span class='co'># Setting the image title</span>
-<span class='fu'><a href='plotCells.html'>plotCells</a></span>(<span class='no'>pancreasMasks</span>,
-            <span class='kw'>image_title</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span>(<span class='kw'>text</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span>(<span class='st'>"image1"</span>, <span class='st'>"image2"</span>, <span class='st'>"image3"</span>),
-                                <span class='kw'>position</span> <span class='kw'>=</span> <span class='st'>"topleft"</span>,
-                                <span class='kw'>colour</span> <span class='kw'>=</span> <span class='st'>"blue"</span>,
-                                <span class='kw'>margin</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span>(<span class='fl'>0</span>,<span class='fl'>5</span>),
-                                <span class='kw'>font</span> <span class='kw'>=</span> <span class='fl'>2</span>,
-                                <span class='kw'>cex</span> <span class='kw'>=</span> <span class='fl'>2</span>))</div><div class='img'><img src='plotting-param-4.png' alt='' width='700' height='433' /></div><div class='input'>
+<span class='fu'><a href='plotCells.html'>plotCells</a></span>(<span class='kw'>pancreasMasks</span>,
+            image_title = <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span>(text = <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span>(<span class='st'>"image1"</span>, <span class='st'>"image2"</span>, <span class='st'>"image3"</span>),
+                                position = <span class='st'>"topleft"</span>,
+                                colour = <span class='st'>"blue"</span>,
+                                margin = <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span>(<span class='fl'>0</span>,<span class='fl'>5</span>),
+                                font = <span class='fl'>2</span>,
+                                cex = <span class='fl'>2</span>))
+</div><div class='img'><img src='plotting-param-4.png' alt='' width='700' height='433' /></div><div class='input'>
 <span class='co'># Return plot</span>
-<span class='no'>cur_out</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='plotPixels.html'>plotPixels</a></span>(<span class='no'>pancreasImages</span>, <span class='kw'>return_plot</span> <span class='kw'>=</span> <span class='fl'>TRUE</span>)</div><div class='img'><img src='plotting-param-5.png' alt='' width='700' height='433' /></div><div class='input'><span class='no'>cur_out</span>$<span class='no'>plot</span></div><div class='img'><img src='plotting-param-6.png' alt='' width='700' height='433' /></div><div class='input'>
+<span class='kw'>cur_out</span> <span class='op'>&lt;-</span> <span class='fu'><a href='plotPixels.html'>plotPixels</a></span>(<span class='kw'>pancreasImages</span>, return_plot = <span class='fl'>TRUE</span>)
+</div><div class='img'><img src='plotting-param-5.png' alt='' width='700' height='433' /></div><div class='input'><span class='kw'>cur_out</span><span class='op'>$</span><span class='kw'>plot</span>
+</div><div class='img'><img src='plotting-param-6.png' alt='' width='700' height='433' /></div><div class='input'>
 <span class='co'># Return images</span>
-<span class='no'>cur_out</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='plotPixels.html'>plotPixels</a></span>(<span class='no'>pancreasImages</span>, <span class='kw'>return_images</span> <span class='kw'>=</span> <span class='fl'>TRUE</span>)
-<span class='no'>cur_out</span>$<span class='no'>images</span></div><div class='output co'>#&gt; List of length 3
+<span class='kw'>cur_out</span> <span class='op'>&lt;-</span> <span class='fu'><a href='plotPixels.html'>plotPixels</a></span>(<span class='kw'>pancreasImages</span>, return_images = <span class='fl'>TRUE</span>)
+<span class='kw'>cur_out</span><span class='op'>$</span><span class='kw'>images</span>
+</div><div class='output co'>#&gt; List of length 3
 #&gt; names(3): E34_imc G01_imc J02_imc</div><div class='input'>
 <span class='co'># Setting the legend</span>
-<span class='fu'><a href='plotCells.html'>plotCells</a></span>(<span class='no'>pancreasMasks</span>, <span class='kw'>object</span> <span class='kw'>=</span> <span class='no'>pancreasSCE</span>,
-            <span class='kw'>img_id</span> <span class='kw'>=</span> <span class='st'>"ImageNb"</span>, <span class='kw'>cell_id</span> <span class='kw'>=</span> <span class='st'>"CellNb"</span>,
-            <span class='kw'>colour_by</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span>(<span class='st'>"CD99"</span>, <span class='st'>"CDH"</span>),
-            <span class='kw'>outline_by</span> <span class='kw'>=</span> <span class='st'>"CellType"</span>,
-            <span class='kw'>legend</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span>(<span class='kw'>colour_by.title.font</span> <span class='kw'>=</span> <span class='fl'>0.5</span>,
-                        <span class='kw'>colour_by.title.cex</span> <span class='kw'>=</span> <span class='fl'>0.5</span>,
-                        <span class='kw'>colour_by.labels.cex</span> <span class='kw'>=</span> <span class='fl'>0.5</span>,
-                        <span class='kw'>outline_by.legend.cex</span> <span class='kw'>=</span> <span class='fl'>0.5</span>,
-                        <span class='kw'>margin</span> <span class='kw'>=</span> <span class='fl'>0</span>))</div><div class='img'><img src='plotting-param-7.png' alt='' width='700' height='433' /></div><div class='input'>
+<span class='fu'><a href='plotCells.html'>plotCells</a></span>(<span class='kw'>pancreasMasks</span>, object = <span class='kw'>pancreasSCE</span>,
+            img_id = <span class='st'>"ImageNb"</span>, cell_id = <span class='st'>"CellNb"</span>,
+            colour_by = <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span>(<span class='st'>"CD99"</span>, <span class='st'>"CDH"</span>),
+            outline_by = <span class='st'>"CellType"</span>,
+            legend = <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span>(colour_by.title.font = <span class='fl'>0.5</span>,
+                        colour_by.title.cex = <span class='fl'>0.5</span>,
+                        colour_by.labels.cex = <span class='fl'>0.5</span>,
+                        outline_by.legend.cex = <span class='fl'>0.5</span>,
+                        margin = <span class='fl'>0</span>))
+</div><div class='img'><img src='plotting-param-7.png' alt='' width='700' height='433' /></div><div class='input'>
 <span class='co'># Setting the margin between images</span>
-<span class='fu'><a href='plotPixels.html'>plotPixels</a></span>(<span class='no'>pancreasImages</span>, <span class='kw'>margin</span> <span class='kw'>=</span> <span class='fl'>3</span>)</div><div class='img'><img src='plotting-param-8.png' alt='' width='700' height='433' /></div><div class='input'>
+<span class='fu'><a href='plotPixels.html'>plotPixels</a></span>(<span class='kw'>pancreasImages</span>, margin = <span class='fl'>3</span>)
+</div><div class='img'><img src='plotting-param-8.png' alt='' width='700' height='433' /></div><div class='input'>
 <span class='co'># Displaying individual images</span>
-<span class='fu'><a href='plotPixels.html'>plotPixels</a></span>(<span class='no'>pancreasImages</span>, <span class='kw'>display</span> <span class='kw'>=</span> <span class='st'>"single"</span>)</div><div class='img'><img src='plotting-param-9.png' alt='' width='700' height='433' /></div><div class='img'><img src='plotting-param-10.png' alt='' width='700' height='433' /></div><div class='img'><img src='plotting-param-11.png' alt='' width='700' height='433' /></div><div class='img'><img src='plotting-param-12.png' alt='' width='700' height='433' /></div><div class='input'>
+<span class='fu'><a href='plotPixels.html'>plotPixels</a></span>(<span class='kw'>pancreasImages</span>, display = <span class='st'>"single"</span>)
+</div><div class='img'><img src='plotting-param-9.png' alt='' width='700' height='433' /></div><div class='img'><img src='plotting-param-10.png' alt='' width='700' height='433' /></div><div class='img'><img src='plotting-param-11.png' alt='' width='700' height='433' /></div><div class='img'><img src='plotting-param-12.png' alt='' width='700' height='433' /></div><div class='input'>
 <span class='co'># Supress scaling</span>
-<span class='fu'><a href='plotPixels.html'>plotPixels</a></span>(<span class='no'>pancreasImages</span>, <span class='kw'>colour_by</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span>(<span class='st'>"CD99"</span>, <span class='st'>"PIN"</span>),
-            <span class='kw'>scale</span> <span class='kw'>=</span> <span class='fl'>TRUE</span>)</div><div class='img'><img src='plotting-param-13.png' alt='' width='700' height='433' /></div><div class='input'><span class='fu'><a href='plotPixels.html'>plotPixels</a></span>(<span class='no'>pancreasImages</span>, <span class='kw'>colour_by</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span>(<span class='st'>"CD99"</span>, <span class='st'>"PIN"</span>),
-            <span class='kw'>scale</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>)</div><div class='img'><img src='plotting-param-14.png' alt='' width='700' height='433' /></div><div class='input'>
+<span class='fu'><a href='plotPixels.html'>plotPixels</a></span>(<span class='kw'>pancreasImages</span>, colour_by = <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span>(<span class='st'>"CD99"</span>, <span class='st'>"PIN"</span>),
+            scale = <span class='fl'>TRUE</span>)
+</div><div class='img'><img src='plotting-param-13.png' alt='' width='700' height='433' /></div><div class='input'><span class='fu'><a href='plotPixels.html'>plotPixels</a></span>(<span class='kw'>pancreasImages</span>, colour_by = <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span>(<span class='st'>"CD99"</span>, <span class='st'>"PIN"</span>),
+            scale = <span class='fl'>FALSE</span>)
+</div><div class='img'><img src='plotting-param-14.png' alt='' width='700' height='433' /></div><div class='input'>
 <span class='co'># Suppress interpolation</span>
-<span class='fu'><a href='plotPixels.html'>plotPixels</a></span>(<span class='no'>pancreasImages</span>, <span class='kw'>colour_by</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span>(<span class='st'>"CD99"</span>, <span class='st'>"PIN"</span>),
-            <span class='kw'>interpolate</span> <span class='kw'>=</span> <span class='fl'>TRUE</span>)</div><div class='img'><img src='plotting-param-15.png' alt='' width='700' height='433' /></div><div class='input'><span class='fu'><a href='plotPixels.html'>plotPixels</a></span>(<span class='no'>pancreasImages</span>, <span class='kw'>colour_by</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span>(<span class='st'>"CD99"</span>, <span class='st'>"PIN"</span>),
-            <span class='kw'>interpolate</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>)</div><div class='img'><img src='plotting-param-16.png' alt='' width='700' height='433' /></div><div class='input'>
+<span class='fu'><a href='plotPixels.html'>plotPixels</a></span>(<span class='kw'>pancreasImages</span>, colour_by = <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span>(<span class='st'>"CD99"</span>, <span class='st'>"PIN"</span>),
+            interpolate = <span class='fl'>TRUE</span>)
+</div><div class='img'><img src='plotting-param-15.png' alt='' width='700' height='433' /></div><div class='input'><span class='fu'><a href='plotPixels.html'>plotPixels</a></span>(<span class='kw'>pancreasImages</span>, colour_by = <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span>(<span class='st'>"CD99"</span>, <span class='st'>"PIN"</span>),
+            interpolate = <span class='fl'>FALSE</span>)
+</div><div class='img'><img src='plotting-param-16.png' alt='' width='700' height='433' /></div><div class='input'>
 </div></pre>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="pkgdown-sidebar">
@@ -349,7 +367,7 @@ for the main plotting functions</p></div>
 </div>
 
 <div class="pkgdown">
-  <p>Site built with <a href="https://pkgdown.r-lib.org/">pkgdown</a> 1.5.1.</p>
+  <p>Site built with <a href="https://pkgdown.r-lib.org/">pkgdown</a> 1.6.0.</p>
 </div>
 
       </footer>

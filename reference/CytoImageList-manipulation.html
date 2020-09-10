@@ -120,7 +120,7 @@ containing one or multiple channels." />
 
     <div class="ref-description">
     <p>Methods to change pixel values in CytoImageList objects. In the
-following sections, <code>object</code> is a <a href='CytoImageList.html'>CytoImageList</a> object
+following sections, <code>object</code> is a <a href='CytoImageList-class.html'>CytoImageList</a> object
 containing one or multiple channels.</p>
     </div>
 
@@ -135,9 +135,9 @@ containing one or multiple channels.</p>
 
 <p>In some cases, images need to be scaled by a constant
 (e.g. 2^16-1 = 65535) <code>value</code> to revert them back to the original
-pixel values after reading them in.</p><dl'>
+pixel values after reading them in.</p><dl>
 <dt><code>scaleImages(object, value)</code></dt><dd><p>Scales all images in the
-<a href='CytoImageList.html'>CytoImageList</a> <code>object</code> by <code>value</code>.</p></dd>
+<a href='CytoImageList-class.html'>CytoImageList</a> <code>object</code> by <code>value</code>.</p></dd>
 
 </dl>
 
@@ -146,7 +146,7 @@ pixel values after reading them in.</p><dl'>
     
 
 <p>Linear scaling of the intensity values of each Image contained
-in a <a href='CytoImageList.html'>CytoImageList</a> <code>object</code> to a specific range. Images
+in a <a href='CytoImageList-class.html'>CytoImageList</a> <code>object</code> to a specific range. Images
 can either be scaled to the minimum/maximum value per channel or across all
 channels (default <code>separateChannels = TRUE</code>). Also, images can be scaled
 to the minimum/maximum value per image or across all images (default
@@ -155,7 +155,7 @@ intensity values across images.</p>
 <p>To clip the images before normalization, the <code>inputRange</code> can be set.</p>
 <p><code>normalize(object, separateChannels = TRUE, separateImages = FALSE,
 ft = c(0, 1), inputRange = NULL)</code>:</p>
-<dl'>
+<dl>
 <dt><code>object</code>:</dt><dd><p>A CytoImageList object</p></dd>
 <dt><code>separateChannels</code>:</dt><dd><p>Logical if pixel values should be normalized
 per channel (default) or across all channels.</p></dd>
@@ -172,27 +172,34 @@ clipping range of the input intensity values (see
     <h2 class="hasAnchor" id="see-also"><a class="anchor" href="#see-also"></a>See also</h2>
 
     <div class='dont-index'><p><code><a href='https://rdrr.io/pkg/EBImage/man/normalize.html'>normalize</a></code> for details on Image normalization</p></div>
+    <h2 class="hasAnchor" id="author"><a class="anchor" href="#author"></a>Author</h2>
+
+    <p>Nils Eling (<a href='mailto:nils.eling@dqbm.uzh.ch'>nils.eling@dqbm.uzh.ch</a>)</p>
 
     <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
-    <pre class="examples"><div class='input'><span class='fu'><a href='https://rdrr.io/r/utils/data.html'>data</a></span>(<span class='no'>pancreasImages</span>)
+    <pre class="examples"><div class='input'><span class='fu'><a href='https://rdrr.io/r/utils/data.html'>data</a></span>(<span class='kw'>pancreasImages</span>)
 
 <span class='co'># Scale images to create segmentation masks</span>
-<span class='no'>cur_files</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/base/list.files.html'>list.files</a></span>(<span class='fu'><a href='https://rdrr.io/r/base/system.file.html'>system.file</a></span>(<span class='st'>"extdata"</span>, <span class='kw'>package</span> <span class='kw'>=</span> <span class='st'>"cytomapper"</span>),
-                        <span class='kw'>pattern</span> <span class='kw'>=</span> <span class='st'>"mask.tiff"</span>, <span class='kw'>full.names</span> <span class='kw'>=</span> <span class='fl'>TRUE</span>)
-<span class='no'>x</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='loadImages.html'>loadImages</a></span>(<span class='no'>cur_files</span>)
+<span class='kw'>cur_files</span> <span class='op'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/base/list.files.html'>list.files</a></span>(<span class='fu'><a href='https://rdrr.io/r/base/system.file.html'>system.file</a></span>(<span class='st'>"extdata"</span>, package = <span class='st'>"cytomapper"</span>),
+                        pattern = <span class='st'>"mask.tiff"</span>, full.names = <span class='fl'>TRUE</span>)
+<span class='kw'>x</span> <span class='op'>&lt;-</span> <span class='fu'><a href='loadImages.html'>loadImages</a></span>(<span class='kw'>cur_files</span>)
 <span class='co'># Error when running plotCells(x)</span>
 <span class='co'># Therefore scale to account for 16 bit encoding</span>
-<span class='no'>x</span> <span class='kw'>&lt;-</span> <span class='fu'>scaleImages</span>(<span class='no'>x</span>, <span class='fl'>2</span>^<span class='fl'>16</span> - <span class='fl'>1</span>)
-<span class='fu'><a href='plotCells.html'>plotCells</a></span>(<span class='no'>x</span>)</div><div class='img'><img src='CytoImageList-manipulation-1.png' alt='' width='700' height='433' /></div><div class='input'>
+<span class='kw'>x</span> <span class='op'>&lt;-</span> <span class='fu'>scaleImages</span>(<span class='kw'>x</span>, <span class='fl'>2</span><span class='op'>^</span><span class='fl'>16</span> <span class='op'>-</span> <span class='fl'>1</span>)
+<span class='fu'><a href='plotCells.html'>plotCells</a></span>(<span class='kw'>x</span>)
+</div><div class='img'><img src='CytoImageList-manipulation-1.png' alt='' width='700' height='433' /></div><div class='input'>
 <span class='co'># Default normalization</span>
-<span class='no'>x</span> <span class='kw'>&lt;-</span> <span class='fu'>normalize</span>(<span class='no'>pancreasImages</span>)
-<span class='fu'><a href='plotPixels.html'>plotPixels</a></span>(<span class='no'>x</span>, <span class='kw'>colour_by</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span>(<span class='st'>"H3"</span>, <span class='st'>"CD99"</span>))</div><div class='img'><img src='CytoImageList-manipulation-2.png' alt='' width='700' height='433' /></div><div class='input'>
+<span class='kw'>x</span> <span class='op'>&lt;-</span> <span class='fu'>normalize</span>(<span class='kw'>pancreasImages</span>)
+<span class='fu'><a href='plotPixels.html'>plotPixels</a></span>(<span class='kw'>x</span>, colour_by = <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span>(<span class='st'>"H3"</span>, <span class='st'>"CD99"</span>))
+</div><div class='img'><img src='CytoImageList-manipulation-2.png' alt='' width='700' height='433' /></div><div class='input'>
 <span class='co'># Setting the clipping range</span>
-<span class='no'>x</span> <span class='kw'>&lt;-</span> <span class='fu'>normalize</span>(<span class='no'>x</span>, <span class='kw'>inputRange</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span>(<span class='fl'>0</span>, <span class='fl'>0.9</span>))
-<span class='fu'><a href='plotPixels.html'>plotPixels</a></span>(<span class='no'>x</span>, <span class='kw'>colour_by</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span>(<span class='st'>"H3"</span>, <span class='st'>"CD99"</span>))</div><div class='img'><img src='CytoImageList-manipulation-3.png' alt='' width='700' height='433' /></div><div class='input'>
+<span class='kw'>x</span> <span class='op'>&lt;-</span> <span class='fu'>normalize</span>(<span class='kw'>x</span>, inputRange = <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span>(<span class='fl'>0</span>, <span class='fl'>0.9</span>))
+<span class='fu'><a href='plotPixels.html'>plotPixels</a></span>(<span class='kw'>x</span>, colour_by = <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span>(<span class='st'>"H3"</span>, <span class='st'>"CD99"</span>))
+</div><div class='img'><img src='CytoImageList-manipulation-3.png' alt='' width='700' height='433' /></div><div class='input'>
 <span class='co'># Normalizing per image</span>
-<span class='no'>x</span> <span class='kw'>&lt;-</span> <span class='fu'>normalize</span>(<span class='no'>pancreasImages</span>, <span class='kw'>separateImages</span> <span class='kw'>=</span> <span class='fl'>TRUE</span>)
-<span class='fu'><a href='plotPixels.html'>plotPixels</a></span>(<span class='no'>x</span>, <span class='kw'>colour_by</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span>(<span class='st'>"H3"</span>, <span class='st'>"CD99"</span>))</div><div class='img'><img src='CytoImageList-manipulation-4.png' alt='' width='700' height='433' /></div><div class='input'>
+<span class='kw'>x</span> <span class='op'>&lt;-</span> <span class='fu'>normalize</span>(<span class='kw'>pancreasImages</span>, separateImages = <span class='fl'>TRUE</span>)
+<span class='fu'><a href='plotPixels.html'>plotPixels</a></span>(<span class='kw'>x</span>, colour_by = <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span>(<span class='st'>"H3"</span>, <span class='st'>"CD99"</span>))
+</div><div class='img'><img src='CytoImageList-manipulation-4.png' alt='' width='700' height='433' /></div><div class='input'>
 </div></pre>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="pkgdown-sidebar">
@@ -209,7 +216,7 @@ clipping range of the input intensity values (see
 </div>
 
 <div class="pkgdown">
-  <p>Site built with <a href="https://pkgdown.r-lib.org/">pkgdown</a> 1.5.1.</p>
+  <p>Site built with <a href="https://pkgdown.r-lib.org/">pkgdown</a> 1.6.0.</p>
 </div>
 
       </footer>

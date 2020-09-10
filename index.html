@@ -104,21 +104,27 @@
 <h2 class="hasAnchor">
 <a href="#installation" class="anchor"></a>Installation</h2>
 <p>The <code>cytomapper</code> package can be installed from <code>Bioconductor</code> via:</p>
-<div class="sourceCode" id="cb1"><pre class="r"><span class="kw">if</span> (!<span class="fu"><a href="https://rdrr.io/r/base/ns-load.html">requireNamespace</a></span>(<span class="st">"BiocManager"</span>, <span class="kw">quietly</span> <span class="kw">=</span> <span class="fl">TRUE</span>))
+<div class="sourceCode" id="cb1"><pre class="downlit">
+<span class="co">if</span> (<span class="op">!</span><span class="fu"><a href="https://rdrr.io/r/base/ns-load.html">requireNamespace</a></span>(<span class="st">"BiocManager"</span>, quietly = <span class="fl">TRUE</span>))
     <span class="fu"><a href="https://rdrr.io/r/utils/install.packages.html">install.packages</a></span>(<span class="st">"BiocManager"</span>)
-
-<span class="kw pkg">BiocManager</span><span class="kw ns">::</span><span class="fu"><a href="https://rdrr.io/pkg/BiocManager/man/install.html">install</a></span>(<span class="st">"cytomapper"</span>)</pre></div>
+    
+<span class="kw">BiocManager</span>::<span class="fu"><a href="https://rdrr.io/pkg/BiocManager/man/install.html">install</a></span>(<span class="st">"cytomapper"</span>)
+</pre></div>
 <p>The development version of the <code>cytomapper</code> package can be installed from Github using <code>devtools</code> in R. Please make sure to also install its dependecies:</p>
-<div class="sourceCode" id="cb2"><pre class="r"><span class="kw">if</span> (!<span class="fu"><a href="https://rdrr.io/r/base/ns-load.html">requireNamespace</a></span>(<span class="st">"BiocManager"</span>, <span class="kw">quietly</span> <span class="kw">=</span> <span class="fl">TRUE</span>))
+<div class="sourceCode" id="cb2"><pre class="downlit">
+<span class="co">if</span> (<span class="op">!</span><span class="fu"><a href="https://rdrr.io/r/base/ns-load.html">requireNamespace</a></span>(<span class="st">"BiocManager"</span>, quietly = <span class="fl">TRUE</span>))
     <span class="fu"><a href="https://rdrr.io/r/utils/install.packages.html">install.packages</a></span>(<span class="st">"BiocManager"</span>)
-
-<span class="kw pkg">BiocManager</span><span class="kw ns">::</span><span class="fu"><a href="https://rdrr.io/pkg/BiocManager/man/install.html">install</a></span>(<span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span>(<span class="st">"EBImage"</span>, <span class="st">"SingleCellExperiment"</span>))
+    
+<span class="kw">BiocManager</span>::<span class="fu"><a href="https://rdrr.io/pkg/BiocManager/man/install.html">install</a></span>(<span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span>(<span class="st">"EBImage"</span>, <span class="st">"SingleCellExperiment"</span>))
 
 <span class="co"># install.packages("devtools")</span>
 
-<span class="kw pkg">devtools</span><span class="kw ns">::</span><span class="fu">install_github</span>(<span class="st">"BodenmillerGroup/cytomapper"</span>, <span class="kw">build_vignettes</span> <span class="kw">=</span> <span class="fl">TRUE</span>)</pre></div>
+<span class="kw">devtools</span>::<span class="fu">install_github</span>(<span class="st">"BodenmillerGroup/cytomapper"</span>, build_vignettes = <span class="fl">TRUE</span>)
+</pre></div>
 <p>To load the package in your R session, type the following:</p>
-<div class="sourceCode" id="cb3"><pre class="r"><span class="fu"><a href="https://rdrr.io/r/base/library.html">library</a></span>(<span class="no">cytomapper</span>)</pre></div>
+<div class="sourceCode" id="cb3"><pre class="downlit">
+<span class="fu"><a href="https://rdrr.io/r/base/library.html">library</a></span>(<span class="kw"><a href="https://github.com/BodenmillerGroup/cytomapper">cytomapper</a></span>)
+</pre></div>
 </div>
 <div id="functionality" class="section level2">
 <h2 class="hasAnchor">
@@ -127,15 +133,21 @@
 <p><strong>plotPixels</strong></p>
 <p>The function takes a <code>CytoImageList</code> object (available via the <code>cytomapper</code> package) containing multi-channel images representing pixel-level expression values and optionally a <code>CytoImageList</code> object containing segementation masks and a <code>SingleCellExperiment</code> object containing cell-level metadata.</p>
 <p>It allows the visualization of pixel-level information of up to six channels and outlining cells based on cell-level metadata. To see the full functionality in R type:</p>
-<div class="sourceCode" id="cb4"><pre class="r">?<span class="no">plotPixels</span></pre></div>
+<div class="sourceCode" id="cb4"><pre class="downlit">
+<span class="op">?</span><span class="kw">plotPixels</span>
+</pre></div>
 <p><strong>plotCells</strong></p>
 <p>This function takes a <code>CytoImageList</code> object containing segementation masks and a <code>SingleCellExperiment</code> object containing cell-level mean expression values and metadata information.</p>
 <p>It allows the visualization of cell-level expression data and metadata information. To see the full functionality in R type:</p>
-<div class="sourceCode" id="cb5"><pre class="r">?<span class="no">plotCells</span></pre></div>
+<div class="sourceCode" id="cb5"><pre class="downlit">
+<span class="op">?</span><span class="kw">plotCells</span>
+</pre></div>
 <p><strong>cytomapperShiny</strong></p>
 <p>This Shiny application allows gating of cells based on their expression values and visualises selected cells on their corresponding images.</p>
 <p>It requires at least a <code>SingleCellExperiment</code> as input and optionally <code>CytoImageList</code> objects containing segmentation masks and multi-channel images. For full details, please refer to:</p>
-<div class="sourceCode" id="cb6"><pre class="r">?<span class="no">cytomapperShiny</span></pre></div>
+<div class="sourceCode" id="cb6"><pre class="downlit">
+<span class="op">?</span><span class="kw">cytomapperShiny</span>
+</pre></div>
 </div>
 <div id="getting-help" class="section level2">
 <h2 class="hasAnchor">
@@ -144,7 +156,9 @@
 <p>More information on how to work with and generate a <code>SingleCellExperiment</code> object can be obtained from: <a href="https://osca.bioconductor.org/data-infrastructure.html">Orchestrating Single-Cell Analysis with Bioconductor</a></p>
 <p>An extensive introduction to image analysis in R can be found at: <a href="https://bioconductor.org/packages/release/bioc/vignettes/EBImage/inst/doc/EBImage-introduction.html">Introduction to EBImage</a></p>
 <p>A full overview on the analysis workflow and functionality of the <code>cytomapper</code> package can be found by typing:</p>
-<div class="sourceCode" id="cb7"><pre class="r"><span class="fu"><a href="https://rdrr.io/r/utils/vignette.html">vignette</a></span>(<span class="st">"cytomapper"</span>)</pre></div>
+<div class="sourceCode" id="cb7"><pre class="downlit">
+<span class="fu"><a href="https://rdrr.io/r/utils/vignette.html">vignette</a></span>(<span class="st">"cytomapper"</span>)
+</pre></div>
 </div>
 <div id="authors" class="section level2">
 <h2 class="hasAnchor">
@@ -181,6 +195,12 @@
 <li>GPL (&gt;= 2)</li>
 </ul>
 </div>
+<div class="citation">
+<h2>Citation</h2>
+<ul class="list-unstyled">
+<li><a href="authors.html">Citing cytomapper</a></li>
+</ul>
+</div>
 <div class="developers">
 <h2>Developers</h2>
 <ul class="list-unstyled">
@@ -199,7 +219,7 @@
 </div>
 
 <div class="pkgdown">
-  <p>Site built with <a href="https://pkgdown.r-lib.org/">pkgdown</a> 1.5.1.</p>
+  <p>Site built with <a href="https://pkgdown.r-lib.org/">pkgdown</a> 1.6.0.</p>
 </div>
 
       </footer>

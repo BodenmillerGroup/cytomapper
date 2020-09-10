@@ -125,12 +125,12 @@ corresponding images.</p>
     </div>
 
     <pre class="usage"><span class='fu'>cytomapperShiny</span>(
-  <span class='no'>object</span>,
-  <span class='kw'>mask</span> <span class='kw'>=</span> <span class='kw'>NULL</span>,
-  <span class='kw'>image</span> <span class='kw'>=</span> <span class='kw'>NULL</span>,
-  <span class='kw'>cell_id</span> <span class='kw'>=</span> <span class='kw'>NULL</span>,
-  <span class='kw'>img_id</span> <span class='kw'>=</span> <span class='kw'>NULL</span>,
-  <span class='no'>...</span>
+  <span class='kw'>object</span>,
+  mask = <span class='kw'>NULL</span>,
+  image = <span class='kw'>NULL</span>,
+  cell_id = <span class='kw'>NULL</span>,
+  img_id = <span class='kw'>NULL</span>,
+  <span class='kw'>...</span>
 )</pre>
 
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
@@ -142,12 +142,12 @@ corresponding images.</p>
     </tr>
     <tr>
       <th>mask</th>
-      <td><p>(optional) a <code><a href='CytoImageList.html'>CytoImageList</a></code> containing
+      <td><p>(optional) a <code><a href='CytoImageList-class.html'>CytoImageList</a></code> containing
 single-channel <code>Image</code> objects.</p></td>
     </tr>
     <tr>
       <th>image</th>
-      <td><p>(optional) a <code><a href='CytoImageList.html'>CytoImageList</a></code> object containing
+      <td><p>(optional) a <code><a href='CytoImageList-class.html'>CytoImageList</a></code> object containing
 single or multi-channel <code>Image</code> objects.</p></td>
     </tr>
     <tr>
@@ -256,27 +256,33 @@ workflow on how to use the app.</p>
 
     <div class='dont-index'><p><code><a href='plotCells.html'>plotCells</a></code> and <code><a href='plotPixels.html'>plotPixels</a></code> for the main
 plotting functions</p></div>
+    <h2 class="hasAnchor" id="author"><a class="anchor" href="#author"></a>Author</h2>
+
+    <p>Nils Eling (<a href='mailto:nils.eling@dqbm.uzh.ch'>nils.eling@dqbm.uzh.ch</a>)</p>
+<p>Tobias Hoch (<a href='mailto:tobias.hoch@dqbm.uzh.ch'>tobias.hoch@dqbm.uzh.ch</a>)</p>
 
     <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
     <pre class="examples"><div class='input'><span class='co'>## Only run this example in interactive R sessions</span>
-<span class='kw'>if</span> (<span class='fu'><a href='https://rdrr.io/r/base/interactive.html'>interactive</a></span>()) {
+<span class='co'>if</span> (<span class='fu'><a href='https://rdrr.io/r/base/interactive.html'>interactive</a></span>()) {
    <span class='co'># Load example data sets</span>
    <span class='fu'><a href='https://rdrr.io/r/utils/data.html'>data</a></span>(<span class='st'>"pancreasSCE"</span>)
    <span class='fu'><a href='https://rdrr.io/r/utils/data.html'>data</a></span>(<span class='st'>"pancreasImages"</span>)
    <span class='fu'><a href='https://rdrr.io/r/utils/data.html'>data</a></span>(<span class='st'>"pancreasMasks"</span>)
 
    <span class='co'># Use shiny with SCE object, images and masks</span>
-   <span class='fu'>cytomapperShiny</span>(<span class='kw'>object</span> <span class='kw'>=</span> <span class='no'>pancreasSCE</span>, <span class='kw'>mask</span> <span class='kw'>=</span> <span class='no'>pancreasMasks</span>, <span class='kw'>image</span> <span class='kw'>=</span> <span class='no'>pancreasImages</span>,
-                   <span class='kw'>cell_id</span> <span class='kw'>=</span> <span class='st'>"CellNb"</span>, <span class='kw'>img_id</span> <span class='kw'>=</span> <span class='st'>"ImageNb"</span>)
+   <span class='fu'>cytomapperShiny</span>(object = <span class='kw'>pancreasSCE</span>, mask = <span class='kw'>pancreasMasks</span>, image = <span class='kw'>pancreasImages</span>,
+                   cell_id = <span class='st'>"CellNb"</span>, img_id = <span class='st'>"ImageNb"</span>)
 
    <span class='co'># Use shiny with SCE object and masks</span>
-   <span class='fu'>cytomapperShiny</span>(<span class='kw'>object</span> <span class='kw'>=</span> <span class='no'>pancreasSCE</span>, <span class='kw'>mask</span> <span class='kw'>=</span> <span class='no'>pancreasMasks</span>,
-                   <span class='kw'>cell_id</span> <span class='kw'>=</span> <span class='st'>"CellNb"</span>, <span class='kw'>img_id</span> <span class='kw'>=</span> <span class='st'>"ImageNb"</span>)
+   <span class='fu'>cytomapperShiny</span>(object = <span class='kw'>pancreasSCE</span>, mask = <span class='kw'>pancreasMasks</span>,
+                   cell_id = <span class='st'>"CellNb"</span>, img_id = <span class='st'>"ImageNb"</span>)
 
    <span class='co'># Use shiny with SCE object only</span>
-   <span class='fu'>cytomapperShiny</span>(<span class='kw'>object</span> <span class='kw'>=</span> <span class='no'>pancreasSCE</span>,
-                   <span class='kw'>cell_id</span> <span class='kw'>=</span> <span class='st'>"CellNb"</span>, <span class='kw'>img_id</span> <span class='kw'>=</span> <span class='st'>"ImageNb"</span>)
-}</div></pre>
+   <span class='fu'>cytomapperShiny</span>(object = <span class='kw'>pancreasSCE</span>,
+                   cell_id = <span class='st'>"CellNb"</span>, img_id = <span class='st'>"ImageNb"</span>)
+}
+
+</div></pre>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="pkgdown-sidebar">
     <nav id="toc" data-toggle="toc" class="sticky-top">
@@ -292,7 +298,7 @@ plotting functions</p></div>
 </div>
 
 <div class="pkgdown">
-  <p>Site built with <a href="https://pkgdown.r-lib.org/">pkgdown</a> 1.5.1.</p>
+  <p>Site built with <a href="https://pkgdown.r-lib.org/">pkgdown</a> 1.6.0.</p>
 </div>
 
       </footer>
