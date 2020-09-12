@@ -5,23 +5,23 @@
 <meta charset="utf-8">
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Visualization of highly multiplexed imaging cytometry data in R • cytomapper</title>
+<title>Visualization of highly multiplexed imaging data in R • cytomapper</title>
 <!-- jquery --><script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.4.1/jquery.min.js" integrity="sha256-CSXorXvZcTkaix6Yvo6HppcZGetbYMGWSFlBw8HfCJo=" crossorigin="anonymous"></script><!-- Bootstrap --><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.4.1/css/bootstrap.min.css" integrity="sha256-bZLfwXAP04zRMK2BjiO8iu9pf4FbLqX6zitd+tIvLhE=" crossorigin="anonymous">
 <script src="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.4.1/js/bootstrap.min.js" integrity="sha256-nuL8/2cJ5NDSSwnKD8VqreErSWHtnEP9E7AySL+1ev4=" crossorigin="anonymous"></script><!-- bootstrap-toc --><link rel="stylesheet" href="bootstrap-toc.css">
 <script src="bootstrap-toc.js"></script><!-- Font Awesome icons --><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.12.1/css/all.min.css" integrity="sha256-mmgLkCYLUQbXn0B1SRqzHar6dCnv9oZFPEC1g1cwlkk=" crossorigin="anonymous">
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.12.1/css/v4-shims.min.css" integrity="sha256-wZjR52fzng1pJHwx4aV2AO3yyTOXrcDW7jBpJtTwVxw=" crossorigin="anonymous">
 <!-- clipboard.js --><script src="https://cdnjs.cloudflare.com/ajax/libs/clipboard.js/2.0.6/clipboard.min.js" integrity="sha256-inc5kl9MA1hkeYUt+EC3BhlIgyp/2jDIyBLS6k3UxPI=" crossorigin="anonymous"></script><!-- headroom.js --><script src="https://cdnjs.cloudflare.com/ajax/libs/headroom/0.11.0/headroom.min.js" integrity="sha256-AsUX4SJE1+yuDu5+mAVzJbuYNPHj/WroHuZ8Ir/CkE0=" crossorigin="anonymous"></script><script src="https://cdnjs.cloudflare.com/ajax/libs/headroom/0.11.0/jQuery.headroom.min.js" integrity="sha256-ZX/yNShbjqsohH1k95liqY9Gd8uOiE1S4vZc+9KQ1K4=" crossorigin="anonymous"></script><!-- pkgdown --><link href="pkgdown.css" rel="stylesheet">
-<script src="pkgdown.js"></script><meta property="og:title" content="Visualization of highly multiplexed imaging cytometry data in R">
+<script src="pkgdown.js"></script><meta property="og:title" content="Visualization of highly multiplexed imaging data in R">
 <meta property="og:description" content="
-    Highly multiplexed imaging cytometry acquires the single-cell expression of
+    Highly multiplexed imaging acquires the single-cell expression of
     selected proteins in a spatially-resolved fashion. These measurements can be
     visualized across multiple length-scales. First, pixel-level intensities
     represent the spatial distributions of feature expression with highest
     resolution. Second, after segmentation, expression values or cell-level
     metadata (e.g. cell-type information) can be visualized on segmented cell
     areas. This package contains functions for the visualization of multiplexed
-    read-outs and cell-level information obtained by multiplexed imaging
-    cytometry. The main functions of this package allow 1. the visualization of
+    read-outs and cell-level information obtained by multiplexed imaging. 
+    The main functions of this package allow 1. the visualization of
     pixel-level information across multiple channels and 2. the display of
     cell-level information (expression and/or metadata) on segmentation masks.">
 <!-- mathjax --><script src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/MathJax.js" integrity="sha256-nvJJv9wWKEm88qvoQl9ekL2J+k/RWIsaSScxxlsrv8k=" crossorigin="anonymous"></script><script src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/config/TeX-AMS-MML_HTMLorMML.js" integrity="sha256-84DKXVJXs0/F8OTMzX4UR909+jtl4G7SPypPavF+GfA=" crossorigin="anonymous"></script><!--[if lt IE 9]>
@@ -87,11 +87,11 @@
 <a href="#cytomapper" class="anchor"></a>cytomapper</h1></div>
 <!-- badges: start -->
 <p><a href="https://codecov.io/gh/BodenmillerGroup/cytomapper"><img src="https://codecov.io/gh/BodenmillerGroup/cytomapper/branch/master/graph/badge.svg" alt="codecov"></a> <a href="https://github.com/BodenmillerGroup/cytomapper/actions?query=workflow%3Abuild-checks"><img src="https://github.com/BodenmillerGroup/cytomapper/workflows/build-checks/badge.svg" alt="build-check"></a> <a href="https://github.com/BodenmillerGroup/cytomapper/actions?query=workflow%3Adocs"><img src="https://github.com/BodenmillerGroup/cytomapper/workflows/docs/badge.svg?branch=master" alt="docs"></a> <!-- badges: end --></p>
-<p>R package to spatially visualize pixel- and cell-level information obtained from highly multiplexed imaging cytometry.</p>
+<p>R package to spatially visualize pixel- and cell-level information obtained from highly multiplexed imaging.</p>
 <div id="introduction" class="section level2">
 <h2 class="hasAnchor">
 <a href="#introduction" class="anchor"></a>Introduction</h2>
-<p>Highly multiplexed imaging cytometry acquires single-cell expression values of selected proteins in a spatially-resolved fashion. These measurements can be visualized across multiple length-scales. First, pixel-level intensities represent the spatial distributions of feature expression with highest resolution. Second, after segmentation, expression values or cell-level metadata (e.g. cell-type information) can be visualized on segmented cell areas. This package contains functions for the visualization of multiplexed read-outs and cell-level information obtained by multiplexed imaging cytometry. The main functions of this package allow 1. the visualization of pixel-level information across multiple channels and 2. the display of cell-level information (expression and/or metadata) on segmentation masks.</p>
+<p>Highly multiplexed imaging acquires single-cell expression values of selected proteins in a spatially-resolved fashion. These measurements can be visualized across multiple length-scales. First, pixel-level intensities represent the spatial distributions of feature expression with highest resolution. Second, after segmentation, expression values or cell-level metadata (e.g. cell-type information) can be visualized on segmented cell areas. This package contains functions for the visualization of multiplexed read-outs and cell-level information obtained by multiplexed imaging. The main functions of this package allow 1. the visualization of pixel-level information across multiple channels and 2. the display of cell-level information (expression and/or metadata) on segmentation masks.</p>
 <p>The <code>cytomapper</code> package provides toy data that were generated using imaging mass cytometry [1] taken from Damond <em>et al.</em> [2]. For further instructions to process raw imaging mass cytometry data, please refer to the <a href="https://github.com/BodenmillerGroup/ImcSegmentationPipeline">IMC Segmentation Pipeline</a> and the <a href="https://github.com/BodenmillerGroup/histoCAT">histoCAT</a> as alternative visualization tool.</p>
 </div>
 <div id="requirements" class="section level2">
@@ -226,7 +226,7 @@
 </div>
 
 <div class="pkgdown">
-  <p>Site built with <a href="https://pkgdown.r-lib.org/">pkgdown</a> 1.6.0.</p>
+  <p>Site built with <a href="https://pkgdown.r-lib.org/">pkgdown</a> 1.6.1.</p>
 </div>
 
       </footer>
