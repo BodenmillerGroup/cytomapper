@@ -703,6 +703,12 @@ plotCells(pancreasMasks, object = cur_sce,
             colour = list(CellType = c(celltype_A = "red")))
 ```
 
+This feature is also helpful when visualising individual images. By default, the
+legend will contain all metadata levels even those that are not contained
+in the selected image. By subsetting the `SingleCellExperiment` object to
+contain only the cells of the selected image, the legend will only contain the
+metadata levels of the selected cells.
+
 ## Background and missing colour
 
 The background of a segemntation mask is defined by the value `0`. To change the
