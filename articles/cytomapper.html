@@ -31,7 +31,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">cytomapper</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">1.1.3</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">1.1.4</span>
       </span>
     </div>
 
@@ -84,7 +84,7 @@
       Department for Quantitative Biomedicine, University of Zurich<br><a class="author_email" href="mailto:#"></a><a href="mailto:tobias.hoch@dqbm.uzh.ch" class="email">tobias.hoch@dqbm.uzh.ch</a>
       </address>
                   
-            <h4 class="date">12 September 2020</h4>
+            <h4 class="date">13 September 2020</h4>
       
       <small class="dont-index">Source: <a href="https://github.com/BodenmillerGroup/cytomapper/blob/master/vignettes/cytomapper.Rmd"><code>vignettes/cytomapper.Rmd</code></a></small>
       <div class="hidden name"><code>cytomapper.Rmd</code></div>
@@ -578,7 +578,7 @@
 <span class="co"># Image-wise normalization</span>
 <span class="kw">cur_images</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/CytoImageList-manipulation.html">normalize</a></span>(<span class="kw">pancreasImages</span>, separateImages = <span class="fl">TRUE</span>)
 </pre></div>
-<p>To clip the image range, the user can provide a clipping range.</p>
+<p>To clip the image range, the user can provide a clipping range for all channels.</p>
 <div class="sourceCode" id="cb80"><pre class="downlit">
 <span class="co"># Percentage-based clipping range</span>
 <span class="kw">cur_images</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/CytoImageList-manipulation.html">normalize</a></span>(<span class="kw">pancreasImages</span>)
@@ -586,6 +586,12 @@
 <span class="fu"><a href="../reference/plotPixels.html">plotPixels</a></span>(<span class="kw">cur_images</span>, colour_by = <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span>(<span class="st">"H3"</span>, <span class="st">"CD99"</span>, <span class="st">"CDH"</span>))
 </pre></div>
 <p><img src="cytomapper_files/figure-html/normalize-clippingrange-1.png" width="700"></p>
+<p>Alternatively, channel-specific clipping can be performed:</p>
+<div class="sourceCode" id="cb81"><pre class="downlit">
+<span class="co"># Channel-wise clipping</span>
+<span class="kw">cur_images</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/CytoImageList-manipulation.html">normalize</a></span>(<span class="kw">pancreasImages</span>,
+                        inputRange = <span class="fu"><a href="https://rdrr.io/r/base/list.html">list</a></span>(H3 = <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span>(<span class="fl">0</span>, <span class="fl">70</span>), CD99 = <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span>(<span class="fl">0</span>, <span class="fl">100</span>)))
+</pre></div>
 <p>For more information on the normalization functionality provided by the <code>cytomapper</code> package, please refer to <code><a href="../reference/CytoImageList-manipulation.html">?'normalize,CytoImageList-method'</a></code>.</p>
 </div>
 <div id="colouring" class="section level2">
@@ -597,7 +603,7 @@
 <h2 class="hasAnchor">
 <a href="#adjusting-brightness-contrast-and-gamma" class="anchor"></a>Adjusting brightness, contrast and gamma</h2>
 <p>To enhance individual channels, the brightness (b), contrast (c) and gamma (g) can be set channel-wise via the <code>bcg</code> parameter. These parameters are set in form of a named <code>list</code> object. Entry names need to correspond by channels specified in <code>colour_by</code>. Each entry takes a numeric vector of length three where the first entry represents the brightness value, the second the contrast factor and the third the gamma factor. Internally, the brightness value is added to each channel; each channel is multiplied by the contrast factor and each channel is exponentiated by the gamma factor.</p>
-<div class="sourceCode" id="cb81"><pre class="downlit">
+<div class="sourceCode" id="cb82"><pre class="downlit">
 <span class="fu"><a href="https://rdrr.io/r/utils/data.html">data</a></span>(<span class="st">"pancreasImages"</span>)
 <span class="co"># Increase contrast for the CD99 and CDH channel</span>
 <span class="fu"><a href="../reference/plotPixels.html">plotPixels</a></span>(<span class="kw">pancreasImages</span>,
@@ -612,7 +618,7 @@
 <a href="#Outlining" class="anchor"></a>Outlining</h2>
 <p>The cells can be outlined when providing a <code>CytoImageList</code> object containing the corresponding segmentation masks and a character <code>img_id</code> indicating the name of the <code>elementMetadata</code> slot that contains the image IDs.</p>
 <p>The user can furthermore specify the metadata entry to outline cells by. For this, a <code>SingleCellExperiment</code> object containing the cell-specific metadata and a <code>cell_id</code> indicating the name of the <code>colData</code> slot that contains the cell IDs need to be provided:</p>
-<div class="sourceCode" id="cb82"><pre class="downlit">
+<div class="sourceCode" id="cb83"><pre class="downlit">
 <span class="fu"><a href="../reference/plotPixels.html">plotPixels</a></span>(<span class="kw">pancreasImages</span>, mask = <span class="kw">pancreasMasks</span>,
             object = <span class="kw">pancreasSCE</span>, img_id = <span class="st">"ImageNb"</span>,
             cell_id = <span class="st">"CellNb"</span>,
@@ -625,7 +631,7 @@
 <h2 class="hasAnchor">
 <a href="#subsetting" class="anchor"></a>Subsetting</h2>
 <p>The user can subset the images before calling the plotting functions:</p>
-<div class="sourceCode" id="cb83"><pre class="downlit">
+<div class="sourceCode" id="cb84"><pre class="downlit">
 <span class="kw">cur_images</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/CytoImageList-subsetting.html">getImages</a></span>(<span class="kw">pancreasImages</span>, <span class="st">"J02_imc"</span>)
 <span class="fu"><a href="../reference/plotPixels.html">plotPixels</a></span>(<span class="kw">cur_images</span>, colour_by = <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span>(<span class="st">"H3"</span>, <span class="st">"CD99"</span>, <span class="st">"CDH"</span>))
 </pre></div>
@@ -652,7 +658,7 @@
 <h2 class="hasAnchor">
 <a href="#changing-the-assay-slot" class="anchor"></a>Changing the assay slot</h2>
 <p>To visualize differently transformed counts, the <code>plotCells</code> function allows setting the <code>exprs_values</code> parameter. In the toy dataset, the <code>assay(pancreasSCE, "exprs")</code> slot contains the arcsinh-transformed raw expression counts.</p>
-<div class="sourceCode" id="cb84"><pre class="downlit">
+<div class="sourceCode" id="cb85"><pre class="downlit">
 <span class="fu"><a href="../reference/plotCells.html">plotCells</a></span>(<span class="kw">pancreasMasks</span>, object = <span class="kw">pancreasSCE</span>,
             img_id = <span class="st">"ImageNb"</span>, cell_id = <span class="st">"CellNb"</span>,
             colour_by = <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span>(<span class="st">"CD8a"</span>, <span class="st">"PIN"</span>),
@@ -674,7 +680,7 @@
 <h2 class="hasAnchor">
 <a href="#adjustingColour" class="anchor"></a>Adjusting the colour</h2>
 <p>The user can also customize the colours for selected features and metadata. The <code>colour</code> parameter takes a named <code>list</code> in which names correspond to the entries to <code>colour_by</code> and/or <code>outline_by</code>. To colour continous features such as expression or continous metadata entries (e.g. cell area), at least two colours for interpolation need to be provided. These colours are passed to the <code>colorRampPalette</code> function for interpolation. To colour discrete entries, one colour per entry needs to be specified in form of a named vector.</p>
-<div class="sourceCode" id="cb85"><pre class="downlit">
+<div class="sourceCode" id="cb86"><pre class="downlit">
 <span class="fu"><a href="../reference/plotCells.html">plotCells</a></span>(<span class="kw">pancreasMasks</span>, object = <span class="kw">pancreasSCE</span>,
             img_id = <span class="st">"ImageNb"</span>, cell_id = <span class="st">"CellNb"</span>,
             colour_by = <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span>(<span class="st">"CD99"</span>, <span class="st">"CDH"</span>),
@@ -697,7 +703,7 @@
 <a href="#subsetting-the-singlecellexperiment-object" class="anchor"></a>Subsetting the SingleCellExperiment object</h2>
 <p>The <code>cytomapper</code> package matches cells contained in the <code>SingleCellExperiment</code> to objects contained in the <code>CytoImageList</code> segmentation masks object via cell identifiers. These are integer values, which are unique to each object per image.</p>
 <p>By matching these IDs, the user can subset the <code>SingleCellExperiment</code> object and therefore only visualize the cells retained in the object:</p>
-<div class="sourceCode" id="cb86"><pre class="downlit">
+<div class="sourceCode" id="cb87"><pre class="downlit">
 <span class="kw">cur_sce</span> <span class="op">&lt;-</span> <span class="kw">pancreasSCE</span>[,<span class="fu">colData</span>(<span class="kw">pancreasSCE</span>)<span class="op">$</span><span class="kw">CellType</span> <span class="op">==</span> <span class="st">"celltype_A"</span>]
 <span class="fu"><a href="../reference/plotCells.html">plotCells</a></span>(<span class="kw">pancreasMasks</span>, object = <span class="kw">cur_sce</span>,
             img_id = <span class="st">"ImageNb"</span>, cell_id = <span class="st">"CellNb"</span>,
@@ -745,7 +751,7 @@
 <h2 class="hasAnchor">
 <a href="#image-interpolation" class="anchor"></a>Image interpolation</h2>
 <p>By default, colours are interpolated between pixels (see <code><a href="https://rdrr.io/r/graphics/rasterImage.html">?rasterImage</a></code> for details). To suppress this default behaviour, the user can set <code>interpolate = FALSE</code>.</p>
-<div class="sourceCode" id="cb87"><pre class="downlit">
+<div class="sourceCode" id="cb88"><pre class="downlit">
 <span class="fu"><a href="../reference/plotCells.html">plotCells</a></span>(<span class="kw">pancreasMasks</span>, object = <span class="kw">pancreasSCE</span>,
             img_id = <span class="st">"ImageNb"</span>, cell_id = <span class="st">"CellNb"</span>,
             colour_by = <span class="st">"CD99"</span>,
@@ -787,19 +793,19 @@ Plot customization example.
 <p>The <code>display</code> parameter supports the entries <code>display = "all"</code> (default), which displays images in a grid-like fashion and <code>display = "single"</code>, which display images individually.</p>
 <p>If the <code>return_plot</code> parameter is set to <code>TRUE</code>, <code>cytomapper</code> internally calls the <code>recordPlot</code> function and returns a plot object. The user can additionally set <code>display = "single"</code> to get a list of plots returned.</p>
 <p>If the <code>return_images</code> parameter is set to <code>TRUE</code>, <code>cytomapper</code> returns a <code>SimpleList</code> object containing three-colour (red, green, blue) <code>Image</code> objects.</p>
-<div class="sourceCode" id="cb88"><pre class="downlit">
+<div class="sourceCode" id="cb89"><pre class="downlit">
 <span class="kw">cur_out</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/plotPixels.html">plotPixels</a></span>(<span class="kw">pancreasImages</span>, colour_by = <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span>(<span class="st">"H3"</span>, <span class="st">"CD99"</span>, <span class="st">"CDH"</span>),
                 return_plot = <span class="fl">TRUE</span>, return_images = <span class="fl">TRUE</span>, 
                 display = <span class="st">"single"</span>)
 </pre></div>
 <p><img src="cytomapper_files/figure-html/return_plot-1.png" width="700"><img src="cytomapper_files/figure-html/return_plot-2.png" width="700"><img src="cytomapper_files/figure-html/return_plot-3.png" width="700"><img src="cytomapper_files/figure-html/return_plot-4.png" width="700"></p>
 <p>The returned plot objects now allows the plotting of individual images:</p>
-<div class="sourceCode" id="cb89"><pre class="downlit">
+<div class="sourceCode" id="cb90"><pre class="downlit">
 <span class="kw">cur_out</span><span class="op">$</span><span class="kw">plot</span><span class="op">$</span><span class="kw">E34_imc</span>
 </pre></div>
 <p><img src="cytomapper_files/figure-html/return_plot-2-1.png" width="700"></p>
 <p>Furthermore, the user can directly plot the coloured images from the returned <code>SimpleList</code> object:</p>
-<div class="sourceCode" id="cb90"><pre class="downlit">
+<div class="sourceCode" id="cb91"><pre class="downlit">
 <span class="fu"><a href="https://rdrr.io/r/graphics/plot.default.html">plot</a></span>(<span class="kw">cur_out</span><span class="op">$</span><span class="kw">images</span><span class="op">$</span><span class="kw">G01_imc</span>)
 </pre></div>
 <p><img src="cytomapper_files/figure-html/return_images-1.png" width="700"></p>
@@ -849,7 +855,7 @@ Plot customization example.
 ## [8] methods   base     
 ## 
 ## other attached packages:
-##  [1] cytomapper_1.1.3            SingleCellExperiment_1.10.1
+##  [1] cytomapper_1.1.4            SingleCellExperiment_1.10.1
 ##  [3] SummarizedExperiment_1.18.2 DelayedArray_0.14.1        
 ##  [5] matrixStats_0.56.0          Biobase_2.48.0             
 ##  [7] GenomicRanges_1.40.0        GenomeInfoDb_1.24.2        
