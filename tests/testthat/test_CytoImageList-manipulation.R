@@ -544,12 +544,97 @@ test_that("CytoImageList can be normalized", {
                            colour_by = c("H3", "CD99"), scale = TRUE))
   expect_silent(plotPixels(cur_images,
                            colour_by = c("H3", "CD99"), scale = FALSE))
-
+  
+  # Channel-wise normalization
+  # Separate images
+  expect_silent(cur_images <- normalize(pancreasImages, separateImages = TRUE,
+                                        inputRange = list(H3 = c(0,50), CD99 = c(0,70))))
+  expect_silent(plotPixels(pancreasImages,
+                           colour_by = c("H3", "CD99", "PIN")))
+  expect_silent(plotPixels(cur_images,
+                           colour_by = c("H3", "CD99", "PIN")))
+  
+  expect_equal(imageData(cur_images[[1]])[1, 1:10,"H3"],
+               imageData(pancreasImages[[1]])[1, 1:10,"H3"]/50,
+               tolerance = 1e-06)
+  expect_equal(imageData(cur_images[[1]])[1, 1:10,"CD99"],
+               imageData(pancreasImages[[1]])[1, 1:10,"CD99"]/70,
+               tolerance = 1e-06)
+  expect_equal(imageData(cur_images[[1]])[1, 1:10,"PIN"],
+               imageData(pancreasImages[[1]])[1, 1:10,"PIN"]/max(imageData(pancreasImages[[1]])[,,"PIN"]),
+               tolerance = 1e-06)
+  expect_equal(imageData(cur_images[[2]])[1, 1:10,"H3"],
+               imageData(pancreasImages[[2]])[1, 1:10,"H3"]/50,
+               tolerance = 1e-06)
+  expect_equal(imageData(cur_images[[2]])[1, 1:10,"CD99"],
+               imageData(pancreasImages[[2]])[1, 1:10,"CD99"]/70,
+               tolerance = 1e-06)
+  expect_equal(imageData(cur_images[[2]])[1, 1:10,"PIN"],
+               imageData(pancreasImages[[2]])[1, 1:10,"PIN"]/max(imageData(pancreasImages[[1]])[,,"PIN"]),
+               tolerance = 1e-06)
+  expect_equal(imageData(cur_images[[3]])[1, 1:10,"H3"],
+               imageData(pancreasImages[[3]])[1, 1:10,"H3"]/50,
+               tolerance = 1e-06)
+  expect_equal(imageData(cur_images[[3]])[1, 1:10,"CD99"],
+               imageData(pancreasImages[[3]])[1, 1:10,"CD99"]/70,
+               tolerance = 1e-06)
+  expect_equal(imageData(cur_images[[3]])[1, 1:10,"PIN"],
+               imageData(pancreasImages[[3]])[1, 1:10,"PIN"]/max(imageData(pancreasImages[[1]])[,,"PIN"]),
+               tolerance = 1e-06)
+  
+  # Not Separate images
+  expect_silent(cur_images <- normalize(pancreasImages, separateImages = FALSE,
+                                        inputRange = list(H3 = c(0,50), CD99 = c(0,70))))
+  expect_silent(plotPixels(pancreasImages,
+                           colour_by = c("H3", "CD99", "PIN")))
+  expect_silent(plotPixels(cur_images,
+                           colour_by = c("H3", "CD99", "PIN")))
+  
+  expect_equal(imageData(cur_images[[1]])[1, 1:10,"H3"],
+               imageData(pancreasImages[[1]])[1, 1:10,"H3"]/50,
+               tolerance = 1e-06)
+  expect_equal(imageData(cur_images[[1]])[1, 1:10,"CD99"],
+               imageData(pancreasImages[[1]])[1, 1:10,"CD99"]/70,
+               tolerance = 1e-06)
+  cur_max <- max(c(max(imageData(pancreasImages[[1]])[,,"PIN"]),
+                   max(imageData(pancreasImages[[2]])[,,"PIN"]),
+                   max(imageData(pancreasImages[[3]])[,,"PIN"])))
+  expect_equal(imageData(cur_images[[1]])[1, 1:10,"PIN"],
+               imageData(pancreasImages[[1]])[1, 1:10,"PIN"]/cur_max,
+               tolerance = 1e-06)
+  expect_equal(imageData(cur_images[[2]])[1, 1:10,"H3"],
+               imageData(pancreasImages[[2]])[1, 1:10,"H3"]/50,
+               tolerance = 1e-06)
+  expect_equal(imageData(cur_images[[2]])[1, 1:10,"CD99"],
+               imageData(pancreasImages[[2]])[1, 1:10,"CD99"]/70,
+               tolerance = 1e-06)
+  expect_equal(imageData(cur_images[[2]])[1, 1:10,"PIN"],
+               imageData(pancreasImages[[2]])[1, 1:10,"PIN"]/cur_max,
+               tolerance = 1e-06)
+  expect_equal(imageData(cur_images[[3]])[1, 1:10,"H3"],
+               imageData(pancreasImages[[3]])[1, 1:10,"H3"]/50,
+               tolerance = 1e-06)
+  expect_equal(imageData(cur_images[[3]])[1, 1:10,"CD99"],
+               imageData(pancreasImages[[3]])[1, 1:10,"CD99"]/70,
+               tolerance = 1e-06)
+  expect_equal(imageData(cur_images[[3]])[1, 1:10,"PIN"],
+               imageData(pancreasImages[[3]])[1, 1:10,"PIN"]/cur_max,
+               tolerance = 1e-06)
 
   # Error
   expect_error(normalize(pancreasImages, separateChannels = "test"),
                regexp = "'separateChannels' only takes TRUE or FALSE.")
   expect_error(normalize(pancreasImages, separateImages = "test"),
                regexp = "'separateImages' only takes TRUE or FALSE.")
+  expect_error(normalize(pancreasImages, inputRange = "test"),
+               regexp = "'inputRange' takes a vector of length 2, a list or NULL.")
+  expect_error(normalize(pancreasImages, inputRange = 2),
+               regexp = "'inputRange' takes a vector of length 2, a list or NULL.")
+  cur_images <- pancreasImages
+  channelNames(cur_images) <- NULL
+  expect_error(normalize(cur_images, inputRange = list(H3 = c(0, 100), CDH = c(0, 20))),
+               regexp = "Please set the 'channelNames' of the CytoImageList object.")
+  expect_error(normalize(pancreasImages, inputRange = list(test = c(0, 100), CDH = c(0, 20))),
+               regexp = "The names of 'inputRange' should correspond to the'channelNames' of the CytoImageList object.")
 
 })
