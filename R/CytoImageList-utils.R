@@ -204,7 +204,7 @@ setMethod("scaleImages",
     })
 
 #' @importFrom stats quantile
-#' @importFrom EBImage combine
+#' @importFrom EBImage combine abind
 normImages <- function(object, separateChannels = TRUE, separateImages = FALSE,
                 ft = c(0, 1), inputRange = NULL){
 
@@ -250,104 +250,58 @@ normImages <- function(object, separateChannels = TRUE, separateImages = FALSE,
             
             cur_out <- endoapply(object, function(y){
                 
-                y1 <- lapply(names(cur_inputRanges), function(x){
-                    EBImage::normalize(imageData(y)[,,x], separate = TRUE,
-                                       ft = ft, inputRange = cur_inputRanges[[x]])
-                })
-                y1$along <- 3
+                cur_names <- dimnames(y)
                 
-                y1 <- do.call("abind", args = y1)
-                imageData(y) <- y1
+                y <- lapply(names(cur_inputRanges), function(i){
+                    EBImage::normalize(y[,,i], separate = TRUE,
+                                       ft = ft, inputRange = cur_inputRanges[[i]])
+                })
+                y <- combine(y)
+                
+                dimnames(y) <- cur_names
 
                 return(y)
             })
             
         } else {
             
-            # Finding the maximum and minimum values
-            if (separateChannels && is.null(inputRange)) {
+            cur_range <- cur_inputRanges[unlist(lapply(cur_inputRanges, 
+                                                       is.null))]
+            
+            cur_r <- lapply(names(cur_range), function(x){
+                quantile(unlist(lapply(getChannels(object, x), quantile, 
+                                       probs = c(0, 1))), c(0,1))
+            })
+            names(cur_r) <- names(cur_range)
+            
+            cur_inputRanges[names(cur_r)] <- cur_r
+                
+            cur_out <- endoapply(object, function(y){
+                    
+                cur_names <- dimnames(y)
+                    
                 if (nf == 1) {
-                    cur_range <- vapply(object, function(i){
-                        quantile(i, probs = c(0, 1))
-                    }, FUN.VALUE = numeric(2))
-                    cur_range <- quantile(cur_range, c(0, 1))
+                        
+                    y <- EBImage::normalize(y,
+                                            separate = TRUE, ft=ft,
+                                            inputRange = cur_inputRanges[[1]])
+                        
                 } else {
-                    cur_range <- vapply(seq_len(nf), function(i){
-                        cur_r <- vapply(getChannels(object, i),
-                                        function(x){
-                                            quantile(x, c(0,1))
-                                        }, FUN.VALUE = numeric(2))
-                        quantile(cur_r, c(0, 1))
-                    }, FUN.VALUE = numeric(2))
+                        
+                    y <- lapply(names(cur_inputRanges), function(i){
+                        EBImage::normalize(y[,,i],
+                                        separate = TRUE, ft=ft,
+                                        inputRange = cur_inputRanges[[i]])
+                        })
+                    y <- combine(y)
+            
                 }
-            } else if(!separateChannels && is.null(inputRange)) {
-                cur_range <- vapply(object, function(i){
-                    quantile(i, probs = c(0, 1))
-                }, FUN.VALUE = numeric(2))
-                cur_range <- quantile(cur_range, c(0, 1))
-            }
-            
-            if (separateChannels) {
-                
-                cur_out <- endoapply(object, function(y){
-                    
-                    cur_names <- dimnames(y)
-                    
-                    if (nf == 1) {
                         
-                        if (!is.null(inputRange)) {
-                            cur_range <- inputRange
-                        } else {
-                            cur_range <- as.numeric(cur_range)
-                        }
-                        
-                        y <- EBImage::normalize(y,
-                                                separate = TRUE, ft=ft,
-                                                inputRange = cur_range)
-                        
-                    } else {
-                        
-                        if (!is.null(inputRange)) {
-                            y <- EBImage::normalize(y, separate = TRUE, ft=ft,
-                                                    inputRange = inputRange)
-                        } else {
-                            y <- lapply(seq_len(nf), function(i){
-                                EBImage::normalize(y[,,i],
-                                                   separate = TRUE, ft=ft,
-                                                   inputRange = as.numeric(cur_range[,i]))
-                            })
-                            y <- combine(y)
-                        }
-                        
-                    }
+                dimnames(y) <- cur_names
                     
-                    dimnames(y) <- cur_names
-                    
-                    return(y)
-                })
-                
-            } else {
-                cur_out <- endoapply(object, function(y){
-                    if(is.null(inputRange)){
-                        inputRange <- as.numeric(cur_range)
-                    }
-                    
-                    
-                    y <- EBImage::normalize(y, separate = FALSE,
-                                            ft=ft, inputRange = inputRange)
-                    
-                    return(y)
-                })
-                
-            }
+                return(y)
+            })
         }
-        
-        cur_out <- endoapply(object, function(y){
-            
-            y <- EBImage::normalize(y, separate = TRUE,
-                                    ft = ft, inputRange = ir)
-            return(y)
-        })
         
     } else {
         
