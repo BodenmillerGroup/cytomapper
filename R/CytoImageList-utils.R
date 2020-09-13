@@ -250,9 +250,15 @@ normImages <- function(object, separateChannels = TRUE, separateImages = FALSE,
             
             cur_out <- endoapply(object, function(y){
                 
+                y1 <- lapply(names(cur_inputRanges), function(x){
+                    EBImage::normalize(imageData(y)[,,x], separate = TRUE,
+                                       ft = ft, inputRange = cur_inputRanges[[x]])
+                })
+                y1$along <- 3
                 
-                y <- EBImage::normalize(y, separate = separateChannels,
-                                        ft = ft, inputRange = inputRange)
+                y1 <- do.call("abind", args = y1)
+                imageData(y) <- y1
+
                 return(y)
             })
             
