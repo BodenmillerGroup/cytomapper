@@ -527,13 +527,21 @@ A `CytoImageList` object can also be normalized image-wise:
 cur_images <- normalize(pancreasImages, separateImages = TRUE)
 ```
 
-To clip the image range, the user can provide a clipping range.
+To clip the image range, the user can provide a clipping range for all channels.
 
 ```{r normalize-clippingrange}
 # Percentage-based clipping range
 cur_images <- normalize(pancreasImages)
 cur_images <- normalize(cur_images, inputRange = c(0, 0.9))
 plotPixels(cur_images, colour_by = c("H3", "CD99", "CDH"))
+```
+
+Alternatively, channel-specific clipping can be performed:
+
+```{r normalize-clippingrange-channelwise}
+# Channel-wise clipping
+cur_images <- normalize(pancreasImages,
+                        inputRange = list(H3 = c(0, 70), CD99 = c(0, 100)))
 ```
 
 For more information on the normalization functionality provided by the
