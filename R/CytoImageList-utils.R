@@ -138,6 +138,9 @@ setReplaceMethod("names",
 #' intensity values across images.
 #'
 #' To clip the images before normalization, the \code{inputRange} can be set.
+#' The \code{inputRange} either takes NULL (default), a vector of length 2
+#' specifying the clipping range for all channels or a list where each
+#' named entry contains a channel-specific clipping range.
 #'
 #' \code{normalize(object, separateChannels = TRUE, separateImages = FALSE,
 #' ft = c(0, 1), inputRange = NULL)}:
@@ -152,7 +155,8 @@ setReplaceMethod("names",
 #' intensity values after normalization (see \code{\link[EBImage]{normalize}}).}
 #' \item{\code{inputRange}:}{Numeric vector of 2 values, sets the absolute
 #' clipping range of the input intensity values (see
-#' \code{\link[EBImage]{normalize}}).}
+#' \code{\link[EBImage]{normalize}}). Alternatively a names list where each
+#' entry corresponds to a channel-specific clipping range.}
 #' }
 #'
 #' @return A CytoImageList object containing the manipulated Images.
@@ -175,6 +179,11 @@ setReplaceMethod("names",
 #'
 #' # Setting the clipping range
 #' x <- normalize(x, inputRange = c(0, 0.9))
+#' plotPixels(x, colour_by = c("H3", "CD99"))
+#' 
+#' # Setting the clipping range per channel
+#' x <- normalize(pancreasImages, 
+#'                inputRange = list(H3 = c(0, 70), CD99 = c(0, 100)))
 #' plotPixels(x, colour_by = c("H3", "CD99"))
 #'
 #' # Normalizing per image
