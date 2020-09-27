@@ -111,11 +111,43 @@
 #' @importFrom matrixStats rowRanges
 .create_interactive_observer <- function(object, img_id, input, session, rValues, objValues){
 
+  # Next Image Observer
+  observeEvent(input$next.sample, {
+    img_IDs <- unique(colData(object)[,img_id])
+    cur_index <- match(input$sample, img_IDs)
+    updated_index <- ifelse(cur_index == length(img_IDs), 1, cur_index+1)
+    
+    # return updated img_id 
+    updated_sample <- img_IDs[updated_index]
+    
+    updateSelectInput(session, inputId = "sample",
+                         choices = unique(img_IDs),
+                         selected = updated_sample)
+    
+    }, ignoreInit = TRUE)    
+  
+  # Previous Image Observer
+  observeEvent(input$previous.sample, {
+    img_IDs <- unique(colData(object)[,img_id])
+    cur_index <- match(input$sample, img_IDs)
+    updated_index <- ifelse(cur_index == 1,  length(img_IDs), cur_index-1)
+    
+    # return updated img_id
+    updated_sample <- img_IDs[updated_index]
+    
+    updateSelectInput(session, inputId = "sample",
+                         choices = unique(img_IDs),
+                         selected = updated_sample)
+
+  
+  }, ignoreInit = TRUE)    
+  
+  
     # Select first object
     observeEvent(input$sample, {
-        objValues$object1 <- object[,colData(object)[,img_id] == input$sample]
-
-        updateTabsetPanel(session, "tabbox1",
+      objValues$object1 <- object[,colData(object)[,img_id] == input$sample]
+      
+      updateTabsetPanel(session, "tabbox1",
                           selected = "tab1"
         )
 
@@ -570,8 +602,8 @@
         input$exprs_marker_1 != "") {
         if (input$exprs_marker_2 != "") {
             cur_markers <- c(input$exprs_marker_1, input$exprs_marker_2)
-        }
-        else{
+    }
+    else{
             cur_markers <- input$exprs_marker_1
         }
     } else {
@@ -687,12 +719,13 @@
 
         cur_markers <- .select_markers(input)
         cur_bcg <- .select_contrast(input)
-
+        
         cur_object <- reactiveValuesToList(objValues)
         cur_object <- cur_object[!unlist(lapply(cur_object, is.null))]
+        
+        cur_ln <- length(cur_object)
+        
         cur_object <- cur_object[[paste0("object", length(cur_object))]]
-
-        cur_object$selected <- TRUE
 
         cur_mask <- mask[mcols(mask)[,img_id] == input$sample]
 
@@ -701,7 +734,17 @@
         }
 
         if (is.null(image)) {
-            suppressMessages(svgPanZoom(stringSVG(
+            
+            if (cur_ln == 1) {
+                suppressMessages(svgPanZoom(stringSVG(
+                    plotCells(mask = cur_mask,
+                              legend = NULL,
+                              ...)),
+                    zoomScaleSensitivity = 0.4, maxZoom = 20,
+                    controlIconsEnabled = TRUE, viewBox = FALSE))
+            } else {
+                cur_object$selected <- TRUE
+                suppressMessages(svgPanZoom(stringSVG(
                     plotCells(object = cur_object,
                               mask = cur_mask,
                               cell_id = cell_id,
@@ -712,6 +755,7 @@
                               ...)),
                     zoomScaleSensitivity = 0.4, maxZoom = 20,
                     controlIconsEnabled = TRUE, viewBox = FALSE))
+            }
 
         } else {
 
@@ -721,7 +765,20 @@
             }
 
             cur_image <- image[mcols(image)[,img_id] == input$sample]
-            suppressMessages(svgPanZoom(stringSVG(
+            
+            
+            if (cur_ln == 1) {
+                suppressMessages(svgPanZoom(stringSVG(
+                    plotPixels(image = cur_image,
+                               colour_by = cur_markers,
+                               legend = NULL,
+                               bcg = cur_bcg,
+                               ...)),
+                    zoomScaleSensitivity = 0.4, maxZoom = 20,
+                    controlIconsEnabled = TRUE, viewBox = FALSE))
+            } else {
+                cur_object$selected <- TRUE
+                suppressMessages(svgPanZoom(stringSVG(
                     plotPixels(image = cur_image,
                                object = cur_object,
                                mask = cur_mask,
@@ -735,6 +792,7 @@
                                ...)),
                     zoomScaleSensitivity = 0.4, maxZoom = 20,
                     controlIconsEnabled = TRUE, viewBox = FALSE))
+            }
         }
     })
 }

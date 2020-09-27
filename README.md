@@ -1,9 +1,14 @@
+<img src="inst/imgs/cytomapper_sticker.png" align="right" alt="" width="120" />
+
 # cytomapper
 
+<!-- badges: start -->
 [![codecov](https://codecov.io/gh/BodenmillerGroup/cytomapper/branch/master/graph/badge.svg)](https://codecov.io/gh/BodenmillerGroup/cytomapper)
-[![Check](https://github.com/BodenmillerGroup/cytomapper/workflows/test_package/badge.svg)](https://github.com/BodenmillerGroup/cytomapper/actions?query=workflow%3Atest_package)
+[![build-check](https://github.com/BodenmillerGroup/cytomapper/workflows/build-checks/badge.svg)](https://github.com/BodenmillerGroup/cytomapper/actions?query=workflow%3Abuild-checks)
+[![docs](https://github.com/BodenmillerGroup/cytomapper/workflows/docs/badge.svg?branch=master)](https://github.com/BodenmillerGroup/cytomapper/actions?query=workflow%3Adocs)
+<!-- badges: end -->
 
-R package to spatially visualize pixel- and cell-level information obtained from highly multiplexed imaging technologies.
+R package to spatially visualize pixel- and cell-level information obtained from highly multiplexed imaging.
 
 ## Introduction
 
@@ -104,6 +109,15 @@ A full overview on the analysis workflow and functionality of the `cytomapper` p
 
 ```r
 vignette("cytomapper")
+```
+
+## Citation
+
+Please cite `cytomapper` as:
+
+```
+Nils Eling, Nicolas Damond, Tobias Hoch, Bernd Bodenmiller (2020). cytomapper: an R/Bioconductor package for visualisation of highly
+  multiplexed imaging data. bioRxiv, doi: 10.1101/2020.09.08.287516
 ```
 
 ## Authors

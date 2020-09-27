@@ -1,0 +1,13 @@
+ 	
+citHeader("To cite the package 'cytomapper' in publications use:")
+
+citEntry(entry="article",
+         title = "cytomapper: an R/Bioconductor package for visualisation of highly multiplexed imaging data",
+         author = personList(as.person("Nils Eling"),
+                             as.person("Nicolas Damond"),
+                             as.person("Tobias Hoch"),
+                             as.person("Bernd Bodenmiller")),
+         year = 2020,
+         journal = "bioRxiv",
+	 doi = "10.1101/2020.09.08.287516",
+         textVersion = "Nils Eling, Nicolas Damond, Tobias Hoch, Bernd Bodenmiller (2020). cytomapper: an R/Bioconductor package for visualisation of highly multiplexed imaging data. bioRxiv, doi: 10.1101/2020.09.08.287516")
