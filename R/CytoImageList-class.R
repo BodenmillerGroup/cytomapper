@@ -62,13 +62,6 @@ S4Vectors:::setValidity2(Class="CytoImageList", .ImageList_validity)
                             "allowed in a CytoImageList object."))
     }
 
-    # Check if colourmode of each Image is "Grayscale"
-    colour.modes <- unlist(lapply(object, colorMode))
-    if("Color" %in% colour.modes || 2 %in% colour.modes){
-        msg <- c(msg, paste("Only Grayscale images are",
-                        "supported for CytoImageList objects."))
-    }
-
     if (length(msg)) { return(msg) }
 
     return(TRUE)
