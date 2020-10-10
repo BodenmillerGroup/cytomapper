@@ -6,8 +6,8 @@
 # Function to generate colours
 .create_colours <- function(x){
     cur_col <- c("#70C389", "#39BEB4", "#3F85A7", "#494579", "#5B1C55",
-                 "#971B4B", "#C81F43", "#F26738", "#F79C1D", "#F7CD0F",
-                 "#EBE24A", "#B4D55A")
+                    "#971B4B", "#C81F43", "#F26738", "#F79C1D", "#F7CD0F",
+                    "#EBE24A", "#B4D55A")
     return(cur_col[x])
 }
 
@@ -48,52 +48,52 @@
     tagList(
         h3("Using the Shiny application"),
         p("This help page provides a recommended workflow on how to most ",
-          "efficiently use the app. The workflow is solely a recommendation - ",
-          "the app provides full flexibility to change settings during each ",
-          "step. To see the full documentation, please refer to the help page ",
-          "found at", em("?cytomapperShiny")),
+        "efficiently use the app. The workflow is solely a recommendation - ",
+        "the app provides full flexibility to change settings during each ",
+        "step. To see the full documentation, please refer to the help page ",
+        "found at", em("?cytomapperShiny")),
         h3("1. Select the number of plots"),
         p("The slider under ", em("General controls"), 
-          " can be used to specify ",
-          "the number of plots on which to perform gating. Up to two markers ",
-          "can be visualized per plot."),
+        " can be used to specify ",
+        "the number of plots on which to perform gating. Up to two markers ",
+        "can be visualized per plot."),
         h3("2. Select the sample"),
         p("The ", em("assay"), " dropdown selection under ", 
-          em("General controls"), " allows the user to specify on",
-          "which assay entry to perform gating. In most cases, a log- or ",
-          "arcsinh-transformation can help to distinguish between 'positive' ",
-          "and 'negative' populations."),
+        em("General controls"), " allows the user to specify on",
+        "which assay entry to perform gating. In most cases, a log- or ",
+        "arcsinh-transformation can help to distinguish between 'positive' ",
+        "and 'negative' populations."),
         h3("3. Select the markers"),
         p("For each plot, up to two markers can be specified. If selecting ",
-          "a single marker, please specify this marker in the first of the ",
-          "two dropdown menus. A violin plot is used to visualize the ",
-          "expression of a single marker while a scatter plot is used to ",
-          "visualize the expression of two markers."),
+        "a single marker, please specify this marker in the first of the ",
+        "two dropdown menus. A violin plot is used to visualize the ",
+        "expression of a single marker while a scatter plot is used to ",
+        "visualize the expression of two markers."),
         h3("4. Gate cells"),
         p("When selecting cells in one plot, only those cells are visualized ",
-          "on the following plot. Once markers, the assay or the number of ",
-          "plots are changed, gates are cleared."),
+        "on the following plot. Once markers, the assay or the number of ",
+        "plots are changed, gates are cleared."),
         h3("5. Observe the selected cells"),
         p("After gating, the selected cells are visualized on the ",
-          "corresponding images by switching to the ",
-          em("Images"), " tab. By default, the first marker is selected. ",
-          "The user can change the displayed marker or press reset marker ",
-          "to switch to the markers used for gating. If a multi-channel ",
-          "image object is provided, the contrast of the image can be ",
-          "changed. The right panel visualizes the selected cells either ",
-          "by filling in the segmentation masks or by outlining the ",
-          "cells on the images."),
+        "corresponding images by switching to the ",
+        em("Images"), " tab. By default, the first marker is selected. ",
+        "The user can change the displayed marker or press reset marker ",
+        "to switch to the markers used for gating. If a multi-channel ",
+        "image object is provided, the contrast of the image can be ",
+        "changed. The right panel visualizes the selected cells either ",
+        "by filling in the segmentation masks or by outlining the ",
+        "cells on the images."),
         h3("6. Change samples"),
         p("Samples can now be iteratively changed using the dropdown ",
-          "menu under ", em("General controls"), ". The gates will remain ",
-          "on the plots and can be adjusted for each sample."),
+        "menu under ", em("General controls"), ". The gates will remain ",
+        "on the plots and can be adjusted for each sample."),
         h3("7. Save the selected cells"),
         p("Finally, the selected cells can be saved by clicking the download ",
-          "button next to the '?' symbol. The selected cells will be stored ",
-          "as a ", em("SingleCellExperiment"), " object in .rds format.",
-          "Per selection, the user can provide a ", em("Cell label"), 
-          " that will be stored in the ", em("colData"), " under the ", 
-          em("cytomapper_CellLabel"), " entry of the downloaded object.")
+        "button next to the '?' symbol. The selected cells will be stored ",
+        "as a ", em("SingleCellExperiment"), " object in .rds format.",
+        "Per selection, the user can provide a ", em("Cell label"), 
+        " that will be stored in the ", em("colData"), " under the ", 
+        em("cytomapper_CellLabel"), " entry of the downloaded object.")
     )
 }
 
@@ -126,47 +126,44 @@
 # Create interactive observers
 #' @importFrom matrixStats rowRanges
 .create_interactive_observer <- function(object, img_id, input, session,
-                                         rValues, objValues){
+                                            rValues, objValues){
 
-  # Next Image Observer
-  observeEvent(input$next.sample, {
-    img_IDs <- unique(colData(object)[,img_id])
-    cur_index <- match(input$sample, img_IDs)
-    updated_index <- ifelse(cur_index == length(img_IDs), 1, cur_index+1)
+    # Next Image Observer
+    observeEvent(input$next.sample, {
+        img_IDs <- unique(colData(object)[,img_id])
+        cur_index <- match(input$sample, img_IDs)
+        updated_index <- ifelse(cur_index == length(img_IDs), 1, cur_index + 1)
     
-    # return updated img_id 
-    updated_sample <- img_IDs[updated_index]
+        # return updated img_id 
+        updated_sample <- img_IDs[updated_index]
     
-    updateSelectInput(session, inputId = "sample",
-                         choices = unique(img_IDs),
-                         selected = updated_sample)
+        updateSelectInput(session, inputId = "sample",
+                        choices = unique(img_IDs),
+                        selected = updated_sample)
     
+        }, ignoreInit = TRUE)    
+
+    # Previous Image Observer
+    observeEvent(input$previous.sample, {
+        img_IDs <- unique(colData(object)[,img_id])
+        cur_index <- match(input$sample, img_IDs)
+        updated_index <- ifelse(cur_index == 1,  length(img_IDs), cur_index - 1)
+    
+        # return updated img_id
+        updated_sample <- img_IDs[updated_index]
+    
+        updateSelectInput(session, inputId = "sample",
+                        choices = unique(img_IDs),
+                        selected = updated_sample)
+
     }, ignoreInit = TRUE)    
-  
-  # Previous Image Observer
-  observeEvent(input$previous.sample, {
-    img_IDs <- unique(colData(object)[,img_id])
-    cur_index <- match(input$sample, img_IDs)
-    updated_index <- ifelse(cur_index == 1,  length(img_IDs), cur_index-1)
-    
-    # return updated img_id
-    updated_sample <- img_IDs[updated_index]
-    
-    updateSelectInput(session, inputId = "sample",
-                         choices = unique(img_IDs),
-                         selected = updated_sample)
 
-  
-  }, ignoreInit = TRUE)    
-  
-  
     # Select first object
     observeEvent(input$sample, {
-      objValues$object1 <- object[,colData(object)[,img_id] == input$sample]
-      
-      updateTabsetPanel(session, "tabbox1",
-                          selected = "tab1"
-        )
+        objValues$object1 <- object[,colData(object)[,img_id] == input$sample]
+
+        updateTabsetPanel(session, "tabbox1",
+                        selected = "tab1")
 
     }, ignoreInit = TRUE)
 
@@ -186,7 +183,7 @@
     observeEvent(input$plotCount, {
 
         updateTabsetPanel(session, "tabbox1",
-                          selected = "tab1")
+                            selected = "tab1")
 
         # Reset gates and objects
         .clearObjects(objValues, iter = 1)
@@ -196,7 +193,7 @@
     # Assay change observer - change tab if assay changes
     observeEvent(input$assay, {
         updateTabsetPanel(session, "tabbox1",
-                          selected = "tab1"
+                            selected = "tab1"
         )
 
         # Reset gates and objects
@@ -211,7 +208,7 @@
             })
         }, {
             updateTabsetPanel(session, "tabbox1",
-                              selected = "tab1"
+                            selected = "tab1"
             )
 
             # Reset gates and objects
@@ -229,39 +226,39 @@
     markers <- rownames(object)
 
     updateSelectizeInput(session, inputId = "sample",
-                         choices = unique(img_IDs),
-                         selected = unique(img_IDs)[1])
+                        choices = unique(img_IDs),
+                        selected = unique(img_IDs)[1])
     updateSelectizeInput(session, inputId = "assay",
-                         choices = assayNames(object),
-                         server = TRUE,
-                         selected = assayNames(object)[1])
+                        choices = assayNames(object),
+                        server = TRUE,
+                        selected = assayNames(object)[1])
     observeEvent(input$plotCount, {
 
         for (i in seq_len(input$plotCount)) {
             cur_val <- (i * 2) - 1
 
             updateSelectizeInput(session, paste0("Marker_", cur_val),
-                                 choices = markers,
-                                 server = TRUE,
-                                 selected = "")
+                                choices = markers,
+                                server = TRUE,
+                                selected = "")
             updateSelectizeInput(session, paste0("Marker_", cur_val + 1),
-                                 choices = markers,
-                                 server = TRUE,
-                                 selected = "")
+                                choices = markers,
+                                server = TRUE,
+                                selected = "")
         }
     })
 
     observeEvent(input$resetMarkers, {
 
-      cur_markers <- .select_markers(input, exprs_marker_update = FALSE)
+        cur_markers <- .select_markers(input, exprs_marker_update = FALSE)
 
-      updateSelectInput(session, "exprs_marker_1",
-                           choices = markers,
-                           selected = cur_markers[1])
-      updateSelectInput(session, "exprs_marker_2",
-                           choices = markers,
-                           selected = ifelse(length(cur_markers) > 1, 
-                                             cur_markers[2], ""))
+        updateSelectInput(session, "exprs_marker_1",
+                            choices = markers,
+                            selected = cur_markers[1])
+        updateSelectInput(session, "exprs_marker_2",
+                            choices = markers,
+                            selected = ifelse(length(cur_markers) > 1, 
+                                                cur_markers[2], ""))
     })
 
 }
@@ -274,20 +271,21 @@
             wellPanel(
                 h3(paste("Plot", cur_plot), style = "color: black"),
                 selectizeInput(paste0("Marker_", cur_val),
-                               label = span(paste("Select marker", cur_val),
+                                label = span(paste("Select marker", cur_val),
                                     style = "color: black; padding-top: 0px"),
-                               choices = NULL,
-                               options = list(placeholder = 'Select marker',
-                                              maxItems = 1)),
+                                choices = NULL,
+                                options = list(placeholder = 'Select marker',
+                                                maxItems = 1)),
                 selectizeInput(paste0("Marker_", cur_val + 1),
-                               label = span(paste("Select marker", cur_val + 1),
+                                label = span(paste("Select marker", 
+                                                    cur_val + 1),
                                     style = "color: black; padding-top: 0px"),
-                               choices = NULL,
-                               options = list(placeholder = 'Select marker',
-                                              maxItems = 1)),
+                                choices = NULL,
+                                options = list(placeholder = 'Select marker',
+                                                maxItems = 1)),
                 style = paste0("background-color: ", .create_colours(cur_plot),
-                               "; border-color: ", .create_colours(cur_plot),
-                               "; padding-bottom: 0px; padding-top: 0px"))
+                                "; border-color: ", .create_colours(cur_plot),
+                                "; padding-bottom: 0px; padding-top: 0px"))
         })
     })
 }
@@ -309,7 +307,7 @@
                                         resetOnNew = FALSE)
 
             box(plotOutput(paste0("scatter", cur_plot),
-                           brush = cur_brush_opts),
+                            brush = cur_brush_opts),
                 verbatimTextOutput(paste0("info", cur_plot)),
                 title = paste("Plot", cur_plot),
                 status = "primary",
@@ -333,9 +331,9 @@
                                     style = "color: black; padding-top: 0px"),
                                 value = 1)
         contrast_input_2 <- numericInput("contrast_marker_2",
-                                 label = span(paste("Contrast marker 2"),
+                                label = span(paste("Contrast marker 2"),
                                     style = "color: black; padding-top: 0px"),
-                                 value = 1)
+                                value = 1)
     } else {
         contrast_input_1 <- contrast_input_2 <- NULL
     }
@@ -347,7 +345,7 @@
         fluidRow(box(column(width = 12,
                         actionButton("resetMarkers", label = "Reset markers",
                         style = "background-color: #46EC46; color: black;")),
-              column(width = 6,
+                column(width = 6,
                     selectInput("exprs_marker_1",
                         label = span(paste("Select marker 1"),
                             style = "color: black"),
@@ -361,7 +359,7 @@
                         selected = ""),
                     contrast_input_2),
                 column(width = 12,
-                       svgPanZoomOutput("image_expression", height = "300px")),
+                        svgPanZoomOutput("image_expression", height = "300px")),
                 title = "Expression", status = "primary",
                 width = 6, height = "550px"),
             box(
@@ -390,7 +388,7 @@
 
     # Brush the data.frame
     cur_selection <- brushedPoints(cur_df, input[[paste0("plot_brush", iter)]], 
-                                   allRows = TRUE)
+                                    allRows = TRUE)
 
     # Save the Gate
     cur_gate <- list()
@@ -399,14 +397,14 @@
                             input[[paste0("plot_brush", iter)]]$xmax,
                             input[[paste0("plot_brush", iter)]]$ymin,
                             input[[paste0("plot_brush", iter)]]$ymax),
-                   nrow = 2, ncol = 2,
-                   byrow = TRUE,
-                   dimnames = list(
-                       c(input[[paste0("plot_brush", iter)]]$mapping$x,
-                        input[[paste0("plot_brush", iter)]]$mapping$y), 
-                       c("min", "max")
-                       )
-                   )
+                    nrow = 2, ncol = 2,
+                    byrow = TRUE,
+                    dimnames = list(
+                        c(input[[paste0("plot_brush", iter)]]$mapping$x,
+                            input[[paste0("plot_brush", iter)]]$mapping$y), 
+                        c("min", "max")
+                        )
+                    )
 
     if (rownames(gate)[1] == "sample") {
         gate <- gate[-1, , drop = FALSE]
@@ -420,11 +418,11 @@
     next_obj <- objValues[[paste0("object", iter)]]
 
     if (!is.null(metadata(next_obj)) && iter == 1) {
-      cur_meta <- list(metadata = metadata(next_obj))
-      cur_meta[[paste0("cytomapper_gate_", iter)]] <- cur_gate
-      metadata(next_obj) <- cur_meta
+        cur_meta <- list(metadata = metadata(next_obj))
+        cur_meta[[paste0("cytomapper_gate_", iter)]] <- cur_gate
+        metadata(next_obj) <- cur_meta
     } else {
-      metadata(next_obj)[[paste0("cytomapper_gate_", iter)]] <- cur_gate
+        metadata(next_obj)[[paste0("cytomapper_gate_", iter)]] <- cur_gate
     }
 
     if (sum(cur_selection$selected_) > 0) {
@@ -451,25 +449,25 @@
         p <- ggplot(cur_df) +
             geom_point(aes_(as.name(input[[paste0("Marker_", cur_val)]]),
                             as.name(input[[paste0("Marker_", cur_val + 1)]])),
-                       show.legend = FALSE) +
+                        show.legend = FALSE) +
             theme(panel.background = element_blank()) +
             ylim(c(rValues$ranges[input[[paste0("Marker_", cur_val + 1)]], 1],
-                   rValues$ranges[input[[paste0("Marker_", 
+                    rValues$ranges[input[[paste0("Marker_", 
                                                 cur_val + 1)]], 2])) +
             xlim(c(rValues$ranges[input[[paste0("Marker_", cur_val)]], 1],
-                   rValues$ranges[input[[paste0("Marker_", cur_val)]], 2]))
+                    rValues$ranges[input[[paste0("Marker_", cur_val)]], 2]))
 
         if (!is.null(objValues[[paste0("object", iter + 1)]])) {
 
             cur_df_1 <- as.data.frame(t(assay(objValues[[paste0("object", 
                                                                 iter + 1)]],
-                                              input$assay)))
+                                            input$assay)))
             cur_df_1$sample <- input$sample
 
             p <- p + geom_point(aes_(as.name(input[[paste0("Marker_", 
-                                                           cur_val)]]),
-                                     as.name(input[[paste0("Marker_", 
-                                                           cur_val + 1)]])),
+                                                            cur_val)]]),
+                                    as.name(input[[paste0("Marker_", 
+                                                            cur_val + 1)]])),
                                 show.legend = FALSE, data = cur_df_1, 
                                 colour = "red")
         }
@@ -484,7 +482,7 @@
         p <- ggplot(cur_df) +
             geom_blank(aes_(as.name(input[[paste0("Marker_", cur_val)]]),
                             as.name(input[[paste0("Marker_", cur_val + 1)]])),
-                       show.legend = FALSE) +
+                        show.legend = FALSE) +
             ylim(c(rValues$ranges[input[[paste0("Marker_", cur_val + 1)]], 1],
                 rValues$ranges[input[[paste0("Marker_", cur_val + 1)]], 2])) +
             xlim(c(rValues$ranges[input[[paste0("Marker_", cur_val)]], 1],
@@ -514,9 +512,9 @@
                             show.legend = FALSE) +
                 xlab(input$sample) +
                 theme(axis.text.x = element_blank(),
-                      panel.background = element_blank()) +
+                        panel.background = element_blank()) +
                 ylim(c(rValues$ranges[input[[paste0("Marker_", cur_val)]], 1],
-                       rValues$ranges[input[[paste0("Marker_", cur_val)]], 2]))
+                    rValues$ranges[input[[paste0("Marker_", cur_val)]], 2]))
         } else {
             p <- ggplot(cur_df) +
                 geom_violin(aes_(x = quote(sample),
@@ -524,14 +522,14 @@
                             show.legend = FALSE) +
                 geom_quasirandom(aes_(x = quote(sample),
                                 y = as.name(input[[paste0("Marker_", 
-                                                          cur_val)]])),
-                                 show.legend = FALSE,
-                                 groupOnX = TRUE) +
+                                                        cur_val)]])),
+                                show.legend = FALSE,
+                                groupOnX = TRUE) +
                 xlab(input$sample) +
                 theme(axis.text.x = element_blank(),
-                      panel.background = element_blank()) +
+                    panel.background = element_blank()) +
                 ylim(c(rValues$ranges[input[[paste0("Marker_", cur_val)]], 1],
-                       rValues$ranges[input[[paste0("Marker_", cur_val)]], 2]))
+                        rValues$ranges[input[[paste0("Marker_", cur_val)]], 2]))
         }
 
         if (!is.null(objValues[[paste0("object", iter + 1)]])) {
@@ -543,22 +541,22 @@
             if (nrow(cur_df) < 3) {
                 p <- p +
                     geom_point(aes_(x = quote(sample),
-                                          y = as.name(input[[paste0("Marker_", 
-                                                                    cur_val)]]),
-                                          colour = quote(selected)),
-                                     show.legend = FALSE, data = cur_df) +
+                                    y = as.name(input[[paste0("Marker_", 
+                                                            cur_val)]]),
+                                    colour = quote(selected)),
+                                show.legend = FALSE, data = cur_df) +
                     scale_colour_manual(values = c(`FALSE` = "black",
-                                                   `TRUE` = "red"))
+                                                    `TRUE` = "red"))
             } else {
                 p <- p +
                     geom_quasirandom(aes_(x = quote(sample),
-                                          y = as.name(input[[paste0("Marker_", 
+                                        y = as.name(input[[paste0("Marker_", 
                                                                     cur_val)]]),
-                                          colour = quote(selected)),
-                                     show.legend = FALSE, data = cur_df,
-                                     groupOnX = TRUE) +
+                                        colour = quote(selected)),
+                                        show.legend = FALSE, data = cur_df,
+                                        groupOnX = TRUE) +
                     scale_colour_manual(values = c(`FALSE` = "black",
-                                                   `TRUE` = "red"))
+                                                    `TRUE` = "red"))
             }
 
         }
@@ -573,14 +571,14 @@
         p <- ggplot(cur_df) +
             geom_blank(aes_(x = quote(sample),
                             y = as.name(input[[paste0("Marker_", cur_val)]])),
-                       show.legend = FALSE) +
+                        show.legend = FALSE) +
             ylim(c(rValues$ranges[input[[paste0("Marker_", cur_val)]], 1],
-                   rValues$ranges[input[[paste0("Marker_", cur_val)]], 2])) +
+                    rValues$ranges[input[[paste0("Marker_", cur_val)]], 2])) +
             xlim(c(0.5, 1.5)) +
             ylab(input[[paste0("Marker_", cur_val)]]) +
             xlab(input$sample) +
             theme(axis.text.x = element_blank(),
-                  panel.background = element_blank())
+                    panel.background = element_blank())
     }
     return(p)
 }
@@ -589,7 +587,7 @@
 #' @import ggplot2
 #' @importFrom ggbeeswarm geom_quasirandom
 .createScatter <- function(input, session, rValues, objValues, 
-                           iter, img_id, cell_id){
+                            iter, img_id, cell_id){
 
     renderPlot({
 
@@ -649,7 +647,7 @@
         cur_input <- reactiveValuesToList(input)
         cur_markers <- cur_input[grepl("Marker_", names(cur_input))]
         cur_markers <- cur_markers[unlist(lapply(cur_markers, 
-                                                 function(x){x != ""}))]
+                                                function(x){x != ""}))]
 
         # Subset markers to those of the last gate + 1
         cur_brushes <- cur_input[grepl("plot_brush", names(cur_input))]
@@ -663,30 +661,30 @@
                                             names(cur_brushes))))
 
             if (!is.null(input[[paste0("Marker_", 
-                                       ((max_brush + 1) * 2) - 1)]]) &&
+                                        ((max_brush + 1) * 2) - 1)]]) &&
                 input[[paste0("Marker_", ((max_brush + 1) * 2) - 1)]] != "") {
                 cur_markers <- cur_markers[
                     names(cur_markers) == paste0("Marker_", 
-                                                 ((max_brush + 1) * 2) - 1) |
+                                                ((max_brush + 1) * 2) - 1) |
                     names(cur_markers) == paste0("Marker_", 
-                                                 (max_brush + 1) * 2)]
+                                                (max_brush + 1) * 2)]
             } else {
                 cur_markers <- cur_markers[
                     names(cur_markers) == paste0("Marker_", 
-                                                 ((max_brush) * 2) - 1) |
+                                                ((max_brush) * 2) - 1) |
                     names(cur_markers) == paste0("Marker_", (max_brush) * 2)]
             }
 
         } else {
             cur_markers <- cur_markers[names(cur_markers) == "Marker_1" |
-                                           names(cur_markers) == "Marker_2"]
+                                            names(cur_markers) == "Marker_2"]
         }
 
         max_marker <- max(as.numeric(sub("Marker_", "", names(cur_markers))))
 
         if (max_marker %% 2 == 0) {
             cur_markers <- c(cur_markers[[paste0("Marker_", max_marker - 1)]],
-                             cur_markers[[paste0("Marker_", max_marker)]])
+                                cur_markers[[paste0("Marker_", max_marker)]])
         } else {
             cur_markers <- cur_markers[[paste0("Marker_", max_marker)]]
         }
@@ -714,7 +712,7 @@
 #' @importFrom svgPanZoom svgPanZoom renderSvgPanZoom
 #' @importFrom svglite stringSVG
 .createImageExpression <- function(input, object, mask, 
-                                   image, img_id, cell_id, ...){
+                                    image, img_id, cell_id, ...){
     renderSvgPanZoom({
 
         cur_markers <- .select_markers(input)
@@ -736,7 +734,7 @@
 
             if (length(cur_markers) > 1) {
                 validate(need(cur_markers[1] != cur_markers[2],
-                              message = "Please specify two different markers"))
+                            message = "Please specify two different markers"))
             }
 
             cur_image <- image[mcols(image)[,img_id] == input$sample]
@@ -756,7 +754,7 @@
 #' @importFrom svglite stringSVG
 #' @importFrom S4Vectors metadata
 .createImageSelection <- function(input, objValues, 
-                                  mask, image, img_id, cell_id, ...){
+                                    mask, image, img_id, cell_id, ...){
     renderSvgPanZoom({
 
         cur_val <- (input$plotCount * 2) - 1
@@ -785,22 +783,22 @@
             if (cur_ln == 1) {
                 suppressMessages(svgPanZoom(stringSVG(
                     plotCells(mask = cur_mask,
-                              legend = NULL,
-                              ...)),
+                                legend = NULL,
+                                ...)),
                     zoomScaleSensitivity = 0.4, maxZoom = 20,
                     controlIconsEnabled = TRUE, viewBox = FALSE))
             } else {
                 cur_object$selected <- TRUE
                 suppressMessages(svgPanZoom(stringSVG(
                     plotCells(object = cur_object,
-                              mask = cur_mask,
-                              cell_id = cell_id,
-                              img_id = img_id,
-                              colour_by = "selected",
-                              colour = list(selected = c("TRUE" = "dark red", 
-                                                         "FALSE" = "gray")),
-                              legend = NULL,
-                              ...)),
+                                mask = cur_mask,
+                                cell_id = cell_id,
+                                img_id = img_id,
+                                colour_by = "selected",
+                                colour = list(selected = c("TRUE" = "dark red", 
+                                                            "FALSE" = "gray")),
+                                legend = NULL,
+                                ...)),
                     zoomScaleSensitivity = 0.4, maxZoom = 20,
                     controlIconsEnabled = TRUE, viewBox = FALSE))
             }
@@ -809,7 +807,7 @@
 
             if (length(cur_markers) > 1) {
                 validate(need(cur_markers[1] != cur_markers[2],
-                              message = "Please specify two different markers"))
+                            message = "Please specify two different markers"))
             }
 
             cur_image <- image[mcols(image)[,img_id] == input$sample]
@@ -818,27 +816,27 @@
             if (cur_ln == 1) {
                 suppressMessages(svgPanZoom(stringSVG(
                     plotPixels(image = cur_image,
-                               colour_by = cur_markers,
-                               legend = NULL,
-                               bcg = cur_bcg,
-                               ...)),
+                                colour_by = cur_markers,
+                                legend = NULL,
+                                bcg = cur_bcg,
+                                ...)),
                     zoomScaleSensitivity = 0.4, maxZoom = 20,
                     controlIconsEnabled = TRUE, viewBox = FALSE))
             } else {
                 cur_object$selected <- TRUE
                 suppressMessages(svgPanZoom(stringSVG(
                     plotPixels(image = cur_image,
-                               object = cur_object,
-                               mask = cur_mask,
-                               cell_id = cell_id,
-                               img_id = img_id,
-                               colour_by = cur_markers,
-                               outline_by = "selected",
-                               colour = list(selected = c("TRUE" = "white", 
-                                                          "FALSE" = "gray")),
-                               legend = NULL,
-                               bcg = cur_bcg,
-                               ...)),
+                                object = cur_object,
+                                mask = cur_mask,
+                                cell_id = cell_id,
+                                img_id = img_id,
+                                colour_by = cur_markers,
+                                outline_by = "selected",
+                                colour = list(selected = c("TRUE" = "white", 
+                                                            "FALSE" = "gray")),
+                                legend = NULL,
+                                bcg = cur_bcg,
+                                ...)),
                     zoomScaleSensitivity = 0.4, maxZoom = 20,
                     controlIconsEnabled = TRUE, viewBox = FALSE))
             }

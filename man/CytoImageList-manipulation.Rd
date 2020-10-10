@@ -82,7 +82,7 @@ plotPixels(x, colour_by = c("H3", "CD99"))
 
 # Setting the clipping range per channel
 x <- normalize(pancreasImages, 
-               inputRange = list(H3 = c(0, 70), CD99 = c(0, 100)))
+                inputRange = list(H3 = c(0, 70), CD99 = c(0, 100)))
 plotPixels(x, colour_by = c("H3", "CD99"))
 
 # Normalizing per image

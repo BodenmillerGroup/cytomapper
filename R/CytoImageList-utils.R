@@ -183,7 +183,7 @@ setReplaceMethod("names",
 #' 
 #' # Setting the clipping range per channel
 #' x <- normalize(pancreasImages, 
-#'                inputRange = list(H3 = c(0, 70), CD99 = c(0, 100)))
+#'                 inputRange = list(H3 = c(0, 70), CD99 = c(0, 100)))
 #' plotPixels(x, colour_by = c("H3", "CD99"))
 #'
 #' # Normalizing per image
@@ -275,11 +275,11 @@ normImages <- function(object, separateChannels = TRUE, separateImages = FALSE,
         } else {
             
             cur_range <- cur_inputRanges[unlist(lapply(cur_inputRanges, 
-                                                       is.null))]
+                                                        is.null))]
             
             cur_r <- lapply(names(cur_range), function(x){
                 quantile(unlist(lapply(getChannels(object, x), quantile, 
-                                       probs = c(0, 1))), c(0,1))
+                                        probs = c(0, 1))), c(0, 1))
             })
             names(cur_r) <- names(cur_range)
             

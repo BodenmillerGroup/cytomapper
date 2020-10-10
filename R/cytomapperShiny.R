@@ -6,17 +6,17 @@
 #'
 #'@param object a \code{\linkS4class{SingleCellExperiment}} object.
 #'@param mask (optional) a \code{\linkS4class{CytoImageList}} containing
-#'  single-channel \code{\linkS4class{Image}} objects.
+#'    single-channel \code{\linkS4class{Image}} objects.
 #'@param image (optional) a \code{\linkS4class{CytoImageList}} object containing
-#'  single or multi-channel \code{\linkS4class{Image}} objects.
+#'    single or multi-channel \code{\linkS4class{Image}} objects.
 #'@param cell_id character specifying the \code{colData(object)} entry, in which
-#'  the integer cell IDs are stored. These IDs should match the integer pixel
-#'  values in the segmentation mask object (\code{mask}).
+#'    the integer cell IDs are stored. These IDs should match the integer pixel
+#'    values in the segmentation mask object (\code{mask}).
 #'@param img_id character specifying the \code{colData(object)} and
-#'  \code{mcols(mask)} and/or \code{mcols(image)} entry, in which the image IDs
-#'  are stored.
+#'    \code{mcols(mask)} and/or \code{mcols(image)} entry, 
+#'    in which the image IDs are stored.
 #'@param ... parameters passed to the \code{\link{plotCells}} or
-#'  \code{\link{plotPixels}} function.
+#'    \code{\link{plotPixels}} function.
 #'
 #'@section User inputs:
 #'This function requires at least a \code{\linkS4class{SingleCellExperiment}}
@@ -107,16 +107,16 @@
 #'
 #'    # Use shiny with SCE object, images and masks
 #'    cytomapperShiny(object = pancreasSCE, mask = pancreasMasks, 
-#'                    image = pancreasImages, cell_id = "CellNb", 
-#'                    img_id = "ImageNb")
+#'                  image = pancreasImages, cell_id = "CellNb", 
+#'                  img_id = "ImageNb")
 #'
 #'    # Use shiny with SCE object and masks
 #'    cytomapperShiny(object = pancreasSCE, mask = pancreasMasks,
-#'                    cell_id = "CellNb", img_id = "ImageNb")
+#'                  cell_id = "CellNb", img_id = "ImageNb")
 #'
 #'    # Use shiny with SCE object only
 #'    cytomapperShiny(object = pancreasSCE,
-#'                    cell_id = "CellNb", img_id = "ImageNb")
+#'                  cell_id = "CellNb", img_id = "ImageNb")
 #'}
 #'
 #'@author Nils Eling (\email{nils.eling@@dqbm.uzh.ch})
@@ -157,7 +157,7 @@ cytomapperShiny <- function(object,
 
     shiny_server <- function(input, output, session) {
         .cytomapper_server(object, mask, image, cell_id, img_id,
-                           input, output, session, ...)
+                            input, output, session, ...)
     }
 
     shinyApp(ui = shiny_ui, server = shiny_server)

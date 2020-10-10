@@ -21,7 +21,7 @@
                     outputId = "downloadData",
                     label = "Download selection",
                     style = paste0("background-color: #3C8DBC; color: white; ",
-                                   "border-color: #7EA6F8")
+                                    "border-color: #7EA6F8")
                 ),
                 icon = icon(""),
                 status = "info"
@@ -36,7 +36,7 @@
                     inputId = "SessionInfo",
                     label = "Session Info",
                     style = paste0("background-color: #3C8DBC; color: white; ",
-                                   "border-color: #3C8DBC")
+                                    "border-color: #3C8DBC")
                 ),
                 icon = icon(""),
                 status = "info"
@@ -46,7 +46,7 @@
                     inputId = "Help",
                     label = "Help",
                     style = paste0("background-color: #3C8DBC; color: white; ",
-                                   "border-color: #3C8DBC")
+                                    "border-color: #3C8DBC")
                 ),
                 icon = icon(""),
                 status = "info"
@@ -64,41 +64,41 @@
     cm_side <- dashboardSidebar(
         sidebarMenu(
             menuItem("General controls",
-                     sliderInput("plotCount", label = "Select number of plots",
-                                 min = 1, max = 12, value = 1),
-                     fluidRow(column(
-                         12, p(strong("Select sample")), 
-                         style="padding-left:30px;")),
-                     fluidRow(column(2, 
-                         actionButton("previous.sample", label = NULL,
-                                      icon = icon("angle-left", class="fa-2x"),
-                                      style = paste0("background-color: ",
-                                      "transparent; border-color: transparent",
-                                      "; color:white; margin-left: 0px;"))),
-                         column(8, style="padding-left:0px;padding-right:0px;",
-                         selectizeInput("sample", label = NULL,
-                                        width = "100%",
-                                        choices = NULL,
-                                        options = list(
-                                            placeholder = 'Select a sample', 
-                                            maxItems = 1))),
-                         column(2,style="padding-left:0px;",
-                         actionButton("next.sample", label = NULL,
-                                      icon = icon(name = "angle-right", 
-                                                  class="fa-2x"),
-                                      style = paste0("background-color: ",
-                                      "transparent; border-color: transparent",
-                                      "; color: white; margin-left: 0px; ",
-                                      "padding-left: 0px;")))),
+                    sliderInput("plotCount", label = "Select number of plots",
+                                min = 1, max = 12, value = 1),
+                    fluidRow(column(
+                        12, p(strong("Select sample")), 
+                        style="padding-left:30px;")),
+                    fluidRow(column(2, 
+                        actionButton("previous.sample", label = NULL,
+                                    icon = icon("angle-left", class="fa-2x"),
+                                    style = paste0("background-color: ",
+                                    "transparent; border-color: transparent",
+                                    "; color:white; margin-left: 0px;"))),
+                        column(8, style="padding-left:0px;padding-right:0px;",
+                        selectizeInput("sample", label = NULL,
+                                    width = "100%",
+                                    choices = NULL,
+                                    options = list(
+                                        placeholder = 'Select a sample', 
+                                        maxItems = 1))),
+                        column(2,style="padding-left:0px;",
+                        actionButton("next.sample", label = NULL,
+                                    icon = icon(name = "angle-right", 
+                                            class="fa-2x"),
+                                    style = paste0("background-color: ",
+                                    "transparent; border-color: transparent",
+                                    "; color: white; margin-left: 0px; ",
+                                    "padding-left: 0px;")))),
 
-                     selectizeInput("assay", 
+                    selectizeInput("assay", 
                                     label = "Select which assay to display",
                                     choices = NULL, 
                                     options = list(
                                         placeholder = 'Select an assay', 
                                         maxItems = 1)),
-                     icon = icon("fas fa-sliders-h"), 
-                     startExpanded = TRUE),
+                    icon = icon("fas fa-sliders-h"), 
+                    startExpanded = TRUE),
             menuItem("Plots",
                 uiOutput("AdditionalPlots_sidebar"),
                 icon = icon("far fa-chart-bar"), startExpanded = TRUE),
@@ -117,9 +117,9 @@
 
         tabBox(width = 12, id = "tabbox1",
             tabPanel(title = "Scatter Plots", value = "tab1", 
-                     uiOutput("AdditionalPlots_tab1")),
+                        uiOutput("AdditionalPlots_tab1")),
             tabPanel(title = "Images", value = "tab2", 
-                     uiOutput("AdditionalPlots_tab2")))
+                        uiOutput("AdditionalPlots_tab2")))
         )
 
     return(cm_body)

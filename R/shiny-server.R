@@ -4,7 +4,7 @@
 
 #' @importFrom SummarizedExperiment assay
 .cytomapper_server <- function(object, mask, image, cell_id, img_id,
-                               input, output, session, ...)
+                                input, output, session, ...)
 {
     # Session info observer
     cur_sessionInfo <- sessionInfo()
@@ -17,7 +17,7 @@
     objValues <- reactiveValues(object1 = NULL)
     
     .create_interactive_observer(object, img_id, input, session, 
-                                 rValues, objValues)
+                                    rValues, objValues)
     
     # Create updateSelectizeInput objects
     .create_updateSelectizeInput(object, img_id, input, session)

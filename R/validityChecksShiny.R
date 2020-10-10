@@ -12,7 +12,7 @@
 
     if (is.null(img_id)) {
         stop("Please provide an 'img_id' argument.\n",
-             "Gating is only supported on individual samples.")
+                "Gating is only supported on individual samples.")
     }
 
     if (is.null(cell_id)) {
@@ -50,18 +50,18 @@
         }
         if (!identical(channelNames(image), rownames(object))) {
             stop("The 'channelNames' of the images\n",  
-                 "need to match the rownames of the object.")
+                    "need to match the rownames of the object.")
         }
         if (length(image) != length(unique(colData(object)[[img_id]]))) {
             stop("Please provide a unique image/mask\n",
-                 "for every sample stored in 'object'.")
+                    "for every sample stored in 'object'.")
         }
     }
     
     if (!is.null(mask)) {
         if (length(mask) != length(unique(colData(object)[[img_id]]))) {
             stop("Please provide a unique image/mask\n", 
-                 "for every sample stored in 'object'.")
+                    "for every sample stored in 'object'.")
         }
     }
 }
