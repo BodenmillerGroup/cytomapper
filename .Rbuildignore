@@ -5,3 +5,6 @@
 ^docs$
 ^pkgdown$
 ^\.github$
+^inst/extdata/pancreas_images.rds$
+^inst/extdata/pancreas_masks.rds$
+^inst/extdata/pancreas_sce.rds$
