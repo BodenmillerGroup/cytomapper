@@ -77,7 +77,7 @@ test_that("server-utils: auxiliary functions work", {
     expect_equal(.create_colours(10), "#F7CD0F")
     expect_equal(.create_colours(11), "#EBE24A") 
     expect_equal(.create_colours(12), "#B4D55A")
-    expect_equal(.create_colours(13), NA)
+    expect_true(is.na(.create_colours(13)))
     
     # Brush range
     cur_brush <- NULL
