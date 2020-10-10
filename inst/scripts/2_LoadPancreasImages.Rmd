@@ -27,7 +27,7 @@ Here, a subset of 100 images from the pancreas IMC dataset is downloaded.
 
 ```{r load-images}
 # Download the zipped folder image and unzip it
-url.images <- ("https://data.mendeley.com/datasets/cydmwsfztj/2/files/b37054d2-d5d0-4c48-a001-81ff77136f41/ImageSubset.zip?dl=1")
+url.images <- ("https://data.mendeley.com/public-files/datasets/cydmwsfztj/files/b37054d2-d5d0-4c48-a001-81ff77136f41/file_downloaded")
 download.file(url.images, destfile = "ImageSubset.zip")
 unzip("ImageSubset.zip")
 file.remove("ImageSubset.zip")
@@ -41,7 +41,7 @@ images
 
 ```{r load-masks}
 # Download the zipped folder image and unzip it
-url.masks <- ("https://data.mendeley.com/datasets/cydmwsfztj/2/files/13679a61-e9b4-4820-9f09-a5bbc697647c/Masks.zip?dl=1")
+url.masks <- ("https://data.mendeley.com/public-files/datasets/cydmwsfztj/files/13679a61-e9b4-4820-9f09-a5bbc697647c/file_downloaded")
 download.file(url.masks, destfile = "Masks.zip")
 unzip("Masks.zip")
 file.remove("Masks.zip")
@@ -70,12 +70,12 @@ The channel-mass file is used to match panel information and image stack slices.
 
 ```{r load-panel}
 # Import panel
-url.panel <- ("https://data.mendeley.com/datasets/cydmwsfztj/2/files/2f9fecfc-b98f-4937-bc38-ae1b959bd74d/Panel.csv?dl=1")
+url.panel <- ("https://data.mendeley.com/public-files/datasets/cydmwsfztj/files/2f9fecfc-b98f-4937-bc38-ae1b959bd74d/file_downloaded")
 download.file(url.panel, destfile = "panel.csv")
 panel <- read.csv("panel.csv")
 
 # Import channel-mass file
-url.channelmass <- ("https://data.mendeley.com/datasets/cydmwsfztj/2/files/704312eb-377c-42e2-8227-44bb9aca0fb3/ChannelMass.csv?dl=1")
+url.channelmass <- ("https://data.mendeley.com/public-files/datasets/cydmwsfztj/files/704312eb-377c-42e2-8227-44bb9aca0fb3/file_downloaded")
 download.file(url.channelmass, destfile = "ChannelMass.csv")
 channel.mass <- read.csv("ChannelMass.csv", header = FALSE)
 ```
