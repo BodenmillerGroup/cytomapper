@@ -39,7 +39,7 @@ test_that("cytomapperShiny: Standard input testing works", {
                  fixed = TRUE)
     rownames(cur_obj) <- paste0("test", 1:5)
     expect_error(cytomapperShiny(object = cur_obj, image = pancreasImages, img_id = "ImageNb", cell_id = "CellNb"), 
-                 regexp = "The 'channelNames' of the images need to match the rownames of the object.",
+                 regexp = "The 'channelNames' of the images\nneed to match the rownames of the object.",
                  fixed = TRUE)
     cur_images <- pancreasImages
     channelNames(cur_images) <- NULL
@@ -49,7 +49,7 @@ test_that("cytomapperShiny: Standard input testing works", {
     cur_obj <- pancreasSCE
     metadata(cur_obj) <- data.frame()
     expect_warning(cytomapperShiny(object = cur_obj, mask = pancreasMasks, image = pancreasImages, img_id = "ImageNb", cell_id = "CellNb"), 
-                   regexp = "metadata('object') will be stored as 'list' in the metadata slot of the output object.",
+                   regexp = "metadata('object') is not of type 'list'.\nmetadata('object') will be stored as 'list' \nin the metadata slot of the output object.",
                    fixed = TRUE)
     
     cur_images <- pancreasImages
@@ -57,7 +57,7 @@ test_that("cytomapperShiny: Standard input testing works", {
     cur_images[1] <- NULL
     cur_masks[1] <- NULL
     expect_error(cytomapperShiny(object = pancreasSCE, image = cur_images, mask = cur_masks, img_id = "ImageNb", cell_id = "CellNb"), 
-                 regexp = "Please provide a unique image/mask for every sample stored in 'object'.",
+                 regexp = "Please provide a unique image/mask\nfor every sample stored in 'object'.",
                  fixed = TRUE)
     
     # Pass
