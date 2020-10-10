@@ -16,7 +16,8 @@
     # Reactive object list to store selected cells
     objValues <- reactiveValues(object1 = NULL)
     
-    .create_interactive_observer(object, img_id, input, session, rValues, objValues)
+    .create_interactive_observer(object, img_id, input, session, 
+                                 rValues, objValues)
     
     # Create updateSelectizeInput objects
     .create_updateSelectizeInput(object, img_id, input, session)
@@ -33,19 +34,24 @@
     observe({
         
         lapply(seq_len(input$plotCount), function(cur_plot){
-            output[[paste0("scatter", cur_plot)]] <- .createScatter(input, session, rValues, objValues, 
-                                                                 iter = cur_plot, img_id = img_id, cell_id = cell_id)
+            output[[paste0("scatter", cur_plot)]] <- .createScatter(input, 
+                                session, rValues, objValues, 
+                                iter = cur_plot, img_id = img_id, 
+                                cell_id = cell_id)
             
             output[[paste0("info", cur_plot)]] <- renderText({
-                paste0("Selection: ", .brushRange(input[[paste0("plot_brush", cur_plot)]]))
+                paste0("Selection: ", .brushRange(input[[paste0("plot_brush", 
+                                                                cur_plot)]]))
             })
         })
     })
     
     if (!is.null(mask) || !is.null(image)) {
-        output$image_expression <- .createImageExpression(input, object, mask, image, img_id, cell_id, ...)
+        output$image_expression <- .createImageExpression(input, object, 
+                                            mask, image, img_id, cell_id, ...)
         
-        output$image_selection <- .createImageSelection(input, objValues, mask, image, img_id, cell_id, ...)
+        output$image_selection <- .createImageSelection(input, objValues, 
+                                            mask, image, img_id, cell_id, ...)
     }
     
     output$downloadData <- .downloadSelection(input, objValues)

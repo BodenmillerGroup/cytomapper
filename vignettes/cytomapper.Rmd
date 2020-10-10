@@ -901,8 +901,8 @@ If the user provides a `CytoImageList` segmentation mask object, the `plotCells`
 function is called internally to visualize marker expression as well as the
 selected cells on the segmentation mask. Pixel-level information is diplayed if
 the user provides a `CytoImageList` multi-channel image object. In this setting,
-the user also needs to provide a segmentation mask object to outline the selected cells on
-the composite images.
+the user also needs to provide a segmentation mask object to outline the
+selected cells on the composite images.
 
 As a final step, the user can download the selected cells in form of a
 `SingleCellExperiment` object. Furthermore, the user can specify a label for the

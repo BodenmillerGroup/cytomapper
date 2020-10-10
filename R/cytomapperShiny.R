@@ -106,8 +106,9 @@
 #'    data("pancreasMasks")
 #'
 #'    # Use shiny with SCE object, images and masks
-#'    cytomapperShiny(object = pancreasSCE, mask = pancreasMasks, image = pancreasImages,
-#'                    cell_id = "CellNb", img_id = "ImageNb")
+#'    cytomapperShiny(object = pancreasSCE, mask = pancreasMasks, 
+#'                    image = pancreasImages, cell_id = "CellNb", 
+#'                    img_id = "ImageNb")
 #'
 #'    # Use shiny with SCE object and masks
 #'    cytomapperShiny(object = pancreasSCE, mask = pancreasMasks,

@@ -6,7 +6,8 @@
     
     if (!is(metadata(object), "list")) {
         warning("metadata('object') is not of type 'list'.\n",
-        "metadata('object') will be stored as 'list' in the metadata slot of the output object.")
+        "metadata('object') will be stored as 'list' \n", 
+        "in the metadata slot of the output object.")
     }
 
     if (is.null(img_id)) {
@@ -48,16 +49,19 @@
             stop("Please specify the 'channelNames' of the 'image' object.")
         }
         if (!identical(channelNames(image), rownames(object))) {
-            stop("The 'channelNames' of the images need to match the rownames of the object.")
+            stop("The 'channelNames' of the images\n",  
+                 "need to match the rownames of the object.")
         }
         if (length(image) != length(unique(colData(object)[[img_id]]))) {
-            stop("Please provide a unique image/mask for every sample stored in 'object'.")
+            stop("Please provide a unique image/mask\n",
+                 "for every sample stored in 'object'.")
         }
     }
     
     if (!is.null(mask)) {
         if (length(mask) != length(unique(colData(object)[[img_id]]))) {
-            stop("Please provide a unique image/mask for every sample stored in 'object'.")
+            stop("Please provide a unique image/mask\n", 
+                 "for every sample stored in 'object'.")
         }
     }
 }

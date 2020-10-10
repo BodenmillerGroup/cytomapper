@@ -263,7 +263,7 @@ normImages <- function(object, separateChannels = TRUE, separateImages = FALSE,
                 
                 y <- lapply(names(cur_inputRanges), function(i){
                     EBImage::normalize(y[,,i], separate = TRUE,
-                                       ft = ft, inputRange = cur_inputRanges[[i]])
+                                ft = ft, inputRange = cur_inputRanges[[i]])
                 })
                 y <- combine(y)
                 
@@ -373,8 +373,8 @@ normImages <- function(object, separateChannels = TRUE, separateImages = FALSE,
                         } else {
                             y <- lapply(seq_len(nf), function(i){
                                 EBImage::normalize(y[,,i],
-                                            separate = TRUE, ft=ft,
-                                            inputRange = as.numeric(cur_range[,i]))
+                                    separate = TRUE, ft=ft,
+                                    inputRange = as.numeric(cur_range[,i]))
                             })
                             y <- combine(y)
                         }
