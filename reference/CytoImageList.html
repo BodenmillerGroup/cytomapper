@@ -75,7 +75,7 @@ multi-dimensional array in form of an Image object." />
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">cytomapper</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">1.1.4</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">1.1.5</span>
       </span>
     </div>
 
@@ -126,7 +126,7 @@ It inherits from <code>SimpleList</code> setting
 multi-dimensional array in form of an <code>Image</code> object.</p>
     </div>
 
-    <pre class="usage"><span class='fu'>CytoImageList</span>(<span class='kw'>...</span>)</pre>
+    <pre class="usage"><span class='fu'>CytoImageList</span><span class='op'>(</span><span class='va'>...</span><span class='op'>)</span></pre>
 
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
     <table class="ref-arguments">
@@ -199,12 +199,12 @@ accessor functions</p></div>
 
     <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
     <pre class="examples"><div class='input'><span class='co'># Creation of CytoImageList</span>
-<span class='kw'>u</span> <span class='op'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/base/matrix.html'>matrix</a></span>(<span class='fu'><a href='https://rdrr.io/r/stats/Binomial.html'>rbinom</a></span>(<span class='fl'>100</span>, <span class='fl'>10</span>, <span class='fl'>0.5</span>), ncol=<span class='fl'>10</span>, nrow=<span class='fl'>10</span>)
-<span class='kw'>v</span> <span class='op'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/base/matrix.html'>matrix</a></span>(<span class='fu'><a href='https://rdrr.io/r/stats/Binomial.html'>rbinom</a></span>(<span class='fl'>100</span>, <span class='fl'>10</span>, <span class='fl'>0.5</span>), ncol=<span class='fl'>10</span>, nrow=<span class='fl'>10</span>)
-<span class='kw'>IL1</span> <span class='op'>&lt;-</span> <span class='fu'>CytoImageList</span>(image1 = <span class='fu'>Image</span>(<span class='kw'>u</span>), image2 = <span class='fu'>Image</span>(<span class='kw'>v</span>))
+<span class='va'>u</span> <span class='op'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/base/matrix.html'>matrix</a></span><span class='op'>(</span><span class='fu'><a href='https://rdrr.io/r/stats/Binomial.html'>rbinom</a></span><span class='op'>(</span><span class='fl'>100</span>, <span class='fl'>10</span>, <span class='fl'>0.5</span><span class='op'>)</span>, ncol<span class='op'>=</span><span class='fl'>10</span>, nrow<span class='op'>=</span><span class='fl'>10</span><span class='op'>)</span>
+<span class='va'>v</span> <span class='op'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/base/matrix.html'>matrix</a></span><span class='op'>(</span><span class='fu'><a href='https://rdrr.io/r/stats/Binomial.html'>rbinom</a></span><span class='op'>(</span><span class='fl'>100</span>, <span class='fl'>10</span>, <span class='fl'>0.5</span><span class='op'>)</span>, ncol<span class='op'>=</span><span class='fl'>10</span>, nrow<span class='op'>=</span><span class='fl'>10</span><span class='op'>)</span>
+<span class='va'>IL1</span> <span class='op'>&lt;-</span> <span class='fu'>CytoImageList</span><span class='op'>(</span>image1 <span class='op'>=</span> <span class='fu'>Image</span><span class='op'>(</span><span class='va'>u</span><span class='op'>)</span>, image2 <span class='op'>=</span> <span class='fu'>Image</span><span class='op'>(</span><span class='va'>v</span><span class='op'>)</span><span class='op'>)</span>
 
 <span class='co'># Coercion</span>
-<span class='fu'><a href='https://rdrr.io/r/base/list.html'>as.list</a></span>(<span class='kw'>IL1</span>)
+<span class='fu'><a href='https://rdrr.io/r/base/list.html'>as.list</a></span><span class='op'>(</span><span class='va'>IL1</span><span class='op'>)</span>
 </div><div class='output co'>#&gt; $image1
 #&gt; Image 
 #&gt;   colorMode    : Grayscale 
@@ -236,9 +236,9 @@ accessor functions</p></div>
 #&gt; [3,]    5    2    4    7    5    6
 #&gt; [4,]    4    7    7    7    4    4
 #&gt; [5,]    5    9    7    5    7    5
-#&gt; </div><div class='input'><span class='fu'>as</span>(<span class='kw'>IL1</span>, <span class='st'>"SimpleList"</span>)
+#&gt; </div><div class='input'><span class='fu'>as</span><span class='op'>(</span><span class='va'>IL1</span>, <span class='st'>"SimpleList"</span><span class='op'>)</span>
 </div><div class='output co'>#&gt; List of length 2
-#&gt; names(2): image1 image2</div><div class='input'><span class='fu'>as</span>(<span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span>(image1 = <span class='fu'>Image</span>(<span class='kw'>u</span>), image2 = <span class='fu'>Image</span>(<span class='kw'>v</span>)), <span class='st'>"CytoImageList"</span>)
+#&gt; names(2): image1 image2</div><div class='input'><span class='fu'>as</span><span class='op'>(</span><span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span><span class='op'>(</span>image1 <span class='op'>=</span> <span class='fu'>Image</span><span class='op'>(</span><span class='va'>u</span><span class='op'>)</span>, image2 <span class='op'>=</span> <span class='fu'>Image</span><span class='op'>(</span><span class='va'>v</span><span class='op'>)</span><span class='op'>)</span>, <span class='st'>"CytoImageList"</span><span class='op'>)</span>
 </div><div class='output co'>#&gt; CytoImageList containing 2 image(s)
 #&gt; names(2): image1 image2 
 #&gt; Each image contains 1 channel</div><div class='input'>

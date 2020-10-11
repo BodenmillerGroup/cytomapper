@@ -73,7 +73,7 @@ entries in a CytoImageList object." />
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">cytomapper</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">1.1.4</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">1.1.5</span>
       </span>
     </div>
 
@@ -230,64 +230,64 @@ Only channels of two CytoImageList objects can be merged in that way.</p></dd>
     <p>Nils Eling (<a href='mailto:nils.eling@dqbm.uzh.ch'>nils.eling@dqbm.uzh.ch</a>)</p>
 
     <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
-    <pre class="examples"><div class='input'><span class='fu'><a href='https://rdrr.io/r/utils/data.html'>data</a></span>(<span class='st'>"pancreasImages"</span>)
+    <pre class="examples"><div class='input'><span class='fu'><a href='https://rdrr.io/r/utils/data.html'>data</a></span><span class='op'>(</span><span class='st'>"pancreasImages"</span><span class='op'>)</span>
 
 <span class='co'># Get images</span>
-<span class='fu'>getImages</span>(<span class='kw'>pancreasImages</span>, <span class='fl'>1</span>)
+<span class='fu'>getImages</span><span class='op'>(</span><span class='va'>pancreasImages</span>, <span class='fl'>1</span><span class='op'>)</span>
 </div><div class='output co'>#&gt; CytoImageList containing 1 image(s)
 #&gt; names(1): E34_imc 
 #&gt; Each image contains 5 channel(s)
-#&gt; channelNames(5): H3 CD99 PIN CD8a CDH </div><div class='input'><span class='fu'>getImages</span>(<span class='kw'>pancreasImages</span>, <span class='st'>"E34_imc"</span>)
+#&gt; channelNames(5): H3 CD99 PIN CD8a CDH </div><div class='input'><span class='fu'>getImages</span><span class='op'>(</span><span class='va'>pancreasImages</span>, <span class='st'>"E34_imc"</span><span class='op'>)</span>
 </div><div class='output co'>#&gt; CytoImageList containing 1 image(s)
 #&gt; names(1): E34_imc 
 #&gt; Each image contains 5 channel(s)
-#&gt; channelNames(5): H3 CD99 PIN CD8a CDH </div><div class='input'><span class='fu'>getImages</span>(<span class='kw'>pancreasImages</span>, <span class='fl'>1</span><span class='op'>:</span><span class='fl'>2</span>)
+#&gt; channelNames(5): H3 CD99 PIN CD8a CDH </div><div class='input'><span class='fu'>getImages</span><span class='op'>(</span><span class='va'>pancreasImages</span>, <span class='fl'>1</span><span class='op'>:</span><span class='fl'>2</span><span class='op'>)</span>
 </div><div class='output co'>#&gt; CytoImageList containing 2 image(s)
 #&gt; names(2): E34_imc G01_imc 
 #&gt; Each image contains 5 channel(s)
-#&gt; channelNames(5): H3 CD99 PIN CD8a CDH </div><div class='input'><span class='fu'>getImages</span>(<span class='kw'>pancreasImages</span>, <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span>(<span class='st'>"E34_imc"</span>, <span class='st'>"G01_imc"</span>))
+#&gt; channelNames(5): H3 CD99 PIN CD8a CDH </div><div class='input'><span class='fu'>getImages</span><span class='op'>(</span><span class='va'>pancreasImages</span>, <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='st'>"E34_imc"</span>, <span class='st'>"G01_imc"</span><span class='op'>)</span><span class='op'>)</span>
 </div><div class='output co'>#&gt; CytoImageList containing 2 image(s)
 #&gt; names(2): E34_imc G01_imc 
 #&gt; Each image contains 5 channel(s)
-#&gt; channelNames(5): H3 CD99 PIN CD8a CDH </div><div class='input'><span class='fu'>getImages</span>(<span class='kw'>pancreasImages</span>, <span class='fu'><a href='https://rdrr.io/r/base/grep.html'>grepl</a></span>(<span class='st'>"E34_imc"</span>, <span class='fu'><a href='https://rdrr.io/r/base/names.html'>names</a></span>(<span class='kw'>pancreasImages</span>)))
+#&gt; channelNames(5): H3 CD99 PIN CD8a CDH </div><div class='input'><span class='fu'>getImages</span><span class='op'>(</span><span class='va'>pancreasImages</span>, <span class='fu'><a href='https://rdrr.io/r/base/grep.html'>grepl</a></span><span class='op'>(</span><span class='st'>"E34_imc"</span>, <span class='fu'><a href='https://rdrr.io/r/base/names.html'>names</a></span><span class='op'>(</span><span class='va'>pancreasImages</span><span class='op'>)</span><span class='op'>)</span><span class='op'>)</span>
 </div><div class='output co'>#&gt; CytoImageList containing 1 image(s)
 #&gt; names(1): E34_imc 
 #&gt; Each image contains 5 channel(s)
 #&gt; channelNames(5): H3 CD99 PIN CD8a CDH </div><div class='input'>
 <span class='co'># Set images</span>
-<span class='fu'>setImages</span>(<span class='kw'>pancreasImages</span>, <span class='fl'>1</span>) <span class='op'>&lt;-</span> <span class='kw'>pancreasImages</span>[<span class='fl'>1</span>]
-<span class='fu'>setImages</span>(<span class='kw'>pancreasImages</span>, <span class='st'>"J02_imc"</span>) <span class='op'>&lt;-</span> <span class='kw'>pancreasImages</span>[<span class='fl'>1</span>]
-<span class='fu'>setImages</span>(<span class='kw'>pancreasImages</span>, <span class='st'>"J02_imc"</span>) <span class='op'>&lt;-</span> <span class='kw'>NULL</span>
+<span class='fu'>setImages</span><span class='op'>(</span><span class='va'>pancreasImages</span>, <span class='fl'>1</span><span class='op'>)</span> <span class='op'>&lt;-</span> <span class='va'>pancreasImages</span><span class='op'>[</span><span class='fl'>1</span><span class='op'>]</span>
+<span class='fu'>setImages</span><span class='op'>(</span><span class='va'>pancreasImages</span>, <span class='st'>"J02_imc"</span><span class='op'>)</span> <span class='op'>&lt;-</span> <span class='va'>pancreasImages</span><span class='op'>[</span><span class='fl'>1</span><span class='op'>]</span>
+<span class='fu'>setImages</span><span class='op'>(</span><span class='va'>pancreasImages</span>, <span class='st'>"J02_imc"</span><span class='op'>)</span> <span class='op'>&lt;-</span> <span class='cn'>NULL</span>
 
 <span class='co'># Get channels</span>
-<span class='fu'>getChannels</span>(<span class='kw'>pancreasImages</span>, <span class='fl'>1</span>)
+<span class='fu'>getChannels</span><span class='op'>(</span><span class='va'>pancreasImages</span>, <span class='fl'>1</span><span class='op'>)</span>
 </div><div class='output co'>#&gt; CytoImageList containing 2 image(s)
 #&gt; names(2): E34_imc G01_imc 
 #&gt; Each image contains 1 channel(s)
-#&gt; channelNames(1): H3 </div><div class='input'><span class='fu'>getChannels</span>(<span class='kw'>pancreasImages</span>, <span class='st'>"CD99"</span>)
+#&gt; channelNames(1): H3 </div><div class='input'><span class='fu'>getChannels</span><span class='op'>(</span><span class='va'>pancreasImages</span>, <span class='st'>"CD99"</span><span class='op'>)</span>
 </div><div class='output co'>#&gt; CytoImageList containing 2 image(s)
 #&gt; names(2): E34_imc G01_imc 
 #&gt; Each image contains 1 channel(s)
-#&gt; channelNames(1): CD99 </div><div class='input'><span class='fu'>getChannels</span>(<span class='kw'>pancreasImages</span>, <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span>(<span class='st'>"CD99"</span>, <span class='st'>"PIN"</span>))
+#&gt; channelNames(1): CD99 </div><div class='input'><span class='fu'>getChannels</span><span class='op'>(</span><span class='va'>pancreasImages</span>, <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='st'>"CD99"</span>, <span class='st'>"PIN"</span><span class='op'>)</span><span class='op'>)</span>
 </div><div class='output co'>#&gt; CytoImageList containing 2 image(s)
 #&gt; names(2): E34_imc G01_imc 
 #&gt; Each image contains 2 channel(s)
 #&gt; channelNames(2): CD99 PIN </div><div class='input'>
 <span class='co'># Set channels</span>
-<span class='kw'>channel1</span> <span class='op'>&lt;-</span> <span class='fu'>getChannels</span>(<span class='kw'>pancreasImages</span>, <span class='fl'>1</span>)
-<span class='fu'>setChannels</span>(<span class='kw'>pancreasImages</span>, <span class='fl'>1</span>) <span class='op'>&lt;-</span> <span class='kw'>channel1</span>
-<span class='kw'>channelPIN</span> <span class='op'>&lt;-</span> <span class='fu'>getChannels</span>(<span class='kw'>pancreasImages</span>, <span class='st'>"PIN"</span>)
-<span class='fu'>setChannels</span>(<span class='kw'>pancreasImages</span>, <span class='st'>"CD8a"</span>) <span class='op'>&lt;-</span> <span class='kw'>channelPIN</span>
-<span class='fu'>setChannels</span>(<span class='kw'>pancreasImages</span>, <span class='st'>"CD8a"</span>) <span class='op'>&lt;-</span> <span class='kw'>NULL</span>
+<span class='va'>channel1</span> <span class='op'>&lt;-</span> <span class='fu'>getChannels</span><span class='op'>(</span><span class='va'>pancreasImages</span>, <span class='fl'>1</span><span class='op'>)</span>
+<span class='fu'>setChannels</span><span class='op'>(</span><span class='va'>pancreasImages</span>, <span class='fl'>1</span><span class='op'>)</span> <span class='op'>&lt;-</span> <span class='va'>channel1</span>
+<span class='va'>channelPIN</span> <span class='op'>&lt;-</span> <span class='fu'>getChannels</span><span class='op'>(</span><span class='va'>pancreasImages</span>, <span class='st'>"PIN"</span><span class='op'>)</span>
+<span class='fu'>setChannels</span><span class='op'>(</span><span class='va'>pancreasImages</span>, <span class='st'>"CD8a"</span><span class='op'>)</span> <span class='op'>&lt;-</span> <span class='va'>channelPIN</span>
+<span class='fu'>setChannels</span><span class='op'>(</span><span class='va'>pancreasImages</span>, <span class='st'>"CD8a"</span><span class='op'>)</span> <span class='op'>&lt;-</span> <span class='cn'>NULL</span>
 
 <span class='co'># Merge images</span>
-<span class='fu'><a href='https://rdrr.io/r/utils/data.html'>data</a></span>(<span class='st'>"pancreasImages"</span>)
-<span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span>(<span class='kw'>pancreasImages</span>[<span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span>(<span class='fl'>1</span>,<span class='fl'>3</span>)], <span class='kw'>pancreasImages</span>[<span class='fl'>2</span>])
+<span class='fu'><a href='https://rdrr.io/r/utils/data.html'>data</a></span><span class='op'>(</span><span class='st'>"pancreasImages"</span><span class='op'>)</span>
+<span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='va'>pancreasImages</span><span class='op'>[</span><span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='fl'>1</span>,<span class='fl'>3</span><span class='op'>)</span><span class='op'>]</span>, <span class='va'>pancreasImages</span><span class='op'>[</span><span class='fl'>2</span><span class='op'>]</span><span class='op'>)</span>
 </div><div class='output co'>#&gt; <span class='error'>Error: subscript contains out-of-bounds indices</span></div><div class='input'>
 <span class='co'># Merge channels</span>
-<span class='kw'>channel12</span> <span class='op'>&lt;-</span> <span class='fu'>getChannels</span>(<span class='kw'>pancreasImages</span>, <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span>(<span class='fl'>1</span>,<span class='fl'>2</span>))
-<span class='kw'>channel34</span> <span class='op'>&lt;-</span> <span class='fu'>getChannels</span>(<span class='kw'>pancreasImages</span>, <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span>(<span class='fl'>3</span>,<span class='fl'>4</span>))
-<span class='fu'>mergeChannels</span>(<span class='kw'>channel12</span>, <span class='kw'>channel34</span>)
+<span class='va'>channel12</span> <span class='op'>&lt;-</span> <span class='fu'>getChannels</span><span class='op'>(</span><span class='va'>pancreasImages</span>, <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='fl'>1</span>,<span class='fl'>2</span><span class='op'>)</span><span class='op'>)</span>
+<span class='va'>channel34</span> <span class='op'>&lt;-</span> <span class='fu'>getChannels</span><span class='op'>(</span><span class='va'>pancreasImages</span>, <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='fl'>3</span>,<span class='fl'>4</span><span class='op'>)</span><span class='op'>)</span>
+<span class='fu'>mergeChannels</span><span class='op'>(</span><span class='va'>channel12</span>, <span class='va'>channel34</span><span class='op'>)</span>
 </div><div class='output co'>#&gt; CytoImageList containing 2 image(s)
 #&gt; names(2): E34_imc G01_imc 
 #&gt; Each image contains 4 channel(s)
