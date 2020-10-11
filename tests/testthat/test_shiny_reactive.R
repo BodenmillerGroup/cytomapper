@@ -65,8 +65,19 @@ test_that("Gates can be set", {
                                                            exprs_marker_2 = NULL,
                                                            plot_brush1 = cur_gate_1)
                                          
+                                         rValues <- reactiveValues(ranges = NULL)
+                                         objValues <- reactiveValues(object1 = pancreasSCE[,pancreasSCE$ImageNb == 1])
+                                         
                                          expect_equal(output$info1, "Selection: xmin = 0.5 xmax = 1.5 ymin = 12 ymax = 34")
+                                         
+                                         .brushObject(input, session, objValues, iter = 1)
+                                        
+                                         
+                                         
+                                         
                                      })
 }
 )
+
+
 
