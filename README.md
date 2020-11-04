@@ -4,11 +4,18 @@
 
 <!-- badges: start -->
 [![codecov](https://codecov.io/gh/BodenmillerGroup/cytomapper/branch/master/graph/badge.svg)](https://codecov.io/gh/BodenmillerGroup/cytomapper)
-[![build-check](https://github.com/BodenmillerGroup/cytomapper/workflows/build-checks/badge.svg)](https://github.com/BodenmillerGroup/cytomapper/actions?query=workflow%3Abuild-checks)
 [![docs](https://github.com/BodenmillerGroup/cytomapper/workflows/docs/badge.svg?branch=master)](https://github.com/BodenmillerGroup/cytomapper/actions?query=workflow%3Adocs)
 <!-- badges: end -->
 
 R package to spatially visualize pixel- and cell-level information obtained from highly multiplexed imaging.
+
+## Check status
+
+| Bioc branch | Checks |
+|:-----------:|:------:|
+| Release     |[![build-check](https://github.com/BodenmillerGroup/cytomapper/workflows/build-checks/badge.svg)](https://github.com/BodenmillerGroup/cytomapper/actions?query=workflow%3Abuild-checks)|
+| Devel       |        |
+
 
 ## Introduction
 

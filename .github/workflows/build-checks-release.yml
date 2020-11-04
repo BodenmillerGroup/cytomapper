@@ -1,4 +1,4 @@
-name: build-checks
+name: build-checks-release
 
 on:
   push:
@@ -31,7 +31,6 @@ jobs:
       - name: Install dependencies
         run: |
          install.packages("BiocManager")
-         BiocManager::install(version = "devel", update = TRUE, ask = FALSE) 
          remotes::install_deps(dependencies = TRUE, repos = BiocManager::repositories(), Ncpu = 2L)
         shell: Rscript {0}
         
