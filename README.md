@@ -13,8 +13,8 @@ R package to spatially visualize pixel- and cell-level information obtained from
 
 | Bioc branch | Checks |
 |:-----------:|:------:|
-| Release     |[![build-check](https://github.com/BodenmillerGroup/cytomapper/workflows/build-checks/badge.svg)](https://github.com/BodenmillerGroup/cytomapper/actions?query=workflow%3Abuild-checks)|
-| Devel       |        |
+| Release     |[![build-check-release](https://github.com/BodenmillerGroup/cytomapper/workflows/build-checks-release/badge.svg)](https://github.com/BodenmillerGroup/cytomapper/actions?query=workflow%3Abuild-checks-release)|
+| Devel       |[![build-check-devel](https://github.com/BodenmillerGroup/cytomapper/workflows/build-checks-devel/badge.svg)](https://github.com/BodenmillerGroup/cytomapper/actions?query=workflow%3Abuild-checks-devel)|
 
 
 ## Introduction
