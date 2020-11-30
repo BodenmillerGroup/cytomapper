@@ -82,17 +82,27 @@
 #' @importFrom S4Vectors new2
 #'
 #' @export
-CytoImageList <- function(...){
+CytoImageList <- function(..., on_disk = FALSE){
     args <- list(...)
+    
     if (length(args) == 1L &&
         methods::extends(class(args[[1L]]), "list")){
         args <- args[[1]]
     }
+    
     if (length(args) == 1L &&
         methods::extends(class(args[[1L]]), "SimpleList")){
         args <- as.list(args[[1]])
     }
-    x <- S4Vectors::new2("CytoImageList", listData=args)
+    
+    x <- S4Vectors::new2("CytoImageList", listData = args)
+    
+    if (on_disk) {
+        x <- lapply(x, function(y){
+            as(imageData(x), "HDF5Array")
+        })
+    }
+    
     return(x)
 }
 

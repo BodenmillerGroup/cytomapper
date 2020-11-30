@@ -9,7 +9,7 @@
 \alias{show,CytoImageList-method}
 \title{S4 class for list of images}
 \usage{
-CytoImageList(...)
+CytoImageList(..., on_disk = FALSE)
 }
 \arguments{
 \item{...}{A list of images (or coercible to a list) or individual images}

@@ -61,14 +61,22 @@
 #' @author Nicolas Damond (\email{nicolas.damond@@dqbm.uzh.ch})
 #'
 #' @export
-loadImages <- function(x, pattern = NULL, ...) {
+loadImages <- function(x, pattern = NULL, on_disk = FALSE, ...) {
 
     # Validity checks
     x <- .valid.loadImage.input(x, pattern)
 
     # Read in images
-    cur_list <- lapply(x, function(y){EBImage::readImage(y, ...,
-                                        names = NULL)})
+    cur_list <- lapply(x, function(y){
+            cur_img <- EBImage::readImage(y, ..., names = NULL)
+        
+            if (on_disk) {
+                as(imageData(cur_img), "HDF5Array")
+            } else {
+                cur_img
+            }
+        })
+    
     out <- CytoImageList(cur_list)
     names(out) <- sub("\\.[^.]*$", "", basename(x))
 

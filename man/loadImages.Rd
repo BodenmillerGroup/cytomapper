@@ -4,7 +4,7 @@
 \alias{loadImages}
 \title{Read images into CytoImageList object}
 \usage{
-loadImages(x, pattern = NULL, ...)
+loadImages(x, pattern = NULL, on_disk = FALSE, ...)
 }
 \arguments{
 \item{x}{The function takes a variety of possible character inputs:
