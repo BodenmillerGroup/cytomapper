@@ -789,6 +789,11 @@ By default, colours are interpolated between pixels (see `?rasterImage` for
 details). To suppress this default behaviour, the user can set `interpolate =
 FALSE`.
 
+## Thick borders
+
+By setting `thick = TRUE`, the thickness of the outline border is increased.
+This setting can be useful to enhance the cell borders on large images.
+
 ```{r customization, fig.cap = "Plot customization example."}
 plotCells(pancreasMasks, object = pancreasSCE,
             img_id = "ImageNb", cell_id = "CellNb",
@@ -815,7 +820,8 @@ plotCells(pancreasMasks, object = pancreasSCE,
                             colour_by.labels.cex = 0.7,
                             outline_by.legend.cex = 0.3,
                             margin = 10),
-            margin = 2)
+            margin = 2,
+            thick = TRUE)
 ```
 
 # Returning plots and images

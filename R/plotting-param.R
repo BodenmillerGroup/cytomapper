@@ -100,6 +100,8 @@
 #' Plotting of the legend is suppressed if set to \code{NULL}.
 #' @param margin numeric value indicating the gap (in pixels) between 
 #' individual images (default 0).
+#' @param thick logical indicating whether cell borders should be drawn as
+#' thick lines (default \code{FALSE}).
 #' @param display one of two possible values: "all" or "single". When set to
 #' "all", all images are displayed at once in a grid-like fashion. When
 #' set to "single", individual images are plotted in single graphics devices.
@@ -175,6 +177,13 @@
 #'
 #' # Setting the margin between images
 #' plotPixels(pancreasImages, margin = 3)
+#' 
+#' # Thick outlines
+#' plotCells(pancreasMasks, object = pancreasSCE,
+#'             img_id = "ImageNb", cell_id = "CellNb",
+#'             colour_by = "CD99",
+#'             outline_by = "CellType",
+#'             thick = TRUE)
 #'
 #' # Displaying individual images
 #' plotPixels(pancreasImages, display = "single")
@@ -203,7 +212,7 @@ NULL
     supported <- c("scale_bar", "image_title", "missing_colour",
                     "background_colour", "save_plot", "return_plot",
                     "return_images", "legend", "margin", "display",
-                    "scale", "interpolate")
+                    "scale", "interpolate", "thick")
     not_supported <- cur_entries[!(cur_entries %in% supported)]
     if(length(not_supported) > 0L){
         stop("Entries ", paste0("'", not_supported, "'",
@@ -314,7 +323,7 @@ NULL
         dotArgs$scale <- dotArgs$scale
     }
 
-    # scale
+    # interpolate
     if(!("interpolate" %in% names(dotArgs))){
         dotArgs$interpolate <- TRUE
     } else {
@@ -327,9 +336,20 @@ NULL
     # missing_colour
     cur_missing <- dotArgs$missing_colour
     dotArgs$missing_colour <- .valid.missingcolour(cur_missing)
-    # missing_colour
+    
+    # background_colour
     cur_background <- dotArgs$background_colour
     dotArgs$background_colour <- .valid.backgroundcolour(cur_background)
+    
+    # thick
+    if(!("thick" %in% names(dotArgs))){
+        dotArgs$thick <- FALSE
+    } else {
+        if(!is.logical(dotArgs$thick)){
+            stop("Invalid 'thick' entry.")
+        }
+        dotArgs$thick <- dotArgs$thick
+    }
 
     return(dotArgs)
 }

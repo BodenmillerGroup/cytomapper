@@ -5,15 +5,15 @@
 \title{Function to visualize cell-level information on segmentation masks}
 \usage{
 plotCells(
-    mask,
-    object = NULL,
-    cell_id = NULL,
-    img_id = NULL,
-    colour_by = NULL,
-    outline_by = NULL,
-    exprs_values = "counts",
-    colour = NULL,
-    ...
+  mask,
+  object = NULL,
+  cell_id = NULL,
+  img_id = NULL,
+  colour_by = NULL,
+  outline_by = NULL,
+  exprs_values = "counts",
+  colour = NULL,
+  ...
 )
 }
 \arguments{

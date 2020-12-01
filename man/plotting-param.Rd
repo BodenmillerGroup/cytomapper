@@ -107,6 +107,9 @@ Plotting of the legend is suppressed if set to \code{NULL}.}
 \item{margin}{numeric value indicating the gap (in pixels) between 
 individual images (default 0).}
 
+\item{thick}{logical indicating whether cell borders should be drawn as
+thick lines (default \code{FALSE}).}
+
 \item{display}{one of two possible values: "all" or "single". When set to
 "all", all images are displayed at once in a grid-like fashion. When
 set to "single", individual images are plotted in single graphics devices.
@@ -187,6 +190,13 @@ plotCells(pancreasMasks, object = pancreasSCE,
 
 # Setting the margin between images
 plotPixels(pancreasImages, margin = 3)
+
+# Thick outlines
+plotCells(pancreasMasks, object = pancreasSCE,
+            img_id = "ImageNb", cell_id = "CellNb",
+            colour_by = "CD99",
+            outline_by = "CellType",
+            thick = TRUE)
 
 # Displaying individual images
 plotPixels(pancreasImages, display = "single")

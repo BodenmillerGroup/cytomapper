@@ -5,16 +5,16 @@
 \title{Function to visualize pixel-level information of multi-channel images}
 \usage{
 plotPixels(
-    image,
-    object = NULL,
-    mask = NULL,
-    cell_id = NULL,
-    img_id = NULL,
-    colour_by = NULL,
-    outline_by = NULL,
-    bcg = NULL,
-    colour = NULL,
-    ...
+  image,
+  object = NULL,
+  mask = NULL,
+  cell_id = NULL,
+  img_id = NULL,
+  colour_by = NULL,
+  outline_by = NULL,
+  bcg = NULL,
+  colour = NULL,
+  ...
 )
 }
 \arguments{

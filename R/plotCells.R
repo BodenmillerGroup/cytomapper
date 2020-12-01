@@ -219,7 +219,8 @@ plotCells <- function(
         cur_col$outline_by <- .selectColours(object, outline_by, colour,
                                         call.arg = "outline_by")
         out_img <- .outlineImageByMeta(object, mask, out_img, cell_id, img_id,
-                                        outline_by, cur_col$outline_by[[1]])
+                                        outline_by, cur_col$outline_by[[1]], 
+                                        plottingParam$thick)
         cur_limits$outline_by <- out_img$cur_limit
         out_img <- out_img$imgs
     }

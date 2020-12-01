@@ -271,7 +271,7 @@
 #' @importFrom EBImage paintObjects
 #' @importFrom S4Vectors mcols
 .outlineImageByMeta <- function(object, mask, out_img, cell_id, img_id,
-                                outline_by, cur_colour){
+                                outline_by, cur_colour, thick){
 
     for(i in seq_along(mask)){
         cur_mask <- mask[[i]]
@@ -293,7 +293,8 @@
                 cur_cell_id <- colData(cur_sce)[j,cell_id]
                 meta_mask[meta_mask != cur_cell_id] <- 0L
                 cur_img <- paintObjects(meta_mask, Image(cur_img),
-                                col = col_ind[round(100*cur_scaling[j]) + 1])
+                                col = col_ind[round(100*cur_scaling[j]) + 1],
+                                thick = thick)
             }
         } else {
             cur_vec <- as.character(colData(cur_sce)[,outline_by])
@@ -303,7 +304,8 @@
                 cur_cell_id <- colData(cur_sce)[ind, cell_id]
                 meta_mask[!(meta_mask %in% cur_cell_id)] <- 0L
                 cur_img <- paintObjects(meta_mask, Image(cur_img),
-                                        col = cur_colour[j])
+                                        col = cur_colour[j],
+                                        thick = thick)
             }
             cur_limit <- NULL
         }

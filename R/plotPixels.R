@@ -226,13 +226,15 @@ plotPixels <- function(
     if (!is.null(outline_by)) {
         cur_col$outline_by <- .selectColours(object, outline_by, colour)
         out_img <- .outlineImageByMeta(object, mask, out_img, cell_id, img_id,
-                                    outline_by, cur_col$outline_by[[1]])
+                                    outline_by, cur_col$outline_by[[1]], 
+                                    plottingParam$thick)
         cur_limits$outline_by <- out_img$cur_limit
         out_img <- out_img$imgs
     } else if (!is.null(mask)) {
         out_img <- mendoapply(function(cur_image, cur_mask){
             cur_img <- paintObjects(cur_mask, Image(cur_image),
-                                col = plottingParam$missing_colour)
+                                col = plottingParam$missing_colour,
+                                thick = plottingParam$thick)
             return(cur_img)
         }, out_img, mask)
         out_img <- as(out_img, "SimpleList")

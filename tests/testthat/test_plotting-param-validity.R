@@ -399,7 +399,8 @@ test_that("all parameters are correctly set.", {
                                scale = TRUE,
                                interpolate = TRUE,
                                missing_colour = "gray",
-                               background_colour = "#000000"))
+                               background_colour = "#000000",
+                               thick = FALSE))
 })
 
 

@@ -5,12 +5,12 @@
 \title{Shiny application to visualise gated cells on images}
 \usage{
 cytomapperShiny(
-    object,
-    mask = NULL,
-    image = NULL,
-    cell_id = NULL,
-    img_id = NULL,
-    ...
+  object,
+  mask = NULL,
+  image = NULL,
+  cell_id = NULL,
+  img_id = NULL,
+  ...
 )
 }
 \arguments{
@@ -128,23 +128,23 @@ workflow on how to use the app.
 \examples{
 ## Only run this example in interactive R sessions
 if (interactive()) {
-    # Load example data sets
-    data("pancreasSCE")
-    data("pancreasImages")
-    data("pancreasMasks")
+   # Load example data sets
+   data("pancreasSCE")
+   data("pancreasImages")
+   data("pancreasMasks")
 
-    # Use shiny with SCE object, images and masks
-    cytomapperShiny(object = pancreasSCE, mask = pancreasMasks, 
-                    image = pancreasImages, cell_id = "CellNb", 
-                    img_id = "ImageNb")
+   # Use shiny with SCE object, images and masks
+   cytomapperShiny(object = pancreasSCE, mask = pancreasMasks, 
+                 image = pancreasImages, cell_id = "CellNb", 
+                 img_id = "ImageNb")
 
-    # Use shiny with SCE object and masks
-    cytomapperShiny(object = pancreasSCE, mask = pancreasMasks,
-                    cell_id = "CellNb", img_id = "ImageNb")
+   # Use shiny with SCE object and masks
+   cytomapperShiny(object = pancreasSCE, mask = pancreasMasks,
+                 cell_id = "CellNb", img_id = "ImageNb")
 
-    # Use shiny with SCE object only
-    cytomapperShiny(object = pancreasSCE,
-                    cell_id = "CellNb", img_id = "ImageNb")
+   # Use shiny with SCE object only
+   cytomapperShiny(object = pancreasSCE,
+                 cell_id = "CellNb", img_id = "ImageNb")
 }
 
 }
