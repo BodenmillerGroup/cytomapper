@@ -853,3 +853,62 @@ test_that("plotting-param: images can be interpolated", {
                fixed = TRUE)
 })
 
+test_that("plotting-param: border thickness can be adjusted", {
+    data("pancreasImages")
+    data("pancreasMasks")
+    data("pancreasSCE")
+    
+    # Works
+    expect_silent(plotCells(object = pancreasSCE,
+                            mask = pancreasMasks, img_id = "ImageNb",
+                            cell_id = "CellNb",
+                            outline_by = "CellType",
+                            thick = TRUE))
+    expect_silent(plotCells(object = pancreasSCE,
+                            mask = pancreasMasks, img_id = "ImageNb",
+                            cell_id = "CellNb", colour_by = "CD99",
+                            outline_by = "CellType",
+                            thick = TRUE))
+    expect_silent(plotCells(object = pancreasSCE,
+                            mask = pancreasMasks, img_id = "ImageNb",
+                            cell_id = "CellNb", colour_by = "CD99",
+                            outline_by = "Area", 
+                            thick = TRUE))
+    expect_silent(plotPixels(object = pancreasSCE,
+                             mask = pancreasMasks,
+                             image = pancreasImages,
+                             img_id = "ImageNb",
+                             cell_id = "CellNb",
+                             outline_by = "CellType",
+                             thick = TRUE))
+    expect_silent(plotPixels(object = pancreasSCE,
+                             mask = pancreasMasks,
+                             image = pancreasImages,
+                             img_id = "ImageNb",
+                             cell_id = "CellNb", colour_by = "CD99",
+                             outline_by = "CellType",
+                             thick = TRUE))
+    expect_silent(plotPixels(object = pancreasSCE,
+                             mask = pancreasMasks,
+                             image = pancreasImages,
+                             img_id = "ImageNb",
+                             cell_id = "CellNb", colour_by = "CD99",
+                             outline_by = "Area",
+                             thick = TRUE))
+    expect_silent(plotPixels(object = pancreasSCE,
+                             mask = pancreasMasks,
+                             image = pancreasImages,
+                             img_id = "ImageNb",
+                             cell_id = "CellNb", colour_by = "CD99",
+                             thick = TRUE))
+    
+    # Error
+    expect_error(plotCells(object = pancreasSCE,
+                           mask = pancreasMasks, img_id = "ImageNb",
+                           cell_id = "CellNb",
+                           outline_by = "CellType",
+                           thick = "test"),
+                 regexp = "Invalid 'thick' entry.",
+                 fixed = TRUE)
+})
+

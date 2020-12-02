@@ -602,7 +602,8 @@ test_that("images can be outlined by metadata.", {
     expect_silent(cur_out <- .outlineImageByMeta(object = pancreasSCE, mask = pancreasMasks,
                                                  out_img = out_img, cell_id = "CellNb", img_id = "ImageNb",
                                                  outline_by = "CellType",
-                                                 cur_colour = cur_col))
+                                                 cur_colour = cur_col,
+                                                 thick = FALSE))
     
     expect_true(is.list(cur_out))
     expect_true(is.null(cur_out$cur_limit))
@@ -657,7 +658,8 @@ test_that("images can be outlined by metadata.", {
     expect_silent(cur_out <- .outlineImageByMeta(object = pancreasSCE, mask = pancreasMasks,
                                                  out_img = out_img, cell_id = "CellNb", img_id = "ImageNb",
                                                  outline_by = "Area",
-                                                 cur_colour = cur_col))
+                                                 cur_colour = cur_col,
+                                                 thick = FALSE))
 
     expect_true(is.list(cur_out))
     expect_equal(cur_out$cur_limit, list(Area = c(2, 200)))
@@ -669,7 +671,8 @@ test_that("images can be outlined by metadata.", {
     expect_silent(cur_out <- .outlineImageByMeta(object = pancreasSCE, mask = pancreasMasks,
                                                  out_img = out_img, cell_id = "CellNb", img_id = "ImageNb",
                                                  outline_by = "Pos_X",
-                                                 cur_colour = cur_col))
+                                                 cur_colour = cur_col,
+                                                 thick = FALSE))
     expect_true(is.list(cur_out))
     expect_equal(cur_out$cur_limit, list(Pos_X = as.numeric(quantile(pancreasSCE$Pos_X, probs = c(0, 1)))))
     cur_out <- cur_out$imgs
