@@ -4,7 +4,7 @@
 \alias{loadImages}
 \title{Read images into CytoImageList object}
 \usage{
-loadImages(x, pattern = NULL, on_disk = FALSE, ...)
+loadImages(x, pattern = NULL, on_disk = FALSE, BPPARAM = SerialParam(), ...)
 }
 \arguments{
 \item{x}{The function takes a variety of possible character inputs:
@@ -22,6 +22,10 @@ individual file.}
 \item{A character vector}{Unique entries are matched against
 file names in the specified path.}
 }}
+
+\item{on_disk}{Logical indicating if images in form of
+\linkS4class{HDF5Array} objects should be stored on disk rather than in
+memory.}
 
 \item{...}{arguments passed to the \code{\link{readImage}} function.}
 }

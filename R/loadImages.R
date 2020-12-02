@@ -21,6 +21,9 @@
 #' \item{A character vector}{Unique entries are matched against
 #' file names in the specified path.}
 #' }
+#' @param on_disk Logical indicating if images in form of
+#' \linkS4class{HDF5Array} objects should be stored on disk rather than in
+#' memory.
 #' @param ... arguments passed to the \code{\link{readImage}} function.
 #'
 #' @return A \linkS4class{CytoImageList} object
@@ -61,21 +64,24 @@
 #' @author Nicolas Damond (\email{nicolas.damond@@dqbm.uzh.ch})
 #'
 #' @export
-loadImages <- function(x, pattern = NULL, on_disk = FALSE, ...) {
+#' @importFrom BiocParallel bplapply SerialParam
+loadImages <- function(x, pattern = NULL, on_disk = FALSE, h5FilesPath = getHDF5DumpDir(), 
+                        BPPARAM = SerialParam(), ...) {
 
     # Validity checks
     x <- .valid.loadImage.input(x, pattern)
 
     # Read in images
-    cur_list <- lapply(x, function(y){
+    cur_list <- bplapply(x, function(y){
             cur_img <- EBImage::readImage(y, ..., names = NULL)
         
             if (on_disk) {
-                as(imageData(cur_img), "HDF5Array")
+                writeHDF5Array(imageData(cur_img), 
+                               filepath = h5FilesPath)
             } else {
                 cur_img
             }
-        })
+        }, BPPARAM = BPPARAM)
     
     out <- CytoImageList(cur_list)
     names(out) <- sub("\\.[^.]*$", "", basename(x))

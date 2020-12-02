@@ -82,7 +82,8 @@
 #' @importFrom S4Vectors new2
 #'
 #' @export
-CytoImageList <- function(..., on_disk = FALSE){
+#' @importFrom BiocParallel bplapply SerialParam
+CytoImageList <- function(..., on_disk = FALSE, BPPARAM = SerialParam()){
     args <- list(...)
     
     if (length(args) == 1L &&
@@ -98,9 +99,9 @@ CytoImageList <- function(..., on_disk = FALSE){
     x <- S4Vectors::new2("CytoImageList", listData = args)
     
     if (on_disk) {
-        x <- lapply(x, function(y){
+        x <- bplapply(x, function(y){
             as(imageData(x), "HDF5Array")
-        })
+        }, BPPARAM = BPPARAM)
     }
     
     return(x)
