@@ -1,22 +1,25 @@
+
 test_that("User interface is correctly rendered", {
+    local_edition(3)
+
     cur_header <- .cytomapper_header()
-    
+
     expect_equal(cur_header$name, "header")
     expect_equal(cur_header$attribs$class, "main-header")
     expect_null(cur_header$children[[1]])
-    expect_equal(as.character(cur_header$children[[2]]), paste0('<span class="logo">cytomapper v',
-                        packageVersion("cytomapper"), '</span>'))
-    expect_equal(as.character(cur_header$children[[3]]), "<nav class=\"navbar navbar-static-top\" role=\"navigation\">\n  <span style=\"display:none;\">\n    <i class=\"fa fa-bars\"></i>\n  </span>\n  <a href=\"#\" class=\"sidebar-toggle\" data-toggle=\"offcanvas\" role=\"button\">\n    <span class=\"sr-only\">Toggle navigation</span>\n  </a>\n  <div class=\"navbar-custom-menu\">\n    <ul class=\"nav navbar-nav\">\n      <li class=\"dropdown notifications-menu\">\n        <a href=\"#\" class=\"dropdown-toggle\" data-toggle=\"dropdown\">\n          <i class=\"fa fa-fas fa-download\"></i>\n        </a>\n        <ul class=\"dropdown-menu\">\n          <li class=\"header\"></li>\n          <li>\n            <ul class=\"menu\">\n              <li>\n                <a href=\"#\">\n                  <i class=\"fa fa- text-info\"></i>\n                  <div class=\"form-group shiny-input-container\">\n                    <label class=\"control-label\" for=\"labelCellsBy\">Cell label</label>\n                    <input id=\"labelCellsBy\" type=\"text\" class=\"form-control\" value=\"Cell-Type\"/>\n                  </div>\n                </a>\n              </li>\n              <li>\n                <a href=\"#\">\n                  <i class=\"fa fa- text-info\"></i>\n                  <a id=\"downloadData\" class=\"btn btn-default shiny-download-link \" href=\"\" target=\"_blank\" download style=\"background-color: #3C8DBC; color: white; border-color: #7EA6F8\">\n                    <i class=\"fa fa-download\"></i>\n                    Download selection\n                  </a>\n                </a>\n              </li>\n            </ul>\n          </li>\n        </ul>\n      </li>\n      <li class=\"dropdown tasks-menu\">\n        <a href=\"#\" class=\"dropdown-toggle\" data-toggle=\"dropdown\">\n          <i class=\"fa fa-fas fa-question\"></i>\n        </a>\n        <ul class=\"dropdown-menu\">\n          <li class=\"header\"></li>\n          <li>\n            <ul class=\"menu\">\n              <li>\n                <a href=\"#\">\n                  <i class=\"fa fa- text-info\"></i>\n                  <button id=\"SessionInfo\" type=\"button\" class=\"btn btn-default action-button\" style=\"background-color: #3C8DBC; color: white; border-color: #3C8DBC\">Session Info</button>\n                </a>\n              </li>\n              <li>\n                <a href=\"#\">\n                  <i class=\"fa fa- text-info\"></i>\n                  <button id=\"Help\" type=\"button\" class=\"btn btn-default action-button\" style=\"background-color: #3C8DBC; color: white; border-color: #3C8DBC\">Help</button>\n                </a>\n              </li>\n            </ul>\n          </li>\n        </ul>\n      </li>\n    </ul>\n  </div>\n</nav>")
+    expect_snapshot_output(cur_header$children[[2]])
+    expect_snapshot_output(cur_header$children[[3]])
 
     cur_sidebar <- .cytomapper_sidebar()
-    
+
     expect_equal(cur_sidebar$name, "aside")
     expect_equal(cur_sidebar$attribs$id, "sidebarCollapsed")
     expect_equal(cur_sidebar$attribs$class, "main-sidebar")
     expect_equal(cur_sidebar$attribs$`data-collapsed`, "false")
     expect_null(cur_sidebar$children[[1]])
-    expect_equal(as.character(cur_sidebar$children[[2]]), "<section id=\"sidebarItemExpanded\" class=\"sidebar\">\n  <ul class=\"sidebar-menu\">\n    <li class=\"treeview\">\n      <a href=\"#\">\n        <i class=\"fa fa-fas fa-sliders-h\"></i>\n        <span>General controls</span>\n        <i class=\"fa fa-angle-left pull-right\"></i>\n      </a>\n      <ul class=\"treeview-menu menu-open\" style=\"display: block;\" data-expanded=\"Generalcontrols\">\n        <div class=\"form-group shiny-input-container\">\n          <label class=\"control-label\" for=\"plotCount\">Select number of plots</label>\n          <input class=\"js-range-slider\" id=\"plotCount\" data-min=\"1\" data-max=\"12\" data-from=\"1\" data-step=\"1\" data-grid=\"true\" data-grid-num=\"5.5\" data-grid-snap=\"false\" data-prettify-separator=\",\" data-prettify-enabled=\"true\" data-keyboard=\"true\" data-data-type=\"number\"/>\n        </div>\n        <div class=\"row\">\n          <div class=\"col-sm-12\" style=\"padding-left:30px;\">\n            <p>\n              <strong>Select sample</strong>\n            </p>\n          </div>\n        </div>\n        <div class=\"row\">\n          <div class=\"col-sm-2\">\n            <button id=\"previous.sample\" type=\"button\" class=\"btn btn-default action-button\" style=\"background-color: transparent; border-color: transparent; color:white; margin-left: 0px;\">\n              <i class=\"fa fa-angle-left fa-2x\"></i>\n            </button>\n          </div>\n          <div class=\"col-sm-8\" style=\"padding-left:0px;padding-right:0px;\">\n            <div class=\"form-group shiny-input-container\" style=\"width: 100%;\">\n              <label class=\"control-label shiny-label-null\" for=\"sample\"></label>\n              <div>\n                <select id=\"sample\" class=\"form-control\"></select>\n                <script type=\"application/json\" data-for=\"sample\">{\"placeholder\":\"Select a sample\",\"maxItems\":1}</script>\n              </div>\n            </div>\n          </div>\n          <div class=\"col-sm-2\" style=\"padding-left:0px;\">\n            <button id=\"next.sample\" type=\"button\" class=\"btn btn-default action-button\" style=\"background-color: transparent; border-color: transparent; color: white; margin-left: 0px; padding-left: 0px;\">\n              <i class=\"fa fa-angle-right fa-2x\"></i>\n            </button>\n          </div>\n        </div>\n        <div class=\"form-group shiny-input-container\">\n          <label class=\"control-label\" for=\"assay\">Select which assay to display</label>\n          <div>\n            <select id=\"assay\" class=\"form-control\"></select>\n            <script type=\"application/json\" data-for=\"assay\">{\"placeholder\":\"Select an assay\",\"maxItems\":1}</script>\n          </div>\n        </div>\n      </ul>\n    </li>\n    <li class=\"treeview\">\n      <a href=\"#\">\n        <i class=\"fa fa-far fa-chart-bar\"></i>\n        <span>Plots</span>\n        <i class=\"fa fa-angle-left pull-right\"></i>\n      </a>\n      <ul class=\"treeview-menu menu-open\" style=\"display: block;\" data-expanded=\"Plots\">\n        <div id=\"AdditionalPlots_sidebar\" class=\"shiny-html-output\"></div>\n      </ul>\n    </li>\n    <div id=\"sidebar\" class=\"sidebarMenuSelectedTabItem\" data-value=\"null\"></div>\n  </ul>\n</section>")
-    
+    expect_snapshot_output(cur_sidebar$children[[2]])
+
+    skip_on_cran()
     cur_body <- .cytomapper_body()
     expect_equal(cur_body$name, "div")
     expect_equal(cur_body$attribs$class, "content-wrapper")
@@ -26,86 +29,80 @@ test_that("User interface is correctly rendered", {
 
 test_that("Sidebar is correctly rendered", {
     data("pancreasSCE")
-    
-    testServer(app = cytomapperShiny(object = pancreasSCE, img_id = "ImageNb", 
-                                     cell_id = "CellNb"), 
+  local_edition(3)
+
+    testServer(app = cytomapperShiny(object = pancreasSCE, img_id = "ImageNb",
+                                     cell_id = "CellNb"),
                {
                    session$setInputs(plotCount = 1)
-                   
-                   expect_equal(as.character(.addPlots_sidebar(input)(session)$html),
-                                "<div class=\"well\" style=\"background-color: #70C389; border-color: #70C389; padding-bottom: 0px; padding-top: 0px\">\n  <h3 style=\"color: black\">Plot 1</h3>\n  <div class=\"form-group shiny-input-container\">\n    <label class=\"control-label\" for=\"Marker_1\">\n      <span style=\"color: black; padding-top: 0px\">Select marker 1</span>\n    </label>\n    <div>\n      <select id=\"Marker_1\" class=\"form-control\"></select>\n      <script type=\"application/json\" data-for=\"Marker_1\">{\"placeholder\":\"Select marker\",\"maxItems\":1}</script>\n    </div>\n  </div>\n  <div class=\"form-group shiny-input-container\">\n    <label class=\"control-label\" for=\"Marker_2\">\n      <span style=\"color: black; padding-top: 0px\">Select marker 2</span>\n    </label>\n    <div>\n      <select id=\"Marker_2\" class=\"form-control\"></select>\n      <script type=\"application/json\" data-for=\"Marker_2\">{\"placeholder\":\"Select marker\",\"maxItems\":1}</script>\n    </div>\n  </div>\n</div>")
-                   
+
+                  expect_snapshot_output(.addPlots_sidebar(input)(session)$html)
+
                    session$setInputs(plotCount = 2)
-                   
-                   expect_equal(as.character(.addPlots_sidebar(input)(session)$html),
-                                "<div class=\"well\" style=\"background-color: #70C389; border-color: #70C389; padding-bottom: 0px; padding-top: 0px\">\n  <h3 style=\"color: black\">Plot 1</h3>\n  <div class=\"form-group shiny-input-container\">\n    <label class=\"control-label\" for=\"Marker_1\">\n      <span style=\"color: black; padding-top: 0px\">Select marker 1</span>\n    </label>\n    <div>\n      <select id=\"Marker_1\" class=\"form-control\"></select>\n      <script type=\"application/json\" data-for=\"Marker_1\">{\"placeholder\":\"Select marker\",\"maxItems\":1}</script>\n    </div>\n  </div>\n  <div class=\"form-group shiny-input-container\">\n    <label class=\"control-label\" for=\"Marker_2\">\n      <span style=\"color: black; padding-top: 0px\">Select marker 2</span>\n    </label>\n    <div>\n      <select id=\"Marker_2\" class=\"form-control\"></select>\n      <script type=\"application/json\" data-for=\"Marker_2\">{\"placeholder\":\"Select marker\",\"maxItems\":1}</script>\n    </div>\n  </div>\n</div>\n<div class=\"well\" style=\"background-color: #39BEB4; border-color: #39BEB4; padding-bottom: 0px; padding-top: 0px\">\n  <h3 style=\"color: black\">Plot 2</h3>\n  <div class=\"form-group shiny-input-container\">\n    <label class=\"control-label\" for=\"Marker_3\">\n      <span style=\"color: black; padding-top: 0px\">Select marker 3</span>\n    </label>\n    <div>\n      <select id=\"Marker_3\" class=\"form-control\"></select>\n      <script type=\"application/json\" data-for=\"Marker_3\">{\"placeholder\":\"Select marker\",\"maxItems\":1}</script>\n    </div>\n  </div>\n  <div class=\"form-group shiny-input-container\">\n    <label class=\"control-label\" for=\"Marker_4\">\n      <span style=\"color: black; padding-top: 0px\">Select marker 4</span>\n    </label>\n    <div>\n      <select id=\"Marker_4\" class=\"form-control\"></select>\n      <script type=\"application/json\" data-for=\"Marker_4\">{\"placeholder\":\"Select marker\",\"maxItems\":1}</script>\n    </div>\n  </div>\n</div>")
-                   
+
+                   expect_snapshot_output(.addPlots_sidebar(input)(session)$html)
+
                    session$setInputs(plotCount = 3)
-                   
-                   expect_equal(as.character(.addPlots_sidebar(input)(session)$html),
-                                "<div class=\"well\" style=\"background-color: #70C389; border-color: #70C389; padding-bottom: 0px; padding-top: 0px\">\n  <h3 style=\"color: black\">Plot 1</h3>\n  <div class=\"form-group shiny-input-container\">\n    <label class=\"control-label\" for=\"Marker_1\">\n      <span style=\"color: black; padding-top: 0px\">Select marker 1</span>\n    </label>\n    <div>\n      <select id=\"Marker_1\" class=\"form-control\"></select>\n      <script type=\"application/json\" data-for=\"Marker_1\">{\"placeholder\":\"Select marker\",\"maxItems\":1}</script>\n    </div>\n  </div>\n  <div class=\"form-group shiny-input-container\">\n    <label class=\"control-label\" for=\"Marker_2\">\n      <span style=\"color: black; padding-top: 0px\">Select marker 2</span>\n    </label>\n    <div>\n      <select id=\"Marker_2\" class=\"form-control\"></select>\n      <script type=\"application/json\" data-for=\"Marker_2\">{\"placeholder\":\"Select marker\",\"maxItems\":1}</script>\n    </div>\n  </div>\n</div>\n<div class=\"well\" style=\"background-color: #39BEB4; border-color: #39BEB4; padding-bottom: 0px; padding-top: 0px\">\n  <h3 style=\"color: black\">Plot 2</h3>\n  <div class=\"form-group shiny-input-container\">\n    <label class=\"control-label\" for=\"Marker_3\">\n      <span style=\"color: black; padding-top: 0px\">Select marker 3</span>\n    </label>\n    <div>\n      <select id=\"Marker_3\" class=\"form-control\"></select>\n      <script type=\"application/json\" data-for=\"Marker_3\">{\"placeholder\":\"Select marker\",\"maxItems\":1}</script>\n    </div>\n  </div>\n  <div class=\"form-group shiny-input-container\">\n    <label class=\"control-label\" for=\"Marker_4\">\n      <span style=\"color: black; padding-top: 0px\">Select marker 4</span>\n    </label>\n    <div>\n      <select id=\"Marker_4\" class=\"form-control\"></select>\n      <script type=\"application/json\" data-for=\"Marker_4\">{\"placeholder\":\"Select marker\",\"maxItems\":1}</script>\n    </div>\n  </div>\n</div>\n<div class=\"well\" style=\"background-color: #3F85A7; border-color: #3F85A7; padding-bottom: 0px; padding-top: 0px\">\n  <h3 style=\"color: black\">Plot 3</h3>\n  <div class=\"form-group shiny-input-container\">\n    <label class=\"control-label\" for=\"Marker_5\">\n      <span style=\"color: black; padding-top: 0px\">Select marker 5</span>\n    </label>\n    <div>\n      <select id=\"Marker_5\" class=\"form-control\"></select>\n      <script type=\"application/json\" data-for=\"Marker_5\">{\"placeholder\":\"Select marker\",\"maxItems\":1}</script>\n    </div>\n  </div>\n  <div class=\"form-group shiny-input-container\">\n    <label class=\"control-label\" for=\"Marker_6\">\n      <span style=\"color: black; padding-top: 0px\">Select marker 6</span>\n    </label>\n    <div>\n      <select id=\"Marker_6\" class=\"form-control\"></select>\n      <script type=\"application/json\" data-for=\"Marker_6\">{\"placeholder\":\"Select marker\",\"maxItems\":1}</script>\n    </div>\n  </div>\n</div>")
-                   
+
+                   expect_snapshot_output(.addPlots_sidebar(input)(session)$html)
+
                })
 
 })
 
 test_that("Plots in tab 1 are correctly rendered", {
     data("pancreasSCE")
-    
-    testServer(app = cytomapperShiny(object = pancreasSCE, img_id = "ImageNb", 
-                                     cell_id = "CellNb"), 
+  local_edition(3)
+
+    testServer(app = cytomapperShiny(object = pancreasSCE, img_id = "ImageNb",
+                                     cell_id = "CellNb"),
                {
                    session$setInputs(plotCount = 1)
-                   
-                   expect_equal(as.character(.addPlots_tab1(input)(session)$html),
-                                "<div class=\"row\">\n  <div class=\"col-sm-4\">\n    <div class=\"box box-primary\">\n      <div class=\"box-header\">\n        <h3 class=\"box-title\">Plot 1</h3>\n      </div>\n      <div class=\"box-body\">\n        <div id=\"scatter1\" class=\"shiny-plot-output\" style=\"width: 100% ; height: 400px\" data-brush-id=\"plot_brush1\" data-brush-fill=\"#70C389\" data-brush-stroke=\"#70C389\" data-brush-opacity=\"0.25\" data-brush-delay=\"300\" data-brush-delay-type=\"debounce\" data-brush-clip=\"TRUE\" data-brush-direction=\"xy\" data-brush-reset-on-new=\"FALSE\"></div>\n        <pre id=\"info1\" class=\"shiny-text-output noplaceholder\"></pre>\n      </div>\n    </div>\n  </div>\n</div>")
-                   
+
+                   expect_snapshot_output(.addPlots_tab1(input)(session)$html)
+
                    session$setInputs(plotCount = 2)
-                   
-                   expect_equal(as.character(.addPlots_tab1(input)(session)$html),
-                                "<div class=\"row\">\n  <div class=\"col-sm-4\">\n    <div class=\"box box-primary\">\n      <div class=\"box-header\">\n        <h3 class=\"box-title\">Plot 1</h3>\n      </div>\n      <div class=\"box-body\">\n        <div id=\"scatter1\" class=\"shiny-plot-output\" style=\"width: 100% ; height: 400px\" data-brush-id=\"plot_brush1\" data-brush-fill=\"#70C389\" data-brush-stroke=\"#70C389\" data-brush-opacity=\"0.25\" data-brush-delay=\"300\" data-brush-delay-type=\"debounce\" data-brush-clip=\"TRUE\" data-brush-direction=\"xy\" data-brush-reset-on-new=\"FALSE\"></div>\n        <pre id=\"info1\" class=\"shiny-text-output noplaceholder\"></pre>\n      </div>\n    </div>\n  </div>\n  <div class=\"col-sm-4\">\n    <div class=\"box box-primary\">\n      <div class=\"box-header\">\n        <h3 class=\"box-title\">Plot 2</h3>\n      </div>\n      <div class=\"box-body\">\n        <div id=\"scatter2\" class=\"shiny-plot-output\" style=\"width: 100% ; height: 400px\" data-brush-id=\"plot_brush2\" data-brush-fill=\"#39BEB4\" data-brush-stroke=\"#39BEB4\" data-brush-opacity=\"0.25\" data-brush-delay=\"300\" data-brush-delay-type=\"debounce\" data-brush-clip=\"TRUE\" data-brush-direction=\"xy\" data-brush-reset-on-new=\"FALSE\"></div>\n        <pre id=\"info2\" class=\"shiny-text-output noplaceholder\"></pre>\n      </div>\n    </div>\n  </div>\n</div>")
-                   
-                   
+
+                   expect_snapshot_output(.addPlots_tab1(input)(session)$html)
+
                    session$setInputs(plotCount = 3)
-                   
-                   expect_equal(as.character(.addPlots_tab1(input)(session)$html),
-                                "<div class=\"row\">\n  <div class=\"col-sm-4\">\n    <div class=\"box box-primary\">\n      <div class=\"box-header\">\n        <h3 class=\"box-title\">Plot 1</h3>\n      </div>\n      <div class=\"box-body\">\n        <div id=\"scatter1\" class=\"shiny-plot-output\" style=\"width: 100% ; height: 400px\" data-brush-id=\"plot_brush1\" data-brush-fill=\"#70C389\" data-brush-stroke=\"#70C389\" data-brush-opacity=\"0.25\" data-brush-delay=\"300\" data-brush-delay-type=\"debounce\" data-brush-clip=\"TRUE\" data-brush-direction=\"xy\" data-brush-reset-on-new=\"FALSE\"></div>\n        <pre id=\"info1\" class=\"shiny-text-output noplaceholder\"></pre>\n      </div>\n    </div>\n  </div>\n  <div class=\"col-sm-4\">\n    <div class=\"box box-primary\">\n      <div class=\"box-header\">\n        <h3 class=\"box-title\">Plot 2</h3>\n      </div>\n      <div class=\"box-body\">\n        <div id=\"scatter2\" class=\"shiny-plot-output\" style=\"width: 100% ; height: 400px\" data-brush-id=\"plot_brush2\" data-brush-fill=\"#39BEB4\" data-brush-stroke=\"#39BEB4\" data-brush-opacity=\"0.25\" data-brush-delay=\"300\" data-brush-delay-type=\"debounce\" data-brush-clip=\"TRUE\" data-brush-direction=\"xy\" data-brush-reset-on-new=\"FALSE\"></div>\n        <pre id=\"info2\" class=\"shiny-text-output noplaceholder\"></pre>\n      </div>\n    </div>\n  </div>\n  <div class=\"col-sm-4\">\n    <div class=\"box box-primary\">\n      <div class=\"box-header\">\n        <h3 class=\"box-title\">Plot 3</h3>\n      </div>\n      <div class=\"box-body\">\n        <div id=\"scatter3\" class=\"shiny-plot-output\" style=\"width: 100% ; height: 400px\" data-brush-id=\"plot_brush3\" data-brush-fill=\"#3F85A7\" data-brush-stroke=\"#3F85A7\" data-brush-opacity=\"0.25\" data-brush-delay=\"300\" data-brush-delay-type=\"debounce\" data-brush-clip=\"TRUE\" data-brush-direction=\"xy\" data-brush-reset-on-new=\"FALSE\"></div>\n        <pre id=\"info3\" class=\"shiny-text-output noplaceholder\"></pre>\n      </div>\n    </div>\n  </div>\n</div>")
-                   
+
+                   expect_snapshot_output(.addPlots_tab1(input)(session)$html)
+
                })
-    
+
 })
 
 test_that("Plots in tab 2 are correctly rendered", {
     data("pancreasSCE")
     data("pancreasMasks")
     data("pancreasImages")
-    
-    testServer(app = cytomapperShiny(object = pancreasSCE, img_id = "ImageNb", 
-                                     cell_id = "CellNb"), 
+    local_edition(3)
+
+    testServer(app = cytomapperShiny(object = pancreasSCE, img_id = "ImageNb",
+                                     cell_id = "CellNb"),
                {
 
                    expect_null(.addPlots_tab2(input, object = pancreasSCE, mask = NULL, image = NULL))
-                   
+
                })
-    
-    testServer(app = cytomapperShiny(object = pancreasSCE, img_id = "ImageNb", 
+
+    testServer(app = cytomapperShiny(object = pancreasSCE, img_id = "ImageNb",
                                      cell_id = "CellNb", mask = pancreasMasks,
-                                     image = NULL), 
+                                     image = NULL),
                {
 
-                   expect_equal(as.character(.addPlots_tab2(input, object = pancreasSCE, mask = pancreasMasks, image = NULL)(session)$html),
-                                "<div class=\"row\">\n  <div class=\"col-sm-6\">\n    <div class=\"box box-primary\" style=\"height: 550px\">\n      <div class=\"box-header\">\n        <h3 class=\"box-title\">Expression</h3>\n      </div>\n      <div class=\"box-body\">\n        <div class=\"col-sm-12\">\n          <button id=\"resetMarkers\" type=\"button\" class=\"btn btn-default action-button\" style=\"background-color: #46EC46; color: black;\">Reset markers</button>\n        </div>\n        <div class=\"col-sm-6\">\n          <div class=\"form-group shiny-input-container\">\n            <label class=\"control-label\" for=\"exprs_marker_1\">\n              <span style=\"color: black\">Select marker 1</span>\n            </label>\n            <div>\n              <select id=\"exprs_marker_1\"><option value=\"H3\" selected>H3</option>\n<option value=\"CD99\">CD99</option>\n<option value=\"PIN\">PIN</option>\n<option value=\"CD8a\">CD8a</option>\n<option value=\"CDH\">CDH</option></select>\n              <script type=\"application/json\" data-for=\"exprs_marker_1\" data-nonempty=\"\">{}</script>\n            </div>\n          </div>\n        </div>\n        <div class=\"col-sm-6\">\n          <div class=\"form-group shiny-input-container\">\n            <label class=\"control-label\" for=\"exprs_marker_2\">\n              <span style=\"color: black\">Select marker 2</span>\n            </label>\n            <div>\n              <select id=\"exprs_marker_2\"><option value=\"H3\">H3</option>\n<option value=\"CD99\">CD99</option>\n<option value=\"PIN\">PIN</option>\n<option value=\"CD8a\">CD8a</option>\n<option value=\"CDH\">CDH</option>\n<option value=\"\" selected></option></select>\n              <script type=\"application/json\" data-for=\"exprs_marker_2\">{}</script>\n            </div>\n          </div>\n        </div>\n        <div class=\"col-sm-12\">\n          <div id=\"image_expression\" style=\"width:100%; height:300px; \" class=\"svgPanZoom html-widget html-widget-output\"></div>\n        </div>\n      </div>\n    </div>\n  </div>\n  <div class=\"col-sm-6\">\n    <div class=\"box box-primary\" style=\"height: 550px\">\n      <div class=\"box-header\">\n        <h3 class=\"box-title\">Selection</h3>\n      </div>\n      <div class=\"box-body\" id=\"selection\">\n        <div class=\"col-sm-12\">\n          <div id=\"image_selection\" style=\"width:100%; height:400px; \" class=\"svgPanZoom html-widget html-widget-output\"></div>\n        </div>\n      </div>\n    </div>\n  </div>\n</div>")
-                   
+                 expect_snapshot_output(.addPlots_tab2(input, object = pancreasSCE, mask = pancreasMasks, image = NULL)(session)$html)
+
                })
-    
-    testServer(app = cytomapperShiny(object = pancreasSCE, img_id = "ImageNb", 
+
+    testServer(app = cytomapperShiny(object = pancreasSCE, img_id = "ImageNb",
                                      cell_id = "CellNb", mask = pancreasMasks,
-                                     image = pancreasImages), 
+                                     image = pancreasImages),
                {
 
-                   expect_equal(as.character(.addPlots_tab2(input, object = pancreasSCE, mask = pancreasMasks, image = pancreasImages)(session)$html),
-                                "<div class=\"row\">\n  <div class=\"col-sm-6\">\n    <div class=\"box box-primary\" style=\"height: 550px\">\n      <div class=\"box-header\">\n        <h3 class=\"box-title\">Expression</h3>\n      </div>\n      <div class=\"box-body\">\n        <div class=\"col-sm-12\">\n          <button id=\"resetMarkers\" type=\"button\" class=\"btn btn-default action-button\" style=\"background-color: #46EC46; color: black;\">Reset markers</button>\n        </div>\n        <div class=\"col-sm-6\">\n          <div class=\"form-group shiny-input-container\">\n            <label class=\"control-label\" for=\"exprs_marker_1\">\n              <span style=\"color: black\">Select marker 1</span>\n            </label>\n            <div>\n              <select id=\"exprs_marker_1\"><option value=\"H3\" selected>H3</option>\n<option value=\"CD99\">CD99</option>\n<option value=\"PIN\">PIN</option>\n<option value=\"CD8a\">CD8a</option>\n<option value=\"CDH\">CDH</option></select>\n              <script type=\"application/json\" data-for=\"exprs_marker_1\" data-nonempty=\"\">{}</script>\n            </div>\n          </div>\n          <div class=\"form-group shiny-input-container\">\n            <label class=\"control-label\" for=\"contrast_marker_1\">\n              <span style=\"color: black; padding-top: 0px\">Contrast marker 1</span>\n            </label>\n            <input id=\"contrast_marker_1\" type=\"number\" class=\"form-control\" value=\"1\"/>\n          </div>\n        </div>\n        <div class=\"col-sm-6\">\n          <div class=\"form-group shiny-input-container\">\n            <label class=\"control-label\" for=\"exprs_marker_2\">\n              <span style=\"color: black\">Select marker 2</span>\n            </label>\n            <div>\n              <select id=\"exprs_marker_2\"><option value=\"H3\">H3</option>\n<option value=\"CD99\">CD99</option>\n<option value=\"PIN\">PIN</option>\n<option value=\"CD8a\">CD8a</option>\n<option value=\"CDH\">CDH</option>\n<option value=\"\" selected></option></select>\n              <script type=\"application/json\" data-for=\"exprs_marker_2\">{}</script>\n            </div>\n          </div>\n          <div class=\"form-group shiny-input-container\">\n            <label class=\"control-label\" for=\"contrast_marker_2\">\n              <span style=\"color: black; padding-top: 0px\">Contrast marker 2</span>\n            </label>\n            <input id=\"contrast_marker_2\" type=\"number\" class=\"form-control\" value=\"1\"/>\n          </div>\n        </div>\n        <div class=\"col-sm-12\">\n          <div id=\"image_expression\" style=\"width:100%; height:300px; \" class=\"svgPanZoom html-widget html-widget-output\"></div>\n        </div>\n      </div>\n    </div>\n  </div>\n  <div class=\"col-sm-6\">\n    <div class=\"box box-primary\" style=\"height: 550px\">\n      <div class=\"box-header\">\n        <h3 class=\"box-title\">Selection</h3>\n      </div>\n      <div class=\"box-body\" id=\"selection\">\n        <div class=\"col-sm-12\">\n          <div id=\"image_selection\" style=\"width:100%; height:400px; \" class=\"svgPanZoom html-widget html-widget-output\"></div>\n        </div>\n      </div>\n    </div>\n  </div>\n</div>")
+                 expect_snapshot_output(.addPlots_tab2(input, object = pancreasSCE, mask = pancreasMasks, image = pancreasImages)(session)$html)
                })
-    
+
 })
 
