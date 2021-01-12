@@ -65,7 +65,7 @@
 #'
 #' @export
 #' @importFrom BiocParallel bplapply SerialParam
-loadImages <- function(x, pattern = NULL, on_disk = FALSE, h5FilesPath = getHDF5DumpDir(), 
+loadImages <- function(x, pattern = NULL, on_disk = FALSE, h5FilesPath = NULL, 
                         BPPARAM = SerialParam(), ...) {
 
     # Validity checks
@@ -76,8 +76,19 @@ loadImages <- function(x, pattern = NULL, on_disk = FALSE, h5FilesPath = getHDF5
             cur_img <- EBImage::readImage(y, ..., names = NULL)
         
             if (on_disk) {
+                
+                if (is.null(h5FilesPath)) {
+                    stop("When storing the images on disk, please specify a 'h5FilesPath'. \n",
+                         "You can use 'h5FilesPath = getHDF5DumpDir()' to temporarily store the images.\n",
+                         "If doing so, .h5 files will be deleted once the R session ends.")
+                }
+                
+                # Check if name and file already exists
+                
                 writeHDF5Array(imageData(cur_img), 
-                               filepath = h5FilesPath)
+                               filepath = h5FilesPath,
+                               name = sub("\\.[^.]*$", "", basename(y)),
+                               )
             } else {
                 cur_img
             }
