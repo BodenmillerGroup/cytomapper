@@ -1,0 +1,23 @@
+app <- ShinyDriver$new("../../", loadTimeout = 100000, seed = 1234)
+app$snapshotInit("tab_reset")
+
+app$setInputs(tabbox1 = "tab2")
+app$snapshot()
+app$setInputs(Marker_1 = "CD99")
+app$snapshot()
+app$setInputs(tabbox1 = "tab2")
+app$snapshot()
+app$setInputs(Marker_2 = "CD8a")
+app$snapshot()
+app$setInputs(tabbox1 = "tab2")
+app$snapshot()
+app$setInputs(assay = "exprs")
+app$snapshot()
+app$setInputs(tabbox1 = "tab2")
+app$snapshot()
+app$setInputs(sample = "2")
+app$snapshot()
+
+p <- app$.__enclos_env__$private$shinyProcess
+p$interrupt()
+p$wait()
