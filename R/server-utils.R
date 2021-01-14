@@ -208,12 +208,11 @@
             })
         }, {
             updateTabsetPanel(session, "tabbox1",
-                            selected = "tab1"
-            )
+                            selected = "tab1")
 
             # Reset gates and objects
-            .clearObjects(objValues, iter = 1)
-            .clearBrush(input, session, iter = 1)
+            #.clearObjects(objValues, iter = 1)
+            #.clearBrush(input, session, iter = 1)
 
     })
 
