@@ -1,0 +1,20 @@
+app <- ShinyDriver$new("../../", loadTimeout = 100000, seed = 1234)
+app$snapshotInit("gating_sample_change")
+
+app$setInputs(plotCount = 2)
+app$setInputs(plotCount = 3)
+app$setInputs(Marker_1 = "CD99")
+app$setInputs(Marker_3 = "PIN")
+app$setInputs(Marker_5 = "CDH")
+app$setInputs(assay = "exprs")
+app$snapshot()
+app$setInputs(sample = "2")
+app$snapshot()
+app$setInputs(sample = "3")
+app$snapshot()
+app$setInputs(assay = "counts")
+app$snapshot()
+
+p <- app$.__enclos_env__$private$shinyProcess
+p$interrupt()
+p$wait()
