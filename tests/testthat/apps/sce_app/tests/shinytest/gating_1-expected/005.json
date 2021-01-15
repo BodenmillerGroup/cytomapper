@@ -7,9 +7,35 @@
     "Marker_2": "",
     "Marker_3": "CD8a",
     "Marker_4": "",
-    "Marker_5": "CDH",
+    "Marker_5": "",
     "Marker_6": "",
     "next.sample": 0,
+    "plot_brush1": {
+      "xmin": 0.5,
+      "xmax": 1.5,
+      "ymin": 12,
+      "ymax": 34,
+      "mapping": {
+        "x": "sample",
+        "y": "CD99"
+      },
+      "direction": "xy",
+      "brushId": "plot_brush1",
+      "outputId": "scatter1"
+    },
+    "plot_brush2": {
+      "xmin": 0.5,
+      "xmax": 1.5,
+      "ymin": 0,
+      "ymax": 3,
+      "mapping": {
+        "x": "sample",
+        "y": "CD8a"
+      },
+      "direction": "xy",
+      "brushId": "plot_brush2",
+      "outputId": "scatter2"
+    },
     "plotCount": 3,
     "previous.sample": 0,
     "sample": "1",
@@ -45,11 +71,11 @@
 
       ]
     },
-    "info1": "Selection: ",
-    "info2": "Selection: ",
+    "info1": "Selection: xmin = 0.5 xmax = 1.5 ymin = 12 ymax = 34",
+    "info2": "Selection: xmin = 0.5 xmax = 1.5 ymin = 0 ymax = 3",
     "info3": "Selection: ",
     "scatter1": {
-      "src": "[image data sha1: 16ed2e91d45e2f10dc78b8379a834e0582730692]",
+      "src": "[image data sha1: 06cdb755571ed0e3f17167365bc29532f5d2eaa2]",
       "width": 182,
       "height": 400,
       "coordmap": {
@@ -93,12 +119,48 @@
       }
     },
     "scatter2": {
-      "message": "",
-      "call": "NULL",
-      "type": [
-        "shiny.silent.error",
-        "validation"
-      ]
+      "src": "[image data sha1: 4f88416ad6b053141831dc2d1547340c3a21e03a]",
+      "width": 182,
+      "height": 400,
+      "coordmap": {
+        "panels": [
+          {
+            "panel": 1,
+            "row": 1,
+            "col": 1,
+            "panel_vars": {
+
+            },
+            "log": {
+              "x": null,
+              "y": null
+            },
+            "domain": {
+              "left": 0.4,
+              "right": 1.6,
+              "bottom": -0.536465634658935,
+              "top": 11.2657783278376,
+              "discrete_limits": {
+                "x": "1"
+              }
+            },
+            "mapping": {
+              "x": "sample",
+              "y": "CD8a"
+            },
+            "range": {
+              "left": 28.2337904956243,
+              "right": 176.520547945205,
+              "bottom": 378.852131046661,
+              "top": 5.47945205479452
+            }
+          }
+        ],
+        "dims": {
+          "width": 182,
+          "height": 400
+        }
+      }
     },
     "scatter3": {
       "message": "",

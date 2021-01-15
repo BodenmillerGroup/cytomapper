@@ -7,9 +7,24 @@
     "Marker_2": "",
     "Marker_3": "CD8a",
     "Marker_4": "",
-    "Marker_5": "H3",
+    "Marker_5": "CDH",
     "Marker_6": "",
     "next.sample": 0,
+    "plot_brush1": {
+      "xmin": 0.5,
+      "xmax": 1.5,
+      "ymin": 3,
+      "ymax": 34,
+      "mapping": {
+        "x": "sample",
+        "y": "CD99"
+      },
+      "direction": "xy",
+      "brushId": "plot_brush1",
+      "outputId": "scatter1"
+    },
+    "plot_brush2": null,
+    "plot_brush3": null,
     "plotCount": 3,
     "previous.sample": 0,
     "sample": "1",
@@ -45,11 +60,11 @@
 
       ]
     },
-    "info1": "Selection: ",
+    "info1": "Selection: xmin = 0.5 xmax = 1.5 ymin = 3 ymax = 34",
     "info2": "Selection: ",
     "info3": "Selection: ",
     "scatter1": {
-      "src": "[image data sha1: 3a5fe7460e3dbcb65b13018c9f3f33add625c96b]",
+      "src": "[image data sha1: 725447d456a513df3cd0d6d0b1a7974aa76fea5c]",
       "width": 182,
       "height": 400,
       "coordmap": {
@@ -93,12 +108,48 @@
       }
     },
     "scatter2": {
-      "message": "",
-      "call": "NULL",
-      "type": [
-        "shiny.silent.error",
-        "validation"
-      ]
+      "src": "[image data sha1: 6d98ae81691f92c0bf4ffd17bb4c6c8bb4c63008]",
+      "width": 182,
+      "height": 400,
+      "coordmap": {
+        "panels": [
+          {
+            "panel": 1,
+            "row": 1,
+            "col": 1,
+            "panel_vars": {
+
+            },
+            "log": {
+              "x": null,
+              "y": null
+            },
+            "domain": {
+              "left": 0.4,
+              "right": 1.6,
+              "bottom": -0.153414566098248,
+              "top": 3.2217058880632,
+              "discrete_limits": {
+                "x": "1"
+              }
+            },
+            "mapping": {
+              "x": "sample",
+              "y": "CD8a"
+            },
+            "range": {
+              "left": 28.2337904956243,
+              "right": 176.520547945205,
+              "bottom": 378.852131046661,
+              "top": 5.47945205479452
+            }
+          }
+        ],
+        "dims": {
+          "width": 182,
+          "height": 400
+        }
+      }
     },
     "scatter3": {
       "message": "",

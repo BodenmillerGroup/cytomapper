@@ -5,11 +5,14 @@
     "labelCellsBy": "Cell-Type",
     "Marker_1": "CD99",
     "Marker_2": "",
-    "Marker_3": "CDH",
+    "Marker_3": "CD8a",
     "Marker_4": "",
-    "Marker_5": "H3",
+    "Marker_5": "CDH",
     "Marker_6": "",
     "next.sample": 0,
+    "object1": {
+
+    },
     "plot_brush1": {
       "xmin": 0.5,
       "xmax": 1.5,
@@ -37,7 +40,17 @@
       "outputId": "scatter2"
     },
     "plot_brush3": {
-
+      "xmin": 0.5,
+      "xmax": 1.5,
+      "ymin": 10,
+      "ymax": 20,
+      "mapping": {
+        "x": "sample",
+        "y": "CDH"
+      },
+      "direction": "xy",
+      "brushId": "plot_brush3",
+      "outputId": "scatter3"
     },
     "plotCount": 3,
     "previous.sample": 0,
@@ -76,11 +89,7 @@
     },
     "info1": "Selection: xmin = 0.5 xmax = 1.5 ymin = 12 ymax = 34",
     "info2": "Selection: xmin = 0.5 xmax = 1.5 ymin = 0 ymax = 3",
-    "info3": {
-      "message": "non-numeric argument to mathematical function",
-      "call": "round(brush$xmin, 1)",
-      "type": null
-    },
+    "info3": "Selection: xmin = 0.5 xmax = 1.5 ymin = 10 ymax = 20",
     "scatter1": {
       "src": "[image data sha1: 06cdb755571ed0e3f17167365bc29532f5d2eaa2]",
       "width": 182,
@@ -126,7 +135,51 @@
       }
     },
     "scatter2": {
-      "src": "[image data sha1: 7c92da04e77cb6e3cb3b818d49af26579d2677ec]",
+      "src": "[image data sha1: 4f88416ad6b053141831dc2d1547340c3a21e03a]",
+      "width": 182,
+      "height": 400,
+      "coordmap": {
+        "panels": [
+          {
+            "panel": 1,
+            "row": 1,
+            "col": 1,
+            "panel_vars": {
+
+            },
+            "log": {
+              "x": null,
+              "y": null
+            },
+            "domain": {
+              "left": 0.4,
+              "right": 1.6,
+              "bottom": -0.536465634658935,
+              "top": 11.2657783278376,
+              "discrete_limits": {
+                "x": "1"
+              }
+            },
+            "mapping": {
+              "x": "sample",
+              "y": "CD8a"
+            },
+            "range": {
+              "left": 28.2337904956243,
+              "right": 176.520547945205,
+              "bottom": 378.852131046661,
+              "top": 5.47945205479452
+            }
+          }
+        ],
+        "dims": {
+          "width": 182,
+          "height": 400
+        }
+      }
+    },
+    "scatter3": {
+      "src": "[image data sha1: 100f4b3a7e4f07a466142abbf6e9a93e8c3b818a]",
       "width": 182,
       "height": 400,
       "coordmap": {
@@ -168,11 +221,6 @@
           "height": 400
         }
       }
-    },
-    "scatter3": {
-      "message": "brushedPoints requires a brush object with xmin, xmax, ymin, and ymax.",
-      "call": "brushedPoints(cur_df, input[[paste0(\"plot_brush\", iter)]], allRows = TRUE)",
-      "type": null
     }
   },
   "export": {

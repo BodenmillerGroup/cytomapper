@@ -10,6 +10,19 @@
     "Marker_5": "",
     "Marker_6": "",
     "next.sample": 0,
+    "plot_brush1": {
+      "xmin": 0.5,
+      "xmax": 1.5,
+      "ymin": 12,
+      "ymax": 34,
+      "mapping": {
+        "x": "sample",
+        "y": "CD99"
+      },
+      "direction": "xy",
+      "brushId": "plot_brush1",
+      "outputId": "scatter1"
+    },
     "plotCount": 3,
     "previous.sample": 0,
     "sample": "1",
@@ -45,11 +58,11 @@
 
       ]
     },
-    "info1": "Selection: ",
+    "info1": "Selection: xmin = 0.5 xmax = 1.5 ymin = 12 ymax = 34",
     "info2": "Selection: ",
     "info3": "Selection: ",
     "scatter1": {
-      "src": "[image data sha1: 16ed2e91d45e2f10dc78b8379a834e0582730692]",
+      "src": "[image data sha1: 06cdb755571ed0e3f17167365bc29532f5d2eaa2]",
       "width": 182,
       "height": 400,
       "coordmap": {

@@ -7,9 +7,48 @@
     "Marker_2": "",
     "Marker_3": "CD8a",
     "Marker_4": "",
-    "Marker_5": "H3",
+    "Marker_5": "CDH",
     "Marker_6": "",
     "next.sample": 0,
+    "plot_brush1": {
+      "xmin": 0.5,
+      "xmax": 1.5,
+      "ymin": 1,
+      "ymax": 3,
+      "mapping": {
+        "x": "sample",
+        "y": "CD99"
+      },
+      "direction": "xy",
+      "brushId": "plot_brush1",
+      "outputId": "scatter1"
+    },
+    "plot_brush2": {
+      "xmin": 0.5,
+      "xmax": 1.5,
+      "ymin": 0,
+      "ymax": 3,
+      "mapping": {
+        "x": "sample",
+        "y": "CD8a"
+      },
+      "direction": "xy",
+      "brushId": "plot_brush2",
+      "outputId": "scatter2"
+    },
+    "plot_brush3": {
+      "xmin": 0.5,
+      "xmax": 1.5,
+      "ymin": 1,
+      "ymax": 2,
+      "mapping": {
+        "x": "sample",
+        "y": "CDH"
+      },
+      "direction": "xy",
+      "brushId": "plot_brush3",
+      "outputId": "scatter3"
+    },
     "plotCount": 3,
     "previous.sample": 0,
     "sample": "1",
@@ -45,11 +84,11 @@
 
       ]
     },
-    "info1": "Selection: ",
-    "info2": "Selection: ",
-    "info3": "Selection: ",
+    "info1": "Selection: xmin = 0.5 xmax = 1.5 ymin = 1 ymax = 3",
+    "info2": "Selection: xmin = 0.5 xmax = 1.5 ymin = 0 ymax = 3",
+    "info3": "Selection: xmin = 0.5 xmax = 1.5 ymin = 1 ymax = 2",
     "scatter1": {
-      "src": "[image data sha1: 3a5fe7460e3dbcb65b13018c9f3f33add625c96b]",
+      "src": "[image data sha1: 9d44479ee00f2c246d9e2890906f6a3a26f86050]",
       "width": 182,
       "height": 400,
       "coordmap": {
@@ -93,20 +132,92 @@
       }
     },
     "scatter2": {
-      "message": "",
-      "call": "NULL",
-      "type": [
-        "shiny.silent.error",
-        "validation"
-      ]
+      "src": "[image data sha1: 57c42d39f1a5416ed6be05f1eeb1108aa5b82c2e]",
+      "width": 182,
+      "height": 400,
+      "coordmap": {
+        "panels": [
+          {
+            "panel": 1,
+            "row": 1,
+            "col": 1,
+            "panel_vars": {
+
+            },
+            "log": {
+              "x": null,
+              "y": null
+            },
+            "domain": {
+              "left": 0.4,
+              "right": 1.6,
+              "bottom": -0.153414566098248,
+              "top": 3.2217058880632,
+              "discrete_limits": {
+                "x": "1"
+              }
+            },
+            "mapping": {
+              "x": "sample",
+              "y": "CD8a"
+            },
+            "range": {
+              "left": 28.2337904956243,
+              "right": 176.520547945205,
+              "bottom": 378.852131046661,
+              "top": 5.47945205479452
+            }
+          }
+        ],
+        "dims": {
+          "width": 182,
+          "height": 400
+        }
+      }
     },
     "scatter3": {
-      "message": "",
-      "call": "NULL",
-      "type": [
-        "shiny.silent.error",
-        "validation"
-      ]
+      "src": "[image data sha1: c5da5c56de65302bf08239d4efac2420b33f3ac3]",
+      "width": 182,
+      "height": 400,
+      "coordmap": {
+        "panels": [
+          {
+            "panel": 1,
+            "row": 1,
+            "col": 1,
+            "panel_vars": {
+
+            },
+            "log": {
+              "x": null,
+              "y": null
+            },
+            "domain": {
+              "left": 0.4,
+              "right": 1.6,
+              "bottom": 0.0303217520280337,
+              "top": 3.97104185799336,
+              "discrete_limits": {
+                "x": "1"
+              }
+            },
+            "mapping": {
+              "x": "sample",
+              "y": "CDH"
+            },
+            "range": {
+              "left": 28.2337904956243,
+              "right": 176.520547945205,
+              "bottom": 378.852131046661,
+              "top": 5.47945205479452
+            }
+          }
+        ],
+        "dims": {
+          "width": 182,
+          "height": 400
+        }
+      }
     }
   },
   "export": {
