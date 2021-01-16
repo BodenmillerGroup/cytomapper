@@ -1,6 +1,6 @@
 {
   "input": {
-    "assay": "counts",
+    "assay": "exprs",
     "Help": 0,
     "labelCellsBy": "Cell-Type",
     "Marker_1": "CD99",
@@ -13,8 +13,8 @@
     "plot_brush1": {
       "xmin": 0.5,
       "xmax": 1.5,
-      "ymin": 12,
-      "ymax": 34,
+      "ymin": 0,
+      "ymax": 3,
       "mapping": {
         "x": "sample",
         "y": "CD99"
@@ -39,8 +39,8 @@
     "plot_brush3": {
       "xmin": 0.5,
       "xmax": 1.5,
-      "ymin": 10,
-      "ymax": 20,
+      "ymin": 0,
+      "ymax": 3,
       "mapping": {
         "x": "sample",
         "y": "CDH"
@@ -84,11 +84,11 @@
 
       ]
     },
-    "info1": "Selection: xmin = 0.5 xmax = 1.5 ymin = 12 ymax = 34",
+    "info1": "Selection: xmin = 0.5 xmax = 1.5 ymin = 0 ymax = 3",
     "info2": "Selection: xmin = 0.5 xmax = 1.5 ymin = 0 ymax = 3",
-    "info3": "Selection: xmin = 0.5 xmax = 1.5 ymin = 10 ymax = 20",
+    "info3": "Selection: xmin = 0.5 xmax = 1.5 ymin = 0 ymax = 3",
     "scatter1": {
-      "src": "[image data sha1: 024d912ca2fb959e1a423f3504d47846d159df89]",
+      "src": "[image data sha1: cfa859a18a1a16fbb2c5917dee413473999c4162]",
       "width": 182,
       "height": 400,
       "coordmap": {
@@ -107,8 +107,8 @@
             "domain": {
               "left": 0.4,
               "right": 1.6,
-              "bottom": -1.82060493602872,
-              "top": 42.9142487949622,
+              "bottom": 0.00158661522383519,
+              "top": 4.61359513618651,
               "discrete_limits": {
                 "x": "3"
               }
@@ -118,7 +118,7 @@
               "y": "CD99"
             },
             "range": {
-              "left": 33.1279312159917,
+              "left": 28.2337904956243,
               "right": 176.520547945205,
               "bottom": 378.852131046661,
               "top": 5.47945205479452
@@ -132,7 +132,7 @@
       }
     },
     "scatter2": {
-      "src": "[image data sha1: 47298df753e0cf05d3933066bf84ba39c62871f1]",
+      "src": "[image data sha1: 80e20a9b01f85d891ee20d4b0c45b2ea8647a170]",
       "width": 182,
       "height": 400,
       "coordmap": {
@@ -151,8 +151,8 @@
             "domain": {
               "left": 0.4,
               "right": 1.6,
-              "bottom": -1.7673456473784,
-              "top": 37.1142585949464,
+              "bottom": -0.212927913810371,
+              "top": 4.47148619001779,
               "discrete_limits": {
                 "x": "3"
               }
@@ -162,7 +162,7 @@
               "y": "PIN"
             },
             "range": {
-              "left": 33.1279312159917,
+              "left": 28.2337904956243,
               "right": 176.520547945205,
               "bottom": 378.852131046661,
               "top": 5.47945205479452
@@ -176,7 +176,7 @@
       }
     },
     "scatter3": {
-      "src": "[image data sha1: d3bb1c8b422c083816c303b6d4e7434366be6f52]",
+      "src": "[image data sha1: 3e6448a5792ed86b13c5b84b624bd6ffd130c9f1]",
       "width": 182,
       "height": 400,
       "coordmap": {
@@ -195,8 +195,8 @@
             "domain": {
               "left": 0.4,
               "right": 1.6,
-              "bottom": -0.886441508974092,
-              "top": 23.2568329780843,
+              "bottom": 0.0303217520280337,
+              "top": 3.97104185799336,
               "discrete_limits": {
                 "x": "3"
               }
@@ -206,7 +206,7 @@
               "y": "CDH"
             },
             "range": {
-              "left": 33.1279312159917,
+              "left": 28.2337904956243,
               "right": 176.520547945205,
               "bottom": 378.852131046661,
               "top": 5.47945205479452
