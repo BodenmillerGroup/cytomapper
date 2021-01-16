@@ -3,8 +3,8 @@
     "assay": "counts",
     "Help": 0,
     "labelCellsBy": "Cell-Type",
-    "Marker_1": "",
-    "Marker_2": "",
+    "Marker_1": "CD99",
+    "Marker_2": "H3",
     "Marker_3": "",
     "Marker_4": "",
     "Marker_5": "",
@@ -52,12 +52,45 @@
     "info2": "Selection: ",
     "info3": "Selection: ",
     "scatter1": {
-      "message": "",
-      "call": "NULL",
-      "type": [
-        "shiny.silent.error",
-        "validation"
-      ]
+      "src": "[image data sha1: 6f85d8e0fa024513e1a9550e9a0c1317d0045abf]",
+      "width": 182,
+      "height": 400,
+      "coordmap": {
+        "panels": [
+          {
+            "panel": 1,
+            "row": 1,
+            "col": 1,
+            "panel_vars": {
+
+            },
+            "log": {
+              "x": null,
+              "y": null
+            },
+            "domain": {
+              "left": -1.82060493602872,
+              "right": 42.9142487949622,
+              "bottom": -2.3685467163964,
+              "top": 85.2283968453727
+            },
+            "mapping": {
+              "x": "CD99",
+              "y": "H3"
+            },
+            "range": {
+              "left": 33.1279312159917,
+              "right": 176.520547945205,
+              "bottom": 368.509178173071,
+              "top": 5.47945205479452
+            }
+          }
+        ],
+        "dims": {
+          "width": 182,
+          "height": 400
+        }
+      }
     },
     "scatter2": {
       "message": "",

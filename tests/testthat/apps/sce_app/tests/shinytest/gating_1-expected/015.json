@@ -1,6 +1,6 @@
 {
   "input": {
-    "assay": "counts",
+    "assay": "exprs",
     "Help": 0,
     "labelCellsBy": "Cell-Type",
     "Marker_1": "",

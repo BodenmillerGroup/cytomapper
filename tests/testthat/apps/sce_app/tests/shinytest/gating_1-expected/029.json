@@ -1,18 +1,54 @@
 {
   "input": {
-    "assay": "counts",
+    "assay": "exprs",
     "Help": 0,
     "labelCellsBy": "Cell-Type",
-    "Marker_1": "",
-    "Marker_2": "",
-    "Marker_3": "",
-    "Marker_4": "",
-    "Marker_5": "",
-    "Marker_6": "",
+    "Marker_1": "CD99",
+    "Marker_2": "H3",
+    "Marker_3": "PIN",
+    "Marker_4": "CDH",
+    "Marker_5": "CD8a",
+    "Marker_6": "CD99",
     "next.sample": 0,
-    "plot_brush1": null,
-    "plot_brush2": null,
-    "plot_brush3": null,
+    "plot_brush1": {
+      "xmin": 1,
+      "xmax": 4,
+      "ymin": 2,
+      "ymax": 6,
+      "mapping": {
+        "x": "CD99",
+        "y": "H3"
+      },
+      "direction": "xy",
+      "brushId": "plot_brush1",
+      "outputId": "scatter1"
+    },
+    "plot_brush2": {
+      "xmin": 1,
+      "xmax": 4,
+      "ymin": 0,
+      "ymax": 4,
+      "mapping": {
+        "x": "PIN",
+        "y": "CDH"
+      },
+      "direction": "xy",
+      "brushId": "plot_brush2",
+      "outputId": "scatter2"
+    },
+    "plot_brush3": {
+      "xmin": 0,
+      "xmax": 3,
+      "ymin": 1,
+      "ymax": 4,
+      "mapping": {
+        "x": "CD8a",
+        "y": "CD99"
+      },
+      "direction": "xy",
+      "brushId": "plot_brush3",
+      "outputId": "scatter3"
+    },
     "plotCount": 3,
     "previous.sample": 0,
     "sample": "1",
@@ -48,32 +84,131 @@
 
       ]
     },
-    "info1": "Selection: ",
-    "info2": "Selection: ",
-    "info3": "Selection: ",
+    "info1": "Selection: xmin = 1 xmax = 4 ymin = 2 ymax = 6",
+    "info2": "Selection: xmin = 1 xmax = 4 ymin = 0 ymax = 4",
+    "info3": "Selection: xmin = 0 xmax = 3 ymin = 1 ymax = 4",
     "scatter1": {
-      "message": "",
-      "call": "NULL",
-      "type": [
-        "shiny.silent.error",
-        "validation"
-      ]
+      "src": "[image data sha1: 06846a6852bf6c11c3b86c5c69efdd91aca2a167]",
+      "width": 182,
+      "height": 400,
+      "coordmap": {
+        "panels": [
+          {
+            "panel": 1,
+            "row": 1,
+            "col": 1,
+            "panel_vars": {
+
+            },
+            "log": {
+              "x": null,
+              "y": null
+            },
+            "domain": {
+              "left": 0.00158661522383519,
+              "right": 4.61359513618651,
+              "bottom": 1.06418546310452,
+              "top": 5.28241309233457
+            },
+            "mapping": {
+              "x": "CD99",
+              "y": "H3"
+            },
+            "range": {
+              "left": 28.2337904956243,
+              "right": 176.520547945205,
+              "bottom": 368.509178173071,
+              "top": 5.47945205479452
+            }
+          }
+        ],
+        "dims": {
+          "width": 182,
+          "height": 400
+        }
+      }
     },
     "scatter2": {
-      "message": "",
-      "call": "NULL",
-      "type": [
-        "shiny.silent.error",
-        "validation"
-      ]
+      "src": "[image data sha1: 0891d1be2628dd9573a26e66b9bead6550b1695d]",
+      "width": 182,
+      "height": 400,
+      "coordmap": {
+        "panels": [
+          {
+            "panel": 1,
+            "row": 1,
+            "col": 1,
+            "panel_vars": {
+
+            },
+            "log": {
+              "x": null,
+              "y": null
+            },
+            "domain": {
+              "left": -0.212927913810371,
+              "right": 4.47148619001779,
+              "bottom": 0.0303217520280337,
+              "top": 3.97104185799336
+            },
+            "mapping": {
+              "x": "PIN",
+              "y": "CDH"
+            },
+            "range": {
+              "left": 28.2337904956243,
+              "right": 176.520547945205,
+              "bottom": 368.509178173071,
+              "top": 5.47945205479452
+            }
+          }
+        ],
+        "dims": {
+          "width": 182,
+          "height": 400
+        }
+      }
     },
     "scatter3": {
-      "message": "",
-      "call": "NULL",
-      "type": [
-        "shiny.silent.error",
-        "validation"
-      ]
+      "src": "[image data sha1: ef5713f91d95448b34f60132665dd3d29e7b1bc6]",
+      "width": 182,
+      "height": 400,
+      "coordmap": {
+        "panels": [
+          {
+            "panel": 1,
+            "row": 1,
+            "col": 1,
+            "panel_vars": {
+
+            },
+            "log": {
+              "x": null,
+              "y": null
+            },
+            "domain": {
+              "left": -0.153414566098248,
+              "right": 3.2217058880632,
+              "bottom": 0.00158661522383519,
+              "top": 4.61359513618651
+            },
+            "mapping": {
+              "x": "CD8a",
+              "y": "CD99"
+            },
+            "range": {
+              "left": 28.2337904956243,
+              "right": 176.520547945205,
+              "bottom": 368.509178173071,
+              "top": 5.47945205479452
+            }
+          }
+        ],
+        "dims": {
+          "width": 182,
+          "height": 400
+        }
+      }
     }
   },
   "export": {
