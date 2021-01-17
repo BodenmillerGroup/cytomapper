@@ -1,7 +1,7 @@
 {
   "input": {
     "assay": "counts",
-    "Help": 0,
+    "Help": 1,
     "labelCellsBy": "Cell-Type",
     "Marker_1": "",
     "Marker_2": "",

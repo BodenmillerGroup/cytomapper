@@ -51,6 +51,7 @@ app$snapshot()
 app$setInputs(plotCount = 1)
 app$snapshot()
 
+
 p <- app$.__enclos_env__$private$shinyProcess
 p$interrupt()
 p$wait()

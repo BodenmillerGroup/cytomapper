@@ -3,7 +3,7 @@
     "assay": "counts",
     "Help": 0,
     "labelCellsBy": "Cell-Type",
-    "Marker_1": "",
+    "Marker_1": "PIN",
     "Marker_2": "",
     "next.sample": 0,
     "plotCount": 1,
@@ -51,12 +51,48 @@
     },
     "info1": "Selection: ",
     "scatter1": {
-      "message": "",
-      "call": "NULL",
-      "type": [
-        "shiny.silent.error",
-        "validation"
-      ]
+      "src": "[image data sha1: 559e3118c78d6d57988fbabbad36df37a7595917]",
+      "width": 187,
+      "height": 400,
+      "coordmap": {
+        "panels": [
+          {
+            "panel": 1,
+            "row": 1,
+            "col": 1,
+            "panel_vars": {
+
+            },
+            "log": {
+              "x": null,
+              "y": null
+            },
+            "domain": {
+              "left": 0.4,
+              "right": 1.6,
+              "bottom": -1.7673456473784,
+              "top": 37.1142585949464,
+              "discrete_limits": {
+                "x": "1"
+              }
+            },
+            "mapping": {
+              "x": "sample",
+              "y": "PIN"
+            },
+            "range": {
+              "left": 33.1279312159917,
+              "right": 181.520547945205,
+              "bottom": 378.852131046661,
+              "top": 5.47945205479452
+            }
+          }
+        ],
+        "dims": {
+          "width": 187,
+          "height": 400
+        }
+      }
     }
   },
   "export": {

@@ -3,7 +3,7 @@
     "assay": "counts",
     "Help": 0,
     "labelCellsBy": "Cell-Type",
-    "Marker_1": "H3",
+    "Marker_1": "CD99",
     "Marker_2": "",
     "Marker_3": "",
     "Marker_4": "",
@@ -49,7 +49,7 @@
     "info2": "Selection: ",
     "info3": "Selection: ",
     "scatter1": {
-      "src": "[image data sha1: 472628af0968d91415aa44376103d64a0acaa1dd]",
+      "src": "[image data sha1: 16ed2e91d45e2f10dc78b8379a834e0582730692]",
       "width": 182,
       "height": 400,
       "coordmap": {
@@ -68,15 +68,15 @@
             "domain": {
               "left": 0.4,
               "right": 1.6,
-              "bottom": -2.3685467163964,
-              "top": 85.2283968453727,
+              "bottom": -1.82060493602872,
+              "top": 42.9142487949622,
               "discrete_limits": {
                 "x": "1"
               }
             },
             "mapping": {
               "x": "sample",
-              "y": "H3"
+              "y": "CD99"
             },
             "range": {
               "left": 33.1279312159917,

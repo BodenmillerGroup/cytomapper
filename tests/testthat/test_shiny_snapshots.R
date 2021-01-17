@@ -18,4 +18,5 @@ test_that("cytomapperShiny() works when only providing a SCE object", {
     expect_pass(testApp(appDir = "apps/sce_app/", testnames = "sample_selection", compareImages = FALSE))
     expect_pass(testApp(appDir = "apps/sce_app/", testnames = "side_panel", compareImages = FALSE))
     expect_pass(testApp(appDir = "apps/sce_app/", testnames = "tab_reset", compareImages = FALSE))
+    expect_pass(testApp(appDir = "apps/sce_app/", testnames = "tab_reset_gate_clear", compareImages = FALSE))
 })

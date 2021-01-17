@@ -1,13 +1,21 @@
 app <- ShinyDriver$new("../../", loadTimeout = 100000, seed = 1234)
 app$snapshotInit("side_panel")
 
-app$setInputs(sidebarItemExpanded = "Plots")
 app$snapshot()
-app$setInputs(sidebarItemExpanded = character(0))
+app$setInputs(sidebarItemExpanded = "Plots")
+Sys.sleep(time = 0.5)
 app$snapshot()
 app$setInputs(sidebarItemExpanded = "Generalcontrols")
+Sys.sleep(time = 0.5)
 app$snapshot()
 app$setInputs(sidebarItemExpanded = "Plots")
+Sys.sleep(time = 0.5)
+app$snapshot()
+app$setInputs(sidebarItemExpanded = "Generalcontrols")
+Sys.sleep(time = 0.5)
+app$snapshot()
+app$setInputs(sidebarItemExpanded = "Plots")
+Sys.sleep(time = 0.5)
 app$snapshot()
 
 p <- app$.__enclos_env__$private$shinyProcess

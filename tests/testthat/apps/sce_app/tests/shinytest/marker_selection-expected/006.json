@@ -6,8 +6,8 @@
     "Marker_1": "CD99",
     "Marker_2": "H3",
     "Marker_3": "PIN",
-    "Marker_4": "",
-    "Marker_5": "",
+    "Marker_4": "CDH",
+    "Marker_5": "CD8a",
     "Marker_6": "",
     "next.sample": 0,
     "plot_brush1": {
@@ -22,6 +22,19 @@
       "direction": "xy",
       "brushId": "plot_brush1",
       "outputId": "scatter1"
+    },
+    "plot_brush2": {
+      "xmin": 5,
+      "xmax": 30,
+      "ymin": 0,
+      "ymax": 40,
+      "mapping": {
+        "x": "PIN",
+        "y": "CDH"
+      },
+      "direction": "xy",
+      "brushId": "plot_brush2",
+      "outputId": "scatter2"
     },
     "plotCount": 3,
     "previous.sample": 0,
@@ -59,7 +72,7 @@
       ]
     },
     "info1": "Selection: xmin = 5 xmax = 34 ymin = 10 ymax = 60",
-    "info2": "Selection: ",
+    "info2": "Selection: xmin = 5 xmax = 30 ymin = 0 ymax = 40",
     "info3": "Selection: ",
     "scatter1": {
       "src": "[image data sha1: 175b4047a13985c5024728416bf4a72558a1f840]",
@@ -103,7 +116,48 @@
       }
     },
     "scatter2": {
-      "src": "[image data sha1: c4ea914080fb8f7cdc939493a6c78ed2665e450f]",
+      "src": "[image data sha1: 437198eb1529ecd9892bc3e1e92edbef8ec4981e]",
+      "width": 182,
+      "height": 400,
+      "coordmap": {
+        "panels": [
+          {
+            "panel": 1,
+            "row": 1,
+            "col": 1,
+            "panel_vars": {
+
+            },
+            "log": {
+              "x": null,
+              "y": null
+            },
+            "domain": {
+              "left": -1.7673456473784,
+              "right": 37.1142585949464,
+              "bottom": -0.886441508974092,
+              "top": 23.2568329780843
+            },
+            "mapping": {
+              "x": "PIN",
+              "y": "CDH"
+            },
+            "range": {
+              "left": 33.1279312159917,
+              "right": 176.520547945205,
+              "bottom": 368.509178173071,
+              "top": 5.47945205479452
+            }
+          }
+        ],
+        "dims": {
+          "width": 182,
+          "height": 400
+        }
+      }
+    },
+    "scatter3": {
+      "src": "[image data sha1: 8f82a931c8f70d1353f6c075215c91c0491c8b86]",
       "width": 182,
       "height": 400,
       "coordmap": {
@@ -122,18 +176,18 @@
             "domain": {
               "left": 0.4,
               "right": 1.6,
-              "bottom": -1.7673456473784,
-              "top": 37.1142585949464,
+              "bottom": -0.536465634658935,
+              "top": 11.2657783278376,
               "discrete_limits": {
                 "x": "1"
               }
             },
             "mapping": {
               "x": "sample",
-              "y": "PIN"
+              "y": "CD8a"
             },
             "range": {
-              "left": 33.1279312159917,
+              "left": 28.2337904956243,
               "right": 176.520547945205,
               "bottom": 378.852131046661,
               "top": 5.47945205479452
@@ -145,14 +199,6 @@
           "height": 400
         }
       }
-    },
-    "scatter3": {
-      "message": "",
-      "call": "NULL",
-      "type": [
-        "shiny.silent.error",
-        "validation"
-      ]
     }
   },
   "export": {
