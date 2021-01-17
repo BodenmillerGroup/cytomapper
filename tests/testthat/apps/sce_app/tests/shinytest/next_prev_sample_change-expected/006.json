@@ -1,0 +1,93 @@
+{
+  "input": {
+    "assay": "counts",
+    "Help": 0,
+    "labelCellsBy": "Cell-Type",
+    "Marker_1": "CD99",
+    "Marker_2": "",
+    "next.sample": 3,
+    "plotCount": 1,
+    "previous.sample": 2,
+    "sample": "2",
+    "SessionInfo": 0,
+    "sidebar": null,
+    "sidebarCollapsed": false,
+    "sidebarItemExpanded": null,
+    "tabbox1": "tab1"
+  },
+  "output": {
+    "AdditionalPlots_sidebar": {
+      "html": "<div class=\"well\" style=\"background-color: #70C389; border-color: #70C389; padding-bottom: 0px; padding-top: 0px\">\n  <h3 style=\"color: black\">Plot 1<\/h3>\n  <div class=\"form-group shiny-input-container\">\n    <label class=\"control-label\" for=\"Marker_1\">\n      <span style=\"color: black; padding-top: 0px\">Select marker 1<\/span>\n    <\/label>\n    <div>\n      <select id=\"Marker_1\" class=\"form-control\"><\/select>\n      <script type=\"application/json\" data-for=\"Marker_1\">{\"placeholder\":\"Select marker\",\"maxItems\":1}<\/script>\n    <\/div>\n  <\/div>\n  <div class=\"form-group shiny-input-container\">\n    <label class=\"control-label\" for=\"Marker_2\">\n      <span style=\"color: black; padding-top: 0px\">Select marker 2<\/span>\n    <\/label>\n    <div>\n      <select id=\"Marker_2\" class=\"form-control\"><\/select>\n      <script type=\"application/json\" data-for=\"Marker_2\">{\"placeholder\":\"Select marker\",\"maxItems\":1}<\/script>\n    <\/div>\n  <\/div>\n<\/div>",
+      "deps": [
+        {
+          "name": "selectize",
+          "version": "0.11.2",
+          "src": {
+            "href": "shared/selectize"
+          },
+          "meta": null,
+          "script": null,
+          "stylesheet": "css/selectize.bootstrap3.css",
+          "head": "<!--[if lt IE 9]>\n<script src=\"shared/selectize/js/es5-shim.min.js\"><\/script>\n<![endif]-->\n<script src=\"shared/selectize/js/selectize.min.js\"><\/script>",
+          "attachment": null,
+          "package": null,
+          "all_files": true
+        }
+      ]
+    },
+    "AdditionalPlots_tab1": {
+      "html": "<div class=\"row\">\n  <div class=\"col-sm-4\">\n    <div class=\"box box-primary\">\n      <div class=\"box-header\">\n        <h3 class=\"box-title\">Plot 1<\/h3>\n      <\/div>\n      <div class=\"box-body\">\n        <div id=\"scatter1\" class=\"shiny-plot-output\" style=\"width: 100% ; height: 400px\" data-brush-id=\"plot_brush1\" data-brush-fill=\"#70C389\" data-brush-stroke=\"#70C389\" data-brush-opacity=\"0.25\" data-brush-delay=\"300\" data-brush-delay-type=\"debounce\" data-brush-clip=\"TRUE\" data-brush-direction=\"xy\" data-brush-reset-on-new=\"FALSE\"><\/div>\n        <pre id=\"info1\" class=\"shiny-text-output noplaceholder\"><\/pre>\n      <\/div>\n    <\/div>\n  <\/div>\n<\/div>",
+      "deps": [
+
+      ]
+    },
+    "info1": "Selection: ",
+    "scatter1": {
+      "src": "[image data sha1: 0ad534abaf7aaa496f15ed7fe8f517b249cf6718]",
+      "width": 187,
+      "height": 400,
+      "coordmap": {
+        "panels": [
+          {
+            "panel": 1,
+            "row": 1,
+            "col": 1,
+            "panel_vars": {
+
+            },
+            "log": {
+              "x": null,
+              "y": null
+            },
+            "domain": {
+              "left": 0.4,
+              "right": 1.6,
+              "bottom": -1.82060493602872,
+              "top": 42.9142487949622,
+              "discrete_limits": {
+                "x": "2"
+              }
+            },
+            "mapping": {
+              "x": "sample",
+              "y": "CD99"
+            },
+            "range": {
+              "left": 33.1279312159917,
+              "right": 181.520547945205,
+              "bottom": 378.852131046661,
+              "top": 5.47945205479452
+            }
+          }
+        ],
+        "dims": {
+          "width": 187,
+          "height": 400
+        }
+      }
+    }
+  },
+  "export": {
+
+  }
+}
