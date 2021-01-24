@@ -51,4 +51,5 @@ test_that("cytomapperShiny() works when masks and images are provided", {
     expect_pass(testApp(appDir = "apps/images_app/", testnames = "complex_plot_change", compareImages = FALSE))
     expect_pass(testApp(appDir = "apps/images_app/", testnames = "complex_gating", compareImages = FALSE))
     expect_pass(testApp(appDir = "apps/images_app/", testnames = "complex_assay_change", compareImages = FALSE))
+    expect_pass(testApp(appDir = "apps/images_app/", testnames = "contrasts_set", compareImages = FALSE))
 })
