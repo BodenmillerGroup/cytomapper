@@ -50,7 +50,8 @@ Suggests:
     BiocStyle,
     knitr,
     rmarkdown,
-    testthat
+    testthat,
+    shinytest
 biocViews: ImmunoOncology, Software, SingleCell, OneChannel, TwoChannel, MultipleComparison, Normalization, DataImport
 VignetteBuilder: knitr
 URL: https://github.com/BodenmillerGroup/cytomapper
