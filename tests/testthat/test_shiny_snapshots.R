@@ -36,3 +36,19 @@ test_that("cytomapperShiny() works when masks are provided", {
     expect_pass(testApp(appDir = "apps/masks_app/", testnames = "complex_gating", compareImages = FALSE))
     expect_pass(testApp(appDir = "apps/masks_app/", testnames = "complex_assay_change", compareImages = FALSE))
 })
+
+test_that("cytomapperShiny() works when masks and images are provided", {
+    
+    skip_on_cran()
+    
+    expect_pass(testApp(appDir = "apps/images_app/", testnames = "tab_select", compareImages = FALSE))
+    expect_pass(testApp(appDir = "apps/images_app/", testnames = "simple_sample_select", compareImages = FALSE))
+    expect_pass(testApp(appDir = "apps/images_app/", testnames = "simple_plot_change", compareImages = FALSE))
+    expect_pass(testApp(appDir = "apps/images_app/", testnames = "simple_gating", compareImages = FALSE))
+    expect_pass(testApp(appDir = "apps/images_app/", testnames = "simple_assay_change", compareImages = FALSE))
+    expect_pass(testApp(appDir = "apps/images_app/", testnames = "marker_select", compareImages = FALSE))
+    expect_pass(testApp(appDir = "apps/images_app/", testnames = "complex_sample_change", compareImages = FALSE))
+    expect_pass(testApp(appDir = "apps/images_app/", testnames = "complex_plot_change", compareImages = FALSE))
+    expect_pass(testApp(appDir = "apps/images_app/", testnames = "complex_gating", compareImages = FALSE))
+    expect_pass(testApp(appDir = "apps/images_app/", testnames = "complex_assay_change", compareImages = FALSE))
+})
