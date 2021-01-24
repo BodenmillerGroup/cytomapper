@@ -208,12 +208,11 @@
             })
         }, {
             updateTabsetPanel(session, "tabbox1",
-                            selected = "tab1"
-            )
+                            selected = "tab1")
 
             # Reset gates and objects
-            .clearObjects(objValues, iter = 1)
-            .clearBrush(input, session, iter = 1)
+            #.clearObjects(objValues, iter = 1)
+            #.clearBrush(input, session, iter = 1)
 
     })
 
@@ -374,7 +373,7 @@
 #' @importFrom S4Vectors metadata
 #' @importFrom SummarizedExperiment metadata<-
 .brushObject <- function(input, session, objValues, iter){
-
+    
     cur_val <- (iter * 2) - 1
 
     if (is.null(objValues[[paste0("object", iter)]])) {
@@ -590,7 +589,7 @@
                             iter, img_id, cell_id){
 
     renderPlot({
-
+        
         req(input$sample)
 
         cur_val <- (iter * 2) - 1
