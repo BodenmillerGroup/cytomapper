@@ -1,6 +1,6 @@
 {
   "input": {
-    "assay": "counts",
+    "assay": "exprs",
     "contrast_marker_1": 1,
     "contrast_marker_2": 1,
     "exprs_marker_1": "H3",
@@ -18,7 +18,7 @@
     "sidebar": null,
     "sidebarCollapsed": false,
     "sidebarItemExpanded": null,
-    "tabbox1": "tab2"
+    "tabbox1": "tab1"
   },
   "output": {
     "AdditionalPlots_sidebar": {
@@ -65,9 +65,9 @@
         },
         {
           "name": "htmlwidgets",
-          "version": "1.5.2",
+          "version": "1.5.3",
           "src": {
-            "href": "htmlwidgets-1.5.2"
+            "href": "htmlwidgets-1.5.3"
           },
           "meta": null,
           "script": "htmlwidgets.js",
@@ -153,7 +153,7 @@
     },
     "info1": "Selection: ",
     "scatter1": {
-      "src": "[image data sha1: 79628878940492e4c57fdef4d5ece7ce0336fbc9]",
+      "src": "[image data sha1: e3584cb9db62b20bcd091b3730dafb49b1f659c3]",
       "width": 187,
       "height": 400,
       "coordmap": {
@@ -172,8 +172,8 @@
             "domain": {
               "left": 0.4,
               "right": 1.6,
-              "bottom": -1.82060493602872,
-              "top": 42.9142487949622,
+              "bottom": 0.00158661522383519,
+              "top": 4.61359513618651,
               "discrete_limits": {
                 "x": "1"
               }
@@ -183,7 +183,7 @@
               "y": "CD99"
             },
             "range": {
-              "left": 33.1279312159917,
+              "left": 28.2337904956243,
               "right": 181.520547945205,
               "bottom": 378.852131046661,
               "top": 5.47945205479452

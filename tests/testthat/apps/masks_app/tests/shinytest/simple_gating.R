@@ -10,16 +10,16 @@ brush1 <- list(xmin = 0.5,
                direction = "xy",
                brushId = "plot_brush1",
                outputId = "scatter1")
-
+Sys.sleep(0.5)
 app$setInputs(Marker_1 = "CD99")
 app$snapshot()
 app$setInputs(plot_brush1 = brush1, allowInputNoBinding_ = TRUE)
 app$snapshot()
 app$setInputs(tabbox1 = "tab2")
 Sys.sleep(0.5)
-app$snapshot()
+#app$snapshot()
 app$setInputs(resetMarkers = "click")
-app$snapshot()
+#app$snapshot()
 
 p <- app$.__enclos_env__$private$shinyProcess
 p$interrupt()

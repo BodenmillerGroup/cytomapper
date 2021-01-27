@@ -7,7 +7,7 @@
     "exprs_marker_2": "",
     "Help": 0,
     "labelCellsBy": "Cell-Type",
-    "Marker_1": "",
+    "Marker_1": "CD99",
     "Marker_2": "",
     "next.sample": 0,
     "plotCount": 1,
@@ -18,7 +18,7 @@
     "sidebar": null,
     "sidebarCollapsed": false,
     "sidebarItemExpanded": null,
-    "tabbox1": "tab2"
+    "tabbox1": "tab1"
   },
   "output": {
     "AdditionalPlots_sidebar": {
@@ -65,9 +65,9 @@
         },
         {
           "name": "htmlwidgets",
-          "version": "1.5.2",
+          "version": "1.5.3",
           "src": {
-            "href": "htmlwidgets-1.5.2"
+            "href": "htmlwidgets-1.5.3"
           },
           "meta": null,
           "script": "htmlwidgets.js",
@@ -153,12 +153,48 @@
     },
     "info1": "Selection: ",
     "scatter1": {
-      "message": "",
-      "call": "NULL",
-      "type": [
-        "shiny.silent.error",
-        "validation"
-      ]
+      "src": "[image data sha1: 79628878940492e4c57fdef4d5ece7ce0336fbc9]",
+      "width": 187,
+      "height": 400,
+      "coordmap": {
+        "panels": [
+          {
+            "panel": 1,
+            "row": 1,
+            "col": 1,
+            "panel_vars": {
+
+            },
+            "log": {
+              "x": null,
+              "y": null
+            },
+            "domain": {
+              "left": 0.4,
+              "right": 1.6,
+              "bottom": -1.82060493602872,
+              "top": 42.9142487949622,
+              "discrete_limits": {
+                "x": "1"
+              }
+            },
+            "mapping": {
+              "x": "sample",
+              "y": "CD99"
+            },
+            "range": {
+              "left": 33.1279312159917,
+              "right": 181.520547945205,
+              "bottom": 378.852131046661,
+              "top": 5.47945205479452
+            }
+          }
+        ],
+        "dims": {
+          "width": 187,
+          "height": 400
+        }
+      }
     }
   },
   "export": {

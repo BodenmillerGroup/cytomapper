@@ -17,8 +17,8 @@
     "plot_brush1": {
       "xmin": 0.5,
       "xmax": 1.5,
-      "ymin": 12,
-      "ymax": 34,
+      "ymin": 3.1798,
+      "ymax": 4.2197,
       "mapping": {
         "x": "sample",
         "y": "CD99"
@@ -27,8 +27,32 @@
       "brushId": "plot_brush1",
       "outputId": "scatter1"
     },
-    "plot_brush2": null,
-    "plot_brush3": null,
+    "plot_brush2": {
+      "xmin": 0.5,
+      "xmax": 1.5,
+      "ymin": 2.3124,
+      "ymax": 3.4023,
+      "mapping": {
+        "x": "sample",
+        "y": "CDH"
+      },
+      "direction": "xy",
+      "brushId": "plot_brush2",
+      "outputId": "scatter2"
+    },
+    "plot_brush3": {
+      "xmin": 0.5,
+      "xmax": 1.5,
+      "ymin": 2.9982,
+      "ymax": 3.6895,
+      "mapping": {
+        "x": "sample",
+        "y": "PIN"
+      },
+      "direction": "xy",
+      "brushId": "plot_brush3",
+      "outputId": "scatter3"
+    },
     "plotCount": 3,
     "previous.sample": 0,
     "resetMarkers": 1,
@@ -84,9 +108,9 @@
         },
         {
           "name": "htmlwidgets",
-          "version": "1.5.2",
+          "version": "1.5.3",
           "src": {
-            "href": "htmlwidgets-1.5.2"
+            "href": "htmlwidgets-1.5.3"
           },
           "meta": null,
           "script": "htmlwidgets.js",
@@ -184,11 +208,11 @@
 
       ]
     },
-    "info1": "Selection: xmin = 0.5 xmax = 1.5 ymin = 12 ymax = 34",
-    "info2": "Selection: ",
-    "info3": "Selection: ",
+    "info1": "Selection: xmin = 0.5 xmax = 1.5 ymin = 3.2 ymax = 4.2",
+    "info2": "Selection: xmin = 0.5 xmax = 1.5 ymin = 2.3 ymax = 3.4",
+    "info3": "Selection: xmin = 0.5 xmax = 1.5 ymin = 3 ymax = 3.7",
     "scatter1": {
-      "src": "[image data sha1: 3a5fe7460e3dbcb65b13018c9f3f33add625c96b]",
+      "src": "[image data sha1: 330b27e4df0e1f118d213577dfe7836897db2df9]",
       "width": 182,
       "height": 400,
       "coordmap": {
@@ -232,7 +256,7 @@
       }
     },
     "scatter2": {
-      "src": "[image data sha1: c40ed03de52915440698b29ba5c2b0b60fa6d8ad]",
+      "src": "[image data sha1: c1b12461ca6137920b35e60704837731986901f5]",
       "width": 182,
       "height": 400,
       "coordmap": {
@@ -249,10 +273,13 @@
               "y": null
             },
             "domain": {
-              "left": 0.45,
-              "right": 1.55,
+              "left": 0.4,
+              "right": 1.6,
               "bottom": 0.0303217520280337,
-              "top": 3.97104185799336
+              "top": 3.97104185799336,
+              "discrete_limits": {
+                "x": "1"
+              }
             },
             "mapping": {
               "x": "sample",
@@ -273,12 +300,48 @@
       }
     },
     "scatter3": {
-      "message": "",
-      "call": "NULL",
-      "type": [
-        "shiny.silent.error",
-        "validation"
-      ]
+      "src": "[image data sha1: 172a55db73ba7e09dae35b5d8b0c95ef14817731]",
+      "width": 182,
+      "height": 400,
+      "coordmap": {
+        "panels": [
+          {
+            "panel": 1,
+            "row": 1,
+            "col": 1,
+            "panel_vars": {
+
+            },
+            "log": {
+              "x": null,
+              "y": null
+            },
+            "domain": {
+              "left": 0.4,
+              "right": 1.6,
+              "bottom": -0.212927913810371,
+              "top": 4.47148619001779,
+              "discrete_limits": {
+                "x": "1"
+              }
+            },
+            "mapping": {
+              "x": "sample",
+              "y": "PIN"
+            },
+            "range": {
+              "left": 28.2337904956243,
+              "right": 176.520547945205,
+              "bottom": 378.852131046661,
+              "top": 5.47945205479452
+            }
+          }
+        ],
+        "dims": {
+          "width": 182,
+          "height": 400
+        }
+      }
     }
   },
   "export": {

@@ -6,7 +6,7 @@
     "Help": 0,
     "labelCellsBy": "Cell-Type",
     "Marker_1": "CD99",
-    "Marker_2": "",
+    "Marker_2": "PIN",
     "next.sample": 0,
     "plot_brush1": {
       "xmin": 0.5,
@@ -29,7 +29,7 @@
     "sidebar": null,
     "sidebarCollapsed": false,
     "sidebarItemExpanded": null,
-    "tabbox1": "tab2"
+    "tabbox1": "tab1"
   },
   "output": {
     "AdditionalPlots_sidebar": {
@@ -76,9 +76,9 @@
         },
         {
           "name": "htmlwidgets",
-          "version": "1.5.2",
+          "version": "1.5.3",
           "src": {
-            "href": "htmlwidgets-1.5.2"
+            "href": "htmlwidgets-1.5.3"
           },
           "meta": null,
           "script": "htmlwidgets.js",
@@ -178,7 +178,7 @@
     },
     "info1": "Selection: xmin = 0.5 xmax = 1.5 ymin = 12 ymax = 34",
     "scatter1": {
-      "src": "[image data sha1: e91fd4a8b41097715e8a45f867708ad83a3575de]",
+      "src": "[image data sha1: 2e0287dd56fc4439c758e48f89c979962e4c96c9]",
       "width": 187,
       "height": 400,
       "coordmap": {
@@ -195,22 +195,19 @@
               "y": null
             },
             "domain": {
-              "left": 0.4,
-              "right": 1.6,
-              "bottom": -1.82060493602872,
-              "top": 42.9142487949622,
-              "discrete_limits": {
-                "x": "1"
-              }
+              "left": -1.82060493602872,
+              "right": 42.9142487949622,
+              "bottom": -1.7673456473784,
+              "top": 37.1142585949464
             },
             "mapping": {
-              "x": "sample",
-              "y": "CD99"
+              "x": "CD99",
+              "y": "PIN"
             },
             "range": {
               "left": 33.1279312159917,
               "right": 181.520547945205,
-              "bottom": 378.852131046661,
+              "bottom": 368.509178173071,
               "top": 5.47945205479452
             }
           }

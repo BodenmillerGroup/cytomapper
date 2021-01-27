@@ -9,13 +9,13 @@
     "Marker_2": "PIN",
     "next.sample": 0,
     "plot_brush1": {
-      "xmin": 0.5,
-      "xmax": 1.5,
-      "ymin": 12,
-      "ymax": 34,
+      "xmin": 5,
+      "xmax": 34,
+      "ymin": 10,
+      "ymax": 60,
       "mapping": {
-        "x": "sample",
-        "y": "CD99"
+        "x": "CD99",
+        "y": "PIN"
       },
       "direction": "xy",
       "brushId": "plot_brush1",
@@ -76,9 +76,9 @@
         },
         {
           "name": "htmlwidgets",
-          "version": "1.5.2",
+          "version": "1.5.3",
           "src": {
-            "href": "htmlwidgets-1.5.2"
+            "href": "htmlwidgets-1.5.3"
           },
           "meta": null,
           "script": "htmlwidgets.js",
@@ -176,9 +176,9 @@
 
       ]
     },
-    "info1": "Selection: xmin = 0.5 xmax = 1.5 ymin = 12 ymax = 34",
+    "info1": "Selection: xmin = 5 xmax = 34 ymin = 10 ymax = 60",
     "scatter1": {
-      "src": "[image data sha1: 2e0287dd56fc4439c758e48f89c979962e4c96c9]",
+      "src": "[image data sha1: ef60c781f9a9653dc51b60380237a3590bd480a3]",
       "width": 187,
       "height": 400,
       "coordmap": {

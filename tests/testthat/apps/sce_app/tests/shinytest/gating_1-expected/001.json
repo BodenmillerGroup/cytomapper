@@ -5,6 +5,10 @@
     "labelCellsBy": "Cell-Type",
     "Marker_1": "",
     "Marker_2": "",
+    "Marker_3": "",
+    "Marker_4": "",
+    "Marker_5": "",
+    "Marker_6": "",
     "next.sample": 0,
     "plotCount": 3,
     "previous.sample": 0,
@@ -42,7 +46,25 @@
       ]
     },
     "info1": "Selection: ",
+    "info2": "Selection: ",
+    "info3": "Selection: ",
     "scatter1": {
+      "message": "",
+      "call": "NULL",
+      "type": [
+        "shiny.silent.error",
+        "validation"
+      ]
+    },
+    "scatter2": {
+      "message": "",
+      "call": "NULL",
+      "type": [
+        "shiny.silent.error",
+        "validation"
+      ]
+    },
+    "scatter3": {
       "message": "",
       "call": "NULL",
       "type": [

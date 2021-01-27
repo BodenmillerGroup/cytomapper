@@ -7,7 +7,7 @@
     "exprs_marker_2": "",
     "Help": 0,
     "labelCellsBy": "Cell-Type",
-    "Marker_1": "",
+    "Marker_1": "CDH",
     "Marker_2": "",
     "Marker_3": "",
     "Marker_4": "",
@@ -68,9 +68,9 @@
         },
         {
           "name": "htmlwidgets",
-          "version": "1.5.2",
+          "version": "1.5.3",
           "src": {
-            "href": "htmlwidgets-1.5.2"
+            "href": "htmlwidgets-1.5.3"
           },
           "meta": null,
           "script": "htmlwidgets.js",
@@ -155,7 +155,52 @@
       ]
     },
     "info1": "Selection: ",
+    "info2": "Selection: ",
     "scatter1": {
+      "src": "[image data sha1: b1e2f56a9575bbfab338bc355a9cb06af435a886]",
+      "width": 182,
+      "height": 400,
+      "coordmap": {
+        "panels": [
+          {
+            "panel": 1,
+            "row": 1,
+            "col": 1,
+            "panel_vars": {
+
+            },
+            "log": {
+              "x": null,
+              "y": null
+            },
+            "domain": {
+              "left": 0.4,
+              "right": 1.6,
+              "bottom": -0.886441508974092,
+              "top": 23.2568329780843,
+              "discrete_limits": {
+                "x": "1"
+              }
+            },
+            "mapping": {
+              "x": "sample",
+              "y": "CDH"
+            },
+            "range": {
+              "left": 33.1279312159917,
+              "right": 176.520547945205,
+              "bottom": 378.852131046661,
+              "top": 5.47945205479452
+            }
+          }
+        ],
+        "dims": {
+          "width": 182,
+          "height": 400
+        }
+      }
+    },
+    "scatter2": {
       "message": "",
       "call": "NULL",
       "type": [

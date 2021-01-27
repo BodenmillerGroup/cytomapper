@@ -31,7 +31,9 @@ brush3 <- list(xmin = 0.5,
                brushId = "plot_brush3",
                outputId = "scatter3")
 
+
 app$setInputs(plotCount = 3)
+Sys.sleep(0.5)
 app$snapshot()
 app$setInputs(Marker_1 = "CD99")
 app$snapshot()
