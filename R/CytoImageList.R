@@ -83,7 +83,8 @@
 #'
 #' @export
 #' @importFrom BiocParallel bplapply SerialParam
-CytoImageList <- function(..., on_disk = FALSE, BPPARAM = SerialParam()){
+CytoImageList <- function(..., on_disk = FALSE, h5FilesPath = NULL,
+                            BPPARAM = SerialParam()){
     args <- list(...)
     
     if (length(args) == 1L &&
@@ -96,13 +97,57 @@ CytoImageList <- function(..., on_disk = FALSE, BPPARAM = SerialParam()){
         args <- as.list(args[[1]])
     }
     
-    x <- S4Vectors::new2("CytoImageList", listData = args)
-    
     if (on_disk) {
-        x <- bplapply(x, function(y){
-            as(imageData(x), "DelayedArray")
-        }, BPPARAM = BPPARAM)
+        
+        if (is.null(names(args))){
+            stop("Please specify the names of the images.")
+        }
+        
+        if (is.null(h5FilesPath)) {
+            stop("When storing the images on disk, please specify a 'h5FilesPath'. \n",
+                 "You can use 'h5FilesPath = getHDF5DumpDir()' to temporarily store the images.\n",
+                 "If doing so, .h5 files will be deleted once the R session ends.")
+        }
+        
+        cur_class <- lapply(args, class)
+        
+        if (all(cur_class == "Image")) {
+            cur_names <- names(args)
+            args <- bplapply(names(args), function(y){
+                cur_name <- y
+                cur_file <- file.path(h5FilesPath, paste0(y, ".h5"))
+                
+                # Check if file already exists
+                # If so, delete them
+                if (file.exists(cur_file)) {
+                    file.remove(cur_file)
+                }
+                
+                writeHDF5Array(DelayedArray(imageData(args[[y]])), 
+                               filepath = cur_file,
+                               name = cur_name)
+            }, BPPARAM = BPPARAM)
+            names(args) <- cur_names
+        }
+    } else {
+        cur_class <- lapply(args, class)
+        
+        if (all(cur_class == "HDF5Array" | cur_class == "HDF5Matrix" |
+                cur_class == "DelayedArray" | cur_class == "DelayedMatrix")) {
+            
+            if (is.null(names(args))){
+                stop("Please specify the names of the images.")
+            }
+            cur_names <- names(args)
+            args <- bplapply(names(args), function(y){
+                Image(args[[y]])
+            }, BPPARAM = BPPARAM)
+            names(args) <- cur_names
+        }
+        
     }
+    
+    x <- S4Vectors::new2("CytoImageList", listData = args)
     
     return(x)
 }

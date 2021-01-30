@@ -121,8 +121,8 @@ loadImages <- function(x, pattern = NULL, on_disk = FALSE, h5FilesPath = NULL,
             }
         }, BPPARAM = BPPARAM)
     
-    out <- CytoImageList(cur_list)
-    names(out) <- sub("\\.[^.]*$", "", basename(x))
+    names(cur_list) <- sub("\\.[^.]*$", "", basename(x))
+    out <- CytoImageList(cur_list, on_disk = on_disk, h5FilesPath = h5FilesPath)
 
     return(out)
 }
