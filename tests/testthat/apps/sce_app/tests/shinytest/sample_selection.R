@@ -1,0 +1,23 @@
+app <- ShinyDriver$new("../../", loadTimeout = 100000, seed = 1234)
+app$snapshotInit("sample_selection")
+
+app$setInputs(sample = "2")
+app$snapshot()
+app$setInputs(sample = "3")
+app$snapshot()
+app$setInputs(Marker_1 = "CD99")
+app$snapshot()
+app$setInputs(sample = "2")
+app$snapshot()
+app$setInputs(sample = "1")
+app$snapshot()
+app$setInputs(Marker_2 = "PIN")
+app$snapshot()
+app$setInputs(sample = "2")
+app$snapshot()
+app$setInputs(sample = "3")
+app$snapshot()
+
+p <- app$.__enclos_env__$private$shinyProcess
+p$interrupt()
+p$wait()

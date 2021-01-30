@@ -1,0 +1,172 @@
+{
+  "input": {
+    "assay": "counts",
+    "Help": 0,
+    "labelCellsBy": "Cell-Type",
+    "Marker_1": "CD99",
+    "Marker_2": "H3",
+    "Marker_3": "PIN",
+    "Marker_4": "CDH",
+    "Marker_5": "",
+    "Marker_6": "",
+    "next.sample": 0,
+    "plot_brush1": {
+      "xmin": 5,
+      "xmax": 34,
+      "ymin": 10,
+      "ymax": 60,
+      "mapping": {
+        "x": "CD99",
+        "y": "H3"
+      },
+      "direction": "xy",
+      "brushId": "plot_brush1",
+      "outputId": "scatter1"
+    },
+    "plot_brush2": {
+      "xmin": 5,
+      "xmax": 30,
+      "ymin": 0,
+      "ymax": 40,
+      "mapping": {
+        "x": "PIN",
+        "y": "CDH"
+      },
+      "direction": "xy",
+      "brushId": "plot_brush2",
+      "outputId": "scatter2"
+    },
+    "plot_brush3": null,
+    "plotCount": 3,
+    "previous.sample": 0,
+    "sample": "1",
+    "SessionInfo": 0,
+    "sidebar": null,
+    "sidebarCollapsed": false,
+    "sidebarItemExpanded": null,
+    "tabbox1": "tab1"
+  },
+  "output": {
+    "AdditionalPlots_sidebar": {
+      "html": "<div class=\"well\" style=\"background-color: #70C389; border-color: #70C389; padding-bottom: 0px; padding-top: 0px\">\n  <h3 style=\"color: black\">Plot 1<\/h3>\n  <div class=\"form-group shiny-input-container\">\n    <label class=\"control-label\" for=\"Marker_1\">\n      <span style=\"color: black; padding-top: 0px\">Select marker 1<\/span>\n    <\/label>\n    <div>\n      <select id=\"Marker_1\" class=\"form-control\"><\/select>\n      <script type=\"application/json\" data-for=\"Marker_1\">{\"placeholder\":\"Select marker\",\"maxItems\":1}<\/script>\n    <\/div>\n  <\/div>\n  <div class=\"form-group shiny-input-container\">\n    <label class=\"control-label\" for=\"Marker_2\">\n      <span style=\"color: black; padding-top: 0px\">Select marker 2<\/span>\n    <\/label>\n    <div>\n      <select id=\"Marker_2\" class=\"form-control\"><\/select>\n      <script type=\"application/json\" data-for=\"Marker_2\">{\"placeholder\":\"Select marker\",\"maxItems\":1}<\/script>\n    <\/div>\n  <\/div>\n<\/div>\n<div class=\"well\" style=\"background-color: #39BEB4; border-color: #39BEB4; padding-bottom: 0px; padding-top: 0px\">\n  <h3 style=\"color: black\">Plot 2<\/h3>\n  <div class=\"form-group shiny-input-container\">\n    <label class=\"control-label\" for=\"Marker_3\">\n      <span style=\"color: black; padding-top: 0px\">Select marker 3<\/span>\n    <\/label>\n    <div>\n      <select id=\"Marker_3\" class=\"form-control\"><\/select>\n      <script type=\"application/json\" data-for=\"Marker_3\">{\"placeholder\":\"Select marker\",\"maxItems\":1}<\/script>\n    <\/div>\n  <\/div>\n  <div class=\"form-group shiny-input-container\">\n    <label class=\"control-label\" for=\"Marker_4\">\n      <span style=\"color: black; padding-top: 0px\">Select marker 4<\/span>\n    <\/label>\n    <div>\n      <select id=\"Marker_4\" class=\"form-control\"><\/select>\n      <script type=\"application/json\" data-for=\"Marker_4\">{\"placeholder\":\"Select marker\",\"maxItems\":1}<\/script>\n    <\/div>\n  <\/div>\n<\/div>\n<div class=\"well\" style=\"background-color: #3F85A7; border-color: #3F85A7; padding-bottom: 0px; padding-top: 0px\">\n  <h3 style=\"color: black\">Plot 3<\/h3>\n  <div class=\"form-group shiny-input-container\">\n    <label class=\"control-label\" for=\"Marker_5\">\n      <span style=\"color: black; padding-top: 0px\">Select marker 5<\/span>\n    <\/label>\n    <div>\n      <select id=\"Marker_5\" class=\"form-control\"><\/select>\n      <script type=\"application/json\" data-for=\"Marker_5\">{\"placeholder\":\"Select marker\",\"maxItems\":1}<\/script>\n    <\/div>\n  <\/div>\n  <div class=\"form-group shiny-input-container\">\n    <label class=\"control-label\" for=\"Marker_6\">\n      <span style=\"color: black; padding-top: 0px\">Select marker 6<\/span>\n    <\/label>\n    <div>\n      <select id=\"Marker_6\" class=\"form-control\"><\/select>\n      <script type=\"application/json\" data-for=\"Marker_6\">{\"placeholder\":\"Select marker\",\"maxItems\":1}<\/script>\n    <\/div>\n  <\/div>\n<\/div>",
+      "deps": [
+        {
+          "name": "selectize",
+          "version": "0.11.2",
+          "src": {
+            "href": "shared/selectize"
+          },
+          "meta": null,
+          "script": null,
+          "stylesheet": "css/selectize.bootstrap3.css",
+          "head": "<!--[if lt IE 9]>\n<script src=\"shared/selectize/js/es5-shim.min.js\"><\/script>\n<![endif]-->\n<script src=\"shared/selectize/js/selectize.min.js\"><\/script>",
+          "attachment": null,
+          "package": null,
+          "all_files": true
+        }
+      ]
+    },
+    "AdditionalPlots_tab1": {
+      "html": "<div class=\"row\">\n  <div class=\"col-sm-4\">\n    <div class=\"box box-primary\">\n      <div class=\"box-header\">\n        <h3 class=\"box-title\">Plot 1<\/h3>\n      <\/div>\n      <div class=\"box-body\">\n        <div id=\"scatter1\" class=\"shiny-plot-output\" style=\"width: 100% ; height: 400px\" data-brush-id=\"plot_brush1\" data-brush-fill=\"#70C389\" data-brush-stroke=\"#70C389\" data-brush-opacity=\"0.25\" data-brush-delay=\"300\" data-brush-delay-type=\"debounce\" data-brush-clip=\"TRUE\" data-brush-direction=\"xy\" data-brush-reset-on-new=\"FALSE\"><\/div>\n        <pre id=\"info1\" class=\"shiny-text-output noplaceholder\"><\/pre>\n      <\/div>\n    <\/div>\n  <\/div>\n  <div class=\"col-sm-4\">\n    <div class=\"box box-primary\">\n      <div class=\"box-header\">\n        <h3 class=\"box-title\">Plot 2<\/h3>\n      <\/div>\n      <div class=\"box-body\">\n        <div id=\"scatter2\" class=\"shiny-plot-output\" style=\"width: 100% ; height: 400px\" data-brush-id=\"plot_brush2\" data-brush-fill=\"#39BEB4\" data-brush-stroke=\"#39BEB4\" data-brush-opacity=\"0.25\" data-brush-delay=\"300\" data-brush-delay-type=\"debounce\" data-brush-clip=\"TRUE\" data-brush-direction=\"xy\" data-brush-reset-on-new=\"FALSE\"><\/div>\n        <pre id=\"info2\" class=\"shiny-text-output noplaceholder\"><\/pre>\n      <\/div>\n    <\/div>\n  <\/div>\n  <div class=\"col-sm-4\">\n    <div class=\"box box-primary\">\n      <div class=\"box-header\">\n        <h3 class=\"box-title\">Plot 3<\/h3>\n      <\/div>\n      <div class=\"box-body\">\n        <div id=\"scatter3\" class=\"shiny-plot-output\" style=\"width: 100% ; height: 400px\" data-brush-id=\"plot_brush3\" data-brush-fill=\"#3F85A7\" data-brush-stroke=\"#3F85A7\" data-brush-opacity=\"0.25\" data-brush-delay=\"300\" data-brush-delay-type=\"debounce\" data-brush-clip=\"TRUE\" data-brush-direction=\"xy\" data-brush-reset-on-new=\"FALSE\"><\/div>\n        <pre id=\"info3\" class=\"shiny-text-output noplaceholder\"><\/pre>\n      <\/div>\n    <\/div>\n  <\/div>\n<\/div>",
+      "deps": [
+
+      ]
+    },
+    "info1": "Selection: xmin = 5 xmax = 34 ymin = 10 ymax = 60",
+    "info2": "Selection: xmin = 5 xmax = 30 ymin = 0 ymax = 40",
+    "info3": "Selection: ",
+    "scatter1": {
+      "src": "[image data sha1: 175b4047a13985c5024728416bf4a72558a1f840]",
+      "width": 182,
+      "height": 400,
+      "coordmap": {
+        "panels": [
+          {
+            "panel": 1,
+            "row": 1,
+            "col": 1,
+            "panel_vars": {
+
+            },
+            "log": {
+              "x": null,
+              "y": null
+            },
+            "domain": {
+              "left": -1.82060493602872,
+              "right": 42.9142487949622,
+              "bottom": -2.3685467163964,
+              "top": 85.2283968453727
+            },
+            "mapping": {
+              "x": "CD99",
+              "y": "H3"
+            },
+            "range": {
+              "left": 33.1279312159917,
+              "right": 176.520547945205,
+              "bottom": 368.509178173071,
+              "top": 5.47945205479452
+            }
+          }
+        ],
+        "dims": {
+          "width": 182,
+          "height": 400
+        }
+      }
+    },
+    "scatter2": {
+      "src": "[image data sha1: 437198eb1529ecd9892bc3e1e92edbef8ec4981e]",
+      "width": 182,
+      "height": 400,
+      "coordmap": {
+        "panels": [
+          {
+            "panel": 1,
+            "row": 1,
+            "col": 1,
+            "panel_vars": {
+
+            },
+            "log": {
+              "x": null,
+              "y": null
+            },
+            "domain": {
+              "left": -1.7673456473784,
+              "right": 37.1142585949464,
+              "bottom": -0.886441508974092,
+              "top": 23.2568329780843
+            },
+            "mapping": {
+              "x": "PIN",
+              "y": "CDH"
+            },
+            "range": {
+              "left": 33.1279312159917,
+              "right": 176.520547945205,
+              "bottom": 368.509178173071,
+              "top": 5.47945205479452
+            }
+          }
+        ],
+        "dims": {
+          "width": 182,
+          "height": 400
+        }
+      }
+    },
+    "scatter3": {
+      "message": "",
+      "call": "NULL",
+      "type": [
+        "shiny.silent.error",
+        "validation"
+      ]
+    }
+  },
+  "export": {
+
+  }
+}

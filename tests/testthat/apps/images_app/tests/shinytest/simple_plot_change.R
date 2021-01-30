@@ -1,0 +1,22 @@
+app <- ShinyDriver$new("../../", loadTimeout = 100000, seed = 1234)
+app$snapshotInit("simple_plot_change")
+
+app$setInputs(assay = "counts")
+app$setInputs(Marker_1 = "CD99")
+app$snapshot()
+app$setInputs(tabbox1 = "tab2")
+app$setInputs(resetMarkers = "click")
+#app$snapshot()
+app$setInputs(plotCount = 2)
+app$snapshot()
+app$setInputs(Marker_1 = "CDH")
+app$snapshot()
+app$setInputs(tabbox1 = "tab2")
+app$setInputs(resetMarkers = "click")
+#app$snapshot()
+app$setInputs(plotCount = 1)
+app$snapshot()
+
+p <- app$.__enclos_env__$private$shinyProcess
+p$interrupt()
+p$wait()
