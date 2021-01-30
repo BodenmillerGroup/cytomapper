@@ -100,7 +100,7 @@ CytoImageList <- function(..., on_disk = FALSE, BPPARAM = SerialParam()){
     
     if (on_disk) {
         x <- bplapply(x, function(y){
-            as(imageData(x), "HDF5Array")
+            as(imageData(x), "DelayedArray")
         }, BPPARAM = BPPARAM)
     }
     

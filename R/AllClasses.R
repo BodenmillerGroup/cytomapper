@@ -1,10 +1,11 @@
 # -------------------------------------------------------------------------
-# The Image_OR_HDF5Array class
+# The Image_OR_DelayedArray class
 # -------------------------------------------------------------------------
 
-# We want to extend the CytoImageList object to also contain HDF5Array objects.
-# For this, we'll merge the Image and HDF5Array class
+# We want to extend the CytoImageList object to also contain DelayedArray objects.
+# For this, we'll merge the Image, DelayedArray and DelayedMatrix class
 
 #' @import HDF5Array  
 #' @importFrom EBImage Image 
-setClassUnion("Image_OR_HDF5Array", c("Image", "HDF5Array", "HDF5Matrix"))
+setClassUnion("Image_OR_DelayedArray", c("Image", "DelayedArray", "DelayedMatrix",
+                                         "HDF5Array", "HDF5Matrix"))

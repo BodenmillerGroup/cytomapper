@@ -11,7 +11,7 @@ setClass(
     prototype = prototype(
     int_metadata = list(
         version = utils::packageVersion("cytomapper")),
-    elementType = "Image_OR_HDF5Array"
+    elementType = "Image_OR_DelayedArray"
     )
 )
 

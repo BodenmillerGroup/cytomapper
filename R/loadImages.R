@@ -65,6 +65,8 @@
 #'
 #' @export
 #' @importFrom BiocParallel bplapply SerialParam
+#' @importFrom HDF5Array writeHDF5Array
+#' @importFrom DelayedArray DelayedArray
 loadImages <- function(x, pattern = NULL, on_disk = FALSE, h5FilesPath = NULL, 
                         BPPARAM = SerialParam(), ...) {
 
@@ -83,12 +85,19 @@ loadImages <- function(x, pattern = NULL, on_disk = FALSE, h5FilesPath = NULL,
                          "If doing so, .h5 files will be deleted once the R session ends.")
                 }
                 
-                # Check if name and file already exists
+                # Build filename
+                cur_name <- sub("\\.[^.]*$", "", basename(y))
+                cur_file <- file.path(h5FilesPath, paste0(cur_name, ".h5"))
                 
-                writeHDF5Array(imageData(cur_img), 
-                               filepath = h5FilesPath,
-                               name = sub("\\.[^.]*$", "", basename(y)),
-                               )
+                # Check if file already exists
+                # If so, delete them
+                if (file.exists(cur_file)) {
+                    file.remove(cur_file)
+                }
+                
+                writeHDF5Array(DelayedArray(imageData(cur_img)), 
+                               filepath = cur_file,
+                               name = cur_name)
             } else {
                 cur_img
             }
