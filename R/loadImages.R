@@ -22,8 +22,16 @@
 #' file names in the specified path.}
 #' }
 #' @param on_disk Logical indicating if images in form of
-#' \linkS4class{HDF5Array} objects should be stored on disk rather than in
-#' memory.
+#' \linkS4class{HDF5Array} objects (as .h5 files) should be stored on disk
+#' rather than in memory.
+#' @param h5FilesPath path to where the .h5 files for on disk representation
+#' are stored. This path needs to be defined when \code{on_disk = TRUE}.
+#' When files should only temporarily be stored on disk, please set
+#' \code{h5FilesPath = getHDF5DumpDir()}
+#' @param BPPARAM parameters for parallelised reading in of images. 
+#' This is only recommended for very large images. 
+#' See \code{\linkS4class{MulticoreParam}} for information on how to use multiple
+#' cores for parallelised processing.
 #' @param ... arguments passed to the \code{\link{readImage}} function.
 #'
 #' @return A \linkS4class{CytoImageList} object
@@ -56,6 +64,16 @@
 #' list.images <- list.files(system.file("extdata", package = "cytomapper"),
 #'                             pattern = "_mask.tiff", full.names = TRUE)
 #' image.list <- loadImages(list.images)
+#' 
+#' # On disk representation
+#' path.to.images <- system.file("extdata", package = "cytomapper")
+#' image.list <- loadImages(path.to.images, pattern = "mask.tiff",
+#'                             on_disk = TRUE, h5FilesPath = getHDF5DumpDir())
+#'                             
+#' # Parallel processing
+#' path.to.images <- system.file("extdata", package = "cytomapper")
+#' image.list <- loadImages(path.to.images, pattern = "mask.tiff",
+#'                             BPPARAM = MulticoreParam())
 #'
 #' @seealso
 #' \code{\link{readImage}}, for reading in individual images.
