@@ -29,7 +29,7 @@ abstract: |
     pixel-level information across multiple channels and 2. the display of
     cell-level information (expression and/or metadata) on segmentation masks.
 vignette: |
-    %\VignetteIndexEntry{"Visualization of imaging cytometry data in R}
+    %\VignetteIndexEntry{"Visualization of imaging cytometry data in R"}
     %\VignetteEngine{knitr::rmarkdown}
     %\VignetteEncoding{UTF-8}
 ---
