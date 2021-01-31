@@ -31,16 +31,16 @@ test_that("loadImages function reads in correct objects on disk.", {
                                                          basename(single_file)), ".h5"))))
   
   ## Parallelisation
-  file.remove(file.path(cur_path, paste0(sub("\\.[^.]*$", "", 
-                                             basename(single_file)), ".h5")))
+  expect_true(file.remove(file.path(cur_path, paste0(sub("\\.[^.]*$", "", 
+                                             basename(single_file)), ".h5"))))
   expect_silent(cur_file <- loadImages(single_file, on_disk = TRUE, 
                                        h5FilesPath = cur_path, BPPARAM = MulticoreParam()))
   expect_s4_class(cur_file, "CytoImageList")
   expect_true(file.exists(file.path(cur_path, paste0(sub("\\.[^.]*$", "", 
                                                          basename(single_file)), ".h5"))))
   
-  file.remove(file.path(cur_path, paste0(sub("\\.[^.]*$", "", 
-                                             basename(single_file)), ".h5")))
+  expect_true(file.remove(file.path(cur_path, paste0(sub("\\.[^.]*$", "", 
+                                             basename(single_file)), ".h5"))))
 
   # Pattern
   expect_silent(cur_files <- loadImages(path, pattern = "_imc.tiff",
@@ -68,9 +68,9 @@ test_that("loadImages function reads in correct objects on disk.", {
   expect_true(file.exists(file.path(cur_path, "J02_imc.h5")))
   
   ## Parallelisation
-  file.remove(file.path(cur_path, "E34_imc.h5"))
-  file.remove(file.path(cur_path, "G01_imc.h5"))
-  file.remove(file.path(cur_path, "J02_imc.h5"))
+  expect_true(file.remove(file.path(cur_path, "E34_imc.h5")))
+  expect_true(file.remove(file.path(cur_path, "G01_imc.h5")))
+  expect_true(file.remove(file.path(cur_path, "J02_imc.h5")))
   expect_silent(cur_files <- loadImages(path, pattern = "_imc.tiff",
                                        on_disk = TRUE, h5FilesPath = cur_path, 
                                        BPPARAM = MulticoreParam()))
@@ -82,9 +82,9 @@ test_that("loadImages function reads in correct objects on disk.", {
   expect_true(file.exists(file.path(cur_path, "J02_imc.h5")))
 
   # Multiple pattern
-  file.remove(file.path(cur_path, "E34_imc.h5"))
-  file.remove(file.path(cur_path, "G01_imc.h5"))
-  file.remove(file.path(cur_path, "J02_imc.h5"))
+  expect_true(file.remove(file.path(cur_path, "E34_imc.h5")))
+  expect_true(file.remove(file.path(cur_path, "G01_imc.h5")))
+  expect_true(file.remove(file.path(cur_path, "J02_imc.h5")))
   expect_silent(cur_files <- loadImages(path, pattern = c("E34_imc", "J02_imc"),
                                         on_disk = TRUE, h5FilesPath = cur_path))
   expect_s4_class(cur_files, "CytoImageList")
@@ -100,9 +100,9 @@ test_that("loadImages function reads in correct objects on disk.", {
   expect_s4_class(cur_files, "CytoImageList")
   expect_equal(length(cur_files), 3L)
 
-  file.remove(file.path(cur_path, "E34_mask.h5"))
-  file.remove(file.path(cur_path, "G01_mask.h5"))
-  file.remove(file.path(cur_path, "J02_mask.h5"))
+  expect_true(file.remove(file.path(cur_path, "E34_mask.h5")))
+  expect_true(file.remove(file.path(cur_path, "G01_mask.h5")))
+  expect_true(file.remove(file.path(cur_path, "J02_mask.h5")))
 })
 
 test_that("getHDF5DumpDir works.", {
@@ -138,16 +138,16 @@ test_that("getHDF5DumpDir works.", {
                                                            basename(single_file)), ".h5"))))
     
     ## Parallelisation
-    file.remove(file.path(cur_path, paste0(sub("\\.[^.]*$", "", 
-                                               basename(single_file)), ".h5")))
+    expect_true(file.remove(file.path(cur_path, paste0(sub("\\.[^.]*$", "", 
+                                               basename(single_file)), ".h5"))))
     expect_silent(cur_file <- loadImages(single_file, on_disk = TRUE, 
                                          h5FilesPath = cur_path, BPPARAM = MulticoreParam()))
     expect_s4_class(cur_file, "CytoImageList")
     expect_true(file.exists(file.path(cur_path, paste0(sub("\\.[^.]*$", "", 
                                                            basename(single_file)), ".h5"))))
     
-    file.remove(file.path(cur_path, paste0(sub("\\.[^.]*$", "", 
-                                               basename(single_file)), ".h5")))
+    expect_true(file.remove(file.path(cur_path, paste0(sub("\\.[^.]*$", "", 
+                                               basename(single_file)), ".h5"))))
     
     # Pattern
     expect_silent(cur_files <- loadImages(path, pattern = "_imc.tiff",
@@ -155,9 +155,9 @@ test_that("getHDF5DumpDir works.", {
     expect_s4_class(cur_files, "CytoImageList")
     expect_equal(length(cur_files), 3L)
     
-    expect_true(file.exists(file.path(cur_path, "E34_imc.h5")))
-    expect_true(file.exists(file.path(cur_path, "G01_imc.h5")))
-    expect_true(file.exists(file.path(cur_path, "J02_imc.h5")))
+    expect_true(expect_true(file.exists(file.path(cur_path, "E34_imc.h5"))))
+    expect_true(expect_true(file.exists(file.path(cur_path, "G01_imc.h5"))))
+    expect_true(expect_true(file.exists(file.path(cur_path, "J02_imc.h5"))))
     
     expect_s4_class(cur_files$E34_imc, "HDF5Array")
     expect_equal(cur_files$E34_imc@seed@name, "E34_imc")
@@ -175,9 +175,9 @@ test_that("getHDF5DumpDir works.", {
     expect_true(file.exists(file.path(cur_path, "J02_imc.h5")))
     
     ## Parallelisation
-    file.remove(file.path(cur_path, "E34_imc.h5"))
-    file.remove(file.path(cur_path, "G01_imc.h5"))
-    file.remove(file.path(cur_path, "J02_imc.h5"))
+    expect_true(file.remove(file.path(cur_path, "E34_imc.h5")))
+    expect_true(file.remove(file.path(cur_path, "G01_imc.h5")))
+    expect_true(file.remove(file.path(cur_path, "J02_imc.h5")))
     expect_silent(cur_files <- loadImages(path, pattern = "_imc.tiff",
                                           on_disk = TRUE, h5FilesPath = cur_path, 
                                           BPPARAM = MulticoreParam()))
@@ -189,9 +189,9 @@ test_that("getHDF5DumpDir works.", {
     expect_true(file.exists(file.path(cur_path, "J02_imc.h5")))
     
     # Multiple pattern
-    file.remove(file.path(cur_path, "E34_imc.h5"))
-    file.remove(file.path(cur_path, "G01_imc.h5"))
-    file.remove(file.path(cur_path, "J02_imc.h5"))
+    expect_true(file.remove(file.path(cur_path, "E34_imc.h5")))
+    expect_true(file.remove(file.path(cur_path, "G01_imc.h5")))
+    expect_true(file.remove(file.path(cur_path, "J02_imc.h5")))
     expect_silent(cur_files <- loadImages(path, pattern = c("E34_imc", "J02_imc"),
                                           on_disk = TRUE, h5FilesPath = cur_path))
     expect_s4_class(cur_files, "CytoImageList")
@@ -207,7 +207,7 @@ test_that("getHDF5DumpDir works.", {
     expect_s4_class(cur_files, "CytoImageList")
     expect_equal(length(cur_files), 3L)
     
-    file.remove(file.path(cur_path, "E34_mask.h5"))
-    file.remove(file.path(cur_path, "G01_mask.h5"))
-    file.remove(file.path(cur_path, "J02_mask.h5"))
+    expect_true(file.remove(file.path(cur_path, "E34_mask.h5")))
+    expect_true(file.remove(file.path(cur_path, "G01_mask.h5")))
+    expect_true(file.remove(file.path(cur_path, "J02_mask.h5")))
 })
