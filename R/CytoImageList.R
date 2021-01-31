@@ -85,6 +85,12 @@
 #' @importFrom BiocParallel bplapply SerialParam
 CytoImageList <- function(..., on_disk = FALSE, h5FilesPath = NULL,
                             BPPARAM = SerialParam()){
+    
+    # Make sure List metadata are transferred
+    if (is(..., "List")) {
+        cur_meta <- mcols(...)
+    }
+    
     args <- list(...)
     
     if (length(args) == 1L &&
@@ -149,6 +155,11 @@ CytoImageList <- function(..., on_disk = FALSE, h5FilesPath = NULL,
     }
     
     x <- S4Vectors::new2("CytoImageList", listData = args)
+    
+    # Store metadata again
+    if (!is.null(cur_meta)) {
+        mcols(x) <- cur_meta
+    }
     
     return(x)
 }
