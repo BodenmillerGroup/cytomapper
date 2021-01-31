@@ -115,7 +115,8 @@ loadImages <- function(x, pattern = NULL, on_disk = FALSE, h5FilesPath = NULL,
                 
                 writeHDF5Array(DelayedArray(imageData(cur_img)), 
                                filepath = cur_file,
-                               name = cur_name)
+                               name = cur_name,
+                               with.dimnames = TRUE)
             } else {
                 cur_img
             }

@@ -125,7 +125,8 @@ CytoImageList <- function(..., on_disk = FALSE, h5FilesPath = NULL,
                 
                 writeHDF5Array(DelayedArray(imageData(args[[y]])), 
                                filepath = cur_file,
-                               name = cur_name)
+                               name = cur_name,
+                               with.dimnames = TRUE)
             }, BPPARAM = BPPARAM)
             names(args) <- cur_names
         }
