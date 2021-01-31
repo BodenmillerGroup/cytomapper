@@ -147,7 +147,7 @@ CytoImageList <- function(..., on_disk = FALSE, h5FilesPath = NULL,
             }
             cur_names <- names(args)
             args <- bplapply(names(args), function(y){
-                Image(args[[y]])
+                Image(as.array(args[[y]]))
             }, BPPARAM = BPPARAM)
             names(args) <- cur_names
         }
