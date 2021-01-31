@@ -9,10 +9,29 @@
 \alias{show,CytoImageList-method}
 \title{S4 class for list of images}
 \usage{
-CytoImageList(..., on_disk = FALSE, BPPARAM = SerialParam())
+CytoImageList(
+  ...,
+  on_disk = FALSE,
+  h5FilesPath = NULL,
+  BPPARAM = SerialParam()
+)
 }
 \arguments{
 \item{...}{A list of images (or coercible to a list) or individual images}
+
+\item{on_disk}{Logical indicating if images in form of
+\linkS4class{HDF5Array} objects (as .h5 files) should be stored on disk
+rather than in memory.}
+
+\item{h5FilesPath}{path to where the .h5 files for on disk representation
+are stored. This path needs to be defined when \code{on_disk = TRUE}.
+When files should only temporarily be stored on disk, please set
+\code{h5FilesPath = getHDF5DumpDir()}}
+
+\item{BPPARAM}{parameters for parallelised processing. 
+This is only recommended for very large images. 
+See \code{\linkS4class{MulticoreParam}} for information on how to use multiple
+cores for parallelised processing.}
 }
 \value{
 A CytoImageList object
@@ -65,6 +84,14 @@ regular list objects, \code{\link{endoapply}} and
 \code{\link{mendoapply}} return CytoImageList objects.
 }
 
+\section{On disk representation}{
+
+When setting \code{on_disk = TRUE} and specifying the \code{h5FilesPath}, 
+images are stored on disk. To convert back to an in-memory 
+\code{CytoImageList} object, one can call 
+\code{CytoImageList(on_disk_IL, on_disk = FLASE)}.
+}
+
 \examples{
 # Creation of CytoImageList
 u <- matrix(rbinom(100, 10, 0.5), ncol=10, nrow=10)
@@ -75,6 +102,11 @@ IL1 <- CytoImageList(image1 = Image(u), image2 = Image(v))
 as.list(IL1)
 as(IL1, "SimpleList")
 as(list(image1 = Image(u), image2 = Image(v)), "CytoImageList")
+
+# On disk representation
+IL1 <- CytoImageList(image1 = Image(u), image2 = Image(v),
+                     on_disk = TRUE, 
+                     h5FilesPath = HDF5Array::getHDF5DumpDir())
 
 }
 \seealso{

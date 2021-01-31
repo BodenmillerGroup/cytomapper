@@ -4,7 +4,14 @@
 \alias{loadImages}
 \title{Read images into CytoImageList object}
 \usage{
-loadImages(x, pattern = NULL, on_disk = FALSE, BPPARAM = SerialParam(), ...)
+loadImages(
+  x,
+  pattern = NULL,
+  on_disk = FALSE,
+  h5FilesPath = NULL,
+  BPPARAM = SerialParam(),
+  ...
+)
 }
 \arguments{
 \item{x}{The function takes a variety of possible character inputs:
@@ -24,8 +31,18 @@ file names in the specified path.}
 }}
 
 \item{on_disk}{Logical indicating if images in form of
-\linkS4class{HDF5Array} objects should be stored on disk rather than in
-memory.}
+\linkS4class{HDF5Array} objects (as .h5 files) should be stored on disk
+rather than in memory.}
+
+\item{h5FilesPath}{path to where the .h5 files for on disk representation
+are stored. This path needs to be defined when \code{on_disk = TRUE}.
+When files should only temporarily be stored on disk, please set
+\code{h5FilesPath = getHDF5DumpDir()}}
+
+\item{BPPARAM}{parameters for parallelised reading in of images. 
+This is only recommended for very large images. 
+See \code{\linkS4class{MulticoreParam}} for information on how to use multiple
+cores for parallelised processing.}
 
 \item{...}{arguments passed to the \code{\link{readImage}} function.}
 }
@@ -68,6 +85,16 @@ image.list <- loadImages(path.to.images, pattern = pancreasSCE$MaskName)
 list.images <- list.files(system.file("extdata", package = "cytomapper"),
                             pattern = "_mask.tiff", full.names = TRUE)
 image.list <- loadImages(list.images)
+
+# On disk representation
+path.to.images <- system.file("extdata", package = "cytomapper")
+image.list <- loadImages(path.to.images, pattern = "mask.tiff",
+                            on_disk = TRUE, h5FilesPath = HDF5Array::getHDF5DumpDir())
+                            
+# Parallel processing
+path.to.images <- system.file("extdata", package = "cytomapper")
+image.list <- loadImages(path.to.images, pattern = "mask.tiff",
+                            BPPARAM = BiocParallel::MulticoreParam())
 
 }
 \seealso{

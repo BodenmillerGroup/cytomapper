@@ -90,7 +90,7 @@
 #' # On disk representation
 #' IL1 <- CytoImageList(image1 = Image(u), image2 = Image(v),
 #'                      on_disk = TRUE, 
-#'                      h5FilesPath = getHDF5DumpDir())
+#'                      h5FilesPath = HDF5Array::getHDF5DumpDir())
 #'
 #' @aliases
 #' coerce,ANY,CytoImageList-method
@@ -101,12 +101,12 @@
 #'
 #' @docType class
 #'
-#' @importFrom S4Vectors new2
+#' @importFrom S4Vectors new2 mcols<-
 #'
 #' @export
-#' @importFrom BiocParallel bplapply SerialParam
+#' @importFrom BiocParallel bplapply SerialParam MulticoreParam
 #' @importFrom EBImage Image imageData
-#' @importFrom S4Vectors mcols
+#' @importFrom DelayedArray DelayedArray
 CytoImageList <- function(..., on_disk = FALSE, h5FilesPath = NULL,
                             BPPARAM = SerialParam()){
     

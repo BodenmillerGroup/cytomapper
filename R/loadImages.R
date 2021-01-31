@@ -68,12 +68,12 @@
 #' # On disk representation
 #' path.to.images <- system.file("extdata", package = "cytomapper")
 #' image.list <- loadImages(path.to.images, pattern = "mask.tiff",
-#'                             on_disk = TRUE, h5FilesPath = getHDF5DumpDir())
+#'                             on_disk = TRUE, h5FilesPath = HDF5Array::getHDF5DumpDir())
 #'                             
 #' # Parallel processing
 #' path.to.images <- system.file("extdata", package = "cytomapper")
 #' image.list <- loadImages(path.to.images, pattern = "mask.tiff",
-#'                             BPPARAM = MulticoreParam())
+#'                             BPPARAM = BiocParallel::MulticoreParam())
 #'
 #' @seealso
 #' \code{\link{readImage}}, for reading in individual images.
@@ -85,6 +85,7 @@
 #' @importFrom BiocParallel bplapply SerialParam
 #' @importFrom HDF5Array writeHDF5Array
 #' @importFrom DelayedArray DelayedArray
+#' @importFrom EBImage imageData
 loadImages <- function(x, pattern = NULL, on_disk = FALSE, h5FilesPath = NULL, 
                         BPPARAM = SerialParam(), ...) {
 

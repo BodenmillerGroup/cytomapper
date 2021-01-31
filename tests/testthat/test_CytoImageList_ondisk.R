@@ -79,7 +79,7 @@ test_that("Images can be loaded into CytoImageList object.", {
   names(cur_list) <- c("E34_imc", "G01_imc", "J02_imc")
   expect_silent(cur_ImageList <- CytoImageList(cur_list, on_disk = TRUE, 
                                                h5FilesPath = cur_path,
-                                               BPPARAM = MulticoreParam()))
+                                               BPPARAM = BiocParallel::MulticoreParam()))
   expect_s4_class(cur_ImageList, "CytoImageList")
   expect_true(file.remove(file.path(cur_path, "E34_imc.h5")))
   expect_true(file.remove(file.path(cur_path, "G01_imc.h5")))
@@ -112,7 +112,7 @@ test_that("Images can be loaded into CytoImageList object.", {
   ## Parallelisation
   expect_silent(cur_ImageList <- CytoImageList(pancreasImages, on_disk = TRUE, 
                                                h5FilesPath = cur_path,
-                                               BPPARAM = MulticoreParam()))
+                                               BPPARAM = BiocParallel::MulticoreParam()))
   expect_s4_class(cur_ImageList, "CytoImageList")
   expect_equal(mcols(cur_ImageList), mcols(pancreasImages))
   expect_equal(channelNames(cur_ImageList), channelNames(pancreasImages))
@@ -140,7 +140,7 @@ test_that("Images can be loaded into CytoImageList object.", {
   
   ## Parallelisation
   expect_silent(cur_ImageList_memory <- CytoImageList(cur_ImageList, on_disk = FALSE,
-                                                      BPPARAM = MulticoreParam()))
+                                                      BPPARAM = BiocParallel::MulticoreParam()))
   expect_equal(cur_ImageList_memory$E34_imc, pancreasImages$E34_imc)
   expect_equal(mcols(cur_ImageList_memory), mcols(pancreasImages))
   expect_equal(channelNames(cur_ImageList_memory), channelNames(pancreasImages))

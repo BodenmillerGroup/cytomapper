@@ -32,6 +32,7 @@ Imports:
     S4Vectors,
     BiocParallel,
     HDF5Array,
+    DelayedArray,
     RColorBrewer,
     viridis,
     utils,
