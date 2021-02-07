@@ -68,10 +68,8 @@ S4Vectors:::setValidity2(Class = "CytoImageList", .ImageList_validity)
     # Check if only Image objects OR HDF5Array objects are contained
     cur_class <- lapply(object, class)
     
-    if (! (all(cur_class == "Image") | all(cur_class == "HDF5Array") | 
-           all(cur_class == "HDF5Matrix"))) {
-        msg <- c(msg, paste("Only 'Image' OR 'HDF5Array' objects",
-                            "are allowed in a CytoImageList"))
+    if (length(unique(cur_class)) > 1) {
+        msg <- c(msg, paste("Only one type of class allowed in the object."))
     }
 
     if (length(msg)) { return(msg) }
