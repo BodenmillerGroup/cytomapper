@@ -220,9 +220,17 @@ setMethod("getChannels",
         }
 
         if(length(dim(x[[1]])) >= 3){
-            x <- S4Vectors::endoapply(x, function(y){
-                y[,,i,drop=FALSE]
-            })
+            
+            if (is(x[[1]], "Image")) {
+                x <- S4Vectors::endoapply(x, function(y){
+                    y[,,i,drop=FALSE]
+                })
+            } else {
+                x@listData <- lapply(x, function(y){
+                    y[,,i,drop=FALSE]
+                })
+            }
+
         } else {
             if(i != 1L){
                 stop(paste("For single-channel images,",

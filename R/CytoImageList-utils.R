@@ -74,19 +74,45 @@ setMethod("channelNames",
 setReplaceMethod("channelNames",
     signature = signature(x="CytoImageList"),
     definition = function(x, value){
-    # Image needs to be expanded to store channel names
-    if(length(dim(x[[1]])) == 2L){
+        
+    if (is(x[[1]], "Image")) {
+        # Image needs to be expanded to store channel names
+        if(length(dim(x[[1]])) == 2L){
+            x <- S4Vectors::endoapply(x, function(y){
+                cur_Image <- Image(y, dim = c(dim(y)[1], dim(y)[2], 1))
+                dimnames(cur_Image) <- c(dimnames(y), NULL)
+                return(cur_Image)
+            })
+        }
+        
         x <- S4Vectors::endoapply(x, function(y){
-        cur_Image <- Image(y, dim = c(dim(y)[1], dim(y)[2], 1))
-        dimnames(cur_Image) <- c(dimnames(y), NULL)
-            return(cur_Image)
-        })
-    }
-
-    x <- S4Vectors::endoapply(x, function(y){
-        dimnames(y)[[3]] <- as.character(value)
+            if (is.null(value)) {
+                dimnames(y)[[3]] <- NULL
+            } else {
+                dimnames(y)[[3]] <- as.character(value)
+            }
             return(y)
         })
+    } else {
+        # Image needs to be expanded to store channel names
+        if(length(dim(x[[1]])) == 2L){
+            x@listData <- lapply(x, function(y){
+                cur_Image <- y
+                dim(cur_Image) <- c(dim(cur_Image)[1], dim(cur_Image)[2], 1)
+                dimnames(cur_Image) <- c(dimnames(y), NULL)
+                return(cur_Image)
+            })
+        }
+        
+        x@listData <- lapply(x, function(y){
+            if (is.null(value)) {
+                dimnames(y)[[3]] <- NULL
+            } else {
+                dimnames(y)[[3]] <- as.character(value)
+            }
+            return(y)
+        })
+    }
 
     validObject(x)
 
