@@ -106,7 +106,7 @@
 #' @importFrom methods is
 .valid.Image.setting <- function(x, i, value){
     # Check if value is Image or CytoImageList
-    if(!is.null(value) && !(is(value, "Image") ||
+    if(!is.null(value) && !(is(value, "Image_OR_DelayedArray") ||
         is(value, "CytoImageList"))){
         stop("Invalid replacement operation: \n",
             "Only 'Image' or 'CytoImageList' objects allowed.")
@@ -123,7 +123,7 @@
                                     "unnamed CytoImageList object.")
                 }
             } else {
-                if(is(value, "Image")){
+                if(is(value, "Image_OR_DelayedArray")){
                     error <- "Cannot set Image object to named CytoImageList."
                 } else if(is.null(names(value))){
                     error <- paste("Cannot merge named and",
@@ -169,7 +169,7 @@
     }
 
     # Check if number of channels is same as length(i)
-    if(!is.null(value) && length(i) != numberOfFrames(value[[1]])){
+    if(!is.null(value) && length(i) != dim(value[[1]])[3]){
         stop("Invalid replacement operation: \n",
             "Number of replacement channels is not the same as \n",
             "number of channels to replace.")

@@ -174,27 +174,34 @@ test_that("General operations work on CytoImageList object.", {
 
 test_that("Custom accessors work on CytoImageList object.", {
   data("pancreasImages")
+  cur_path <- tempdir()
+  on.exit(unlink(cur_path))
+    
+  cur_Images <- CytoImageList(pancreasImages, on_disk = TRUE, h5FilesPath = cur_path)
+    
+  cur_size <- file.info(paste0(cur_path, "/E34_imc.h5"))[,"size"]
+  
   # Accessors
   ## getImages
   ### Should work
-  expect_s4_class(getImages(pancreasImages, "E34_imc"), "CytoImageList")
-  expect_s4_class(getImages(pancreasImages, "E34_imc")[[1]], "Image")
-  expect_s4_class(getImages(pancreasImages, 1), "CytoImageList")
-  expect_s4_class(getImages(pancreasImages, 1)[[1]], "Image")
-  expect_s4_class(getImages(pancreasImages, c(TRUE, FALSE, FALSE)), "CytoImageList")
-  expect_s4_class(getImages(pancreasImages, c(TRUE, FALSE, FALSE))[[1]], "Image")
-  expect_s4_class(getImages(pancreasImages, c("E34_imc", "G01_imc")), "CytoImageList")
-  expect_s4_class(getImages(pancreasImages, c(1,2)), "CytoImageList")
+  expect_s4_class(getImages(cur_Images, "E34_imc"), "CytoImageList")
+  expect_s4_class(getImages(cur_Images, "E34_imc")[[1]], "HDF5Array")
+  expect_s4_class(getImages(cur_Images, 1), "CytoImageList")
+  expect_s4_class(getImages(cur_Images, 1)[[1]], "HDF5Array")
+  expect_s4_class(getImages(cur_Images, c(TRUE, FALSE, FALSE)), "CytoImageList")
+  expect_s4_class(getImages(cur_Images, c(TRUE, FALSE, FALSE))[[1]], "HDF5Array")
+  expect_s4_class(getImages(cur_Images, c("E34_imc", "G01_imc")), "CytoImageList")
+  expect_s4_class(getImages(cur_Images, c(1,2)), "CytoImageList")
 
   ### Should not work
-  expect_error(getImages(pancreasImages, "A"))
-  expect_error(getImages(pancreasImages, "E34_imc", "test"))
-  expect_error(getImages(pancreasImages, c("E34_imc", "test")))
-  expect_error(getImages(pancreasImages, 4))
+  expect_error(getImages(cur_Images, "A"))
+  expect_error(getImages(cur_Images, "E34_imc", "test"))
+  expect_error(getImages(cur_Images, c("E34_imc", "test")))
+  expect_error(getImages(cur_Images, 4))
 
   ## setImages
-  cur_Images1 <- pancreasImages
-  cur_Images2 <- pancreasImages
+  cur_Images1 <- cur_Images
+  cur_Images2 <- cur_Images
   names(cur_Images2) <- c("test1", "test2", "test3")
   mcols(cur_Images2)$ImageNumber <- mcols(cur_Images2)$ImageNb
   cur_Images3 <- cur_Images2
@@ -238,46 +245,41 @@ test_that("Custom accessors work on CytoImageList object.", {
 
   ## getChannels
   ### Should work
-  expect_s4_class(getChannels(pancreasImages, 1), "CytoImageList")
-  expect_s4_class(getChannels(pancreasImages, 1:2), "CytoImageList")
-  expect_s4_class(getChannels(pancreasImages, "H3"), "CytoImageList")
+  expect_s4_class(getChannels(cur_Images, 1), "CytoImageList")
+  expect_s4_class(getChannels(cur_Images, 1:2), "CytoImageList")
+  expect_s4_class(getChannels(cur_Images, "H3"), "CytoImageList")
 
-  expect_silent(test <- getChannels(pancreasImages, 1))
-  expect_equal(channelNames(test), "H3")
-  expect_equal(length(test), 3L)
-  expect_equal(names(test), c("E34_imc", "G01_imc", "J02_imc"))
-
-  expect_silent(test <- getChannels(pancreasImages, "H3"))
+  expect_silent(test <- getChannels(cur_Images, 1))
   expect_equal(channelNames(test), "H3")
   expect_equal(length(test), 3L)
   expect_equal(names(test), c("E34_imc", "G01_imc", "J02_imc"))
 
   ### Should not work
-  expect_error(getChannels(pancreasImages, 10))
-  expect_error(getChannels(pancreasImages, "test"))
-  expect_error(getChannels(pancreasImages, c("H3", "test")))
+  expect_error(getChannels(cur_Images, 10))
+  expect_error(getChannels(cur_Images, "test"))
+  expect_error(getChannels(cur_Images, c("H3", "test")))
 
   ## setChannels
-  cur_Images1 <- pancreasImages
-  cur_Images2 <- getChannels(pancreasImages, 2)
+  cur_Images1 <- cur_Images
+  cur_Images2 <- getChannels(cur_Images, 2)
   channelNames(cur_Images2) <- "test"
 
   ### Should work
   expect_silent(setChannels(cur_Images1, 1) <- cur_Images2)
   expect_equal(channelNames(cur_Images1), c("test", "CD99", "PIN", "CD8a", "CDH"))
-  expect_equal(cur_Images1[[1]][,,1], cur_Images1[[1]][,,2])
+  expect_equal(as.matrix(cur_Images1[[1]][,,1]), as.matrix(cur_Images[[1]][,,2]))
 
   expect_silent(setChannels(cur_Images1, "PIN") <- cur_Images2)
   expect_equal(channelNames(cur_Images1), c("test", "CD99", "PIN", "CD8a", "CDH"))
-  expect_equal(cur_Images1[[1]][,,2], cur_Images1[[1]][,,3])
+  expect_equal(as.matrix(cur_Images1[[1]][,,2]), as.matrix(cur_Images1[[1]][,,3]))
 
-  cur_Images1 <- pancreasImages
-  cur_Images2 <- getChannels(pancreasImages, 2:3)
+  cur_Images1 <- cur_Images
+  cur_Images2 <- getChannels(cur_Images, 2:3)
   channelNames(cur_Images2) <- c("test1", "test2")
 
   expect_silent(setChannels(cur_Images1, 1:2) <- cur_Images2)
   expect_equal(channelNames(cur_Images1), c("test1", "test2", "PIN", "CD8a", "CDH"))
-  expect_equal(cur_Images1[[1]][,,2], cur_Images1[[1]][,,3])
+  expect_equal(as.matrix(cur_Images1[[1]][,,2]), as.matrix(cur_Images1[[1]][,,3]))
 
   expect_silent(setChannels(cur_Images1, 1:2) <- NULL)
   expect_equal(channelNames(cur_Images1), c("PIN", "CD8a", "CDH"))
@@ -285,8 +287,8 @@ test_that("Custom accessors work on CytoImageList object.", {
   expect_equal(channelNames(cur_Images1), c("CD8a", "CDH"))
 
   ### Should not work
-  cur_Images1 <- pancreasImages
-  cur_Images2 <- getChannels(pancreasImages, 2)
+  cur_Images1 <- cur_Images
+  cur_Images2 <- getChannels(cur_Images, 2)
   expect_error(setChannels(cur_Images1, 6) <- cur_Images2)
   expect_error(setChannels(cur_Images1, "test") <- cur_Images2)
   expect_error(setChannels(cur_Images1, 1) <- "test")

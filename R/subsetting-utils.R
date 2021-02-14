@@ -201,8 +201,8 @@ setReplaceMethod("setImages",
             cor_names[i] <- names(value)
         }
 
-        # If value is Image, only the image will be replaced
-        if(is(value, "Image")){
+        # If value is Image_OR_DelayedArray, only the image will be replaced
+        if(is(value, "Image_OR_DelayedArray")){
             x[[i]] <- value
         } else {
             x[i] <- value
