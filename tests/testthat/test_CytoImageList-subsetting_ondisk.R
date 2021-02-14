@@ -106,39 +106,46 @@ test_that("Merging works on CytoImageList object.", {
 })
 
 test_that("General operations work on CytoImageList object.", {
-    data("pancreasImages")
+  data("pancreasImages")
+  cur_path <- tempdir()
+  on.exit(unlink(cur_path))
+    
+  cur_Images <- CytoImageList(pancreasImages, on_disk = TRUE, h5FilesPath = cur_path)
+    
+  cur_size <- file.info(paste0(cur_path, "/E34_imc.h5"))[,"size"]
+    
   # Subsetting
   ## Getters
-  expect_true(is(pancreasImages[1], "CytoImageList"))
-  expect_true(is(pancreasImages[[1]], "Image"))
+  expect_true(is(cur_Images[1], "CytoImageList"))
+  expect_true(is(cur_Images[[1]], "HDF5Array"))
 
-  expect_equal(names(pancreasImages), c("E34_imc", "G01_imc", "J02_imc"))
-  expect_equal(rownames(mcols(pancreasImages)), c("E34_imc", "G01_imc", "J02_imc"))
+  expect_equal(names(cur_Images), c("E34_imc", "G01_imc", "J02_imc"))
+  expect_equal(rownames(mcols(cur_Images)), c("E34_imc", "G01_imc", "J02_imc"))
 
   ## Setters
   #### These checks are mainly in place to avoid NA or empty names
-  cur_Images <- pancreasImages
-  names(cur_Images) <- NULL
+  cur_Images_2 <- cur_Images
+  names(cur_Images_2) <- NULL
 
   ### Should fail
-  expect_error(cur_Images["test"] <- pancreasImages[1])
-  expect_error(names(cur_Images) <- c("test1", "test2"))
-  expect_error(cur_Images[1] <- pancreasImages[[1]])
+  expect_error(cur_Images_2["test"] <- cur_Images[1])
+  expect_error(names(cur_Images_2) <- c("test1", "test2"))
+  expect_error(cur_Images_2[1] <- cur_Images[[1]])
 
   ### Should work
-  expect_silent(cur_Images[1] <- pancreasImages[1])
-  expect_silent(cur_Images[1] <- as(pancreasImages[[2]], "CytoImageList"))
+  expect_silent(cur_Images_2[1] <- cur_Images[1])
+  expect_silent(cur_Images_2[1] <- as(list(cur_Images[[2]]), "CytoImageList"))
 
-  names(cur_Images) <- c("test1", "test2", "test3")
-  expect_equal(names(cur_Images), c("test1", "test2", "test3"))
-  expect_equal(rownames(mcols(cur_Images)), c("test1", "test2", "test3"))
+  names(cur_Images_2) <- c("test1", "test2", "test3")
+  expect_equal(names(cur_Images_2), c("test1", "test2", "test3"))
+  expect_equal(rownames(mcols(cur_Images_2)), c("test1", "test2", "test3"))
 
-  expect_error(cur_Images[1] <- "test")
-  expect_error(cur_Images[[1]] <- "test")
+  expect_error(cur_Images_2[1] <- "test")
+  expect_error(cur_Images_2[[1]] <- "test")
 
   ### Test mcols
-  cur_Images1 <- pancreasImages
-  cur_Images2 <- pancreasImages
+  cur_Images1 <- cur_Images
+  cur_Images2 <- cur_Images
   names(cur_Images2) <- c("test1", "test2", "test3")
   mcols(cur_Images2)$ImageNumber <- mcols(cur_Images2)$ImageNb
 
@@ -146,24 +153,23 @@ test_that("General operations work on CytoImageList object.", {
   expect_true(all(is.na(mcols(cur_Images3[1:3,3]))))
 
   ### Test channel subsetting
-  cur_Images <- pancreasImages
-  expect_error(cur_Images[1] <- as(cur_Images[[1]][,,1], "CytoImageList"))
+  cur_Images_2 <- cur_Images
+  expect_error(cur_Images_2[1] <- as(list(cur_Images_2[[1]][,,1]), "CytoImageList"))
 
   ## Looping
   ### Should work
-  expect_silent(cur_list <- lapply(pancreasImages, dim))
+  expect_silent(cur_list <- lapply(cur_Images, dim))
   expect_true(is.list(cur_list))
-  expect_silent(cur_list <- endoapply(pancreasImages, function(x){
-    EBImage::gblur(x, sigma = 1)
-    return(x)}))
+  expect_silent(cur_list <- endoapply(cur_Images, function(x){
+    Image(EBImage::gblur(x, sigma = 1))}))
   expect_true(is(cur_list, "CytoImageList"))
 
   ### Should not work
-  expect_error(cur_list <- endoapply(pancreasImages, dim))
+  expect_error(cur_list <- endoapply(cur_Images, dim))
 
   ## Vector functions
-  expect_equal(length(pancreasImages), 3L)
-  expect_null(dim(pancreasImages))
+  expect_equal(length(cur_Images), 3L)
+  expect_null(dim(cur_Images))
 })
 
 test_that("Custom accessors work on CytoImageList object.", {

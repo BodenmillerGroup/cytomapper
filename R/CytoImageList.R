@@ -128,19 +128,20 @@ CytoImageList <- function(..., on_disk = FALSE, h5FilesPath = NULL,
     
     if (on_disk) {
         
-        if (is.null(names(args))){
-            stop("Please specify the names of the images.")
-        }
-        
-        if (is.null(h5FilesPath)) {
-            stop("When storing the images on disk, please specify a 'h5FilesPath'. \n",
-                 "You can use 'h5FilesPath = getHDF5DumpDir()' to temporarily store the images.\n",
-                 "If doing so, .h5 files will be deleted once the R session ends.")
-        }
-        
         cur_class <- lapply(args, class)
         
         if (all(cur_class == "Image")) {
+            
+            if (is.null(names(args))){
+                stop("Please specify the names of the images.")
+            }
+            
+            if (is.null(h5FilesPath)) {
+                stop("When storing the images on disk, please specify a 'h5FilesPath'. \n",
+                     "You can use 'h5FilesPath = getHDF5DumpDir()' to temporarily store the images.\n",
+                     "If doing so, .h5 files will be deleted once the R session ends.")
+            }
+            
             cur_names <- names(args)
             args <- bplapply(names(args), function(y){
                 cur_name <- y
