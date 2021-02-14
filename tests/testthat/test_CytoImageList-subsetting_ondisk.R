@@ -1,18 +1,28 @@
 test_that("Coercion works on CytoImageList object.", {
   data("pancreasImages")
+  cur_path <- tempdir()
+  on.exit(unlink(cur_path))
+    
+  cur_Images <- CytoImageList(pancreasImages, on_disk = TRUE, h5FilesPath = cur_path)
+    
+  cur_size <- file.info(paste0(cur_path, "/E34_imc.h5"))[,"size"]
+    
+  expect_silent(test.list1 <- as.list(cur_Images))
+  expect_s4_class(test.list1[[1]], "HDF5Array")
 
-  expect_silent(test.list1 <- as.list(pancreasImages))
+  expect_silent(test.list2 <- as(cur_Images, "List"))
+  expect_identical(mcols(test.list2), mcols(cur_Images))
+  expect_identical(test.list2[[1]], cur_Images[[1]])
+  expect_s4_class(test.list2[[1]], "HDF5Array")
 
-  expect_silent(test.list2 <- as(pancreasImages, "List"))
-  expect_identical(mcols(test.list2), mcols(pancreasImages))
-  expect_identical(test.list2[[1]], pancreasImages[[1]])
-
-  expect_silent(test.list3 <- as(pancreasImages, "SimpleList"))
-  expect_identical(mcols(test.list3), mcols(pancreasImages))
-  expect_identical(test.list3[[1]], pancreasImages[[1]])
+  expect_silent(test.list3 <- as(cur_Images, "SimpleList"))
+  expect_identical(mcols(test.list3), mcols(cur_Images))
+  expect_identical(test.list3[[1]], cur_Images[[1]])
+  expect_s4_class(test.list3[[1]], "HDF5Array")
 
   expect_silent(test.list <- as(test.list1, "CytoImageList"))
   expect_true(is.null(mcols(test.list)))
+  expect_s4_class(test.list[[1]], "HDF5Array")
 
   expect_silent(test.list <- as(test.list2, "CytoImageList"))
   expect_identical(mcols(test.list2), mcols(test.list))
@@ -21,41 +31,68 @@ test_that("Coercion works on CytoImageList object.", {
   expect_silent(test.list <- as(test.list3, "CytoImageList"))
   expect_identical(mcols(test.list3), mcols(test.list))
   expect_identical(test.list3[[1]], test.list[[1]])
+  
+  expect_identical(cur_size, file.info(paste0(cur_path, "/E34_imc.h5"))[,"size"])
 })
 
 test_that("Merging works on CytoImageList object.", {
   data("pancreasImages")
+  cur_path <- tempdir()
+  on.exit(unlink(cur_path))
+  
+  cur_Images <- CytoImageList(pancreasImages, on_disk = TRUE, h5FilesPath = cur_path)
+  
+  cur_size <- file.info(paste0(cur_path, "/E34_imc.h5"))[,"size"]
+    
   # Merging
   ## Should work
-  expect_silent(test.list <- c(pancreasImages[c(1,3)], pancreasImages[2]))
+  expect_silent(test.list <- c(cur_Images[c(1,3)], cur_Images[2]))
   expect_s4_class(test.list, "CytoImageList")
   expect_equal(names(test.list), c("E34_imc", "J02_imc", "G01_imc"))
   expect_equal(rownames(mcols(test.list)), c("E34_imc", "J02_imc", "G01_imc"))
-  expect_identical(test.list[[3]], pancreasImages[[2]])
+  expect_identical(test.list[[3]], cur_Images[[2]])
 
   ## Should fail due to duplicated names
-  expect_error(test.list <- c(pancreasImages, pancreasImages),
+  expect_error(test.list <- c(cur_Images, cur_Images),
                regexp = "Only unique entries allowed in a CytoImageList object.",
                fixed = TRUE)
 
   # Merge channels
-  channels1 <- getChannels(pancreasImages, 1:2)
-  channels2 <- getChannels(pancreasImages, 3:4)
+  channels1 <- getChannels(cur_Images, 1:2)
+  channels2 <- getChannels(cur_Images, 3:4)
+  
+  # Error
+  expect_error(channels3 <- mergeChannels(channels1, channels2),
+               regexp = "Please specify the filepath \nwhere the merged images should be stored.",
+               fixed = TRUE)
 
   ## Should work
-  expect_silent(channels3 <- mergeChannels(channels1, channels2))
+  dir.create(file.path(cur_path, "test"))
+  cur_path_2 <- file.path(cur_path, "test")
+  on.exit(unlink(cur_path_2))
+  expect_silent(channels3 <- mergeChannels(channels1, channels2, 
+                                           h5FilesPath = cur_path_2))
   expect_equal(channelNames(channels3), c("H3", "CD99", "PIN", "CD8a"))
   expect_equal(names(channels3), c("E34_imc", "G01_imc", "J02_imc"))
   
-  # Check if mcols are correctly set
-  mcols(channels1) <- DataFrame(test = c("test1", "test2", "test3"))
-  mcols(channels2) <- DataFrame(test2 = c("test5", "test6", "test7"))
-  expect_silent(channels3 <- mergeChannels(channels1, channels2))
-  expect_equal(mcols(channels3), mcols(channels1))
+  expect_true(expect_true(file.exists(file.path(cur_path_2, "E34_imc.h5"))))
+  expect_true(expect_true(file.exists(file.path(cur_path_2, "G01_imc.h5"))))
+  expect_true(expect_true(file.exists(file.path(cur_path_2, "J02_imc.h5"))))
 
+  expect_lt(file.info(paste0(cur_path_2, "/E34_imc.h5"))[,"size"],
+            file.info(paste0(cur_path, "/E34_imc.h5"))[,"size"])
+  
+  # Overwrite old files
+  expect_silent(channels3 <- mergeChannels(channels1, channels2, 
+                                           h5FilesPath = cur_path))
+  expect_lt(file.info(paste0(cur_path, "/E34_imc.h5"))[,"size"],
+            cur_size)
+  
   ## Should not work
-  channels1 <- getChannels(pancreasImages, 1:2)
-  channels2 <- getChannels(pancreasImages, 3:4)
+  cur_Images <- CytoImageList(pancreasImages, on_disk = TRUE, h5FilesPath = cur_path)
+
+  channels1 <- getChannels(cur_Images, 1:2)
+  channels2 <- getChannels(cur_Images, 3:4)
   expect_error(mergeChannels(channels1, as(channels2, "SimpleList")))
 
   channels2 <- channels2[1:2]
@@ -64,6 +101,8 @@ test_that("Merging works on CytoImageList object.", {
   expect_error(mergeChannels(channels1, as(channels2)))
 
   expect_error(mergeChannels(channels1, channels1))
+  
+  expect_identical(cur_size, file.info(paste0(cur_path, "/E34_imc.h5"))[,"size"])
 })
 
 test_that("General operations work on CytoImageList object.", {

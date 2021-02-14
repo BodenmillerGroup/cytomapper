@@ -190,15 +190,35 @@ CytoImageList <- function(..., on_disk = FALSE, h5FilesPath = NULL,
 # Coercion from list
 #' @exportMethod coerce
 setAs("list", "CytoImageList", function(from) {
+    
+    if (class(from[[1]]) %in% c("HDF5Array", "DelayedArray",
+                                "HDF5Matrix", "DelayedMatrix")){
+        on_disk <- TRUE
+        h5FilesPath <- dirname(path(seed(from[[1]])))
+    } else {
+        on_disk <- FALSE
+        h5FilesPath <- NULL
+    }
+    
     # Use constructor function
-    CytoImageList(from)
+    CytoImageList(from, on_disk = on_disk, h5FilesPath = h5FilesPath)
 })
 
 # Coercion from ANY
 #' @exportMethod coerce
 setAs("ANY", "CytoImageList", function(from) {
+    
+    if (class(from[[1]]) %in% c("HDF5Array", "DelayedArray",
+                                "HDF5Matrix", "DelayedMatrix")){
+        on_disk <- TRUE
+        h5FilesPath <- dirname(path(seed(from[[1]])))
+    } else {
+        on_disk <- FALSE
+        h5FilesPath <- NULL
+    }
+    
     # Use constructor function
-    CytoImageList(from)
+    CytoImageList(from, on_disk = on_disk, h5FilesPath = h5FilesPath)
 })
 
 # Expanded show method
