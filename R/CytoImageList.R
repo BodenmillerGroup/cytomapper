@@ -190,6 +190,7 @@ CytoImageList <- function(..., on_disk = FALSE, h5FilesPath = NULL,
 
 # Coercion from list
 #' @exportMethod coerce
+#' @importFrom DelayedArray seed path
 setAs("list", "CytoImageList", function(from) {
     
     if (class(from[[1]]) %in% c("HDF5Array", "DelayedArray",
@@ -207,6 +208,7 @@ setAs("list", "CytoImageList", function(from) {
 
 # Coercion from ANY
 #' @exportMethod coerce
+#' @importFrom DelayedArray seed path
 setAs("ANY", "CytoImageList", function(from) {
     
     if (class(from[[1]]) %in% c("HDF5Array", "DelayedArray",
