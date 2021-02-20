@@ -1,7 +1,6 @@
 test_that("CytoImageList can be scaled.", {
   data("pancreasImages")
 
-  data("pancreasImages")
   cur_path <- tempdir()
   on.exit(unlink(cur_path))
     
