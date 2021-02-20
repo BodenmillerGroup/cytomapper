@@ -241,7 +241,7 @@ setMethod("scaleImages",
 #' @importFrom stats quantile
 #' @importFrom EBImage combine abind
 normImages <- function(object, separateChannels = TRUE, separateImages = FALSE,
-                ft = c(0, 1), inputRange = NULL){
+                ft = c(0, 1), inputRange = NULL, overwrite = FALSE){
 
     if (!is.logical(separateChannels) ||
         length(separateChannels) > 1L ||
@@ -309,7 +309,7 @@ normImages <- function(object, separateChannels = TRUE, separateImages = FALSE,
                     z <- combine(z)
                     dimnames(z) <- cur_names
                     
-                    y[seq_len(dim(y)[1]),seq_len(dim(y)[2]),seq_len(dim(y)[3])] <- z
+                    y <- .add_h5(y, z, overwrite)
                 }
                 
                 return(y)
@@ -370,7 +370,7 @@ normImages <- function(object, separateChannels = TRUE, separateImages = FALSE,
                     }
                     
                     dimnames(z) <- cur_names 
-                    y[seq_len(dim(y)[1]),seq_len(dim(y)[2]),seq_len(dim(y)[3])] <- z
+                    y <- .add_h5(y, z, overwrite)
                 }
                     
                 return(y)
@@ -388,7 +388,7 @@ normImages <- function(object, separateChannels = TRUE, separateImages = FALSE,
                 } else {
                     z <- EBImage::normalize(as.array(y), separate = separateChannels,
                                             ft = ft, inputRange = inputRange)
-                    y[seq_len(dim(y)[1]),seq_len(dim(y)[2]),seq_len(dim(y)[3])] <- z
+                    y <- .add_h5(y, z, overwrite)
                 }
                 return(y)
             })
@@ -484,7 +484,7 @@ normImages <- function(object, separateChannels = TRUE, separateImages = FALSE,
                         }
                         dimnames(z) <- cur_names  
                         
-                        y[seq_len(dim(y)[1]),seq_len(dim(y)[2]),seq_len(dim(y)[3])] <- z
+                        y <- .add_h5(y, z, overwrite)
                     }
     
                     return(y)
@@ -502,7 +502,7 @@ normImages <- function(object, separateChannels = TRUE, separateImages = FALSE,
                     } else {
                         z <- EBImage::normalize(as.array(y), separate = FALSE,
                                                 ft=ft, inputRange = inputRange)
-                        y[seq_len(dim(y)[1]),seq_len(dim(y)[2]),seq_len(dim(y)[3])] <- z
+                        y <- .add_h5(y, z, overwrite)
                     }
     
                     return(y)
@@ -520,3 +520,26 @@ normImages <- function(object, separateChannels = TRUE, separateImages = FALSE,
 setMethod("normalize",
     signature = signature(object = "CytoImageList"),
     definition = normImages)
+
+#' Function to overwrite h5 files
+.add_h5 <- function(cur_obj, new_obj, overwrite){
+    
+    cur_file <- path(cur_obj)
+    
+    cur_name <- paste0(sub("\\.[A-Za-z0-9]*", "", basename(cur_file)), "_norm")
+    
+    if (overwrite) {
+        file.remove(cur_file)
+    }
+    
+    # Check if normalisation entry already exists
+    # If so, delete it
+    if (cur_name %in% h5ls(cur_file)$name) {
+        h5delete(cur_file, cur_name)
+    }
+    
+    writeHDF5Array(DelayedArray(new_obj), 
+                   filepath = cur_file,
+                   name = cur_name,
+                   with.dimnames = TRUE)
+}

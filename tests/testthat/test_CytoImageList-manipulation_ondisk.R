@@ -39,140 +39,151 @@ test_that("CytoImageList can be scaled.", {
   expect_error(scaleImages(cur_Images, "test"),
                regexp = "'value' must be a single numeric.",
                fixed = TRUE)
+  
+  expect_equal(cur_size, file.info(paste0(cur_path, "/E34_imc.h5"))[,"size"])
 })
 
 test_that("CytoImageList can be normalized", {
   data("pancreasImages")
+    
+  cur_path <- tempdir()
+  on.exit(unlink(cur_path))
+    
+  cur_Images <- CytoImageList(pancreasImages, on_disk = TRUE, h5FilesPath = cur_path)
+    
+  cur_size <- file.info(paste0(cur_path, "/E34_imc.h5"))[,"size"]
 
   # Works
-  expect_silent(cur_images <- normalize(pancreasImages))
-  expect_silent(plotPixels(cur_images))
-  expect_silent(plotPixels(cur_images,
-                           colour_by = c("H3", "CD99")))
+  expect_silent(cur_images <- normalize(cur_Images))
+  expect_s4_class(cur_images$E34_imc, "DelayedArray")
+  expect_s4_class(cur_images$G01_imc, "DelayedArray")
+  expect_s4_class(cur_images$J02_imc, "DelayedArray")
 
   # Separate images
   # Separate channels
-  expect_silent(cur_images <- normalize(pancreasImages, separateImages = TRUE,
+  expect_silent(cur_images <- normalize(cur_Images, separateImages = TRUE,
                                         separateChannels = TRUE))
-  expect_silent(plotPixels(cur_images,
-                           colour_by = c("H3", "CD99")))
+  #expect_silent(plotPixels(cur_images,
+  #                        colour_by = c("H3", "CD99"), scale = TRUE))
+  #expect_silent(plotPixels(cur_images,
+  #                         colour_by = c("H3", "CD99"), scale = FALSE))
 
-  expect_equal(imageData(cur_images[[1]])[1, 1:10,1],
+  expect_equal(as.array(cur_images[[1]])[1, 1:10,1],
                imageData(pancreasImages[[1]])[1, 1:10,1]/max(imageData(pancreasImages[[1]])[,,1]),
                tolerance = 1e-06)
-  expect_equal(imageData(cur_images[[1]])[1, 1:10,2],
+  expect_equal(as.array(cur_images[[1]])[1, 1:10,2],
                imageData(pancreasImages[[1]])[1, 1:10,2]/max(imageData(pancreasImages[[1]])[,,2]),
                tolerance = 1e-06)
-  expect_equal(imageData(cur_images[[1]])[1, 1:10,3],
+  expect_equal(as.array(cur_images[[1]])[1, 1:10,3],
                imageData(pancreasImages[[1]])[1, 1:10,3]/max(imageData(pancreasImages[[1]])[,,3]),
                tolerance = 1e-06)
-  expect_equal(imageData(cur_images[[1]])[1, 1:10,4],
+  expect_equal(as.array(cur_images[[1]])[1, 1:10,4],
                imageData(pancreasImages[[1]])[1, 1:10,4]/max(imageData(pancreasImages[[1]])[,,4]),
                tolerance = 1e-06)
-  expect_equal(imageData(cur_images[[1]])[1, 1:10,5],
+  expect_equal(as.array(cur_images[[1]])[1, 1:10,5],
                imageData(pancreasImages[[1]])[1, 1:10,5]/max(imageData(pancreasImages[[1]])[,,5]),
                tolerance = 1e-06)
-  expect_equal(imageData(cur_images[[2]])[1, 1:10,1],
+  expect_equal(as.array(cur_images[[2]])[1, 1:10,1],
                imageData(pancreasImages[[2]])[1, 1:10,1]/max(imageData(pancreasImages[[2]])[,,1]),
                tolerance = 1e-06)
-  expect_equal(imageData(cur_images[[2]])[1, 1:10,2],
+  expect_equal(as.array(cur_images[[2]])[1, 1:10,2],
                imageData(pancreasImages[[2]])[1, 1:10,2]/max(imageData(pancreasImages[[2]])[,,2]),
                tolerance = 1e-06)
-  expect_equal(imageData(cur_images[[2]])[1, 1:10,3],
+  expect_equal(as.array(cur_images[[2]])[1, 1:10,3],
                imageData(pancreasImages[[2]])[1, 1:10,3]/max(imageData(pancreasImages[[2]])[,,3]),
                tolerance = 1e-06)
-  expect_equal(imageData(cur_images[[2]])[1, 1:10,4],
+  expect_equal(as.array(cur_images[[2]])[1, 1:10,4],
                imageData(pancreasImages[[2]])[1, 1:10,4]/max(imageData(pancreasImages[[2]])[,,4]),
                tolerance = 1e-06)
-  expect_equal(imageData(cur_images[[2]])[1, 1:10,5],
+  expect_equal(as.array(cur_images[[2]])[1, 1:10,5],
                imageData(pancreasImages[[2]])[1, 1:10,5]/max(imageData(pancreasImages[[2]])[,,5]),
                tolerance = 1e-06)
 
-  expect_equal(max(imageData(cur_images[[1]])[,,1]),
+  expect_equal(max(as.array(cur_images[[1]])[,,1]),
                1, tolerance = 1e-06)
-  expect_equal(max(imageData(cur_images[[1]])[,,2]),
+  expect_equal(max(as.array(cur_images[[1]])[,,2]),
                1, tolerance = 1e-06)
-  expect_equal(max(imageData(cur_images[[1]])[,,3]),
+  expect_equal(max(as.array(cur_images[[1]])[,,3]),
                1, tolerance = 1e-06)
-  expect_equal(max(imageData(cur_images[[1]])[,,4]),
+  expect_equal(max(as.array(cur_images[[1]])[,,4]),
                1, tolerance = 1e-06)
-  expect_equal(max(imageData(cur_images[[1]])[,,5]),
+  expect_equal(max(as.array(cur_images[[1]])[,,5]),
                1, tolerance = 1e-06)
-  expect_equal(max(imageData(cur_images[[2]])[,,1]),
+  expect_equal(max(as.array(cur_images[[2]])[,,1]),
                1, tolerance = 1e-06)
-  expect_equal(max(imageData(cur_images[[2]])[,,2]),
+  expect_equal(max(as.array(cur_images[[2]])[,,2]),
                1, tolerance = 1e-06)
-  expect_equal(max(imageData(cur_images[[2]])[,,3]),
+  expect_equal(max(as.array(cur_images[[2]])[,,3]),
                1, tolerance = 1e-06)
-  expect_equal(max(imageData(cur_images[[2]])[,,4]),
+  expect_equal(max(as.array(cur_images[[2]])[,,4]),
                1, tolerance = 1e-06)
-  expect_equal(max(imageData(cur_images[[2]])[,,5]),
+  expect_equal(max(as.array(cur_images[[2]])[,,5]),
                1, tolerance = 1e-06)
 
   # Separate images
   # Not Separate channels
-  expect_silent(cur_images <- normalize(pancreasImages, separateImages = TRUE,
+  expect_silent(cur_images <- normalize(cur_Images, separateImages = TRUE,
                                         separateChannels = FALSE))
-  expect_silent(plotPixels(cur_images,
-                           colour_by = c("H3", "CD99"), scale = TRUE))
-  expect_silent(plotPixels(cur_images,
-                           colour_by = c("H3", "CD99"), scale = FALSE))
+  #expect_silent(plotPixels(cur_images,
+  #                        colour_by = c("H3", "CD99"), scale = TRUE))
+  #expect_silent(plotPixels(cur_images,
+  #                         colour_by = c("H3", "CD99"), scale = FALSE))
 
-  expect_equal(imageData(cur_images[[1]])[1, 1:10,1],
+  expect_equal(as.array(cur_images[[1]])[1, 1:10,1],
                imageData(pancreasImages[[1]])[1, 1:10,1]/max(imageData(pancreasImages[[1]])),
                tolerance = 1e-06)
-  expect_equal(imageData(cur_images[[1]])[1, 1:10,2],
+  expect_equal(as.array(cur_images[[1]])[1, 1:10,2],
                imageData(pancreasImages[[1]])[1, 1:10,2]/max(imageData(pancreasImages[[1]])),
                tolerance = 1e-06)
-  expect_equal(imageData(cur_images[[1]])[1, 1:10,3],
+  expect_equal(as.array(cur_images[[1]])[1, 1:10,3],
                imageData(pancreasImages[[1]])[1, 1:10,3]/max(imageData(pancreasImages[[1]])),
                tolerance = 1e-06)
-  expect_equal(imageData(cur_images[[1]])[1, 1:10,4],
+  expect_equal(as.array(cur_images[[1]])[1, 1:10,4],
                imageData(pancreasImages[[1]])[1, 1:10,4]/max(imageData(pancreasImages[[1]])),
                tolerance = 1e-06)
-  expect_equal(imageData(cur_images[[1]])[1, 1:10,5],
+  expect_equal(as.array(cur_images[[1]])[1, 1:10,5],
                imageData(pancreasImages[[1]])[1, 1:10,5]/max(imageData(pancreasImages[[1]])),
                tolerance = 1e-06)
-  expect_equal(imageData(cur_images[[2]])[1, 1:10,1],
+  expect_equal(as.array(cur_images[[2]])[1, 1:10,1],
                imageData(pancreasImages[[2]])[1, 1:10,1]/max(imageData(pancreasImages[[2]])),
                tolerance = 1e-06)
-  expect_equal(imageData(cur_images[[2]])[1, 1:10,2],
+  expect_equal(as.array(cur_images[[2]])[1, 1:10,2],
                imageData(pancreasImages[[2]])[1, 1:10,2]/max(imageData(pancreasImages[[2]])),
                tolerance = 1e-06)
-  expect_equal(imageData(cur_images[[2]])[1, 1:10,3],
+  expect_equal(as.array(cur_images[[2]])[1, 1:10,3],
                imageData(pancreasImages[[2]])[1, 1:10,3]/max(imageData(pancreasImages[[2]])),
                tolerance = 1e-06)
-  expect_equal(imageData(cur_images[[2]])[1, 1:10,4],
+  expect_equal(as.array(cur_images[[2]])[1, 1:10,4],
                imageData(pancreasImages[[2]])[1, 1:10,4]/max(imageData(pancreasImages[[2]])),
                tolerance = 1e-06)
-  expect_equal(imageData(cur_images[[2]])[1, 1:10,5],
+  expect_equal(as.array(cur_images[[2]])[1, 1:10,5],
                imageData(pancreasImages[[2]])[1, 1:10,5]/max(imageData(pancreasImages[[2]])),
                tolerance = 1e-06)
 
-  expect_equal(max(imageData(cur_images[[1]])[,,1]),
+  expect_equal(max(as.array(cur_images[[1]])[,,1]),
                max(imageData(pancreasImages[[1]])[,,1])/max(imageData(pancreasImages[[1]])), tolerance = 1e-06)
-  expect_equal(max(imageData(cur_images[[1]])[,,2]),
+  expect_equal(max(as.array(cur_images[[1]])[,,2]),
                max(imageData(pancreasImages[[1]])[,,2])/max(imageData(pancreasImages[[1]])), tolerance = 1e-06)
-  expect_equal(max(imageData(cur_images[[1]])[,,3]),
+  expect_equal(max(as.array(cur_images[[1]])[,,3]),
                max(imageData(pancreasImages[[1]])[,,3])/max(imageData(pancreasImages[[1]])), tolerance = 1e-06)
-  expect_equal(max(imageData(cur_images[[1]])[,,4]),
+  expect_equal(max(as.array(cur_images[[1]])[,,4]),
                max(imageData(pancreasImages[[1]])[,,4])/max(imageData(pancreasImages[[1]])), tolerance = 1e-06)
-  expect_equal(max(imageData(cur_images[[1]])[,,5]),
+  expect_equal(max(as.array(cur_images[[1]])[,,5]),
                max(imageData(pancreasImages[[1]])[,,5])/max(imageData(pancreasImages[[1]])), tolerance = 1e-06)
-  expect_equal(max(imageData(cur_images[[2]])[,,1]),
+  expect_equal(max(as.array(cur_images[[2]])[,,1]),
                max(imageData(pancreasImages[[2]])[,,1])/max(imageData(pancreasImages[[2]])), tolerance = 1e-06)
-  expect_equal(max(imageData(cur_images[[2]])[,,2]),
+  expect_equal(max(as.array(cur_images[[2]])[,,2]),
                max(imageData(pancreasImages[[2]])[,,2])/max(imageData(pancreasImages[[2]])), tolerance = 1e-06)
-  expect_equal(max(imageData(cur_images[[2]])[,,3]),
+  expect_equal(max(as.array(cur_images[[2]])[,,3]),
                max(imageData(pancreasImages[[2]])[,,3])/max(imageData(pancreasImages[[2]])), tolerance = 1e-06)
-  expect_equal(max(imageData(cur_images[[2]])[,,4]),
+  expect_equal(max(as.array(cur_images[[2]])[,,4]),
                max(imageData(pancreasImages[[2]])[,,4])/max(imageData(pancreasImages[[2]])), tolerance = 1e-06)
-  expect_equal(max(imageData(cur_images[[2]])[,,5]),
+  expect_equal(max(as.array(cur_images[[2]])[,,5]),
                max(imageData(pancreasImages[[2]])[,,5])/max(imageData(pancreasImages[[2]])), tolerance = 1e-06)
 
   # Not Separate images
   # Separate channels
-  expect_silent(cur_images <- normalize(pancreasImages, separateImages = FALSE,
+  expect_silent(cur_images <- normalize(cur_Images, separateImages = FALSE,
                                         separateChannels = TRUE))
   expect_silent(plotPixels(cur_images,
                            colour_by = c("H3", "CD99"), scale = TRUE))

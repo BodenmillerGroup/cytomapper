@@ -30,7 +30,9 @@ library(cytomapper)
 
 Explain the backend
 
-mcols are not transfered
+Normalization will save the normalized pixel intensities in second layer - slow and increases size on disk.
+
+
 
 # Session info {.unnumbered}
 
