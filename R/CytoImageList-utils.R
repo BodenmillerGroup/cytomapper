@@ -290,7 +290,7 @@ normImages <- function(object, separateChannels = TRUE, separateImages = FALSE,
         
         if (separateImages) {
             
-            cur_out <- endoapply(object, function(y){
+            object <- endoapply(object, function(y){
                 
                 cur_names <- dimnames(y)
                 
@@ -328,7 +328,7 @@ normImages <- function(object, separateChannels = TRUE, separateImages = FALSE,
             
             cur_inputRanges[names(cur_r)] <- cur_r
                 
-            cur_out <- endoapply(object, function(y){
+            object <- endoapply(object, function(y){
                     
                 cur_names <- dimnames(y)
                 
@@ -381,7 +381,7 @@ normImages <- function(object, separateChannels = TRUE, separateImages = FALSE,
         
         if (separateImages) {
     
-            cur_out <- endoapply(object, function(y){
+            object <- endoapply(object, function(y){
                 if (is_image) {
                     y <- EBImage::normalize(y, separate = separateChannels,
                                             ft = ft, inputRange = inputRange)
@@ -420,7 +420,7 @@ normImages <- function(object, separateChannels = TRUE, separateImages = FALSE,
     
             if (separateChannels) {
     
-                cur_out <- endoapply(object, function(y){
+                object <- endoapply(object, function(y){
     
                     cur_names <- dimnames(y)
                     
@@ -491,7 +491,7 @@ normImages <- function(object, separateChannels = TRUE, separateImages = FALSE,
                 })
     
             } else {
-                cur_out <- endoapply(object, function(y){
+                object <- endoapply(object, function(y){
                     if(is.null(inputRange)){
                         inputRange <- as.numeric(cur_range)
                     }
@@ -512,7 +512,7 @@ normImages <- function(object, separateChannels = TRUE, separateImages = FALSE,
         }
         
     }
-    return(cur_out)
+    return(object)
 }
 
 
