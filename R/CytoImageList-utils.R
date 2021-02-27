@@ -521,7 +521,7 @@ setMethod("normalize",
     signature = signature(object = "CytoImageList"),
     definition = normImages)
 
-#' Function to overwrite h5 files
+#' Function to handle h5 files
 .add_h5 <- function(cur_obj, new_obj, overwrite){
     
     cur_file <- path(cur_obj)
@@ -530,12 +530,16 @@ setMethod("normalize",
     
     if (overwrite) {
         file.remove(cur_file)
-    }
-    
-    # Check if normalisation entry already exists
-    # If so, delete it
-    if (cur_name %in% h5ls(cur_file)$name) {
-        h5delete(cur_file, cur_name)
+    } else {
+        # Check if normalisation entry already exists
+        # If so, delete it
+        if (cur_name %in% h5ls(cur_file)$name) {
+            h5delete(cur_file, cur_name)
+        }
+        
+        if (paste0(".", cur_name, "_dimnames") %in% h5ls(cur_file)$name) {
+            h5delete(cur_file, paste0(".", cur_name, "_dimnames"))
+        }
     }
     
     writeHDF5Array(DelayedArray(new_obj), 
