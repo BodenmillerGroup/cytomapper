@@ -48,7 +48,8 @@ Imports:
     svglite,
     shiny,
     shinydashboard,
-    matrixStats
+    matrixStats,
+    rhdf5
 Suggests:
     BiocStyle,
     knitr,

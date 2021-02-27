@@ -537,6 +537,7 @@ setMethod("normalize",
     definition = normImages)
 
 # Function to handle h5 files
+#' @importFrom rhdf5 h5delete h5ls
 .add_h5 <- function(cur_obj, new_obj, overwrite){
     
     cur_file <- path(cur_obj)
