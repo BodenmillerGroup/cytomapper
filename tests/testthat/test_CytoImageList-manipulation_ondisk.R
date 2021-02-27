@@ -709,3 +709,27 @@ test_that("CytoImageList can be normalized", {
   expect_false("E34_imc" %in% h5ls(path(cur_images$E34_imc@seed))$name)
   expect_false(".E34_imc_dimnames" %in% h5ls(path(cur_images$E34_imc@seed))$name)
 })
+
+test_that("HDF5 handling works", {
+    cur_array <- array(data = rnorm(3000), dim = c(100, 100, 3)) 
+    cur_array_2 <- array(data = runif(3000), dim = c(100, 100, 3)) 
+    
+    cur_path <- tempdir()
+    on.exit(unlink(cur_path))
+    
+    cur_file <- paste0(cur_path, "/test.h5")
+    
+    cur_hdf5 <- writeHDF5Array(x = cur_array, filepath = cur_file,  name = "test")
+    
+    expect_equal(h5ls(cur_file)$name, "test")
+    
+    expect_silent(test <- .add_h5(cur_obj = cur_hdf5, new_obj = cur_array_2, overwrite = FALSE))
+    
+    expect_equal(h5ls(cur_file)$name, c("test", "test_norm"))
+    expect_equal(as.array(test), cur_array_2)
+    
+    expect_silent(test <- .add_h5(cur_obj = cur_hdf5, new_obj = cur_array_2, overwrite = TRUE))
+    expect_equal(h5ls(cur_file)$name, "test_norm")
+    expect_equal(as.array(test), cur_array_2)
+    
+})
