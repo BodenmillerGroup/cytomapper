@@ -536,7 +536,7 @@ setMethod("normalize",
     signature = signature(object = "CytoImageList"),
     definition = normImages)
 
-#' Function to handle h5 files
+# Function to handle h5 files
 .add_h5 <- function(cur_obj, new_obj, overwrite){
     
     cur_file <- path(cur_obj)
