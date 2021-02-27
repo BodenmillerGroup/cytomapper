@@ -167,9 +167,18 @@ setReplaceMethod("names",
 #' The \code{inputRange} either takes NULL (default), a vector of length 2
 #' specifying the clipping range for all channels or a list where each
 #' named entry contains a channel-specific clipping range.
+#' 
+#' Image normalization also works for images stored on disk. By default,
+#' the normalized images are stored as a second entry called "XYZ_norm"
+#' in the .h5 file. Here "XYZ" specifies the name of the original entry.
+#' By storing the normalized next to the original images on disk, space
+#' usage increases. To avoid storing duplicated data, one can specify
+#' \code{overwrite = TRUE}, therefore deleting the original images
+#' and only storing the normalized images. However, the original images
+#' cannot be accessed anymore after normalisation.
 #'
 #' \code{normalize(object, separateChannels = TRUE, separateImages = FALSE,
-#' ft = c(0, 1), inputRange = NULL)}:
+#' ft = c(0, 1), inputRange = NULL, overwrite = FALSE)}:
 #'
 #' \describe{
 #' \item{\code{object}:}{A CytoImageList object}
@@ -183,6 +192,12 @@ setReplaceMethod("names",
 #' clipping range of the input intensity values (see
 #' \code{\link[EBImage]{normalize}}). Alternatively a names list where each
 #' entry corresponds to a channel-specific clipping range.}
+#' \item{\code{overwrite}:}{Only relevant when images are kept on disk. By 
+#' specifying \code{overwrite = TRUE}, the normalized images will overwrite
+#' the original images in the .h5 file, therefore reducing space on disk.
+#' However, the original images cannot be accessed anymore after normalization.
+#' If \code{overwrite = FALSE} (default), the normalized images are added as
+#' a new entry called "XYZ_norm" to the .h5 file.})
 #' }
 #'
 #' @return A CytoImageList object containing the manipulated Images.
