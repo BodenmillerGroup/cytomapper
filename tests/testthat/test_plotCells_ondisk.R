@@ -116,38 +116,25 @@ test_that("plotCells: Metadata can be displayed.", {
 test_that("plotCells: Cells can be outlined correctly.", {
   data("pancreasSCE")
   data("pancreasMasks")
+    
+  cur_path <- tempdir()
+  on.exit(unlink(cur_path))
+    
+  cur_Masks <- CytoImageList(pancreasMasks, on_disk = TRUE, h5FilesPath = cur_path)
 
   # Works
   expect_silent(plotCells(object = pancreasSCE,
-            mask = pancreasMasks, img_id = "ImageNb",
+            mask = cur_Masks, img_id = "ImageNb",
             cell_id = "CellNb",
             outline_by = "CellType"))
   expect_silent(plotCells(object = pancreasSCE,
-                          mask = pancreasMasks, img_id = "ImageNb",
+                          mask = cur_Masks, img_id = "ImageNb",
                           cell_id = "CellNb", colour_by = "CD99",
                           outline_by = "CellType"))
   expect_silent(plotCells(object = pancreasSCE,
-            mask = pancreasMasks, img_id = "ImageNb",
+            mask = cur_Masks, img_id = "ImageNb",
             cell_id = "CellNb", colour_by = "CD99",
             outline_by = "Area"))
-
-  # Error
-  expect_error(plotCells(mask = pancreasMasks,
-                         outline_by = "CellType"),
-               regexp = "Please provide a SingleCellExperiment 'object'.",
-               fix = TRUE)
-  expect_error(plotCells(object = pancreasSCE,
-                          mask = pancreasMasks, img_id = "ImageNb",
-                          cell_id = "CellNb", colour_by = "CD99",
-                          outline_by = "test"),
-               regexp = "'outline_by' not in 'colData(object)' slot.",
-               fixed = TRUE)
-  expect_error(plotCells(object = pancreasSCE,
-                         mask = pancreasMasks, img_id = "ImageNb",
-                         cell_id = "CellNb", colour_by = "CD99",
-                         outline_by = c("CellType", "Area")),
-               regexp = "Only one 'outline_by' entry allowed.",
-               fixed = TRUE)
 })
 
 test_that("plotCells: Exprs values can be correctly set.", {

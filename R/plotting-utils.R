@@ -305,9 +305,16 @@
 #' @importFrom S4Vectors mcols
 .outlineImageByMeta <- function(object, mask, out_img, cell_id, img_id,
                                 outline_by, cur_colour, thick){
+    
+    is_Image <- is(mask[[1]], "Image")
 
     for(i in seq_along(mask)){
         cur_mask <- mask[[i]]
+        
+        if (!is_Image) {
+            cur_mask <- as.array(cur_mask)
+        }
+        
         cur_img <- out_img[[i]]
         cur_sce <- object[,colData(object)[,img_id] == mcols(mask)[i,img_id]]
 
