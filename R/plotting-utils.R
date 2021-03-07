@@ -4,6 +4,7 @@
 
 # Colour segmentation masks based on metadata
 #' @importFrom S4Vectors mcols
+#' @importFrom EBImage imageData
 .colourMaskByMeta <- function(object, mask, cell_id, img_id,
                                 colour_by, cur_colour, missing_colour,
                                 background_colour){
@@ -144,6 +145,7 @@
 #' @importFrom grDevices colorRampPalette
 #' @importFrom SummarizedExperiment assay
 #' @importFrom S4Vectors mcols
+#' @importFrom EBImage imageData
 .colourMaskByFeature <- function(object, mask, cell_id, img_id,
                         colour_by, exprs_values, cur_colour,
                         missing_colour, background_colour, plottingParam){
@@ -209,6 +211,8 @@
 #' @importFrom EBImage normalize
 .colourImageByFeature <- function(image, colour_by, bcg,
                                     cur_colour, plottingParam){
+    
+    is_Image <- is(image[[1]], "Image")
 
     if (length(colour_by) > 1) {
         max.values <- vapply(getChannels(image, colour_by), function(x){
@@ -255,6 +259,10 @@
 
     for(i in seq_along(image)){
         cur_image <- image[[i]][,,colour_by, drop = FALSE]
+        
+        if (!is_Image) {
+            cur_image <- as.array(cur_image)
+        }
 
         # Colour pixels
         # For this, we will perform a min/max scaling on the pixel values per
