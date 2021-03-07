@@ -126,7 +126,7 @@ test_that("plotCells: Metadata can be displayed.", {
   pancreasSCE$ImageNb2 <- factor(pancreasSCE$ImageNb)
   mcols(pancreasMasks)$ImageNb2 <- factor(mcols(pancreasMasks)$ImageNb)
   expect_silent(plotCells(object = pancreasSCE,
-                         mask = pancreasMasks, img_id = "ImageNb",
+                         mask = pancreasMasks, img_id = "ImageNb2",
                          cell_id = "CellNb", colour_by = "CellType"))
 
   # Use factor entry
