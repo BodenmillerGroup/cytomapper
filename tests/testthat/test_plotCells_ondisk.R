@@ -6,8 +6,6 @@ test_that("plotCells: Standard input testing works", {
   on.exit(unlink(cur_path))
   
   cur_Masks <- CytoImageList(pancreasMasks, on_disk = TRUE, h5FilesPath = cur_path)
-  
-  cur_size <- file.info(paste0(cur_path, "/E34_mask.h5"))[,"size"]
 
   # Works
   # Add test if only mask can be displayed
@@ -25,8 +23,6 @@ test_that("plotCells: Features can be displayed.", {
   on.exit(unlink(cur_path))
   
   cur_Masks <- CytoImageList(pancreasMasks, on_disk = TRUE, h5FilesPath = cur_path)
-  
-  cur_size <- file.info(paste0(cur_path, "/E34_mask.h5"))[,"size"]
 
   # Works
   expect_silent(plotCells(object = pancreasSCE,
@@ -68,65 +64,52 @@ test_that("plotCells: Features can be displayed.", {
 test_that("plotCells: Metadata can be displayed.", {
   data("pancreasSCE")
   data("pancreasMasks")
+    
+  cur_path <- tempdir()
+  on.exit(unlink(cur_path))
+    
+  cur_Masks <- CytoImageList(pancreasMasks, on_disk = TRUE, h5FilesPath = cur_path)
 
   # Works
   expect_silent(plotCells(object = pancreasSCE,
-            mask = pancreasMasks, img_id = "ImageNb",
+            mask = cur_Masks, img_id = "ImageNb",
             cell_id = "CellNb", colour_by = "CellType"))
   expect_silent(plotCells(object = pancreasSCE,
-            mask = pancreasMasks, img_id = "ImageNb",
+            mask = cur_Masks, img_id = "ImageNb",
             cell_id = "CellNb",
             colour_by = "Area"))
   expect_silent(plotCells(object = pancreasSCE,
-            mask = pancreasMasks, img_id = "ImageNb",
+            mask = cur_Masks, img_id = "ImageNb",
             cell_id = "CellNb",
             colour_by = "Pos_X"))
   expect_silent(plotCells(object = pancreasSCE,
-            mask = pancreasMasks, img_id = "ImageNb",
+            mask = cur_Masks, img_id = "ImageNb",
             cell_id = "CellNb",
             colour_by = "Pos_Y"))
 
   # Test if cell id is factor
   pancreasSCE$CellNb2 <- factor(pancreasSCE$CellNb)
   expect_error(plotCells(object = pancreasSCE,
-                          mask = pancreasMasks, img_id = "ImageNb",
+                          mask = cur_Masks, img_id = "ImageNb",
                           cell_id = "CellNb2", colour_by = "CellType"))
 
   # Test if image id is factor
   pancreasSCE$ImageNb2 <- factor(pancreasSCE$ImageNb)
   mcols(pancreasMasks)$ImageNb2 <- factor(mcols(pancreasMasks)$ImageNb)
   expect_silent(plotCells(object = pancreasSCE,
-                         mask = pancreasMasks, img_id = "ImageNb",
+                         mask = cur_Masks, img_id = "ImageNb",
                          cell_id = "CellNb", colour_by = "CellType"))
 
   # Use factor entry
   pancreasSCE$CellType2 <- factor(pancreasSCE$CellType)
   expect_silent(plotCells(object = pancreasSCE,
-                          mask = pancreasMasks, img_id = "ImageNb",
+                          mask = cur_Masks, img_id = "ImageNb",
                           cell_id = "CellNb", colour_by = "CellType2"))
 
   # Use logical entry
   expect_silent(plotCells(object = pancreasSCE,
-                          mask = pancreasMasks, img_id = "ImageNb",
+                          mask = cur_Masks, img_id = "ImageNb",
                           cell_id = "CellNb", colour_by = "Pattern"))
-
-  # Error
-  expect_error(plotCells(mask = pancreasMasks,
-                         colour_by = "H3"),
-               regexp = "Please provide a SingleCellExperiment 'object'.",
-               fix = TRUE)
-  expect_error(plotCells(object = pancreasSCE,
-               mask = pancreasMasks, img_id = "ImageNb",
-               cell_id = "CellNb",
-               colour_by = c("CellType", "test")),
-               regexp = "'colour_by' not in 'rownames(object)' or the 'colData(object)' slot.",
-               fix = TRUE)
-  expect_error(plotCells(object = pancreasSCE,
-                         mask = pancreasMasks, img_id = "ImageNb",
-                         cell_id = "CellNb",
-                         colour_by = c("CellType", "Area")),
-               regexp = "Only one 'colour_by' entry allowed when selecting a 'colData(object)' slot.",
-               fix = TRUE)
 
 })
 
