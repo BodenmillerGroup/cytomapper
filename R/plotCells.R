@@ -176,6 +176,9 @@ plotCells <- function(
 
     cur_col <- list()
     cur_limits <- list()
+    
+    # Check image type
+    is_Image <- is(mask[[1]], "Image")
 
     # Colour the masks
     # Here, a SimpleList is returned that allows storing colour Images
@@ -205,6 +208,11 @@ plotCells <- function(
         }
     } else {
         out_img <- endoapply(mask, function(x){
+            
+            if (!is_Image) {
+                x <- as.array(x)
+            }
+            
             x[x == 0L] <- plottingParam$background_colour
             x <- replace(x, which(x != plottingParam$background_colour),
                     plottingParam$missing_colour)
