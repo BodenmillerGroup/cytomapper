@@ -137,9 +137,16 @@
                                     plottingParam)
     cur_limit <- object$cur_out
     object <- object$object
+    
+    is_Image <- is(mask[[1]], "Image")
 
     for(i in seq_along(mask)){
         cur_mask <- mask[[i]]
+        
+        if (!is_Image) {
+            cur_mask <- as.array(cur_mask)
+        }
+        
         cur_sce <- object[,colData(object)[,img_id] == mcols(mask)[i,img_id]]
 
         # Colour first the background
@@ -166,7 +173,17 @@
         } else{
             ind <- i
         }
-        setImages(mask, ind) <- cur_mask
+        
+        if (!is_Image) {
+            cur_out_img <- Image(data = NA, 
+                                 dim = dim(cur_mask),
+                                 colormode = "Grayscale")
+            imageData(cur_out_img) <- cur_mask
+            setImages(mask, ind) <- cur_out_img
+        } else {
+            setImages(mask, ind) <- cur_mask
+        }
+        
     }
 
     return(list(imgs = as(mask, "SimpleList"), cur_limit = cur_limit))

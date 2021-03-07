@@ -20,67 +20,49 @@ test_that("plotCells: Standard input testing works", {
 test_that("plotCells: Features can be displayed.", {
   data("pancreasSCE")
   data("pancreasMasks")
+  
+  cur_path <- tempdir()
+  on.exit(unlink(cur_path))
+  
+  cur_Masks <- CytoImageList(pancreasMasks, on_disk = TRUE, h5FilesPath = cur_path)
+  
+  cur_size <- file.info(paste0(cur_path, "/E34_mask.h5"))[,"size"]
 
   # Works
   expect_silent(plotCells(object = pancreasSCE,
-            mask = pancreasMasks, img_id = "ImageNb",
+            mask = cur_Masks, img_id = "ImageNb",
             cell_id = "CellNb", colour_by = "H3"))
   expect_silent(plotCells(object = pancreasSCE,
-            mask = pancreasMasks, img_id = "ImageNb",
+            mask = cur_Masks, img_id = "ImageNb",
             cell_id = "CellNb", colour_by = "CD99"))
   expect_silent(plotCells(object = pancreasSCE,
-            mask = pancreasMasks, img_id = "ImageNb",
+            mask = cur_Masks, img_id = "ImageNb",
             cell_id = "CellNb", colour_by = "PIN"))
   expect_silent(plotCells(object = pancreasSCE,
-            mask = pancreasMasks, img_id = "ImageNb",
+            mask = cur_Masks, img_id = "ImageNb",
             cell_id = "CellNb", colour_by = "CD8a"))
   expect_silent(plotCells(object = pancreasSCE,
-            mask = pancreasMasks, img_id = "ImageNb",
+            mask = cur_Masks, img_id = "ImageNb",
             cell_id = "CellNb", colour_by = "CDH"))
   expect_silent(plotCells(object = pancreasSCE,
-            mask = pancreasMasks, img_id = "ImageNb",
+            mask = cur_Masks, img_id = "ImageNb",
             cell_id = "CellNb", colour_by = c("H3", "CD99")))
   expect_silent(plotCells(object = pancreasSCE,
-            mask = pancreasMasks, img_id = "ImageNb",
+            mask = cur_Masks, img_id = "ImageNb",
             cell_id = "CellNb", colour_by = c("H3", "CD99", "PIN")))
   expect_silent(test1 <- plotCells(object = pancreasSCE,
-            mask = pancreasMasks, img_id = "ImageNb",
+            mask = cur_Masks, img_id = "ImageNb",
             cell_id = "CellNb",
             colour_by = c("H3", "CD99", "PIN", "CD8a", "CDH"),
             return_plot = TRUE, display = "single"))
   expect_silent(test2 <- plotCells(object = pancreasSCE,
-                          mask = rev(pancreasMasks), img_id = "ImageNb",
+                          mask = rev(cur_Masks), img_id = "ImageNb",
                           cell_id = "CellNb",
                           colour_by = c("H3", "CD99", "PIN", "CD8a", "CDH"),
                           return_plot = TRUE, display = "single"))
   expect_identical(test1$plot$E34_imc, test2$plot$E34_imc)
   expect_identical(test1$plot$G01_imc, test2$plot$G01_imc)
   expect_identical(test1$plot$J02_imc, test2$plot$J02_imc)
-
-  # Error
-  expect_error(plotCells(mask = pancreasMasks, colour_by = "H3"),
-               regexp = "Please provide a SingleCellExperiment 'object'.",
-               fix = TRUE)
-  expect_error(plotCells(mask = pancreasMasks,
-                         object = pancreasSCE,
-                         colour_by = "H3"),
-               regexp = "Please provide an 'img_id' and 'cell_id' argument",
-               fix = TRUE)
-  expect_error(plotCells(object = pancreasSCE,
-                         mask = pancreasMasks, img_id = "ImageNb",
-                         cell_id = "CellNb", colour_by = "test"),
-               regexp = "'colour_by' not in 'rownames(object)' or the 'colData(object)' slot.",
-               fix = TRUE)
-  expect_error(plotCells(object = pancreasSCE,
-                         mask = pancreasMasks, img_id = "ImageNb",
-                         cell_id = "CellNb", colour_by = c("H3", "test")),
-               regexp = "'colour_by' not in 'rownames(object)' or the 'colData(object)' slot.",
-               fix = TRUE)
-  expect_error(plotCells(object = pancreasSCE,
-                         mask = pancreasMasks, img_id = "ImageNb",
-                         cell_id = "CellNb", colour_by = 1),
-               regexp = "'colour_by' not in 'rownames(object)' or the 'colData(object)' slot.",
-               fix = TRUE)
 })
 
 test_that("plotCells: Metadata can be displayed.", {
