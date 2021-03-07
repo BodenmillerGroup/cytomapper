@@ -4,7 +4,7 @@
 
 # Colour segmentation masks based on metadata
 #' @importFrom S4Vectors mcols
-#' @importFrom EBImage imageData
+#' @importFrom EBImage imageData<-
 .colourMaskByMeta <- function(object, mask, cell_id, img_id,
                                 colour_by, cur_colour, missing_colour,
                                 background_colour){
@@ -145,7 +145,7 @@
 #' @importFrom grDevices colorRampPalette
 #' @importFrom SummarizedExperiment assay
 #' @importFrom S4Vectors mcols
-#' @importFrom EBImage imageData
+#' @importFrom EBImage imageData<-
 .colourMaskByFeature <- function(object, mask, cell_id, img_id,
                         colour_by, exprs_values, cur_colour,
                         missing_colour, background_colour, plottingParam){
