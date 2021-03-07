@@ -95,9 +95,9 @@ test_that("plotCells: Metadata can be displayed.", {
 
   # Test if image id is factor
   pancreasSCE$ImageNb2 <- factor(pancreasSCE$ImageNb)
-  mcols(pancreasMasks)$ImageNb2 <- factor(mcols(pancreasMasks)$ImageNb)
+  mcols(cur_Masks)$ImageNb2 <- factor(mcols(pancreasMasks)$ImageNb)
   expect_silent(plotCells(object = pancreasSCE,
-                         mask = cur_Masks, img_id = "ImageNb",
+                         mask = cur_Masks, img_id = "ImageNb2",
                          cell_id = "CellNb", colour_by = "CellType"))
 
   # Use factor entry
@@ -140,58 +140,68 @@ test_that("plotCells: Cells can be outlined correctly.", {
 test_that("plotCells: Exprs values can be correctly set.", {
   data("pancreasSCE")
   data("pancreasMasks")
+    
+  cur_path <- tempdir()
+  on.exit(unlink(cur_path))
+    
+  cur_Masks <- CytoImageList(pancreasMasks, on_disk = TRUE, h5FilesPath = cur_path)
 
   # Works
   expect_silent(plotCells(object = pancreasSCE,
-            mask = pancreasMasks, img_id = "ImageNb",
+            mask = cur_Masks, img_id = "ImageNb",
             cell_id = "CellNb", exprs_values = "counts",
             colour_by = "H3"))
   expect_silent(plotCells(object = pancreasSCE,
-            mask = pancreasMasks, img_id = "ImageNb",
-            cell_id = "CellNb", exprs_values = "counts",
+            mask = cur_Masks, img_id = "ImageNb",
+            cell_id = "CellNb", exprs_values = "exprs",
             colour_by = "H3"))
-
-  # Error
-  expect_error(plotCells(object = pancreasSCE,
-                          mask = pancreasMasks, img_id = "ImageNb",
-                          cell_id = "CellNb", exprs_values = "logcounts",
-                          colour_by = "H3"),
-               regexp = "'exprs_values' not an assay entry in 'object'.",
-               fixed = TRUE)
+  expect_silent(plotCells(object = pancreasSCE,
+                          mask = cur_Masks, img_id = "ImageNb",
+                          cell_id = "CellNb", exprs_values = "exprs",
+                          colour_by = "CD99"))
+  expect_silent(plotCells(object = pancreasSCE,
+                          mask = cur_Masks, img_id = "ImageNb",
+                          cell_id = "CellNb", exprs_values = "counts",
+                          colour_by = "CD99"))
 
 })
 
 test_that("plotCells: images can be correctly subsetted.", {
-  data("pancreasSCE")
-  data("pancreasMasks")
+    data("pancreasSCE")
+    data("pancreasMasks")
+    
+    cur_path <- tempdir()
+    on.exit(unlink(cur_path))
+    
+    cur_Masks <- CytoImageList(pancreasMasks, on_disk = TRUE, h5FilesPath = cur_path)
 
   # Works
   expect_silent(plotCells(object = pancreasSCE,
-            mask = pancreasMasks[1], img_id = "ImageNb",
+            mask = cur_Masks[1], img_id = "ImageNb",
             cell_id = "CellNb", exprs_values = "counts",
             colour_by = "CD99"))
   expect_silent(plotCells(object = pancreasSCE,
-                          mask = pancreasMasks[1:3], img_id = "ImageNb",
+                          mask = cur_Masks[1:3], img_id = "ImageNb",
                           cell_id = "CellNb", exprs_values = "counts",
                           colour_by = "CD99"))
   expect_silent(plotCells(object = pancreasSCE,
-                          mask = pancreasMasks[1:2], img_id = "ImageNb",
+                          mask = cur_Masks[1:2], img_id = "ImageNb",
                           cell_id = "CellNb", exprs_values = "counts",
                           colour_by = "CD99"))
   expect_silent(plotCells(object = pancreasSCE,
-                          mask = pancreasMasks[c(1,3)], img_id = "ImageNb",
+                          mask = cur_Masks[c(1,3)], img_id = "ImageNb",
                           cell_id = "CellNb", exprs_values = "counts",
                           colour_by = "CD99"))
   expect_silent(plotCells(object = pancreasSCE,
-                          mask = pancreasMasks["E34_mask"], img_id = "ImageNb",
+                          mask = cur_Masks["E34_mask"], img_id = "ImageNb",
                           cell_id = "CellNb", exprs_values = "counts",
                           colour_by = "CD99"))
   expect_silent(plotCells(object = pancreasSCE,
-                          mask = pancreasMasks[c("E34_mask", "J02_mask")], img_id = "ImageNb",
+                          mask = cur_Masks[c("E34_mask", "J02_mask")], img_id = "ImageNb",
                           cell_id = "CellNb", exprs_values = "counts",
                           colour_by = "CD99"))
 
-  cur_images <- pancreasMasks["E34_mask"]
+  cur_images <- cur_Masks["E34_mask"]
   expect_silent(plotCells(object = pancreasSCE,
                           mask = cur_images, img_id = "ImageNb",
                           cell_id = "CellNb", exprs_values = "counts",
@@ -204,7 +214,7 @@ test_that("plotCells: images can be correctly subsetted.", {
                           colour_by = "CD99"))
 
   # Set image title
-  cut_images <- getImages(pancreasMasks, c("E34_mask", "J02_mask"))
+  cut_images <- getImages(cur_Masks, c("E34_mask", "J02_mask"))
   expect_silent(plotCells(object = pancreasSCE,
                           mask = cut_images, img_id = "ImageNb",
                           cell_id = "CellNb", exprs_values = "counts",
@@ -212,13 +222,13 @@ test_that("plotCells: images can be correctly subsetted.", {
                           image_title = list(text = c("test1", "test2"))))
 
   # Use mcols entry
-  mcols(pancreasMasks)$MaskName <- paste0(names(pancreasMasks), ".tiff")
-  cur_images <- getImages(pancreasMasks, mcols(pancreasMasks)$MaskName %in% c("E34_mask.tiff", "J02_mask.tiff"))
+  mcols(cur_Masks)$MaskName <- paste0(names(cur_Masks), ".tiff")
+  cur_images <- getImages(cur_Masks, mcols(cur_Masks)$MaskName %in% c("E34_mask.tiff", "J02_mask.tiff"))
   expect_silent(plotCells(object = pancreasSCE,
                           mask = cur_images, img_id = "MaskName",
                           cell_id = "CellNb", exprs_values = "counts",
                           colour_by = "CD99"))
-  cur_images <- getImages(pancreasMasks, 1:2)
+  cur_images <- getImages(cur_Masks, 1:2)
   expect_silent(plotCells(object = pancreasSCE,
                           mask = cur_images, img_id = "MaskName",
                           cell_id = "CellNb", exprs_values = "counts",
@@ -227,64 +237,69 @@ test_that("plotCells: images can be correctly subsetted.", {
 })
 
 test_that("plotCells: colour can be correctly adjusted.", {
-  data("pancreasSCE")
-  data("pancreasMasks")
+    data("pancreasSCE")
+    data("pancreasMasks")
+    
+    cur_path <- tempdir()
+    on.exit(unlink(cur_path))
+    
+    cur_Masks <- CytoImageList(pancreasMasks, on_disk = TRUE, h5FilesPath = cur_path)
 
   # Works
   expect_silent(plotCells(object = pancreasSCE,
-                          mask = pancreasMasks, img_id = "ImageNb",
+                          mask = cur_Masks, img_id = "ImageNb",
                           cell_id = "CellNb",
                           colour_by = "CD99",
                           colour = list(CD99 = colorRampPalette(c("black", "red"))(100))))
   expect_silent(plotCells(object = pancreasSCE,
-                          mask = pancreasMasks, img_id = "ImageNb",
+                          mask = cur_Masks, img_id = "ImageNb",
                           cell_id = "CellNb",
                           colour_by = "CD99",
                           colour = list(CD99 = c("black", "red"))))
   expect_silent(plotCells(object = pancreasSCE,
-                          mask = pancreasMasks, img_id = "ImageNb",
+                          mask = cur_Masks, img_id = "ImageNb",
                           cell_id = "CellNb",
                           colour_by = c("H3", "CDH"),
                           colour = list(H3 = colorRampPalette(c("black", "red"))(100),
                                         CDH = colorRampPalette(c("black", "green"))(100))))
   expect_silent(plotCells(object = pancreasSCE,
-                          mask = pancreasMasks, img_id = "ImageNb",
+                          mask = cur_Masks, img_id = "ImageNb",
                           cell_id = "CellNb",
                           colour_by = "CellType",
                           colour = list(CellType = c(celltype_B = "green",
                                                      celltype_A = "blue",
                                                      celltype_C = "red"))))
   expect_silent(plotCells(object = pancreasSCE,
-                          mask = pancreasMasks, img_id = "ImageNb",
+                          mask = cur_Masks, img_id = "ImageNb",
                           cell_id = "CellNb", exprs_values = "counts",
                           colour_by = "Area",
                           colour = list(Area = colorRampPalette(c("black", "red"))(100))))
   expect_silent(plotCells(object = pancreasSCE,
-                          mask = pancreasMasks, img_id = "ImageNb",
+                          mask = cur_Masks, img_id = "ImageNb",
                           cell_id = "CellNb",
                           colour_by = "Area",
                           colour = list(Area = c("black", "red"))))
   expect_silent(plotCells(object = pancreasSCE,
-                          mask = pancreasMasks, img_id = "ImageNb",
+                          mask = cur_Masks, img_id = "ImageNb",
                           cell_id = "CellNb",
                           colour_by = "H3", outline_by = "CellType",
                           colour = list(CellType = c(celltype_B = "green",
                                                      celltype_A = "blue",
                                                      celltype_C = "red"))))
   expect_silent(plotCells(object = pancreasSCE,
-                          mask = pancreasMasks, img_id = "ImageNb",
+                          mask = cur_Masks, img_id = "ImageNb",
                           cell_id = "CellNb",
                           colour_by = "H3", outline_by = "CellType",
                           colour = list(H3 = c("black", "green"))))
   expect_silent(plotCells(object = pancreasSCE,
-                          mask = pancreasMasks, img_id = "ImageNb",
+                          mask = cur_Masks, img_id = "ImageNb",
                           cell_id = "CellNb",
                           colour_by = "CellType", outline_by = "Area",
                           colour = list(CellType = c(celltype_B = "green",
                                                      celltype_A = "blue",
                                                      celltype_C = "red"))))
   expect_silent(plotCells(object = pancreasSCE,
-                          mask = pancreasMasks, img_id = "ImageNb",
+                          mask = cur_Masks, img_id = "ImageNb",
                           cell_id = "CellNb",
                           colour_by = "CellType", outline_by = "Area",
                           colour = list(CellType = c(celltype_B = "green",
@@ -292,110 +307,76 @@ test_that("plotCells: colour can be correctly adjusted.", {
                                                      celltype_C = "red"),
                                         Area = c("black", "green"))))
   expect_silent(plotCells(object = pancreasSCE,
-                          mask = pancreasMasks, img_id = "ImageNb",
+                          mask = cur_Masks, img_id = "ImageNb",
                           cell_id = "CellNb",
                           colour_by = "CellType", outline_by = "Area",
                           colour = list(Area = c("black", "green"))))
-
-
-  # Error
-  expect_error(plotCells(object = pancreasSCE,
-                          mask = pancreasMasks, img_id = "ImageNb",
-                          cell_id = "CellNb", exprs_values = "counts",
-                          colour_by = "CD99",
-                          colour = list(CD99 = "green")),
-               regexp = "Please specify at least two colours when colouring features.",
-               fixed = TRUE)
-  expect_error(plotCells(object = pancreasSCE,
-                         mask = pancreasMasks, img_id = "ImageNb",
-                         cell_id = "CellNb", exprs_values = "counts",
-                         colour_by = "CD99",
-                         colour = list(test = c("black", "green"))),
-               regexp = "'names(colour)' do not match with 'colour_by' and/or 'outline_by'",
-               fixed = TRUE)
-  expect_error(plotCells(object = pancreasSCE,
-                         mask = pancreasMasks, img_id = "ImageNb",
-                         cell_id = "CellNb", exprs_values = "counts",
-                         colour_by = "CellType",
-                         colour = list(CellType = "green")),
-               regexp = "Please specify colours for all 'colour_by' levels.",
-               fixed = TRUE)
-  expect_error(plotCells(object = pancreasSCE,
-                         mask = pancreasMasks, img_id = "ImageNb",
-                         cell_id = "CellNb", exprs_values = "counts",
-                         outline_by = "CellType",
-                         colour = list(CellType = "green")),
-               regexp = "Please specify colours for all 'outline_by' levels.",
-               fixed = TRUE)
-  expect_error(plotCells(object = pancreasSCE,
-                         mask = pancreasMasks, img_id = "ImageNb",
-                         cell_id = "CellNb", exprs_values = "counts",
-                         colour_by = "Area",
-                         colour = list(Area = "green")),
-               regexp = "Please specify at least two colours when colouring continous entries.",
-               fixed = TRUE)
-  expect_error(plotCells(object = pancreasSCE,
-                         mask = pancreasMasks, img_id = "ImageNb",
-                         cell_id = "CellNb", exprs_values = "counts",
-                         outline_by = "Area",
-                         colour = list(Area = "green")),
-               regexp = "Please specify at least two colours when colouring continous entries.",
-               fixed = TRUE)
-  expect_error(plotCells(object = pancreasSCE,
-                         mask = pancreasMasks, img_id = "ImageNb",
-                         cell_id = "CellNb", exprs_values = "counts",
-                         colour_by = c("H3", "CD99"),
-                         colour = list(H3 = c("black", "blue"))),
-               regexp = "Please specify colour gradients for all features.",
-               fixed = TRUE)
 })
 
 test_that("plotCells: SCE can be subsetted.", {
-  data("pancreasSCE")
-  data("pancreasMasks")
+    data("pancreasSCE")
+    data("pancreasMasks")
+    
+    cur_path <- tempdir()
+    on.exit(unlink(cur_path))
+    
+    cur_Masks <- CytoImageList(pancreasMasks, on_disk = TRUE, h5FilesPath = cur_path)
 
   # Subset cells
   set.seed(12345)
   cur_sce <- pancreasSCE[,sample(1:ncol(pancreasSCE), 100)]
 
   expect_silent(plotCells(object = cur_sce,
-            mask = pancreasMasks, img_id = "ImageNb",
+            mask = cur_Masks, img_id = "ImageNb",
             cell_id = "CellNb", colour_by = "CellType"))
   expect_silent(plotCells(object = cur_sce,
-                          mask = pancreasMasks, img_id = "ImageNb",
+                          mask = cur_Masks, img_id = "ImageNb",
                           cell_id = "CellNb", colour_by = "Pattern"))
   expect_silent(plotCells(object = cur_sce,
-                          mask = pancreasMasks, img_id = "ImageNb",
+                          mask = cur_Masks, img_id = "ImageNb",
                           cell_id = "CellNb", colour_by = "CellType",
                 colour = list(CellType = c(celltype_B = "green",
                                            celltype_A = "blue",
                                            celltype_C = "red"))))
   expect_silent(plotCells(object = cur_sce,
-            mask = pancreasMasks, img_id = "ImageNb",
+            mask = cur_Masks, img_id = "ImageNb",
             cell_id = "CellNb", colour_by = "H3"))
   expect_silent(plotCells(object = cur_sce,
-            mask = pancreasMasks, img_id = "ImageNb",
+            mask = cur_Masks, img_id = "ImageNb",
             cell_id = "CellNb", colour_by = "H3",
             outline_by = "CellType"))
 
   cur_sce <- pancreasSCE[,pancreasSCE$ImageNb == 1]
   cur_sce <- cur_sce[,1:10]
   expect_silent(plotCells(object = cur_sce,
-                          mask = pancreasMasks, img_id = "ImageNb",
+                          mask = cur_Masks, img_id = "ImageNb",
                           cell_id = "CellNb", colour_by = "CellType"))
-  cur_images <- getImages(pancreasMasks, mcols(pancreasMasks)$ImageNb == unique(cur_sce$ImageNb))
+  cur_images <- getImages(cur_Masks, mcols(cur_Masks)$ImageNb == unique(cur_sce$ImageNb))
   expect_silent(plotCells(object = cur_sce,
                           mask = cur_images, img_id = "ImageNb",
                           cell_id = "CellNb", colour_by = "CellType"))
+  
+  cur_sce <- pancreasSCE[,pancreasSCE$CellType == "celltype_A"]
+  expect_silent(plotCells(object = cur_sce,
+                          mask = cur_Masks, img_id = "ImageNb",
+                          cell_id = "CellNb", colour_by = "CellType"))
+  expect_silent(plotCells(object = cur_sce,
+                          mask = cur_Masks, img_id = "ImageNb",
+                          cell_id = "CellNb", colour_by = "PIN"))
 })
 
 test_that("plotCells: Size of images can be changed.", {
-  data("pancreasSCE")
-  data("pancreasMasks")
+    data("pancreasSCE")
+    data("pancreasMasks")
+    
+    cur_path <- tempdir()
+    on.exit(unlink(cur_path))
+    
+    cur_Masks <- CytoImageList(pancreasMasks, on_disk = TRUE, h5FilesPath = cur_path)
 
   # Change size of images
   # Decreasing the size
-  cur_images <- pancreasMasks
+  cur_images <- cur_Masks
   setImages(cur_images, "E34_mask") <- cur_images[[1]][1:50, 1:10,drop=FALSE]
 
   expect_silent(plotCells(object = pancreasSCE,
