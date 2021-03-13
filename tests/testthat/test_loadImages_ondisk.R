@@ -1,4 +1,4 @@
-test_that("loadImages function reads in correct objects on disk.", {
+test_that("On disk: loadImages function reads in correct objects on disk.", {
   path <- system.file("extdata", package = "cytomapper")
   single_file <- system.file("extdata/E34_mask.tiff",
                              package = "cytomapper")
@@ -105,7 +105,7 @@ test_that("loadImages function reads in correct objects on disk.", {
   expect_true(file.remove(file.path(cur_path, "J02_mask.h5")))
 })
 
-test_that("getHDF5DumpDir works.", {
+test_that("On disk: getHDF5DumpDir works.", {
     path <- system.file("extdata", package = "cytomapper")
     single_file <- system.file("extdata/E34_mask.tiff",
                                package = "cytomapper")

@@ -1,4 +1,4 @@
-test_that("Coercion works on CytoImageList object.", {
+test_that("On disk: Coercion works on CytoImageList object.", {
   data("pancreasImages")
   cur_path <- tempdir()
   on.exit(unlink(cur_path))
@@ -35,7 +35,7 @@ test_that("Coercion works on CytoImageList object.", {
   expect_identical(cur_size, file.info(paste0(cur_path, "/E34_imc.h5"))[,"size"])
 })
 
-test_that("Merging works on CytoImageList object.", {
+test_that("On disk: Merging works on CytoImageList object.", {
   data("pancreasImages")
   cur_path <- tempdir()
   on.exit(unlink(cur_path))
@@ -105,7 +105,7 @@ test_that("Merging works on CytoImageList object.", {
   expect_identical(cur_size, file.info(paste0(cur_path, "/E34_imc.h5"))[,"size"])
 })
 
-test_that("General operations work on CytoImageList object.", {
+test_that("On disk: General operations work on CytoImageList object.", {
   data("pancreasImages")
   cur_path <- tempdir()
   on.exit(unlink(cur_path))
@@ -172,7 +172,7 @@ test_that("General operations work on CytoImageList object.", {
   expect_null(dim(cur_Images))
 })
 
-test_that("Custom accessors work on CytoImageList object.", {
+test_that("On disk: Custom accessors work on CytoImageList object.", {
   data("pancreasImages")
   cur_path <- tempdir()
   on.exit(unlink(cur_path))

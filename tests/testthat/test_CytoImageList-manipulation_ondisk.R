@@ -1,4 +1,4 @@
-test_that("CytoImageList can be scaled.", {
+test_that("On disk: CytoImageList can be scaled.", {
   data("pancreasImages")
 
   cur_path <- tempdir()
@@ -43,7 +43,7 @@ test_that("CytoImageList can be scaled.", {
   expect_equal(cur_size, file.info(paste0(cur_path, "/E34_imc.h5"))[,"size"])
 })
 
-test_that("CytoImageList can be normalized", {
+test_that("On disk: CytoImageList can be normalized", {
   data("pancreasImages")
     
   cur_path <- tempdir()
@@ -55,6 +55,11 @@ test_that("CytoImageList can be normalized", {
 
   # Works
   expect_silent(cur_images <- normalize(cur_Images))
+  
+  expect_silent(plotPixels(cur_images))
+  expect_silent(plotPixels(cur_images,
+                           colour_by = c("H3", "CD99")))
+  
   expect_s4_class(cur_images$E34_imc, "DelayedArray")
   expect_s4_class(cur_images$G01_imc, "DelayedArray")
   expect_s4_class(cur_images$J02_imc, "DelayedArray")
@@ -80,10 +85,10 @@ test_that("CytoImageList can be normalized", {
   # Separate channels
   expect_silent(cur_images <- normalize(cur_Images, separateImages = TRUE,
                                         separateChannels = TRUE))
-  #expect_silent(plotPixels(cur_images,
-  #                        colour_by = c("H3", "CD99"), scale = TRUE))
-  #expect_silent(plotPixels(cur_images,
-  #                         colour_by = c("H3", "CD99"), scale = FALSE))
+  expect_silent(plotPixels(cur_images,
+                          colour_by = c("H3", "CD99"), scale = TRUE))
+  expect_silent(plotPixels(cur_images,
+                           colour_by = c("H3", "CD99"), scale = FALSE))
 
   expect_equal(as.array(cur_images[[1]])[1, 1:10,1],
                imageData(pancreasImages[[1]])[1, 1:10,1]/max(imageData(pancreasImages[[1]])[,,1]),
@@ -141,10 +146,10 @@ test_that("CytoImageList can be normalized", {
   # Not Separate channels
   expect_silent(cur_images <- normalize(cur_Images, separateImages = TRUE,
                                         separateChannels = FALSE))
-  #expect_silent(plotPixels(cur_images,
-  #                        colour_by = c("H3", "CD99"), scale = TRUE))
-  #expect_silent(plotPixels(cur_images,
-  #                         colour_by = c("H3", "CD99"), scale = FALSE))
+  expect_silent(plotPixels(cur_images,
+                          colour_by = c("H3", "CD99"), scale = TRUE))
+  expect_silent(plotPixels(cur_images,
+                           colour_by = c("H3", "CD99"), scale = FALSE))
 
   expect_equal(as.array(cur_images[[1]])[1, 1:10,1],
                imageData(pancreasImages[[1]])[1, 1:10,1]/max(imageData(pancreasImages[[1]])),
@@ -202,10 +207,10 @@ test_that("CytoImageList can be normalized", {
   # Separate channels
   expect_silent(cur_images <- normalize(cur_Images, separateImages = FALSE,
                                         separateChannels = TRUE))
-  #expect_silent(plotPixels(cur_images,
-  #                         colour_by = c("H3", "CD99"), scale = TRUE))
-  #expect_silent(plotPixels(cur_images,
-  #                         colour_by = c("H3", "CD99"), scale = FALSE))
+  expect_silent(plotPixels(cur_images,
+                           colour_by = c("H3", "CD99"), scale = TRUE))
+  expect_silent(plotPixels(cur_images,
+                           colour_by = c("H3", "CD99"), scale = FALSE))
 
   cur_max <- sapply(pancreasImages, function(x){apply(x, 3, max)})
   cur_max <- as.numeric(apply(cur_max, 1, max))
@@ -271,8 +276,8 @@ test_that("CytoImageList can be normalized", {
   
   expect_silent(cur_images <- normalize(cur_img, separateImages = FALSE,
                                         separateChannels = TRUE))
-  #expect_silent(plotPixels(cur_images,
-  #                         colour_by = "H3"))
+  expect_silent(plotPixels(cur_images,
+                           colour_by = "H3"))
   
   cur_max <- max(max(cur_img1), max(cur_img2))
   expect_equal(max(as.array(cur_images[[1]])[,,1]),
@@ -284,10 +289,10 @@ test_that("CytoImageList can be normalized", {
   # Not Separate channels
   expect_silent(cur_images <- normalize(cur_Images, separateImages = FALSE,
                                         separateChannels = FALSE))
-  #expect_silent(plotPixels(cur_images,
-  #                         colour_by = c("H3", "CD99"), scale = TRUE))
-  #expect_silent(plotPixels(cur_images,
-  #                         colour_by = c("H3", "CD99"), scale = FALSE))
+  expect_silent(plotPixels(cur_images,
+                           colour_by = c("H3", "CD99"), scale = TRUE))
+  expect_silent(plotPixels(cur_images,
+                           colour_by = c("H3", "CD99"), scale = FALSE))
 
   cur_max <- sapply(pancreasImages, max)
   cur_max <- as.numeric(max(cur_max))
@@ -354,12 +359,12 @@ test_that("CytoImageList can be normalized", {
                                         separateChannels = TRUE, inputRange = c(0, 0.9)))
   expect_silent(cur_images <- normalize(pancreasImages, separateImages = TRUE,
                                         separateChannels = TRUE))
-  #expect_silent(plotPixels(cur_images,
-  #                         colour_by = c("H3", "CD99"), scale = TRUE))
-  #expect_silent(plotPixels(cur_images2,
-  #                         colour_by = c("H3", "CD99"), scale = TRUE))
-  #expect_silent(plotPixels(cur_images2,
-  #                         colour_by = c("H3", "CD99"), scale = FALSE))
+  expect_silent(plotPixels(cur_images,
+                           colour_by = c("H3", "CD99"), scale = TRUE))
+  expect_silent(plotPixels(cur_images2,
+                           colour_by = c("H3", "CD99"), scale = TRUE))
+  expect_silent(plotPixels(cur_images2,
+                           colour_by = c("H3", "CD99"), scale = FALSE))
 
   expect_equal(as.array(cur_images2[[1]])[1, 1:10,1],
                imageData(cur_images[[1]])[1, 1:10,1]/0.9,
@@ -400,12 +405,12 @@ test_that("CytoImageList can be normalized", {
                                          separateChannels = FALSE, inputRange = c(0, 0.9)))
   expect_silent(cur_images <- normalize(pancreasImages, separateImages = TRUE,
                                         separateChannels = FALSE))
-  #expect_silent(plotPixels(cur_images,
-  #                         colour_by = c("H3", "CD99"), scale = TRUE))
-  #expect_silent(plotPixels(cur_images2,
-  #                         colour_by = c("H3", "CD99"), scale = TRUE))
-  #expect_silent(plotPixels(cur_images2,
-  #                         colour_by = c("H3", "CD99"), scale = FALSE))
+  expect_silent(plotPixels(cur_images,
+                           colour_by = c("H3", "CD99"), scale = TRUE))
+  expect_silent(plotPixels(cur_images2,
+                           colour_by = c("H3", "CD99"), scale = TRUE))
+  expect_silent(plotPixels(cur_images2,
+                           colour_by = c("H3", "CD99"), scale = FALSE))
 
   expect_equal(as.array(cur_images2[[1]])[1, 1:10,1],
                imageData(cur_images[[1]])[1, 1:10,1]/0.9,
@@ -446,12 +451,12 @@ test_that("CytoImageList can be normalized", {
                                          separateChannels = TRUE, inputRange = c(0, 0.9)))
   expect_silent(cur_images <- normalize(pancreasImages, separateImages = FALSE,
                                         separateChannels = TRUE))
-  #expect_silent(plotPixels(cur_images,
-  #                         colour_by = c("H3", "CD99"), scale = TRUE))
-  #expect_silent(plotPixels(cur_images2,
-  #                         colour_by = c("H3", "CD99"), scale = TRUE))
-  #expect_silent(plotPixels(cur_images2,
-  #                         colour_by = c("H3", "CD99"), scale = FALSE))
+  expect_silent(plotPixels(cur_images,
+                          colour_by = c("H3", "CD99"), scale = TRUE))
+  expect_silent(plotPixels(cur_images2,
+                           colour_by = c("H3", "CD99"), scale = TRUE))
+  expect_silent(plotPixels(cur_images2,
+                           colour_by = c("H3", "CD99"), scale = FALSE))
 
   expect_equal(as.array(cur_images2[[1]])[1, 1:10,1],
                imageData(cur_images[[1]])[1, 1:10,1]/0.9,
@@ -492,12 +497,12 @@ test_that("CytoImageList can be normalized", {
                                          separateChannels = FALSE, inputRange = c(0, 0.9)))
   expect_silent(cur_images <- normalize(pancreasImages, separateImages = TRUE,
                                         separateChannels = FALSE))
-  #expect_silent(plotPixels(cur_images,
-  #                         colour_by = c("H3", "CD99"), scale = TRUE))
-  #expect_silent(plotPixels(cur_images2,
-  #                         colour_by = c("H3", "CD99"), scale = TRUE))
-  #expect_silent(plotPixels(cur_images2,
-  #                         colour_by = c("H3", "CD99"), scale = FALSE))
+  expect_silent(plotPixels(cur_images,
+                           colour_by = c("H3", "CD99"), scale = TRUE))
+  expect_silent(plotPixels(cur_images2,
+                           colour_by = c("H3", "CD99"), scale = TRUE))
+  expect_silent(plotPixels(cur_images2,
+                           colour_by = c("H3", "CD99"), scale = FALSE))
 
   expect_equal(as.array(cur_images2[[1]])[1, 1:10,1],
                imageData(cur_images[[1]])[1, 1:10,1]/0.9,
@@ -538,12 +543,12 @@ test_that("CytoImageList can be normalized", {
                                          separateChannels = FALSE, inputRange = c(0, 0.9)))
   expect_silent(cur_images <- normalize(pancreasImages, separateImages = FALSE,
                                         separateChannels = FALSE))
-  #expect_silent(plotPixels(cur_images,
-  #                         colour_by = c("H3", "CD99"), scale = TRUE))
-  #expect_silent(plotPixels(cur_images2,
-  #                         colour_by = c("H3", "CD99"), scale = TRUE))
-  #expect_silent(plotPixels(cur_images2,
-  #                         colour_by = c("H3", "CD99"), scale = FALSE))
+  expect_silent(plotPixels(cur_images,
+                           colour_by = c("H3", "CD99"), scale = TRUE))
+  expect_silent(plotPixels(cur_images2,
+                           colour_by = c("H3", "CD99"), scale = TRUE))
+  expect_silent(plotPixels(cur_images2,
+                           colour_by = c("H3", "CD99"), scale = FALSE))
 
   expect_equal(as.array(cur_images2[[1]])[1, 1:10,1],
                imageData(cur_images[[1]])[1, 1:10,1]/0.9,
@@ -579,40 +584,40 @@ test_that("CytoImageList can be normalized", {
   # Setting ft
   expect_silent(cur_images <- normalize(cur_Images, separateImages = TRUE,
                                         separateChannels = TRUE, ft = c(0, 2)))
-  #expect_silent(plotPixels(cur_images,
-  #                         colour_by = c("H3", "CD99"), scale = TRUE))
-  #expect_silent(plotPixels(cur_images,
-  #                         colour_by = c("H3", "CD99"), scale = FALSE))
+  expect_silent(plotPixels(cur_images,
+                           colour_by = c("H3", "CD99"), scale = TRUE))
+  expect_silent(plotPixels(cur_images,
+                           colour_by = c("H3", "CD99"), scale = FALSE))
 
   expect_silent(cur_images <- normalize(cur_Images, separateImages = TRUE,
                                         separateChannels = FALSE, ft = c(0, 2)))
-  #expect_silent(plotPixels(cur_images,
-  #                         colour_by = c("H3", "CD99"), scale = TRUE))
-  #expect_silent(plotPixels(cur_images,
-  #                         colour_by = c("H3", "CD99"), scale = FALSE))
+  expect_silent(plotPixels(cur_images,
+                           colour_by = c("H3", "CD99"), scale = TRUE))
+  expect_silent(plotPixels(cur_images,
+                           colour_by = c("H3", "CD99"), scale = FALSE))
 
   expect_silent(cur_images <- normalize(cur_Images, separateImages = FALSE,
                                         separateChannels = TRUE, ft = c(0, 2)))
-  #expect_silent(plotPixels(cur_images,
-  #                         colour_by = c("H3", "CD99"), scale = TRUE))
-  #expect_silent(plotPixels(cur_images,
-  #                         colour_by = c("H3", "CD99"), scale = FALSE))
+  expect_silent(plotPixels(cur_images,
+                           colour_by = c("H3", "CD99"), scale = TRUE))
+  expect_silent(plotPixels(cur_images,
+                           colour_by = c("H3", "CD99"), scale = FALSE))
 
   expect_silent(cur_images <- normalize(cur_Images, separateImages = FALSE,
                                         separateChannels = FALSE, ft = c(0, 2)))
-  #expect_silent(plotPixels(cur_images,
-  #                         colour_by = c("H3", "CD99"), scale = TRUE))
-  #expect_silent(plotPixels(cur_images,
-  #                         colour_by = c("H3", "CD99"), scale = FALSE))
+  expect_silent(plotPixels(cur_images,
+                           colour_by = c("H3", "CD99"), scale = TRUE))
+  expect_silent(plotPixels(cur_images,
+                           colour_by = c("H3", "CD99"), scale = FALSE))
   
   # Channel-wise normalization
   # Separate images
   expect_silent(cur_images <- normalize(cur_Images, separateImages = TRUE,
                                         inputRange = list(H3 = c(0,50), CD99 = c(0,70))))
-  #expect_silent(plotPixels(pancreasImages,
-  #                         colour_by = c("H3", "CD99", "PIN")))
-  #expect_silent(plotPixels(cur_images,
-  #                         colour_by = c("H3", "CD99", "PIN")))
+  expect_silent(plotPixels(cur_Images,
+                           colour_by = c("H3", "CD99", "PIN")))
+  expect_silent(plotPixels(cur_images,
+                           colour_by = c("H3", "CD99", "PIN")))
   
   expect_equal(as.array(cur_images[[1]])[1, 1:10,"H3"],
                imageData(pancreasImages[[1]])[1, 1:10,"H3"]/50,
@@ -645,10 +650,10 @@ test_that("CytoImageList can be normalized", {
   # Not Separate images
   expect_silent(cur_images <- normalize(cur_Images, separateImages = FALSE,
                                         inputRange = list(H3 = c(0,50), CD99 = c(0,70))))
-  #expect_silent(plotPixels(pancreasImages,
-  #                         colour_by = c("H3", "CD99", "PIN")))
-  #expect_silent(plotPixels(cur_images,
-  #                         colour_by = c("H3", "CD99", "PIN")))
+  expect_silent(plotPixels(cur_Images,
+                           colour_by = c("H3", "CD99", "PIN")))
+  expect_silent(plotPixels(cur_images,
+                           colour_by = c("H3", "CD99", "PIN")))
   
   expect_equal(as.array(cur_images[[1]])[1, 1:10,"H3"],
                imageData(pancreasImages[[1]])[1, 1:10,"H3"]/50,
@@ -710,7 +715,7 @@ test_that("CytoImageList can be normalized", {
   expect_false(".E34_imc_dimnames" %in% h5ls(path(cur_images$E34_imc@seed))$name)
 })
 
-test_that("HDF5 handling works", {
+test_that("On disk: HDF5 handling works", {
     cur_array <- array(data = rnorm(3000), dim = c(100, 100, 3)) 
     cur_array_2 <- array(data = runif(3000), dim = c(100, 100, 3)) 
     

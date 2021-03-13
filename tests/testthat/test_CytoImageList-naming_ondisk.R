@@ -1,4 +1,4 @@
-test_that("Image and channel names can be extracted and set.", {
+test_that("On disk: Image and channel names can be extracted and set.", {
   data("pancreasImages")
   cur_path <- tempdir()
   on.exit(unlink(cur_path))

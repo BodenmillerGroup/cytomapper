@@ -1,4 +1,4 @@
-test_that("Images can be loaded into CytoImageList object.", {
+test_that("On disk: Images can be loaded into CytoImageList object.", {
     
   data("pancreasImages")
     
@@ -167,7 +167,7 @@ test_that("Images can be loaded into CytoImageList object.", {
   expect_error(CytoImageList(cur_list, on_disk = TRUE, h5FilesPath = cur_path))
 })
 
-test_that("Show function works.", {
+test_that("On disk: Show function works.", {
     data(pancreasImages)
     
     cur_path <- tempdir()

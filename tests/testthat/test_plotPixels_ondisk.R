@@ -1,4 +1,4 @@
-test_that("plotPixels: Standard input testing works", {
+test_that("On disk: plotPixels: Standard input testing works", {
   data("pancreasSCE")
   data("pancreasImages")
   data("pancreasMasks")
@@ -23,7 +23,7 @@ test_that("plotPixels: Standard input testing works", {
                            img_id = "ImageNb"))
 })
 
-test_that("plotPixels: Features can be displayed.", {
+test_that("On disk: plotPixels: Features can be displayed.", {
     data("pancreasImages")
     
     cur_path <- tempdir()
@@ -58,7 +58,7 @@ test_that("plotPixels: Features can be displayed.", {
   expect_identical(test1$plot$J02_imc, test2$plot$J02_imc)
 })
 
-test_that("plotPixels: Channels can be enhanced.", {
+test_that("On disk: plotPixels: Channels can be enhanced.", {
     data("pancreasImages")
     
     cur_path <- tempdir()
@@ -93,7 +93,7 @@ test_that("plotPixels: Channels can be enhanced.", {
                                       CD99 = c(10,2,1))))
 })
 
-test_that("plotPixels: Cells can be outlined correctly.", {
+test_that("On disk: plotPixels: Cells can be outlined correctly.", {
     data("pancreasSCE")
     data("pancreasImages")
     data("pancreasMasks")
@@ -125,7 +125,7 @@ test_that("plotPixels: Cells can be outlined correctly.", {
             outline_by = "Area"))
 })
 
-test_that("plotPixels: images can be correctly subsetted.", {
+test_that("On disk: plotPixels: images can be correctly subsetted.", {
     data("pancreasSCE")
     data("pancreasImages")
     data("pancreasMasks")
@@ -176,7 +176,7 @@ test_that("plotPixels: images can be correctly subsetted.", {
                            outline_by = "CellType"))
 })
 
-test_that("plotPixels: colour can be correctly adjusted.", {
+test_that("On disk: plotPixels: colour can be correctly adjusted.", {
     data("pancreasSCE")
     data("pancreasImages")
     data("pancreasMasks")
@@ -223,7 +223,7 @@ test_that("plotPixels: colour can be correctly adjusted.", {
                                         H3 = c("black", "green"))))
 })
 
-test_that("plotPixels: SCE can be subsetted.", {
+test_that("On disk: plotPixels: SCE can be subsetted.", {
     data("pancreasSCE")
     data("pancreasImages")
     data("pancreasMasks")
@@ -273,7 +273,7 @@ test_that("plotPixels: SCE can be subsetted.", {
                            colour_by = "H3", outline_by = "CellType"))
 })
 
-test_that("plotPixels: Size of images can be changed.", {
+test_that("On disk: plotPixels: Size of images can be changed.", {
     data("pancreasSCE")
     data("pancreasImages")
     data("pancreasMasks")

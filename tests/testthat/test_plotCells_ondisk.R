@@ -1,4 +1,4 @@
-test_that("plotCells: Standard input testing works", {
+test_that("On disk: plotCells: Standard input testing works", {
   data("pancreasSCE")
   data("pancreasMasks")
   
@@ -15,7 +15,7 @@ test_that("plotCells: Standard input testing works", {
                           cell_id = "CellNb"))
 })
 
-test_that("plotCells: Features can be displayed.", {
+test_that("On disk: plotCells: Features can be displayed.", {
   data("pancreasSCE")
   data("pancreasMasks")
   
@@ -61,7 +61,7 @@ test_that("plotCells: Features can be displayed.", {
   expect_identical(test1$plot$J02_imc, test2$plot$J02_imc)
 })
 
-test_that("plotCells: Metadata can be displayed.", {
+test_that("On disk: plotCells: Metadata can be displayed.", {
   data("pancreasSCE")
   data("pancreasMasks")
     
@@ -113,7 +113,7 @@ test_that("plotCells: Metadata can be displayed.", {
 
 })
 
-test_that("plotCells: Cells can be outlined correctly.", {
+test_that("On disk: plotCells: Cells can be outlined correctly.", {
   data("pancreasSCE")
   data("pancreasMasks")
     
@@ -137,7 +137,7 @@ test_that("plotCells: Cells can be outlined correctly.", {
             outline_by = "Area"))
 })
 
-test_that("plotCells: Exprs values can be correctly set.", {
+test_that("On disk: plotCells: Exprs values can be correctly set.", {
   data("pancreasSCE")
   data("pancreasMasks")
     
@@ -166,7 +166,7 @@ test_that("plotCells: Exprs values can be correctly set.", {
 
 })
 
-test_that("plotCells: images can be correctly subsetted.", {
+test_that("On disk: plotCells: images can be correctly subsetted.", {
     data("pancreasSCE")
     data("pancreasMasks")
     
@@ -236,7 +236,7 @@ test_that("plotCells: images can be correctly subsetted.", {
 
 })
 
-test_that("plotCells: colour can be correctly adjusted.", {
+test_that("On disk: plotCells: colour can be correctly adjusted.", {
     data("pancreasSCE")
     data("pancreasMasks")
     
@@ -313,7 +313,7 @@ test_that("plotCells: colour can be correctly adjusted.", {
                           colour = list(Area = c("black", "green"))))
 })
 
-test_that("plotCells: SCE can be subsetted.", {
+test_that("On disk: plotCells: SCE can be subsetted.", {
     data("pancreasSCE")
     data("pancreasMasks")
     
@@ -365,7 +365,7 @@ test_that("plotCells: SCE can be subsetted.", {
                           cell_id = "CellNb", colour_by = "PIN"))
 })
 
-test_that("plotCells: Size of images can be changed.", {
+test_that("On disk: plotCells: Size of images can be changed.", {
     data("pancreasSCE")
     data("pancreasMasks")
     
