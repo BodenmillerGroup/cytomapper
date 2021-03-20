@@ -1,17 +1,25 @@
 ---
-title: "On disk storage of images"
+title: "On disk storage and handling of images"
 date: "`r BiocStyle::doc_date()`"
 package: "`r BiocStyle::pkg_ver('cytomapper')`"
 author:
 - name: Nils Eling
-  affiliation: Department for Quantitative Biomedicine, University of Zurich
+  affiliation: 
+  - Department for Quantitative Biomedicine, University of Zurich
+  - Institute for Molecular Health Sciences, ETH Zurich
   email: nils.eling@dqbm.uzh.ch
 output:
     BiocStyle::html_document:
         toc_float: yes
 bibliography: library.bib
 abstract: |
-    Usanility of on disk storage of images for the cytomapper package.
+    To scale the functionality of the `cytomapper` package, images can 
+    be stored on disk. For this, images are written onto disk as arrays in 
+    hdf5 format. Writing and accessing these arrays is facilitated by the 
+    `HDF5Array` and `DelayedArray` Bioconductor packages. The functionality
+    of `cytomapper`remains the same, the only change is how images are read
+    in. This vignette will give an overview on how to work with images 
+    stored on disk.
 vignette: |
     %\VignetteIndexEntry{"On disk storage of images"}
     %\VignetteEngine{knitr::rmarkdown}
@@ -28,11 +36,169 @@ library(BiocStyle)
 library(cytomapper)
 ```
 
-Explain the backend
+# Introduction {#Introduction}
 
-Normalization will save the normalized pixel intensities in second layer - slow and increases size on disk.
+`r Biocpkg("HDF5Array")` and `r Biocpkg("DelayedArray")` are
+convenient Bioconductor packages to work with arrays "on disk" instead of "in
+memory". The `cytomapper` package builds upon these tools to allow storing image
+data on disk. While this facilitates the handling of hundreds to thousand of
+images in parallel, little changes are experienced from the user perspective.
+Here, we explain which `cytomapper` function are effected by storing images on
+disk.
 
+# Reading in data to disk {#ReadingData}
 
+The `loadImages` function takes extra arguments to specify if images should be
+stored on disk (`on_disk`) and where to store them (`h5FilesPath`). When images
+should be stored for longer than the current R session, the `h5FilesPath` needs
+to be set to a permanent directory. The `HDF5Array` package provides the
+`getHDF5DumpDir` function, which initialize a temporary directory, which will be
+deleted once the session closes. This is what we will use here for demonstration
+purposes.
+
+```{r, message=FALSE}
+library(HDF5Array)
+
+# Define output directory
+cur_dir <- getHDF5DumpDir()
+
+path.to.images <- system.file("extdata", package = "cytomapper")
+image.list <- loadImages(path.to.images, pattern = "mask.tiff",
+                             on_disk = TRUE, h5FilesPath = cur_dir)
+
+# Show list
+image.list
+
+# Scale images
+image.list <- scaleImages(image.list, value = 2^16 - 1)
+image.list$E34_mask
+```
+
+This function call reads in the .tiff images before writing them as .h5 files to
+the indicated directory. It generates a `CytoImageList` object that contains
+`HDF5Array` or `DelayedArray` objects (instead of `Image` objects) in each slot,
+which references the data in the .h5 files. The name of the array within the .h5
+file is automatically set as the original filename and cannot be changed easily
+from within R. Writing the images to disk is slow and therefore less efficient
+compared to keeping images in memory. However, when working with hundreds of
+images in parallel, all images remain accessible from within the R session if
+they are stored on disk. In conclusion: when working with small image sets it is
+recommended reading them into memory (`on_disk = FALSE`, default), while large
+image sets should be written to disk (`on_disk = TRUE`). When reading in the
+same images multiple times, the .h5 files will always be replaced.
+
+Please follow the [main
+vignette](https://bioconductor.org/packages/release/bioc/vignettes/cytomapper/inst/doc/cytomapper.html)
+for instructions on how to work with multi-channel images in R.
+
+# Converting from on disk to memory and back {#Converting}
+
+Existing `CytoImageList` objects, which contain individual `Image` objects in
+memory can be converted into `CytoImageList` objects storing `DelayedArray` or
+`HDF5Array` objects on disk. For this the following function calls can be used:
+
+```{r}
+data("pancreasImages")
+
+pancreasImages_onDisk <- CytoImageList(pancreasImages,
+                                        on_disk = TRUE, 
+                                        h5FilesPath = cur_dir)
+
+# Image object
+pancreasImages$E34_imc
+
+# HDF5Array object
+pancreasImages_onDisk$E34_imc
+
+# Seed of HDF5Array object
+seed(pancreasImages_onDisk$E34_imc)
+
+# Size in memory
+format(object.size(pancreasImages), units = "auto")
+format(object.size(pancreasImages_onDisk), units = "auto")
+```
+
+Images can also be moved back to in memory representation:
+
+```{r}
+pancreasImages_inMemory <- CytoImageList(pancreasImages_onDisk,
+                                        on_disk = FALSE)
+
+# Compare the image data to the orginal representation
+identical(pancreasImages_inMemory@listData, pancreasImages@listData)
+```
+
+```{r sanity-check, echo=FALSE}
+stopifnot(identical(pancreasImages@listData, pancreasImages_inMemory@listData))
+```
+
+# Effects on package functionality {#Functionality}
+
+While most functions of the `cytomapper` package natively support images stored
+on disk, there are three exceptions: the `normalize`, `setChannels` and
+`mergeChannels` functions.
+
+The `normalize` function will store the normalized images as a second dataset in
+the same .h5 file as the original data.
+
+```{r}
+# Size of object in memory
+format(object.size(pancreasImages_onDisk), units = "auto")
+
+# Size of object on disk in kB
+file.info(paste0(cur_dir, "/E34_imc.h5"))[,"size"] / 1000
+
+pancreasImages_norm <- normalize(pancreasImages_onDisk)
+
+seed(pancreasImages_norm$E34_imc)
+
+# Size of object in memory
+format(object.size(pancreasImages_norm), units = "auto")
+
+# Size of object on disk in kB
+file.info(paste0(cur_dir, "/E34_imc.h5"))[,"size"] / 1000
+```
+
+As we can see, the size in memory does not increase when normalizing images.
+However, the size on disk increases since a second, normalized dataset is stored
+in the .h5 file. The original dataset can be overwritten by setting `overwrite =
+TRUE` to save space on disk. This will however break the links to the original
+data in all R objects. It is therefore recommended leaving the default
+`overwrite = FALSE`. Furthermore, the normalization of images stored on disk is
+slower compared to normalizing images in memory since normalized images need to
+be written to disk.
+
+The `setChannels` function replaces the same channels in all images by a user
+defined channel. There is no problem with this when keeping images in memory.
+However, the `DelayedArray` framework stores the replacement value in
+subassignemt operations in memory. This means that when using the `setChannels`
+function, the size of the object increases in memory usage:
+
+```{r}
+cur_Images1 <- pancreasImages_onDisk
+cur_Images2 <- getChannels(pancreasImages_onDisk, 2)
+channelNames(cur_Images2) <- "CD99_2"
+
+setChannels(cur_Images1, 1) <- cur_Images2
+format(object.size(cur_Images1), units = "auto")
+```
+
+The `mergeChannels` function merges multiple user-defined channels. As this
+operation creates a completely new image object, one needs to store the merged
+channels in a different location:
+
+```{r}
+channels1 <- getChannels(pancreasImages_onDisk, 1:2)
+channels2 <- getChannels(pancreasImages_onDisk, 3:4)
+
+dir.create(file.path(cur_dir, "test"))
+cur_path_2 <- file.path(cur_dir, "test")
+
+channels3 <- mergeChannels(channels1, channels2,
+                            h5FilesPath = cur_path_2)
+
+seed(channels3$E34_imc)
+```
 
 # Session info {.unnumbered}
 
