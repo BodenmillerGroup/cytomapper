@@ -75,7 +75,7 @@ one image per slot. Supported file extensions are: '.tiff', '.tif', '.png',
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">cytomapper</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">1.3.3</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">1.3.4</span>
       </span>
     </div>
 
@@ -92,6 +92,18 @@ one image per slot. Supported file extensions are: '.tiff', '.tif', '.png',
 </li>
 <li>
   <a href="../reference/index.html">Reference</a>
+</li>
+<li class="dropdown">
+  <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">
+    Articles
+     
+    <span class="caret"></span>
+  </a>
+  <ul class="dropdown-menu" role="menu">
+    <li>
+      <a href="../articles/cytomapper_ondisk.html">On disk storage and handling of images</a>
+    </li>
+  </ul>
 </li>
       </ul>
       <ul class="nav navbar-nav navbar-right">
@@ -126,7 +138,14 @@ one image per slot. Supported file extensions are: '.tiff', '.tif', '.png',
 '.jpeg', '.jpg'.</p>
     </div>
 
-    <pre class="usage"><span class='fu'>loadImages</span><span class='op'>(</span><span class='va'>x</span>, pattern <span class='op'>=</span> <span class='cn'>NULL</span>, <span class='va'>...</span><span class='op'>)</span></pre>
+    <pre class="usage"><span class='fu'>loadImages</span><span class='op'>(</span>
+  <span class='va'>x</span>,
+  pattern <span class='op'>=</span> <span class='cn'>NULL</span>,
+  on_disk <span class='op'>=</span> <span class='cn'>FALSE</span>,
+  h5FilesPath <span class='op'>=</span> <span class='cn'>NULL</span>,
+  BPPARAM <span class='op'>=</span> <span class='fu'>SerialParam</span><span class='op'>(</span><span class='op'>)</span>,
+  <span class='va'>...</span>
+<span class='op'>)</span></pre>
 
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
     <table class="ref-arguments">
@@ -150,6 +169,26 @@ individual file.</p></dd>
 file names in the specified path.</p></dd>
 
 </dl></td>
+    </tr>
+    <tr>
+      <th>on_disk</th>
+      <td><p>Logical indicating if images in form of
+HDF5Array objects (as .h5 files) should be stored on disk
+rather than in memory.</p></td>
+    </tr>
+    <tr>
+      <th>h5FilesPath</th>
+      <td><p>path to where the .h5 files for on disk representation
+are stored. This path needs to be defined when <code>on_disk = TRUE</code>.
+When files should only temporarily be stored on disk, please set
+<code>h5FilesPath = getHDF5DumpDir()</code></p></td>
+    </tr>
+    <tr>
+      <th>BPPARAM</th>
+      <td><p>parameters for parallelised reading in of images. 
+This is only recommended for very large images. 
+See <code>MulticoreParam</code> for information on how to use multiple
+cores for parallelised processing.</p></td>
     </tr>
     <tr>
       <th>...</th>
@@ -198,6 +237,16 @@ images.</p>
 <span class='va'>list.images</span> <span class='op'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/base/list.files.html'>list.files</a></span><span class='op'>(</span><span class='fu'><a href='https://rdrr.io/r/base/system.file.html'>system.file</a></span><span class='op'>(</span><span class='st'>"extdata"</span>, package <span class='op'>=</span> <span class='st'>"cytomapper"</span><span class='op'>)</span>,
                             pattern <span class='op'>=</span> <span class='st'>"_mask.tiff"</span>, full.names <span class='op'>=</span> <span class='cn'>TRUE</span><span class='op'>)</span>
 <span class='va'>image.list</span> <span class='op'>&lt;-</span> <span class='fu'>loadImages</span><span class='op'>(</span><span class='va'>list.images</span><span class='op'>)</span>
+
+<span class='co'># On disk representation</span>
+<span class='va'>path.to.images</span> <span class='op'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/base/system.file.html'>system.file</a></span><span class='op'>(</span><span class='st'>"extdata"</span>, package <span class='op'>=</span> <span class='st'>"cytomapper"</span><span class='op'>)</span>
+<span class='va'>image.list</span> <span class='op'>&lt;-</span> <span class='fu'>loadImages</span><span class='op'>(</span><span class='va'>path.to.images</span>, pattern <span class='op'>=</span> <span class='st'>"mask.tiff"</span>,
+                            on_disk <span class='op'>=</span> <span class='cn'>TRUE</span>, h5FilesPath <span class='op'>=</span> <span class='fu'>HDF5Array</span><span class='fu'>::</span><span class='fu'><a href='https://rdrr.io/pkg/HDF5Array/man/dump-management.html'>getHDF5DumpDir</a></span><span class='op'>(</span><span class='op'>)</span><span class='op'>)</span>
+                            
+<span class='co'># Parallel processing</span>
+<span class='va'>path.to.images</span> <span class='op'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/base/system.file.html'>system.file</a></span><span class='op'>(</span><span class='st'>"extdata"</span>, package <span class='op'>=</span> <span class='st'>"cytomapper"</span><span class='op'>)</span>
+<span class='va'>image.list</span> <span class='op'>&lt;-</span> <span class='fu'>loadImages</span><span class='op'>(</span><span class='va'>path.to.images</span>, pattern <span class='op'>=</span> <span class='st'>"mask.tiff"</span>,
+                            BPPARAM <span class='op'>=</span> <span class='fu'>BiocParallel</span><span class='fu'>::</span><span class='fu'><a href='https://rdrr.io/pkg/BiocParallel/man/MulticoreParam-class.html'>MulticoreParam</a></span><span class='op'>(</span><span class='op'>)</span><span class='op'>)</span>
 
 </div></pre>
   </div>

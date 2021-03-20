@@ -75,7 +75,7 @@ multi-dimensional array in form of an Image object." />
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">cytomapper</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">1.3.3</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">1.3.4</span>
       </span>
     </div>
 
@@ -92,6 +92,18 @@ multi-dimensional array in form of an Image object." />
 </li>
 <li>
   <a href="../reference/index.html">Reference</a>
+</li>
+<li class="dropdown">
+  <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">
+    Articles
+     
+    <span class="caret"></span>
+  </a>
+  <ul class="dropdown-menu" role="menu">
+    <li>
+      <a href="../articles/cytomapper_ondisk.html">On disk storage and handling of images</a>
+    </li>
+  </ul>
 </li>
       </ul>
       <ul class="nav navbar-nav navbar-right">
@@ -126,7 +138,12 @@ It inherits from <code>SimpleList</code> setting
 multi-dimensional array in form of an <code>Image</code> object.</p>
     </div>
 
-    <pre class="usage"><span class='fu'>CytoImageList</span><span class='op'>(</span><span class='va'>...</span><span class='op'>)</span></pre>
+    <pre class="usage"><span class='fu'>CytoImageList</span><span class='op'>(</span>
+  <span class='va'>...</span>,
+  on_disk <span class='op'>=</span> <span class='cn'>FALSE</span>,
+  h5FilesPath <span class='op'>=</span> <span class='cn'>NULL</span>,
+  BPPARAM <span class='op'>=</span> <span class='fu'>SerialParam</span><span class='op'>(</span><span class='op'>)</span>
+<span class='op'>)</span></pre>
 
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
     <table class="ref-arguments">
@@ -134,6 +151,26 @@ multi-dimensional array in form of an <code>Image</code> object.</p>
     <tr>
       <th>...</th>
       <td><p>A list of images (or coercible to a list) or individual images</p></td>
+    </tr>
+    <tr>
+      <th>on_disk</th>
+      <td><p>Logical indicating if images in form of
+HDF5Array objects (as .h5 files) should be stored on disk
+rather than in memory.</p></td>
+    </tr>
+    <tr>
+      <th>h5FilesPath</th>
+      <td><p>path to where the .h5 files for on disk representation
+are stored. This path needs to be defined when <code>on_disk = TRUE</code>.
+When files should only temporarily be stored on disk, please set
+<code>h5FilesPath = getHDF5DumpDir()</code></p></td>
+    </tr>
+    <tr>
+      <th>BPPARAM</th>
+      <td><p>parameters for parallelised processing. 
+This is only recommended for very large images. 
+See <code>MulticoreParam</code> for information on how to use multiple
+cores for parallelised processing.</p></td>
     </tr>
     </table>
 
@@ -182,6 +219,14 @@ object <code>x</code> to anCytoImageList object</p></dd>
 <p>While <code><a href='https://rdrr.io/r/base/lapply.html'>lapply</a></code> and <code><a href='https://rdrr.io/r/base/mapply.html'>mapply</a></code> return
 regular list objects, <code>endoapply</code> and
 <code>mendoapply</code> return CytoImageList objects.</p>
+    <h2 class="hasAnchor" id="on-disk-representation"><a class="anchor" href="#on-disk-representation"></a>On disk representation</h2>
+
+    
+
+<p>When setting <code>on_disk = TRUE</code> and specifying the <code>h5FilesPath</code>, 
+images are stored on disk. To convert back to an in-memory 
+<code>CytoImageList</code> object, one can call 
+<code>CytoImageList(on_disk_IL, on_disk = FLASE)</code>.</p>
     <h2 class="hasAnchor" id="see-also"><a class="anchor" href="#see-also"></a>See also</h2>
 
     <div class='dont-index'><p><code>Image</code>, for further image analysis tools.</p>
@@ -242,6 +287,11 @@ accessor functions</p></div>
 </div><div class='output co'>#&gt; CytoImageList containing 2 image(s)
 #&gt; names(2): image1 image2 
 #&gt; Each image contains 1 channel</div><div class='input'>
+<span class='co'># On disk representation</span>
+<span class='va'>IL1</span> <span class='op'>&lt;-</span> <span class='fu'>CytoImageList</span><span class='op'>(</span>image1 <span class='op'>=</span> <span class='fu'>Image</span><span class='op'>(</span><span class='va'>u</span><span class='op'>)</span>, image2 <span class='op'>=</span> <span class='fu'>Image</span><span class='op'>(</span><span class='va'>v</span><span class='op'>)</span>,
+                     on_disk <span class='op'>=</span> <span class='cn'>TRUE</span>, 
+                     h5FilesPath <span class='op'>=</span> <span class='fu'>HDF5Array</span><span class='fu'>::</span><span class='fu'><a href='https://rdrr.io/pkg/HDF5Array/man/dump-management.html'>getHDF5DumpDir</a></span><span class='op'>(</span><span class='op'>)</span><span class='op'>)</span>
+
 </div></pre>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="pkgdown-sidebar">

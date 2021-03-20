@@ -74,7 +74,7 @@ containing one or multiple channels." />
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">cytomapper</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">1.3.3</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">1.3.4</span>
       </span>
     </div>
 
@@ -91,6 +91,18 @@ containing one or multiple channels." />
 </li>
 <li>
   <a href="../reference/index.html">Reference</a>
+</li>
+<li class="dropdown">
+  <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">
+    Articles
+     
+    <span class="caret"></span>
+  </a>
+  <ul class="dropdown-menu" role="menu">
+    <li>
+      <a href="../articles/cytomapper_ondisk.html">On disk storage and handling of images</a>
+    </li>
+  </ul>
 </li>
       </ul>
       <ul class="nav navbar-nav navbar-right">
@@ -156,8 +168,16 @@ intensity values across images.</p>
 The <code>inputRange</code> either takes NULL (default), a vector of length 2
 specifying the clipping range for all channels or a list where each
 named entry contains a channel-specific clipping range.</p>
+<p>Image normalization also works for images stored on disk. By default,
+the normalized images are stored as a second entry called "XYZ_norm"
+in the .h5 file. Here "XYZ" specifies the name of the original entry.
+By storing the normalized next to the original images on disk, space
+usage increases. To avoid storing duplicated data, one can specify
+<code>overwrite = TRUE</code>, therefore deleting the original images
+and only storing the normalized images. However, the original images
+cannot be accessed anymore after normalisation.</p>
 <p><code>normalize(object, separateChannels = TRUE, separateImages = FALSE,
-ft = c(0, 1), inputRange = NULL)</code>:</p>
+ft = c(0, 1), inputRange = NULL, overwrite = FALSE)</code>:</p>
 <dl>
 <dt><code>object</code>:</dt><dd><p>A CytoImageList object</p></dd>
 <dt><code>separateChannels</code>:</dt><dd><p>Logical if pixel values should be normalized
@@ -170,6 +190,12 @@ intensity values after normalization (see <code><a href='https://rdrr.io/pkg/EBI
 clipping range of the input intensity values (see
 <code><a href='https://rdrr.io/pkg/EBImage/man/normalize.html'>normalize</a></code>). Alternatively a names list where each
 entry corresponds to a channel-specific clipping range.</p></dd>
+<dt><code>overwrite</code>:</dt><dd><p>Only relevant when images are kept on disk. By 
+specifying <code>overwrite = TRUE</code>, the normalized images will overwrite
+the original images in the .h5 file, therefore reducing space on disk.
+However, the original images cannot be accessed anymore after normalization.
+If <code>overwrite = FALSE</code> (default), the normalized images are added as
+a new entry called "XYZ_norm" to the .h5 file.</p></dd>)
 
 </dl>
 
