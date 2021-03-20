@@ -102,10 +102,14 @@ More than two CytoImageList objects can be merged in that way.}
 Merging channels is possible via:
 
 \describe{
-\item{\code{mergeChannels(x, y)}:}{Returns a CytoImageList in which
-the channels of the CytoImageList object \code{y} have been appended
-to the channels of the CytoImageList object \code{x}.
-Only channels of two CytoImageList objects can be merged in that way.}
+\item{\code{mergeChannels(x, y, h5FilesPath = NULL)}:}{
+Returns a CytoImageList in which the channels of the CytoImageList object
+\code{y} have been appended to the channels of the CytoImageList object
+\code{x}. Only channels of two CytoImageList objects can be merged in that
+way. The \code{h5FilesPath} argument can be ignored unless images are stored 
+on disk. To avoid overriding the .h5 files, one needs to specify a new
+location where the merged images are stored on disk. 
+}
 }
 }
 
@@ -144,6 +148,17 @@ c(pancreasImages[c(1,3)], pancreasImages[2])
 channel12 <- getChannels(pancreasImages, c(1,2))
 channel34 <- getChannels(pancreasImages, c(3,4))
 mergeChannels(channel12, channel34)
+
+# Merge channels on disk
+cur_images <- CytoImageList(pancreasImages,
+                     on_disk = TRUE, 
+                     h5FilesPath = HDF5Array::getHDF5DumpDir())
+channel12 <- getChannels(cur_images, c(1,2))
+channel34 <- getChannels(cur_images, c(3,4))
+
+# This will overwrite the initial .h5 files
+mergeChannels(channel12, channel34,
+                h5FilesPath = HDF5Array::getHDF5DumpDir())
 
 }
 \author{

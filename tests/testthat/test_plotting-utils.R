@@ -1293,6 +1293,8 @@ test_that("legend can be plotted.", {
 })
 
 test_that("scale bar can be plotted.", {
+    data("pancreasImages")
+    
     plottingParam <- .plottingParam(dotArgs = list(), image = pancreasImages)
     plottingParam$scale_bar$colour <- "black"
 

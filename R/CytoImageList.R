@@ -6,6 +6,17 @@
 #' multi-dimensional array in form of an \code{\linkS4class{Image}} object.
 #'
 #' @param ... A list of images (or coercible to a list) or individual images
+#' @param on_disk Logical indicating if images in form of
+#' \linkS4class{HDF5Array} objects (as .h5 files) should be stored on disk
+#' rather than in memory.
+#' @param h5FilesPath path to where the .h5 files for on disk representation
+#' are stored. This path needs to be defined when \code{on_disk = TRUE}.
+#' When files should only temporarily be stored on disk, please set
+#' \code{h5FilesPath = getHDF5DumpDir()}
+#' @param BPPARAM parameters for parallelised processing. 
+#' This is only recommended for very large images. 
+#' See \code{\linkS4class{MulticoreParam}} for information on how to use multiple
+#' cores for parallelised processing.
 #'
 #' @details Similar to the \code{\linkS4class{Image}} class, the first two
 #' dimensions of each entry indicate the spatial dimension of the image. These
@@ -41,6 +52,12 @@
 #' While \code{\link[base]{lapply}} and \code{\link[base]{mapply}} return
 #' regular list objects, \code{\link{endoapply}} and
 #' \code{\link{mendoapply}} return CytoImageList objects.
+#' 
+#' @section On disk representation:
+#' When setting \code{on_disk = TRUE} and specifying the \code{h5FilesPath}, 
+#' images are stored on disk. To convert back to an in-memory 
+#' \code{CytoImageList} object, one can call 
+#' \code{CytoImageList(on_disk_IL, on_disk = FLASE)}.
 #'
 #' @seealso
 #' \code{\linkS4class{Image}}, for further image analysis tools.
@@ -69,6 +86,11 @@
 #' as.list(IL1)
 #' as(IL1, "SimpleList")
 #' as(list(image1 = Image(u), image2 = Image(v)), "CytoImageList")
+#' 
+#' # On disk representation
+#' IL1 <- CytoImageList(image1 = Image(u), image2 = Image(v),
+#'                      on_disk = TRUE, 
+#'                      h5FilesPath = HDF5Array::getHDF5DumpDir())
 #'
 #' @aliases
 #' coerce,ANY,CytoImageList-method
@@ -79,35 +101,127 @@
 #'
 #' @docType class
 #'
-#' @importFrom S4Vectors new2
+#' @importFrom S4Vectors new2 mcols<-
 #'
 #' @export
-CytoImageList <- function(...){
+#' @importFrom BiocParallel bplapply SerialParam MulticoreParam
+#' @importFrom EBImage Image imageData
+#' @importFrom DelayedArray DelayedArray
+CytoImageList <- function(..., on_disk = FALSE, h5FilesPath = NULL,
+                            BPPARAM = SerialParam()){
+    
     args <- list(...)
+    
     if (length(args) == 1L &&
         methods::extends(class(args[[1L]]), "list")){
         args <- args[[1]]
     }
+    
     if (length(args) == 1L &&
         methods::extends(class(args[[1L]]), "SimpleList")){
+        
+        # Make sure mcols are transfered
+        cur_meta <- mcols(args[[1]])
+        
         args <- as.list(args[[1]])
     }
-    x <- S4Vectors::new2("CytoImageList", listData=args)
+    
+    if (on_disk) {
+        
+        cur_class <- lapply(args, class)
+        
+        if (all(cur_class == "Image")) {
+            
+            if (is.null(names(args))){
+                stop("Please specify the names of the images.")
+            }
+            
+            if (is.null(h5FilesPath)) {
+                stop("When storing the images on disk, please specify a 'h5FilesPath'. \n",
+                     "You can use 'h5FilesPath = getHDF5DumpDir()' to temporarily store the images.\n",
+                     "If doing so, .h5 files will be deleted once the R session ends.")
+            }
+            
+            cur_names <- names(args)
+            args <- bplapply(names(args), function(y){
+                cur_name <- y
+                cur_file <- file.path(h5FilesPath, paste0(y, ".h5"))
+                
+                # Check if file already exists
+                # If so, delete them
+                if (file.exists(cur_file)) {
+                    file.remove(cur_file)
+                }
+                
+                writeHDF5Array(DelayedArray(imageData(args[[y]])), 
+                               filepath = cur_file,
+                               name = cur_name,
+                               with.dimnames = TRUE)
+            }, BPPARAM = BPPARAM)
+            names(args) <- cur_names
+        }
+    } else {
+        cur_class <- lapply(args, class)
+        
+        if (all(cur_class == "HDF5Array" | cur_class == "HDF5Matrix" |
+                cur_class == "DelayedArray" | cur_class == "DelayedMatrix")) {
+            
+            if (is.null(names(args))){
+                stop("Please specify the names of the images.")
+            }
+            cur_names <- names(args)
+            args <- bplapply(names(args), function(y){
+                Image(as.array(args[[y]]))
+            }, BPPARAM = BPPARAM)
+            names(args) <- cur_names
+        }
+        
+    }
+    
+    x <- S4Vectors::new2("CytoImageList", listData = args)
+    
+    # Store metadata again
+    if (exists("cur_meta") && !is.null(cur_meta)) {
+        mcols(x) <- cur_meta
+    }
+    
     return(x)
 }
 
 # Coercion from list
 #' @exportMethod coerce
+#' @importFrom DelayedArray seed path
 setAs("list", "CytoImageList", function(from) {
+    
+    if (class(from[[1]]) %in% c("HDF5Array", "DelayedArray",
+                                "HDF5Matrix", "DelayedMatrix")){
+        on_disk <- TRUE
+        h5FilesPath <- dirname(path(seed(from[[1]])))
+    } else {
+        on_disk <- FALSE
+        h5FilesPath <- NULL
+    }
+    
     # Use constructor function
-    CytoImageList(from)
+    CytoImageList(from, on_disk = on_disk, h5FilesPath = h5FilesPath)
 })
 
 # Coercion from ANY
 #' @exportMethod coerce
+#' @importFrom DelayedArray seed path
 setAs("ANY", "CytoImageList", function(from) {
+    
+    if (class(from[[1]]) %in% c("HDF5Array", "DelayedArray",
+                                "HDF5Matrix", "DelayedMatrix")){
+        on_disk <- TRUE
+        h5FilesPath <- dirname(path(seed(from[[1]])))
+    } else {
+        on_disk <- FALSE
+        h5FilesPath <- NULL
+    }
+    
     # Use constructor function
-    CytoImageList(from)
+    CytoImageList(from, on_disk = on_disk, h5FilesPath = h5FilesPath)
 })
 
 # Expanded show method

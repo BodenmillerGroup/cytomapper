@@ -74,19 +74,45 @@ setMethod("channelNames",
 setReplaceMethod("channelNames",
     signature = signature(x="CytoImageList"),
     definition = function(x, value){
-    # Image needs to be expanded to store channel names
-    if(length(dim(x[[1]])) == 2L){
+        
+    if (is(x[[1]], "Image")) {
+        # Image needs to be expanded to store channel names
+        if(length(dim(x[[1]])) == 2L){
+            x <- S4Vectors::endoapply(x, function(y){
+                cur_Image <- Image(y, dim = c(dim(y)[1], dim(y)[2], 1))
+                dimnames(cur_Image) <- c(dimnames(y), NULL)
+                return(cur_Image)
+            })
+        }
+        
         x <- S4Vectors::endoapply(x, function(y){
-        cur_Image <- Image(y, dim = c(dim(y)[1], dim(y)[2], 1))
-        dimnames(cur_Image) <- c(dimnames(y), NULL)
-            return(cur_Image)
-        })
-    }
-
-    x <- S4Vectors::endoapply(x, function(y){
-        dimnames(y)[[3]] <- as.character(value)
+            if (is.null(value)) {
+                dimnames(y)[[3]] <- NULL
+            } else {
+                dimnames(y)[[3]] <- as.character(value)
+            }
             return(y)
         })
+    } else {
+        # Image needs to be expanded to store channel names
+        if(length(dim(x[[1]])) == 2L){
+            x@listData <- lapply(x, function(y){
+                cur_Image <- y
+                dim(cur_Image) <- c(dim(cur_Image)[1], dim(cur_Image)[2], 1)
+                dimnames(cur_Image) <- c(dimnames(y), NULL)
+                return(cur_Image)
+            })
+        }
+        
+        x@listData <- lapply(x, function(y){
+            if (is.null(value)) {
+                dimnames(y)[[3]] <- NULL
+            } else {
+                dimnames(y)[[3]] <- as.character(value)
+            }
+            return(y)
+        })
+    }
 
     validObject(x)
 
@@ -141,9 +167,18 @@ setReplaceMethod("names",
 #' The \code{inputRange} either takes NULL (default), a vector of length 2
 #' specifying the clipping range for all channels or a list where each
 #' named entry contains a channel-specific clipping range.
+#' 
+#' Image normalization also works for images stored on disk. By default,
+#' the normalized images are stored as a second entry called "XYZ_norm"
+#' in the .h5 file. Here "XYZ" specifies the name of the original entry.
+#' By storing the normalized next to the original images on disk, space
+#' usage increases. To avoid storing duplicated data, one can specify
+#' \code{overwrite = TRUE}, therefore deleting the original images
+#' and only storing the normalized images. However, the original images
+#' cannot be accessed anymore after normalisation.
 #'
 #' \code{normalize(object, separateChannels = TRUE, separateImages = FALSE,
-#' ft = c(0, 1), inputRange = NULL)}:
+#' ft = c(0, 1), inputRange = NULL, overwrite = FALSE)}:
 #'
 #' \describe{
 #' \item{\code{object}:}{A CytoImageList object}
@@ -157,6 +192,12 @@ setReplaceMethod("names",
 #' clipping range of the input intensity values (see
 #' \code{\link[EBImage]{normalize}}). Alternatively a names list where each
 #' entry corresponds to a channel-specific clipping range.}
+#' \item{\code{overwrite}:}{Only relevant when images are kept on disk. By 
+#' specifying \code{overwrite = TRUE}, the normalized images will overwrite
+#' the original images in the .h5 file, therefore reducing space on disk.
+#' However, the original images cannot be accessed anymore after normalization.
+#' If \code{overwrite = FALSE} (default), the normalized images are added as
+#' a new entry called "XYZ_norm" to the .h5 file.})
 #' }
 #'
 #' @return A CytoImageList object containing the manipulated Images.
@@ -215,7 +256,7 @@ setMethod("scaleImages",
 #' @importFrom stats quantile
 #' @importFrom EBImage combine abind
 normImages <- function(object, separateChannels = TRUE, separateImages = FALSE,
-                ft = c(0, 1), inputRange = NULL){
+                ft = c(0, 1), inputRange = NULL, overwrite = FALSE){
 
     if (!is.logical(separateChannels) ||
         length(separateChannels) > 1L ||
@@ -233,8 +274,15 @@ normImages <- function(object, separateChannels = TRUE, separateImages = FALSE,
         stop("'inputRange' takes a vector of length 2, a list or NULL.")
     }
     
+    # Type of objects
+    is_image <- is(object[[1]], "Image")
+    
     # Number of frames
-    nf <- numberOfFrames(object[[1]])
+    if (is_image) {
+        nf <- numberOfFrames(object[[1]])
+    } else {
+        nf <- numberOfFrames(as.array(object[[1]]))
+    }
 
     # Number of images
     ni <- length(object)
@@ -257,18 +305,28 @@ normImages <- function(object, separateChannels = TRUE, separateImages = FALSE,
         
         if (separateImages) {
             
-            cur_out <- endoapply(object, function(y){
+            object <- endoapply(object, function(y){
                 
                 cur_names <- dimnames(y)
                 
-                y <- lapply(names(cur_inputRanges), function(i){
-                    EBImage::normalize(y[,,i], separate = TRUE,
-                                ft = ft, inputRange = cur_inputRanges[[i]])
-                })
-                y <- combine(y)
+                if (is_image) {
+                    y <- lapply(names(cur_inputRanges), function(i){
+                            EBImage::normalize(y[,,i], separate = TRUE,
+                                               ft = ft, inputRange = cur_inputRanges[[i]])
+                        })
+                    y <- combine(y)
+                    dimnames(y) <- cur_names
+                } else {
+                    z <- lapply(names(cur_inputRanges), function(i){
+                        EBImage::normalize(as.array(y[,,i]), separate = TRUE,
+                                           ft = ft, inputRange = cur_inputRanges[[i]])
+                    })
+                    z <- combine(z)
+                    dimnames(z) <- cur_names
+                    
+                    y <- .add_h5(y, z, overwrite)
+                }
                 
-                dimnames(y) <- cur_names
-
                 return(y)
             })
             
@@ -285,28 +343,50 @@ normImages <- function(object, separateChannels = TRUE, separateImages = FALSE,
             
             cur_inputRanges[names(cur_r)] <- cur_r
                 
-            cur_out <- endoapply(object, function(y){
+            object <- endoapply(object, function(y){
                     
                 cur_names <- dimnames(y)
-                    
-                if (nf == 1) {
+                
+                if (is_image) {
+                    if (nf == 1) {
                         
-                    y <- EBImage::normalize(y,
-                                            separate = TRUE, ft=ft,
-                                            inputRange = cur_inputRanges[[1]])
+                        y <- EBImage::normalize(y,
+                                                separate = TRUE, ft=ft,
+                                                inputRange = cur_inputRanges[[1]])
                         
-                } else {
+                    } else {
                         
-                    y <- lapply(names(cur_inputRanges), function(i){
-                        EBImage::normalize(y[,,i],
-                                        separate = TRUE, ft=ft,
-                                        inputRange = cur_inputRanges[[i]])
+                        y <- lapply(names(cur_inputRanges), function(i){
+                            EBImage::normalize(y[,,i],
+                                               separate = TRUE, ft=ft,
+                                               inputRange = cur_inputRanges[[i]])
                         })
-                    y <- combine(y)
-            
-                }
+                        y <- combine(y)
                         
-                dimnames(y) <- cur_names
+                    }
+                    
+                    dimnames(y) <- cur_names 
+                } else {
+                    if (nf == 1) {
+                        
+                        z <- EBImage::normalize(as.array(y),
+                                                separate = TRUE, ft=ft,
+                                                inputRange = cur_inputRanges[[1]])
+                        
+                    } else {
+                        
+                        z <- lapply(names(cur_inputRanges), function(i){
+                            EBImage::normalize(as.array(y[,,i]),
+                                               separate = TRUE, ft=ft,
+                                               inputRange = cur_inputRanges[[i]])
+                        })
+                        z <- combine(z)
+                        
+                    }
+                    
+                    dimnames(z) <- cur_names 
+                    y <- .add_h5(y, z, overwrite)
+                }
                     
                 return(y)
             })
@@ -316,9 +396,15 @@ normImages <- function(object, separateChannels = TRUE, separateImages = FALSE,
         
         if (separateImages) {
     
-            cur_out <- endoapply(object, function(y){
-                y <- EBImage::normalize(y, separate = separateChannels,
-                                        ft = ft, inputRange = inputRange)
+            object <- endoapply(object, function(y){
+                if (is_image) {
+                    y <- EBImage::normalize(y, separate = separateChannels,
+                                            ft = ft, inputRange = inputRange)
+                } else {
+                    z <- EBImage::normalize(as.array(y), separate = separateChannels,
+                                            ft = ft, inputRange = inputRange)
+                    y <- .add_h5(y, z, overwrite)
+                }
                 return(y)
             })
     
@@ -349,52 +435,90 @@ normImages <- function(object, separateChannels = TRUE, separateImages = FALSE,
     
             if (separateChannels) {
     
-                cur_out <- endoapply(object, function(y){
+                object <- endoapply(object, function(y){
     
                     cur_names <- dimnames(y)
-    
-                    if (nf == 1) {
-    
-                        if (!is.null(inputRange)) {
-                            cur_range <- inputRange
+                    
+                    if (is_image) {
+                        if (nf == 1) {
+                            
+                            if (!is.null(inputRange)) {
+                                cur_range <- inputRange
+                            } else {
+                                cur_range <- as.numeric(cur_range)
+                            }
+                            
+                            y <- EBImage::normalize(y,
+                                                    separate = TRUE, ft=ft,
+                                                    inputRange = cur_range)
+                            
                         } else {
-                            cur_range <- as.numeric(cur_range)
+                            
+                            if (!is.null(inputRange)) {
+                                y <- EBImage::normalize(y, separate = TRUE, ft=ft,
+                                                        inputRange = inputRange)
+                            } else {
+                                y <- lapply(seq_len(nf), function(i){
+                                    EBImage::normalize(y[,,i],
+                                                       separate = TRUE, ft=ft,
+                                                       inputRange = as.numeric(cur_range[,i]))
+                                })
+                                y <- combine(y)
+                            }
+                            
                         }
-    
-                        y <- EBImage::normalize(y,
-                                                separate = TRUE, ft=ft,
-                                                inputRange = cur_range)
-    
+                        
+                        dimnames(y) <- cur_names
                     } else {
-    
-                        if (!is.null(inputRange)) {
-                            y <- EBImage::normalize(y, separate = TRUE, ft=ft,
-                                            inputRange = inputRange)
+                        if (nf == 1) {
+                            
+                            if (!is.null(inputRange)) {
+                                cur_range <- inputRange
+                            } else {
+                                cur_range <- as.numeric(cur_range)
+                            }
+                            
+                            z <- EBImage::normalize(as.array(y),
+                                                    separate = TRUE, ft=ft,
+                                                    inputRange = cur_range)
+                            
                         } else {
-                            y <- lapply(seq_len(nf), function(i){
-                                EBImage::normalize(y[,,i],
-                                    separate = TRUE, ft=ft,
-                                    inputRange = as.numeric(cur_range[,i]))
-                            })
-                            y <- combine(y)
+                            
+                            if (!is.null(inputRange)) {
+                                z <- EBImage::normalize(as.array(y), separate = TRUE, ft=ft,
+                                                        inputRange = inputRange)
+                            } else {
+                                z <- lapply(seq_len(nf), function(i){
+                                    EBImage::normalize(as.array(y[,,i]),
+                                                       separate = TRUE, ft=ft,
+                                                       inputRange = as.numeric(cur_range[,i]))
+                                })
+                                z <- combine(z)
+                            }
+                            
                         }
-    
+                        dimnames(z) <- cur_names  
+                        
+                        y <- .add_h5(y, z, overwrite)
                     }
-    
-                    dimnames(y) <- cur_names
     
                     return(y)
                 })
     
             } else {
-                cur_out <- endoapply(object, function(y){
+                object <- endoapply(object, function(y){
                     if(is.null(inputRange)){
                         inputRange <- as.numeric(cur_range)
                     }
     
-    
-                    y <- EBImage::normalize(y, separate = FALSE,
-                                            ft=ft, inputRange = inputRange)
+                    if (is_image) {
+                        y <- EBImage::normalize(y, separate = FALSE,
+                                                ft=ft, inputRange = inputRange) 
+                    } else {
+                        z <- EBImage::normalize(as.array(y), separate = FALSE,
+                                                ft=ft, inputRange = inputRange)
+                        y <- .add_h5(y, z, overwrite)
+                    }
     
                     return(y)
                 })
@@ -403,7 +527,7 @@ normImages <- function(object, separateChannels = TRUE, separateImages = FALSE,
         }
         
     }
-    return(cur_out)
+    return(object)
 }
 
 
@@ -411,3 +535,31 @@ normImages <- function(object, separateChannels = TRUE, separateImages = FALSE,
 setMethod("normalize",
     signature = signature(object = "CytoImageList"),
     definition = normImages)
+
+# Function to handle h5 files
+#' @importFrom rhdf5 h5delete h5ls
+.add_h5 <- function(cur_obj, new_obj, overwrite){
+    
+    cur_file <- path(cur_obj)
+    
+    cur_name <- paste0(sub("\\.[A-Za-z0-9]*", "", basename(cur_file)), "_norm")
+    
+    if (overwrite) {
+        file.remove(cur_file)
+    } else {
+        # Check if normalisation entry already exists
+        # If so, delete it
+        if (cur_name %in% h5ls(cur_file)$name) {
+            h5delete(cur_file, cur_name)
+        }
+        
+        if (paste0(".", cur_name, "_dimnames") %in% h5ls(cur_file)$name) {
+            h5delete(cur_file, paste0(".", cur_name, "_dimnames"))
+        }
+    }
+    
+    writeHDF5Array(DelayedArray(new_obj), 
+                   filepath = cur_file,
+                   name = cur_name,
+                   with.dimnames = TRUE)
+}

@@ -4,12 +4,20 @@
 
 # Colour segmentation masks based on metadata
 #' @importFrom S4Vectors mcols
+#' @importFrom EBImage imageData<-
 .colourMaskByMeta <- function(object, mask, cell_id, img_id,
                                 colour_by, cur_colour, missing_colour,
                                 background_colour){
     
+    is_Image <- is(mask[[1]], "Image")
+    
     for(i in seq_along(mask)){
         cur_mask <- mask[[i]]
+        
+        if (!is_Image) {
+            cur_mask <- as.array(cur_mask)
+        }
+        
         cur_sce <- object[,colData(object)[,img_id] == mcols(mask)[i,img_id]]
         if (is.null(names(cur_colour))) {
             col_ind <- colorRampPalette(cur_colour)(101)
@@ -48,7 +56,16 @@
         } else {
             ind <- i
         }
-        setImages(mask, ind) <- cur_mask
+        
+        if (!is_Image) {
+            cur_out_img <- Image(data = NA, 
+                                 dim = dim(cur_mask),
+                                 colormode = "Grayscale")
+            imageData(cur_out_img) <- cur_mask
+            setImages(mask, ind) <- cur_out_img
+        } else {
+            setImages(mask, ind) <- cur_mask
+        }
     }
 
     return(list(imgs = as(mask, "SimpleList"), cur_limit = cur_limit))
@@ -128,6 +145,7 @@
 #' @importFrom grDevices colorRampPalette
 #' @importFrom SummarizedExperiment assay
 #' @importFrom S4Vectors mcols
+#' @importFrom EBImage imageData<-
 .colourMaskByFeature <- function(object, mask, cell_id, img_id,
                         colour_by, exprs_values, cur_colour,
                         missing_colour, background_colour, plottingParam){
@@ -137,9 +155,16 @@
                                     plottingParam)
     cur_limit <- object$cur_out
     object <- object$object
+    
+    is_Image <- is(mask[[1]], "Image")
 
     for(i in seq_along(mask)){
         cur_mask <- mask[[i]]
+        
+        if (!is_Image) {
+            cur_mask <- as.array(cur_mask)
+        }
+        
         cur_sce <- object[,colData(object)[,img_id] == mcols(mask)[i,img_id]]
 
         # Colour first the background
@@ -166,7 +191,17 @@
         } else{
             ind <- i
         }
-        setImages(mask, ind) <- cur_mask
+        
+        if (!is_Image) {
+            cur_out_img <- Image(data = NA, 
+                                 dim = dim(cur_mask),
+                                 colormode = "Grayscale")
+            imageData(cur_out_img) <- cur_mask
+            setImages(mask, ind) <- cur_out_img
+        } else {
+            setImages(mask, ind) <- cur_mask
+        }
+        
     }
 
     return(list(imgs = as(mask, "SimpleList"), cur_limit = cur_limit))
@@ -176,6 +211,8 @@
 #' @importFrom EBImage normalize
 .colourImageByFeature <- function(image, colour_by, bcg,
                                     cur_colour, plottingParam){
+    
+    is_Image <- is(image[[1]], "Image")
 
     if (length(colour_by) > 1) {
         max.values <- vapply(getChannels(image, colour_by), function(x){
@@ -222,6 +259,10 @@
 
     for(i in seq_along(image)){
         cur_image <- image[[i]][,,colour_by, drop = FALSE]
+        
+        if (!is_Image) {
+            cur_image <- as.array(cur_image)
+        }
 
         # Colour pixels
         # For this, we will perform a min/max scaling on the pixel values per
@@ -272,9 +313,16 @@
 #' @importFrom S4Vectors mcols
 .outlineImageByMeta <- function(object, mask, out_img, cell_id, img_id,
                                 outline_by, cur_colour, thick){
+    
+    is_Image <- is(mask[[1]], "Image")
 
     for(i in seq_along(mask)){
         cur_mask <- mask[[i]]
+        
+        if (!is_Image) {
+            cur_mask <- as.array(cur_mask)
+        }
+        
         cur_img <- out_img[[i]]
         cur_sce <- object[,colData(object)[,img_id] == mcols(mask)[i,img_id]]
 

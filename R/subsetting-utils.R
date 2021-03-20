@@ -79,10 +79,14 @@
 #' Merging channels is possible via:
 #'
 #' \describe{
-#' \item{\code{mergeChannels(x, y)}:}{Returns a CytoImageList in which
-#' the channels of the CytoImageList object \code{y} have been appended
-#' to the channels of the CytoImageList object \code{x}.
-#' Only channels of two CytoImageList objects can be merged in that way.}
+#' \item{\code{mergeChannels(x, y, h5FilesPath = NULL)}:}{
+#' Returns a CytoImageList in which the channels of the CytoImageList object
+#' \code{y} have been appended to the channels of the CytoImageList object
+#' \code{x}. Only channels of two CytoImageList objects can be merged in that
+#' way. The \code{h5FilesPath} argument can be ignored unless images are stored 
+#' on disk. To avoid overriding the .h5 files, one needs to specify a new
+#' location where the merged images are stored on disk. 
+#' }
 #' }
 #'
 #' @return A CytoImageList object
@@ -122,6 +126,17 @@
 #' channel12 <- getChannels(pancreasImages, c(1,2))
 #' channel34 <- getChannels(pancreasImages, c(3,4))
 #' mergeChannels(channel12, channel34)
+#' 
+#' # Merge channels on disk
+#' cur_images <- CytoImageList(pancreasImages,
+#'                      on_disk = TRUE, 
+#'                      h5FilesPath = HDF5Array::getHDF5DumpDir())
+#' channel12 <- getChannels(cur_images, c(1,2))
+#' channel34 <- getChannels(cur_images, c(3,4))
+#' 
+#' # This will overwrite the initial .h5 files
+#' mergeChannels(channel12, channel34,
+#'                 h5FilesPath = HDF5Array::getHDF5DumpDir())
 #'
 #' @aliases
 #' getImages getChannels mergeChannels
@@ -186,8 +201,8 @@ setReplaceMethod("setImages",
             cor_names[i] <- names(value)
         }
 
-        # If value is Image, only the image will be replaced
-        if(is(value, "Image")){
+        # If value is Image_OR_DelayedArray, only the image will be replaced
+        if(is(value, "Image_OR_DelayedArray")){
             x[[i]] <- value
         } else {
             x[i] <- value
@@ -220,9 +235,17 @@ setMethod("getChannels",
         }
 
         if(length(dim(x[[1]])) >= 3){
-            x <- S4Vectors::endoapply(x, function(y){
-                y[,,i,drop=FALSE]
-            })
+            
+            if (is(x[[1]], "Image")) {
+                x <- S4Vectors::endoapply(x, function(y){
+                    y[,,i,drop=FALSE]
+                })
+            } else {
+                x@listData <- lapply(x, function(y){
+                    y[,,i,drop=FALSE]
+                })
+            }
+
         } else {
             if(i != 1L){
                 stop(paste("For single-channel images,",
@@ -313,7 +336,7 @@ setReplaceMethod("[[",
 #' @importFrom S4Vectors mendoapply
 #' @importFrom methods is validObject
 #' @importFrom EBImage abind
-mergeChannels <- function(x, y){
+mergeChannels <- function(x, y, h5FilesPath = NULL){
     if(!is(x, "CytoImageList") || !is(y, "CytoImageList")){
         stop("'x' and 'y' must be CytoImageList objects")
     }
@@ -323,12 +346,45 @@ mergeChannels <- function(x, y){
         stop("Invalid merge operation: \n",
             "'y' needs to have same length as 'x'")
     }
+    
+    if(!all(as.character(lapply(x, class)) == 
+            as.character(lapply(y, class)))){
+        stop("Invalid merge operation: \n",
+             "'y' needs to contain the same class objects as 'x'")
+    }
 
-    x <- S4Vectors::mendoapply(function(k, u){
-        k <- abind(k,u)
-        return(k)
-    }, x, y)
-
+    
+    if (is(x[[1]], "Image")) {
+        x <- S4Vectors::mendoapply(function(k, u){
+            k <- abind(k,u)
+            return(k)
+        }, x, y)
+    } else {
+        
+        if (is.null(h5FilesPath)){
+            stop("Please specify the filepath \n", 
+                 "where the merged images should be stored.")
+        }
+        
+        x@listData <- mapply(function(cur_name, k, u){
+            cur_array <- abind(as.array(k), as.array(u))
+            
+            cur_file <- file.path(h5FilesPath, paste0(cur_name, ".h5"))
+            
+            # Check if file already exists
+            # If so, delete them
+            if (file.exists(cur_file)) {
+                file.remove(cur_file)
+            }
+            
+            writeHDF5Array(DelayedArray(cur_array), 
+                           filepath = cur_file,
+                           name = cur_name,
+                           with.dimnames = TRUE)
+    
+        }, names(x), x, y, SIMPLIFY = FALSE)
+    }
+        
     validObject(x)
 
     return(x)

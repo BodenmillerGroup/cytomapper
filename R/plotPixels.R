@@ -187,6 +187,8 @@ plotPixels <- function(
 
     cur_col <- list()
     cur_limits <- list()
+    
+    is_Image_mask <- is(mask[[1]], "Image")
 
     # Colour the images
     # Here, a SimpleList is returned that allows storing colour Images
@@ -232,9 +234,16 @@ plotPixels <- function(
         out_img <- out_img$imgs
     } else if (!is.null(mask)) {
         out_img <- mendoapply(function(cur_image, cur_mask){
-            cur_img <- paintObjects(cur_mask, Image(cur_image),
-                                col = plottingParam$missing_colour,
-                                thick = plottingParam$thick)
+            
+            if (is_Image_mask) {
+                cur_img <- paintObjects(cur_mask, Image(cur_image),
+                                        col = plottingParam$missing_colour,
+                                        thick = plottingParam$thick)
+            } else {
+                cur_img <- paintObjects(as.array(cur_mask), Image(cur_image),
+                                        col = plottingParam$missing_colour,
+                                        thick = plottingParam$thick)
+            }
             return(cur_img)
         }, out_img, mask)
         out_img <- as(out_img, "SimpleList")

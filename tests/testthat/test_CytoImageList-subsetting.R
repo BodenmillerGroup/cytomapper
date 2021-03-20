@@ -46,6 +46,12 @@ test_that("Merging works on CytoImageList object.", {
   expect_silent(channels3 <- mergeChannels(channels1, channels2))
   expect_equal(channelNames(channels3), c("H3", "CD99", "PIN", "CD8a"))
   expect_equal(names(channels3), c("E34_imc", "G01_imc", "J02_imc"))
+  
+  # Check if mcols are correctly set
+  mcols(channels1) <- DataFrame(test = c("test1", "test2", "test3"))
+  mcols(channels2) <- DataFrame(test2 = c("test5", "test6", "test7"))
+  expect_silent(channels3 <- mergeChannels(channels1, channels2))
+  expect_equal(mcols(channels3), mcols(channels1))
 
   ## Should not work
   channels1 <- getChannels(pancreasImages, 1:2)

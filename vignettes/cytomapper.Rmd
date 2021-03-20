@@ -4,13 +4,19 @@ date: "`r BiocStyle::doc_date()`"
 package: "`r BiocStyle::pkg_ver('cytomapper')`"
 author:
 - name: Nils Eling
-  affiliation: Department for Quantitative Biomedicine, University of Zurich
+  affiliation: 
+  - Department for Quantitative Biomedicine, University of Zurich
+  - Institute for Molecular Health Sciences, ETH Zurich
   email: nils.eling@dqbm.uzh.ch
 - name: Nicolas Damond
-  affiliation: Department for Quantitative Biomedicine, University of Zurich
+  affiliation: 
+  - Department for Quantitative Biomedicine, University of Zurich
+  - Institute for Molecular Health Sciences, ETH Zurich
   email: nicolas.damond@dqbm.uzh.ch
 - name: Tobias Hoch
-  affiliation: Department for Quantitative Biomedicine, University of Zurich
+  affiliation: 
+  - Department for Quantitative Biomedicine, University of Zurich
+  - Institute for Molecular Health Sciences, ETH Zurich
   email: tobias.hoch@dqbm.uzh.ch
 output:
     BiocStyle::html_document:
@@ -29,7 +35,7 @@ abstract: |
     pixel-level information across multiple channels and 2. the display of
     cell-level information (expression and/or metadata) on segmentation masks.
 vignette: |
-    %\VignetteIndexEntry{"Visualization of imaging cytometry data in R}
+    %\VignetteIndexEntry{"Visualization of imaging cytometry data in R"}
     %\VignetteEngine{knitr::rmarkdown}
     %\VignetteEncoding{UTF-8}
 ---

@@ -52,6 +52,8 @@ test_that("CytoImageList can be normalized", {
                                         separateChannels = TRUE))
   expect_silent(plotPixels(cur_images,
                            colour_by = c("H3", "CD99")))
+  expect_silent(plotPixels(cur_images,
+                           colour_by = c("H3", "CD99"), scale = FALSE))
 
   expect_equal(imageData(cur_images[[1]])[1, 1:10,1],
                imageData(pancreasImages[[1]])[1, 1:10,1]/max(imageData(pancreasImages[[1]])[,,1]),

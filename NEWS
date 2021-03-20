@@ -140,3 +140,6 @@ Changes in version 1.3.2 (2021-01-12):
 Changes in version 1.3.3 (2021-01-24):
 + Added snapshot tests for shiny
 + Support win32 again
+
+Changes in version 1.3.4 (2021-03-20):
++ Support on disk representation of images

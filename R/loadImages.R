@@ -21,6 +21,17 @@
 #' \item{A character vector}{Unique entries are matched against
 #' file names in the specified path.}
 #' }
+#' @param on_disk Logical indicating if images in form of
+#' \linkS4class{HDF5Array} objects (as .h5 files) should be stored on disk
+#' rather than in memory.
+#' @param h5FilesPath path to where the .h5 files for on disk representation
+#' are stored. This path needs to be defined when \code{on_disk = TRUE}.
+#' When files should only temporarily be stored on disk, please set
+#' \code{h5FilesPath = getHDF5DumpDir()}
+#' @param BPPARAM parameters for parallelised reading in of images. 
+#' This is only recommended for very large images. 
+#' See \code{\linkS4class{MulticoreParam}} for information on how to use multiple
+#' cores for parallelised processing.
 #' @param ... arguments passed to the \code{\link{readImage}} function.
 #'
 #' @return A \linkS4class{CytoImageList} object
@@ -53,6 +64,16 @@
 #' list.images <- list.files(system.file("extdata", package = "cytomapper"),
 #'                             pattern = "_mask.tiff", full.names = TRUE)
 #' image.list <- loadImages(list.images)
+#' 
+#' # On disk representation
+#' path.to.images <- system.file("extdata", package = "cytomapper")
+#' image.list <- loadImages(path.to.images, pattern = "mask.tiff",
+#'                             on_disk = TRUE, h5FilesPath = HDF5Array::getHDF5DumpDir())
+#'                             
+#' # Parallel processing
+#' path.to.images <- system.file("extdata", package = "cytomapper")
+#' image.list <- loadImages(path.to.images, pattern = "mask.tiff",
+#'                             BPPARAM = BiocParallel::MulticoreParam())
 #'
 #' @seealso
 #' \code{\link{readImage}}, for reading in individual images.
@@ -61,16 +82,49 @@
 #' @author Nicolas Damond (\email{nicolas.damond@@dqbm.uzh.ch})
 #'
 #' @export
-loadImages <- function(x, pattern = NULL, ...) {
+#' @importFrom BiocParallel bplapply SerialParam
+#' @importFrom HDF5Array writeHDF5Array
+#' @importFrom DelayedArray DelayedArray
+#' @importFrom EBImage imageData
+loadImages <- function(x, pattern = NULL, on_disk = FALSE, h5FilesPath = NULL, 
+                        BPPARAM = SerialParam(), ...) {
 
     # Validity checks
     x <- .valid.loadImage.input(x, pattern)
 
     # Read in images
-    cur_list <- lapply(x, function(y){EBImage::readImage(y, ...,
-                                        names = NULL)})
-    out <- CytoImageList(cur_list)
-    names(out) <- sub("\\.[^.]*$", "", basename(x))
+    cur_list <- bplapply(x, function(y){
+            cur_img <- EBImage::readImage(y, ..., names = NULL)
+        
+            if (on_disk) {
+                
+                if (is.null(h5FilesPath)) {
+                    stop("When storing the images on disk, please specify a 'h5FilesPath'. \n",
+                         "You can use 'h5FilesPath = getHDF5DumpDir()' to temporarily store the images.\n",
+                         "If doing so, .h5 files will be deleted once the R session ends.")
+                }
+                
+                # Build filename
+                cur_name <- sub("\\.[^.]*$", "", basename(y))
+                cur_file <- file.path(h5FilesPath, paste0(cur_name, ".h5"))
+                
+                # Check if file already exists
+                # If so, delete them
+                if (file.exists(cur_file)) {
+                    file.remove(cur_file)
+                }
+                
+                writeHDF5Array(DelayedArray(imageData(cur_img)), 
+                               filepath = cur_file,
+                               name = cur_name,
+                               with.dimnames = TRUE)
+            } else {
+                cur_img
+            }
+        }, BPPARAM = BPPARAM)
+    
+    names(cur_list) <- sub("\\.[^.]*$", "", basename(x))
+    out <- CytoImageList(cur_list, on_disk = on_disk, h5FilesPath = h5FilesPath)
 
     return(out)
 }
