@@ -314,6 +314,25 @@
     }
 }
 
+#' @importFrom S4Vectors mcols
+.valid.matchObjects.measureObjects <- function(mask, image, img_id){
+    if(is.null(img_id)){
+        stop("'img_id' is missing.")
+    }
+    
+    image_images <- mcols(image)[,img_id]
+    mask_images <- mcols(mask)[,img_id]
+    if(!identical(mask_images, image_images)){
+        stop("Mask and image ids must be identical.")
+    }
+        
+    image_dims <- unlist(lapply(image, function(x){dim(x)[c(1,2)]}))
+    mask_dims <- unlist(lapply(mask, function(x){dim(x)[c(1,2)]}))
+    if(!identical(as.numeric(image_dims), as.numeric(mask_dims))){
+        stop("Mask and image entries must have the same dimensions.")
+    }
+}
+
 #' @importFrom S4Vectors isEmpty
 .valid.colour_by <- function(colour_by, object, image,
         call.arg = c("plotCells", "plotPixels")){
@@ -494,3 +513,75 @@
         stop("'bcg': specify in form of numeric entries")
     }
 }
+
+# Valid features for measuring objects
+.valid.features <- function(feature_types, basic_feature, 
+                            shape_feature, moment_feature, basic.quantiles){
+    if (!all(feature_types %in% c("basic", "shape", "moment", "haralick"))) {
+        stop("Only features of type 'basic', 'shape', 'moment' and 'haralick' are allowed.")
+    }
+    
+    if (!("basic" %in% feature_types) & is.null(basic_feature)) {
+        stop("Please specify a basic feature to characterise the marker expression per cell.")
+    }
+
+    if (length(basic_feature) > 1) {
+        stop("Only one intensity feature can be used to characterise the expression of each marker in each object.")
+    }
+    
+    if (!is.null(basic.quantiles)) {
+        
+        if (!all(is.numeric(basic.quantiles)) & !all(basic.quantiles < 1) & !all(basic.quantiles > 0)){
+            stop("Only numeric quantiles between 0 and 1 allowed.")
+        }
+        
+        str_quantiles <- lapply(strsplit(as.character(basic.quantiles), "\\."), paste, collapse = "")
+        basic_features_allowed <- c("mean", "sd", "mad", paste0("q", unlist(str_quantiles)))
+    } else {
+        basic_features_allowed <- c("mean", "sd", "mad")
+    }
+        
+    if (!basic_feature %in% basic_features_allowed) {
+        stop("Only basic features of type 'mean', 'sd', 'mad' or the selected quantiles allowed,")
+    }
+    
+    if ("shape" %in% feature_types) {
+        if (is.null(shape_feature)) {
+            stop("Specify at least one shape feature.")
+        }
+        
+        if (!all(shape_feature %in% c("area", "perimeter", "radius.mean", "radius.sd", "radius.max", "radius.min"))) {
+            stop("Only shape features of type 'area', 'perimeter', 'radius.mean', 'radius.sd', 'radius.max', 'radius.min' allowed,")
+        }
+    }
+    
+    if ("moment" %in% feature_types) {
+        if (is.null(moment_feature)) {
+            stop("Specify at least one moment feature.")
+        }
+    
+        if (!all(moment_feature %in% c("cx", "cy", "majoraxis", "eccentricity", "theta"))) {
+            stop("Only moment features of type 'cx', 'cy', 'majoraxis', 'eccentricity', 'theta' allowed,")
+        }
+    }
+    
+    if ("haralick" %in% feature_types) {
+        if (is.null(haralick_feature)) {
+            stop("Specify at least one haralick feature.")
+        }
+        
+        if (!all(haralick_feature %in% c("asm.s1", "con.s1", "cor.s1", "var.s1", "idm.s1", "sav.s1", "sva.s1",
+                                         "sen.s1", "ent.s1", "dva.s1", "den.s1", "f12.s1",
+                                         "f13.s1", "asm.s2", "con.s2", "cor.s2", "var.s2",
+                                         "idm.s2", "sav.s2", "sva.s2", "sen.s2", "ent.s2", "dva.s2",
+                                         "den.s2", "f12.s2", "f13.s2"))) {
+            stop("Only moment features of type 'asm.s1', 'con.s1', 'cor.s1',",
+                 "'var.s1', 'idm.s1', 'sav.s1', 'sva.s1', 'sen.s1', 'ent.s1',\n",
+                 "'dva.s1', 'den.s1', 'f12.s1', 'f13.s1', 'asm.s2', 'con.s2',",
+                 "'cor.s2', 'var.s2', 'idm.s2', 'sav.s2', 'sva.s2', 'sen.s2',",
+                 "'ent.s2', 'dva.s2', 'den.s2', 'f12.s2', 'f13.s2' allowed,")
+        }
+    }
+    
+}
+
