@@ -570,16 +570,23 @@
             stop("Specify at least one haralick feature.")
         }
         
-        if (!all(haralick_feature %in% c("asm.s1", "con.s1", "cor.s1", "var.s1", "idm.s1", "sav.s1", "sva.s1",
-                                         "sen.s1", "ent.s1", "dva.s1", "den.s1", "f12.s1",
-                                         "f13.s1", "asm.s2", "con.s2", "cor.s2", "var.s2",
-                                         "idm.s2", "sav.s2", "sva.s2", "sen.s2", "ent.s2", "dva.s2",
-                                         "den.s2", "f12.s2", "f13.s2"))) {
-            stop("Only moment features of type 'asm.s1', 'con.s1', 'cor.s1',",
-                 "'var.s1', 'idm.s1', 'sav.s1', 'sva.s1', 'sen.s1', 'ent.s1',\n",
-                 "'dva.s1', 'den.s1', 'f12.s1', 'f13.s1', 'asm.s2', 'con.s2',",
-                 "'cor.s2', 'var.s2', 'idm.s2', 'sav.s2', 'sva.s2', 'sen.s2',",
-                 "'ent.s2', 'dva.s2', 'den.s2', 'f12.s2', 'f13.s2' allowed,")
+        if (is.null(haralick.nbins) | !is.numeric(haralick.nbins) | length(haralick.nbins) > 1) {
+            stop("Specify the number of bins into which intensity levels are binned.")
+        }
+        
+        if (is.null(haralick.scales) | !is.numeric(haralick.scales)) {
+            stop("Specify the scale (in pixels) over which the haralick features are computed.")
+        }
+        
+        haralick_features_allowed <- c("asm", "con", "cor", "var", "idm", "sav", "sva",
+                                       "sen", "ent", "dva", "den", "f12",
+                                       "f13")
+        haralick_features_allowed <- paste0(rep(haralick_features_allowed, length(haralick.scales)), 
+                                            ".",
+                                            rep(paste0("s", haralick.scales), each = length(haralick_features_allowed)))
+        
+        if (!all(haralick_feature %in% haralick_features_allowed)) {
+            stop("Only haralick features of type ", paste(haralick_features_allowed, collapse = ", "), " allowed.")
         }
     }
     

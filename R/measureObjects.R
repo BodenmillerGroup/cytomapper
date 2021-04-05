@@ -14,6 +14,8 @@
 #' @section The returned SingleCellExperiment objects:
 #' basic_feature defines the entry to counts assay
 #' moment_features are only computed on masks
+#' Rotation invariant haralick features: average in all four directions. 
+#' 
 #'
 #' @examples
 #' # Examples
@@ -35,13 +37,16 @@ measureObjects <- function(mask,
                            moment_feature = c("majoraxis", "eccentricity"),
                            haralick_feature = NULL,
                            basic.quantiles = NULL,
+                           haralick.nbins = 32,
+                           haralick.scales = c(1, 2),
                            ...) {
 
     # Validity checks
     .valid.mask(mask)
     .valid.image(image)
     .valid.matchObjects.measureObjects(mask, image, img_id)
-    .valid.features(feature_types, basic_feature, shape_feature, moment_feature, basic.quantiles)
+    .valid.features(feature_types, basic_feature, shape_feature, moment_feature, haralick_feature, basic.quantiles,
+                    haralick.nbins, haralick.scales)
     
     return(sce)
 }
