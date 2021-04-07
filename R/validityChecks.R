@@ -586,9 +586,9 @@
         haralick_features_allowed <- c("asm", "con", "cor", "var", "idm", "sav", "sva",
                                        "sen", "ent", "dva", "den", "f12",
                                        "f13")
-        haralick_features_allowed <- paste0(rep(haralick_features_allowed, length(haralick.scales)), 
+        haralick_features_allowed <- paste0(rep(haralick_features_allowed, length(haralick_scales)), 
                                             ".",
-                                            rep(paste0("s", haralick.scales), each = length(haralick_features_allowed)))
+                                            rep(paste0("s", haralick_scales), each = length(haralick_features_allowed)))
         
         if (!all(haralick_feature %in% haralick_features_allowed)) {
             stop("Only haralick features of type ", paste(haralick_features_allowed, collapse = ", "), " allowed.")

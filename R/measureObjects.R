@@ -1,5 +1,4 @@
-#' @title Compute morphological and intensity features from objects on images.
-#' @name measureObjects
+#' Compute morphological and intensity features from objects on images.
 #'
 #' For each object (e.g. cell) identified by segmentation, the
 #' \code{measureObjects} function computes intensity features (also referred to
@@ -75,7 +74,7 @@
 #' \item m.cx: x centroid position of object
 #' \item m.cy: y centroid position of object
 #' \item m.majoraxis: major axis length in pixels of elliptical fit
-#' \item m.eccentricity: elliptical eccentricity. 1 meaning straight line and 0
+#' \item m.eccentricity: elliptical eccentricity. 1 meaning straight line and 0 
 #' meaning circle.
 #' }
 #' }
@@ -114,6 +113,8 @@
 #' @export
 #' @importFrom EBImage computeFeatures.basic computeFeatures.shape computeFeatures.moment computeFeatures.haralick
 #' @importFrom BiocParallel SerialParam bpmapply
+#' @importFrom S4Vectors DataFrame
+#' @importFrom SummarizedExperiment colData<-
 #' @importClassesFrom SingleCellExperiment SingleCellExperiment
 measureObjects <- function(mask, 
                            image,
@@ -179,8 +180,8 @@ measureObjects <- function(mask,
         if ("haralick" %in% feature_types) {
             cur_haralick <- apply(as.array(cur_image), 3, function(x){
                 cur_haralick_ch <- computeFeatures.haralick(x = cur_mask, ref = x, 
-                                                            haralick.nbins = haralick.nbins,
-                                                            haralick.scales = haralick.scales)
+                                                            haralick.nbins = haralick_nbins,
+                                                            haralick.scales = haralick_scales)
                 rownames(cur_haralick_ch) <- seq_len(nrow(cur_haralick_ch))
                 cur_haralick_ch <- cur_haralick_ch[rownames(cur_basic),]
                 cur_haralick_ch <- cur_haralick_ch[,sub("h.", "", colnames(cur_haralick_ch)) %in% haralick_feature, drop = FALSE]
