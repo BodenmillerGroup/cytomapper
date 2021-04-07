@@ -207,9 +207,13 @@
         !(cell_id %in% colnames(colData(object)))){
         stop("'img_id' and/or 'cell_id' not in 'colData(object)'.")
     }
+    
+    if (!all(is.numeric(colData(object)[,cell_id]))) {
+        stop("Cell ids should only contain numeric integer values.")
+    }
 
     if(!all(colData(object)[,cell_id] == floor(colData(object)[,cell_id]))){
-        stop("Cell ids should only contain integer values.")
+        stop("Cell ids should only contain numeric integer values.")
     }
 
     if(!is.null(exprs_values) && !(exprs_values %in% assayNames(object))){
