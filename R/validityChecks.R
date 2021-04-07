@@ -519,8 +519,9 @@
 }
 
 # Valid features for measuring objects
-.valid.features <- function(feature_types, basic_feature, 
-                            shape_feature, moment_feature, basic.quantiles){
+.valid.features <- function(feature_types, basic_feature, shape_feature, moment_feature, 
+                            haralick_feature, basic_quantiles,
+                            haralick_nbins, haralick_scales){
     if (!all(feature_types %in% c("basic", "shape", "moment", "haralick"))) {
         stop("Only features of type 'basic', 'shape', 'moment' and 'haralick' are allowed.")
     }
@@ -533,13 +534,13 @@
         stop("Only one intensity feature can be used to characterise the expression of each marker in each object.")
     }
     
-    if (!is.null(basic.quantiles)) {
+    if (!is.null(basic_quantiles)) {
         
-        if (!all(is.numeric(basic.quantiles)) & !all(basic.quantiles < 1) & !all(basic.quantiles > 0)){
+        if (!all(is.numeric(basic_quantiles)) & !all(basic_quantiles < 1) & !all(basic_quantiles > 0)){
             stop("Only numeric quantiles between 0 and 1 allowed.")
         }
         
-        str_quantiles <- lapply(strsplit(as.character(basic.quantiles), "\\."), paste, collapse = "")
+        str_quantiles <- lapply(strsplit(as.character(basic_quantiles), "\\."), paste, collapse = "")
         basic_features_allowed <- c("mean", "sd", "mad", paste0("q", unlist(str_quantiles)))
     } else {
         basic_features_allowed <- c("mean", "sd", "mad")
@@ -574,11 +575,11 @@
             stop("Specify at least one haralick feature.")
         }
         
-        if (is.null(haralick.nbins) | !is.numeric(haralick.nbins) | length(haralick.nbins) > 1) {
+        if (is.null(haralick_nbins) | !is.numeric(haralick_nbins) | length(haralick_nbins) > 1) {
             stop("Specify the number of bins into which intensity levels are binned.")
         }
         
-        if (is.null(haralick.scales) | !is.numeric(haralick.scales)) {
+        if (is.null(haralick_scales) | !is.numeric(haralick_scales)) {
             stop("Specify the scale (in pixels) over which the haralick features are computed.")
         }
         
