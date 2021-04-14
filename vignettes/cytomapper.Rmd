@@ -81,8 +81,10 @@ Cell-level expression and metadata can be processed and read into a
 `SingleCellExperiment` class object. For more information on the
 `SingleCellExperiment` object and how to create it, please see the 
 `r Biocpkg("SingleCellExperiment")` package and the 
-[Orchestrating Single-Cell Analysis with Bioconductor](https://osca.bioconductor.org/data-infrastructure.html#the-singlecellexperiment-class)
-workflow.
+[Orchestrating Single-Cell Analysis with Bioconductor](https://bioconductor.org/books/release/OSCA/data-infrastructure.html)
+workflow. Furthermore, the `cytomapper` package provides the
+[measureObjects](#measureObjects) function that generates a
+`SingleCellExperiment` based on segmentation masks and multi-channel images.
 
 The `cytomapper` package provides a new `CytoImageList` class as a container for
 multiplexed images or segmentation masks. For more information on this class,
@@ -145,7 +147,9 @@ plotCells(mask = pancreasMasks, object = pancreasSCE,
 
 For more information on the data formats and requirements, refer to the
 following section. More details on the `plotCells` function are provided in the
-[Plotting cell information](#CellInfo) section.
+[Plotting cell information](#CellInfo) section. Also refer to the
+[measureObjects](#measureObjects) function to generate a `SingleCellExperiment`
+directly from the images.
 
 # Data formats {#DataFormats}
 
@@ -333,6 +337,17 @@ all_masks <- scaleImages(all_masks, 2^16-1)
 head(unique(as.numeric(all_masks[[1]])))
 ```
 
+Alternatively, the `as.is` parameter can be set to `TRUE` to attempt image
+scaling while reading in the images:
+
+```{r as.is}
+all_masks_2 <- loadImages(path.to.images, pattern = "_mask.tiff", as.is = TRUE)
+head(unique(as.numeric(all_masks_2[[1]])))
+```
+
+However, care needs to be taken and masks and images need to be checked if they
+are correctly imported.
+
 For this toy dataset, the multi-channel images are not affected by this scaling 
 factor. The final `all_masks` object corresponds to the `pancreasMasks` object 
 provided by `cytomapper`.
@@ -349,6 +364,25 @@ channelNames(all_stacks) <- c("H3", "CD99", "PIN", "CD8a", "CDH")
 
 The read-in data can now be used for visualization as explained in the [Quick
 start section](#QuickStart).
+
+## Generating the SingleCellExperiment object {#measureObjects}
+
+Based on the processed segmentation masks and multi-channel images, 
+`cytomapper` can be used to measure cell-specific intensities and morphological features.
+These features are stored in form of a `SingleCellExperiment` object:
+
+```{r measureObjects}
+sce <- measureObjects(all_masks, all_stacks, img_id = "ImageNb")
+sce
+```
+
+By default, the mean intensities per cell and channel are stored in `counts(sce)`
+while all other morphological features are stored in `colData(sce)`:
+
+```{r counts-sce}
+counts(sce)[1:5, 1:5]
+colData(sce)
+```
 
 # The CytoImageList object {#CytoImageList}
 
