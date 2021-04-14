@@ -20,16 +20,16 @@ measureObjects(
 )
 }
 \arguments{
-\item{mask}{a \code{\linkS4class{CytoImageList}} containing single-channel
-\code{\linkS4class{Image}} or \code{\linkS4class{HDF5Array}} objects. 
+\item{mask}{a \code{\linkS4class{CytoImageList}} object containing single-channel
+\code{\linkS4class{Image}} or \code{\linkS4class{HDF5Array}} objects.
 Segmentation masks must contain integer pixel values where groups of
 pixels correspond to objects.}
 
 \item{image}{a \code{\linkS4class{CytoImageList}} object containing single or
 multi-channel \code{\linkS4class{Image}} or \code{\linkS4class{HDF5Array}}
-objects.}
+objects, where each channel indicates the measured pixel intensities.}
 
-\item{img_id}{character specifying the \code{mcols(image)} and 
+\item{img_id}{character specifying the \code{mcols(image)} and
 \code{mcols(mask)} entry, in which the image IDs are stored.}
 
 \item{feature_types}{character vector or string indicating which features to
@@ -40,8 +40,8 @@ compute. Needs to contain \code{"basic"}. Optionally, \code{"shape"},
 \item{basic_feature}{string indicating which intensity measurement per object
 and channel should be used to populate the \code{counts(x)} slot; where
 \code{x} is the returned \code{SingleCellExperiment} object. Default
-\code{"mean"} but \code{"sd"}, \code{"mad"} and \code{"q\*"} allowed. Here,
-\code{\*} indicates the computed quantile (see \code{basic_quantiles}).}
+\code{"mean"} but \code{"sd"}, \code{"mad"} and \code{"q*"} allowed. Here,
+\code{*} indicates the computed quantile (see \code{basic_quantiles}).}
 
 \item{basic_quantiles}{numeric vector or single number indicating which
 quantiles to compute. Default none.}
@@ -57,7 +57,7 @@ features to compute. Default \code{"cx"}, \code{"cy"}, \code{"majoraxis"},
 and \code{"eccentricity"}. Other allowed features are \code{"theta"}. Here
 moment features are only computed on the segmentation mask without
 incorporating pixel intensities. Therefore, \code{"cx"} and \code{"cy"} are
-the x and y coordinates of the centroids.}
+the x and y coordinates of the cell centroids.}
 
 \item{haralick_feature}{string or character vector indicating which haralick
 features to compute. Default none. Allowed are the 13 haralick features:
@@ -65,7 +65,7 @@ features to compute. Default none. Allowed are the 13 haralick features:
 \code{"sav"}, \code{"sva"}, \code{"sen"}, \code{"ent"}, \code{"dva"},
 \code{"den"}, \code{"f12"}, \code{"f13"}}
 
-\item{haralick_nbins}{an integer indicating the number of bins using to
+\item{haralick_nbins}{an integer indicating the number of bins used to
 compute the haralick matrix. Pixel intensities are binned in
 \code{haralick_nbins} discrete gray levels before computing the haralick
 matrix.}
@@ -74,7 +74,7 @@ matrix.}
 (distance at which to consider neighbouring pixels) to use to compute the
 haralick features.}
 
-\item{BPPARAM}{parameters for parallelised processing of images. 
+\item{BPPARAM}{parameters for parallelised processing of images.
 See \code{\linkS4class{MulticoreParam}} for information on how to use multiple
 cores for parallelised processing.}
 }
@@ -108,7 +108,7 @@ haralick (\code{h.}) features. Default features are the following:
 \item m.cx: x centroid position of object
 \item m.cy: y centroid position of object
 \item m.majoraxis: major axis length in pixels of elliptical fit
-\item m.eccentricity: elliptical eccentricity. 1 meaning straight line and 0 
+\item m.eccentricity: elliptical eccentricity. 1 meaning straight line and 0
 meaning circle.
 }
 }
@@ -137,13 +137,13 @@ sce <- measureObjects(pancreasMasks, pancreasImages, img_id = "ImageNb",
 colData(sce)
 
 # Visualize on segmentation masks
-plotCells(pancreasMasks, object = sce, img_id = "ImageNb", 
+plotCells(pancreasMasks, object = sce, img_id = "ImageNb",
             cell_id = "object_id", colour_by = "PIN")
 
 }
 \seealso{
 \code{\link{computeFeatures}}, for detailed explanation for the computed features.
-\url{https://earlglynn.github.io/RNotes/package/EBImage/Haralick-Textural-Features.html} 
+\url{https://earlglynn.github.io/RNotes/package/EBImage/Haralick-Textural-Features.html}
 for more discussion on the haralick features
 }
 \author{
