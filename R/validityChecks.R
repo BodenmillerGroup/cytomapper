@@ -526,7 +526,7 @@
         stop("Only features of type 'basic', 'shape', 'moment' and 'haralick' are allowed.")
     }
     
-    if (!("basic" %in% feature_types) & is.null(basic_feature)) {
+    if (!("basic" %in% feature_types) | is.null(basic_feature)) {
         stop("Please specify a basic feature to characterise the marker expression per cell.")
     }
 
@@ -536,7 +536,7 @@
     
     if (!is.null(basic_quantiles)) {
         
-        if (!all(is.numeric(basic_quantiles)) & !all(basic_quantiles < 1) & !all(basic_quantiles > 0)){
+        if (!all(is.numeric(basic_quantiles)) | !all(basic_quantiles < 1) | !all(basic_quantiles > 0)){
             stop("Only numeric quantiles between 0 and 1 allowed.")
         }
         
@@ -547,7 +547,7 @@
     }
         
     if (!basic_feature %in% basic_features_allowed) {
-        stop("Only basic features of type 'mean', 'sd', 'mad' or the selected quantiles allowed,")
+        stop("Only basic features of type 'mean', 'sd', 'mad' or the selected quantiles allowed.")
     }
     
     if ("shape" %in% feature_types) {
@@ -556,7 +556,7 @@
         }
         
         if (!all(shape_feature %in% c("area", "perimeter", "radius.mean", "radius.sd", "radius.max", "radius.min"))) {
-            stop("Only shape features of type 'area', 'perimeter', 'radius.mean', 'radius.sd', 'radius.max', 'radius.min' allowed,")
+            stop("Only shape features of type 'area', 'perimeter', 'radius.mean', 'radius.sd', 'radius.max', 'radius.min' allowed.")
         }
     }
     
@@ -566,7 +566,7 @@
         }
     
         if (!all(moment_feature %in% c("cx", "cy", "majoraxis", "eccentricity", "theta"))) {
-            stop("Only moment features of type 'cx', 'cy', 'majoraxis', 'eccentricity', 'theta' allowed,")
+            stop("Only moment features of type 'cx', 'cy', 'majoraxis', 'eccentricity', 'theta' allowed.")
         }
     }
     

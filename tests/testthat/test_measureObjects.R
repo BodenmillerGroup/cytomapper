@@ -1,10 +1,10 @@
-test_that("measureObjects: inputs work", {
+test_that("measureObjects: defaults work", {
     data("pancreasSCE")
     data("pancreasMasks")
     data("pancreasImages")
     
     # Works
-    sce <- measureObjects(pancreasMasks, pancreasImages, img_id = "ImageNb")
+    expect_silent(sce <- measureObjects(pancreasMasks, pancreasImages, img_id = "ImageNb"))
     cur_H3 <- c(tapply(pancreasImages[[1]][,,1], pancreasMasks[[1]], mean)[-1],
                 tapply(pancreasImages[[2]][,,1], pancreasMasks[[2]], mean)[-1],
                 tapply(pancreasImages[[3]][,,1], pancreasMasks[[3]], mean)[-1])
@@ -21,33 +21,206 @@ test_that("measureObjects: inputs work", {
                 tapply(pancreasImages[[2]][,,5], pancreasMasks[[2]], mean)[-1],
                 tapply(pancreasImages[[3]][,,5], pancreasMasks[[3]], mean)[-1])
     
+    # Intensities
+    expect_equal(as.numeric(cur_H3), counts(sce)["H3",])
+    expect_equal(as.numeric(cur_CD99), counts(sce)["CD99",])
+    expect_equal(as.numeric(cur_PIN), counts(sce)["PIN",])
+    expect_equal(as.numeric(cur_CD8a), counts(sce)["CD8a",])
+    expect_equal(as.numeric(cur_CDH), counts(sce)["CDH",])
     
+    # Other entries
+    expect_equal(sce$ImageNb, pancreasSCE$ImageNb)
+    expect_equal(sce$object_id, pancreasSCE$CellNb)
+    expect_equal(rownames(sce), rownames(pancreasSCE))
+    expect_equal(rownames(sce), channelNames(pancreasImages))
+    
+    # colData entries
+    expect_equal(names(colData(sce)), 
+                 c("ImageNb", "object_id", "s.area", "s.radius.mean", 
+                   "m.cx", "m.cy", "m.majoraxis", "m.eccentricity"))
+    area <- c(table(pancreasMasks[[1]])[-1],
+                table(pancreasMasks[[2]])[-1],
+                table(pancreasMasks[[3]])[-1])
+    expect_equal(sce$s.area, as.numeric(area))
+    expect_equal(sce$s.radius.mean[20:30], 
+                 c(4.636644, 4.764700, 3.166851, 3.637420, 4.538360, 4.423855, 5.031715, 4.556145, 4.854957, 2.911706, 3.895167),
+                 tolerance = 0.0001)
+    expect_equal(sce$m.cx[20:30], 
+                 c(3.776316, 29.804878, 97.243902, 58.478261, 80.092105, 39.873239, 70.260870, 12.092105, 84.920000,  2.588235, 21.271186),
+                 tolerance = 0.0001)
+    expect_equal(sce$m.cy[20:30], 
+                 c(13.71053, 17.71951, 16.12195, 18.56522, 18.36842, 21.67606, 23.11957, 23.78947, 25.02667, 24.50000, 27.27119),
+                 tolerance = 0.0001)
+    expect_equal(sce$m.majoraxis[20:30], 
+                 c(14.651483, 12.792813,  8.718651, 10.983645, 11.665788, 11.333186, 13.358161, 13.151296, 16.216661,  9.080632,  9.137610),
+                 tolerance = 0.0001)
+    expect_equal(sce$m.eccentricity[20:30], 
+                 c(0.8771370, 0.7160534, 0.7079446, 0.8471241, 0.6798998, 0.6019294, 0.7431450, 0.8167983, 0.9096242, 0.8334293, 0.4357446),
+                 tolerance = 0.0001)
+    
+    # Other standard input
     sce <- measureObjects(pancreasMasks, pancreasImages, img_id = "ImageNb", 
                           feature_types = "basic")
+    expect_equal(names(colData(sce)), 
+                 c("ImageNb", "object_id"))
     sce <- measureObjects(pancreasMasks, pancreasImages, img_id = "ImageNb", 
                           feature_types = c("basic", "shape"))
+    expect_equal(names(colData(sce)), 
+                 c("ImageNb", "object_id", "s.area", "s.radius.mean"))
     sce <- measureObjects(pancreasMasks, pancreasImages, img_id = "ImageNb", 
                           feature_types = c("basic", "shape", "moment"))
+    expect_equal(names(colData(sce)), 
+                 c("ImageNb", "object_id", "s.area", "s.radius.mean", 
+                   "m.cx", "m.cy", "m.majoraxis", "m.eccentricity"))
     sce <- measureObjects(pancreasMasks, pancreasImages, img_id = "ImageNb", 
                           feature_types = c("basic", "shape", "moment", "haralick"), 
                           haralick_feature = "ent.s1")
+    expect_equal(names(colData(sce)), 
+                 c("ImageNb", "object_id", "s.area", "s.radius.mean", 
+                   "m.cx", "m.cy", "m.majoraxis", "m.eccentricity",
+                   "H3.h.ent.s1", "CD99.h.ent.s1", "PIN.h.ent.s1", "CD8a.h.ent.s1", "CDH.h.ent.s1"))
+    expect_equal(sce$H3.h.ent.s1[20:30], 
+                 c(0.92239897, 0.18210610, 0.00000000, 0.28466019, 0.24327757, 0.28306235, 0.31983314, 0.26878196, 0.05829775, 0.00000000, 0.54267473),
+                 tolerance = 0.0001)
+    expect_equal(sce$CD99.h.ent.s1[20:30], 
+                 c(1.0087171, 0.6879652, 0.0000000, 0.8714867, 0.8615940, 0.6785749, 0.8175975, 0.9346840, 0.7556055, 0.8351088, 0.7464104),
+                 tolerance = 0.0001)
+    expect_equal(sce$PIN.h.ent.s1[20:30], 
+                 c(0.3824506, 0.4245154, 0.7619950, 0.5764059, 0.6587099, 0.5013036, 0.4560755, 0.1652518, 0.7064710, 0.2808083, 0.6687518),
+                 tolerance = 0.0001)
+    expect_equal(sce$CD8a.h.ent.s1[20:30], 
+                 c(0.4807238, 0.3278883, 0.4608923, 0.5163900, 0.4407971, 0.4067465, 0.4099984, 0.5272945, 0.5660128, 0.6652107, 0.4108133),
+                 tolerance = 0.0001)
+    expect_equal(sce$CDH.h.ent.s1[20:30], 
+                 c(0.2464482, 0.9223040, 0.3924199, 0.6494582, 0.7329984, 0.9315071, 0.5924960, 0.7332656, 0.6537887, 0.6607878, 0.7881618),
+                 tolerance = 0.0001)
+    
     sce <- measureObjects(pancreasMasks, pancreasImages, img_id = "ImageNb",
                           feature_types = c("basic", "moment"))
+    expect_equal(names(colData(sce)), 
+                 c("ImageNb", "object_id", 
+                   "m.cx", "m.cy", "m.majoraxis", "m.eccentricity"))
     sce <- measureObjects(pancreasMasks, pancreasImages, img_id = "ImageNb",
-                          feature_types = c("basic", "moment"))
+                          feature_types = c("moment", "basic"))
+    expect_equal(names(colData(sce)), 
+                 c("ImageNb", "object_id", 
+                   "m.cx", "m.cy", "m.majoraxis", "m.eccentricity"))
     sce <- measureObjects(pancreasMasks, pancreasImages, img_id = "ImageNb",
                           feature_types = c("basic", "haralick"),
                           haralick_feature = "ent.s1")
-    sce <- measureObjects(pancreasMasks, pancreasImages, img_id = "ImageNb")
-    sce <- measureObjects(pancreasMasks, pancreasImages, img_id = "ImageNb")
+    expect_equal(names(colData(sce)), 
+                 c("ImageNb", "object_id",
+                   "H3.h.ent.s1", "CD99.h.ent.s1", "PIN.h.ent.s1", "CD8a.h.ent.s1", "CDH.h.ent.s1"))
+    
+    # Parallelisable
+    expect_silent(sce.1 <- measureObjects(pancreasMasks, pancreasImages, img_id = "ImageNb",
+                                        BPPARAM = MulticoreParam()))
+    expect_silent(sce.2 <- measureObjects(pancreasMasks, pancreasImages, img_id = "ImageNb",
+                                          BPPARAM = SerialParam()))
+    expect_equal(sce.1, sce.2)
+    expect_equal(as.numeric(cur_H3), counts(sce.1)["H3",])
         
     # Error
-    sce <- measureObjects(pancreasMasks, pancreasImages, img_id = "ImageNb", feature_types = c("basic", "shape", "moment", "haralick"))
-
- 
+    expect_error(sce <- measureObjects(pancreasMasks, pancreasImages, img_id = "ImageNb", 
+                                       feature_types = c("basic", "shape", "moment", "haralick")),
+                 regexp = "Specify at least one haralick feature.",
+                 fixed = TRUE)
+    expect_error(sce <- measureObjects(pancreasMasks, pancreasImages, img_id = "ImageNb", 
+                                       feature_types = c("test", "moment")),
+                 regexp = "Only features of type 'basic', 'shape', 'moment' and 'haralick' are allowed.",
+                 fixed = TRUE)
+    expect_error(sce <- measureObjects(pancreasMasks, pancreasImages, img_id = "ImageNb", 
+                                       feature_types = c("shape", "moment")),
+                 regexp = "Please specify a basic feature to characterise the marker expression per cell.",
+                 fixed = TRUE)
+    expect_error(sce <- measureObjects(pancreasMasks, pancreasImages, img_id = "ImageNb", 
+                                       feature_types = c("basic"), basic_feature = NULL),
+                 regexp = "Please specify a basic feature to characterise the marker expression per cell.",
+                 fixed = TRUE)
+    expect_error(sce <- measureObjects(pancreasMasks, pancreasImages, img_id = "ImageNb", 
+                                       feature_types = c("basic"), basic_feature = c("mean", "sd")),
+                 regexp = "Only one intensity feature can be used to characterise the expression of each marker in each object.",
+                 fixed = TRUE)
+    expect_error(sce <- measureObjects(pancreasMasks, pancreasImages, img_id = "ImageNb", 
+                                       feature_types = c("basic"), basic_quantiles = "test"),
+                 regexp = "Only numeric quantiles between 0 and 1 allowed.",
+                 fixed = TRUE)
+    expect_error(sce <- measureObjects(pancreasMasks, pancreasImages, img_id = "ImageNb", 
+                                       feature_types = c("basic"), basic_feature = "test"),
+                 regexp = "Only basic features of type 'mean', 'sd', 'mad' or the selected quantiles allowed.",
+                 fixed = TRUE)
+    expect_error(sce <- measureObjects(pancreasMasks, pancreasImages, img_id = "ImageNb", 
+                                       feature_types = c("basic"), basic_quantiles = 0.2, basic_feature = "q01"),
+                 regexp = "Only basic features of type 'mean', 'sd', 'mad' or the selected quantiles allowed.",
+                 fixed = TRUE)
+    expect_error(sce <- measureObjects(pancreasMasks, pancreasImages, img_id = "ImageNb", 
+                                       feature_types = c("basic", "shape"), shape_feature = NULL),
+                 regexp = "Specify at least one shape feature.",
+                 fixed = TRUE)
+    expect_error(sce <- measureObjects(pancreasMasks, pancreasImages, img_id = "ImageNb", 
+                                       feature_types = c("basic", "shape"), shape_feature = "test"),
+                 regexp = "Only shape features of type 'area', 'perimeter', 'radius.mean', 'radius.sd', 'radius.max', 'radius.min' allowed.",
+                 fixed = TRUE)
+    expect_error(sce <- measureObjects(pancreasMasks, pancreasImages, img_id = "ImageNb", 
+                                       feature_types = c("basic", "shape"), shape_feature = c("area", "test")),
+                 regexp = "Only shape features of type 'area', 'perimeter', 'radius.mean', 'radius.sd', 'radius.max', 'radius.min' allowed.",
+                 fixed = TRUE)
+    expect_error(sce <- measureObjects(pancreasMasks, pancreasImages, img_id = "ImageNb", 
+                                       feature_types = c("basic", "moment"), moment_feature = NULL),
+                 regexp = "Specify at least one moment feature.",
+                 fixed = TRUE)
+    expect_error(sce <- measureObjects(pancreasMasks, pancreasImages, img_id = "ImageNb", 
+                                       feature_types = c("basic", "moment"), moment_feature = "test"),
+                 regexp = "Only moment features of type 'cx', 'cy', 'majoraxis', 'eccentricity', 'theta' allowed.",
+                 fixed = TRUE)
+    expect_error(sce <- measureObjects(pancreasMasks, pancreasImages, img_id = "ImageNb", 
+                                       feature_types = c("basic", "moment"), moment_feature = c("cx", "test")),
+                 regexp = "Only moment features of type 'cx', 'cy', 'majoraxis', 'eccentricity', 'theta' allowed.",
+                 fixed = TRUE)
+    expect_error(sce <- measureObjects(pancreasMasks, pancreasImages, img_id = "ImageNb", 
+                                       feature_types = c("basic", "haralick"), haralick_feature = NULL),
+                 regexp = "Specify at least one haralick feature.",
+                 fixed = TRUE)
+    expect_error(sce <- measureObjects(pancreasMasks, pancreasImages, img_id = "ImageNb", 
+                                       feature_types = c("basic", "haralick"), haralick_feature = "ent.s1",
+                                       haralick_nbins = "test"),
+                 regexp = "Specify the number of bins into which intensity levels are binned.",
+                 fixed = TRUE)
+    expect_error(sce <- measureObjects(pancreasMasks, pancreasImages, img_id = "ImageNb", 
+                                       feature_types = c("basic", "haralick"), haralick_feature = "ent.s1",
+                                       haralick_nbins = NULL),
+                 regexp = "Specify the number of bins into which intensity levels are binned.",
+                 fixed = TRUE)
+    expect_error(sce <- measureObjects(pancreasMasks, pancreasImages, img_id = "ImageNb", 
+                                       feature_types = c("basic", "haralick"), haralick_feature = "ent.s1",
+                                       haralick_nbins = c(1, 2)),
+                 regexp = "Specify the number of bins into which intensity levels are binned.",
+                 fixed = TRUE)
+    expect_error(sce <- measureObjects(pancreasMasks, pancreasImages, img_id = "ImageNb", 
+                                       feature_types = c("basic", "haralick"), haralick_feature = "ent.s1",
+                                       haralick_scales = NULL),
+                 regexp = "Specify the scale (in pixels) over which the haralick features are computed.",
+                 fixed = TRUE)
+    expect_error(sce <- measureObjects(pancreasMasks, pancreasImages, img_id = "ImageNb", 
+                                       feature_types = c("basic", "haralick"), haralick_feature = "ent.s1",
+                                       haralick_scales = "test"),
+                 regexp = "Specify the scale (in pixels) over which the haralick features are computed.",
+                 fixed = TRUE)
+    expect_error(sce <- measureObjects(pancreasMasks, pancreasImages, img_id = "ImageNb", 
+                                       feature_types = c("basic", "haralick"), haralick_feature = "test"),
+                 regexp = "Only haralick features of type asm.s1, con.s1, cor.s1, var.s1, idm.s1, sav.s1, sva.s1, sen.s1, ent.s1, dva.s1, den.s1, f12.s1, f13.s1, asm.s2, con.s2, cor.s2, var.s2, idm.s2, sav.s2, sva.s2, sen.s2, ent.s2, dva.s2, den.s2, f12.s2, f13.s2 allowed.",
+                 fixed = TRUE)
+    expect_error(sce <- measureObjects(pancreasMasks, pancreasImages, img_id = "ImageNb", 
+                                       feature_types = c("basic", "haralick"), haralick_feature = c("var.s1", "test")),
+                 regexp = "Only haralick features of type asm.s1, con.s1, cor.s1, var.s1, idm.s1, sav.s1, sva.s1, sen.s1, ent.s1, dva.s1, den.s1, f12.s1, f13.s1, asm.s2, con.s2, cor.s2, var.s2, idm.s2, sav.s2, sva.s2, sen.s2, ent.s2, dva.s2, den.s2, f12.s2, f13.s2 allowed.",
+                 fixed = TRUE)
+    expect_error(sce <- measureObjects(pancreasMasks, pancreasImages, img_id = "ImageNb", 
+                                       feature_types = c("basic", "haralick"), haralick_feature = c("var.s1", "test"), haralick_scales = c(1, 3)),
+                 regexp = "Only haralick features of type asm.s1, con.s1, cor.s1, var.s1, idm.s1, sav.s1, sva.s1, sen.s1, ent.s1, dva.s1, den.s1, f12.s1, f13.s1, asm.s3, con.s3, cor.s3, var.s3, idm.s3, sav.s3, sva.s3, sen.s3, ent.s3, dva.s3, den.s3, f12.s3, f13.s3 allowed.",
+                 fixed = TRUE)
 })
 
-test_that("measureObjects: outputs work", {
+test_that("measureObjects: different settings work", {
     data("pancreasSCE")
     data("pancreasMasks")
     data("pancreasImagesß")
