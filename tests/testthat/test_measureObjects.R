@@ -223,8 +223,229 @@ test_that("measureObjects: defaults work", {
 test_that("measureObjects: different settings work", {
     data("pancreasSCE")
     data("pancreasMasks")
-    data("pancreasImagesß")
+    data("pancreasImages")
+
+    # Basic features
+    expect_silent(sce <- measureObjects(pancreasMasks, pancreasImages, img_id = "ImageNb", basic_feature = "sd"))
+    cur_H3 <- c(tapply(pancreasImages[[1]][,,1], pancreasMasks[[1]], sd)[-1],
+                tapply(pancreasImages[[2]][,,1], pancreasMasks[[2]], sd)[-1],
+                tapply(pancreasImages[[3]][,,1], pancreasMasks[[3]], sd)[-1])
+    cur_H3[is.na(cur_H3)] <- 0
+    cur_CD99 <- c(tapply(pancreasImages[[1]][,,2], pancreasMasks[[1]], sd)[-1],
+                  tapply(pancreasImages[[2]][,,2], pancreasMasks[[2]], sd)[-1],
+                  tapply(pancreasImages[[3]][,,2], pancreasMasks[[3]], sd)[-1])
+    cur_CD99[is.na(cur_CD99)] <- 0
+    cur_PIN <- c(tapply(pancreasImages[[1]][,,3], pancreasMasks[[1]], sd)[-1],
+                 tapply(pancreasImages[[2]][,,3], pancreasMasks[[2]], sd)[-1],
+                 tapply(pancreasImages[[3]][,,3], pancreasMasks[[3]], sd)[-1])
+    cur_PIN[is.na(cur_PIN)] <- 0
+    cur_CD8a <- c(tapply(pancreasImages[[1]][,,4], pancreasMasks[[1]], sd)[-1],
+                  tapply(pancreasImages[[2]][,,4], pancreasMasks[[2]], sd)[-1],
+                  tapply(pancreasImages[[3]][,,4], pancreasMasks[[3]], sd)[-1])
+    cur_CD8a[is.na(cur_CD8a)] <- 0
+    cur_CDH <- c(tapply(pancreasImages[[1]][,,5], pancreasMasks[[1]], sd)[-1],
+                 tapply(pancreasImages[[2]][,,5], pancreasMasks[[2]], sd)[-1],
+                 tapply(pancreasImages[[3]][,,5], pancreasMasks[[3]], sd)[-1])
+    cur_CDH[is.na(cur_CDH)] <- 0
     
+    # SD
+    expect_equal(as.numeric(cur_H3), counts(sce)["H3",])
+    expect_equal(as.numeric(cur_CD99), counts(sce)["CD99",])
+    expect_equal(as.numeric(cur_PIN), counts(sce)["PIN",])
+    expect_equal(as.numeric(cur_CD8a), counts(sce)["CD8a",])
+    expect_equal(as.numeric(cur_CDH), counts(sce)["CDH",])
+    
+    expect_silent(sce <- measureObjects(pancreasMasks, pancreasImages, img_id = "ImageNb", basic_feature = "mad"))
+    cur_H3 <- c(tapply(pancreasImages[[1]][,,1], pancreasMasks[[1]], mad)[-1],
+                tapply(pancreasImages[[2]][,,1], pancreasMasks[[2]], mad)[-1],
+                tapply(pancreasImages[[3]][,,1], pancreasMasks[[3]], mad)[-1])
+    cur_H3[is.na(cur_H3)] <- 0
+    cur_CD99 <- c(tapply(pancreasImages[[1]][,,2], pancreasMasks[[1]], mad)[-1],
+                  tapply(pancreasImages[[2]][,,2], pancreasMasks[[2]], mad)[-1],
+                  tapply(pancreasImages[[3]][,,2], pancreasMasks[[3]], mad)[-1])
+    cur_CD99[is.na(cur_CD99)] <- 0
+    cur_PIN <- c(tapply(pancreasImages[[1]][,,3], pancreasMasks[[1]], mad)[-1],
+                 tapply(pancreasImages[[2]][,,3], pancreasMasks[[2]], mad)[-1],
+                 tapply(pancreasImages[[3]][,,3], pancreasMasks[[3]], mad)[-1])
+    cur_PIN[is.na(cur_PIN)] <- 0
+    cur_CD8a <- c(tapply(pancreasImages[[1]][,,4], pancreasMasks[[1]], mad)[-1],
+                  tapply(pancreasImages[[2]][,,4], pancreasMasks[[2]], mad)[-1],
+                  tapply(pancreasImages[[3]][,,4], pancreasMasks[[3]], mad)[-1])
+    cur_CD8a[is.na(cur_CD8a)] <- 0
+    cur_CDH <- c(tapply(pancreasImages[[1]][,,5], pancreasMasks[[1]], mad)[-1],
+                 tapply(pancreasImages[[2]][,,5], pancreasMasks[[2]], mad)[-1],
+                 tapply(pancreasImages[[3]][,,5], pancreasMasks[[3]], mad)[-1])
+    cur_CDH[is.na(cur_CDH)] <- 0
+    
+    # MAD
+    expect_equal(as.numeric(cur_H3), counts(sce)["H3",])
+    expect_equal(as.numeric(cur_CD99), counts(sce)["CD99",])
+    expect_equal(as.numeric(cur_PIN), counts(sce)["PIN",])
+    expect_equal(as.numeric(cur_CD8a), counts(sce)["CD8a",])
+    expect_equal(as.numeric(cur_CDH), counts(sce)["CDH",])
+    
+    expect_silent(sce <- measureObjects(pancreasMasks, pancreasImages, img_id = "ImageNb", basic_feature = "mad"))
+    cur_H3 <- c(tapply(pancreasImages[[1]][,,1], pancreasMasks[[1]], mad)[-1],
+                tapply(pancreasImages[[2]][,,1], pancreasMasks[[2]], mad)[-1],
+                tapply(pancreasImages[[3]][,,1], pancreasMasks[[3]], mad)[-1])
+    cur_H3[is.na(cur_H3)] <- 0
+    cur_CD99 <- c(tapply(pancreasImages[[1]][,,2], pancreasMasks[[1]], mad)[-1],
+                  tapply(pancreasImages[[2]][,,2], pancreasMasks[[2]], mad)[-1],
+                  tapply(pancreasImages[[3]][,,2], pancreasMasks[[3]], mad)[-1])
+    cur_CD99[is.na(cur_CD99)] <- 0
+    cur_PIN <- c(tapply(pancreasImages[[1]][,,3], pancreasMasks[[1]], mad)[-1],
+                 tapply(pancreasImages[[2]][,,3], pancreasMasks[[2]], mad)[-1],
+                 tapply(pancreasImages[[3]][,,3], pancreasMasks[[3]], mad)[-1])
+    cur_PIN[is.na(cur_PIN)] <- 0
+    cur_CD8a <- c(tapply(pancreasImages[[1]][,,4], pancreasMasks[[1]], mad)[-1],
+                  tapply(pancreasImages[[2]][,,4], pancreasMasks[[2]], mad)[-1],
+                  tapply(pancreasImages[[3]][,,4], pancreasMasks[[3]], mad)[-1])
+    cur_CD8a[is.na(cur_CD8a)] <- 0
+    cur_CDH <- c(tapply(pancreasImages[[1]][,,5], pancreasMasks[[1]], mad)[-1],
+                 tapply(pancreasImages[[2]][,,5], pancreasMasks[[2]], mad)[-1],
+                 tapply(pancreasImages[[3]][,,5], pancreasMasks[[3]], mad)[-1])
+    cur_CDH[is.na(cur_CDH)] <- 0
+    
+    # MAD
+    expect_equal(as.numeric(cur_H3), counts(sce)["H3",])
+    expect_equal(as.numeric(cur_CD99), counts(sce)["CD99",])
+    expect_equal(as.numeric(cur_PIN), counts(sce)["PIN",])
+    expect_equal(as.numeric(cur_CD8a), counts(sce)["CD8a",])
+    expect_equal(as.numeric(cur_CDH), counts(sce)["CDH",])
+    
+    expect_silent(sce <- measureObjects(pancreasMasks, pancreasImages, img_id = "ImageNb", basic_feature = "q05", basic_quantiles = 0.5))
+    cur_H3 <- c(tapply(pancreasImages[[1]][,,1], pancreasMasks[[1]], median)[-1],
+                tapply(pancreasImages[[2]][,,1], pancreasMasks[[2]], median)[-1],
+                tapply(pancreasImages[[3]][,,1], pancreasMasks[[3]], median)[-1])
+    cur_CD99 <- c(tapply(pancreasImages[[1]][,,2], pancreasMasks[[1]], median)[-1],
+                  tapply(pancreasImages[[2]][,,2], pancreasMasks[[2]], median)[-1],
+                  tapply(pancreasImages[[3]][,,2], pancreasMasks[[3]], median)[-1])
+    cur_PIN <- c(tapply(pancreasImages[[1]][,,3], pancreasMasks[[1]], median)[-1],
+                 tapply(pancreasImages[[2]][,,3], pancreasMasks[[2]], median)[-1],
+                 tapply(pancreasImages[[3]][,,3], pancreasMasks[[3]], median)[-1])
+    cur_CD8a <- c(tapply(pancreasImages[[1]][,,4], pancreasMasks[[1]], median)[-1],
+                  tapply(pancreasImages[[2]][,,4], pancreasMasks[[2]], median)[-1],
+                  tapply(pancreasImages[[3]][,,4], pancreasMasks[[3]], median)[-1])
+    cur_CDH <- c(tapply(pancreasImages[[1]][,,5], pancreasMasks[[1]], median)[-1],
+                 tapply(pancreasImages[[2]][,,5], pancreasMasks[[2]], median)[-1],
+                 tapply(pancreasImages[[3]][,,5], pancreasMasks[[3]], median)[-1])
+    
+    # Median
+    expect_equal(as.numeric(cur_H3), counts(sce)["H3",])
+    expect_equal(as.numeric(cur_CD99), counts(sce)["CD99",])
+    expect_equal(as.numeric(cur_PIN), counts(sce)["PIN",])
+    expect_equal(as.numeric(cur_CD8a), counts(sce)["CD8a",])
+    expect_equal(as.numeric(cur_CDH), counts(sce)["CDH",])
+    
+    # Shape features
+    expect_silent(sce <- measureObjects(pancreasMasks, pancreasImages, img_id = "ImageNb", feature_types = c("basic", "shape"), 
+                                        shape_feature = c('area', 'perimeter', 'radius.mean', 'radius.sd', 'radius.max', 'radius.min')))
+    expect_equal(names(colData(sce)), c("ImageNb", "object_id", "s.area", "s.perimeter", "s.radius.mean", "s.radius.sd", "s.radius.min", "s.radius.max"))
+    
+    expect_equal(sce$s.perimeter[40:50], c(28, 39, 25, 10, 16, 15, 13, 22, 31, 37, 5))
+    expect_equal(sce$s.radius.sd[40:50], c(0.6381883, 1.2634757, 0.5599216, 0.5707716, 0.6687795, 0.4334581, 0.7503223, 0.4679423, 0.7259625, 0.8618819, 0.2850134), tolerance = 0.00001)
+    expect_equal(sce$s.radius.min[40:50], c(3.5959870, 3.1786599, 2.9772471, 0.7810250, 1.4710753, 1.2292726, 0.8770580, 2.8477191, 3.2325735, 3.9868300, 0.4472136), tolerance = 0.00001)
+    expect_equal(sce$s.radius.max[40:50], c(6.123933, 8.641064, 5.209990, 2.570992, 3.628231, 2.996294, 3.328201, 4.788286, 6.002514, 7.190662, 1.264911), tolerance = 0.00001)
+
+    # Moment features
+    expect_silent(sce <- measureObjects(pancreasMasks, pancreasImages, img_id = "ImageNb", feature_types = c("basic", "moment"), 
+                                        moment_feature = c('cx', 'cy', 'majoraxis', 'eccentricity', 'theta')))
+    expect_equal(names(colData(sce)), c("ImageNb", "object_id", "m.cx", "m.cy", "m.majoraxis", "m.eccentricity", "m.theta"))
+    
+    expect_equal(sce$m.theta[40:50], c(0.60960841, -0.04246836, -0.68045282, 1.57079633, 0.89866183, -1.11289559, -1.10737273, -0.96767979, 1.53796956, -0.09403954, -1.24904577))
+    
+    # Haralick features
+    expect_silent(sce <- measureObjects(pancreasMasks, pancreasImages, img_id = "ImageNb", feature_types = c("basic", "haralick"), 
+                                        haralick_feature = c("asm.s1", "con.s1", "cor.s1", "var.s1", "idm.s1", "sav.s1", "sva.s1", "sen.s1", "ent.s1", "dva.s1", "den.s1", "f12.s1", "f13.s1", "asm.s2", "con.s2", "cor.s2", "var.s2", "idm.s2", "sav.s2", "sva.s2", "sen.s2", "ent.s2", "dva.s2", "den.s2", "f12.s2", "f13.s2")))
+    
+    features <- c("asm.s1", "con.s1", "cor.s1", "var.s1", "idm.s1", "sav.s1", "sva.s1", "sen.s1", "ent.s1", "dva.s1", "den.s1", "f12.s1", "f13.s1", "asm.s2", "con.s2", "cor.s2", "var.s2", "idm.s2", "sav.s2", "sva.s2", "sen.s2", "ent.s2", "dva.s2", "den.s2", "f12.s2", "f13.s2")
+    features <- paste0("h.", features)
+    features <- paste0(rep(channelNames(pancreasImages), each = length(features)), ".", features)
+    features <- c("ImageNb", "object_id", features)
+    
+    expect_equal(names(colData(sce)), features)
+    
+    cur_basic <- computeFeatures.basic(pancreasMasks[[1]], pancreasImages[[1]][,,1])    
+    cur_haralick <- computeFeatures.haralick(pancreasMasks[[1]], pancreasImages[[1]][,,1])
+    cur_haralick <- cur_haralick[as.numeric(rownames(cur_basic)),]
+    colnames(cur_haralick) <- paste0("H3.", colnames(cur_haralick))
+    
+    expect_equal(as.matrix(colData(sce)[sce$ImageNb == 1,colnames(cur_haralick)]), cur_haralick)
+    
+    cur_haralick <- computeFeatures.haralick(pancreasMasks[[1]], pancreasImages[[1]][,,2])
+    cur_haralick <- cur_haralick[as.numeric(rownames(cur_basic)),]
+    colnames(cur_haralick) <- paste0("CD99.", colnames(cur_haralick))
+    
+    expect_equal(as.matrix(colData(sce)[sce$ImageNb == 1,colnames(cur_haralick)]), cur_haralick)
+    
+    expect_silent(sce <- measureObjects(pancreasMasks, pancreasImages, img_id = "ImageNb", feature_types = c("basic", "haralick"),  haralick_scales = c(1,4),
+                                        haralick_feature = c("asm.s1", "con.s1", "cor.s1", "var.s1", "idm.s1", "sav.s1", "sva.s1", "sen.s1", "ent.s1", "dva.s1", "den.s1", "f12.s1", "f13.s1", "asm.s4", "con.s4", "cor.s4", "var.s4", "idm.s4", "sav.s4", "sva.s4", "sen.s4", "ent.s4", "dva.s4", "den.s4", "f12.s4", "f13.s4")))
+    
+    features <- c("asm.s1", "con.s1", "cor.s1", "var.s1", "idm.s1", "sav.s1", "sva.s1", "sen.s1", "ent.s1", "dva.s1", "den.s1", "f12.s1", "f13.s1", "asm.s4", "con.s4", "cor.s4", "var.s4", "idm.s4", "sav.s4", "sva.s4", "sen.s4", "ent.s4", "dva.s4", "den.s4", "f12.s4", "f13.s4")
+    features <- paste0("h.", features)
+    features <- paste0(rep(channelNames(pancreasImages), each = length(features)), ".", features)
+    features <- c("ImageNb", "object_id", features)
+    
+    expect_equal(names(colData(sce)), features)
+    
+    cur_basic <- computeFeatures.basic(pancreasMasks[[1]], pancreasImages[[1]][,,1])    
+    cur_haralick <- computeFeatures.haralick(pancreasMasks[[1]], pancreasImages[[1]][,,1], haralick.scales = c(1,4))
+    cur_haralick <- cur_haralick[as.numeric(rownames(cur_basic)),]
+    colnames(cur_haralick) <- paste0("H3.", colnames(cur_haralick))
+    
+    expect_equal(as.matrix(colData(sce)[sce$ImageNb == 1,colnames(cur_haralick)]), cur_haralick)
+    
+    cur_haralick <- computeFeatures.haralick(pancreasMasks[[1]], pancreasImages[[1]][,,2], haralick.scales = c(1,4))
+    cur_haralick <- cur_haralick[as.numeric(rownames(cur_basic)),]
+    colnames(cur_haralick) <- paste0("CD99.", colnames(cur_haralick))
+    
+    expect_equal(as.matrix(colData(sce)[sce$ImageNb == 1,colnames(cur_haralick)]), cur_haralick)
+    
+    expect_silent(sce <- measureObjects(pancreasMasks, pancreasImages, img_id = "ImageNb", feature_types = c("basic", "haralick"), haralick_nbins = 16,
+                                        haralick_feature = c("asm.s1", "con.s1", "cor.s1", "var.s1", "idm.s1", "sav.s1", "sva.s1", "sen.s1", "ent.s1", "dva.s1", "den.s1", "f12.s1", "f13.s1", "asm.s2", "con.s2", "cor.s2", "var.s2", "idm.s2", "sav.s2", "sva.s2", "sen.s2", "ent.s2", "dva.s2", "den.s2", "f12.s2", "f13.s2")))
+    
+    features <- c("asm.s1", "con.s1", "cor.s1", "var.s1", "idm.s1", "sav.s1", "sva.s1", "sen.s1", "ent.s1", "dva.s1", "den.s1", "f12.s1", "f13.s1", "asm.s2", "con.s2", "cor.s2", "var.s2", "idm.s2", "sav.s2", "sva.s2", "sen.s2", "ent.s2", "dva.s2", "den.s2", "f12.s2", "f13.s2")
+    features <- paste0("h.", features)
+    features <- paste0(rep(channelNames(pancreasImages), each = length(features)), ".", features)
+    features <- c("ImageNb", "object_id", features)
+    
+    expect_equal(names(colData(sce)), features)
+    
+    cur_basic <- computeFeatures.basic(pancreasMasks[[1]], pancreasImages[[1]][,,1])    
+    cur_haralick <- computeFeatures.haralick(pancreasMasks[[1]], pancreasImages[[1]][,,1], haralick.nbins = 16)
+    cur_haralick <- cur_haralick[as.numeric(rownames(cur_basic)),]
+    colnames(cur_haralick) <- paste0("H3.", colnames(cur_haralick))
+    
+    expect_equal(as.matrix(colData(sce)[sce$ImageNb == 1,colnames(cur_haralick)]), cur_haralick)
+    
+    cur_haralick <- computeFeatures.haralick(pancreasMasks[[1]], pancreasImages[[1]][,,2], haralick.nbins = 16)
+    cur_haralick <- cur_haralick[as.numeric(rownames(cur_basic)),]
+    colnames(cur_haralick) <- paste0("CD99.", colnames(cur_haralick))
+    
+    expect_equal(as.matrix(colData(sce)[sce$ImageNb == 1,colnames(cur_haralick)]), cur_haralick)
+    
+    expect_silent(sce <- measureObjects(pancreasMasks, pancreasImages, img_id = "ImageNb", feature_types = c("basic", "haralick"),
+                                        haralick_feature = c("asm.s1", "ent.s2")))
+    
+    features <- c("asm.s1", "ent.s2")
+    features <- paste0("h.", features)
+    features <- paste0(rep(channelNames(pancreasImages), each = length(features)), ".", features)
+    features <- c("ImageNb", "object_id", features)
+    
+    expect_equal(names(colData(sce)), features)
+    
+    cur_basic <- computeFeatures.basic(pancreasMasks[[1]], pancreasImages[[1]][,,1])    
+    cur_haralick <- computeFeatures.haralick(pancreasMasks[[1]], pancreasImages[[1]][,,1])
+    cur_haralick <- cur_haralick[as.numeric(rownames(cur_basic)),]
+    colnames(cur_haralick) <- paste0("H3.", colnames(cur_haralick))
+    
+    expect_equal(as.matrix(colData(sce)[sce$ImageNb == 1,c("H3.h.asm.s1", "H3.h.ent.s2")]), cur_haralick[,c("H3.h.asm.s1", "H3.h.ent.s2")])
+    
+    cur_haralick <- computeFeatures.haralick(pancreasMasks[[1]], pancreasImages[[1]][,,2])
+    cur_haralick <- cur_haralick[as.numeric(rownames(cur_basic)),]
+    colnames(cur_haralick) <- paste0("CD99.", colnames(cur_haralick))
+    
+    expect_equal(as.matrix(colData(sce)[sce$ImageNb == 1,c("CD99.h.asm.s1", "CD99.h.ent.s2")]), cur_haralick[,c("CD99.h.asm.s1", "CD99.h.ent.s2")])
     
 })
 
