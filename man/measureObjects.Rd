@@ -101,16 +101,14 @@ haralick features per object. The prefix of the feature names indicate
 whether these features correspond to shape (\code{s.}), moment (\code{m.}) or
 haralick (\code{h.}) features. Default features are the following:
 
-\describe{
 \itemize{
-\item s.area: object size in pixels
-\item s.radius.mean: mean object radius in pixels
-\item m.cx: x centroid position of object
-\item m.cy: y centroid position of object
-\item m.majoraxis: major axis length in pixels of elliptical fit
-\item m.eccentricity: elliptical eccentricity. 1 meaning straight line and 0
-meaning circle.
-}
+\item{s.area}{object size in pixels}
+\item{s.radius.mean}{mean object radius in pixels}
+\item{m.cx}{x centroid position of object}
+\item{m.cy}{y centroid position of object}
+\item{m.majoraxis}{major axis length in pixels of elliptical fit}
+\item{m.eccentricity}{elliptical eccentricity. 1 meaning straight line and 0
+meaning circle.}
 }
 }
 
