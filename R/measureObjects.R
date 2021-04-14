@@ -151,7 +151,7 @@ measureObjects <- function(mask,
         
         # Compute basic features
         cur_basic <- apply(as.array(cur_image), 3, function(x){
-            cur_basic_ch <- computeFeatures.basic(x = cur_mask, ref = x, 
+            cur_basic_ch <- computeFeatures.basic(x = as.array(cur_mask), ref = x, 
                                                   basic.quantiles = basic_quantiles)
             cur_basic_ch[,grepl(basic_feature, colnames(cur_basic_ch))]
         })
@@ -162,7 +162,7 @@ measureObjects <- function(mask,
         
         # Compute shape features
         if ("shape" %in% feature_types) {
-            cur_shape <- computeFeatures.shape(cur_mask)
+            cur_shape <- computeFeatures.shape(as.array(cur_mask))
             cur_shape <- cur_shape[,sub("s.", "", colnames(cur_shape)) %in% shape_feature]
             
             cur_coldata <- cbind(cur_coldata, cur_shape)
@@ -170,7 +170,7 @@ measureObjects <- function(mask,
         
         # Compute moment features
         if ("moment" %in% feature_types) {
-            cur_moment <- computeFeatures.moment(cur_mask)
+            cur_moment <- computeFeatures.moment(as.array(cur_mask))
             cur_moment <- cur_moment[,sub("m.", "", colnames(cur_moment)) %in% moment_feature]
             
             cur_coldata <- cbind(cur_coldata, cur_moment)
@@ -179,7 +179,7 @@ measureObjects <- function(mask,
         # Compute haralick features
         if ("haralick" %in% feature_types) {
             cur_haralick <- apply(as.array(cur_image), 3, function(x){
-                cur_haralick_ch <- computeFeatures.haralick(x = cur_mask, ref = x, 
+                cur_haralick_ch <- computeFeatures.haralick(x = as.array(cur_mask), ref = x, 
                                                             haralick.nbins = haralick_nbins,
                                                             haralick.scales = haralick_scales)
                 rownames(cur_haralick_ch) <- seq_len(nrow(cur_haralick_ch))
