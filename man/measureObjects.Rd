@@ -90,11 +90,15 @@ in form of a \linkS4class{SingleCellExperiment} object.
 }
 \section{The returned \linkS4class{SingleCellExperiment} objects}{
 
-The returned SingleCellExperiment object \code{sce} contains a single assay
-accessible via \code{counts(sce)}. This assay contains individual objects in
-columns and channels in rows. Each entry summarises the intensities per
-object and channel. This summary statistic is typically the mean intensity
-per object and channel. However, other summary statistics can be computed
+The returned SingleCellExperiment object \code{sce} contains a single assay.
+This assay contains individual objects in columns and channels in rows. Each
+entry summarises the intensities per object and channel. This summary
+statistic is typically the mean intensity per object and channel. However,
+other summary statistics can be computed. When the mean intensity per object
+and channel is computed (default), the assay is accessible via
+\code{counts(sce)}. Otherwise, the assay needs to be accessed via
+\code{assay(sce, "counts_*")}, where \code{*} indicates the argument to
+\code{basic_feature}.
 
 The \code{colData(x)} entry is populated by the computed shape, moment and
 haralick features per object. The prefix of the feature names indicate

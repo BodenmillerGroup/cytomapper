@@ -56,11 +56,15 @@
 #' @return A \linkS4class{SingleCellExperiment} object (see details)
 #'
 #' @section The returned \linkS4class{SingleCellExperiment} objects:
-#' The returned SingleCellExperiment object \code{sce} contains a single assay
-#' accessible via \code{counts(sce)}. This assay contains individual objects in
-#' columns and channels in rows. Each entry summarises the intensities per
-#' object and channel. This summary statistic is typically the mean intensity
-#' per object and channel. However, other summary statistics can be computed
+#' The returned SingleCellExperiment object \code{sce} contains a single assay.
+#' This assay contains individual objects in columns and channels in rows. Each
+#' entry summarises the intensities per object and channel. This summary
+#' statistic is typically the mean intensity per object and channel. However,
+#' other summary statistics can be computed. When the mean intensity per object
+#' and channel is computed (default), the assay is accessible via
+#' \code{counts(sce)}. Otherwise, the assay needs to be accessed via
+#' \code{assay(sce, "counts_*")}, where \code{*} indicates the argument to
+#' \code{basic_feature}.
 #'
 #' The \code{colData(x)} entry is populated by the computed shape, moment and
 #' haralick features per object. The prefix of the feature names indicate
@@ -112,7 +116,7 @@
 #' @importFrom EBImage computeFeatures.basic computeFeatures.shape computeFeatures.moment computeFeatures.haralick
 #' @importFrom BiocParallel SerialParam bpmapply
 #' @importFrom S4Vectors DataFrame
-#' @importFrom SummarizedExperiment colData<-
+#' @importFrom SummarizedExperiment colData<- assayNames<-
 #' @importClassesFrom SingleCellExperiment SingleCellExperiment
 measureObjects <- function(mask,
                            image,
@@ -195,7 +199,9 @@ measureObjects <- function(mask,
         }
 
         # Generate SCE object
+        assay_name <- ifelse(basic_feature == "mean", "counts", paste0("counts_", basic_feature))
         cur_sce <- SingleCellExperiment(assays = list(counts = t(cur_basic)))
+        assayNames(cur_sce) <- assay_name
         colData(cur_sce) <- cur_coldata
 
         return(cur_sce)

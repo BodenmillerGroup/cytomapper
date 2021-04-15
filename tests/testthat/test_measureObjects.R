@@ -21,6 +21,8 @@ test_that("measureObjects: defaults work", {
                 tapply(pancreasImages[[2]][,,5], pancreasMasks[[2]], mean)[-1],
                 tapply(pancreasImages[[3]][,,5], pancreasMasks[[3]], mean)[-1])
 
+    expect_equal(assayNames(sce), "counts")
+    
     # Intensities
     expect_equal(as.numeric(cur_H3), counts(sce)["H3",])
     expect_equal(as.numeric(cur_CD99), counts(sce)["CD99",])
@@ -248,12 +250,14 @@ test_that("measureObjects: different settings work", {
                  tapply(pancreasImages[[3]][,,5], pancreasMasks[[3]], sd)[-1])
     cur_CDH[is.na(cur_CDH)] <- 0
 
+    expect_equal(assayNames(sce), "counts_sd")
+    
     # SD
-    expect_equal(as.numeric(cur_H3), counts(sce)["H3",])
-    expect_equal(as.numeric(cur_CD99), counts(sce)["CD99",])
-    expect_equal(as.numeric(cur_PIN), counts(sce)["PIN",])
-    expect_equal(as.numeric(cur_CD8a), counts(sce)["CD8a",])
-    expect_equal(as.numeric(cur_CDH), counts(sce)["CDH",])
+    expect_equal(as.numeric(cur_H3), assay(sce, "counts_sd")["H3",])
+    expect_equal(as.numeric(cur_CD99), assay(sce, "counts_sd")["CD99",])
+    expect_equal(as.numeric(cur_PIN), assay(sce, "counts_sd")["PIN",])
+    expect_equal(as.numeric(cur_CD8a), assay(sce, "counts_sd")["CD8a",])
+    expect_equal(as.numeric(cur_CDH), assay(sce, "counts_sd")["CDH",])
 
     expect_silent(sce <- measureObjects(pancreasMasks, pancreasImages, img_id = "ImageNb", basic_feature = "mad"))
     cur_H3 <- c(tapply(pancreasImages[[1]][,,1], pancreasMasks[[1]], mad)[-1],
@@ -276,13 +280,15 @@ test_that("measureObjects: different settings work", {
                  tapply(pancreasImages[[2]][,,5], pancreasMasks[[2]], mad)[-1],
                  tapply(pancreasImages[[3]][,,5], pancreasMasks[[3]], mad)[-1])
     cur_CDH[is.na(cur_CDH)] <- 0
+    
+    expect_equal(assayNames(sce), "counts_mad")
 
     # MAD
-    expect_equal(as.numeric(cur_H3), counts(sce)["H3",])
-    expect_equal(as.numeric(cur_CD99), counts(sce)["CD99",])
-    expect_equal(as.numeric(cur_PIN), counts(sce)["PIN",])
-    expect_equal(as.numeric(cur_CD8a), counts(sce)["CD8a",])
-    expect_equal(as.numeric(cur_CDH), counts(sce)["CDH",])
+    expect_equal(as.numeric(cur_H3), assay(sce, "counts_mad")["H3",])
+    expect_equal(as.numeric(cur_CD99), assay(sce, "counts_mad")["CD99",])
+    expect_equal(as.numeric(cur_PIN), assay(sce, "counts_mad")["PIN",])
+    expect_equal(as.numeric(cur_CD8a), assay(sce, "counts_mad")["CD8a",])
+    expect_equal(as.numeric(cur_CDH), assay(sce, "counts_mad")["CDH",])
 
     expect_silent(sce <- measureObjects(pancreasMasks, pancreasImages, img_id = "ImageNb", basic_feature = "q05", basic_quantiles = 0.5))
     cur_H3 <- c(tapply(pancreasImages[[1]][,,1], pancreasMasks[[1]], median)[-1],
@@ -301,12 +307,14 @@ test_that("measureObjects: different settings work", {
                  tapply(pancreasImages[[2]][,,5], pancreasMasks[[2]], median)[-1],
                  tapply(pancreasImages[[3]][,,5], pancreasMasks[[3]], median)[-1])
 
+    expect_equal(assayNames(sce), "counts_q05")
+    
     # Median
-    expect_equal(as.numeric(cur_H3), counts(sce)["H3",])
-    expect_equal(as.numeric(cur_CD99), counts(sce)["CD99",])
-    expect_equal(as.numeric(cur_PIN), counts(sce)["PIN",])
-    expect_equal(as.numeric(cur_CD8a), counts(sce)["CD8a",])
-    expect_equal(as.numeric(cur_CDH), counts(sce)["CDH",])
+    expect_equal(as.numeric(cur_H3), assay(sce, "counts_q05")["H3",])
+    expect_equal(as.numeric(cur_CD99), assay(sce, "counts_q05")["CD99",])
+    expect_equal(as.numeric(cur_PIN), assay(sce, "counts_q05")["PIN",])
+    expect_equal(as.numeric(cur_CD8a), assay(sce, "counts_q05")["CD8a",])
+    expect_equal(as.numeric(cur_CDH), assay(sce, "counts_q05")["CDH",])
 
     # Shape features
     expect_silent(sce <- measureObjects(pancreasMasks, pancreasImages, img_id = "ImageNb", feature_types = c("basic", "shape"),
