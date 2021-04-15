@@ -207,9 +207,13 @@
         !(cell_id %in% colnames(colData(object)))){
         stop("'img_id' and/or 'cell_id' not in 'colData(object)'.")
     }
+    
+    if (!all(is.numeric(colData(object)[,cell_id]))) {
+        stop("Cell ids should only contain numeric integer values.")
+    }
 
     if(!all(colData(object)[,cell_id] == floor(colData(object)[,cell_id]))){
-        stop("Cell ids should only contain integer values.")
+        stop("Cell ids should only contain numeric integer values.")
     }
 
     if(!is.null(exprs_values) && !(exprs_values %in% assayNames(object))){
@@ -311,6 +315,25 @@
             stop("Image ids in 'mcols(image)' and",
                     " 'colData(object)' do not match")
         }
+    }
+}
+
+#' @importFrom S4Vectors mcols
+.valid.matchObjects.measureObjects <- function(mask, image, img_id){
+    if(is.null(img_id)){
+        stop("'img_id' is missing.")
+    }
+    
+    image_images <- mcols(image)[,img_id]
+    mask_images <- mcols(mask)[,img_id]
+    if(!identical(mask_images, image_images)){
+        stop("Mask and image ids must be identical.")
+    }
+        
+    image_dims <- unlist(lapply(image, function(x){dim(x)[c(1,2)]}))
+    mask_dims <- unlist(lapply(mask, function(x){dim(x)[c(1,2)]}))
+    if(!identical(as.numeric(image_dims), as.numeric(mask_dims))){
+        stop("Mask and image entries must have the same dimensions.")
     }
 }
 
@@ -494,3 +517,83 @@
         stop("'bcg': specify in form of numeric entries")
     }
 }
+
+# Valid features for measuring objects
+.valid.features <- function(feature_types, basic_feature, shape_feature, moment_feature, 
+                            haralick_feature, basic_quantiles,
+                            haralick_nbins, haralick_scales){
+    if (!all(feature_types %in% c("basic", "shape", "moment", "haralick"))) {
+        stop("Only features of type 'basic', 'shape', 'moment' and 'haralick' are allowed.")
+    }
+    
+    if (!("basic" %in% feature_types) | is.null(basic_feature)) {
+        stop("Please specify a basic feature to characterise the marker expression per cell.")
+    }
+
+    if (length(basic_feature) > 1) {
+        stop("Only one intensity feature can be used to characterise the expression of each marker in each object.")
+    }
+    
+    if (!is.null(basic_quantiles)) {
+        
+        if (!all(is.numeric(basic_quantiles)) | !all(basic_quantiles < 1) | !all(basic_quantiles > 0)){
+            stop("Only numeric quantiles between 0 and 1 allowed.")
+        }
+        
+        str_quantiles <- lapply(strsplit(as.character(basic_quantiles), "\\."), paste, collapse = "")
+        basic_features_allowed <- c("mean", "sd", "mad", paste0("q", unlist(str_quantiles)))
+    } else {
+        basic_features_allowed <- c("mean", "sd", "mad")
+    }
+        
+    if (!basic_feature %in% basic_features_allowed) {
+        stop("Only basic features of type 'mean', 'sd', 'mad' or the selected quantiles allowed.")
+    }
+    
+    if ("shape" %in% feature_types) {
+        if (is.null(shape_feature)) {
+            stop("Specify at least one shape feature.")
+        }
+        
+        if (!all(shape_feature %in% c("area", "perimeter", "radius.mean", "radius.sd", "radius.max", "radius.min"))) {
+            stop("Only shape features of type 'area', 'perimeter', 'radius.mean', 'radius.sd', 'radius.max', 'radius.min' allowed.")
+        }
+    }
+    
+    if ("moment" %in% feature_types) {
+        if (is.null(moment_feature)) {
+            stop("Specify at least one moment feature.")
+        }
+    
+        if (!all(moment_feature %in% c("cx", "cy", "majoraxis", "eccentricity", "theta"))) {
+            stop("Only moment features of type 'cx', 'cy', 'majoraxis', 'eccentricity', 'theta' allowed.")
+        }
+    }
+    
+    if ("haralick" %in% feature_types) {
+        if (is.null(haralick_feature)) {
+            stop("Specify at least one haralick feature.")
+        }
+        
+        if (is.null(haralick_nbins) | !is.numeric(haralick_nbins) | length(haralick_nbins) > 1) {
+            stop("Specify the number of bins into which intensity levels are binned.")
+        }
+        
+        if (is.null(haralick_scales) | !is.numeric(haralick_scales)) {
+            stop("Specify the scale (in pixels) over which the haralick features are computed.")
+        }
+        
+        haralick_features_allowed <- c("asm", "con", "cor", "var", "idm", "sav", "sva",
+                                       "sen", "ent", "dva", "den", "f12",
+                                       "f13")
+        haralick_features_allowed <- paste0(rep(haralick_features_allowed, length(haralick_scales)), 
+                                            ".",
+                                            rep(paste0("s", haralick_scales), each = length(haralick_features_allowed)))
+        
+        if (!all(haralick_feature %in% haralick_features_allowed)) {
+            stop("Only haralick features of type ", paste(haralick_features_allowed, collapse = ", "), " allowed.")
+        }
+    }
+    
+}
+

@@ -150,7 +150,7 @@ test_that("SingleCellExperiment validity check is correct.", {
     set.seed(1234)
     cur_sce$CellNb <- rnorm(ncol(cur_sce))   
     expect_error(.valid.sce(object = cur_sce, img_id = "ImageNb", cell_id = "CellNb"), 
-                 regexp = "Cell ids should only contain integer values.", 
+                 regexp = "Cell ids should only contain numeric integer values.", 
                  fixed = TRUE)
     expect_error(.valid.sce(object = pancreasSCE, img_id = "ImageNb", cell_id = "CellNb", exprs_values = "test"), 
                  regexp = "'exprs_values' not an assay entry in 'object'.", 
