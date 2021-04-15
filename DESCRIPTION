@@ -54,6 +54,7 @@ Suggests:
     BiocStyle,
     knitr,
     rmarkdown,
+    markdown,
     testthat,
     shinytest
 biocViews: ImmunoOncology, Software, SingleCell, OneChannel, TwoChannel, MultipleComparison, Normalization, DataImport
