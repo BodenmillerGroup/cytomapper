@@ -74,7 +74,7 @@ containing one or multiple channels." />
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">cytomapper</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">1.3.5</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">1.3.6</span>
       </span>
     </div>
 
@@ -149,7 +149,9 @@ containing one or multiple channels.</p>
 (e.g. 2^16-1 = 65535) <code>value</code> to revert them back to the original
 pixel values after reading them in.</p><dl>
 <dt><code>scaleImages(object, value)</code></dt><dd><p>Scales all images in the
-<a href='CytoImageList-class.html'>CytoImageList</a> <code>object</code> by <code>value</code>.</p></dd>
+<a href='CytoImageList-class.html'>CytoImageList</a> <code>object</code> by <code>value</code>. Here <code>value</code>
+needs to be a single numeric or a numeric vector of the same length as
+<code>object</code>.</p></dd>
 
 </dl>
 
@@ -190,7 +192,7 @@ intensity values after normalization (see <code><a href='https://rdrr.io/pkg/EBI
 clipping range of the input intensity values (see
 <code><a href='https://rdrr.io/pkg/EBImage/man/normalize.html'>normalize</a></code>). Alternatively a names list where each
 entry corresponds to a channel-specific clipping range.</p></dd>
-<dt><code>overwrite</code>:</dt><dd><p>Only relevant when images are kept on disk. By 
+<dt><code>overwrite</code>:</dt><dd><p>Only relevant when images are kept on disk. By
 specifying <code>overwrite = TRUE</code>, the normalized images will overwrite
 the original images in the .h5 file, therefore reducing space on disk.
 However, the original images cannot be accessed anymore after normalization.
@@ -227,7 +229,7 @@ a new entry called "XYZ_norm" to the .h5 file.</p></dd>)
 <span class='fu'><a href='plotPixels.html'>plotPixels</a></span><span class='op'>(</span><span class='va'>x</span>, colour_by <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='st'>"H3"</span>, <span class='st'>"CD99"</span><span class='op'>)</span><span class='op'>)</span>
 </div><div class='img'><img src='CytoImageList-manipulation-3.png' alt='' width='700' height='433' /></div><div class='input'>
 <span class='co'># Setting the clipping range per channel</span>
-<span class='va'>x</span> <span class='op'>&lt;-</span> <span class='fu'>normalize</span><span class='op'>(</span><span class='va'>pancreasImages</span>, 
+<span class='va'>x</span> <span class='op'>&lt;-</span> <span class='fu'>normalize</span><span class='op'>(</span><span class='va'>pancreasImages</span>,
                 inputRange <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span><span class='op'>(</span>H3 <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='fl'>0</span>, <span class='fl'>70</span><span class='op'>)</span>, CD99 <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='fl'>0</span>, <span class='fl'>100</span><span class='op'>)</span><span class='op'>)</span><span class='op'>)</span>
 <span class='fu'><a href='plotPixels.html'>plotPixels</a></span><span class='op'>(</span><span class='va'>x</span>, colour_by <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='st'>"H3"</span>, <span class='st'>"CD99"</span><span class='op'>)</span><span class='op'>)</span>
 </div><div class='img'><img src='CytoImageList-manipulation-4.png' alt='' width='700' height='433' /></div><div class='input'>
