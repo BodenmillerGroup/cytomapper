@@ -124,12 +124,12 @@ Images can also be moved back to in memory representation:
 pancreasImages_inMemory <- CytoImageList(pancreasImages_onDisk,
                                         on_disk = FALSE)
 
-# Compare the image data to the orginal representation
-identical(pancreasImages_inMemory@listData, pancreasImages@listData)
+# Compare the image data to the original representation
+identical(as.list(pancreasImages_inMemory), as.list(pancreasImages))
 ```
 
 ```{r sanity-check, echo=FALSE}
-stopifnot(identical(pancreasImages@listData, pancreasImages_inMemory@listData))
+stopifnot(identical(as.list(pancreasImages), as.list(pancreasImages_inMemory)))
 ```
 
 # Effects on package functionality {#Functionality}

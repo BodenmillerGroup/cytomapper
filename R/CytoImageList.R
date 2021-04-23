@@ -15,8 +15,8 @@
 #' \code{h5FilesPath = getHDF5DumpDir()}
 #' @param BPPARAM parameters for parallelised processing. 
 #' This is only recommended for very large images. 
-#' See \code{\linkS4class{MulticoreParam}} for information on how to use multiple
-#' cores for parallelised processing.
+#' See \code{\linkS4class{MulticoreParam}} for information on how to use
+#' multiple cores for parallelised processing.
 #'
 #' @details Similar to the \code{\linkS4class{Image}} class, the first two
 #' dimensions of each entry indicate the spatial dimension of the image. These
