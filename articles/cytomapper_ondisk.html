@@ -198,7 +198,7 @@
 <span class="fu">seed</span><span class="op">(</span><span class="va">pancreasImages_onDisk</span><span class="op">$</span><span class="va">E34_imc</span><span class="op">)</span></code></pre></div>
 <pre><code>## An object of class "HDF5ArraySeed"
 ## Slot "filepath":
-## [1] "/private/var/folders/24/8k48jl6d249_n_qfxwsl6xvm0000gn/T/RtmpdsyqN7/HDF5Array_dump/E34_imc.h5"
+## [1] "/private/var/folders/24/8k48jl6d249_n_qfxwsl6xvm0000gn/T/RtmpOjDm1c/HDF5Array_dump/E34_imc.h5"
 ## 
 ## Slot "name":
 ## [1] "E34_imc"
@@ -229,8 +229,8 @@
 <code class="sourceCode R"><span class="va">pancreasImages_inMemory</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/CytoImageList-class.html">CytoImageList</a></span><span class="op">(</span><span class="va">pancreasImages_onDisk</span>,
                                         on_disk <span class="op">=</span> <span class="cn">FALSE</span><span class="op">)</span>
 
-<span class="co"># Compare the image data to the orginal representation</span>
-<span class="fu"><a href="https://rdrr.io/r/base/identical.html">identical</a></span><span class="op">(</span><span class="va">pancreasImages_inMemory</span><span class="op">@</span><span class="va">listData</span>, <span class="va">pancreasImages</span><span class="op">@</span><span class="va">listData</span><span class="op">)</span></code></pre></div>
+<span class="co"># Compare the image data to the original representation</span>
+<span class="fu"><a href="https://rdrr.io/r/base/identical.html">identical</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/list.html">as.list</a></span><span class="op">(</span><span class="va">pancreasImages_inMemory</span><span class="op">)</span>, <span class="fu"><a href="https://rdrr.io/r/base/list.html">as.list</a></span><span class="op">(</span><span class="va">pancreasImages</span><span class="op">)</span><span class="op">)</span></code></pre></div>
 <pre><code>## [1] TRUE</code></pre>
 </div>
 <div id="Functionality" class="section level1">
@@ -252,7 +252,7 @@
 <span class="fu">seed</span><span class="op">(</span><span class="va">pancreasImages_norm</span><span class="op">$</span><span class="va">E34_imc</span><span class="op">)</span></code></pre></div>
 <pre><code>## An object of class "HDF5ArraySeed"
 ## Slot "filepath":
-## [1] "/private/var/folders/24/8k48jl6d249_n_qfxwsl6xvm0000gn/T/RtmpdsyqN7/HDF5Array_dump/E34_imc.h5"
+## [1] "/private/var/folders/24/8k48jl6d249_n_qfxwsl6xvm0000gn/T/RtmpOjDm1c/HDF5Array_dump/E34_imc.h5"
 ## 
 ## Slot "name":
 ## [1] "E34_imc_norm"
@@ -303,7 +303,7 @@
 <span class="fu">seed</span><span class="op">(</span><span class="va">channels3</span><span class="op">$</span><span class="va">E34_imc</span><span class="op">)</span></code></pre></div>
 <pre><code>## An object of class "HDF5ArraySeed"
 ## Slot "filepath":
-## [1] "/private/var/folders/24/8k48jl6d249_n_qfxwsl6xvm0000gn/T/RtmpdsyqN7/HDF5Array_dump/test/E34_imc.h5"
+## [1] "/private/var/folders/24/8k48jl6d249_n_qfxwsl6xvm0000gn/T/RtmpOjDm1c/HDF5Array_dump/test/E34_imc.h5"
 ## 
 ## Slot "name":
 ## [1] "E34_imc"
