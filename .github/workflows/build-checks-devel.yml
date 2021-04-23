@@ -9,7 +9,7 @@ on:
 jobs:
   R-CMD-check:
     runs-on: ubuntu-latest
-    container: rocker/r-ver:devel
+    container: bioconductor/bioconductor_docker:devel
 
     steps:
       - uses: actions/checkout@v2
