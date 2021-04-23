@@ -16,7 +16,7 @@ test_that("On disk: Images can be loaded into CytoImageList object.", {
   expect_s4_class(cur_ImageList, "CytoImageList")
   
   expect_s4_class(cur_ImageList$E34_imc, "HDF5Array")
-  expect_equal(cur_ImageList$E34_imc@seed@name, "E34_imc")
+  expect_equal(cur_ImageList$E34_imc@seed@name, "/E34_imc")
   expect_false(cur_ImageList$E34_imc@seed@as_sparse)
   expect_equal(cur_ImageList$E34_imc@seed@dim, c(100, 100, 5))
   expect_equal(cur_ImageList$E34_imc@seed@first_val, 2.235787, tolerance = 0.00001)
@@ -42,7 +42,7 @@ test_that("On disk: Images can be loaded into CytoImageList object.", {
   expect_equal(length(cur_ImageList), 2L)
   
   expect_s4_class(cur_ImageList$test1, "HDF5Array")
-  expect_equal(cur_ImageList$test1@seed@name, "test1")
+  expect_equal(cur_ImageList$test1@seed@name, "/test1")
   expect_false(cur_ImageList$test1@seed@as_sparse)
   expect_equal(cur_ImageList$test1@seed@dim, c(100, 100, 5))
   expect_equal(cur_ImageList$test1@seed@first_val, 2.235787, tolerance = 0.00001)
@@ -96,7 +96,7 @@ test_that("On disk: Images can be loaded into CytoImageList object.", {
   expect_lt(object.size(cur_ImageList), object.size(pancreasImages))
   
   expect_s4_class(cur_ImageList$E34_imc, "HDF5Array")
-  expect_equal(cur_ImageList$E34_imc@seed@name, "E34_imc")
+  expect_equal(cur_ImageList$E34_imc@seed@name, "/E34_imc")
   expect_false(cur_ImageList$E34_imc@seed@as_sparse)
   expect_equal(cur_ImageList$E34_imc@seed@dim, c(100, 100, 5))
   expect_equal(cur_ImageList$E34_imc@seed@first_val, 2.235787, tolerance = 0.00001)
@@ -121,7 +121,7 @@ test_that("On disk: Images can be loaded into CytoImageList object.", {
   expect_lt(object.size(cur_ImageList), object.size(pancreasImages))
   
   expect_s4_class(cur_ImageList$E34_imc, "HDF5Array")
-  expect_equal(cur_ImageList$E34_imc@seed@name, "E34_imc")
+  expect_equal(cur_ImageList$E34_imc@seed@name, "/E34_imc")
   expect_false(cur_ImageList$E34_imc@seed@as_sparse)
   expect_equal(cur_ImageList$E34_imc@seed@dim, c(100, 100, 5))
   expect_equal(cur_ImageList$E34_imc@seed@first_val, 2.235787, tolerance = 0.00001)
