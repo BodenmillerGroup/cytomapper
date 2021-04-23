@@ -23,7 +23,9 @@ In some cases, images need to be scaled by a constant
 pixel values after reading them in.
 \describe{
 \item{\code{scaleImages(object, value)}}{Scales all images in the
-\linkS4class{CytoImageList} \code{object} by \code{value}.}
+\linkS4class{CytoImageList} \code{object} by \code{value}. Here \code{value}
+needs to be a single numeric or a numeric vector of the same length as
+\code{object}.}
 }
 }
 
@@ -66,7 +68,7 @@ intensity values after normalization (see \code{\link[EBImage]{normalize}}).}
 clipping range of the input intensity values (see
 \code{\link[EBImage]{normalize}}). Alternatively a names list where each
 entry corresponds to a channel-specific clipping range.}
-\item{\code{overwrite}:}{Only relevant when images are kept on disk. By 
+\item{\code{overwrite}:}{Only relevant when images are kept on disk. By
 specifying \code{overwrite = TRUE}, the normalized images will overwrite
 the original images in the .h5 file, therefore reducing space on disk.
 However, the original images cannot be accessed anymore after normalization.
@@ -96,7 +98,7 @@ x <- normalize(x, inputRange = c(0, 0.9))
 plotPixels(x, colour_by = c("H3", "CD99"))
 
 # Setting the clipping range per channel
-x <- normalize(pancreasImages, 
+x <- normalize(pancreasImages,
                 inputRange = list(H3 = c(0, 70), CD99 = c(0, 100)))
 plotPixels(x, colour_by = c("H3", "CD99"))
 

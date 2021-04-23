@@ -8,7 +8,7 @@ test_that("On disk: CytoImageList can be scaled.", {
     
   cur_size <- file.info(paste0(cur_path, "/E34_imc.h5"))[,"size"]
 
-  # Works
+  # Works - single numeric
   expect_silent(cur_Images_2 <- scaleImages(cur_Images, 1))
   expect_s4_class(cur_Images_2[[1]], "DelayedArray")
   expect_s4_class(cur_Images_2[[2]], "DelayedArray")
@@ -16,28 +16,53 @@ test_that("On disk: CytoImageList can be scaled.", {
   expect_identical(as.array(cur_Images_2[[1]]), as.array(cur_Images[[1]]))
 
   expect_silent(cur_Images_2 <- scaleImages(cur_Images, 2))
-  expect_identical(as.array(cur_Images_2[[1]]), as.array(cur_Images[[1]] * 2))
+  expect_identical(as.array(cur_Images_2[[1]]), as.array(cur_Images[[1]]) * 2)
 
   image.list <- list.files(system.file("extdata", package = "cytomapper"),
              pattern = "mask.tiff", full.names = TRUE)
-  cur_Images <- loadImages(image.list, on_disk = TRUE, h5FilesPath = cur_path)
-  expect_equal(cur_Images[[1]][11, 1:2],
+  cur_Images_2 <- loadImages(image.list, on_disk = TRUE, h5FilesPath = cur_path)
+  expect_equal(cur_Images_2[[1]][11, 1:2],
                    c(0.01257343, 0.01257343))
 
-  expect_error(plotCells(cur_Images),
+  expect_error(plotCells(cur_Images_2),
                regexp = "Segmentation masks must only contain integer values.",
                fixed = TRUE)
 
-  expect_silent(cur_Images <- scaleImages(cur_Images, (2^16)-1))
-  expect_equal(cur_Images[[1]][11, 1:2],
+  expect_silent(cur_Images_2 <- scaleImages(cur_Images_2, (2^16)-1))
+  expect_identical(cur_Images_2[[1]][11, 1:2],
                c(824, 824))
+  
+  # Works - numeric vector
+  expect_silent(cur_images <- scaleImages(cur_Images, c(1, 1, 1)))
+  expect_identical(as.array(imageData(cur_images[[1]])), as.array(imageData(cur_Images[[1]])))
+  expect_identical(as.array(imageData(cur_images[[2]])), as.array(imageData(cur_Images[[2]])))
+  expect_identical(as.array(imageData(cur_images[[3]])), as.array(imageData(cur_Images[[3]])))
+  
+  expect_silent(cur_images <- scaleImages(cur_Images, c(2, 3, 4)))
+  expect_identical(as.array(imageData(cur_images[[1]])),
+                   as.array(imageData(cur_Images[[1]])) * 2)
+  expect_identical(as.array(imageData(cur_images[[2]])),
+                   as.array(imageData(cur_Images[[2]])) * 3)
+  expect_identical(as.array(imageData(cur_images[[3]])),
+                   as.array(imageData(cur_Images[[3]])) * 4)
+  
+  expect_silent(plotPixels(cur_images))
 
   # Error
   expect_error(scaleImages(cur_Images, c(1,2)),
-               regexp = "'value' must be a single numeric.",
+               regexp = "'value' must either be a single numeric or of the same length as 'object'.",
                fixed = TRUE)
   expect_error(scaleImages(cur_Images, "test"),
-               regexp = "'value' must be a single numeric.",
+               regexp = "'value' must be numeric.",
+               fixed = TRUE)
+  expect_error(scaleImages(cur_Images, c(1, "test")),
+               regexp = "'value' must be numeric.",
+               fixed = TRUE)
+  expect_error(scaleImages(cur_Images, c(1, 2, "test")),
+               regexp = "'value' must be numeric.",
+               fixed = TRUE)
+  expect_error(scaleImages(cur_Images, c(1, 2, 3, 4)),
+               regexp = "'value' must either be a single numeric or of the same length as 'object'.",
                fixed = TRUE)
   
   expect_equal(cur_size, file.info(paste0(cur_path, "/E34_imc.h5"))[,"size"])

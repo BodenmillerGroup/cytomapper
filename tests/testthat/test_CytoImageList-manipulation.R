@@ -1,15 +1,15 @@
 test_that("CytoImageList can be scaled.", {
   data("pancreasImages")
 
-  # Works
+  # Works - single numeric
   expect_silent(cur_images <- scaleImages(pancreasImages, 1))
   expect_identical(imageData(cur_images[[1]]), imageData(pancreasImages[[1]]))
   expect_equal(imageData(cur_images[[1]]),
                imageData(pancreasImages[[1]]))
 
-  expect_silent(cur_images <- scaleImages(cur_images, 2))
+  expect_silent(cur_images <- scaleImages(pancreasImages, 2))
   expect_equal(imageData(cur_images[[1]]),
-               imageData(pancreasImages[[1]] * 2))
+               imageData(pancreasImages[[1]]) * 2)
 
   expect_silent(plotPixels(cur_images))
 
@@ -28,12 +28,37 @@ test_that("CytoImageList can be scaled.", {
                c(824, 824))
   expect_silent(plotCells(cur_images))
 
+  # Works - numeric vector
+  expect_silent(cur_images <- scaleImages(pancreasImages, c(1, 1, 1)))
+  expect_identical(imageData(cur_images[[1]]), imageData(pancreasImages[[1]]))
+  expect_identical(imageData(cur_images[[2]]), imageData(pancreasImages[[2]]))
+  expect_identical(imageData(cur_images[[3]]), imageData(pancreasImages[[3]]))
+
+  expect_silent(cur_images <- scaleImages(cur_images, c(2, 3, 4)))
+  expect_identical(imageData(cur_images[[1]]),
+               imageData(pancreasImages[[1]]) * 2)
+  expect_identical(imageData(cur_images[[2]]),
+                   imageData(pancreasImages[[2]]) * 3)
+  expect_identical(imageData(cur_images[[3]]),
+                   imageData(pancreasImages[[3]]) * 4)
+
+  expect_silent(plotPixels(cur_images))
+
   # Error
-  expect_error(scaleImages(cur_images, c(1,2)),
-               regexp = "'value' must be a single numeric.",
+  expect_error(scaleImages(pancreasImages, c(1,2)),
+               regexp = "'value' must either be a single numeric or of the same length as 'object'.",
                fixed = TRUE)
-  expect_error(scaleImages(cur_images, "test"),
-               regexp = "'value' must be a single numeric.",
+  expect_error(scaleImages(pancreasImages, "test"),
+               regexp = "'value' must be numeric.",
+               fixed = TRUE)
+  expect_error(scaleImages(pancreasImages, c(1, "test")),
+               regexp = "'value' must be numeric.",
+               fixed = TRUE)
+  expect_error(scaleImages(pancreasImages, c(1, 2, "test")),
+               regexp = "'value' must be numeric.",
+               fixed = TRUE)
+  expect_error(scaleImages(pancreasImages, c(1, 2, 3, 4)),
+               regexp = "'value' must either be a single numeric or of the same length as 'object'.",
                fixed = TRUE)
 })
 
@@ -231,24 +256,24 @@ test_that("CytoImageList can be normalized", {
                max(imageData(pancreasImages[[2]])[,,4])/cur_max[4], tolerance = 1e-06)
   expect_equal(max(imageData(cur_images[[2]])[,,5]),
                max(imageData(pancreasImages[[2]])[,,5])/cur_max[5], tolerance = 1e-06)
-  
+
   # Single frame
   cur_img1 <- pancreasImages[[1]][,,1]
   cur_img2 <- pancreasImages[[2]][,,1]
   cur_img <- CytoImageList(cur_img1, cur_img2)
   channelNames(cur_img) <- "H3"
-  
+
   expect_silent(cur_images <- normalize(cur_img, separateImages = FALSE,
                                         separateChannels = TRUE))
   expect_silent(plotPixels(cur_images,
                            colour_by = "H3"))
-  
+
   cur_max <- max(max(cur_img1), max(cur_img2))
   expect_equal(max(imageData(cur_images[[1]])[,,1]),
                max(imageData(pancreasImages[[1]])[,,1])/cur_max, tolerance = 1e-06)
   expect_equal(max(imageData(cur_images[[2]])[,,1]),
                max(imageData(pancreasImages[[2]])[,,1])/cur_max, tolerance = 1e-06)
-  
+
   # Not Separate images
   # Not Separate channels
   expect_silent(cur_images <- normalize(pancreasImages, separateImages = FALSE,
@@ -563,7 +588,7 @@ test_that("CytoImageList can be normalized", {
                            colour_by = c("H3", "CD99"), scale = TRUE))
   expect_silent(plotPixels(cur_images,
                            colour_by = c("H3", "CD99"), scale = FALSE))
-  
+
   # Channel-wise normalization
   # Separate images
   expect_silent(cur_images <- normalize(pancreasImages, separateImages = TRUE,
@@ -572,7 +597,7 @@ test_that("CytoImageList can be normalized", {
                            colour_by = c("H3", "CD99", "PIN")))
   expect_silent(plotPixels(cur_images,
                            colour_by = c("H3", "CD99", "PIN")))
-  
+
   expect_equal(imageData(cur_images[[1]])[1, 1:10,"H3"],
                imageData(pancreasImages[[1]])[1, 1:10,"H3"]/50,
                tolerance = 1e-06)
@@ -600,7 +625,7 @@ test_that("CytoImageList can be normalized", {
   expect_equal(imageData(cur_images[[3]])[1, 1:10,"PIN"],
                imageData(pancreasImages[[3]])[1, 1:10,"PIN"]/max(imageData(pancreasImages[[1]])[,,"PIN"]),
                tolerance = 1e-06)
-  
+
   # Not Separate images
   expect_silent(cur_images <- normalize(pancreasImages, separateImages = FALSE,
                                         inputRange = list(H3 = c(0,50), CD99 = c(0,70))))
@@ -608,7 +633,7 @@ test_that("CytoImageList can be normalized", {
                            colour_by = c("H3", "CD99", "PIN")))
   expect_silent(plotPixels(cur_images,
                            colour_by = c("H3", "CD99", "PIN")))
-  
+
   expect_equal(imageData(cur_images[[1]])[1, 1:10,"H3"],
                imageData(pancreasImages[[1]])[1, 1:10,"H3"]/50,
                tolerance = 1e-06)

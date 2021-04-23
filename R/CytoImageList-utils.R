@@ -74,7 +74,7 @@ setMethod("channelNames",
 setReplaceMethod("channelNames",
     signature = signature(x="CytoImageList"),
     definition = function(x, value){
-        
+
     if (is(x[[1]], "Image")) {
         # Image needs to be expanded to store channel names
         if(length(dim(x[[1]])) == 2L){
@@ -84,7 +84,7 @@ setReplaceMethod("channelNames",
                 return(cur_Image)
             })
         }
-        
+
         x <- S4Vectors::endoapply(x, function(y){
             if (is.null(value)) {
                 dimnames(y)[[3]] <- NULL
@@ -103,7 +103,7 @@ setReplaceMethod("channelNames",
                 return(cur_Image)
             })
         }
-        
+
         x@listData <- lapply(x, function(y){
             if (is.null(value)) {
                 dimnames(y)[[3]] <- NULL
@@ -151,7 +151,9 @@ setReplaceMethod("names",
 #' pixel values after reading them in.
 #' \describe{
 #' \item{\code{scaleImages(object, value)}}{Scales all images in the
-#' \linkS4class{CytoImageList} \code{object} by \code{value}.}
+#' \linkS4class{CytoImageList} \code{object} by \code{value}. Here \code{value}
+#' needs to be a single numeric or a numeric vector of the same length as
+#' \code{object}.}
 #' }
 #'
 #' @section Image normalization:
@@ -167,7 +169,7 @@ setReplaceMethod("names",
 #' The \code{inputRange} either takes NULL (default), a vector of length 2
 #' specifying the clipping range for all channels or a list where each
 #' named entry contains a channel-specific clipping range.
-#' 
+#'
 #' Image normalization also works for images stored on disk. By default,
 #' the normalized images are stored as a second entry called "XYZ_norm"
 #' in the .h5 file. Here "XYZ" specifies the name of the original entry.
@@ -192,7 +194,7 @@ setReplaceMethod("names",
 #' clipping range of the input intensity values (see
 #' \code{\link[EBImage]{normalize}}). Alternatively a names list where each
 #' entry corresponds to a channel-specific clipping range.}
-#' \item{\code{overwrite}:}{Only relevant when images are kept on disk. By 
+#' \item{\code{overwrite}:}{Only relevant when images are kept on disk. By
 #' specifying \code{overwrite = TRUE}, the normalized images will overwrite
 #' the original images in the .h5 file, therefore reducing space on disk.
 #' However, the original images cannot be accessed anymore after normalization.
@@ -221,9 +223,9 @@ setReplaceMethod("names",
 #' # Setting the clipping range
 #' x <- normalize(x, inputRange = c(0, 0.9))
 #' plotPixels(x, colour_by = c("H3", "CD99"))
-#' 
+#'
 #' # Setting the clipping range per channel
-#' x <- normalize(pancreasImages, 
+#' x <- normalize(pancreasImages,
 #'                 inputRange = list(H3 = c(0, 70), CD99 = c(0, 100)))
 #' plotPixels(x, colour_by = c("H3", "CD99"))
 #'
@@ -243,13 +245,25 @@ setReplaceMethod("names",
 NULL
 
 #' @export
+#' @importFrom S4Vectors endoapply mendoapply
 setMethod("scaleImages",
     signature = signature(object="CytoImageList"),
     definition = function(object, value){
-        if (length(value) != 1L || !is.numeric(value)) {
-            stop("'value' must be a single numeric.")
+        if (!all(is.numeric(value))) {
+            stop("'value' must be numeric.")
         }
-        cur_out <- endoapply(object, function(y){y * value})
+
+        if (length(value) != 1L && length(value) != length(object)) {
+            stop("'value' must either be a single numeric or",
+                  " of the same length as 'object'.")
+        }
+
+        if (length(value) == 1L) {
+             cur_out <- endoapply(object, function(y){y * value})
+        } else {
+             cur_out <- mendoapply(function(y, k){y * k}, object, value)
+        }
+
         return(cur_out)
     })
 
@@ -273,10 +287,10 @@ normImages <- function(object, separateChannels = TRUE, separateImages = FALSE,
         length(inputRange) != 2) {
         stop("'inputRange' takes a vector of length 2, a list or NULL.")
     }
-    
+
     # Type of objects
     is_image <- is(object[[1]], "Image")
-    
+
     # Number of frames
     if (is_image) {
         nf <- numberOfFrames(object[[1]])
@@ -286,29 +300,29 @@ normImages <- function(object, separateChannels = TRUE, separateImages = FALSE,
 
     # Number of images
     ni <- length(object)
-    
+
     if (is.list(inputRange)) {
-        
+
         if (is.null(channelNames(object))) {
             stop("Please set the 'channelNames' of the CytoImageList object.")
         }
-        
+
         if (!all(names(inputRange) %in% channelNames(object))) {
             stop("The names of 'inputRange' should correspond to the",
             "'channelNames' of the CytoImageList object.")
         }
-        
-        cur_inputRanges <- vector(mode = "list", 
+
+        cur_inputRanges <- vector(mode = "list",
                                 length = length(channelNames(object)))
         names(cur_inputRanges) <- channelNames(object)
         cur_inputRanges[names(inputRange)] <- inputRange
-        
+
         if (separateImages) {
-            
+
             object <- endoapply(object, function(y){
-                
+
                 cur_names <- dimnames(y)
-                
+
                 if (is_image) {
                     y <- lapply(names(cur_inputRanges), function(i){
                             EBImage::normalize(y[,,i], separate = TRUE,
@@ -323,79 +337,79 @@ normImages <- function(object, separateChannels = TRUE, separateImages = FALSE,
                     })
                     z <- combine(z)
                     dimnames(z) <- cur_names
-                    
+
                     y <- .add_h5(y, z, overwrite)
                 }
-                
+
                 return(y)
             })
-            
+
         } else {
-            
-            cur_range <- cur_inputRanges[unlist(lapply(cur_inputRanges, 
+
+            cur_range <- cur_inputRanges[unlist(lapply(cur_inputRanges,
                                                         is.null))]
-            
+
             cur_r <- lapply(names(cur_range), function(x){
-                quantile(unlist(lapply(getChannels(object, x), quantile, 
+                quantile(unlist(lapply(getChannels(object, x), quantile,
                                         probs = c(0, 1))), c(0, 1))
             })
             names(cur_r) <- names(cur_range)
-            
+
             cur_inputRanges[names(cur_r)] <- cur_r
-                
+
             object <- endoapply(object, function(y){
-                    
+
                 cur_names <- dimnames(y)
-                
+
                 if (is_image) {
                     if (nf == 1) {
-                        
+
                         y <- EBImage::normalize(y,
                                                 separate = TRUE, ft=ft,
                                                 inputRange = cur_inputRanges[[1]])
-                        
+
                     } else {
-                        
+
                         y <- lapply(names(cur_inputRanges), function(i){
                             EBImage::normalize(y[,,i],
                                                separate = TRUE, ft=ft,
                                                inputRange = cur_inputRanges[[i]])
                         })
                         y <- combine(y)
-                        
+
                     }
-                    
-                    dimnames(y) <- cur_names 
+
+                    dimnames(y) <- cur_names
                 } else {
                     if (nf == 1) {
-                        
+
                         z <- EBImage::normalize(as.array(y),
                                                 separate = TRUE, ft=ft,
                                                 inputRange = cur_inputRanges[[1]])
-                        
+
                     } else {
-                        
+
                         z <- lapply(names(cur_inputRanges), function(i){
                             EBImage::normalize(as.array(y[,,i]),
                                                separate = TRUE, ft=ft,
                                                inputRange = cur_inputRanges[[i]])
                         })
                         z <- combine(z)
-                        
+
                     }
-                    
-                    dimnames(z) <- cur_names 
+
+                    dimnames(z) <- cur_names
                     y <- .add_h5(y, z, overwrite)
                 }
-                    
+
                 return(y)
             })
         }
-        
+
     } else {
-        
+
         if (separateImages) {
-    
+
             object <- endoapply(object, function(y){
                 if (is_image) {
                     y <- EBImage::normalize(y, separate = separateChannels,
@@ -407,9 +421,9 @@ normImages <- function(object, separateChannels = TRUE, separateImages = FALSE,
                 }
                 return(y)
             })
-    
+
         } else {
-    
+
             # Finding the maximum and minimum values
             if (separateChannels && is.null(inputRange)) {
                 if (nf == 1) {
@@ -432,28 +446,28 @@ normImages <- function(object, separateChannels = TRUE, separateImages = FALSE,
                 }, FUN.VALUE = numeric(2))
                 cur_range <- quantile(cur_range, c(0, 1))
             }
-    
+
             if (separateChannels) {
-    
+
                 object <- endoapply(object, function(y){
-    
+
                     cur_names <- dimnames(y)
-                    
+
                     if (is_image) {
                         if (nf == 1) {
-                            
+
                             if (!is.null(inputRange)) {
                                 cur_range <- inputRange
                             } else {
                                 cur_range <- as.numeric(cur_range)
                             }
-                            
+
                             y <- EBImage::normalize(y,
                                                     separate = TRUE, ft=ft,
                                                     inputRange = cur_range)
-                            
+
                         } else {
-                            
+
                             if (!is.null(inputRange)) {
                                 y <- EBImage::normalize(y, separate = TRUE, ft=ft,
                                                         inputRange = inputRange)
@@ -465,25 +479,25 @@ normImages <- function(object, separateChannels = TRUE, separateImages = FALSE,
                                 })
                                 y <- combine(y)
                             }
-                            
+
                         }
-                        
+
                         dimnames(y) <- cur_names
                     } else {
                         if (nf == 1) {
-                            
+
                             if (!is.null(inputRange)) {
                                 cur_range <- inputRange
                             } else {
                                 cur_range <- as.numeric(cur_range)
                             }
-                            
+
                             z <- EBImage::normalize(as.array(y),
                                                     separate = TRUE, ft=ft,
                                                     inputRange = cur_range)
-                            
+
                         } else {
-                            
+
                             if (!is.null(inputRange)) {
                                 z <- EBImage::normalize(as.array(y), separate = TRUE, ft=ft,
                                                         inputRange = inputRange)
@@ -495,37 +509,37 @@ normImages <- function(object, separateChannels = TRUE, separateImages = FALSE,
                                 })
                                 z <- combine(z)
                             }
-                            
+
                         }
-                        dimnames(z) <- cur_names  
-                        
+                        dimnames(z) <- cur_names
+
                         y <- .add_h5(y, z, overwrite)
                     }
-    
+
                     return(y)
                 })
-    
+
             } else {
                 object <- endoapply(object, function(y){
                     if(is.null(inputRange)){
                         inputRange <- as.numeric(cur_range)
                     }
-    
+
                     if (is_image) {
                         y <- EBImage::normalize(y, separate = FALSE,
-                                                ft=ft, inputRange = inputRange) 
+                                                ft=ft, inputRange = inputRange)
                     } else {
                         z <- EBImage::normalize(as.array(y), separate = FALSE,
                                                 ft=ft, inputRange = inputRange)
                         y <- .add_h5(y, z, overwrite)
                     }
-    
+
                     return(y)
                 })
-    
+
             }
         }
-        
+
     }
     return(object)
 }
@@ -539,11 +553,11 @@ setMethod("normalize",
 # Function to handle h5 files
 #' @importFrom rhdf5 h5delete h5ls
 .add_h5 <- function(cur_obj, new_obj, overwrite){
-    
+
     cur_file <- path(cur_obj)
-    
+
     cur_name <- paste0(sub("\\.[A-Za-z0-9]*", "", basename(cur_file)), "_norm")
-    
+
     if (overwrite) {
         file.remove(cur_file)
     } else {
@@ -552,13 +566,13 @@ setMethod("normalize",
         if (cur_name %in% h5ls(cur_file)$name) {
             h5delete(cur_file, cur_name)
         }
-        
+
         if (paste0(".", cur_name, "_dimnames") %in% h5ls(cur_file)$name) {
             h5delete(cur_file, paste0(".", cur_name, "_dimnames"))
         }
     }
-    
-    writeHDF5Array(DelayedArray(new_obj), 
+
+    writeHDF5Array(DelayedArray(new_obj),
                    filepath = cur_file,
                    name = cur_name,
                    with.dimnames = TRUE)
