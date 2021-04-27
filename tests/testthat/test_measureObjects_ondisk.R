@@ -122,9 +122,9 @@ test_that("measureObjects: defaults work", {
 
     # Parallelisable
     expect_silent(sce.1 <- measureObjects(cur_Masks, cur_Images, img_id = "ImageNb",
-                                        BPPARAM = MulticoreParam()))
+                                        BPPARAM = BiocParallel::bpparam()))
     expect_silent(sce.2 <- measureObjects(cur_Masks, cur_Images, img_id = "ImageNb",
-                                          BPPARAM = SerialParam()))
+                                          BPPARAM = BiocParallel::SerialParam()))
     expect_equal(sce.1, sce.2)
     expect_equal(as.numeric(cur_H3), counts(sce.1)["H3",])
 })

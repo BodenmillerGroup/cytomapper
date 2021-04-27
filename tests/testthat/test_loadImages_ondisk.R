@@ -34,7 +34,7 @@ test_that("On disk: loadImages function reads in correct objects on disk.", {
   expect_true(file.remove(file.path(cur_path, paste0(sub("\\.[^.]*$", "", 
                                              basename(single_file)), ".h5"))))
   expect_silent(cur_file <- loadImages(single_file, on_disk = TRUE, 
-                                       h5FilesPath = cur_path, BPPARAM = BiocParallel::MulticoreParam()))
+                                       h5FilesPath = cur_path, BPPARAM = BiocParallel::bpparam()))
   expect_s4_class(cur_file, "CytoImageList")
   expect_true(file.exists(file.path(cur_path, paste0(sub("\\.[^.]*$", "", 
                                                          basename(single_file)), ".h5"))))
@@ -73,7 +73,7 @@ test_that("On disk: loadImages function reads in correct objects on disk.", {
   expect_true(file.remove(file.path(cur_path, "J02_imc.h5")))
   expect_silent(cur_files <- loadImages(path, pattern = "_imc.tiff",
                                        on_disk = TRUE, h5FilesPath = cur_path, 
-                                       BPPARAM = BiocParallel::MulticoreParam()))
+                                       BPPARAM = BiocParallel::bpparam()))
   expect_s4_class(cur_files, "CytoImageList")
   expect_equal(length(cur_files), 3L)
   
@@ -141,7 +141,7 @@ test_that("On disk: getHDF5DumpDir works.", {
     expect_true(file.remove(file.path(cur_path, paste0(sub("\\.[^.]*$", "", 
                                                basename(single_file)), ".h5"))))
     expect_silent(cur_file <- loadImages(single_file, on_disk = TRUE, 
-                                         h5FilesPath = cur_path, BPPARAM = BiocParallel::MulticoreParam()))
+                                         h5FilesPath = cur_path, BPPARAM = BiocParallel::bpparam()))
     expect_s4_class(cur_file, "CytoImageList")
     expect_true(file.exists(file.path(cur_path, paste0(sub("\\.[^.]*$", "", 
                                                            basename(single_file)), ".h5"))))
@@ -180,7 +180,7 @@ test_that("On disk: getHDF5DumpDir works.", {
     expect_true(file.remove(file.path(cur_path, "J02_imc.h5")))
     expect_silent(cur_files <- loadImages(path, pattern = "_imc.tiff",
                                           on_disk = TRUE, h5FilesPath = cur_path, 
-                                          BPPARAM = BiocParallel::MulticoreParam()))
+                                          BPPARAM = BiocParallel::bpparam()))
     expect_s4_class(cur_files, "CytoImageList")
     expect_equal(length(cur_files), 3L)
     
