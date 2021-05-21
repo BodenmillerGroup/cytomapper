@@ -31,7 +31,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">cytomapper</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">1.3.6</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">1.5.0</span>
       </span>
     </div>
 
@@ -88,7 +88,7 @@
       Department for Quantitative Biomedicine, University of Zurich<br><a class="author_email" href="mailto:#"></a><a href="mailto:nils.eling@dqbm.uzh.ch" class="email">nils.eling@dqbm.uzh.ch</a>
       </address>
                   
-            <h4 class="date">29 April 2021</h4>
+            <h4 class="date">21 May 2021</h4>
       
       <small class="dont-index">Source: <a href="https://github.com/BodenmillerGroup/cytomapper/blob/master/vignettes/cytomapper_ondisk.Rmd"><code>vignettes/cytomapper_ondisk.Rmd</code></a></small>
       <div class="hidden name"><code>cytomapper_ondisk.Rmd</code></div>
@@ -198,7 +198,7 @@
 <span class="fu">seed</span><span class="op">(</span><span class="va">pancreasImages_onDisk</span><span class="op">$</span><span class="va">E34_imc</span><span class="op">)</span></code></pre></div>
 <pre><code>## An object of class "HDF5ArraySeed"
 ## Slot "filepath":
-## [1] "/private/var/folders/24/8k48jl6d249_n_qfxwsl6xvm0000gn/T/Rtmpn6cZhl/HDF5Array_dump/E34_imc.h5"
+## [1] "/private/var/folders/24/8k48jl6d249_n_qfxwsl6xvm0000gn/T/RtmpEOFGWk/HDF5Array_dump/E34_imc.h5"
 ## 
 ## Slot "name":
 ## [1] "E34_imc"
@@ -252,7 +252,7 @@
 <span class="fu">seed</span><span class="op">(</span><span class="va">pancreasImages_norm</span><span class="op">$</span><span class="va">E34_imc</span><span class="op">)</span></code></pre></div>
 <pre><code>## An object of class "HDF5ArraySeed"
 ## Slot "filepath":
-## [1] "/private/var/folders/24/8k48jl6d249_n_qfxwsl6xvm0000gn/T/Rtmpn6cZhl/HDF5Array_dump/E34_imc.h5"
+## [1] "/private/var/folders/24/8k48jl6d249_n_qfxwsl6xvm0000gn/T/RtmpEOFGWk/HDF5Array_dump/E34_imc.h5"
 ## 
 ## Slot "name":
 ## [1] "E34_imc_norm"
@@ -303,7 +303,7 @@
 <span class="fu">seed</span><span class="op">(</span><span class="va">channels3</span><span class="op">$</span><span class="va">E34_imc</span><span class="op">)</span></code></pre></div>
 <pre><code>## An object of class "HDF5ArraySeed"
 ## Slot "filepath":
-## [1] "/private/var/folders/24/8k48jl6d249_n_qfxwsl6xvm0000gn/T/Rtmpn6cZhl/HDF5Array_dump/test/E34_imc.h5"
+## [1] "/private/var/folders/24/8k48jl6d249_n_qfxwsl6xvm0000gn/T/RtmpEOFGWk/HDF5Array_dump/test/E34_imc.h5"
 ## 
 ## Slot "name":
 ## [1] "E34_imc"
@@ -344,7 +344,7 @@
 ## other attached packages:
 ##  [1] HDF5Array_1.18.1            rhdf5_2.34.0               
 ##  [3] DelayedArray_0.16.3         Matrix_1.3-2               
-##  [5] cytomapper_1.3.6            SingleCellExperiment_1.12.0
+##  [5] cytomapper_1.5.0            SingleCellExperiment_1.12.0
 ##  [7] SummarizedExperiment_1.20.0 Biobase_2.50.0             
 ##  [9] GenomicRanges_1.42.0        GenomeInfoDb_1.26.7        
 ## [11] IRanges_2.24.1              S4Vectors_0.28.1           
@@ -354,33 +354,33 @@
 ## 
 ## loaded via a namespace (and not attached):
 ##  [1] bitops_1.0-7           fs_1.5.0               RColorBrewer_1.1-2    
-##  [4] rprojroot_2.0.2        tools_4.0.5            bslib_0.2.4           
+##  [4] rprojroot_2.0.2        tools_4.0.5            bslib_0.2.5.1         
 ##  [7] svgPanZoom_0.3.4       utf8_1.2.1             R6_2.5.0              
-## [10] vipor_0.4.5            colorspace_2.0-0       rhdf5filters_1.2.0    
-## [13] raster_3.4-5           sp_1.4-5               gridExtra_2.3         
-## [16] compiler_4.0.5         textshaping_0.3.3      desc_1.3.0            
-## [19] bookdown_0.22          sass_0.3.1             scales_1.1.1          
-## [22] pkgdown_1.6.1          systemfonts_1.0.1      stringr_1.4.0         
+## [10] vipor_0.4.5            colorspace_2.0-1       rhdf5filters_1.2.1    
+## [13] raster_3.4-10          sp_1.4-5               gridExtra_2.3         
+## [16] compiler_4.0.5         textshaping_0.3.4      desc_1.3.0            
+## [19] bookdown_0.22          sass_0.4.0             scales_1.1.1          
+## [22] pkgdown_1.6.1          systemfonts_1.0.2      stringr_1.4.0         
 ## [25] digest_0.6.27          tiff_0.1-8             fftwtools_0.9-11      
-## [28] svglite_2.0.0          rmarkdown_2.7          XVector_0.30.0        
+## [28] svglite_2.0.0          rmarkdown_2.8          XVector_0.30.0        
 ## [31] jpeg_0.1-8.1           pkgconfig_2.0.3        htmltools_0.5.1.1     
-## [34] fastmap_1.1.0          htmlwidgets_1.5.3      rlang_0.4.10          
+## [34] fastmap_1.1.0          htmlwidgets_1.5.3      rlang_0.4.11          
 ## [37] shiny_1.6.0            jquerylib_0.1.4        jsonlite_1.7.2        
 ## [40] BiocParallel_1.24.1    RCurl_1.98-1.3         magrittr_2.0.1        
 ## [43] GenomeInfoDbData_1.2.4 Rcpp_1.0.6             ggbeeswarm_0.6.0      
 ## [46] munsell_0.5.0          Rhdf5lib_1.12.1        fansi_0.4.2           
-## [49] viridis_0.6.0          abind_1.4-5            lifecycle_1.0.0       
-## [52] stringi_1.5.3          yaml_2.2.1             zlibbioc_1.36.0       
+## [49] viridis_0.6.1          abind_1.4-5            lifecycle_1.0.0       
+## [52] stringi_1.6.2          yaml_2.2.1             zlibbioc_1.36.0       
 ## [55] grid_4.0.5             promises_1.2.0.1       shinydashboard_0.7.1  
 ## [58] crayon_1.4.1           lattice_0.20-41        locfit_1.5-9.4        
-## [61] knitr_1.33             pillar_1.6.0           codetools_0.2-18      
-## [64] glue_1.4.2             evaluate_0.14          BiocManager_1.30.12   
-## [67] png_0.1-7              vctrs_0.3.7            httpuv_1.6.0          
-## [70] gtable_0.3.0           cachem_1.0.4           ggplot2_3.3.3         
-## [73] xfun_0.22              mime_0.10              xtable_1.8-4          
+## [61] knitr_1.33             pillar_1.6.1           codetools_0.2-18      
+## [64] glue_1.4.2             evaluate_0.14          BiocManager_1.30.15   
+## [67] png_0.1-7              vctrs_0.3.8            httpuv_1.6.1          
+## [70] gtable_0.3.0           cachem_1.0.5           ggplot2_3.3.3         
+## [73] xfun_0.23              mime_0.10              xtable_1.8-4          
 ## [76] later_1.2.0            viridisLite_0.4.0      ragg_1.1.2            
-## [79] tibble_3.1.1           beeswarm_0.3.1         memoise_2.0.0         
-## [82] ellipsis_0.3.1</code></pre>
+## [79] tibble_3.1.2           beeswarm_0.3.1         memoise_2.0.0         
+## [82] ellipsis_0.3.2</code></pre>
 </div>
 <div id="references" class="section level1">
 <h1 class="hasAnchor">
