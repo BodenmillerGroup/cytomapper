@@ -457,17 +457,18 @@
     m_width <- max(cur_dims[1L,])
     m_height <- max(cur_dims[2L,])
 
-    cur_dims_x <- c(m_width, as.numeric(cur_dims[1L,]))
-    cur_dims_y <- c(m_height, as.numeric(cur_dims[2L,]))
-
     # Add empty image to list for legend
     if (!is.null(plottingParam$legend)) {
         out_img <- c(SimpleList(Image("#FFFFFF",
                                 dim = c(m_height, m_width))),
                     out_img)
         legend_ind <- 1L
+        cur_dims_x <- c(m_width, as.numeric(cur_dims[1L,]))
+        cur_dims_y <- c(m_height, as.numeric(cur_dims[2L,]))
     } else {
         legend_ind <- 0L
+        cur_dims_x <- as.numeric(cur_dims[1L,])
+        cur_dims_y <- as.numeric(cur_dims[2L,])
     }
 
     # Number of images

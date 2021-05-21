@@ -563,8 +563,20 @@ test_that("plotting-param: legend can be set.", {
                                         "CD8a", "CDH"),
                           outline_by = "CellType",
                           legend = list(margin = 10)))
+  
+  # When images are not of the same dimensions
+  cur_images <- pancreasImages
+  cur_images[[1]] <- cur_images[[1]][1:10, 1:20, ]
+  cur_images[[2]] <- cur_images[[2]][1:30, 1:20, ]
 
-
+  expect_silent(plotPixels(cur_images,
+                           colour_by = c("H3", "CD99", "PIN",
+                                         "CD8a", "CDH"),
+                           legend = NULL))
+  expect_silent(plotPixels(cur_images,
+                           colour_by = c("H3", "CD99", "PIN",
+                                         "CD8a", "CDH")))
+  
   # Error
   expect_error(plotPixels(pancreasImages,
                           colour_by = "H3",
@@ -611,6 +623,7 @@ test_that("plotting-param: legend can be set.", {
                           legend = list(margin = "test")),
                regexp = "Invalid entry to the 'legend' list object",
                fixed = TRUE)
+  
 })
 
 test_that("plotting-param: margin can be set.", {
