@@ -118,6 +118,10 @@ A full overview on the analysis workflow and functionality of the `cytomapper` p
 vignette("cytomapper")
 ```
 
+## Demonstrations
+
+To see example usage of the `cytomapper` package, please refer to its [publication repository](https://github.com/BodenmillerGroup/cytomapper_publication) and a number of [workshop demonstrations](https://github.com/BodenmillerGroup/cytomapper_demos).
+
 ## Citation
 
 Please cite `cytomapper` as:
