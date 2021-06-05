@@ -96,7 +96,7 @@
       Department for Quantitative Biomedicine, University of Zurich<br><a class="author_email" href="mailto:#"></a><a href="mailto:tobias.hoch@dqbm.uzh.ch" class="email">tobias.hoch@dqbm.uzh.ch</a>
       </address>
                   
-            <h4 class="date">23 May 2021</h4>
+            <h4 class="date">5 June 2021</h4>
       
       <small class="dont-index">Source: <a href="https://github.com/BodenmillerGroup/cytomapper/blob/master/vignettes/cytomapper.Rmd"><code>vignettes/cytomapper.Rmd</code></a></small>
       <div class="hidden name"><code>cytomapper.Rmd</code></div>
@@ -115,7 +115,7 @@
 <p>This vignette gives an introduction to displaying highly-multiplexed imaging cytometry data with the <code>cytomapper</code> package. As an example, these instructions display imaging mass cytometry (IMC) data. However, other imaging cytometry approaches including multiplexed ion beam imaging (MIBI) <span class="citation">(Angelo et al. 2014)</span>, tissue-based cyclic immunofluorescence (t-CyCIF) <span class="citation">(Lin et al. 2018)</span> and iterative indirect immunofluorescence imaging (4i) <span class="citation">(Gut, Herrmann, and Pelkmans 2018)</span>, which produce pixel-level intensities and optionally segmentation masks can be displayed using <code>cytomapper</code>.</p>
 <p>IMC <span class="citation">(Giesen et al. 2014)</span> is a multiplexed imaging cytometry approach to measure spatial protein abundance. In IMC, tissue sections are stained with a mix of around 40 metal-conjugated antibodies prior to laser ablation with <span class="math inline">\(1\mu{}m\)</span> resolution. The ablated material is transferred to a mass cytometer for time-of-flight detection of the metal ions <span class="citation">(Giesen et al. 2014)</span><span class="citation">(Mavropoulos et al., n.d.)</span>. In that way, hundreds of images (usually with an image size of around 1mm x 1mm) can be generated in a reasonable amount of time <span class="citation">(Damond et al. 2019)</span>.</p>
 <p>Raw IMC data are computationally processed using a segmentation pipeline (available at <a href="https://github.com/BodenmillerGroup/ImcSegmentationPipeline">https://github.com/BodenmillerGroup/ImcSegmentationPipeline</a>). This pipeline produces image stacks containing the raw pixel values for up to 40 channels, segmentation masks containing the segmented cells, cell-level expression and metadata information as well as a number of image-level meta information.</p>
-<p>Cell-level expression and metadata can be processed and read into a <code>SingleCellExperiment</code> class object. For more information on the <code>SingleCellExperiment</code> object and how to create it, please see the <em><a href="https://bioconductor.org/packages/3.12/SingleCellExperiment">SingleCellExperiment</a></em> package and the <a href="https://bioconductor.org/books/release/OSCA/data-infrastructure.html">Orchestrating Single-Cell Analysis with Bioconductor</a> workflow. Furthermore, the <code>cytomapper</code> package provides the <a href="#measureObjects">measureObjects</a> function that generates a <code>SingleCellExperiment</code> based on segmentation masks and multi-channel images.</p>
+<p>Cell-level expression and metadata can be processed and read into a <code>SingleCellExperiment</code> class object. For more information on the <code>SingleCellExperiment</code> object and how to create it, please see the <em><a href="https://bioconductor.org/packages/3.13/SingleCellExperiment">SingleCellExperiment</a></em> package and the <a href="https://bioconductor.org/books/release/OSCA/data-infrastructure.html">Orchestrating Single-Cell Analysis with Bioconductor</a> workflow. Furthermore, the <code>cytomapper</code> package provides the <a href="#measureObjects">measureObjects</a> function that generates a <code>SingleCellExperiment</code> based on segmentation masks and multi-channel images.</p>
 <p>The <code>cytomapper</code> package provides a new <code>CytoImageList</code> class as a container for multiplexed images or segmentation masks. For more information on this class, refer to the <a href="#CytoImageList">CytoImageList</a> section.</p>
 <p>The main functions of this package include <code>plotCells</code> and <code>plotPixels</code>. The <code>plotCells</code> function requires the following object inputs to display cell-level information (expression and metadata):</p>
 <ol style="list-style-type: decimal">
@@ -159,7 +159,7 @@
 <div id="DataFormats" class="section level1">
 <h1 class="hasAnchor">
 <a href="#DataFormats" class="anchor"></a>Data formats</h1>
-<p>The <code>cytomapper</code> package combines objects of the <em><a href="https://bioconductor.org/packages/3.12/SingleCellExperiment">SingleCellExperiment</a></em> class and the <code>CytoImageList</code> class (provided in <code>cytomapper</code>) to visualize cell- and pixel-level information.</p>
+<p>The <code>cytomapper</code> package combines objects of the <em><a href="https://bioconductor.org/packages/3.13/SingleCellExperiment">SingleCellExperiment</a></em> class and the <code>CytoImageList</code> class (provided in <code>cytomapper</code>) to visualize cell- and pixel-level information.</p>
 <p>In the main functions of the package, <code>image</code> refers to a <code>CytoImageList</code> object containing one or multiple multi-channel images where each channel represents the pixel-intensity of one selected marker (proteins in the case of IMC). The entry <code>mask</code> refers to a <code>CytoImageList</code> object containing one or multiple segmentation masks. Segmentation masks are defined as one-channel images containing integer values, which represent the cells’ ids or 0 (background). Finally, the <code>object</code> entry refers to a <code>SingleCellExperiment</code> class object that contains cell-specific expression values (in the <code>assay</code> slots) and cell-specific metadata in the <code>colData</code> slot.</p>
 <p>To link information between the <code>SingleCellExperiment</code> and <code>CytoImageList</code> objects, two slots need to be specified:</p>
 <ul>
@@ -182,7 +182,7 @@
 <div class="sourceCode" id="cb11"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="fu">mcols</span><span class="op">(</span><span class="va">pancreasMasks</span><span class="op">)</span><span class="op">[</span>,<span class="st">"ImageNb"</span><span class="op">]</span></code></pre></div>
 <pre><code>## [1] 1 2 3</code></pre>
-<p>For more information on the <code>CytoImageList</code> class, please refer to the section <a href="#CytoImageList">The CytoImageList object</a>. For more information on the <code>SingleCellExperiment</code> object and how to create it, please see the <em><a href="https://bioconductor.org/packages/3.12/SingleCellExperiment">SingleCellExperiment</a></em> package and the <a href="https://osca.bioconductor.org/data-infrastructure.html#the-singlecellexperiment-class">Orchestrating Single-Cell Analysis with Bioconductor</a> workflow.</p>
+<p>For more information on the <code>CytoImageList</code> class, please refer to the section <a href="#CytoImageList">The CytoImageList object</a>. For more information on the <code>SingleCellExperiment</code> object and how to create it, please see the <em><a href="https://bioconductor.org/packages/3.13/SingleCellExperiment">SingleCellExperiment</a></em> package and the <a href="https://osca.bioconductor.org/data-infrastructure.html#the-singlecellexperiment-class">Orchestrating Single-Cell Analysis with Bioconductor</a> workflow.</p>
 <div id="ToyData" class="section level2">
 <h2 class="hasAnchor">
 <a href="#ToyData" class="anchor"></a>The provided toy dataset</h2>
@@ -268,6 +268,7 @@
 ## colnames(362): E34_824 E34_835 ... J02_4190 J02_4209
 ## colData names(9): ImageName Pos_X ... MaskName Pattern
 ## reducedDimNames(0):
+## mainExpName: NULL
 ## altExpNames(0):</code></pre>
 <div class="sourceCode" id="cb29"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="fu"><a href="https://rdrr.io/r/base/names.html">names</a></span><span class="op">(</span><span class="fu">colData</span><span class="op">(</span><span class="va">pancreasSCE</span><span class="op">)</span><span class="op">)</span></code></pre></div>
@@ -358,6 +359,7 @@
 ## colnames: NULL
 ## colData names(8): ImageNb object_id ... m.majoraxis m.eccentricity
 ## reducedDimNames(0):
+## mainExpName: NULL
 ## altExpNames(0):</code></pre>
 <p>By default, the mean intensities per cell and channel are stored in <code>counts(sce)</code> while all other morphological features are stored in <code>colData(sce)</code>:</p>
 <div class="sourceCode" id="cb47"><pre class="downlit sourceCode r">
@@ -402,7 +404,7 @@
 <div id="CytoImageList" class="section level1">
 <h1 class="hasAnchor">
 <a href="#CytoImageList" class="anchor"></a>The CytoImageList object</h1>
-<p>The <code>cytomapper</code> package provides a new <code>CytoImageList</code> class, which inherits from the <a href="https://rdrr.io/bioc/S4Vectors/man/SimpleList-class.html"><code>SimpleList</code> class</a>. Each entry to the <code>CytoImageList</code> object is an <code>Image</code> class object defined in the <em><a href="https://bioconductor.org/packages/3.12/EBImage">EBImage</a></em> package. A <code>CytoImageList</code> object is restricted to the following entries:</p>
+<p>The <code>cytomapper</code> package provides a new <code>CytoImageList</code> class, which inherits from the <a href="https://rdrr.io/bioc/S4Vectors/man/SimpleList-class.html"><code>SimpleList</code> class</a>. Each entry to the <code>CytoImageList</code> object is an <code>Image</code> class object defined in the <em><a href="https://bioconductor.org/packages/3.13/EBImage">EBImage</a></em> package. A <code>CytoImageList</code> object is restricted to the following entries:</p>
 <ul>
 <li>all images need to have the same number of channels</li>
 <li>the order/naming of channels need to be the same across all images</li>
@@ -580,8 +582,8 @@
 <div id="looping" class="section level2">
 <h2 class="hasAnchor">
 <a href="#looping" class="anchor"></a>Looping</h2>
-<p>To perform custom operations on each individual entry to a <code>CytoImageList</code> object, the <em><a href="https://bioconductor.org/packages/3.12/S4Vectors">S4Vectors</a></em> package provides the <code>endoapply</code> function. While the <code>lapply</code> function returns a <code>list</code> object, the <code>endoapply</code> function provides an object of the same class of the input object.</p>
-<p>This allows the user to apply all functions provided by the <em><a href="https://bioconductor.org/packages/3.12/EBImage">EBImage</a></em> package to individual entries within the <code>CytoImageList</code> object:</p>
+<p>To perform custom operations on each individual entry to a <code>CytoImageList</code> object, the <em><a href="https://bioconductor.org/packages/3.13/S4Vectors">S4Vectors</a></em> package provides the <code>endoapply</code> function. While the <code>lapply</code> function returns a <code>list</code> object, the <code>endoapply</code> function provides an object of the same class of the input object.</p>
+<p>This allows the user to apply all functions provided by the <em><a href="https://bioconductor.org/packages/3.13/EBImage">EBImage</a></em> package to individual entries within the <code>CytoImageList</code> object:</p>
 <div class="sourceCode" id="cb85"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="fu"><a href="https://rdrr.io/r/utils/data.html">data</a></span><span class="op">(</span><span class="st">"pancreasImages"</span><span class="op">)</span>
 
@@ -597,7 +599,7 @@
 <div id="normalization" class="section level2">
 <h2 class="hasAnchor">
 <a href="#normalization" class="anchor"></a>Normalization</h2>
-<p>The <code>normalize</code> function provided in the <code>cytomapper</code> package internally calls the <code>normalize</code> function of the <em><a href="https://bioconductor.org/packages/3.12/EBImage">EBImage</a></em> package. The main difference between the two functions is the option to scale per image or globally in the <code>cytomapper</code> package (see <code><a href="../reference/CytoImageList-manipulation.html">?'normalize,CytoImageList-method'</a></code>).</p>
+<p>The <code>normalize</code> function provided in the <code>cytomapper</code> package internally calls the <code>normalize</code> function of the <em><a href="https://bioconductor.org/packages/3.13/EBImage">EBImage</a></em> package. The main difference between the two functions is the option to scale per image or globally in the <code>cytomapper</code> package (see <code><a href="../reference/CytoImageList-manipulation.html">?'normalize,CytoImageList-method'</a></code>).</p>
 <p>By default, the <code>normalize</code> function linearly scales the images channel-wise across all images and returns values between 0 and 1 (or the chosen <code>ft</code> range):</p>
 <div class="sourceCode" id="cb86"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="fu"><a href="https://rdrr.io/r/utils/data.html">data</a></span><span class="op">(</span><span class="st">"pancreasImages"</span><span class="op">)</span>
@@ -863,13 +865,13 @@ Plot customization example.
 <div id="session-info" class="section level1 unnumbered">
 <h1 class="hasAnchor">
 <a href="#session-info" class="anchor"></a>Session info</h1>
-<pre><code>## R version 4.0.5 (2021-03-31)
+<pre><code>## R version 4.1.0 (2021-05-18)
 ## Platform: x86_64-apple-darwin17.0 (64-bit)
 ## Running under: macOS Catalina 10.15.7
 ## 
 ## Matrix products: default
-## BLAS:   /Library/Frameworks/R.framework/Versions/4.0/Resources/lib/libRblas.dylib
-## LAPACK: /Library/Frameworks/R.framework/Versions/4.0/Resources/lib/libRlapack.dylib
+## BLAS:   /Library/Frameworks/R.framework/Versions/4.1/Resources/lib/libRblas.dylib
+## LAPACK: /Library/Frameworks/R.framework/Versions/4.1/Resources/lib/libRlapack.dylib
 ## 
 ## locale:
 ## [1] en_US.UTF-8/en_US.UTF-8/en_US.UTF-8/C/en_US.UTF-8/en_US.UTF-8
@@ -879,44 +881,44 @@ Plot customization example.
 ## [8] methods   base     
 ## 
 ## other attached packages:
-##  [1] cytomapper_1.5.1            SingleCellExperiment_1.12.0
-##  [3] SummarizedExperiment_1.20.0 Biobase_2.50.0             
-##  [5] GenomicRanges_1.42.0        GenomeInfoDb_1.26.7        
-##  [7] IRanges_2.24.1              S4Vectors_0.28.1           
-##  [9] BiocGenerics_0.36.1         MatrixGenerics_1.2.1       
-## [11] matrixStats_0.58.0          EBImage_4.32.0             
-## [13] BiocStyle_2.18.1           
+##  [1] cytomapper_1.5.1            SingleCellExperiment_1.14.1
+##  [3] SummarizedExperiment_1.22.0 Biobase_2.52.0             
+##  [5] GenomicRanges_1.44.0        GenomeInfoDb_1.28.0        
+##  [7] IRanges_2.26.0              S4Vectors_0.30.0           
+##  [9] BiocGenerics_0.38.0         MatrixGenerics_1.4.0       
+## [11] matrixStats_0.59.0          EBImage_4.34.0             
+## [13] BiocStyle_2.20.0           
 ## 
 ## loaded via a namespace (and not attached):
 ##  [1] bitops_1.0-7           fs_1.5.0               RColorBrewer_1.1-2    
-##  [4] rprojroot_2.0.2        tools_4.0.5            bslib_0.2.5.1         
+##  [4] rprojroot_2.0.2        tools_4.1.0            bslib_0.2.5.1         
 ##  [7] svgPanZoom_0.3.4       utf8_1.2.1             R6_2.5.0              
-## [10] HDF5Array_1.18.1       vipor_0.4.5            colorspace_2.0-1      
-## [13] rhdf5filters_1.2.1     raster_3.4-10          sp_1.4-5              
-## [16] gridExtra_2.3          compiler_4.0.5         textshaping_0.3.4     
-## [19] desc_1.3.0             DelayedArray_0.16.3    bookdown_0.22         
+## [10] HDF5Array_1.20.0       vipor_0.4.5            colorspace_2.0-1      
+## [13] rhdf5filters_1.4.0     raster_3.4-10          sp_1.4-5              
+## [16] gridExtra_2.3          compiler_4.1.0         textshaping_0.3.4     
+## [19] desc_1.3.0             DelayedArray_0.18.0    bookdown_0.22         
 ## [22] sass_0.4.0             scales_1.1.1           pkgdown_1.6.1         
 ## [25] systemfonts_1.0.2      stringr_1.4.0          digest_0.6.27         
 ## [28] tiff_0.1-8             fftwtools_0.9-11       svglite_2.0.0         
-## [31] rmarkdown_2.8          XVector_0.30.0         jpeg_0.1-8.1          
+## [31] rmarkdown_2.8          XVector_0.32.0         jpeg_0.1-8.1          
 ## [34] pkgconfig_2.0.3        htmltools_0.5.1.1      highr_0.9             
 ## [37] fastmap_1.1.0          htmlwidgets_1.5.3      rlang_0.4.11          
 ## [40] shiny_1.6.0            jquerylib_0.1.4        jsonlite_1.7.2        
-## [43] BiocParallel_1.24.1    RCurl_1.98-1.3         magrittr_2.0.1        
-## [46] GenomeInfoDbData_1.2.4 Matrix_1.3-2           Rcpp_1.0.6            
-## [49] ggbeeswarm_0.6.0       munsell_0.5.0          Rhdf5lib_1.12.1       
-## [52] fansi_0.4.2            viridis_0.6.1          abind_1.4-5           
+## [43] BiocParallel_1.26.0    RCurl_1.98-1.3         magrittr_2.0.1        
+## [46] GenomeInfoDbData_1.2.6 Matrix_1.3-3           Rcpp_1.0.6            
+## [49] ggbeeswarm_0.6.0       munsell_0.5.0          Rhdf5lib_1.14.0       
+## [52] fansi_0.5.0            viridis_0.6.1          abind_1.4-5           
 ## [55] lifecycle_1.0.0        stringi_1.6.2          yaml_2.2.1            
-## [58] zlibbioc_1.36.0        rhdf5_2.34.0           grid_4.0.5            
+## [58] zlibbioc_1.38.0        rhdf5_2.36.0           grid_4.1.0            
 ## [61] promises_1.2.0.1       shinydashboard_0.7.1   crayon_1.4.1          
-## [64] lattice_0.20-41        locfit_1.5-9.4         knitr_1.33            
+## [64] lattice_0.20-44        locfit_1.5-9.4         knitr_1.33            
 ## [67] pillar_1.6.1           codetools_0.2-18       glue_1.4.2            
 ## [70] evaluate_0.14          BiocManager_1.30.15    png_0.1-7             
 ## [73] vctrs_0.3.8            httpuv_1.6.1           gtable_0.3.0          
 ## [76] cachem_1.0.5           ggplot2_3.3.3          xfun_0.23             
 ## [79] mime_0.10              xtable_1.8-4           later_1.2.0           
 ## [82] viridisLite_0.4.0      ragg_1.1.2             tibble_3.1.2          
-## [85] beeswarm_0.3.1         memoise_2.0.0          ellipsis_0.3.2</code></pre>
+## [85] beeswarm_0.4.0         memoise_2.0.0          ellipsis_0.3.2</code></pre>
 </div>
 <div id="references" class="section level1 unnumbered">
 <h1 class="hasAnchor">
