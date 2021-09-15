@@ -87,39 +87,58 @@
 #' @importFrom DelayedArray DelayedArray
 #' @importFrom EBImage imageData
 loadImages <- function(x, pattern = NULL, on_disk = FALSE, h5FilesPath = NULL, 
-                        BPPARAM = SerialParam(), ...) {
+                       name = NULL, BPPARAM = SerialParam(), ...) {
 
     # Validity checks
-    x <- .valid.loadImage.input(x, pattern)
+    x <- .valid.loadImage.input(x, pattern, name)
 
+    if (length(name) > 1) {
+        names(name) <- x
+    }
+    
     # Read in images
     cur_list <- bplapply(x, function(y){
-            cur_img <- EBImage::readImage(y, ..., names = NULL)
-        
-            if (on_disk) {
-                
-                if (is.null(h5FilesPath)) {
-                    stop("When storing the images on disk, please specify a 'h5FilesPath'. \n",
-                         "You can use 'h5FilesPath = getHDF5DumpDir()' to temporarily store the images.\n",
-                         "If doing so, .h5 files will be deleted once the R session ends.")
+            
+            if (file_ext(y) == "h5") {
+                if (is.null(name)) {
+                    cur_name <- sub("\\.[^.]*$", "", basename(y))
+                } else if (length(name) > 1) {
+                    cur_name <- name[y]
+                } else {
+                    cur_name <- name
                 }
                 
-                # Build filename
-                cur_name <- sub("\\.[^.]*$", "", basename(y))
-                cur_file <- file.path(h5FilesPath, paste0(cur_name, ".h5"))
+                cur_img <- h5read(y, name = cur_name)
+                Image(cur_img)
                 
-                # Check if file already exists
-                # If so, delete them
-                if (file.exists(cur_file)) {
-                    file.remove(cur_file)
-                }
-                
-                writeHDF5Array(DelayedArray(imageData(cur_img)), 
-                               filepath = cur_file,
-                               name = cur_name,
-                               with.dimnames = TRUE)
             } else {
-                cur_img
+                cur_img <- EBImage::readImage(y, ..., names = NULL)
+        
+                if (on_disk) {
+                
+                    if (is.null(h5FilesPath)) {
+                        stop("When storing the images on disk, please specify a 'h5FilesPath'. \n",
+                            "You can use 'h5FilesPath = getHDF5DumpDir()' to temporarily store the images.\n",
+                            "If doing so, .h5 files will be deleted once the R session ends.")
+                    }
+                
+                    # Build filename
+                    cur_name <- sub("\\.[^.]*$", "", basename(y))
+                    cur_file <- file.path(h5FilesPath, paste0(cur_name, ".h5"))
+                
+                    # Check if file already exists
+                    # If so, delete them
+                    if (file.exists(cur_file)) {
+                        file.remove(cur_file)
+                    }
+                
+                    writeHDF5Array(DelayedArray(imageData(cur_img)), 
+                                filepath = cur_file,
+                                name = cur_name,
+                                with.dimnames = TRUE)
+                } else {
+                    cur_img
+                }
             }
         }, BPPARAM = BPPARAM)
     
