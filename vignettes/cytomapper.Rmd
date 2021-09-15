@@ -904,6 +904,27 @@ plot(cur_out$images$G01_imc)
 However, when plotting solely the coloured images, the image title and scale bar
 will be lost.
 
+# Integration with ggplot2 objects
+
+The [patchwork](https://patchwork.data-imaginist.com/) and 
+[cowplot](https://cran.r-project.org/web/packages/cowplot/vignettes/introduction.html)
+R packages are popular frameworks to assemble full page figures consisting
+of multiple sub-panels. This section will highlight how to combine `cytomapper`
+plots and ggplot2 objects to create larger figures.
+
+```{r plot-integration}
+library(cowplot)
+library(ggplot2)
+
+g1 <- ggplot(mtcars) + geom_point(aes(cyl, hp))
+g2 <- plotCells(pancreasMasks, object = pancreasSCE,
+            img_id = "ImageNb", cell_id = "CellNb",
+            colour_by = "CellType", return_plot = TRUE)
+g2 <- ggdraw(g2$plot, clip = "on")
+
+plot_grid(g1, g2)
+```
+
 # Saving images
 
 Finally, the user can save the plot by specifying `save_plot`. The `save_plot`

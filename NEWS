@@ -149,3 +149,9 @@ Changes in version 1.3.5 (2021-04-07):
 
 Changes in version 1.3.6 (2021-04-23):
 + scaleImages accepts numeric vector value
+
+Changes in version 1.5.1 (2021-05-19):
++ Bugfix: erroneous dimension setting when legend=NULL
+
+Changes in version 1.5.2 (2021-09-15):
++ Added description on how to handle images with couplet/patchwork
