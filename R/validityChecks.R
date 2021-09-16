@@ -1,5 +1,5 @@
 #' @importFrom tools file_ext
-.valid.loadImage.input <- function(x, pattern){
+.valid.loadImage.input <- function(x, pattern, name){
 
     # Check if input is character
     if(!is.character(x)){
@@ -23,9 +23,9 @@
             exten <- file_ext(list.files(x))
 
             if(sum(!(unique(exten) %in% c("jpeg", "png", "tiff",
-                                            "tif", "jpg"))) > 0){
+                                            "tif", "jpg", "h5"))) > 0){
                 stop("The provided path contains file-types other than\n",
-                    "'jpeg', 'tiff', or 'png'.\n",
+                    "'jpeg', 'tiff', 'png' or 'h5'.\n",
                     "Please provide a correct regular expression\n",
                     "in the 'pattern' argument to select correct images.")
             }
@@ -63,18 +63,18 @@
             exten <- file_ext(out)
 
             if(sum(!(unique(exten) %in% c("jpeg", "png", "tiff",
-                                        "tif", "jpg"))) > 0){
+                                        "tif", "jpg", "h5"))) > 0){
                 stop("The provided path contains file-types other than\n",
-                    "'jpeg', 'tiff', or 'png'.\n",
+                    "'jpeg', 'tiff', 'png' or 'h5'.\n",
                     "Please provide a correct regular expression\n",
                     "in the 'pattern' argument to select correct images.")
             }
 
         } else {
             cur_ext <- file_ext(x)
-            if(!(cur_ext %in% c("jpeg", "png", "tiff", "tif", "jpg"))){
-                stop("The provided file is not of type\n",
-                    "'jpeg', 'tiff' or 'png'.\n",
+            if(!(cur_ext %in% c("jpeg", "png", "tiff", "tif", "jpg", "h5"))){
+                stop("The provided file is not of type ",
+                    "'jpeg', 'tiff', 'png' or 'h5'.\n",
                     "Other image types are not supported.")
             }
             out <- x
@@ -89,15 +89,30 @@
 
         # Check if files are os supported format
         exten <- file_ext(x)
-        cur_test <- unique(exten) %in% c("jpeg", "png", "tiff", "tif", "jpg")
+        cur_test <- unique(exten) %in% c("jpeg", "png", "tiff", 
+                                         "tif", "jpg", "h5")
         if(sum(!cur_test) > 0){
-            stop("The files are of type other than 'jpeg', 'tiff' or 'png'.\n",
+            stop("The files are of type other than ",
+                 "'jpeg', 'tiff', 'png' or 'h5'.\n",
                 "Please only provide files of the supported file-type.")
         }
 
         out <- x
 
     }
+    
+    # Check name argument
+    if (!is.null(name)) {
+        if (!all(is.character(name))) {
+            stop("Argument 'name' must be of type character.")
+        }
+        
+        if (length(name) != 1 && length(name) != length(out)) {
+            stop("Length of 'name' must either be 1 or the same length as ",
+                 "the number of files read in.")
+        }
+    }
+    
     return(out)
 }
 
