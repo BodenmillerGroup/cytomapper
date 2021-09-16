@@ -43,7 +43,7 @@
 <meta property="og:description" content="Function to read in single- or multi-channel images from a specified path or
 file. The function returns a CytoImageList object containing
 one image per slot. Supported file extensions are: '.tiff', '.tif', '.png',
-'.jpeg', '.jpg'." />
+'.jpeg', '.jpg', &quot;.h5&quot;." />
 
 
 
@@ -75,7 +75,7 @@ one image per slot. Supported file extensions are: '.tiff', '.tif', '.png',
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">cytomapper</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">1.5.2</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">1.5.3</span>
       </span>
     </div>
 
@@ -135,7 +135,7 @@ one image per slot. Supported file extensions are: '.tiff', '.tif', '.png',
     <p>Function to read in single- or multi-channel images from a specified path or
 file. The function returns a <a href='CytoImageList-class.html'>CytoImageList</a> object containing
 one image per slot. Supported file extensions are: '.tiff', '.tif', '.png',
-'.jpeg', '.jpg'.</p>
+'.jpeg', '.jpg', ".h5".</p>
     </div>
 
     <pre class="usage"><span class='fu'>loadImages</span><span class='op'>(</span>
@@ -143,6 +143,7 @@ one image per slot. Supported file extensions are: '.tiff', '.tif', '.png',
   pattern <span class='op'>=</span> <span class='cn'>NULL</span>,
   on_disk <span class='op'>=</span> <span class='cn'>FALSE</span>,
   h5FilesPath <span class='op'>=</span> <span class='cn'>NULL</span>,
+  name <span class='op'>=</span> <span class='cn'>NULL</span>,
   BPPARAM <span class='op'>=</span> <span class='fu'>SerialParam</span><span class='op'>(</span><span class='op'>)</span>,
   <span class='va'>...</span>
 <span class='op'>)</span></pre>
@@ -184,6 +185,12 @@ When files should only temporarily be stored on disk, please set
 <code>h5FilesPath = getHDF5DumpDir()</code></p></td>
     </tr>
     <tr>
+      <th>name</th>
+      <td><p>(if reading in .h5 files) a single character, a character vector
+of length equal to the length of x or NULL. See details for how to set 
+<code>name</code>.</p></td>
+    </tr>
+    <tr>
       <th>BPPARAM</th>
       <td><p>parameters for parallelised reading in of images. 
 This is only recommended for very large images. 
@@ -211,6 +218,17 @@ also takes a vector of characters (e.g. a colData entry in a
 SingleCellExperiment object) to select by unique image names.
 Furthermore, a vector of image names can be provided to read in multiple
 images.</p>
+    <h2 class="hasAnchor" id="reading-in-h-files"><a class="anchor" href="#reading-in-h-files"></a>Reading in .h5 files</h2>
+
+    
+
+<p>When reading in .h5 files by default the <code>loadImages</code> function will
+try to read in the dataset with the same name as the .h5 file from within
+the file. If datasets are stored with different names, the <code>name</code>
+argument must be specified. This can either be a single character if datasets
+across all files are named the same or a character vector of the same length
+as <code>x</code> indicating the dataset name within each .h5 file. By default,
+the images/datasets are not read into memory when stored in .h5 files.</p>
     <h2 class="hasAnchor" id="see-also"><a class="anchor" href="#see-also"></a>See also</h2>
 
     <div class='dont-index'><p><code>readImage</code>, for reading in individual images.</p></div>
@@ -241,7 +259,8 @@ images.</p>
 <span class='co'># On disk representation</span>
 <span class='va'>path.to.images</span> <span class='op'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/base/system.file.html'>system.file</a></span><span class='op'>(</span><span class='st'>"extdata"</span>, package <span class='op'>=</span> <span class='st'>"cytomapper"</span><span class='op'>)</span>
 <span class='va'>image.list</span> <span class='op'>&lt;-</span> <span class='fu'>loadImages</span><span class='op'>(</span><span class='va'>path.to.images</span>, pattern <span class='op'>=</span> <span class='st'>"mask.tiff"</span>,
-                            on_disk <span class='op'>=</span> <span class='cn'>TRUE</span>, h5FilesPath <span class='op'>=</span> <span class='fu'>HDF5Array</span><span class='fu'>::</span><span class='fu'><a href='https://rdrr.io/pkg/HDF5Array/man/dump-management.html'>getHDF5DumpDir</a></span><span class='op'>(</span><span class='op'>)</span><span class='op'>)</span>
+                            on_disk <span class='op'>=</span> <span class='cn'>TRUE</span>, 
+                            h5FilesPath <span class='op'>=</span> <span class='fu'>HDF5Array</span><span class='fu'>::</span><span class='fu'><a href='https://rdrr.io/pkg/HDF5Array/man/dump-management.html'>getHDF5DumpDir</a></span><span class='op'>(</span><span class='op'>)</span><span class='op'>)</span>
                             
 <span class='co'># Parallel processing</span>
 <span class='va'>path.to.images</span> <span class='op'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/base/system.file.html'>system.file</a></span><span class='op'>(</span><span class='st'>"extdata"</span>, package <span class='op'>=</span> <span class='st'>"cytomapper"</span><span class='op'>)</span>
