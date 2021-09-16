@@ -5,7 +5,7 @@
 #' Function to read in single- or multi-channel images from a specified path or
 #' file. The function returns a \linkS4class{CytoImageList} object containing
 #' one image per slot. Supported file extensions are: '.tiff', '.tif', '.png',
-#' '.jpeg', '.jpg'.
+#' '.jpeg', '.jpg', ".h5".
 #'
 #' @param x The function takes a variety of possible character inputs:
 #' \describe{
@@ -28,6 +28,9 @@
 #' are stored. This path needs to be defined when \code{on_disk = TRUE}.
 #' When files should only temporarily be stored on disk, please set
 #' \code{h5FilesPath = getHDF5DumpDir()}
+#' @param name (if reading in .h5 files) a single character, a character vector
+#' of length equal to the length of x or NULL. See details for how to set 
+#' \code{name}.
 #' @param BPPARAM parameters for parallelised reading in of images. 
 #' This is only recommended for very large images. 
 #' See \code{\linkS4class{MulticoreParam}} for information on how to use multiple
@@ -45,6 +48,15 @@
 #' \linkS4class{SingleCellExperiment} object) to select by unique image names.
 #' Furthermore, a vector of image names can be provided to read in multiple
 #' images.
+#' 
+#' @section Reading in .h5 files:
+#' When reading in .h5 files by default the \code{loadImages} function will
+#' try to read in the dataset with the same name as the .h5 file from within
+#' the file. If datasets are stored with different names, the \code{name}
+#' argument must be specified. This can either be a single character if datasets
+#' across all files are named the same or a character vector of the same length
+#' as \code{x} indicating the dataset name within each .h5 file. By default,
+#' the images/datasets are not read into memory when stored in .h5 files.
 #'
 #' @examples
 #' # Providing a single file
@@ -68,7 +80,8 @@
 #' # On disk representation
 #' path.to.images <- system.file("extdata", package = "cytomapper")
 #' image.list <- loadImages(path.to.images, pattern = "mask.tiff",
-#'                             on_disk = TRUE, h5FilesPath = HDF5Array::getHDF5DumpDir())
+#'                             on_disk = TRUE, 
+#'                             h5FilesPath = HDF5Array::getHDF5DumpDir())
 #'                             
 #' # Parallel processing
 #' path.to.images <- system.file("extdata", package = "cytomapper")
@@ -83,7 +96,7 @@
 #'
 #' @export
 #' @importFrom BiocParallel bplapply SerialParam
-#' @importFrom HDF5Array writeHDF5Array
+#' @importFrom HDF5Array writeHDF5Array HDF5Array
 #' @importFrom DelayedArray DelayedArray
 #' @importFrom EBImage imageData
 loadImages <- function(x, pattern = NULL, on_disk = FALSE, h5FilesPath = NULL, 
@@ -94,6 +107,10 @@ loadImages <- function(x, pattern = NULL, on_disk = FALSE, h5FilesPath = NULL,
 
     if (length(name) > 1) {
         names(name) <- x
+    }
+    
+    if (all(file_ext(x) == "h5")) {
+        on_disk <- TRUE
     }
     
     # Read in images
@@ -107,9 +124,8 @@ loadImages <- function(x, pattern = NULL, on_disk = FALSE, h5FilesPath = NULL,
                 } else {
                     cur_name <- name
                 }
-                
-                cur_img <- h5read(y, name = cur_name)
-                Image(cur_img)
+            
+                DelayedArray(HDF5Array(y, name = cur_name))
                 
             } else {
                 cur_img <- EBImage::readImage(y, ..., names = NULL)

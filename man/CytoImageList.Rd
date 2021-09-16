@@ -30,8 +30,8 @@ When files should only temporarily be stored on disk, please set
 
 \item{BPPARAM}{parameters for parallelised processing. 
 This is only recommended for very large images. 
-See \code{\linkS4class{MulticoreParam}} for information on how to use multiple
-cores for parallelised processing.}
+See \code{\linkS4class{MulticoreParam}} for information on how to use
+multiple cores for parallelised processing.}
 }
 \value{
 A CytoImageList object
