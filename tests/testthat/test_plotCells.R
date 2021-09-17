@@ -369,13 +369,6 @@ test_that("plotCells: colour can be correctly adjusted.", {
   expect_error(plotCells(object = pancreasSCE,
                          mask = pancreasMasks, img_id = "ImageNb",
                          cell_id = "CellNb", exprs_values = "counts",
-                         colour_by = "CD99",
-                         colour = list(test = c("black", "green"))),
-               regexp = "'names(colour)' do not match with 'colour_by' and/or 'outline_by'",
-               fixed = TRUE)
-  expect_error(plotCells(object = pancreasSCE,
-                         mask = pancreasMasks, img_id = "ImageNb",
-                         cell_id = "CellNb", exprs_values = "counts",
                          colour_by = "CellType",
                          colour = list(CellType = "green")),
                regexp = "Please specify colours for all 'colour_by' levels.",

@@ -335,11 +335,6 @@ test_that("plotPixels: colour can be correctly adjusted.", {
                regexp = "Please specify at least two colours when colouring features.",
                fixed = TRUE)
   expect_error(plotPixels(image = pancreasImages,
-                         colour_by = "CD99",
-                         colour = list(test = c("black", "green"))),
-               regexp = "'names(colour)' do not match with 'colour_by' and/or 'outline_by'",
-               fixed = TRUE)
-  expect_error(plotPixels(image = pancreasImages,
                           colour_by = c("H3", "CD99"),
                           colour = list(H3 = c("black", "green"))),
                regexp = "Please specify colour gradients for all features.",

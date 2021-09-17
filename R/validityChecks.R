@@ -445,13 +445,13 @@
     if(is.null(names(colour))){
         stop("'colour': please specify the entries that should be coloured.")
     }
-    if(!is.null(colour_by) || !is.null(outline_by)){
-        valid_names <- c(colour_by, outline_by)
-        if(!all(names(colour) %in% valid_names)){
-            stop(paste("'names(colour)' do not match",
-                        "with 'colour_by' and/or 'outline_by'"))
-        }
-    }
+    #if(!is.null(colour_by) || !is.null(outline_by)){
+    #    valid_names <- c(colour_by, outline_by)
+    #    if(!all(names(colour) %in% valid_names)){
+    #        stop(paste("'names(colour)' do not match",
+    #                    "with 'colour_by' and/or 'outline_by'"))
+    #    }
+    #}
     cur_entries <- unlist(lapply(colour, is.null))
     if(sum(cur_entries) > 0L){
         stop("Empty entries not allowed in 'colour'")

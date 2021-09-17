@@ -68,7 +68,6 @@ test_that("loadImage validity check is correct.", {
     expect_silent(cur_out <- .valid.loadImage.input(x = cur_dir, pattern = factor(c("G01_imc", "G01_imc", "E34_imc", "E34_imc")), name = NULL))  
     expect_true(all(file.exists(cur_out)))
     expect_equal(basename(cur_out), c("E34_imc.tiff", "G01_imc.tiff"))
-    
     cur_files <- list.files(system.file("extdata",
                                         package = "cytomapper"), full.names = TRUE)
     expect_silent(cur_out <- .valid.loadImage.input(x = cur_files, name = NULL))  
@@ -313,15 +312,6 @@ test_that("colour validity check is correct.", {
                  fixed = TRUE)
     expect_error(.valid.colour(colour = list("test")), 
                  regexp = "'colour': please specify the entries that should be coloured.", 
-                 fixed = TRUE)
-    expect_error(.valid.colour(colour = list(test = "test"), colour_by = "CellType", outline_by = "Area"), 
-                 regexp = "'names(colour)' do not match with 'colour_by' and/or 'outline_by'", 
-                 fixed = TRUE)
-    expect_error(.valid.colour(colour = list(test = "test"), colour_by = NULL, outline_by = "Area"), 
-                 regexp = "'names(colour)' do not match with 'colour_by' and/or 'outline_by'", 
-                 fixed = TRUE)
-    expect_error(.valid.colour(colour = list(test = "test"), colour_by = "CellType", outline_by = NULL), 
-                 regexp = "'names(colour)' do not match with 'colour_by' and/or 'outline_by'", 
                  fixed = TRUE)
     expect_error(.valid.colour(colour = list(CellType = NULL), colour_by = "CellType", outline_by = NULL), 
                  regexp = "Empty entries not allowed in 'colour'", 

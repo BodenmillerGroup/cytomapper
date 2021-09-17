@@ -226,15 +226,6 @@ test_that("On disk: colour validity check is correct.", {
     expect_error(.valid.colour(colour = list("test")), 
                  regexp = "'colour': please specify the entries that should be coloured.", 
                  fixed = TRUE)
-    expect_error(.valid.colour(colour = list(test = "test"), colour_by = "CellType", outline_by = "Area"), 
-                 regexp = "'names(colour)' do not match with 'colour_by' and/or 'outline_by'", 
-                 fixed = TRUE)
-    expect_error(.valid.colour(colour = list(test = "test"), colour_by = NULL, outline_by = "Area"), 
-                 regexp = "'names(colour)' do not match with 'colour_by' and/or 'outline_by'", 
-                 fixed = TRUE)
-    expect_error(.valid.colour(colour = list(test = "test"), colour_by = "CellType", outline_by = NULL), 
-                 regexp = "'names(colour)' do not match with 'colour_by' and/or 'outline_by'", 
-                 fixed = TRUE)
     expect_error(.valid.colour(colour = list(CellType = NULL), colour_by = "CellType", outline_by = NULL), 
                  regexp = "Empty entries not allowed in 'colour'", 
                  fixed = TRUE)
