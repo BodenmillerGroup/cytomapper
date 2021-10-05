@@ -60,6 +60,13 @@ file. The function returns a \linkS4class{CytoImageList} object containing
 one image per slot. Supported file extensions are: '.tiff', '.tif', '.png',
 '.jpeg', '.jpg', ".h5".
 }
+\section{Reading in 16-bit integer images}{
+
+To correctly read in the original integer values of 16-bit, the \code{as.is =
+TRUE} parameter needs to be added to the function call. This will prevent the
+\code{\link[tiff]{readTIFF}} function to re-scale integer values.
+}
+
 \section{Loading specific images}{
 
 This function loads images via the \code{\link{readImage}} function and
