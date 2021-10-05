@@ -75,7 +75,7 @@ one image per slot. Supported file extensions are: '.tiff', '.tif', '.png',
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">cytomapper</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">1.5.4</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">1.5.5</span>
       </span>
     </div>
 
@@ -206,6 +206,13 @@ cores for parallelised processing.</p></td>
     <h2 class="hasAnchor" id="value"><a class="anchor" href="#value"></a>Value</h2>
 
     <p>A <a href='CytoImageList-class.html'>CytoImageList</a> object</p>
+    <h2 class="hasAnchor" id="reading-in-bit-integer-images"><a class="anchor" href="#reading-in-bit-integer-images"></a>Reading in 16-bit integer images</h2>
+
+    
+
+<p>To correctly read in the original integer values of 16-bit, the <code>as.is =
+TRUE</code> parameter needs to be added to the function call. This will prevent the
+<code><a href='https://rdrr.io/pkg/tiff/man/readTIFF.html'>readTIFF</a></code> function to re-scale integer values.</p>
     <h2 class="hasAnchor" id="loading-specific-images"><a class="anchor" href="#loading-specific-images"></a>Loading specific images</h2>
 
     
