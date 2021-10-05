@@ -57,7 +57,7 @@ BiocManager::install(c("EBImage", "SingleCellExperiment"))
 
 # install.packages("remotes")
 
-remotes::install_github("BodenmillerGroup/cytomapper", build_vignettes = TRUE)
+remotes::install_github("BodenmillerGroup/cytomapper", build_vignettes = TRUE, dependencies = TRUE)
 ```
 
 To load the package in your R session, type the following:
