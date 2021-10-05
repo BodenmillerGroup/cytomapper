@@ -46,7 +46,7 @@ if (!requireNamespace("BiocManager", quietly = TRUE))
 BiocManager::install("cytomapper")
 ```
 
-The development version of the `cytomapper` package can be installed from Github using `devtools` in R.
+The development version of the `cytomapper` package can be installed from Github using `remotes` in R.
 Please make sure to also install its dependecies:
 
 ```r
@@ -55,9 +55,9 @@ if (!requireNamespace("BiocManager", quietly = TRUE))
     
 BiocManager::install(c("EBImage", "SingleCellExperiment"))
 
-# install.packages("devtools")
+# install.packages("remotes")
 
-devtools::install_github("BodenmillerGroup/cytomapper", build_vignettes = TRUE)
+remotes::install_github("BodenmillerGroup/cytomapper", build_vignettes = TRUE)
 ```
 
 To load the package in your R session, type the following:
