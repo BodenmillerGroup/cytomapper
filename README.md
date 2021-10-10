@@ -1,4 +1,4 @@
-<img src="inst/imgs/cytomapper_sticker.png" align="right" alt="" width="120" />
+<img src="inst/imgs/cytomapper_sticker.png" align="right" alt="" width="200" />
 
 # cytomapper
 
