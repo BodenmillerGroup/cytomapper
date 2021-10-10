@@ -7,7 +7,9 @@
 [![docs](https://github.com/BodenmillerGroup/cytomapper/workflows/docs/badge.svg?branch=master)](https://github.com/BodenmillerGroup/cytomapper/actions?query=workflow%3Adocs)
 <!-- badges: end -->
 
-R package to spatially visualize pixel- and cell-level information obtained from highly multiplexed imaging.
+R/Bioconductor package to spatially visualize pixel- and cell-level information obtained from highly multiplexed imaging.
+
+Its official package page can be found here: [https://bioconductor.org/packages/cytomapper](https://bioconductor.org/packages/cytomapper)
 
 ## Check status
 
