@@ -1,4 +1,4 @@
-<img src="inst/imgs/cytomapper_sticker.png" align="right" alt="" width="120" />
+<img src="inst/imgs/cytomapper_sticker.png" align="right" alt="" width="200" />
 
 # cytomapper
 
@@ -7,7 +7,9 @@
 [![docs](https://github.com/BodenmillerGroup/cytomapper/workflows/docs/badge.svg?branch=master)](https://github.com/BodenmillerGroup/cytomapper/actions?query=workflow%3Adocs)
 <!-- badges: end -->
 
-R package to spatially visualize pixel- and cell-level information obtained from highly multiplexed imaging.
+R/Bioconductor package to spatially visualize pixel- and cell-level information obtained from highly multiplexed imaging.
+
+Its official package page can be found here: [https://bioconductor.org/packages/cytomapper](https://bioconductor.org/packages/cytomapper)
 
 ## Check status
 
@@ -57,7 +59,7 @@ BiocManager::install(c("EBImage", "SingleCellExperiment"))
 
 # install.packages("remotes")
 
-remotes::install_github("BodenmillerGroup/cytomapper", build_vignettes = TRUE)
+remotes::install_github("BodenmillerGroup/cytomapper", build_vignettes = TRUE, dependencies = TRUE)
 ```
 
 To load the package in your R session, type the following:
@@ -117,6 +119,8 @@ A full overview on the analysis workflow and functionality of the `cytomapper` p
 ```r
 vignette("cytomapper")
 ```
+
+For common issues regarding the `cytomapper` package, please refer to the [wiki](https://github.com/BodenmillerGroup/cytomapper/wiki).
 
 ## Demonstrations
 
