@@ -31,8 +31,8 @@ jobs:
       - name: Install dependencies
         run: |
          install.packages("BiocManager")
-         remotes::install_deps(dependencies = TRUE, repos = BiocManager::repositories(), Ncpu = 2L)
          install.packages("matrixStats")
+         remotes::install_deps(dependencies = TRUE, repos = BiocManager::repositories(), Ncpu = 2L)
         shell: Rscript {0}
         
       - name: Find PhantomJS path
