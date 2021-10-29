@@ -31,7 +31,7 @@ jobs:
       - name: Install dependencies
         run: |
          install.packages("BiocManager")
-         install.packages("matrixStats")
+         install.packages("matrixStats", type = "source")
          remotes::install_deps(dependencies = TRUE, repos = BiocManager::repositories(), Ncpu = 2L)
         shell: Rscript {0}
         
