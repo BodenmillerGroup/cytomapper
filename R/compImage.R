@@ -32,10 +32,17 @@ compImage <- function(object, sm, overwrite = FALSE, BPPARAM = SerialParam()){
             return(Image(cur_out))
         }, BPPARAM = BPPARAM))
         
-        
     } else {
         # on disk
+        object <- CytoImageList(bplapply(object, function(x){
+            cur_out <- apply(as.array(x), c(1,2), 
+                             function(u){nnls(t(sm), u)$x})
+            cur_out <- aperm(cur_out, c(2,3,1))
             
+            cur_out <- .add_h5(x, cur_out, overwrite, suffix = "_comp")
+            
+            return(cur_out)
+        }, BPPARAM = BPPARAM), on_disk = TRUE) 
     }
     
     channelNames(object) <- cur_channels
