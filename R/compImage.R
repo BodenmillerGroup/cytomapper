@@ -1,25 +1,39 @@
-#' @title Peforms channel compensation on multi-channel images
+#' @title Performs channel compensation on multi-channel images
 #'
-#' @description 
+#' @description Corrects the intensity spillover between neighbouring channels
+#' of multi-channel images using a non-negative least squares approach
 #'
 #' @param object a \code{CytoImageList} object containing pixel
-#' intensities for all channels. 
+#' intensities for all channels. The \code{channelNames} must be in the form
+#' of \code{(mt)(mass)Di} (e.g. \code{Sm152Di} for Samarium isotope with the
+#' atomic mass 152).
 #' @param sm numeric matrix containing the spillover estimated between channels.
+#' The column names must be of the form \code{(mt)(mass)Di} (e.g.
+#' \code{Sm152Di} for Samarium isotope with the atomic mass 152) and match to
+#' the \code{channelNames} of \code{object}.
 #'
 #' @return returns the compensated pixel intensities in form of a 
 #' \code{CytoImageList} object
+#' 
+#' @section The input object:
+#' The \code{channelNames} of \code{object} nned to match the column names
+#' of \code{sm}. To adapt the spillover matrix accordingly, please use the
+#' \code{\link[CATALYST]{adaptSpillmat}} function.
 #'
 #' @examples
 #' # TODO
 #' 
-#' @seealso 
-#' 
 #' @author Nils Eling (\email{nils.eling@@dqbm.uzh.ch})
+#' 
+#' @references
+#' \href{https://www.sciencedirect.com/science/article/pii/S2405471217305434}{
+#' Chevrier, S. et al., Compensation of Signal Spillover in Suspension 
+#' and Imaging Mass Cytometry., Cell Systems 2018 6(5):612-620.e5}
 #'
 #' @export
 compImage <- function(object, sm, overwrite = FALSE, BPPARAM = SerialParam()){
     
-    # .valid.compImage.input(object, sm)
+    .valid.compImage.input(object, sm)
     
     cur_channels <- channelNames(object)
     
