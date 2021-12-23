@@ -5,12 +5,81 @@ test_that("compImage function works", {
     on.exit(unlink(cur_path))
     
     # Mock up realistic spillover matrix
-    sm <- matrix(runif(25, min = 0, max = 0.1), ncol = 5, nrow = 5, 
-                  dimnames = list(channelNames(pancreasImages),
-                               channelNames(pancreasImages)))
-    diag(sm) <- 1
+    sm_real <- matrix(c(1, 0.033, 0.01, 0.007, 0,
+                   0.016, 1, 0.051, 0.01, 0,
+                   0.004, 0.013, 1, 0.023, 0,
+                   0.005, 0.008, 0.029, 1, 0.006,
+                   0, 0, 0, 0.001, 1), byrow = TRUE,
+                 ncol = 5, nrow = 5, 
+                 dimnames = list(c("Dy161Di", "Dy162Di", "Dy163Di", "Dy164Di", "Ho165Di"),
+                                 c("Dy161Di", "Dy162Di", "Dy163Di", "Dy164Di", "Ho165Di")))
     
-    expect_silent(cur_out <- compImage(pancreasImages, sm)) 
+    sm_strong <- matrix(c(1, 0.33, 0.1, 0.07, 0,
+                   0.16, 1, 0.51, 0.1, 0,
+                   0.04, 0.13, 1, 0.23, 0,
+                   0.05, 0.08, 0.29, 1, 0.06,
+                   0, 0, 0, 0.01, 1), byrow = TRUE,
+                 ncol = 5, nrow = 5, 
+                 dimnames = list(c("Dy161Di", "Dy162Di", "Dy163Di", "Dy164Di", "Ho165Di"),
+                                 c("Dy161Di", "Dy162Di", "Dy163Di", "Dy164Di", "Ho165Di")))
+    
+    # Generate spillover images
+    sm_images <- pancreasImages
+    channelNames(sm_images) <- c("Dy161Di", "Dy162Di", "Dy163Di", "Dy164Di", "Ho165Di")
+    cur_ch <- endoapply(sm_images, function(x){
+        Image(apply(x, c(1,2), function(y){sum(y * sm_strong[,"Dy161Di"])}))
+    })
+    channelNames(cur_ch) <- "Dy161Di"
+    setChannels(sm_images,  "Dy161Di") <- cur_ch
+    
+    cur_ch <- endoapply(sm_images, function(x){
+        Image(apply(x, c(1,2), function(y){sum(y * sm_strong[,"Dy162Di"])}))
+    })
+    channelNames(cur_ch) <- "Dy162Di"
+    setChannels(sm_images,  "Dy162Di") <- cur_ch
+    
+    cur_ch <- endoapply(sm_images, function(x){
+        Image(apply(x, c(1,2), function(y){sum(y * sm_strong[,"Dy163Di"])}))
+    })
+    channelNames(cur_ch) <- "Dy163Di"
+    setChannels(sm_images,  "Dy163Di") <- cur_ch
+    
+    cur_ch <- endoapply(sm_images, function(x){
+        Image(apply(x, c(1,2), function(y){sum(y * sm_strong[,"Dy164Di"])}))
+    })
+    channelNames(cur_ch) <- "Dy164Di"
+    setChannels(sm_images,  "Dy164Di") <- cur_ch
+    
+    cur_ch <- endoapply(sm_images, function(x){
+        Image(apply(x, c(1,2), function(y){sum(y * sm_strong[,"Ho165Di"])}))
+    })
+    channelNames(cur_ch) <- "Ho165Di"
+    setChannels(sm_images,  "Ho165Di") <- cur_ch
+    
+    # Visual inspection
+    plotPixels(pancreasImages, colour_by = "H3")
+    plotPixels(sm_images, colour_by = "Dy161Di")
+    plotPixels(pancreasImages, colour_by = "CD99")
+    plotPixels(sm_images, colour_by = "Dy162Di")
+    plotPixels(pancreasImages, colour_by = "PIN")
+    plotPixels(sm_images, colour_by = "Dy163Di")
+    plotPixels(pancreasImages, colour_by = "CD8a")
+    plotPixels(sm_images, colour_by = "Dy164Di")
+    plotPixels(pancreasImages, colour_by = "CDH")
+    plotPixels(sm_images, colour_by = "Ho165Di")
+    
+    expect_silent(cur_out <- compImage(sm_images, sm_strong))
+    
+    plotPixels(pancreasImages, colour_by = "H3")
+    plotPixels(cur_out, colour_by = "Dy161Di")
+    plotPixels(pancreasImages, colour_by = "CD99")
+    plotPixels(cur_out, colour_by = "Dy162Di")
+    plotPixels(pancreasImages, colour_by = "PIN")
+    plotPixels(cur_out, colour_by = "Dy163Di")
+    plotPixels(pancreasImages, colour_by = "CD8a")
+    plotPixels(cur_out, colour_by = "Dy164Di")
+    plotPixels(pancreasImages, colour_by = "CDH")
+    plotPixels(cur_out, colour_by = "Ho165Di")
     
     # on disk
     cur_images <- CytoImageList(pancreasImages, on_disk = TRUE,
