@@ -23,7 +23,7 @@ test_that("compImage function works", {
                  dimnames = list(c("Dy161Di", "Dy162Di", "Dy163Di", "Dy164Di", "Ho165Di"),
                                  c("Dy161Di", "Dy162Di", "Dy163Di", "Dy164Di", "Ho165Di")))
     
-    # Generate spillover images
+    # Generate spillover images - strong spillover
     sm_images <- pancreasImages
     channelNames(sm_images) <- c("Dy161Di", "Dy162Di", "Dy163Di", "Dy164Di", "Ho165Di")
     cur_ch <- endoapply(sm_images, function(x){
@@ -80,6 +80,130 @@ test_that("compImage function works", {
     plotPixels(cur_out, colour_by = "Dy164Di")
     plotPixels(pancreasImages, colour_by = "CDH")
     plotPixels(cur_out, colour_by = "Ho165Di")
+    
+    #expect_equal(imageData(pancreasImages$E34_imc)[,,1], imageData(cur_out$E34_imc)[,,1],
+    #             check.attributes = FALSE)
+    
+    # weak spillover
+    sm_images <- pancreasImages
+    channelNames(sm_images) <- c("Dy161Di", "Dy162Di", "Dy163Di", "Dy164Di", "Ho165Di")
+    cur_ch <- endoapply(sm_images, function(x){
+        Image(apply(x, c(1,2), function(y){sum(y * sm_real[,"Dy161Di"])}))
+    })
+    channelNames(cur_ch) <- "Dy161Di"
+    setChannels(sm_images,  "Dy161Di") <- cur_ch
+    
+    cur_ch <- endoapply(sm_images, function(x){
+        Image(apply(x, c(1,2), function(y){sum(y * sm_real[,"Dy162Di"])}))
+    })
+    channelNames(cur_ch) <- "Dy162Di"
+    setChannels(sm_images,  "Dy162Di") <- cur_ch
+    
+    cur_ch <- endoapply(sm_images, function(x){
+        Image(apply(x, c(1,2), function(y){sum(y * sm_real[,"Dy163Di"])}))
+    })
+    channelNames(cur_ch) <- "Dy163Di"
+    setChannels(sm_images,  "Dy163Di") <- cur_ch
+    
+    cur_ch <- endoapply(sm_images, function(x){
+        Image(apply(x, c(1,2), function(y){sum(y * sm_real[,"Dy164Di"])}))
+    })
+    channelNames(cur_ch) <- "Dy164Di"
+    setChannels(sm_images,  "Dy164Di") <- cur_ch
+    
+    cur_ch <- endoapply(sm_images, function(x){
+        Image(apply(x, c(1,2), function(y){sum(y * sm_real[,"Ho165Di"])}))
+    })
+    channelNames(cur_ch) <- "Ho165Di"
+    setChannels(sm_images,  "Ho165Di") <- cur_ch
+    
+    # Visual inspection
+    plotPixels(pancreasImages, colour_by = "H3")
+    plotPixels(sm_images, colour_by = "Dy161Di")
+    plotPixels(pancreasImages, colour_by = "CD99")
+    plotPixels(sm_images, colour_by = "Dy162Di")
+    plotPixels(pancreasImages, colour_by = "PIN")
+    plotPixels(sm_images, colour_by = "Dy163Di")
+    plotPixels(pancreasImages, colour_by = "CD8a")
+    plotPixels(sm_images, colour_by = "Dy164Di")
+    plotPixels(pancreasImages, colour_by = "CDH")
+    plotPixels(sm_images, colour_by = "Ho165Di")
+    
+    expect_silent(cur_out <- compImage(sm_images, sm_real))
+    
+    plotPixels(pancreasImages, colour_by = "H3")
+    plotPixels(cur_out, colour_by = "Dy161Di")
+    plotPixels(pancreasImages, colour_by = "CD99")
+    plotPixels(cur_out, colour_by = "Dy162Di")
+    plotPixels(pancreasImages, colour_by = "PIN")
+    plotPixels(cur_out, colour_by = "Dy163Di")
+    plotPixels(pancreasImages, colour_by = "CD8a")
+    plotPixels(cur_out, colour_by = "Dy164Di")
+    plotPixels(pancreasImages, colour_by = "CDH")
+    plotPixels(cur_out, colour_by = "Ho165Di")
+
+    expect_false(isTRUE(all.equal(imageData(pancreasImages$E34_imc)[,,1], imageData(sm_images$E34_imc)[,,1],
+                 check.attributes = FALSE, tolerance = 0.001)))
+    expect_equal(imageData(pancreasImages$E34_imc)[,,1], imageData(cur_out$E34_imc)[,,1],
+                 check.attributes = FALSE, tolerance = 0.001)
+    expect_false(isTRUE(all.equal(imageData(pancreasImages$E34_imc)[,,2], imageData(sm_images$E34_imc)[,,2],
+                                  check.attributes = FALSE, tolerance = 0.05)))
+    expect_equal(imageData(pancreasImages$E34_imc)[,,2], imageData(cur_out$E34_imc)[,,2],
+                 check.attributes = FALSE, tolerance = 0.05)
+    expect_false(isTRUE(all.equal(imageData(pancreasImages$E34_imc)[,,3], imageData(sm_images$E34_imc)[,,3],
+                                  check.attributes = FALSE, tolerance = 0.05)))
+    expect_equal(imageData(pancreasImages$E34_imc)[,,3], imageData(cur_out$E34_imc)[,,3],
+                 check.attributes = FALSE, tolerance = 0.05)
+    expect_false(isTRUE(all.equal(imageData(pancreasImages$E34_imc)[,,4], imageData(sm_images$E34_imc)[,,4],
+                                  check.attributes = FALSE, tolerance = 0.05)))
+    expect_equal(imageData(pancreasImages$E34_imc)[,,4], imageData(cur_out$E34_imc)[,,4],
+                 check.attributes = FALSE, tolerance = 0.05)
+    #expect_false(isTRUE(all.equal(imageData(pancreasImages$E34_imc)[,,5], imageData(sm_images$E34_imc)[,,5],
+    #                              check.attributes = FALSE, tolerance = 0.001)))
+    #expect_equal(imageData(pancreasImages$E34_imc)[,,5], imageData(cur_out$E34_imc)[,,5],
+    #             check.attributes = FALSE, tolerance = 0.001)
+    
+    expect_false(isTRUE(all.equal(imageData(pancreasImages$G01_imc)[,,1], imageData(sm_images$G01_imc)[,,1],
+                                  check.attributes = FALSE, tolerance = 0.001)))
+    expect_equal(imageData(pancreasImages$G01_imc)[,,1], imageData(cur_out$G01_imc)[,,1],
+                 check.attributes = FALSE, tolerance = 0.001)
+    expect_false(isTRUE(all.equal(imageData(pancreasImages$G01_imc)[,,2], imageData(sm_images$G01_imc)[,,2],
+                                  check.attributes = FALSE, tolerance = 0.005)))
+    expect_equal(imageData(pancreasImages$G01_imc)[,,2], imageData(cur_out$G01_imc)[,,2],
+                 check.attributes = FALSE, tolerance = 0.005)
+    expect_false(isTRUE(all.equal(imageData(pancreasImages$G01_imc)[,,3], imageData(sm_images$G01_imc)[,,3],
+                                  check.attributes = FALSE, tolerance = 0.05)))
+    expect_equal(imageData(pancreasImages$G01_imc)[,,3], imageData(cur_out$G01_imc)[,,3],
+                 check.attributes = FALSE, tolerance = 0.05)
+    expect_false(isTRUE(all.equal(imageData(pancreasImages$G01_imc)[,,4], imageData(sm_images$G01_imc)[,,4],
+                                  check.attributes = FALSE, tolerance = 0.5)))
+    expect_equal(imageData(pancreasImages$G01_imc)[,,4], imageData(cur_out$G01_imc)[,,4],
+                 check.attributes = FALSE, tolerance = 0.5)
+    #expect_false(isTRUE(all.equal(imageData(pancreasImages$G01_imc)[,,5], imageData(sm_images$G01_imc)[,,5],
+    #                              check.attributes = FALSE, tolerance = 0.001)))
+    #expect_equal(imageData(pancreasImages$G01_imc)[,,5], imageData(cur_out$G01_imc)[,,5],
+    #             check.attributes = FALSE, tolerance = 0.001)
+    
+    expect_false(isTRUE(all.equal(imageData(pancreasImages$J02_imc)[,,1], imageData(sm_images$J02_imc)[,,1],
+                                  check.attributes = FALSE, tolerance = 0.001)))
+    expect_equal(imageData(pancreasImages$J02_imc)[,,1], imageData(cur_out$J02_imc)[,,1],
+                 check.attributes = FALSE, tolerance = 0.001)
+    expect_false(isTRUE(all.equal(imageData(pancreasImages$J02_imc)[,,2], imageData(sm_images$J02_imc)[,,2],
+                                  check.attributes = FALSE, tolerance = 0.005)))
+    expect_equal(imageData(pancreasImages$J02_imc)[,,2], imageData(cur_out$J02_imc)[,,2],
+                 check.attributes = FALSE, tolerance = 0.005)
+    expect_false(isTRUE(all.equal(imageData(pancreasImages$J02_imc)[,,3], imageData(sm_images$J02_imc)[,,3],
+                                  check.attributes = FALSE, tolerance = 0.5)))
+    expect_equal(imageData(pancreasImages$J02_imc)[,,3], imageData(cur_out$J02_imc)[,,3],
+                 check.attributes = FALSE, tolerance = 0.5)
+    expect_false(isTRUE(all.equal(imageData(pancreasImages$J02_imc)[,,4], imageData(sm_images$J02_imc)[,,4],
+                                  check.attributes = FALSE, tolerance = 0.05)))
+    expect_equal(imageData(pancreasImages$J02_imc)[,,4], imageData(cur_out$J02_imc)[,,4],
+                 check.attributes = FALSE, tolerance = 0.05)
+    #expect_false(isTRUE(all.equal(imageData(pancreasImages$J02_imc)[,,5], imageData(sm_images$J02_imc)[,,5],
+    #                              check.attributes = FALSE, tolerance = 0.001)))
+    #expect_equal(imageData(pancreasImages$J02_imc)[,,5], imageData(cur_out$J02_imc)[,,5],
+    #             check.attributes = FALSE, tolerance = 0.001)
     
     # on disk
     cur_images <- CytoImageList(pancreasImages, on_disk = TRUE,
