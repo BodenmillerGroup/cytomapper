@@ -266,10 +266,16 @@ test_that("compImage function works", {
     #             check.attributes = FALSE, tolerance = 0.001)
     
     # on disk
-    cur_images_ondisk <- CytoImageList(pancreasImages, on_disk = TRUE,
+    cur_images_ondisk <- CytoImageList(sm_images, on_disk = TRUE,
                                 h5FilesPath = cur_path)
     
-    expect_silent(cur_out_2 <- compImage(cur_images, sm_real)) 
+    cur_size <- file.info(paste0(cur_path, "/E34_imc.h5"))[,"size"]
+    
+    expect_s4_class(cur_images_ondisk$E34_imc, "DelayedArray")
+    expect_s4_class(cur_images_ondisk$G01_imc, "DelayedArray")
+    expect_s4_class(cur_images_ondisk$J02_imc, "DelayedArray")
+    
+    expect_silent(cur_out_2 <- compImage(cur_images_ondisk, sm_real)) 
     
     expect_equal(as.array(cur_out$E34_imc),
                  as.array(cur_out_2$E34_imc))
@@ -277,4 +283,48 @@ test_that("compImage function works", {
                  as.array(cur_out_2$G01_imc))
     expect_equal(as.array(cur_out$G01_imc),
                  as.array(cur_out_2$G01_imc))
+    
+    cur_size_2 <- file.info(paste0(cur_path, "/E34_imc.h5"))[,"size"]
+    expect_gt(cur_size_2, cur_size)
+    
+    expect_s4_class(cur_out_2$E34_imc, "DelayedArray")
+    expect_s4_class(cur_out_2$G01_imc, "DelayedArray")
+    expect_s4_class(cur_out_2$J02_imc, "DelayedArray")
+    
+    # Check if second layer was created
+    expect_true("E34_imc_comp" %in% h5ls(path(cur_out_2$E34_imc@seed))$name)
+    expect_true("E34_imc_comp" %in% h5ls(path(cur_images_ondisk$E34_imc@seed))$name)
+    expect_equal(h5ls(path(cur_out_2$E34_imc@seed))$name, 
+                 c(".E34_imc_dimnames", "3", "E34_imc", "E34_imc_comp"))
+    
+    expect_silent(cur_out_3 <- compImage(cur_images_ondisk, sm_real)) 
+    
+    expect_equal(as.array(cur_out$E34_imc),
+                 as.array(cur_out_3$E34_imc))
+    expect_equal(as.array(cur_out$G01_imc),
+                 as.array(cur_out_3$G01_imc))
+    expect_equal(as.array(cur_out$G01_imc),
+                 as.array(cur_out_3$G01_imc))
+    
+    expect_equal(h5ls(path(cur_out_3$E34_imc@seed))$name, 
+                 c(".E34_imc_dimnames", "3", "E34_imc", "E34_imc_comp"))
+    
+    # Fail
+    expect_error(compImage("test"),
+                 regexp = "'object' not of type 'CytoImageList'")
+    expect_error(compImage(pancreasImages),
+                 regexp = "argument \"sm\" is missing, with no default")
+    expect_error(compImage(pancreasImages, "test"),
+                 regexp = "'sm' is not of type 'matrix'")
+    expect_error(compImage(pancreasImages, matrix("test")),
+                 regexp = "'sm' contains values outside 0-1 range.")
+    expect_error(compImage(pancreasImages, sm_real),
+                 regexp = "Not all 'channelNames(object)' are of the format (mt)(mass)Di.")
+    sm <- sm_real
+    colnames(sm) <- c(1,2,3,4,5)
+    expect_error(compImage(sm_images, sm),
+                 regexp = "'channelNames(object)' and 'colnames(sm)' do not match.")
+    channelNames(sm_images) <- c(1,2,3,4,5)
+    expect_error(compImage(sm_images, sm_real),
+                 regexp = "'channelNames(object)' and 'colnames(sm)' do not match.")
 })

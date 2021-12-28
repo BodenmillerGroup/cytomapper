@@ -632,7 +632,7 @@
     }
         
     # Check spillover matrix
-    if (!all.equal(colnames(sm), channelNames(object))) {
+    if (!isTRUE(all.equal(colnames(sm), channelNames(object)))) {
         stop("'channelNames(object)' and 'colnames(sm)' do not match.")
     }
 }
