@@ -21,11 +21,11 @@
 #' \code{CytoImageList} object.
 #' 
 #' @section The input object:
-#' The \code{channelNames} of \code{object} nned to match the column names
+#' The \code{channelNames} of \code{object} need to match the column names
 #' of \code{sm}. To adapt the spillover matrix accordingly, please use the
 #' \code{\link[CATALYST]{adaptSpillmat}} function.
 #' 
-#' @section Images stored on disk
+#' @section Images stored on disk:
 #' Image compensation also works for images stored on disk. By default,
 #' the compensated images are stored as a second entry called "XYZ_comp"
 #' in the .h5 file. Here "XYZ" specifies the name of the original entry.
