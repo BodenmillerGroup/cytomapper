@@ -22,7 +22,7 @@ be overwritten by the compensated image array? By default (\code{overwrite
 = FALSE}), a new entry called "XYZ_comp" will be written to the .h5  file
 (see below).}
 
-\item{BPPARAM}{}
+\item{BPPARAM}{parameters for parallelised processing.}
 }
 \value{
 returns the compensated pixel intensities in form of a 
@@ -75,6 +75,11 @@ comp_images <- compImage(pancreasImages, sm)
 \href{https://www.sciencedirect.com/science/article/pii/S2405471217305434}{
 Chevrier, S. et al., Compensation of Signal Spillover in Suspension 
 and Imaging Mass Cytometry., Cell Systems 2018 6(5):612-620.e5}
+}
+\seealso{
+\code{\link[nnls]{nnls}}, for the underlying algorithm
+
+\code{\link[CATALYST]{compCytof}}, for how to compensate single-cell data
 }
 \author{
 Nils Eling (\email{nils.eling@dqbm.uzh.ch})

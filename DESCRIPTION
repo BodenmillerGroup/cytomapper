@@ -49,7 +49,8 @@ Imports:
     shiny,
     shinydashboard,
     matrixStats,
-    rhdf5
+    rhdf5,
+    nnls
 Suggests:
     BiocStyle,
     knitr,

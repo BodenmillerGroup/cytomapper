@@ -15,7 +15,7 @@
 #' be overwritten by the compensated image array? By default (\code{overwrite
 #' = FALSE}), a new entry called "XYZ_comp" will be written to the .h5  file
 #' (see below).
-#' @param BPPARAM 
+#' @param BPPARAM parameters for parallelised processing. 
 #'
 #' @return returns the compensated pixel intensities in form of a 
 #' \code{CytoImageList} object.
@@ -55,6 +55,11 @@
 #' comp_images <- compImage(pancreasImages, sm) 
 #' 
 #' @author Nils Eling (\email{nils.eling@@dqbm.uzh.ch})
+#' 
+#' @seealso 
+#' \code{\link[nnls]{nnls}}, for the underlying algorithm
+#' 
+#' \code{\link[CATALYST]{compCytof}}, for how to compensate single-cell data
 #' 
 #' @references
 #' \href{https://www.sciencedirect.com/science/article/pii/S2405471217305434}{

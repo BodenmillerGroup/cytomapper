@@ -753,12 +753,14 @@ test_that("On disk: HDF5 handling works", {
     
     expect_equal(h5ls(cur_file)$name, "test")
     
-    expect_silent(test <- .add_h5(cur_obj = cur_hdf5, new_obj = cur_array_2, overwrite = FALSE))
+    expect_silent(test <- .add_h5(cur_obj = cur_hdf5, new_obj = cur_array_2, 
+                                  overwrite = FALSE, suffix = "_norm"))
     
     expect_equal(h5ls(cur_file)$name, c("test", "test_norm"))
     expect_equal(as.array(test), cur_array_2)
     
-    expect_silent(test <- .add_h5(cur_obj = cur_hdf5, new_obj = cur_array_2, overwrite = TRUE))
+    expect_silent(test <- .add_h5(cur_obj = cur_hdf5, new_obj = cur_array_2, 
+                                  overwrite = TRUE, suffix = "_norm"))
     expect_equal(h5ls(cur_file)$name, "test_norm")
     expect_equal(as.array(test), cur_array_2)
     
