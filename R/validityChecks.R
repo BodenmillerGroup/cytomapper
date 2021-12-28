@@ -609,6 +609,31 @@
             stop("Only haralick features of type ", paste(haralick_features_allowed, collapse = ", "), " allowed.")
         }
     }
+}
     
+.valid.compImage.input <- function(object, sm){
+        
+    # Input checks
+    if (!is(object,  "CytoImageList")) {
+        stop("'object' not of type 'CytoImageList'")
+    }
+    if (!is(sm, "matrix")) {
+        stop("'sm' is not of type 'matrix'")
+    }
+    if (!all(sm >= 0) | !all(sm <= 1)) {
+        stop("'sm' contains values outside 0-1 range.")
+    }
+        
+    # Check channelNames
+    cur_chs <- channelNames(object)
+    
+    if (!all(grepl("^[A-Za-z]{1,2}[0-9]{2,3}Di$", cur_chs))) {
+        stop("Not all 'channelNames(object)' are of the format (mt)(mass)Di.")
+    }
+        
+    # Check spillover matrix
+    if (!isTRUE(all.equal(colnames(sm), channelNames(object)))) {
+        stop("'channelNames(object)' and 'colnames(sm)' do not match.")
+    }
 }
 
