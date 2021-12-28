@@ -19,6 +19,8 @@
 <![endif]-->
 </head>
 <body data-spy="scroll" data-target="#toc">
+    
+
     <div class="container template-article">
       <header><div class="navbar navbar-default navbar-fixed-top" role="navigation">
   <div class="container">
@@ -31,18 +33,12 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">cytomapper</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">1.7.0</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="">1.7.1</span>
       </span>
     </div>
 
     <div id="navbar" class="navbar-collapse collapse">
       <ul class="nav navbar-nav">
-<li>
-  <a href="../index.html">
-    <span class="fas fa-home fa-lg"></span>
-     
-  </a>
-</li>
 <li>
   <a href="../articles/cytomapper.html">Get started</a>
 </li>
@@ -64,7 +60,7 @@
       </ul>
 <ul class="nav navbar-nav navbar-right">
 <li>
-  <a href="https://github.com/BodenmillerGroup/cytomapper/">
+  <a href="https://github.com/BodenmillerGroup/cytomapper/" class="external-link">
     <span class="fab fa-github fa-lg"></span>
      
   </a>
@@ -83,22 +79,22 @@
   <div class="col-md-9 contents">
     <div class="page-header toc-ignore">
       <h1 data-toc-skip>Visualization of imaging cytometry data in R</h1>
-                        <h4 class="author">Nils Eling</h4>
+                        <h4 data-toc-skip class="author">Nils Eling</h4>
             <address class="author_afil">
       Department for Quantitative Biomedicine, University of Zurich<br><a class="author_email" href="mailto:#"></a><a href="mailto:nils.eling@dqbm.uzh.ch" class="email">nils.eling@dqbm.uzh.ch</a>
       </address>
-                              <h4 class="author">Nicolas Damond</h4>
+                              <h4 data-toc-skip class="author">Nicolas Damond</h4>
             <address class="author_afil">
       Department for Quantitative Biomedicine, University of Zurich<br><a class="author_email" href="mailto:#"></a><a href="mailto:nicolas.damond@dqbm.uzh.ch" class="email">nicolas.damond@dqbm.uzh.ch</a>
       </address>
-                              <h4 class="author">Tobias Hoch</h4>
+                              <h4 data-toc-skip class="author">Tobias Hoch</h4>
             <address class="author_afil">
       Department for Quantitative Biomedicine, University of Zurich<br><a class="author_email" href="mailto:#"></a><a href="mailto:tobias.hoch@dqbm.uzh.ch" class="email">tobias.hoch@dqbm.uzh.ch</a>
       </address>
                   
-            <h4 class="date">30 October 2021</h4>
+            <h4 data-toc-skip class="date">28 December 2021</h4>
       
-      <small class="dont-index">Source: <a href="https://github.com/BodenmillerGroup/cytomapper/blob/master/vignettes/cytomapper.Rmd"><code>vignettes/cytomapper.Rmd</code></a></small>
+      <small class="dont-index">Source: <a href="https://github.com/BodenmillerGroup/cytomapper/blob/HEAD/vignettes/cytomapper.Rmd" class="external-link"><code>vignettes/cytomapper.Rmd</code></a></small>
       <div class="hidden name"><code>cytomapper.Rmd</code></div>
 
     </div>
@@ -109,13 +105,13 @@
       <p>Highly multiplexed imaging cytometry acquires the single-cell expression of selected proteins in a spatially-resolved fashion. These measurements can be visualized across multiple length-scales. First, pixel-level intensities represent the spatial distributions of feature expression with highest resolution. Second, after segmentation, expression values or cell-level metadata (e.g. cell-type information) can be visualized on segmented cell areas. This package contains functions for the visualization of multiplexed read-outs and cell-level information obtained by multiplexed imaging cytometry. The main functions of this package allow 1. the visualization of pixel-level information across multiple channels and 2. the display of cell-level information (expression and/or metadata) on segmentation masks.</p>
     </div>
     
-<div id="introduction" class="section level1">
-<h1 class="hasAnchor">
-<a href="#introduction" class="anchor"></a>Introduction</h1>
+<div class="section level1">
+<h1 id="introduction">Introduction<a class="anchor" aria-label="anchor" href="#introduction"></a>
+</h1>
 <p>This vignette gives an introduction to displaying highly-multiplexed imaging cytometry data with the <code>cytomapper</code> package. As an example, these instructions display imaging mass cytometry (IMC) data. However, other imaging cytometry approaches including multiplexed ion beam imaging (MIBI) <span class="citation">(Angelo et al. 2014)</span>, tissue-based cyclic immunofluorescence (t-CyCIF) <span class="citation">(Lin et al. 2018)</span> and iterative indirect immunofluorescence imaging (4i) <span class="citation">(Gut, Herrmann, and Pelkmans 2018)</span>, which produce pixel-level intensities and optionally segmentation masks can be displayed using <code>cytomapper</code>.</p>
 <p>IMC <span class="citation">(Giesen et al. 2014)</span> is a multiplexed imaging cytometry approach to measure spatial protein abundance. In IMC, tissue sections are stained with a mix of around 40 metal-conjugated antibodies prior to laser ablation with <span class="math inline">\(1\mu{}m\)</span> resolution. The ablated material is transferred to a mass cytometer for time-of-flight detection of the metal ions <span class="citation">(Giesen et al. 2014)</span><span class="citation">(Mavropoulos et al., n.d.)</span>. In that way, hundreds of images (usually with an image size of around 1mm x 1mm) can be generated in a reasonable amount of time <span class="citation">(Damond et al. 2019)</span>.</p>
-<p>Raw IMC data are computationally processed using a segmentation pipeline (available at <a href="https://github.com/BodenmillerGroup/ImcSegmentationPipeline">https://github.com/BodenmillerGroup/ImcSegmentationPipeline</a>). This pipeline produces image stacks containing the raw pixel values for up to 40 channels, segmentation masks containing the segmented cells, cell-level expression and metadata information as well as a number of image-level meta information.</p>
-<p>Cell-level expression and metadata can be processed and read into a <code>SingleCellExperiment</code> class object. For more information on the <code>SingleCellExperiment</code> object and how to create it, please see the <em><a href="https://bioconductor.org/packages/3.14/SingleCellExperiment">SingleCellExperiment</a></em> package and the <a href="https://bioconductor.org/books/release/OSCA/data-infrastructure.html">Orchestrating Single-Cell Analysis with Bioconductor</a> workflow. Furthermore, the <code>cytomapper</code> package provides the <a href="#measureObjects">measureObjects</a> function that generates a <code>SingleCellExperiment</code> based on segmentation masks and multi-channel images.</p>
+<p>Raw IMC data are computationally processed using a segmentation pipeline (available at <a href="https://github.com/BodenmillerGroup/ImcSegmentationPipeline" class="external-link">https://github.com/BodenmillerGroup/ImcSegmentationPipeline</a>). This pipeline produces image stacks containing the raw pixel values for up to 40 channels, segmentation masks containing the segmented cells, cell-level expression and metadata information as well as a number of image-level meta information.</p>
+<p>Cell-level expression and metadata can be processed and read into a <code>SingleCellExperiment</code> class object. For more information on the <code>SingleCellExperiment</code> object and how to create it, please see the <em><a href="https://bioconductor.org/packages/3.14/SingleCellExperiment" class="external-link">SingleCellExperiment</a></em> package and the <a href="https://bioconductor.org/books/release/OSCA/data-infrastructure.html" class="external-link">Orchestrating Single-Cell Analysis with Bioconductor</a> workflow. Furthermore, the <code>cytomapper</code> package provides the <a href="#measureObjects">measureObjects</a> function that generates a <code>SingleCellExperiment</code> based on segmentation masks and multi-channel images.</p>
 <p>The <code>cytomapper</code> package provides a new <code>CytoImageList</code> class as a container for multiplexed images or segmentation masks. For more information on this class, refer to the <a href="#CytoImageList">CytoImageList</a> section.</p>
 <p>The main functions of this package include <code>plotCells</code> and <code>plotPixels</code>. The <code>plotCells</code> function requires the following object inputs to display cell-level information (expression and metadata):</p>
 <ol style="list-style-type: decimal">
@@ -129,17 +125,17 @@
 <li>(optionally) a <code>CytoImageList</code> object containing the segmentation masks</li>
 </ol>
 </div>
-<div id="QuickStart" class="section level1">
-<h1 class="hasAnchor">
-<a href="#QuickStart" class="anchor"></a>Quick start</h1>
+<div class="section level1">
+<h1 id="QuickStart">Quick start<a class="anchor" aria-label="anchor" href="#QuickStart"></a>
+</h1>
 <p>The following section provides a quick example highlighting the functionality of <code>cytomapper</code>. For detailed information on reading in the data, refer to the <a href="#ReadingData">Reading in data</a> section. More information on the required data format is provided in the <a href="#DataFormats">Data formats</a> section. In the first step, we will read in the provided <a href="#ToyData">toy dataset</a></p>
 <div class="sourceCode" id="cb1"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="fu"><a href="https://rdrr.io/r/utils/data.html">data</a></span><span class="op">(</span><span class="va">pancreasSCE</span><span class="op">)</span>
-<span class="fu"><a href="https://rdrr.io/r/utils/data.html">data</a></span><span class="op">(</span><span class="va">pancreasImages</span><span class="op">)</span>
-<span class="fu"><a href="https://rdrr.io/r/utils/data.html">data</a></span><span class="op">(</span><span class="va">pancreasMasks</span><span class="op">)</span></code></pre></div>
+<code class="sourceCode R"><span class="fu"><a href="https://rdrr.io/r/utils/data.html" class="external-link">data</a></span><span class="op">(</span><span class="va">pancreasSCE</span><span class="op">)</span>
+<span class="fu"><a href="https://rdrr.io/r/utils/data.html" class="external-link">data</a></span><span class="op">(</span><span class="va">pancreasImages</span><span class="op">)</span>
+<span class="fu"><a href="https://rdrr.io/r/utils/data.html" class="external-link">data</a></span><span class="op">(</span><span class="va">pancreasMasks</span><span class="op">)</span></code></pre></div>
 <p>The <code>CytoImageList</code> object containing pixel-level intensities representing the ion counts for five proteins can be displayed using the <code>plotPixels</code> function:</p>
 <div class="sourceCode" id="cb2"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="fu"><a href="../reference/plotPixels.html">plotPixels</a></span><span class="op">(</span>image <span class="op">=</span> <span class="va">pancreasImages</span>, colour_by <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="st">"H3"</span>, <span class="st">"CD99"</span>, <span class="st">"CDH"</span><span class="op">)</span><span class="op">)</span></code></pre></div>
+<code class="sourceCode R"><span class="fu"><a href="../reference/plotPixels.html">plotPixels</a></span><span class="op">(</span>image <span class="op">=</span> <span class="va">pancreasImages</span>, colour_by <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"H3"</span>, <span class="st">"CD99"</span>, <span class="st">"CDH"</span><span class="op">)</span><span class="op">)</span></code></pre></div>
 <p><img src="cytomapper_files/figure-html/quickstart-plotPixels-1.png" width="700"></p>
 <p>For more details on image normalization, cell outlining, and other pixel-level manipulations, refer to the <a href="#PixelInfo">Plotting pixel information</a> section.</p>
 <p>The <code>CytoImageList</code> object containing segmentation masks, which represent cell areas on the image can be displayed using the <code>plotCells</code> function. Only the segmentation masks are plotted when no other parameters are specified.</p>
@@ -156,10 +152,10 @@
 <p><img src="cytomapper_files/figure-html/quickstart-plotCells-2-2.png" width="700"></p>
 <p>For more information on the data formats and requirements, refer to the following section. More details on the <code>plotCells</code> function are provided in the <a href="#CellInfo">Plotting cell information</a> section. Also refer to the <a href="#measureObjects">measureObjects</a> function to generate a <code>SingleCellExperiment</code> directly from the images.</p>
 </div>
-<div id="DataFormats" class="section level1">
-<h1 class="hasAnchor">
-<a href="#DataFormats" class="anchor"></a>Data formats</h1>
-<p>The <code>cytomapper</code> package combines objects of the <em><a href="https://bioconductor.org/packages/3.14/SingleCellExperiment">SingleCellExperiment</a></em> class and the <code>CytoImageList</code> class (provided in <code>cytomapper</code>) to visualize cell- and pixel-level information.</p>
+<div class="section level1">
+<h1 id="DataFormats">Data formats<a class="anchor" aria-label="anchor" href="#DataFormats"></a>
+</h1>
+<p>The <code>cytomapper</code> package combines objects of the <em><a href="https://bioconductor.org/packages/3.14/SingleCellExperiment" class="external-link">SingleCellExperiment</a></em> class and the <code>CytoImageList</code> class (provided in <code>cytomapper</code>) to visualize cell- and pixel-level information.</p>
 <p>In the main functions of the package, <code>image</code> refers to a <code>CytoImageList</code> object containing one or multiple multi-channel images where each channel represents the pixel-intensity of one selected marker (proteins in the case of IMC). The entry <code>mask</code> refers to a <code>CytoImageList</code> object containing one or multiple segmentation masks. Segmentation masks are defined as one-channel images containing integer values, which represent the cells’ ids or 0 (background). Finally, the <code>object</code> entry refers to a <code>SingleCellExperiment</code> class object that contains cell-specific expression values (in the <code>assay</code> slots) and cell-specific metadata in the <code>colData</code> slot.</p>
 <p>To link information between the <code>SingleCellExperiment</code> and <code>CytoImageList</code> objects, two slots need to be specified:</p>
 <ul>
@@ -170,439 +166,439 @@
 </ul>
 <p>The <code>img_id</code> and <code>cell_id</code> entry in the <code>SingleCellExperiment</code> object need to be accessible via:</p>
 <div class="sourceCode" id="cb5"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="fu"><a href="https://rdrr.io/r/utils/head.html">head</a></span><span class="op">(</span><span class="fu">colData</span><span class="op">(</span><span class="va">pancreasSCE</span><span class="op">)</span><span class="op">[</span>,<span class="st">"ImageNb"</span><span class="op">]</span><span class="op">)</span></code></pre></div>
-<pre><code>## [1] 1 1 1 1 1 1</code></pre>
+<code class="sourceCode R"><span class="fu"><a href="https://rdrr.io/r/utils/head.html" class="external-link">head</a></span><span class="op">(</span><span class="fu">colData</span><span class="op">(</span><span class="va">pancreasSCE</span><span class="op">)</span><span class="op">[</span>,<span class="st">"ImageNb"</span><span class="op">]</span><span class="op">)</span></code></pre></div>
+<pre><code><span class="co">## [1] 1 1 1 1 1 1</span></code></pre>
 <div class="sourceCode" id="cb7"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="fu"><a href="https://rdrr.io/r/utils/head.html">head</a></span><span class="op">(</span><span class="fu">colData</span><span class="op">(</span><span class="va">pancreasSCE</span><span class="op">)</span><span class="op">[</span>,<span class="st">"CellNb"</span><span class="op">]</span><span class="op">)</span></code></pre></div>
-<pre><code>## [1] 824 835 839 844 847 853</code></pre>
+<code class="sourceCode R"><span class="fu"><a href="https://rdrr.io/r/utils/head.html" class="external-link">head</a></span><span class="op">(</span><span class="fu">colData</span><span class="op">(</span><span class="va">pancreasSCE</span><span class="op">)</span><span class="op">[</span>,<span class="st">"CellNb"</span><span class="op">]</span><span class="op">)</span></code></pre></div>
+<pre><code><span class="co">## [1] 824 835 839 844 847 853</span></code></pre>
 <p>The <code>img_id</code> entry in the <code>CytoImageList</code> object need to be accessible via:</p>
 <div class="sourceCode" id="cb9"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="fu">mcols</span><span class="op">(</span><span class="va">pancreasImages</span><span class="op">)</span><span class="op">[</span>,<span class="st">"ImageNb"</span><span class="op">]</span></code></pre></div>
-<pre><code>## [1] 1 2 3</code></pre>
+<pre><code><span class="co">## [1] 1 2 3</span></code></pre>
 <div class="sourceCode" id="cb11"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="fu">mcols</span><span class="op">(</span><span class="va">pancreasMasks</span><span class="op">)</span><span class="op">[</span>,<span class="st">"ImageNb"</span><span class="op">]</span></code></pre></div>
-<pre><code>## [1] 1 2 3</code></pre>
-<p>For more information on the <code>CytoImageList</code> class, please refer to the section <a href="#CytoImageList">The CytoImageList object</a>. For more information on the <code>SingleCellExperiment</code> object and how to create it, please see the <em><a href="https://bioconductor.org/packages/3.14/SingleCellExperiment">SingleCellExperiment</a></em> package and the <a href="https://osca.bioconductor.org/data-infrastructure.html#the-singlecellexperiment-class">Orchestrating Single-Cell Analysis with Bioconductor</a> workflow.</p>
-<div id="ToyData" class="section level2">
-<h2 class="hasAnchor">
-<a href="#ToyData" class="anchor"></a>The provided toy dataset</h2>
-<p>For visualization purposes, the <code>cytomapper</code> package provides a toy dataset containing 3 images of <span class="math inline">\(100\mu{m}\)</span> x <span class="math inline">\(100\mu{m}\)</span> dimensions (100 x 100 pixels). The dataset contains 362 segmented cells and the expression values for 5 proteins: H3, CD99, PIN, CD8a, and CDH It represents a small subset of the data presented in <a href="https://www.cell.com/cell-metabolism/fulltext/S1550-4131(18)30691-0?_returnURL=https%3A%2F%2Flinkinghub.elsevier.com%2Fretrieve%2Fpii%2FS1550413118306910%3Fshowall%3Dtrue">A Map of Human Type 1 Diabetes Progression by Imaging Mass Cytometry</a>.</p>
-<p>This dataset was generated using imaging mass cytometry <span class="citation">(Giesen et al. 2014)</span>. Raw output files (in .mcd format) were processed using the <a href="https://github.com/BodenmillerGroup/ImcSegmentationPipeline">IMC segmentation pipeline</a>, which produces tiff-stacks containing the pixel-level information of all measured markers, segmentation masks that contain the cells’ object ids as well as cell- and image-specific measurements. Cell-specific measurements include the mean marker intensity per cell and per marker, the cells’ position and size measurements.</p>
+<pre><code><span class="co">## [1] 1 2 3</span></code></pre>
+<p>For more information on the <code>CytoImageList</code> class, please refer to the section <a href="#CytoImageList">The CytoImageList object</a>. For more information on the <code>SingleCellExperiment</code> object and how to create it, please see the <em><a href="https://bioconductor.org/packages/3.14/SingleCellExperiment" class="external-link">SingleCellExperiment</a></em> package and the <a href="https://osca.bioconductor.org/data-infrastructure.html#the-singlecellexperiment-class" class="external-link">Orchestrating Single-Cell Analysis with Bioconductor</a> workflow.</p>
+<div class="section level2">
+<h2 id="ToyData">The provided toy dataset<a class="anchor" aria-label="anchor" href="#ToyData"></a>
+</h2>
+<p>For visualization purposes, the <code>cytomapper</code> package provides a toy dataset containing 3 images of <span class="math inline">\(100\mu{m}\)</span> x <span class="math inline">\(100\mu{m}\)</span> dimensions (100 x 100 pixels). The dataset contains 362 segmented cells and the expression values for 5 proteins: H3, CD99, PIN, CD8a, and CDH It represents a small subset of the data presented in <a href="https://www.cell.com/cell-metabolism/fulltext/S1550-4131(18)30691-0?_returnURL=https%3A%2F%2Flinkinghub.elsevier.com%2Fretrieve%2Fpii%2FS1550413118306910%3Fshowall%3Dtrue" class="external-link">A Map of Human Type 1 Diabetes Progression by Imaging Mass Cytometry</a>.</p>
+<p>This dataset was generated using imaging mass cytometry <span class="citation">(Giesen et al. 2014)</span>. Raw output files (in .mcd format) were processed using the <a href="https://github.com/BodenmillerGroup/ImcSegmentationPipeline" class="external-link">IMC segmentation pipeline</a>, which produces tiff-stacks containing the pixel-level information of all measured markers, segmentation masks that contain the cells’ object ids as well as cell- and image-specific measurements. Cell-specific measurements include the mean marker intensity per cell and per marker, the cells’ position and size measurements.</p>
 <p>Pixel-level intensities for all 5 markers (5 channels) are stored in the <code>pancreasImages</code> object. Entries to the <code>CytoImageList</code> object and the rownames of <code>elementMetadata</code> match: E34_imc, G01_imc, and J02_imc. The <code>elementMetadata</code> slot (accesible via the <code>mcols()</code> function) contains the image identifiers.</p>
 <div class="sourceCode" id="cb13"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="va">pancreasImages</span></code></pre></div>
-<pre><code>## CytoImageList containing 3 image(s)
-## names(3): E34_imc G01_imc J02_imc 
-## Each image contains 5 channel(s)
-## channelNames(5): H3 CD99 PIN CD8a CDH</code></pre>
+<pre><code><span class="co">## CytoImageList containing 3 image(s)</span>
+<span class="co">## names(3): E34_imc G01_imc J02_imc </span>
+<span class="co">## Each image contains 5 channel(s)</span>
+<span class="co">## channelNames(5): H3 CD99 PIN CD8a CDH</span></code></pre>
 <div class="sourceCode" id="cb15"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="fu">mcols</span><span class="op">(</span><span class="va">pancreasImages</span><span class="op">)</span></code></pre></div>
-<pre><code>## DataFrame with 3 rows and 2 columns
-##           ImageName   ImageNb
-##         &lt;character&gt; &lt;integer&gt;
-## E34_imc         E34         1
-## G01_imc         G01         2
-## J02_imc         J02         3</code></pre>
+<pre><code><span class="co">## DataFrame with 3 rows and 2 columns</span>
+<span class="co">##           ImageName   ImageNb</span>
+<span class="co">##         &lt;character&gt; &lt;integer&gt;</span>
+<span class="co">## E34_imc         E34         1</span>
+<span class="co">## G01_imc         G01         2</span>
+<span class="co">## J02_imc         J02         3</span></code></pre>
 <div class="sourceCode" id="cb17"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="fu"><a href="../reference/CytoImageList-naming.html">channelNames</a></span><span class="op">(</span><span class="va">pancreasImages</span><span class="op">)</span></code></pre></div>
-<pre><code>## [1] "H3"   "CD99" "PIN"  "CD8a" "CDH"</code></pre>
+<pre><code><span class="co">## [1] "H3"   "CD99" "PIN"  "CD8a" "CDH"</span></code></pre>
 <div class="sourceCode" id="cb19"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="fu">imageData</span><span class="op">(</span><span class="va">pancreasImages</span><span class="op">[[</span><span class="fl">1</span><span class="op">]</span><span class="op">]</span><span class="op">)</span><span class="op">[</span><span class="fl">1</span><span class="op">:</span><span class="fl">15</span>,<span class="fl">1</span><span class="op">:</span><span class="fl">5</span>,<span class="fl">1</span><span class="op">]</span></code></pre></div>
-<pre><code>##               [,1]      [,2]         [,3]         [,4]         [,5]
-##  [1,] 2.235787e+00 0.2537275 1.269632e+00 9.991982e-01 1.990020e+00
-##  [2,] 2.885528e+00 1.9900196 2.264642e+00 0.000000e+00 1.410924e+00
-##  [3,] 3.400943e+00 0.9950098 9.950098e-01 2.180066e+00 4.152935e-17
-##  [4,] 3.223832e+00 3.1750760 1.128341e+00 4.486604e+00 7.371460e-16
-##  [5,] 9.987666e-01 1.9900196 2.644036e-15 0.000000e+00 0.000000e+00
-##  [6,] 7.094598e-17 2.9412489 2.985029e+00 1.990020e+00 9.950098e-01
-##  [7,] 2.149031e-16 0.0000000 9.950098e-01 5.537247e-16 0.000000e+00
-##  [8,] 3.936259e+00 0.0000000 4.269442e-15 1.240777e+00 2.630806e+00
-##  [9,] 9.987666e-01 1.6437560 3.625816e+00 0.000000e+00 2.123351e+00
-## [10,] 1.401616e-16 1.9900196 2.941249e+00 3.090500e+00 0.000000e+00
-## [11,] 1.382069e+00 3.0258245 4.481710e-16 0.000000e+00 1.946239e+00
-## [12,] 4.239594e+00 2.7720971 9.136457e-16 4.677541e+00 4.118345e+00
-## [13,] 2.687521e+00 0.0000000 5.149176e+00 9.988809e-01 4.677541e+00
-## [14,] 4.513364e+00 1.4666444 9.950098e-01 2.828813e+00 2.772097e+00
-## [15,] 1.999239e+00 2.4616542 3.999584e+00 1.484527e+01 1.225784e+01</code></pre>
+<code class="sourceCode R"><span class="fu"><a href="https://rdrr.io/pkg/EBImage/man/Image.html" class="external-link">imageData</a></span><span class="op">(</span><span class="va">pancreasImages</span><span class="op">[[</span><span class="fl">1</span><span class="op">]</span><span class="op">]</span><span class="op">)</span><span class="op">[</span><span class="fl">1</span><span class="op">:</span><span class="fl">15</span>,<span class="fl">1</span><span class="op">:</span><span class="fl">5</span>,<span class="fl">1</span><span class="op">]</span></code></pre></div>
+<pre><code><span class="co">##               [,1]      [,2]         [,3]         [,4]         [,5]</span>
+<span class="co">##  [1,] 2.235787e+00 0.2537275 1.269632e+00 9.991982e-01 1.990020e+00</span>
+<span class="co">##  [2,] 2.885528e+00 1.9900196 2.264642e+00 0.000000e+00 1.410924e+00</span>
+<span class="co">##  [3,] 3.400943e+00 0.9950098 9.950098e-01 2.180066e+00 4.152935e-17</span>
+<span class="co">##  [4,] 3.223832e+00 3.1750760 1.128341e+00 4.486604e+00 7.371460e-16</span>
+<span class="co">##  [5,] 9.987666e-01 1.9900196 2.644036e-15 0.000000e+00 0.000000e+00</span>
+<span class="co">##  [6,] 7.094598e-17 2.9412489 2.985029e+00 1.990020e+00 9.950098e-01</span>
+<span class="co">##  [7,] 2.149031e-16 0.0000000 9.950098e-01 5.537247e-16 0.000000e+00</span>
+<span class="co">##  [8,] 3.936259e+00 0.0000000 4.269442e-15 1.240777e+00 2.630806e+00</span>
+<span class="co">##  [9,] 9.987666e-01 1.6437560 3.625816e+00 0.000000e+00 2.123351e+00</span>
+<span class="co">## [10,] 1.401616e-16 1.9900196 2.941249e+00 3.090500e+00 0.000000e+00</span>
+<span class="co">## [11,] 1.382069e+00 3.0258245 4.481710e-16 0.000000e+00 1.946239e+00</span>
+<span class="co">## [12,] 4.239594e+00 2.7720971 9.136457e-16 4.677541e+00 4.118345e+00</span>
+<span class="co">## [13,] 2.687521e+00 0.0000000 5.149176e+00 9.988809e-01 4.677541e+00</span>
+<span class="co">## [14,] 4.513364e+00 1.4666444 9.950098e-01 2.828813e+00 2.772097e+00</span>
+<span class="co">## [15,] 1.999239e+00 2.4616542 3.999584e+00 1.484527e+01 1.225784e+01</span></code></pre>
 <p>The corresponding segmentation masks are stored in the <code>pancreasMasks</code> object and can be read in from tiff images containing the segmentation masks (see next section). Segmentation masks are defined as one-channel images containing integer values, which represent the cells’ ids or 0 (background).</p>
 <div class="sourceCode" id="cb21"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="va">pancreasMasks</span></code></pre></div>
-<pre><code>## CytoImageList containing 3 image(s)
-## names(3): E34_mask G01_mask J02_mask 
-## Each image contains 1 channel</code></pre>
+<pre><code><span class="co">## CytoImageList containing 3 image(s)</span>
+<span class="co">## names(3): E34_mask G01_mask J02_mask </span>
+<span class="co">## Each image contains 1 channel</span></code></pre>
 <div class="sourceCode" id="cb23"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="fu">mcols</span><span class="op">(</span><span class="va">pancreasMasks</span><span class="op">)</span></code></pre></div>
-<pre><code>## DataFrame with 3 rows and 2 columns
-##            ImageName   ImageNb
-##          &lt;character&gt; &lt;integer&gt;
-## E34_mask         E34         1
-## G01_mask         G01         2
-## J02_mask         J02         3</code></pre>
+<pre><code><span class="co">## DataFrame with 3 rows and 2 columns</span>
+<span class="co">##            ImageName   ImageNb</span>
+<span class="co">##          &lt;character&gt; &lt;integer&gt;</span>
+<span class="co">## E34_mask         E34         1</span>
+<span class="co">## G01_mask         G01         2</span>
+<span class="co">## J02_mask         J02         3</span></code></pre>
 <div class="sourceCode" id="cb25"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="fu">imageData</span><span class="op">(</span><span class="va">pancreasMasks</span><span class="op">[[</span><span class="fl">1</span><span class="op">]</span><span class="op">]</span><span class="op">)</span><span class="op">[</span><span class="fl">1</span><span class="op">:</span><span class="fl">15</span>,<span class="fl">1</span><span class="op">:</span><span class="fl">5</span><span class="op">]</span></code></pre></div>
-<pre><code>##       [,1] [,2] [,3] [,4] [,5]
-##  [1,]  824  824  824  824    0
-##  [2,]  824  824  824  824    0
-##  [3,]  824  824  824  824    0
-##  [4,]  824  824  824  824  824
-##  [5,]  824  824  824  824  824
-##  [6,]  824  824  824  824  824
-##  [7,]  824  824  824  824  824
-##  [8,]  824  824  824  824  824
-##  [9,]  824  824  824  824  824
-## [10,]  824  824  824  824    0
-## [11,]  824  824  824    0    0
-## [12,]  824  824    0    0    0
-## [13,]    0    0    0    0  864
-## [14,]    0    0    0  864  864
-## [15,]    0  864  864  864  864</code></pre>
+<code class="sourceCode R"><span class="fu"><a href="https://rdrr.io/pkg/EBImage/man/Image.html" class="external-link">imageData</a></span><span class="op">(</span><span class="va">pancreasMasks</span><span class="op">[[</span><span class="fl">1</span><span class="op">]</span><span class="op">]</span><span class="op">)</span><span class="op">[</span><span class="fl">1</span><span class="op">:</span><span class="fl">15</span>,<span class="fl">1</span><span class="op">:</span><span class="fl">5</span><span class="op">]</span></code></pre></div>
+<pre><code><span class="co">##       [,1] [,2] [,3] [,4] [,5]</span>
+<span class="co">##  [1,]  824  824  824  824    0</span>
+<span class="co">##  [2,]  824  824  824  824    0</span>
+<span class="co">##  [3,]  824  824  824  824    0</span>
+<span class="co">##  [4,]  824  824  824  824  824</span>
+<span class="co">##  [5,]  824  824  824  824  824</span>
+<span class="co">##  [6,]  824  824  824  824  824</span>
+<span class="co">##  [7,]  824  824  824  824  824</span>
+<span class="co">##  [8,]  824  824  824  824  824</span>
+<span class="co">##  [9,]  824  824  824  824  824</span>
+<span class="co">## [10,]  824  824  824  824    0</span>
+<span class="co">## [11,]  824  824  824    0    0</span>
+<span class="co">## [12,]  824  824    0    0    0</span>
+<span class="co">## [13,]    0    0    0    0  864</span>
+<span class="co">## [14,]    0    0    0  864  864</span>
+<span class="co">## [15,]    0  864  864  864  864</span></code></pre>
 <p>The IMC segmentation pipeline also generates cell-specific measurements. The <code>SingleCellExperiment</code> class offers an ideal container to store cell-specific expression counts together with cell-specific metadata. For the toy dataset, cell-specific mean marker intensities (<code>counts</code>) and arcsinh-transformed mean marker intensities (<code>exprs</code>) are stored in the <code>assays(pancreasSCE)</code> slot. All cell-specific metadata are stored in the <code>colData</code> slot of the corresponding <code>SingleCellExperiment</code> object: <code>pancreasSCE</code>. For more information on the metadata, please refer to the <code><a href="../reference/pancreasSCE.html">?pancreasSCE</a></code> documentation. Of note: the cell-type labels contained in the <code>colData(pancreasSCE)$CellType</code> slot are arbitrary and only partly represent biologically relevant cell-types.</p>
 <div class="sourceCode" id="cb27"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="va">pancreasSCE</span></code></pre></div>
-<pre><code>## class: SingleCellExperiment 
-## dim: 5 362 
-## metadata(0):
-## assays(2): counts exprs
-## rownames(5): H3 CD99 PIN CD8a CDH
-## rowData names(4): MetalTag Target clean_Target frame
-## colnames(362): E34_824 E34_835 ... J02_4190 J02_4209
-## colData names(9): ImageName Pos_X ... MaskName Pattern
-## reducedDimNames(0):
-## mainExpName: NULL
-## altExpNames(0):</code></pre>
+<pre><code><span class="co">## class: SingleCellExperiment </span>
+<span class="co">## dim: 5 362 </span>
+<span class="co">## metadata(0):</span>
+<span class="co">## assays(2): counts exprs</span>
+<span class="co">## rownames(5): H3 CD99 PIN CD8a CDH</span>
+<span class="co">## rowData names(4): MetalTag Target clean_Target frame</span>
+<span class="co">## colnames(362): E34_824 E34_835 ... J02_4190 J02_4209</span>
+<span class="co">## colData names(9): ImageName Pos_X ... MaskName Pattern</span>
+<span class="co">## reducedDimNames(0):</span>
+<span class="co">## mainExpName: NULL</span>
+<span class="co">## altExpNames(0):</span></code></pre>
 <div class="sourceCode" id="cb29"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="fu"><a href="https://rdrr.io/r/base/names.html">names</a></span><span class="op">(</span><span class="fu">colData</span><span class="op">(</span><span class="va">pancreasSCE</span><span class="op">)</span><span class="op">)</span></code></pre></div>
-<pre><code>## [1] "ImageName" "Pos_X"     "Pos_Y"     "Area"      "CellType"  "ImageNb"  
-## [7] "CellNb"    "MaskName"  "Pattern"</code></pre>
+<code class="sourceCode R"><span class="fu"><a href="https://rdrr.io/r/base/names.html" class="external-link">names</a></span><span class="op">(</span><span class="fu">colData</span><span class="op">(</span><span class="va">pancreasSCE</span><span class="op">)</span><span class="op">)</span></code></pre></div>
+<pre><code><span class="co">## [1] "ImageName" "Pos_X"     "Pos_Y"     "Area"      "CellType"  "ImageNb"  </span>
+<span class="co">## [7] "CellNb"    "MaskName"  "Pattern"</span></code></pre>
 <p>The <code>pancreasSCE</code> object also contains further information on the measured proteins via the <code>rowData(pancreasSCE)</code> slot. Furthermore, the <code>pancreasSCE</code> object contains the raw expression counts per cell in the form of mean pixel value per cell and protein (accessible via <code>counts(pancreasSCE)</code>). The arcsinh-transformed (using a co-factor of 1) raw expression counts can be obtained via <code>assay(pancreasSCE, "exprs")</code>.</p>
-<p>For more information on how to generate <code>SingleCellExperiment</code> objects from count-based data, see <a href="https://osca.bioconductor.org/data-infrastructure.html#the-singlecellexperiment-class">Orchestrating Single-Cell Analysis with Bioconductor</a>.</p>
+<p>For more information on how to generate <code>SingleCellExperiment</code> objects from count-based data, see <a href="https://osca.bioconductor.org/data-infrastructure.html#the-singlecellexperiment-class" class="external-link">Orchestrating Single-Cell Analysis with Bioconductor</a>.</p>
 </div>
 </div>
-<div id="ReadingData" class="section level1">
-<h1 class="hasAnchor">
-<a href="#ReadingData" class="anchor"></a>Reading in data</h1>
+<div class="section level1">
+<h1 id="ReadingData">Reading in data<a class="anchor" aria-label="anchor" href="#ReadingData"></a>
+</h1>
 <p>The <code>cytomapper</code> package provides the <code>loadImages</code> function to conveniently read images into a <code>CytoImageList</code> object.</p>
-<div id="load-images" class="section level2">
-<h2 class="hasAnchor">
-<a href="#load-images" class="anchor"></a>Load images</h2>
+<div class="section level2">
+<h2 id="load-images">Load images<a class="anchor" aria-label="anchor" href="#load-images"></a>
+</h2>
 <p>The <code>loadImages</code> function returns a <code>CytoImageList</code> object containing the multi-channel images or segmentation masks. Refer to the <code><a href="../reference/loadImages.html">?loadImages</a></code> function to see the full functionality.</p>
 <p>As an example, we will read in multi-channel images and segmentation masks provided by the <code>cytomapper</code> package.</p>
 <div class="sourceCode" id="cb31"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="co"># Read in masks</span>
-<span class="va">path.to.images</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/system.file.html">system.file</a></span><span class="op">(</span><span class="st">"extdata"</span>, package <span class="op">=</span> <span class="st">"cytomapper"</span><span class="op">)</span>
+<span class="va">path.to.images</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/system.file.html" class="external-link">system.file</a></span><span class="op">(</span><span class="st">"extdata"</span>, package <span class="op">=</span> <span class="st">"cytomapper"</span><span class="op">)</span>
 <span class="va">all_masks</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/loadImages.html">loadImages</a></span><span class="op">(</span><span class="va">path.to.images</span>, pattern <span class="op">=</span> <span class="st">"_mask.tiff"</span><span class="op">)</span>
 <span class="va">all_masks</span></code></pre></div>
-<pre><code>## CytoImageList containing 3 image(s)
-## names(3): E34_mask G01_mask J02_mask 
-## Each image contains 1 channel</code></pre>
+<pre><code><span class="co">## CytoImageList containing 3 image(s)</span>
+<span class="co">## names(3): E34_mask G01_mask J02_mask </span>
+<span class="co">## Each image contains 1 channel</span></code></pre>
 <div class="sourceCode" id="cb33"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="co"># Read in images</span>
 <span class="va">all_stacks</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/loadImages.html">loadImages</a></span><span class="op">(</span><span class="va">path.to.images</span>, pattern <span class="op">=</span> <span class="st">"_imc.tiff"</span><span class="op">)</span>
 <span class="va">all_stacks</span></code></pre></div>
-<pre><code>## CytoImageList containing 3 image(s)
-## names(3): E34_imc G01_imc J02_imc 
-## Each image contains 5 channel(s)</code></pre>
+<pre><code><span class="co">## CytoImageList containing 3 image(s)</span>
+<span class="co">## names(3): E34_imc G01_imc J02_imc </span>
+<span class="co">## Each image contains 5 channel(s)</span></code></pre>
 </div>
-<div id="add-metadata" class="section level2">
-<h2 class="hasAnchor">
-<a href="#add-metadata" class="anchor"></a>Add metadata</h2>
+<div class="section level2">
+<h2 id="add-metadata">Add metadata<a class="anchor" aria-label="anchor" href="#add-metadata"></a>
+</h2>
 <p>To link images between the two <code>CytoImageList</code> objects and the corresponding <code>SingleCellExperiment</code> object, the image ids need to be added to the <code>elementMetadata</code> slot of the <code>CytoImageList</code> objects. From the experimental setup, we know that the image named ‘E34_imc’ has image id ‘1’, G01_imc has id ‘2’, J02_imc has id ‘3’.</p>
 <div class="sourceCode" id="cb35"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="fu"><a href="https://rdrr.io/r/base/unique.html">unique</a></span><span class="op">(</span><span class="va">pancreasSCE</span><span class="op">$</span><span class="va">ImageNb</span><span class="op">)</span></code></pre></div>
-<pre><code>## [1] 1 2 3</code></pre>
+<code class="sourceCode R"><span class="fu"><a href="https://rdrr.io/r/base/unique.html" class="external-link">unique</a></span><span class="op">(</span><span class="va">pancreasSCE</span><span class="op">$</span><span class="va">ImageNb</span><span class="op">)</span></code></pre></div>
+<pre><code><span class="co">## [1] 1 2 3</span></code></pre>
 <div class="sourceCode" id="cb37"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="fu">mcols</span><span class="op">(</span><span class="va">all_masks</span><span class="op">)</span><span class="op">$</span><span class="va">ImageNb</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="st">"1"</span>, <span class="st">"2"</span>, <span class="st">"3"</span><span class="op">)</span>
-<span class="fu">mcols</span><span class="op">(</span><span class="va">all_stacks</span><span class="op">)</span><span class="op">$</span><span class="va">ImageNb</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="st">"1"</span>, <span class="st">"2"</span>, <span class="st">"3"</span><span class="op">)</span></code></pre></div>
+<code class="sourceCode R"><span class="fu">mcols</span><span class="op">(</span><span class="va">all_masks</span><span class="op">)</span><span class="op">$</span><span class="va">ImageNb</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"1"</span>, <span class="st">"2"</span>, <span class="st">"3"</span><span class="op">)</span>
+<span class="fu">mcols</span><span class="op">(</span><span class="va">all_stacks</span><span class="op">)</span><span class="op">$</span><span class="va">ImageNb</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"1"</span>, <span class="st">"2"</span>, <span class="st">"3"</span><span class="op">)</span></code></pre></div>
 </div>
-<div id="scale-images" class="section level2">
-<h2 class="hasAnchor">
-<a href="#scale-images" class="anchor"></a>Scale images</h2>
+<div class="section level2">
+<h2 id="scale-images">Scale images<a class="anchor" aria-label="anchor" href="#scale-images"></a>
+</h2>
 <p>We can see that, in some cases, the pixel-values are not correctly scaled by the image encoding. The segmentation masks should only contain integer entries:</p>
 <div class="sourceCode" id="cb38"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="fu"><a href="https://rdrr.io/r/utils/head.html">head</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/unique.html">unique</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/numeric.html">as.numeric</a></span><span class="op">(</span><span class="va">all_masks</span><span class="op">[[</span><span class="fl">1</span><span class="op">]</span><span class="op">]</span><span class="op">)</span><span class="op">)</span><span class="op">)</span></code></pre></div>
-<pre><code>## [1] 0.01257343 0.00000000 0.01318379 0.01310750 0.01287861 0.01280232</code></pre>
-<p>The provided data was processed using CellProfiler <span class="citation">(Carpenter et al. 2006)</span>. By default, CellProfiler scales all pixel intensities between 0 and 1. This is done by dividing each count by the maximum possible intensity value (see <a href="https://cellprofiler-manual.s3.amazonaws.com/CellProfiler-3.0.0/modules/measurement.html#measureobjectintensity">MeasureObjectIntensity</a> for more info). In the case of 16-bit encoding (where 0 is a valid intensity), this scaling value is <code>2^16-1 = 65535</code>. Therefore, pixel-intensites need to be rescaled by this value. However, this scaling value can change and different images can be scaled by different factors. The user needs make sure to select the correct factors in more complex cases.</p>
+<code class="sourceCode R"><span class="fu"><a href="https://rdrr.io/r/utils/head.html" class="external-link">head</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/unique.html" class="external-link">unique</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/numeric.html" class="external-link">as.numeric</a></span><span class="op">(</span><span class="va">all_masks</span><span class="op">[[</span><span class="fl">1</span><span class="op">]</span><span class="op">]</span><span class="op">)</span><span class="op">)</span><span class="op">)</span></code></pre></div>
+<pre><code><span class="co">## [1] 0.01257343 0.00000000 0.01318379 0.01310750 0.01287861 0.01280232</span></code></pre>
+<p>The provided data was processed using CellProfiler <span class="citation">(Carpenter et al. 2006)</span>. By default, CellProfiler scales all pixel intensities between 0 and 1. This is done by dividing each count by the maximum possible intensity value (see <a href="https://cellprofiler-manual.s3.amazonaws.com/CellProfiler-3.0.0/modules/measurement.html#measureobjectintensity" class="external-link">MeasureObjectIntensity</a> for more info). In the case of 16-bit encoding (where 0 is a valid intensity), this scaling value is <code>2^16-1 = 65535</code>. Therefore, pixel-intensites need to be rescaled by this value. However, this scaling value can change and different images can be scaled by different factors. The user needs make sure to select the correct factors in more complex cases.</p>
 <p>The <code>cytomapper</code> package provides a <code><a href="../reference/CytoImageList-manipulation.html">?scaleImages</a></code> function. The user needs to manually scale images to obtain the correct pixel-values. Here, we scale the segmentation masks by the factor for 16-bit encoding: <code>2^16-1</code></p>
 <div class="sourceCode" id="cb40"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="va">all_masks</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/CytoImageList-manipulation.html">scaleImages</a></span><span class="op">(</span><span class="va">all_masks</span>, <span class="fl">2</span><span class="op">^</span><span class="fl">16</span><span class="op">-</span><span class="fl">1</span><span class="op">)</span>
-<span class="fu"><a href="https://rdrr.io/r/utils/head.html">head</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/unique.html">unique</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/numeric.html">as.numeric</a></span><span class="op">(</span><span class="va">all_masks</span><span class="op">[[</span><span class="fl">1</span><span class="op">]</span><span class="op">]</span><span class="op">)</span><span class="op">)</span><span class="op">)</span></code></pre></div>
-<pre><code>## [1] 824   0 864 859 844 839</code></pre>
+<span class="fu"><a href="https://rdrr.io/r/utils/head.html" class="external-link">head</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/unique.html" class="external-link">unique</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/numeric.html" class="external-link">as.numeric</a></span><span class="op">(</span><span class="va">all_masks</span><span class="op">[[</span><span class="fl">1</span><span class="op">]</span><span class="op">]</span><span class="op">)</span><span class="op">)</span><span class="op">)</span></code></pre></div>
+<pre><code><span class="co">## [1] 824   0 864 859 844 839</span></code></pre>
 <p>Alternatively, the <code>as.is</code> parameter can be set to <code>TRUE</code> to attempt image scaling while reading in the images:</p>
 <div class="sourceCode" id="cb42"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="va">all_masks_2</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/loadImages.html">loadImages</a></span><span class="op">(</span><span class="va">path.to.images</span>, pattern <span class="op">=</span> <span class="st">"_mask.tiff"</span>, as.is <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span>
-<span class="fu"><a href="https://rdrr.io/r/utils/head.html">head</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/unique.html">unique</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/numeric.html">as.numeric</a></span><span class="op">(</span><span class="va">all_masks_2</span><span class="op">[[</span><span class="fl">1</span><span class="op">]</span><span class="op">]</span><span class="op">)</span><span class="op">)</span><span class="op">)</span></code></pre></div>
-<pre><code>## [1] 824   0 864 859 844 839</code></pre>
+<span class="fu"><a href="https://rdrr.io/r/utils/head.html" class="external-link">head</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/unique.html" class="external-link">unique</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/numeric.html" class="external-link">as.numeric</a></span><span class="op">(</span><span class="va">all_masks_2</span><span class="op">[[</span><span class="fl">1</span><span class="op">]</span><span class="op">]</span><span class="op">)</span><span class="op">)</span><span class="op">)</span></code></pre></div>
+<pre><code><span class="co">## [1] 824   0 864 859 844 839</span></code></pre>
 <p>However, care needs to be taken and masks and images need to be checked if they are correctly imported.</p>
 <p>For this toy dataset, the multi-channel images are not affected by this scaling factor. The final <code>all_masks</code> object corresponds to the <code>pancreasMasks</code> object provided by <code>cytomapper</code>.</p>
 </div>
-<div id="add-channel-names" class="section level2">
-<h2 class="hasAnchor">
-<a href="#add-channel-names" class="anchor"></a>Add channel names</h2>
+<div class="section level2">
+<h2 id="add-channel-names">Add channel names<a class="anchor" aria-label="anchor" href="#add-channel-names"></a>
+</h2>
 <p>To access the correct images in the multi-channel <code>CytoImageList</code> object, the user needs to set the correct channel names. For this, the <code>cytomapper</code> package provides the <code><a href="../reference/CytoImageList-naming.html">?channelNames</a></code> getter and setter function:</p>
 <div class="sourceCode" id="cb44"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="fu"><a href="../reference/CytoImageList-naming.html">channelNames</a></span><span class="op">(</span><span class="va">all_stacks</span><span class="op">)</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="st">"H3"</span>, <span class="st">"CD99"</span>, <span class="st">"PIN"</span>, <span class="st">"CD8a"</span>, <span class="st">"CDH"</span><span class="op">)</span></code></pre></div>
+<code class="sourceCode R"><span class="fu"><a href="../reference/CytoImageList-naming.html">channelNames</a></span><span class="op">(</span><span class="va">all_stacks</span><span class="op">)</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"H3"</span>, <span class="st">"CD99"</span>, <span class="st">"PIN"</span>, <span class="st">"CD8a"</span>, <span class="st">"CDH"</span><span class="op">)</span></code></pre></div>
 <p>The read-in data can now be used for visualization as explained in the <a href="#QuickStart">Quick start section</a>.</p>
 </div>
-<div id="measureObjects" class="section level2">
-<h2 class="hasAnchor">
-<a href="#measureObjects" class="anchor"></a>Generating the SingleCellExperiment object</h2>
+<div class="section level2">
+<h2 id="measureObjects">Generating the SingleCellExperiment object<a class="anchor" aria-label="anchor" href="#measureObjects"></a>
+</h2>
 <p>Based on the processed segmentation masks and multi-channel images, <code>cytomapper</code> can be used to measure cell-specific intensities and morphological features. These features are stored in form of a <code>SingleCellExperiment</code> object:</p>
 <div class="sourceCode" id="cb45"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="va">sce</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/measureObjects.html">measureObjects</a></span><span class="op">(</span><span class="va">all_masks</span>, <span class="va">all_stacks</span>, img_id <span class="op">=</span> <span class="st">"ImageNb"</span><span class="op">)</span>
 <span class="va">sce</span></code></pre></div>
-<pre><code>## class: SingleCellExperiment 
-## dim: 5 362 
-## metadata(0):
-## assays(1): counts
-## rownames(5): H3 CD99 PIN CD8a CDH
-## rowData names(0):
-## colnames: NULL
-## colData names(8): ImageNb object_id ... m.majoraxis m.eccentricity
-## reducedDimNames(0):
-## mainExpName: NULL
-## altExpNames(0):</code></pre>
+<pre><code><span class="co">## class: SingleCellExperiment </span>
+<span class="co">## dim: 5 362 </span>
+<span class="co">## metadata(0):</span>
+<span class="co">## assays(1): counts</span>
+<span class="co">## rownames(5): H3 CD99 PIN CD8a CDH</span>
+<span class="co">## rowData names(0):</span>
+<span class="co">## colnames: NULL</span>
+<span class="co">## colData names(8): ImageNb object_id ... m.majoraxis m.eccentricity</span>
+<span class="co">## reducedDimNames(0):</span>
+<span class="co">## mainExpName: NULL</span>
+<span class="co">## altExpNames(0):</span></code></pre>
 <p>By default, the mean intensities per cell and channel are stored in <code>counts(sce)</code> while all other morphological features are stored in <code>colData(sce)</code>:</p>
 <div class="sourceCode" id="cb47"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="fu">counts</span><span class="op">(</span><span class="va">sce</span><span class="op">)</span><span class="op">[</span><span class="fl">1</span><span class="op">:</span><span class="fl">5</span>, <span class="fl">1</span><span class="op">:</span><span class="fl">5</span><span class="op">]</span></code></pre></div>
-<pre><code>##             [,1]       [,2]        [,3]       [,4]       [,5]
-## H3    1.50068681 12.7160872  2.16352437  4.6660460  3.4569734
-## CD99  1.30339721  0.7676006  2.48035219  1.4353548  0.8031506
-## PIN   0.03636109  0.3255984  0.07762631  0.1730306  0.2478255
-## CD8a  0.20264913  0.0000000  0.28294494  0.5511711  0.1217455
-## CDH  11.42480015  3.8496665 19.80123812 13.1796503 11.7225806</code></pre>
+<code class="sourceCode R"><span class="fu"><a href="https://rdrr.io/pkg/SingleCellExperiment/man/assays.html" class="external-link">counts</a></span><span class="op">(</span><span class="va">sce</span><span class="op">)</span><span class="op">[</span><span class="fl">1</span><span class="op">:</span><span class="fl">5</span>, <span class="fl">1</span><span class="op">:</span><span class="fl">5</span><span class="op">]</span></code></pre></div>
+<pre><code><span class="co">##             [,1]       [,2]        [,3]       [,4]       [,5]</span>
+<span class="co">## H3    1.50068681 12.7160872  2.16352437  4.6660460  3.4569734</span>
+<span class="co">## CD99  1.30339721  0.7676006  2.48035219  1.4353548  0.8031506</span>
+<span class="co">## PIN   0.03636109  0.3255984  0.07762631  0.1730306  0.2478255</span>
+<span class="co">## CD8a  0.20264913  0.0000000  0.28294494  0.5511711  0.1217455</span>
+<span class="co">## CDH  11.42480015  3.8496665 19.80123812 13.1796503 11.7225806</span></code></pre>
 <div class="sourceCode" id="cb49"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="fu">colData</span><span class="op">(</span><span class="va">sce</span><span class="op">)</span></code></pre></div>
-<pre><code>## DataFrame with 362 rows and 8 columns
-##         ImageNb object_id    s.area s.radius.mean      m.cx      m.cy
-##     &lt;character&gt; &lt;numeric&gt; &lt;numeric&gt;     &lt;numeric&gt; &lt;numeric&gt; &lt;numeric&gt;
-## 1             1       824        55       3.93042   6.21818   2.96364
-## 2             1       835         9       1.67054  94.44444   1.22222
-## 3             1       839        17       2.47994  46.23529   1.70588
-## 4             1       844        13       2.31966  33.92308   1.30769
-## 5             1       847        87       4.92717  83.41379   4.66667
-## ...         ...       ...       ...           ...       ...       ...
-## 358           3      4165        10       1.34998   35.3000   99.0000
-## 359           3      4167        34       3.09718   52.0882   98.7647
-## 360           3      4173         1       0.00000    1.0000  100.0000
-## 361           3      4190         2       0.50000   21.5000  100.0000
-## 362           3      4209        12       1.60132   79.5000   99.3333
-##     m.majoraxis m.eccentricity
-##       &lt;numeric&gt;      &lt;numeric&gt;
-## 1      12.17659       0.863513
-## 2       8.28709       0.985034
-## 3      10.59886       0.977839
-## 4      11.03438       0.985930
-## 5      13.14283       0.570827
-## ...         ...            ...
-## 358     4.08496       0.514302
-## 359    11.07958       0.932569
-## 360     0.00000       0.000000
-## 361     2.00000       1.000000
-## 362     5.53775       0.842701</code></pre>
+<pre><code><span class="co">## DataFrame with 362 rows and 8 columns</span>
+<span class="co">##         ImageNb object_id    s.area s.radius.mean      m.cx      m.cy</span>
+<span class="co">##     &lt;character&gt; &lt;numeric&gt; &lt;numeric&gt;     &lt;numeric&gt; &lt;numeric&gt; &lt;numeric&gt;</span>
+<span class="co">## 1             1       824        55       3.93042   6.21818   2.96364</span>
+<span class="co">## 2             1       835         9       1.67054  94.44444   1.22222</span>
+<span class="co">## 3             1       839        17       2.47994  46.23529   1.70588</span>
+<span class="co">## 4             1       844        13       2.31966  33.92308   1.30769</span>
+<span class="co">## 5             1       847        87       4.92717  83.41379   4.66667</span>
+<span class="co">## ...         ...       ...       ...           ...       ...       ...</span>
+<span class="co">## 358           3      4165        10       1.34998   35.3000   99.0000</span>
+<span class="co">## 359           3      4167        34       3.09718   52.0882   98.7647</span>
+<span class="co">## 360           3      4173         1       0.00000    1.0000  100.0000</span>
+<span class="co">## 361           3      4190         2       0.50000   21.5000  100.0000</span>
+<span class="co">## 362           3      4209        12       1.60132   79.5000   99.3333</span>
+<span class="co">##     m.majoraxis m.eccentricity</span>
+<span class="co">##       &lt;numeric&gt;      &lt;numeric&gt;</span>
+<span class="co">## 1      12.17659       0.863513</span>
+<span class="co">## 2       8.28709       0.985034</span>
+<span class="co">## 3      10.59886       0.977839</span>
+<span class="co">## 4      11.03438       0.985930</span>
+<span class="co">## 5      13.14283       0.570827</span>
+<span class="co">## ...         ...            ...</span>
+<span class="co">## 358     4.08496       0.514302</span>
+<span class="co">## 359    11.07958       0.932569</span>
+<span class="co">## 360     0.00000       0.000000</span>
+<span class="co">## 361     2.00000       1.000000</span>
+<span class="co">## 362     5.53775       0.842701</span></code></pre>
 </div>
 </div>
-<div id="CytoImageList" class="section level1">
-<h1 class="hasAnchor">
-<a href="#CytoImageList" class="anchor"></a>The CytoImageList object</h1>
-<p>The <code>cytomapper</code> package provides a new <code>CytoImageList</code> class, which inherits from the <a href="https://rdrr.io/bioc/S4Vectors/man/SimpleList-class.html"><code>SimpleList</code> class</a>. Each entry to the <code>CytoImageList</code> object is an <code>Image</code> class object defined in the <em><a href="https://bioconductor.org/packages/3.14/EBImage">EBImage</a></em> package. A <code>CytoImageList</code> object is restricted to the following entries:</p>
+<div class="section level1">
+<h1 id="CytoImageList">The CytoImageList object<a class="anchor" aria-label="anchor" href="#CytoImageList"></a>
+</h1>
+<p>The <code>cytomapper</code> package provides a new <code>CytoImageList</code> class, which inherits from the <a href="https://rdrr.io/bioc/S4Vectors/man/SimpleList-class.html" class="external-link"><code>SimpleList</code> class</a>. Each entry to the <code>CytoImageList</code> object is an <code>Image</code> class object defined in the <em><a href="https://bioconductor.org/packages/3.14/EBImage" class="external-link">EBImage</a></em> package. A <code>CytoImageList</code> object is restricted to the following entries:</p>
 <ul>
 <li>all images need to have the same number of channels</li>
 <li>the order/naming of channels need to be the same across all images</li>
 <li>entries to the <code>CytoImageList</code> object need to be uniquely named</li>
 <li>names of <code>CytoImageList</code> object can either be <code>NULL</code> or should not contain <code>NA</code> or empty entries</li>
-<li>only grayscale images are supported (see <code>?Image</code> for more information)</li>
+<li>only grayscale images are supported (see <code><a href="https://rdrr.io/pkg/EBImage/man/Image.html" class="external-link">?Image</a></code> for more information)</li>
 <li>channels names do not support duplicated entries</li>
 </ul>
 <p><code>CytoImageList</code> objects that contain masks should only contain a single channel</p>
 <p>The following paragraphs will explain further details on manipulating <code>CytoImageList</code> objects</p>
-<div id="accessors" class="section level2">
-<h2 class="hasAnchor">
-<a href="#accessors" class="anchor"></a>Accessors</h2>
+<div class="section level2">
+<h2 id="accessors">Accessors<a class="anchor" aria-label="anchor" href="#accessors"></a>
+</h2>
 <p>All accessor functions defined for <code>SimpleList</code> also work on <code>CytoImageList</code> class objects. Element-wise metadata — in the case of the <code>CytoImageList</code> object these are image-specific metadata — are saved in the <code>elementMetadata</code> slot. This slot can be accessed via the <code>mcols()</code> function:</p>
 <div class="sourceCode" id="cb51"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="fu">mcols</span><span class="op">(</span><span class="va">pancreasImages</span><span class="op">)</span></code></pre></div>
-<pre><code>## DataFrame with 3 rows and 2 columns
-##           ImageName   ImageNb
-##         &lt;character&gt; &lt;integer&gt;
-## E34_imc         E34         1
-## G01_imc         G01         2
-## J02_imc         J02         3</code></pre>
+<pre><code><span class="co">## DataFrame with 3 rows and 2 columns</span>
+<span class="co">##           ImageName   ImageNb</span>
+<span class="co">##         &lt;character&gt; &lt;integer&gt;</span>
+<span class="co">## E34_imc         E34         1</span>
+<span class="co">## G01_imc         G01         2</span>
+<span class="co">## J02_imc         J02         3</span></code></pre>
 <div class="sourceCode" id="cb53"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="fu">mcols</span><span class="op">(</span><span class="va">pancreasImages</span><span class="op">)</span><span class="op">$</span><span class="va">PatientID</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="st">"Patient1"</span>, <span class="st">"Patient2"</span>, <span class="st">"Patient3"</span><span class="op">)</span>
+<code class="sourceCode R"><span class="fu">mcols</span><span class="op">(</span><span class="va">pancreasImages</span><span class="op">)</span><span class="op">$</span><span class="va">PatientID</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"Patient1"</span>, <span class="st">"Patient2"</span>, <span class="st">"Patient3"</span><span class="op">)</span>
 <span class="fu">mcols</span><span class="op">(</span><span class="va">pancreasImages</span><span class="op">)</span></code></pre></div>
-<pre><code>## DataFrame with 3 rows and 3 columns
-##           ImageName   ImageNb   PatientID
-##         &lt;character&gt; &lt;integer&gt; &lt;character&gt;
-## E34_imc         E34         1    Patient1
-## G01_imc         G01         2    Patient2
-## J02_imc         J02         3    Patient3</code></pre>
+<pre><code><span class="co">## DataFrame with 3 rows and 3 columns</span>
+<span class="co">##           ImageName   ImageNb   PatientID</span>
+<span class="co">##         &lt;character&gt; &lt;integer&gt; &lt;character&gt;</span>
+<span class="co">## E34_imc         E34         1    Patient1</span>
+<span class="co">## G01_imc         G01         2    Patient2</span>
+<span class="co">## J02_imc         J02         3    Patient3</span></code></pre>
 <p>Subsetting a <code>CytoImageList</code> object works similar to a <code>SimpleList</code> object:</p>
 <div class="sourceCode" id="cb55"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="va">pancreasImages</span><span class="op">[</span><span class="fl">1</span><span class="op">]</span></code></pre></div>
-<pre><code>## CytoImageList containing 1 image(s)
-## names(1): E34_imc 
-## Each image contains 5 channel(s)
-## channelNames(5): H3 CD99 PIN CD8a CDH</code></pre>
+<pre><code><span class="co">## CytoImageList containing 1 image(s)</span>
+<span class="co">## names(1): E34_imc </span>
+<span class="co">## Each image contains 5 channel(s)</span>
+<span class="co">## channelNames(5): H3 CD99 PIN CD8a CDH</span></code></pre>
 <div class="sourceCode" id="cb57"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="va">pancreasImages</span><span class="op">[[</span><span class="fl">1</span><span class="op">]</span><span class="op">]</span></code></pre></div>
-<pre><code>## Image 
-##   colorMode    : Grayscale 
-##   storage.mode : double 
-##   dim          : 100 100 5 
-##   frames.total : 5 
-##   frames.render: 5 
-## 
-## imageData(object)[1:5,1:6,1]
-##           [,1]      [,2]         [,3]      [,4]         [,5]         [,6]
-## [1,] 2.2357869 0.2537275 1.269632e+00 0.9991982 1.990020e+00 0.000000e+00
-## [2,] 2.8855283 1.9900196 2.264642e+00 0.0000000 1.410924e+00 5.654589e-16
-## [3,] 3.4009433 0.9950098 9.950098e-01 2.1800663 4.152935e-17 1.990020e+00
-## [4,] 3.2238317 3.1750760 1.128341e+00 4.4866042 7.371460e-16 0.000000e+00
-## [5,] 0.9987666 1.9900196 2.644036e-15 0.0000000 0.000000e+00 1.523360e+00</code></pre>
+<pre><code><span class="co">## Image </span>
+<span class="co">##   colorMode    : Grayscale </span>
+<span class="co">##   storage.mode : double </span>
+<span class="co">##   dim          : 100 100 5 </span>
+<span class="co">##   frames.total : 5 </span>
+<span class="co">##   frames.render: 5 </span>
+<span class="co">## </span>
+<span class="co">## imageData(object)[1:5,1:6,1]</span>
+<span class="co">##           [,1]      [,2]         [,3]      [,4]         [,5]         [,6]</span>
+<span class="co">## [1,] 2.2357869 0.2537275 1.269632e+00 0.9991982 1.990020e+00 0.000000e+00</span>
+<span class="co">## [2,] 2.8855283 1.9900196 2.264642e+00 0.0000000 1.410924e+00 5.654589e-16</span>
+<span class="co">## [3,] 3.4009433 0.9950098 9.950098e-01 2.1800663 4.152935e-17 1.990020e+00</span>
+<span class="co">## [4,] 3.2238317 3.1750760 1.128341e+00 4.4866042 7.371460e-16 0.000000e+00</span>
+<span class="co">## [5,] 0.9987666 1.9900196 2.644036e-15 0.0000000 0.000000e+00 1.523360e+00</span></code></pre>
 <p>However, to facilitate subsetting and making sure that entry names are transfered between objects, the <code>cytomapper</code> package provides a number of getter and setter functions:</p>
-<div id="getting-and-setting-images" class="section level3">
-<h3 class="hasAnchor">
-<a href="#getting-and-setting-images" class="anchor"></a>Getting and setting images</h3>
+<div class="section level3">
+<h3 id="getting-and-setting-images">Getting and setting images<a class="anchor" aria-label="anchor" href="#getting-and-setting-images"></a>
+</h3>
 <p>Individual or multiple entries in a <code>CytoImageList</code> object can be obtained or replaced using the <code>getImages</code> and <code>setImages</code> functions, respectively.</p>
 <div class="sourceCode" id="cb59"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="va">cur_image</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/CytoImageList-subsetting.html">getImages</a></span><span class="op">(</span><span class="va">pancreasImages</span>, <span class="st">"E34_imc"</span><span class="op">)</span>
 <span class="va">cur_image</span></code></pre></div>
-<pre><code>## CytoImageList containing 1 image(s)
-## names(1): E34_imc 
-## Each image contains 5 channel(s)
-## channelNames(5): H3 CD99 PIN CD8a CDH</code></pre>
+<pre><code><span class="co">## CytoImageList containing 1 image(s)</span>
+<span class="co">## names(1): E34_imc </span>
+<span class="co">## Each image contains 5 channel(s)</span>
+<span class="co">## channelNames(5): H3 CD99 PIN CD8a CDH</span></code></pre>
 <div class="sourceCode" id="cb61"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="fu">setImages</span><span class="op">(</span><span class="va">pancreasImages</span>, <span class="st">"New_image"</span><span class="op">)</span> <span class="op">&lt;-</span> <span class="va">cur_image</span>
 <span class="va">pancreasImages</span></code></pre></div>
-<pre><code>## CytoImageList containing 4 image(s)
-## names(4): E34_imc G01_imc J02_imc New_image 
-## Each image contains 5 channel(s)
-## channelNames(5): H3 CD99 PIN CD8a CDH</code></pre>
+<pre><code><span class="co">## CytoImageList containing 4 image(s)</span>
+<span class="co">## names(4): E34_imc G01_imc J02_imc New_image </span>
+<span class="co">## Each image contains 5 channel(s)</span>
+<span class="co">## channelNames(5): H3 CD99 PIN CD8a CDH</span></code></pre>
 <div class="sourceCode" id="cb63"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="fu">mcols</span><span class="op">(</span><span class="va">pancreasImages</span><span class="op">)</span></code></pre></div>
-<pre><code>## DataFrame with 4 rows and 3 columns
-##             ImageName   ImageNb   PatientID
-##           &lt;character&gt; &lt;integer&gt; &lt;character&gt;
-## E34_imc           E34         1    Patient1
-## G01_imc           G01         2    Patient2
-## J02_imc           J02         3    Patient3
-## New_image         E34         1    Patient1</code></pre>
+<pre><code><span class="co">## DataFrame with 4 rows and 3 columns</span>
+<span class="co">##             ImageName   ImageNb   PatientID</span>
+<span class="co">##           &lt;character&gt; &lt;integer&gt; &lt;character&gt;</span>
+<span class="co">## E34_imc           E34         1    Patient1</span>
+<span class="co">## G01_imc           G01         2    Patient2</span>
+<span class="co">## J02_imc           J02         3    Patient3</span>
+<span class="co">## New_image         E34         1    Patient1</span></code></pre>
 <p>The <code>setImages</code> function ensures that names are transfered from one to the other object along the assignment operator:</p>
 <div class="sourceCode" id="cb65"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="fu"><a href="https://rdrr.io/r/base/names.html">names</a></span><span class="op">(</span><span class="va">cur_image</span><span class="op">)</span> <span class="op">&lt;-</span> <span class="st">"Replacement"</span>
+<code class="sourceCode R"><span class="fu"><a href="https://rdrr.io/r/base/names.html" class="external-link">names</a></span><span class="op">(</span><span class="va">cur_image</span><span class="op">)</span> <span class="op">&lt;-</span> <span class="st">"Replacement"</span>
 <span class="fu">setImages</span><span class="op">(</span><span class="va">pancreasImages</span>, <span class="fl">2</span><span class="op">)</span> <span class="op">&lt;-</span> <span class="va">cur_image</span>
 <span class="va">pancreasImages</span></code></pre></div>
-<pre><code>## CytoImageList containing 4 image(s)
-## names(4): E34_imc Replacement J02_imc New_image 
-## Each image contains 5 channel(s)
-## channelNames(5): H3 CD99 PIN CD8a CDH</code></pre>
+<pre><code><span class="co">## CytoImageList containing 4 image(s)</span>
+<span class="co">## names(4): E34_imc Replacement J02_imc New_image </span>
+<span class="co">## Each image contains 5 channel(s)</span>
+<span class="co">## channelNames(5): H3 CD99 PIN CD8a CDH</span></code></pre>
 <div class="sourceCode" id="cb67"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="fu">mcols</span><span class="op">(</span><span class="va">pancreasImages</span><span class="op">)</span></code></pre></div>
-<pre><code>## DataFrame with 4 rows and 3 columns
-##               ImageName   ImageNb   PatientID
-##             &lt;character&gt; &lt;integer&gt; &lt;character&gt;
-## E34_imc             E34         1    Patient1
-## Replacement         E34         1    Patient1
-## J02_imc             J02         3    Patient3
-## New_image           E34         1    Patient1</code></pre>
+<pre><code><span class="co">## DataFrame with 4 rows and 3 columns</span>
+<span class="co">##               ImageName   ImageNb   PatientID</span>
+<span class="co">##             &lt;character&gt; &lt;integer&gt; &lt;character&gt;</span>
+<span class="co">## E34_imc             E34         1    Patient1</span>
+<span class="co">## Replacement         E34         1    Patient1</span>
+<span class="co">## J02_imc             J02         3    Patient3</span>
+<span class="co">## New_image           E34         1    Patient1</span></code></pre>
 <p>However, if the image to replace is called by name, only the image and associated metadata is replaced:</p>
 <div class="sourceCode" id="cb69"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="fu">setImages</span><span class="op">(</span><span class="va">pancreasImages</span>, <span class="st">"J02_imc"</span><span class="op">)</span> <span class="op">&lt;-</span> <span class="va">cur_image</span>
 <span class="va">pancreasImages</span></code></pre></div>
-<pre><code>## CytoImageList containing 4 image(s)
-## names(4): E34_imc Replacement J02_imc New_image 
-## Each image contains 5 channel(s)
-## channelNames(5): H3 CD99 PIN CD8a CDH</code></pre>
+<pre><code><span class="co">## CytoImageList containing 4 image(s)</span>
+<span class="co">## names(4): E34_imc Replacement J02_imc New_image </span>
+<span class="co">## Each image contains 5 channel(s)</span>
+<span class="co">## channelNames(5): H3 CD99 PIN CD8a CDH</span></code></pre>
 <div class="sourceCode" id="cb71"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="fu">mcols</span><span class="op">(</span><span class="va">pancreasImages</span><span class="op">)</span></code></pre></div>
-<pre><code>## DataFrame with 4 rows and 3 columns
-##               ImageName   ImageNb   PatientID
-##             &lt;character&gt; &lt;integer&gt; &lt;character&gt;
-## E34_imc             E34         1    Patient1
-## Replacement         E34         1    Patient1
-## J02_imc             E34         1    Patient1
-## New_image           E34         1    Patient1</code></pre>
+<pre><code><span class="co">## DataFrame with 4 rows and 3 columns</span>
+<span class="co">##               ImageName   ImageNb   PatientID</span>
+<span class="co">##             &lt;character&gt; &lt;integer&gt; &lt;character&gt;</span>
+<span class="co">## E34_imc             E34         1    Patient1</span>
+<span class="co">## Replacement         E34         1    Patient1</span>
+<span class="co">## J02_imc             E34         1    Patient1</span>
+<span class="co">## New_image           E34         1    Patient1</span></code></pre>
 <p>Images can be deleted by setting the entry to <code>NULL</code>:</p>
 <div class="sourceCode" id="cb73"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="fu">setImages</span><span class="op">(</span><span class="va">pancreasImages</span>, <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="st">"Replacement"</span>, <span class="st">"New_image"</span><span class="op">)</span><span class="op">)</span> <span class="op">&lt;-</span> <span class="cn">NULL</span>
+<code class="sourceCode R"><span class="fu">setImages</span><span class="op">(</span><span class="va">pancreasImages</span>, <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"Replacement"</span>, <span class="st">"New_image"</span><span class="op">)</span><span class="op">)</span> <span class="op">&lt;-</span> <span class="cn">NULL</span>
 <span class="va">pancreasImages</span></code></pre></div>
-<pre><code>## CytoImageList containing 2 image(s)
-## names(2): E34_imc J02_imc 
-## Each image contains 5 channel(s)
-## channelNames(5): H3 CD99 PIN CD8a CDH</code></pre>
+<pre><code><span class="co">## CytoImageList containing 2 image(s)</span>
+<span class="co">## names(2): E34_imc J02_imc </span>
+<span class="co">## Each image contains 5 channel(s)</span>
+<span class="co">## channelNames(5): H3 CD99 PIN CD8a CDH</span></code></pre>
 <p><strong>Of note:</strong> for plotting, the entries in the <code>img_id</code> slot in the <code>CytoImageList</code> objects have to be unique.</p>
 </div>
-<div id="getting-and-setting-channels" class="section level3">
-<h3 class="hasAnchor">
-<a href="#getting-and-setting-channels" class="anchor"></a>Getting and setting channels</h3>
+<div class="section level3">
+<h3 id="getting-and-setting-channels">Getting and setting channels<a class="anchor" aria-label="anchor" href="#getting-and-setting-channels"></a>
+</h3>
 <p>The <code>cytomapper</code> package also provides functions to obtain and replace channels. This functionality is provided via the <code>getChannels</code> and <code>setChannels</code> functions:</p>
 <div class="sourceCode" id="cb75"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="va">cur_channel</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/CytoImageList-subsetting.html">getChannels</a></span><span class="op">(</span><span class="va">pancreasImages</span>, <span class="st">"H3"</span><span class="op">)</span>
 <span class="va">cur_channel</span></code></pre></div>
-<pre><code>## CytoImageList containing 2 image(s)
-## names(2): E34_imc J02_imc 
-## Each image contains 1 channel(s)
-## channelNames(1): H3</code></pre>
+<pre><code><span class="co">## CytoImageList containing 2 image(s)</span>
+<span class="co">## names(2): E34_imc J02_imc </span>
+<span class="co">## Each image contains 1 channel(s)</span>
+<span class="co">## channelNames(1): H3</span></code></pre>
 <div class="sourceCode" id="cb77"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="fu"><a href="../reference/CytoImageList-naming.html">channelNames</a></span><span class="op">(</span><span class="va">cur_channel</span><span class="op">)</span> <span class="op">&lt;-</span> <span class="st">"New_H3"</span>
 <span class="fu">setChannels</span><span class="op">(</span><span class="va">pancreasImages</span>, <span class="fl">1</span><span class="op">)</span> <span class="op">&lt;-</span> <span class="va">cur_channel</span>
 <span class="va">pancreasImages</span></code></pre></div>
-<pre><code>## CytoImageList containing 2 image(s)
-## names(2): E34_imc J02_imc 
-## Each image contains 5 channel(s)
-## channelNames(5): New_H3 CD99 PIN CD8a CDH</code></pre>
+<pre><code><span class="co">## CytoImageList containing 2 image(s)</span>
+<span class="co">## names(2): E34_imc J02_imc </span>
+<span class="co">## Each image contains 5 channel(s)</span>
+<span class="co">## channelNames(5): New_H3 CD99 PIN CD8a CDH</span></code></pre>
 <p>The <code>setChannels</code> function does not allow combining and adding new channels. For this task, the <code>cytomapper</code> package provides the <code>mergeChannels</code> section in the next paragraph.</p>
 </div>
-<div id="naming-and-merging-channels" class="section level3">
-<h3 class="hasAnchor">
-<a href="#naming-and-merging-channels" class="anchor"></a>Naming and merging channels</h3>
+<div class="section level3">
+<h3 id="naming-and-merging-channels">Naming and merging channels<a class="anchor" aria-label="anchor" href="#naming-and-merging-channels"></a>
+</h3>
 <p>Channel names can be obtained and replaced using the <code>channelNames</code> getter and setter function:</p>
 <div class="sourceCode" id="cb79"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="fu"><a href="../reference/CytoImageList-naming.html">channelNames</a></span><span class="op">(</span><span class="va">pancreasImages</span><span class="op">)</span></code></pre></div>
-<pre><code>## [1] "New_H3" "CD99"   "PIN"    "CD8a"   "CDH"</code></pre>
+<pre><code><span class="co">## [1] "New_H3" "CD99"   "PIN"    "CD8a"   "CDH"</span></code></pre>
 <div class="sourceCode" id="cb81"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="fu"><a href="../reference/CytoImageList-naming.html">channelNames</a></span><span class="op">(</span><span class="va">pancreasImages</span><span class="op">)</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="st">"ch1"</span>, <span class="st">"ch2"</span>, <span class="st">"ch3"</span>, <span class="st">"ch4"</span>, <span class="st">"ch5"</span><span class="op">)</span>
+<code class="sourceCode R"><span class="fu"><a href="../reference/CytoImageList-naming.html">channelNames</a></span><span class="op">(</span><span class="va">pancreasImages</span><span class="op">)</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"ch1"</span>, <span class="st">"ch2"</span>, <span class="st">"ch3"</span>, <span class="st">"ch4"</span>, <span class="st">"ch5"</span><span class="op">)</span>
 <span class="va">pancreasImages</span></code></pre></div>
-<pre><code>## CytoImageList containing 2 image(s)
-## names(2): E34_imc J02_imc 
-## Each image contains 5 channel(s)
-## channelNames(5): ch1 ch2 ch3 ch4 ch5</code></pre>
+<pre><code><span class="co">## CytoImageList containing 2 image(s)</span>
+<span class="co">## names(2): E34_imc J02_imc </span>
+<span class="co">## Each image contains 5 channel(s)</span>
+<span class="co">## channelNames(5): ch1 ch2 ch3 ch4 ch5</span></code></pre>
 <p>Furthermore, channels can be merged using the <code>mergeChannels</code> function:</p>
 <div class="sourceCode" id="cb83"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="va">cur_channels</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/CytoImageList-subsetting.html">getChannels</a></span><span class="op">(</span><span class="va">pancreasImages</span>, <span class="fl">1</span><span class="op">:</span><span class="fl">2</span><span class="op">)</span>
-<span class="fu"><a href="../reference/CytoImageList-naming.html">channelNames</a></span><span class="op">(</span><span class="va">cur_channels</span><span class="op">)</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="st">"new_ch1"</span>, <span class="st">"new_ch2"</span><span class="op">)</span>
+<span class="fu"><a href="../reference/CytoImageList-naming.html">channelNames</a></span><span class="op">(</span><span class="va">cur_channels</span><span class="op">)</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"new_ch1"</span>, <span class="st">"new_ch2"</span><span class="op">)</span>
 <span class="va">pancreasImages</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/CytoImageList-subsetting.html">mergeChannels</a></span><span class="op">(</span><span class="va">pancreasImages</span>, <span class="va">cur_channels</span><span class="op">)</span>
 <span class="va">pancreasImages</span></code></pre></div>
-<pre><code>## CytoImageList containing 2 image(s)
-## names(2): E34_imc J02_imc 
-## Each image contains 7 channel(s)
-## channelNames(7): ch1 ch2 ch3 ch4 ch5 new_ch1 new_ch2</code></pre>
+<pre><code><span class="co">## CytoImageList containing 2 image(s)</span>
+<span class="co">## names(2): E34_imc J02_imc </span>
+<span class="co">## Each image contains 7 channel(s)</span>
+<span class="co">## channelNames(7): ch1 ch2 ch3 ch4 ch5 new_ch1 new_ch2</span></code></pre>
 </div>
 </div>
-<div id="looping" class="section level2">
-<h2 class="hasAnchor">
-<a href="#looping" class="anchor"></a>Looping</h2>
-<p>To perform custom operations on each individual entry to a <code>CytoImageList</code> object, the <em><a href="https://bioconductor.org/packages/3.14/S4Vectors">S4Vectors</a></em> package provides the <code>endoapply</code> function. While the <code>lapply</code> function returns a <code>list</code> object, the <code>endoapply</code> function provides an object of the same class of the input object.</p>
-<p>This allows the user to apply all functions provided by the <em><a href="https://bioconductor.org/packages/3.14/EBImage">EBImage</a></em> package to individual entries within the <code>CytoImageList</code> object:</p>
+<div class="section level2">
+<h2 id="looping">Looping<a class="anchor" aria-label="anchor" href="#looping"></a>
+</h2>
+<p>To perform custom operations on each individual entry to a <code>CytoImageList</code> object, the <em><a href="https://bioconductor.org/packages/3.14/S4Vectors" class="external-link">S4Vectors</a></em> package provides the <code>endoapply</code> function. While the <code>lapply</code> function returns a <code>list</code> object, the <code>endoapply</code> function provides an object of the same class of the input object.</p>
+<p>This allows the user to apply all functions provided by the <em><a href="https://bioconductor.org/packages/3.14/EBImage" class="external-link">EBImage</a></em> package to individual entries within the <code>CytoImageList</code> object:</p>
 <div class="sourceCode" id="cb85"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="fu"><a href="https://rdrr.io/r/utils/data.html">data</a></span><span class="op">(</span><span class="st">"pancreasImages"</span><span class="op">)</span>
+<code class="sourceCode R"><span class="fu"><a href="https://rdrr.io/r/utils/data.html" class="external-link">data</a></span><span class="op">(</span><span class="st">"pancreasImages"</span><span class="op">)</span>
 
 <span class="co"># Performing a gaussian blur</span>
 <span class="va">pancreasImages</span> <span class="op">&lt;-</span> <span class="fu">endoapply</span><span class="op">(</span><span class="va">pancreasImages</span>, <span class="va">gblur</span>, sigma <span class="op">=</span> <span class="fl">1</span><span class="op">)</span></code></pre></div>
 </div>
 </div>
-<div id="PixelInfo" class="section level1">
-<h1 class="hasAnchor">
-<a href="#PixelInfo" class="anchor"></a>Plotting pixel information</h1>
+<div class="section level1">
+<h1 id="PixelInfo">Plotting pixel information<a class="anchor" aria-label="anchor" href="#PixelInfo"></a>
+</h1>
 <p>The <code>cytomapper</code> package provides the <code>plotPixels</code> function to plot pixel-level intensities of marker proteins. The function requires a <code>CytoImageList</code> object containing a single or multiple multi-channel images. To colour images based on channel name, the <code>channelNames</code> of the object need to be set. Furthermore, to outline cells, a <code>CytoImageList</code> object containing segmentation masks and a <code>SingleCellExperiment</code> object containing cell-specific metadata need to be provided.</p>
 <p>By default, pixel values are coloured internally and scaled between the minimum and maximum values across all displayed images. However, to manipulate pixel values and to linearly scale values to a certain range, the <code>cytomapper</code> package provides a function for image normalization.</p>
-<div id="normalization" class="section level2">
-<h2 class="hasAnchor">
-<a href="#normalization" class="anchor"></a>Normalization</h2>
-<p>The <code>normalize</code> function provided in the <code>cytomapper</code> package internally calls the <code>normalize</code> function of the <em><a href="https://bioconductor.org/packages/3.14/EBImage">EBImage</a></em> package. The main difference between the two functions is the option to scale per image or globally in the <code>cytomapper</code> package (see <code><a href="../reference/CytoImageList-manipulation.html">?'normalize,CytoImageList-method'</a></code>).</p>
+<div class="section level2">
+<h2 id="normalization">Normalization<a class="anchor" aria-label="anchor" href="#normalization"></a>
+</h2>
+<p>The <code>normalize</code> function provided in the <code>cytomapper</code> package internally calls the <code>normalize</code> function of the <em><a href="https://bioconductor.org/packages/3.14/EBImage" class="external-link">EBImage</a></em> package. The main difference between the two functions is the option to scale per image or globally in the <code>cytomapper</code> package (see <code><a href="../reference/CytoImageList-manipulation.html">?'normalize,CytoImageList-method'</a></code>).</p>
 <p>By default, the <code>normalize</code> function linearly scales the images channel-wise across all images and returns values between 0 and 1 (or the chosen <code>ft</code> range):</p>
 <div class="sourceCode" id="cb86"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="fu"><a href="https://rdrr.io/r/utils/data.html">data</a></span><span class="op">(</span><span class="st">"pancreasImages"</span><span class="op">)</span>
+<code class="sourceCode R"><span class="fu"><a href="https://rdrr.io/r/utils/data.html" class="external-link">data</a></span><span class="op">(</span><span class="st">"pancreasImages"</span><span class="op">)</span>
 
 <span class="co"># Default normalization</span>
 <span class="va">cur_images</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/CytoImageList-manipulation.html">normalize</a></span><span class="op">(</span><span class="va">pancreasImages</span><span class="op">)</span></code></pre></div>
@@ -614,118 +610,118 @@
 <div class="sourceCode" id="cb88"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="co"># Percentage-based clipping range</span>
 <span class="va">cur_images</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/CytoImageList-manipulation.html">normalize</a></span><span class="op">(</span><span class="va">pancreasImages</span><span class="op">)</span>
-<span class="va">cur_images</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/CytoImageList-manipulation.html">normalize</a></span><span class="op">(</span><span class="va">cur_images</span>, inputRange <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="fl">0</span>, <span class="fl">0.9</span><span class="op">)</span><span class="op">)</span>
-<span class="fu"><a href="../reference/plotPixels.html">plotPixels</a></span><span class="op">(</span><span class="va">cur_images</span>, colour_by <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="st">"H3"</span>, <span class="st">"CD99"</span>, <span class="st">"CDH"</span><span class="op">)</span><span class="op">)</span></code></pre></div>
+<span class="va">cur_images</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/CytoImageList-manipulation.html">normalize</a></span><span class="op">(</span><span class="va">cur_images</span>, inputRange <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">0</span>, <span class="fl">0.9</span><span class="op">)</span><span class="op">)</span>
+<span class="fu"><a href="../reference/plotPixels.html">plotPixels</a></span><span class="op">(</span><span class="va">cur_images</span>, colour_by <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"H3"</span>, <span class="st">"CD99"</span>, <span class="st">"CDH"</span><span class="op">)</span><span class="op">)</span></code></pre></div>
 <p><img src="cytomapper_files/figure-html/normalize-clippingrange-1.png" width="700"></p>
 <p>Alternatively, channel-specific clipping can be performed:</p>
 <div class="sourceCode" id="cb89"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="co"># Channel-wise clipping</span>
 <span class="va">cur_images</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/CytoImageList-manipulation.html">normalize</a></span><span class="op">(</span><span class="va">pancreasImages</span>,
-                        inputRange <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html">list</a></span><span class="op">(</span>H3 <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="fl">0</span>, <span class="fl">70</span><span class="op">)</span>, CD99 <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="fl">0</span>, <span class="fl">100</span><span class="op">)</span><span class="op">)</span><span class="op">)</span></code></pre></div>
+                        inputRange <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span>H3 <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">0</span>, <span class="fl">70</span><span class="op">)</span>, CD99 <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">0</span>, <span class="fl">100</span><span class="op">)</span><span class="op">)</span><span class="op">)</span></code></pre></div>
 <p>For more information on the normalization functionality provided by the <code>cytomapper</code> package, please refer to <code><a href="../reference/CytoImageList-manipulation.html">?'normalize,CytoImageList-method'</a></code>.</p>
 </div>
-<div id="colouring" class="section level2">
-<h2 class="hasAnchor">
-<a href="#colouring" class="anchor"></a>Colouring</h2>
+<div class="section level2">
+<h2 id="colouring">Colouring<a class="anchor" aria-label="anchor" href="#colouring"></a>
+</h2>
 <p>The <code>cytomapper</code> package supports the visualization of up to 6 channels and displays a combined image by setting the <code>colour_by</code> parameter. See <code><a href="../reference/plotPixels.html">?plotPixels</a></code> for examples.</p>
 </div>
-<div id="adjusting-brightness-contrast-and-gamma" class="section level2">
-<h2 class="hasAnchor">
-<a href="#adjusting-brightness-contrast-and-gamma" class="anchor"></a>Adjusting brightness, contrast and gamma</h2>
+<div class="section level2">
+<h2 id="adjusting-brightness-contrast-and-gamma">Adjusting brightness, contrast and gamma<a class="anchor" aria-label="anchor" href="#adjusting-brightness-contrast-and-gamma"></a>
+</h2>
 <p>To enhance individual channels, the brightness (b), contrast (c) and gamma (g) can be set channel-wise via the <code>bcg</code> parameter. These parameters are set in form of a named <code>list</code> object. Entry names need to correspond by channels specified in <code>colour_by</code>. Each entry takes a numeric vector of length three where the first entry represents the brightness value, the second the contrast factor and the third the gamma factor. Internally, the brightness value is added to each channel; each channel is multiplied by the contrast factor and each channel is exponentiated by the gamma factor.</p>
 <div class="sourceCode" id="cb90"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="fu"><a href="https://rdrr.io/r/utils/data.html">data</a></span><span class="op">(</span><span class="st">"pancreasImages"</span><span class="op">)</span>
+<code class="sourceCode R"><span class="fu"><a href="https://rdrr.io/r/utils/data.html" class="external-link">data</a></span><span class="op">(</span><span class="st">"pancreasImages"</span><span class="op">)</span>
 <span class="co"># Increase contrast for the CD99 and CDH channel</span>
 <span class="fu"><a href="../reference/plotPixels.html">plotPixels</a></span><span class="op">(</span><span class="va">pancreasImages</span>,
-            colour_by <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="st">"H3"</span>, <span class="st">"CD99"</span>, <span class="st">"CDH"</span><span class="op">)</span>,
-            bcg <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html">list</a></span><span class="op">(</span>CD99 <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="fl">0</span>,<span class="fl">2</span>,<span class="fl">1</span><span class="op">)</span>,
-                        CDH <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="fl">0</span>,<span class="fl">2</span>,<span class="fl">1</span><span class="op">)</span><span class="op">)</span><span class="op">)</span></code></pre></div>
+            colour_by <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"H3"</span>, <span class="st">"CD99"</span>, <span class="st">"CDH"</span><span class="op">)</span>,
+            bcg <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span>CD99 <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">0</span>,<span class="fl">2</span>,<span class="fl">1</span><span class="op">)</span>,
+                        CDH <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">0</span>,<span class="fl">2</span>,<span class="fl">1</span><span class="op">)</span><span class="op">)</span><span class="op">)</span></code></pre></div>
 <p><img src="cytomapper_files/figure-html/bcg-pixels-1.png" width="700"></p>
 </div>
-<div id="Outlining" class="section level2">
-<h2 class="hasAnchor">
-<a href="#Outlining" class="anchor"></a>Outlining</h2>
+<div class="section level2">
+<h2 id="Outlining">Outlining<a class="anchor" aria-label="anchor" href="#Outlining"></a>
+</h2>
 <p>The cells can be outlined when providing a <code>CytoImageList</code> object containing the corresponding segmentation masks and a character <code>img_id</code> indicating the name of the <code>elementMetadata</code> slot that contains the image IDs.</p>
 <p>The user can furthermore specify the metadata entry to outline cells by. For this, a <code>SingleCellExperiment</code> object containing the cell-specific metadata and a <code>cell_id</code> indicating the name of the <code>colData</code> slot that contains the cell IDs need to be provided:</p>
 <div class="sourceCode" id="cb91"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="fu"><a href="../reference/plotPixels.html">plotPixels</a></span><span class="op">(</span><span class="va">pancreasImages</span>, mask <span class="op">=</span> <span class="va">pancreasMasks</span>,
             object <span class="op">=</span> <span class="va">pancreasSCE</span>, img_id <span class="op">=</span> <span class="st">"ImageNb"</span>,
             cell_id <span class="op">=</span> <span class="st">"CellNb"</span>,
-            colour_by <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="st">"H3"</span>, <span class="st">"CD99"</span>, <span class="st">"CDH"</span><span class="op">)</span>,
+            colour_by <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"H3"</span>, <span class="st">"CD99"</span>, <span class="st">"CDH"</span><span class="op">)</span>,
             outline_by <span class="op">=</span> <span class="st">"CellType"</span><span class="op">)</span></code></pre></div>
 <p><img src="cytomapper_files/figure-html/outline-1-pixels-1.png" width="700"></p>
 </div>
-<div id="subsetting" class="section level2">
-<h2 class="hasAnchor">
-<a href="#subsetting" class="anchor"></a>Subsetting</h2>
+<div class="section level2">
+<h2 id="subsetting">Subsetting<a class="anchor" aria-label="anchor" href="#subsetting"></a>
+</h2>
 <p>The user can subset the images before calling the plotting functions:</p>
 <div class="sourceCode" id="cb92"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="va">cur_images</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/CytoImageList-subsetting.html">getImages</a></span><span class="op">(</span><span class="va">pancreasImages</span>, <span class="st">"J02_imc"</span><span class="op">)</span>
-<span class="fu"><a href="../reference/plotPixels.html">plotPixels</a></span><span class="op">(</span><span class="va">cur_images</span>, colour_by <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="st">"H3"</span>, <span class="st">"CD99"</span>, <span class="st">"CDH"</span><span class="op">)</span><span class="op">)</span></code></pre></div>
+<span class="fu"><a href="../reference/plotPixels.html">plotPixels</a></span><span class="op">(</span><span class="va">cur_images</span>, colour_by <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"H3"</span>, <span class="st">"CD99"</span>, <span class="st">"CDH"</span><span class="op">)</span><span class="op">)</span></code></pre></div>
 <p><img src="cytomapper_files/figure-html/subsetting-pixels-1.png" width="700"></p>
 <p>For further information on subsetting functionality, please refer to the <a href="#accessors">Accessors</a> section.</p>
 </div>
-<div id="adjusting-the-colour" class="section level2">
-<h2 class="hasAnchor">
-<a href="#adjusting-the-colour" class="anchor"></a>Adjusting the colour</h2>
+<div class="section level2">
+<h2 id="adjusting-the-colour">Adjusting the colour<a class="anchor" aria-label="anchor" href="#adjusting-the-colour"></a>
+</h2>
 <p>The user can also customize the colours for selected features. The <code>colour</code> parameter takes a named <code>list</code> in which names correspond to the entries to <code>colour_by</code>. To colour continous features such as expression or continous metadata entries (e.g. cell area, see next section), at least two colours for interpolation need to be provided. These colours are passed to the <code>colorRampPalette</code> function for interpolation. For details, please refer to the next <a href="#adjustingColour">Adjusting the colour</a> section</p>
 </div>
 </div>
-<div id="CellInfo" class="section level1">
-<h1 class="hasAnchor">
-<a href="#CellInfo" class="anchor"></a>Plotting cell information</h1>
+<div class="section level1">
+<h1 id="CellInfo">Plotting cell information<a class="anchor" aria-label="anchor" href="#CellInfo"></a>
+</h1>
 <p>In the following sections, the <code>plotCells</code> function will be introduced. This function displays cell-level information on segmentation masks. It requires a <code>CytoImageList</code> object containing segmentation masks in the form of single-channel images. Furthermore, to colour and outline cells, a <code>SingleCellExperiment</code> object containing cell-specific expression counts and metadata needs to be provided.</p>
 <p>By default, cell-specific expression values are coloured internally and scaled marker-specifically between the minimum and maximum values across the full <code>SingleCellExperiment</code>.</p>
-<div id="colouring-1" class="section level2">
-<h2 class="hasAnchor">
-<a href="#colouring-1" class="anchor"></a>Colouring</h2>
-<p>Segmentation masks can be coloured based on the pixel-values averaged across the area of each cell. In the <code>SingleCellExperiment</code> object, these values can be obtained from the <code>counts()</code> slot. To colour segmentation masks based on expression, the <code>rownames</code> of the <code>SingleCellExperiment</code> must be correctly named. The <code>cytomapper</code> package supports the visualization of up to 6 channels and displays a combined image. However, in the case of displaying expression on segmentation mask, the user should not display too many features. See <code><a href="../reference/plotCells.html">?plotCells</a></code> for examples.</p>
+<div class="section level2">
+<h2 id="colouring-1">Colouring<a class="anchor" aria-label="anchor" href="#colouring-1"></a>
+</h2>
+<p>Segmentation masks can be coloured based on the pixel-values averaged across the area of each cell. In the <code>SingleCellExperiment</code> object, these values can be obtained from the <code><a href="https://rdrr.io/pkg/SingleCellExperiment/man/assays.html" class="external-link">counts()</a></code> slot. To colour segmentation masks based on expression, the <code>rownames</code> of the <code>SingleCellExperiment</code> must be correctly named. The <code>cytomapper</code> package supports the visualization of up to 6 channels and displays a combined image. However, in the case of displaying expression on segmentation mask, the user should not display too many features. See <code><a href="../reference/plotCells.html">?plotCells</a></code> for examples.</p>
 </div>
-<div id="changing-the-assay-slot" class="section level2">
-<h2 class="hasAnchor">
-<a href="#changing-the-assay-slot" class="anchor"></a>Changing the assay slot</h2>
+<div class="section level2">
+<h2 id="changing-the-assay-slot">Changing the assay slot<a class="anchor" aria-label="anchor" href="#changing-the-assay-slot"></a>
+</h2>
 <p>To visualize differently transformed counts, the <code>plotCells</code> function allows setting the <code>exprs_values</code> parameter. In the toy dataset, the <code>assay(pancreasSCE, "exprs")</code> slot contains the arcsinh-transformed raw expression counts.</p>
 <div class="sourceCode" id="cb93"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="fu"><a href="../reference/plotCells.html">plotCells</a></span><span class="op">(</span><span class="va">pancreasMasks</span>, object <span class="op">=</span> <span class="va">pancreasSCE</span>,
             img_id <span class="op">=</span> <span class="st">"ImageNb"</span>, cell_id <span class="op">=</span> <span class="st">"CellNb"</span>,
-            colour_by <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="st">"CD8a"</span>, <span class="st">"PIN"</span><span class="op">)</span>,
+            colour_by <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"CD8a"</span>, <span class="st">"PIN"</span><span class="op">)</span>,
             exprs_values <span class="op">=</span> <span class="st">"exprs"</span><span class="op">)</span></code></pre></div>
 <p><img src="cytomapper_files/figure-html/exprs_values-cells-1.png" width="700"></p>
 </div>
-<div id="outlining" class="section level2">
-<h2 class="hasAnchor">
-<a href="#outlining" class="anchor"></a>Outlining</h2>
+<div class="section level2">
+<h2 id="outlining">Outlining<a class="anchor" aria-label="anchor" href="#outlining"></a>
+</h2>
 <p>The user can furthermore outline cells and specify the metadata entry to outline cells by. See the previous <a href="#Outlining">Outlining</a> section and <code><a href="../reference/plotCells.html">?plotCells</a></code> for examples.</p>
 </div>
-<div id="subsetting-1" class="section level2">
-<h2 class="hasAnchor">
-<a href="#subsetting-1" class="anchor"></a>Subsetting</h2>
+<div class="section level2">
+<h2 id="subsetting-1">Subsetting<a class="anchor" aria-label="anchor" href="#subsetting-1"></a>
+</h2>
 <p>Similar to the <code>plotPixels</code> function, the user can subset the images before plotting. For an example, please see the previous <a href="#subsetting">Subsetting</a> section and the <a href="#accessors">Accessors</a> section.</p>
 </div>
-<div id="adjustingColour" class="section level2">
-<h2 class="hasAnchor">
-<a href="#adjustingColour" class="anchor"></a>Adjusting the colour</h2>
+<div class="section level2">
+<h2 id="adjustingColour">Adjusting the colour<a class="anchor" aria-label="anchor" href="#adjustingColour"></a>
+</h2>
 <p>The user can also customize the colours for selected features and metadata. The <code>colour</code> parameter takes a named <code>list</code> in which names correspond to the entries to <code>colour_by</code> and/or <code>outline_by</code>. To colour continous features such as expression or continous metadata entries (e.g. cell area), at least two colours for interpolation need to be provided. These colours are passed to the <code>colorRampPalette</code> function for interpolation. To colour discrete entries, one colour per entry needs to be specified in form of a named vector.</p>
 <div class="sourceCode" id="cb94"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="fu"><a href="../reference/plotCells.html">plotCells</a></span><span class="op">(</span><span class="va">pancreasMasks</span>, object <span class="op">=</span> <span class="va">pancreasSCE</span>,
             img_id <span class="op">=</span> <span class="st">"ImageNb"</span>, cell_id <span class="op">=</span> <span class="st">"CellNb"</span>,
-            colour_by <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="st">"CD99"</span>, <span class="st">"CDH"</span><span class="op">)</span>,
+            colour_by <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"CD99"</span>, <span class="st">"CDH"</span><span class="op">)</span>,
             outline_by <span class="op">=</span> <span class="st">"CellType"</span>,
-            colour <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html">list</a></span><span class="op">(</span>CD99 <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="st">"black"</span>, <span class="st">"red"</span><span class="op">)</span>,
-                        CDH <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="st">"black"</span>, <span class="st">"white"</span><span class="op">)</span>,
-                        CellType <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span>celltype_A <span class="op">=</span> <span class="st">"blue"</span>,
+            colour <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span>CD99 <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"black"</span>, <span class="st">"red"</span><span class="op">)</span>,
+                        CDH <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"black"</span>, <span class="st">"white"</span><span class="op">)</span>,
+                        CellType <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span>celltype_A <span class="op">=</span> <span class="st">"blue"</span>,
                                     celltype_B <span class="op">=</span> <span class="st">"green"</span>,
                                     celltype_C <span class="op">=</span> <span class="st">"yellow"</span><span class="op">)</span><span class="op">)</span><span class="op">)</span></code></pre></div>
 <p><img src="cytomapper_files/figure-html/colour-cells-1.png" width="700"></p>
 </div>
 </div>
-<div id="customisation" class="section level1">
-<h1 class="hasAnchor">
-<a href="#customisation" class="anchor"></a>Customisation</h1>
+<div class="section level1">
+<h1 id="customisation">Customisation<a class="anchor" aria-label="anchor" href="#customisation"></a>
+</h1>
 <p>The next sections explain different ways to customise the visual output of the <code>cytomapper</code> package. To find more details on additional parameters that can be set to customise the display, refer to <code><a href="../reference/plotting-param.html">?'plotting-param'</a></code>.</p>
-<div id="subsetting-the-singlecellexperiment-object" class="section level2">
-<h2 class="hasAnchor">
-<a href="#subsetting-the-singlecellexperiment-object" class="anchor"></a>Subsetting the SingleCellExperiment object</h2>
+<div class="section level2">
+<h2 id="subsetting-the-singlecellexperiment-object">Subsetting the SingleCellExperiment object<a class="anchor" aria-label="anchor" href="#subsetting-the-singlecellexperiment-object"></a>
+</h2>
 <p>The <code>cytomapper</code> package matches cells contained in the <code>SingleCellExperiment</code> to objects contained in the <code>CytoImageList</code> segmentation masks object via cell identifiers. These are integer values, which are unique to each object per image.</p>
 <p>By matching these IDs, the user can subset the <code>SingleCellExperiment</code> object and therefore only visualize the cells retained in the object:</p>
 <div class="sourceCode" id="cb95"><pre class="downlit sourceCode r">
@@ -733,52 +729,52 @@
 <span class="fu"><a href="../reference/plotCells.html">plotCells</a></span><span class="op">(</span><span class="va">pancreasMasks</span>, object <span class="op">=</span> <span class="va">cur_sce</span>,
             img_id <span class="op">=</span> <span class="st">"ImageNb"</span>, cell_id <span class="op">=</span> <span class="st">"CellNb"</span>,
             colour_by <span class="op">=</span> <span class="st">"CellType"</span>,
-            colour <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html">list</a></span><span class="op">(</span>CellType <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span>celltype_A <span class="op">=</span> <span class="st">"red"</span><span class="op">)</span><span class="op">)</span><span class="op">)</span></code></pre></div>
+            colour <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span>CellType <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span>celltype_A <span class="op">=</span> <span class="st">"red"</span><span class="op">)</span><span class="op">)</span><span class="op">)</span></code></pre></div>
 <p><img src="cytomapper_files/figure-html/subsetting-SCE-1.png" width="700"></p>
 <p>This feature is also helpful when visualising individual images. By default, the legend will contain all metadata levels even those that are not contained in the selected image. By subsetting the <code>SingleCellExperiment</code> object to contain only the cells of the selected image, the legend will only contain the metadata levels of the selected cells.</p>
 </div>
-<div id="background-and-missing-colour" class="section level2">
-<h2 class="hasAnchor">
-<a href="#background-and-missing-colour" class="anchor"></a>Background and missing colour</h2>
+<div class="section level2">
+<h2 id="background-and-missing-colour">Background and missing colour<a class="anchor" aria-label="anchor" href="#background-and-missing-colour"></a>
+</h2>
 <p>The background of a segemntation mask is defined by the value <code>0</code>. To change the background colour, the <code>background_colour</code> parameter can be set. Furthermore, cells that are not contained in the <code>SingleCellExperiment</code> object can be coloured by setting <code>missing_colour</code>. For an example, see figure @ref(fig:customization).</p>
 </div>
-<div id="scale-bar-and-image-title" class="section level2">
-<h2 class="hasAnchor">
-<a href="#scale-bar-and-image-title" class="anchor"></a>Scale bar and image title</h2>
+<div class="section level2">
+<h2 id="scale-bar-and-image-title">Scale bar and image title<a class="anchor" aria-label="anchor" href="#scale-bar-and-image-title"></a>
+</h2>
 <p>Depending on the cells’ and background colour, the scale bar and image title are not visible. To change the visual display of the scale bar, a named list can be passed to the <code>scale_bar</code> parameter. The list should contain one or multiple of the following entries: <code>length</code>, <code>label</code>, <code>cex</code>, <code>lwidth</code>, <code>colour</code>, <code>position</code>, <code>margin</code>, <code>frame</code>. For a detailed explanation on the individual entries, please refer to the <code>scale_bar</code> section in <code><a href="../reference/plotting-param.html">?'plotting-param'</a></code>.</p>
 <p><strong>Of note:</strong> By default, the length of the scale bar is defined in number of pixels. Therefore, the user needs to know the length (e.g. in <span class="math inline">\(\mu{m}\)</span>) to label the scale bar correctly.</p>
 <p>The image titles can be set using the <code>image_title</code> parameter. Also here, the user needs to provide a named list with one or multiple of follwing entries: <code>text</code>, <code>position</code>, <code>colour</code>, <code>margin</code>, <code>font</code>, <code>cex</code>. The entry to <code>text</code> needs to be a character vector of the same length as the <code>CytoImageList</code> object.</p>
 <p>Plotting of the scale bar and image title can be suppressed by setting the <code>scale_bar</code> and <code>image_title</code> parameters to <code>NULL</code>.</p>
 <p>For an example, see figure @ref(fig:customization).</p>
 </div>
-<div id="legend" class="section level2">
-<h2 class="hasAnchor">
-<a href="#legend" class="anchor"></a>Legend</h2>
+<div class="section level2">
+<h2 id="legend">Legend<a class="anchor" aria-label="anchor" href="#legend"></a>
+</h2>
 <p>By default, the legend all all its contents are adjusted to the size of the largest image in the <code>CytoImageList</code> object. However, legend features can be altered by setting the <code>legend</code> parameter. It takes a named list containing one or multiple of the follwoing entries: <code>colour_by.title.font</code>, <code>colour_by.title.cex</code>, <code>colour_by.labels.cex</code>, <code>colour_by.legend.cex</code>, <code>outline_by.title.font</code>, <code>outline_by.title.cex</code>, <code>outline_by.labels.cex</code>, <code>outline_by.legend.cex</code>, <code>margin</code>. For detailed explanation on the individual entries, please refer to the <code>legend</code> parameter in <code><a href="../reference/plotting-param.html">?'plotting-param'</a></code>.</p>
 <p>For an example, see figure @ref(fig:customization).</p>
 </div>
-<div id="setting-the-margin-between-images" class="section level2">
-<h2 class="hasAnchor">
-<a href="#setting-the-margin-between-images" class="anchor"></a>Setting the margin between images</h2>
+<div class="section level2">
+<h2 id="setting-the-margin-between-images">Setting the margin between images<a class="anchor" aria-label="anchor" href="#setting-the-margin-between-images"></a>
+</h2>
 <p>To enhance the display of individual images, the <code>cytomapper</code> package provides the <code>margin</code> parameter.</p>
 <p>The <code>margin</code> parameter takes a single numeric indicating the gap (in pixels) between individual images.</p>
 <p>For an example, see figure @ref(fig:customization).</p>
 </div>
-<div id="scale-the-feature-counts" class="section level2">
-<h2 class="hasAnchor">
-<a href="#scale-the-feature-counts" class="anchor"></a>Scale the feature counts</h2>
+<div class="section level2">
+<h2 id="scale-the-feature-counts">Scale the feature counts<a class="anchor" aria-label="anchor" href="#scale-the-feature-counts"></a>
+</h2>
 <p>By default, features are scaled to the minimum and maximum per channel. This behaviour facilitates visualization but does not allow the user to visually compare absolute expression counts across channels. The default behaviour can be suppressed by setting <code>scale = FALSE</code>.</p>
 <p>In this case, counts are linearly scaled to the minimum and maximum across all channels and across all displayed images.</p>
 <p>For an example, see figure @ref(fig:customization).</p>
 </div>
-<div id="image-interpolation" class="section level2">
-<h2 class="hasAnchor">
-<a href="#image-interpolation" class="anchor"></a>Image interpolation</h2>
-<p>By default, colours are interpolated between pixels (see <code><a href="https://rdrr.io/r/graphics/rasterImage.html">?rasterImage</a></code> for details). To suppress this default behaviour, the user can set <code>interpolate = FALSE</code>.</p>
+<div class="section level2">
+<h2 id="image-interpolation">Image interpolation<a class="anchor" aria-label="anchor" href="#image-interpolation"></a>
+</h2>
+<p>By default, colours are interpolated between pixels (see <code><a href="https://rdrr.io/r/graphics/rasterImage.html" class="external-link">?rasterImage</a></code> for details). To suppress this default behaviour, the user can set <code>interpolate = FALSE</code>.</p>
 </div>
-<div id="thick-borders" class="section level2">
-<h2 class="hasAnchor">
-<a href="#thick-borders" class="anchor"></a>Thick borders</h2>
+<div class="section level2">
+<h2 id="thick-borders">Thick borders<a class="anchor" aria-label="anchor" href="#thick-borders"></a>
+</h2>
 <p>By setting <code>thick = TRUE</code>, the thickness of the outline border is increased. This setting can be useful to enhance the cell borders on large images.</p>
 <div class="sourceCode" id="cb96"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="fu"><a href="../reference/plotCells.html">plotCells</a></span><span class="op">(</span><span class="va">pancreasMasks</span>, object <span class="op">=</span> <span class="va">pancreasSCE</span>,
@@ -787,21 +783,21 @@
             outline_by <span class="op">=</span> <span class="st">"CellType"</span>,
             background_colour <span class="op">=</span> <span class="st">"white"</span>,
             missing_colour <span class="op">=</span> <span class="st">"black"</span>,
-            scale_bar <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html">list</a></span><span class="op">(</span>length <span class="op">=</span> <span class="fl">30</span>,
-                            label <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/expression.html">expression</a></span><span class="op">(</span><span class="st">"30 "</span> <span class="op">~</span> <span class="va">mu</span> <span class="op">*</span> <span class="st">"m"</span><span class="op">)</span>,
+            scale_bar <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span>length <span class="op">=</span> <span class="fl">30</span>,
+                            label <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/expression.html" class="external-link">expression</a></span><span class="op">(</span><span class="st">"30 "</span> <span class="op">~</span> <span class="va">mu</span> <span class="op">*</span> <span class="st">"m"</span><span class="op">)</span>,
                             cex <span class="op">=</span> <span class="fl">2</span>,
                             lwidth <span class="op">=</span> <span class="fl">10</span>,
                             colour <span class="op">=</span> <span class="st">"cyan"</span>,
                             position <span class="op">=</span> <span class="st">"bottomleft"</span>,
-                            margin <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="fl">5</span>,<span class="fl">5</span><span class="op">)</span>,
+                            margin <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">5</span>,<span class="fl">5</span><span class="op">)</span>,
                             frame <span class="op">=</span> <span class="fl">3</span><span class="op">)</span>,
-            image_title <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html">list</a></span><span class="op">(</span>text <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="st">"image_1"</span>, <span class="st">"image_2"</span>, <span class="st">"image_3"</span><span class="op">)</span>,
+            image_title <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span>text <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"image_1"</span>, <span class="st">"image_2"</span>, <span class="st">"image_3"</span><span class="op">)</span>,
                             position <span class="op">=</span> <span class="st">"topleft"</span>,
                             colour <span class="op">=</span> <span class="st">"cyan"</span>,
-                            margin <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="fl">2</span>,<span class="fl">10</span><span class="op">)</span>,
+                            margin <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">2</span>,<span class="fl">10</span><span class="op">)</span>,
                             font <span class="op">=</span> <span class="fl">3</span>,
                             cex <span class="op">=</span> <span class="fl">2</span><span class="op">)</span>,
-            legend <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html">list</a></span><span class="op">(</span>colour_by.title.font <span class="op">=</span> <span class="fl">2</span>,
+            legend <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span>colour_by.title.font <span class="op">=</span> <span class="fl">2</span>,
                             colour_by.title.cex <span class="op">=</span> <span class="fl">1.2</span>,
                             colour_by.labels.cex <span class="op">=</span> <span class="fl">0.7</span>,
                             outline_by.legend.cex <span class="op">=</span> <span class="fl">0.3</span>,
@@ -815,15 +811,15 @@ Plot customization example.
 </div>
 </div>
 </div>
-<div id="returning-plots-and-images" class="section level1">
-<h1 class="hasAnchor">
-<a href="#returning-plots-and-images" class="anchor"></a>Returning plots and images</h1>
+<div class="section level1">
+<h1 id="returning-plots-and-images">Returning plots and images<a class="anchor" aria-label="anchor" href="#returning-plots-and-images"></a>
+</h1>
 <p>The user has the option to save the generated plots (see next section) or to get the plots and/or coloured images returned. If <code>return_plot</code> and/or <code>return_images</code> is set to <code>TRUE</code>, <code>cytomapper</code> returns a list object with one or two entries: <code>plot</code> and/or <code>images</code>.</p>
 <p>The <code>display</code> parameter supports the entries <code>display = "all"</code> (default), which displays images in a grid-like fashion and <code>display = "single"</code>, which display images individually.</p>
 <p>If the <code>return_plot</code> parameter is set to <code>TRUE</code>, <code>cytomapper</code> internally calls the <code>recordPlot</code> function and returns a plot object. The user can additionally set <code>display = "single"</code> to get a list of plots returned.</p>
 <p>If the <code>return_images</code> parameter is set to <code>TRUE</code>, <code>cytomapper</code> returns a <code>SimpleList</code> object containing three-colour (red, green, blue) <code>Image</code> objects.</p>
 <div class="sourceCode" id="cb97"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="va">cur_out</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/plotPixels.html">plotPixels</a></span><span class="op">(</span><span class="va">pancreasImages</span>, colour_by <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="st">"H3"</span>, <span class="st">"CD99"</span>, <span class="st">"CDH"</span><span class="op">)</span>,
+<code class="sourceCode R"><span class="va">cur_out</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/plotPixels.html">plotPixels</a></span><span class="op">(</span><span class="va">pancreasImages</span>, colour_by <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"H3"</span>, <span class="st">"CD99"</span>, <span class="st">"CDH"</span><span class="op">)</span>,
                 return_plot <span class="op">=</span> <span class="cn">TRUE</span>, return_images <span class="op">=</span> <span class="cn">TRUE</span>, 
                 display <span class="op">=</span> <span class="st">"single"</span><span class="op">)</span></code></pre></div>
 <p><img src="cytomapper_files/figure-html/return_plot-1.png" width="700"><img src="cytomapper_files/figure-html/return_plot-2.png" width="700"><img src="cytomapper_files/figure-html/return_plot-3.png" width="700"><img src="cytomapper_files/figure-html/return_plot-4.png" width="700"></p>
@@ -833,117 +829,118 @@ Plot customization example.
 <p><img src="cytomapper_files/figure-html/return_plot-2-1.png" width="700"></p>
 <p>Furthermore, the user can directly plot the coloured images from the returned <code>SimpleList</code> object:</p>
 <div class="sourceCode" id="cb99"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="fu"><a href="https://rdrr.io/r/graphics/plot.default.html">plot</a></span><span class="op">(</span><span class="va">cur_out</span><span class="op">$</span><span class="va">images</span><span class="op">$</span><span class="va">G01_imc</span><span class="op">)</span></code></pre></div>
+<code class="sourceCode R"><span class="fu"><a href="https://rdrr.io/r/graphics/plot.default.html" class="external-link">plot</a></span><span class="op">(</span><span class="va">cur_out</span><span class="op">$</span><span class="va">images</span><span class="op">$</span><span class="va">G01_imc</span><span class="op">)</span></code></pre></div>
 <p><img src="cytomapper_files/figure-html/return_images-1.png" width="700"></p>
 <p>However, when plotting solely the coloured images, the image title and scale bar will be lost.</p>
 </div>
-<div id="integration-with-ggplot2-objects" class="section level1">
-<h1 class="hasAnchor">
-<a href="#integration-with-ggplot2-objects" class="anchor"></a>Integration with ggplot2 objects</h1>
-<p>The <a href="https://patchwork.data-imaginist.com/">patchwork</a> and <a href="https://cran.r-project.org/web/packages/cowplot/vignettes/introduction.html">cowplot</a> R packages are popular frameworks to assemble full page figures consisting of multiple sub-panels. This section will highlight how to combine <code>cytomapper</code> plots and ggplot2 objects to create larger figures.</p>
+<div class="section level1">
+<h1 id="integration-with-ggplot2-objects">Integration with ggplot2 objects<a class="anchor" aria-label="anchor" href="#integration-with-ggplot2-objects"></a>
+</h1>
+<p>The <a href="https://patchwork.data-imaginist.com/" class="external-link">patchwork</a> and <a href="https://cran.r-project.org/web/packages/cowplot/vignettes/introduction.html" class="external-link">cowplot</a> R packages are popular frameworks to assemble full page figures consisting of multiple sub-panels. This section will highlight how to combine <code>cytomapper</code> plots and ggplot2 objects to create larger figures.</p>
 <div class="sourceCode" id="cb100"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span><span class="op">(</span><span class="va"><a href="https://wilkelab.org/cowplot/">cowplot</a></span><span class="op">)</span>
-<span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span><span class="op">(</span><span class="va"><a href="https://ggplot2.tidyverse.org">ggplot2</a></span><span class="op">)</span>
+<code class="sourceCode R"><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://wilkelab.org/cowplot/" class="external-link">cowplot</a></span><span class="op">)</span>
+<span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://ggplot2.tidyverse.org" class="external-link">ggplot2</a></span><span class="op">)</span>
 
-<span class="va">g1</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/ggplot.html">ggplot</a></span><span class="op">(</span><span class="va">mtcars</span><span class="op">)</span> <span class="op">+</span> <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/geom_point.html">geom_point</a></span><span class="op">(</span><span class="fu"><a href="https://ggplot2.tidyverse.org/reference/aes.html">aes</a></span><span class="op">(</span><span class="va">cyl</span>, <span class="va">hp</span><span class="op">)</span><span class="op">)</span>
+<span class="va">g1</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/ggplot.html" class="external-link">ggplot</a></span><span class="op">(</span><span class="va">mtcars</span><span class="op">)</span> <span class="op">+</span> <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/geom_point.html" class="external-link">geom_point</a></span><span class="op">(</span><span class="fu"><a href="https://ggplot2.tidyverse.org/reference/aes.html" class="external-link">aes</a></span><span class="op">(</span><span class="va">cyl</span>, <span class="va">hp</span><span class="op">)</span><span class="op">)</span>
 <span class="va">g2</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/plotCells.html">plotCells</a></span><span class="op">(</span><span class="va">pancreasMasks</span>, object <span class="op">=</span> <span class="va">pancreasSCE</span>,
             img_id <span class="op">=</span> <span class="st">"ImageNb"</span>, cell_id <span class="op">=</span> <span class="st">"CellNb"</span>,
             colour_by <span class="op">=</span> <span class="st">"CellType"</span>, return_plot <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></code></pre></div>
 <p><img src="cytomapper_files/figure-html/plot-integration-1.png" width="700"></p>
 <div class="sourceCode" id="cb101"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="va">g2</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://wilkelab.org/cowplot/reference/ggdraw.html">ggdraw</a></span><span class="op">(</span><span class="va">g2</span><span class="op">$</span><span class="va">plot</span>, clip <span class="op">=</span> <span class="st">"on"</span><span class="op">)</span>
+<code class="sourceCode R"><span class="va">g2</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://wilkelab.org/cowplot/reference/ggdraw.html" class="external-link">ggdraw</a></span><span class="op">(</span><span class="va">g2</span><span class="op">$</span><span class="va">plot</span>, clip <span class="op">=</span> <span class="st">"on"</span><span class="op">)</span>
 
-<span class="fu"><a href="https://wilkelab.org/cowplot/reference/plot_grid.html">plot_grid</a></span><span class="op">(</span><span class="va">g1</span>, <span class="va">g2</span><span class="op">)</span></code></pre></div>
+<span class="fu"><a href="https://wilkelab.org/cowplot/reference/plot_grid.html" class="external-link">plot_grid</a></span><span class="op">(</span><span class="va">g1</span>, <span class="va">g2</span><span class="op">)</span></code></pre></div>
 <p><img src="cytomapper_files/figure-html/plot-integration-2.png" width="700"></p>
 </div>
-<div id="saving-images" class="section level1">
-<h1 class="hasAnchor">
-<a href="#saving-images" class="anchor"></a>Saving images</h1>
+<div class="section level1">
+<h1 id="saving-images">Saving images<a class="anchor" aria-label="anchor" href="#saving-images"></a>
+</h1>
 <p>Finally, the user can save the plot by specifying <code>save_plot</code>. The <code>save_plot</code> entry takes a list of two entries: <code>filename</code> and <code>scale</code>. The <code>filename</code> should be a character representing a valid file name ending with <code>.png</code>, <code>.tiff</code> or <code>.jpeg</code>. The <code>scale</code> entry controls the resolution of the image (see <code><a href="../reference/plotting-param.html">?"plotting-param"</a></code> for help). Increasing the scale parameter will increase the resolution of the final image.</p>
 <p>When setting <code>display = "single"</code>, the <code>cytomapper</code> package will save individual images in individual files. The filename will be altered to the form <code>filename_x.png</code> where <code>x</code> is the position of the image in the <code>CytoImageList</code> object or <code>legend</code>.</p>
 </div>
-<div id="gating-cells-on-images" class="section level1">
-<h1 class="hasAnchor">
-<a href="#gating-cells-on-images" class="anchor"></a>Gating cells on images</h1>
+<div class="section level1">
+<h1 id="gating-cells-on-images">Gating cells on images<a class="anchor" aria-label="anchor" href="#gating-cells-on-images"></a>
+</h1>
 <p>The <code>cytomapper</code> package provides the <code>cytomapperShiny</code> function to gate cells based on their expression values and visualizes selected cells on their corresponing images. This selection strategy can be useful if user-defined cell-type labels should be generated for cell-type classification. For details, please refer to the <code><a href="../reference/cytomapperShiny.html">?cytomapperShiny</a></code> manual or the <code>Help</code> button within the shiny application.</p>
 <p>In brief, the <code>cytomapperShiny</code> function takes a <code>SingleCellExperiment</code> and (optionally) either a <code>CytoImageList</code> segmentation mask or a segmentation mask AND a <code>CytoImageList</code> multi-channel image object as input. The user needs to further provide an <code>img_id</code> and <code>cell_id</code> entry (see <a href="#DataFormats">above</a>).</p>
 <p>The user can specify the number of plots (maximal 12 plot, maximal 2 marker per plot), select the individual images (specified in the <code>img_id</code> entry) and the different <code>assay</code> slots of the <code>SingleCellExperiment</code> object. Furthermore, for each plot, up to two markers can be selected for visualziation and gating. Gating is performed in a hierarchical fashion meaning that only the selected cells are displayed on the following plot. As an example: if the user selects certain cells in <code>Plot 1</code>, the expression values of only those cells are displayed in <code>Plot 2</code> and so on. If the user selects only one marker, the expression values are displayed as violin/beeswarm plots; if two markers are specified, expression values are displayed as scatter plots.</p>
 <p>If the user provides a <code>CytoImageList</code> segmentation mask object, the <code>plotCells</code> function is called internally to visualize marker expression as well as the selected cells on the segmentation mask. Pixel-level information is diplayed if the user provides a <code>CytoImageList</code> multi-channel image object. In this setting, the user also needs to provide a segmentation mask object to outline the selected cells on the composite images.</p>
 <p>As a final step, the user can download the selected cells in form of a <code>SingleCellExperiment</code> object. Furthermore, the user can specify a label for the current selection. The gates are stored in the <code>metadata(object)</code> entry. <strong>Of note:</strong> the metadata that was stored in the original object can be accessed via <code>metadata(object)$metadata</code>.</p>
 </div>
-<div id="acknowledgements" class="section level1">
-<h1 class="hasAnchor">
-<a href="#acknowledgements" class="anchor"></a>Acknowledgements</h1>
-<p>We want to thank the <a href="http://www.bodenmillerlab.org">Bodenmiller laboratory</a> for feedback on the package and its functionality. Special thanks goes to Daniel Schulz and Jana Fischer for testing the package.</p>
+<div class="section level1">
+<h1 id="acknowledgements">Acknowledgements<a class="anchor" aria-label="anchor" href="#acknowledgements"></a>
+</h1>
+<p>We want to thank the <a href="http://www.bodenmillerlab.org" class="external-link">Bodenmiller laboratory</a> for feedback on the package and its functionality. Special thanks goes to Daniel Schulz and Jana Fischer for testing the package.</p>
 </div>
-<div id="contributions" class="section level1">
-<h1 class="hasAnchor">
-<a href="#contributions" class="anchor"></a>Contributions</h1>
+<div class="section level1">
+<h1 id="contributions">Contributions<a class="anchor" aria-label="anchor" href="#contributions"></a>
+</h1>
 <p>Nicolas created the first version of <code>cytomapper</code> (named <code>IMCMapper</code>). Nils and Nicolas implemented and maintain the package. Nils and Tobias implemented and maintain the <code>cytomapperShiny</code> function.</p>
 </div>
-<div id="session-info" class="section level1 unnumbered">
-<h1 class="hasAnchor">
-<a href="#session-info" class="anchor"></a>Session info</h1>
-<pre><code>## R version 4.1.1 (2021-08-10)
-## Platform: x86_64-apple-darwin17.0 (64-bit)
-## Running under: macOS Catalina 10.15.7
-## 
-## Matrix products: default
-## BLAS:   /Library/Frameworks/R.framework/Versions/4.1/Resources/lib/libRblas.0.dylib
-## LAPACK: /Library/Frameworks/R.framework/Versions/4.1/Resources/lib/libRlapack.dylib
-## 
-## locale:
-## [1] en_US.UTF-8/en_US.UTF-8/en_US.UTF-8/C/en_US.UTF-8/en_US.UTF-8
-## 
-## attached base packages:
-## [1] parallel  stats4    stats     graphics  grDevices utils     datasets 
-## [8] methods   base     
-## 
-## other attached packages:
-##  [1] ggplot2_3.3.5               cowplot_1.1.1              
-##  [3] cytomapper_1.7.0            SingleCellExperiment_1.14.1
-##  [5] SummarizedExperiment_1.22.0 Biobase_2.52.0             
-##  [7] GenomicRanges_1.44.0        GenomeInfoDb_1.28.4        
-##  [9] IRanges_2.26.0              S4Vectors_0.30.2           
-## [11] BiocGenerics_0.38.0         MatrixGenerics_1.4.3       
-## [13] matrixStats_0.61.0          EBImage_4.34.0             
-## [15] BiocStyle_2.20.2           
-## 
-## loaded via a namespace (and not attached):
-##  [1] bitops_1.0-7           fs_1.5.0               RColorBrewer_1.1-2    
-##  [4] rprojroot_2.0.2        tools_4.1.1            bslib_0.3.1           
-##  [7] svgPanZoom_0.3.4       utf8_1.2.2             R6_2.5.1              
-## [10] HDF5Array_1.20.0       vipor_0.4.5            colorspace_2.0-2      
-## [13] rhdf5filters_1.4.0     raster_3.5-2           withr_2.4.2           
-## [16] sp_1.4-5               gridExtra_2.3          compiler_4.1.1        
-## [19] textshaping_0.3.6      desc_1.4.0             DelayedArray_0.18.0   
-## [22] labeling_0.4.2         bookdown_0.24          sass_0.4.0            
-## [25] scales_1.1.1           pkgdown_1.6.1          systemfonts_1.0.3     
-## [28] stringr_1.4.0          digest_0.6.28          tiff_0.1-8            
-## [31] fftwtools_0.9-11       svglite_2.0.0          rmarkdown_2.11        
-## [34] XVector_0.32.0         jpeg_0.1-9             pkgconfig_2.0.3       
-## [37] htmltools_0.5.2        highr_0.9              fastmap_1.1.0         
-## [40] htmlwidgets_1.5.4      rlang_0.4.12           shiny_1.7.1           
-## [43] farver_2.1.0           jquerylib_0.1.4        jsonlite_1.7.2        
-## [46] BiocParallel_1.26.2    RCurl_1.98-1.5         magrittr_2.0.1        
-## [49] GenomeInfoDbData_1.2.6 Matrix_1.3-4           Rcpp_1.0.7            
-## [52] ggbeeswarm_0.6.0       munsell_0.5.0          Rhdf5lib_1.14.2       
-## [55] fansi_0.5.0            viridis_0.6.2          abind_1.4-5           
-## [58] terra_1.4-11           lifecycle_1.0.1        stringi_1.7.5         
-## [61] yaml_2.2.1             zlibbioc_1.38.0        rhdf5_2.36.0          
-## [64] grid_4.1.1             promises_1.2.0.1       shinydashboard_0.7.2  
-## [67] crayon_1.4.2           lattice_0.20-44        locfit_1.5-9.4        
-## [70] knitr_1.36             pillar_1.6.4           codetools_0.2-18      
-## [73] glue_1.4.2             evaluate_0.14          BiocManager_1.30.16   
-## [76] png_0.1-7              vctrs_0.3.8            httpuv_1.6.3          
-## [79] gtable_0.3.0           cachem_1.0.6           xfun_0.27             
-## [82] mime_0.12              xtable_1.8-4           later_1.3.0           
-## [85] viridisLite_0.4.0      ragg_1.1.3             tibble_3.1.5          
-## [88] beeswarm_0.4.0         memoise_2.0.0          ellipsis_0.3.2</code></pre>
+<div class="section level1 unnumbered">
+<h1 id="session-info">Session info<a class="anchor" aria-label="anchor" href="#session-info"></a>
+</h1>
+<pre><code><span class="co">## R version 4.1.2 (2021-11-01)</span>
+<span class="co">## Platform: x86_64-apple-darwin17.0 (64-bit)</span>
+<span class="co">## Running under: macOS Big Sur 10.16</span>
+<span class="co">## </span>
+<span class="co">## Matrix products: default</span>
+<span class="co">## BLAS:   /Library/Frameworks/R.framework/Versions/4.1/Resources/lib/libRblas.0.dylib</span>
+<span class="co">## LAPACK: /Library/Frameworks/R.framework/Versions/4.1/Resources/lib/libRlapack.dylib</span>
+<span class="co">## </span>
+<span class="co">## locale:</span>
+<span class="co">## [1] en_US.UTF-8/en_US.UTF-8/en_US.UTF-8/C/en_US.UTF-8/en_US.UTF-8</span>
+<span class="co">## </span>
+<span class="co">## attached base packages:</span>
+<span class="co">## [1] stats4    stats     graphics  grDevices utils     datasets  methods  </span>
+<span class="co">## [8] base     </span>
+<span class="co">## </span>
+<span class="co">## other attached packages:</span>
+<span class="co">##  [1] ggplot2_3.3.5               cowplot_1.1.1              </span>
+<span class="co">##  [3] cytomapper_1.7.1            SingleCellExperiment_1.16.0</span>
+<span class="co">##  [5] SummarizedExperiment_1.24.0 Biobase_2.54.0             </span>
+<span class="co">##  [7] GenomicRanges_1.46.1        GenomeInfoDb_1.30.0        </span>
+<span class="co">##  [9] IRanges_2.28.0              S4Vectors_0.32.3           </span>
+<span class="co">## [11] BiocGenerics_0.40.0         MatrixGenerics_1.6.0       </span>
+<span class="co">## [13] matrixStats_0.61.0          EBImage_4.36.0             </span>
+<span class="co">## [15] BiocStyle_2.22.0           </span>
+<span class="co">## </span>
+<span class="co">## loaded via a namespace (and not attached):</span>
+<span class="co">##  [1] bitops_1.0-7           fs_1.5.2               RColorBrewer_1.1-2    </span>
+<span class="co">##  [4] rprojroot_2.0.2        tools_4.1.2            bslib_0.3.1           </span>
+<span class="co">##  [7] svgPanZoom_0.3.4       utf8_1.2.2             R6_2.5.1              </span>
+<span class="co">## [10] vipor_0.4.5            HDF5Array_1.22.1       colorspace_2.0-2      </span>
+<span class="co">## [13] raster_3.5-11          rhdf5filters_1.6.0     withr_2.4.3           </span>
+<span class="co">## [16] sp_1.4-6               gridExtra_2.3          compiler_4.1.2        </span>
+<span class="co">## [19] textshaping_0.3.6      desc_1.4.0             DelayedArray_0.20.0   </span>
+<span class="co">## [22] labeling_0.4.2         bookdown_0.24          sass_0.4.0            </span>
+<span class="co">## [25] scales_1.1.1           nnls_1.4               pkgdown_2.0.1         </span>
+<span class="co">## [28] systemfonts_1.0.3      stringr_1.4.0          digest_0.6.29         </span>
+<span class="co">## [31] tiff_0.1-10            fftwtools_0.9-11       svglite_2.0.0         </span>
+<span class="co">## [34] rmarkdown_2.11         XVector_0.34.0         jpeg_0.1-9            </span>
+<span class="co">## [37] pkgconfig_2.0.3        htmltools_0.5.2        highr_0.9             </span>
+<span class="co">## [40] fastmap_1.1.0          htmlwidgets_1.5.4      rlang_0.4.12          </span>
+<span class="co">## [43] shiny_1.7.1            farver_2.1.0           jquerylib_0.1.4       </span>
+<span class="co">## [46] jsonlite_1.7.2         BiocParallel_1.28.3    RCurl_1.98-1.5        </span>
+<span class="co">## [49] magrittr_2.0.1         GenomeInfoDbData_1.2.7 Matrix_1.3-4          </span>
+<span class="co">## [52] Rcpp_1.0.7             ggbeeswarm_0.6.0       munsell_0.5.0         </span>
+<span class="co">## [55] Rhdf5lib_1.16.0        fansi_0.5.0            viridis_0.6.2         </span>
+<span class="co">## [58] abind_1.4-5            terra_1.4-22           lifecycle_1.0.1       </span>
+<span class="co">## [61] stringi_1.7.6          yaml_2.2.1             zlibbioc_1.40.0       </span>
+<span class="co">## [64] rhdf5_2.38.0           grid_4.1.2             parallel_4.1.2        </span>
+<span class="co">## [67] promises_1.2.0.1       shinydashboard_0.7.2   crayon_1.4.2          </span>
+<span class="co">## [70] lattice_0.20-45        locfit_1.5-9.4         knitr_1.37            </span>
+<span class="co">## [73] pillar_1.6.4           codetools_0.2-18       glue_1.6.0            </span>
+<span class="co">## [76] evaluate_0.14          BiocManager_1.30.16    png_0.1-7             </span>
+<span class="co">## [79] vctrs_0.3.8            httpuv_1.6.4           gtable_0.3.0          </span>
+<span class="co">## [82] purrr_0.3.4            cachem_1.0.6           xfun_0.29             </span>
+<span class="co">## [85] mime_0.12              xtable_1.8-4           later_1.3.0           </span>
+<span class="co">## [88] viridisLite_0.4.0      ragg_1.2.1             tibble_3.1.6          </span>
+<span class="co">## [91] beeswarm_0.4.0         memoise_2.0.1          ellipsis_0.3.2</span></code></pre>
 </div>
-<div id="references" class="section level1 unnumbered">
-<h1 class="hasAnchor">
-<a href="#references" class="anchor"></a>References</h1>
+<div class="section level1 unnumbered">
+<h1 id="references">References<a class="anchor" aria-label="anchor" href="#references"></a>
+</h1>
 <div id="refs" class="references">
 <div id="ref-angelo2014mibi">
 <p>Angelo, Michael, Sean C. Bendall, Rachel Finck, Matthew B. Hale, Chuck Hitzman, Alexander D. Borowsky, Richard M. Levenson, et al. 2014. “Multiplexed Ion Beam Imaging of Human Breast Tumors.” <em>Nature Medicine</em> 20 (4): 436–42.</p>
@@ -981,11 +978,13 @@ Plot customization example.
 
 
       <footer><div class="copyright">
-  <p>Developed by Nils Eling, Nicolas Damond.</p>
+  <p></p>
+<p>Developed by Nils Eling, Nicolas Damond.</p>
 </div>
 
 <div class="pkgdown">
-  <p>Site built with <a href="https://pkgdown.r-lib.org/">pkgdown</a> 1.6.1.</p>
+  <p></p>
+<p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.1.</p>
 </div>
 
       </footer>
@@ -993,6 +992,8 @@ Plot customization example.
 
   
 
+
+  
 
   </body>
 </html>
