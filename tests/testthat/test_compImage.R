@@ -81,6 +81,12 @@ test_that("compImage function works", {
     plotPixels(pancreasImages, colour_by = "CDH")
     plotPixels(cur_out, colour_by = "Ho165Di")
     
+    expect_s4_class(cur_out, "CytoImageList")
+    expect_equal(cur_out@int_metadata, sm_images@int_metadata)
+    expect_equal(cur_out@elementType, sm_images@elementType)
+    expect_equal(cur_out@elementMetadata, sm_images@elementMetadata)
+    expect_equal(cur_out@metadata, sm_images@metadata)
+    
     expect_equal(as.vector(as.array(cur_out$E34_imc)[1:5, 1:5, 1:5]),
                  c(2.19091247942997, 2.84356252686191, 3.3673723610464, 3.14572847700658, 
                    0.983622669305094, 0.222899337345514, 1.96485523758383, 0.975483504321522, 
@@ -464,6 +470,12 @@ test_that("compImage function works", {
     expect_s4_class(cur_images_ondisk$J02_imc, "DelayedArray")
     
     expect_silent(cur_out_2 <- compImage(cur_images_ondisk, sm_real)) 
+    
+    expect_s4_class(cur_out_2, "CytoImageList")
+    expect_equal(cur_out_2@int_metadata, sm_images@int_metadata)
+    expect_equal(cur_out_2@elementType, sm_images@elementType)
+    expect_equal(cur_out_2@elementMetadata, sm_images@elementMetadata)
+    expect_equal(cur_out_2@metadata, sm_images@metadata)
     
     expect_equal(as.array(cur_out$E34_imc),
                  as.array(cur_out_2$E34_imc))
