@@ -73,6 +73,7 @@ compImage <- function(object, sm, overwrite = FALSE, BPPARAM = SerialParam()){
     .valid.compImage.input(object, sm)
     
     cur_channels <- channelNames(object)
+    cur_meta <- mcols(object)
     
     if (is(object[[1]], "Image")) {
         # in memory    
@@ -97,6 +98,7 @@ compImage <- function(object, sm, overwrite = FALSE, BPPARAM = SerialParam()){
     }
     
     channelNames(object) <- cur_channels
+    mcols(object) <- cur_meta
     
     return(object)
 }
