@@ -1,8 +1,8 @@
 pandoc: 2.7.3
-pkgdown: 2.0.1
+pkgdown: 2.0.2
 pkgdown_sha: ~
 articles:
   cytomapper: cytomapper.html
   cytomapper_ondisk: cytomapper_ondisk.html
-last_built: 2021-12-28T18:34Z
+last_built: 2022-01-18T11:12Z
 

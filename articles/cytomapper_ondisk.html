@@ -84,7 +84,7 @@
       Department for Quantitative Biomedicine, University of Zurich<br><a class="author_email" href="mailto:#"></a><a href="mailto:nils.eling@dqbm.uzh.ch" class="email">nils.eling@dqbm.uzh.ch</a>
       </address>
                   
-            <h4 data-toc-skip class="date">28 December 2021</h4>
+            <h4 data-toc-skip class="date">18 January 2022</h4>
       
       <small class="dont-index">Source: <a href="https://github.com/BodenmillerGroup/cytomapper/blob/HEAD/vignettes/cytomapper_ondisk.Rmd" class="external-link"><code>vignettes/cytomapper_ondisk.Rmd</code></a></small>
       <div class="hidden name"><code>cytomapper_ondisk.Rmd</code></div>
@@ -97,14 +97,14 @@
       <p>To scale the functionality of the <code>cytomapper</code> package, images can be stored on disk. For this, images are written onto disk as arrays in hdf5 format. Writing and accessing these arrays is facilitated by the <code>HDF5Array</code> and <code>DelayedArray</code> Bioconductor packages. The functionality of <code>cytomapper</code>remains the same, the only change is how images are read in. This vignette will give an overview on how to work with images stored on disk.</p>
     </div>
     
-<div class="section level1">
-<h1 id="Introduction">Introduction<a class="anchor" aria-label="anchor" href="#Introduction"></a>
-</h1>
+<div class="section level2">
+<h2 id="Introduction">Introduction<a class="anchor" aria-label="anchor" href="#Introduction"></a>
+</h2>
 <p><em><a href="https://bioconductor.org/packages/3.14/HDF5Array" class="external-link">HDF5Array</a></em> and <em><a href="https://bioconductor.org/packages/3.14/DelayedArray" class="external-link">DelayedArray</a></em> are convenient Bioconductor packages to work with arrays “on disk” instead of “in memory”. The <code>cytomapper</code> package builds upon these tools to allow storing image data on disk. While this facilitates the handling of hundreds to thousand of images in parallel, little changes are experienced from the user perspective. Here, we explain which <code>cytomapper</code> function are effected by storing images on disk.</p>
 </div>
-<div class="section level1">
-<h1 id="ReadingData">Reading in data to disk<a class="anchor" aria-label="anchor" href="#ReadingData"></a>
-</h1>
+<div class="section level2">
+<h2 id="ReadingData">Reading in data to disk<a class="anchor" aria-label="anchor" href="#ReadingData"></a>
+</h2>
 <p>The <code>loadImages</code> function takes extra arguments to specify if images should be stored on disk (<code>on_disk</code>) and where to store them (<code>h5FilesPath</code>). When images should be stored for longer than the current R session, the <code>h5FilesPath</code> needs to be set to a permanent directory. The <code>HDF5Array</code> package provides the <code>getHDF5DumpDir</code> function, which initialize a temporary directory, which will be deleted once the session closes. This is what we will use here for demonstration purposes.</p>
 <div class="sourceCode" id="cb1"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://bioconductor.org/packages/HDF5Array" class="external-link">HDF5Array</a></span><span class="op">)</span>
@@ -141,9 +141,9 @@
 <p>This function call reads in the .tiff images before writing them as .h5 files to the indicated directory. It generates a <code>CytoImageList</code> object that contains <code>HDF5Array</code> or <code>DelayedArray</code> objects (instead of <code>Image</code> objects) in each slot, which references the data in the .h5 files. The name of the array within the .h5 file is automatically set as the original filename and cannot be changed easily from within R. Writing the images to disk is slow and therefore less efficient compared to keeping images in memory. However, when working with hundreds of images in parallel, all images remain accessible from within the R session if they are stored on disk. In conclusion: when working with small image sets it is recommended reading them into memory (<code>on_disk = FALSE</code>, default), while large image sets should be written to disk (<code>on_disk = TRUE</code>). When reading in the same images multiple times, the .h5 files will always be replaced.</p>
 <p>Please follow the <a href="https://bioconductor.org/packages/release/bioc/vignettes/cytomapper/inst/doc/cytomapper.html" class="external-link">main vignette</a> for instructions on how to work with multi-channel images in R.</p>
 </div>
-<div class="section level1">
-<h1 id="Converting">Converting from on disk to memory and back<a class="anchor" aria-label="anchor" href="#Converting"></a>
-</h1>
+<div class="section level2">
+<h2 id="Converting">Converting from on disk to memory and back<a class="anchor" aria-label="anchor" href="#Converting"></a>
+</h2>
 <p>Existing <code>CytoImageList</code> objects, which contain individual <code>Image</code> objects in memory can be converted into <code>CytoImageList</code> objects storing <code>DelayedArray</code> or <code>HDF5Array</code> objects on disk. For this the following function calls can be used:</p>
 <div class="sourceCode" id="cb5"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="fu"><a href="https://rdrr.io/r/utils/data.html" class="external-link">data</a></span><span class="op">(</span><span class="st">"pancreasImages"</span><span class="op">)</span>
@@ -194,7 +194,7 @@
 <span class="fu"><a href="https://rdrr.io/pkg/DelayedArray/man/showtree.html" class="external-link">seed</a></span><span class="op">(</span><span class="va">pancreasImages_onDisk</span><span class="op">$</span><span class="va">E34_imc</span><span class="op">)</span></code></pre></div>
 <pre><code><span class="co">## An object of class "HDF5ArraySeed"</span>
 <span class="co">## Slot "filepath":</span>
-<span class="co">## [1] "/private/var/folders/24/8k48jl6d249_n_qfxwsl6xvm0000gn/T/RtmpZlnBYG/HDF5Array_dump/E34_imc.h5"</span>
+<span class="co">## [1] "/private/var/folders/24/8k48jl6d249_n_qfxwsl6xvm0000gn/T/RtmpH198qT/HDF5Array_dump/E34_imc.h5"</span>
 <span class="co">## </span>
 <span class="co">## Slot "name":</span>
 <span class="co">## [1] "/E34_imc"</span>
@@ -229,9 +229,9 @@
 <span class="fu"><a href="https://rdrr.io/r/base/identical.html" class="external-link">identical</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">as.list</a></span><span class="op">(</span><span class="va">pancreasImages_inMemory</span><span class="op">)</span>, <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">as.list</a></span><span class="op">(</span><span class="va">pancreasImages</span><span class="op">)</span><span class="op">)</span></code></pre></div>
 <pre><code><span class="co">## [1] TRUE</span></code></pre>
 </div>
-<div class="section level1">
-<h1 id="Functionality">Effects on package functionality<a class="anchor" aria-label="anchor" href="#Functionality"></a>
-</h1>
+<div class="section level2">
+<h2 id="Functionality">Effects on package functionality<a class="anchor" aria-label="anchor" href="#Functionality"></a>
+</h2>
 <p>While most functions of the <code>cytomapper</code> package natively support images stored on disk, there are three exceptions: the <code>normalize</code>, <code>setChannels</code> and <code>mergeChannels</code> functions.</p>
 <p>The <code>normalize</code> function will store the normalized images as a second dataset in the same .h5 file as the original data.</p>
 <div class="sourceCode" id="cb17"><pre class="downlit sourceCode r">
@@ -248,7 +248,7 @@
 <span class="fu"><a href="https://rdrr.io/pkg/DelayedArray/man/showtree.html" class="external-link">seed</a></span><span class="op">(</span><span class="va">pancreasImages_norm</span><span class="op">$</span><span class="va">E34_imc</span><span class="op">)</span></code></pre></div>
 <pre><code><span class="co">## An object of class "HDF5ArraySeed"</span>
 <span class="co">## Slot "filepath":</span>
-<span class="co">## [1] "/private/var/folders/24/8k48jl6d249_n_qfxwsl6xvm0000gn/T/RtmpZlnBYG/HDF5Array_dump/E34_imc.h5"</span>
+<span class="co">## [1] "/private/var/folders/24/8k48jl6d249_n_qfxwsl6xvm0000gn/T/RtmpH198qT/HDF5Array_dump/E34_imc.h5"</span>
 <span class="co">## </span>
 <span class="co">## Slot "name":</span>
 <span class="co">## [1] "/E34_imc_norm"</span>
@@ -299,7 +299,7 @@
 <span class="fu"><a href="https://rdrr.io/pkg/DelayedArray/man/showtree.html" class="external-link">seed</a></span><span class="op">(</span><span class="va">channels3</span><span class="op">$</span><span class="va">E34_imc</span><span class="op">)</span></code></pre></div>
 <pre><code><span class="co">## An object of class "HDF5ArraySeed"</span>
 <span class="co">## Slot "filepath":</span>
-<span class="co">## [1] "/private/var/folders/24/8k48jl6d249_n_qfxwsl6xvm0000gn/T/RtmpZlnBYG/HDF5Array_dump/test/E34_imc.h5"</span>
+<span class="co">## [1] "/private/var/folders/24/8k48jl6d249_n_qfxwsl6xvm0000gn/T/RtmpH198qT/HDF5Array_dump/test/E34_imc.h5"</span>
 <span class="co">## </span>
 <span class="co">## Slot "name":</span>
 <span class="co">## [1] "/E34_imc"</span>
@@ -319,9 +319,9 @@
 <span class="co">## Slot "first_val":</span>
 <span class="co">## [1] 2.235787</span></code></pre>
 </div>
-<div class="section level1 unnumbered">
-<h1 id="session-info">Session info<a class="anchor" aria-label="anchor" href="#session-info"></a>
-</h1>
+<div class="section level2">
+<h2 id="session-info">Session info<a class="anchor" aria-label="anchor" href="#session-info"></a>
+</h2>
 <pre><code><span class="co">## R version 4.1.2 (2021-11-01)</span>
 <span class="co">## Platform: x86_64-apple-darwin17.0 (64-bit)</span>
 <span class="co">## Running under: macOS Big Sur 10.16</span>
@@ -356,32 +356,32 @@
 <span class="co">## [13] rhdf5filters_1.6.0     sp_1.4-6               gridExtra_2.3         </span>
 <span class="co">## [16] compiler_4.1.2         textshaping_0.3.6      desc_1.4.0            </span>
 <span class="co">## [19] bookdown_0.24          sass_0.4.0             scales_1.1.1          </span>
-<span class="co">## [22] nnls_1.4               pkgdown_2.0.1          systemfonts_1.0.3     </span>
+<span class="co">## [22] nnls_1.4               pkgdown_2.0.2          systemfonts_1.0.3     </span>
 <span class="co">## [25] stringr_1.4.0          digest_0.6.29          tiff_0.1-10           </span>
 <span class="co">## [28] fftwtools_0.9-11       svglite_2.0.0          rmarkdown_2.11        </span>
 <span class="co">## [31] XVector_0.34.0         jpeg_0.1-9             pkgconfig_2.0.3       </span>
 <span class="co">## [34] htmltools_0.5.2        fastmap_1.1.0          htmlwidgets_1.5.4     </span>
 <span class="co">## [37] rlang_0.4.12           shiny_1.7.1            jquerylib_0.1.4       </span>
-<span class="co">## [40] jsonlite_1.7.2         BiocParallel_1.28.3    RCurl_1.98-1.5        </span>
-<span class="co">## [43] magrittr_2.0.1         GenomeInfoDbData_1.2.7 Rcpp_1.0.7            </span>
+<span class="co">## [40] jsonlite_1.7.3         BiocParallel_1.28.3    RCurl_1.98-1.5        </span>
+<span class="co">## [43] magrittr_2.0.1         GenomeInfoDbData_1.2.7 Rcpp_1.0.8            </span>
 <span class="co">## [46] ggbeeswarm_0.6.0       munsell_0.5.0          Rhdf5lib_1.16.0       </span>
-<span class="co">## [49] fansi_0.5.0            viridis_0.6.2          abind_1.4-5           </span>
-<span class="co">## [52] terra_1.4-22           lifecycle_1.0.1        stringi_1.7.6         </span>
+<span class="co">## [49] fansi_1.0.2            viridis_0.6.2          abind_1.4-5           </span>
+<span class="co">## [52] terra_1.5-12           lifecycle_1.0.1        stringi_1.7.6         </span>
 <span class="co">## [55] yaml_2.2.1             zlibbioc_1.40.0        grid_4.1.2            </span>
 <span class="co">## [58] parallel_4.1.2         promises_1.2.0.1       shinydashboard_0.7.2  </span>
 <span class="co">## [61] crayon_1.4.2           lattice_0.20-45        locfit_1.5-9.4        </span>
 <span class="co">## [64] knitr_1.37             pillar_1.6.4           codetools_0.2-18      </span>
 <span class="co">## [67] glue_1.6.0             evaluate_0.14          BiocManager_1.30.16   </span>
-<span class="co">## [70] png_0.1-7              vctrs_0.3.8            httpuv_1.6.4          </span>
+<span class="co">## [70] png_0.1-7              vctrs_0.3.8            httpuv_1.6.5          </span>
 <span class="co">## [73] gtable_0.3.0           purrr_0.3.4            cachem_1.0.6          </span>
 <span class="co">## [76] ggplot2_3.3.5          xfun_0.29              mime_0.12             </span>
 <span class="co">## [79] xtable_1.8-4           later_1.3.0            viridisLite_0.4.0     </span>
 <span class="co">## [82] ragg_1.2.1             tibble_3.1.6           beeswarm_0.4.0        </span>
 <span class="co">## [85] memoise_2.0.1          ellipsis_0.3.2</span></code></pre>
 </div>
-<div class="section level1">
-<h1 id="references">References<a class="anchor" aria-label="anchor" href="#references"></a>
-</h1>
+<div class="section level2">
+<h2 id="references">References<a class="anchor" aria-label="anchor" href="#references"></a>
+</h2>
 </div>
   </div>
 
@@ -402,7 +402,7 @@
 
 <div class="pkgdown">
   <p></p>
-<p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.1.</p>
+<p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.2.</p>
 </div>
 
       </footer>
