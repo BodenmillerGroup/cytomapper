@@ -189,6 +189,10 @@ plotPixels <- function(
     cur_limits <- list()
     
     is_Image_mask <- is(mask[[1]], "Image")
+    
+    if (browser) {
+        .setup_browser(image)
+    }
 
     # Colour the images
     # Here, a SimpleList is returned that allows storing colour Images

@@ -1118,3 +1118,49 @@
     }
 }
 
+# Create a browser widget
+.setup_browser <- function(image){
+    
+    tmpDir <- tempdir()
+    
+    cur_dims <- vapply(image, dim, FUN.VALUE = numeric(length(dim(image[[1]]))))
+    m_width <- max(cur_dims[1L,])
+    m_height <- max(cur_dims[2L,])
+    
+    frames = seq_len(numberOfFrames(x, type='render'))
+    dependencies = NULL
+    
+    if (!dir.exists(tmpDir) && !dir.create(tmpDir)) {
+        stop("Error creating temporary directory.")
+    }
+        
+    files <- file.path(tmpDir, paste0(names(image), ".png"))
+        
+    dependencies <- htmlDependency(
+            name = basename(tmpDir),
+            version = "0",
+            src = list(tmpDir)
+    )
+        
+    filePath <- file.path(sprintf("%s-%s", dependencies$name, dependencies$version), basename(files))
+    filePath <- file.path("lib", filePath)
+    
+    # widget options
+    opts = list(
+        data = filePath,
+        width = m_width,
+        height = m_height
+    )
+    
+    # create widget
+    do.call(createWidget, c(list(
+        name = 'displayWidget',
+        package = 'cytomapper',
+        x = opts,
+        sizingPolicy = sizingPolicy(padding = 0, browser.fill = TRUE),
+        dependencies = dependencies),
+        dotsArgs)
+    )
+    
+}
+

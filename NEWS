@@ -165,3 +165,6 @@ Changes in version 1.5.4 (2021-09-17):
 Changes in version 1.7.1 (2021-12-28):
 + Added compImage function for channel spillover compensation
 
+Changes in version 1.7.1 (2022-02-10):
++ Added option to display images in browser
+

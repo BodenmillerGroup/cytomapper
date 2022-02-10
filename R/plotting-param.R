@@ -107,6 +107,8 @@
 #' set to "single", individual images are plotted in single graphics devices.
 #' The second option is useful when saving individual images in pdf format or
 #' when displaying in Rmarkdown files.
+#' @param browser single logical indicating if images should be interactively
+#' displayed in a browser window.
 #' @param scale logical indicating whether to scale each feature individually to
 #' its minimum/maximum across the SingleCellExperiment object (see
 #' \code{\link{plotCells}}) or across all displayed images (see
@@ -212,7 +214,7 @@ NULL
     supported <- c("scale_bar", "image_title", "missing_colour",
                     "background_colour", "save_plot", "return_plot",
                     "return_images", "legend", "margin", "display",
-                    "scale", "interpolate", "thick")
+                    "scale", "interpolate", "thick", "browser")
     not_supported <- cur_entries[!(cur_entries %in% supported)]
     if(length(not_supported) > 0L){
         stop("Entries ", paste0("'", not_supported, "'",
@@ -302,7 +304,7 @@ NULL
         dotArgs$margin <- dotArgs$margin
     }
 
-    # return_images
+    # display
     if(!("display" %in% names(dotArgs))){
         dotArgs$display <- "all"
     } else {
@@ -311,6 +313,16 @@ NULL
             stop("Invalid 'display' entry.")
         }
         dotArgs$display <- dotArgs$display
+    }
+    
+    # browser
+    if(!("browser" %in% names(dotArgs))){
+        dotArgs$browser <- FALSE
+    } else {
+        if(!is.logical(dotArgs$browser)){
+            stop("Invalid 'browser' entry.")
+        }
+        dotArgs$browser <- dotArgs$browser
     }
 
     # scale
