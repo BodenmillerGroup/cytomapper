@@ -1127,9 +1127,6 @@
     m_width <- max(cur_dims[1L,])
     m_height <- max(cur_dims[2L,])
     
-    frames = seq_len(numberOfFrames(x, type='render'))
-    dependencies = NULL
-    
     if (!dir.exists(tmpDir) && !dir.create(tmpDir)) {
         stop("Error creating temporary directory.")
     }
@@ -1155,11 +1152,10 @@
     # create widget
     do.call(createWidget, c(list(
         name = 'displayWidget',
-        package = 'cytomapper',
+        package = 'EBImage',
         x = opts,
         sizingPolicy = sizingPolicy(padding = 0, browser.fill = TRUE),
-        dependencies = dependencies),
-        dotsArgs)
+        dependencies = dependencies))
     )
     
 }
