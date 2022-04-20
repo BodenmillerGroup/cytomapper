@@ -142,6 +142,7 @@ test_that("On disk: plotting-param: save_plot can be set.", {
   data("pancreasImages")
     
   skip_on_ci()
+  skip_on_bioc()
   
   cur_path <- tempdir()
   on.exit(unlink(cur_path))

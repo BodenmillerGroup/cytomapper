@@ -211,3 +211,82 @@ test_that("On disk: getHDF5DumpDir works.", {
     expect_true(file.remove(file.path(cur_path, "G01_mask.h5")))
     expect_true(file.remove(file.path(cur_path, "J02_mask.h5")))
 })
+
+test_that("On disk parallelisation: loadImages function reads in correct objects on disk.", {
+    
+    skip_on_os(os = "windows")
+    
+    path <- system.file("extdata", package = "cytomapper")
+    single_file <- system.file("extdata/E34_mask.tiff",
+                               package = "cytomapper")
+    
+    # Single file
+    cur_path <- tempdir()
+    on.exit(unlink(cur_path))
+    
+    ## Parallelisation
+    expect_true(file.remove(file.path(cur_path, paste0(sub("\\.[^.]*$", "", 
+                                                           basename(single_file)), ".h5"))))
+    expect_silent(cur_file <- loadImages(single_file, on_disk = TRUE, 
+                                         h5FilesPath = cur_path, BPPARAM = BiocParallel::bpparam()))
+    expect_s4_class(cur_file, "CytoImageList")
+    expect_true(file.exists(file.path(cur_path, paste0(sub("\\.[^.]*$", "", 
+                                                           basename(single_file)), ".h5"))))
+    
+    expect_true(file.remove(file.path(cur_path, paste0(sub("\\.[^.]*$", "", 
+                                                           basename(single_file)), ".h5"))))
+    
+    ## Parallelisation
+    expect_true(file.remove(file.path(cur_path, "E34_imc.h5")))
+    expect_true(file.remove(file.path(cur_path, "G01_imc.h5")))
+    expect_true(file.remove(file.path(cur_path, "J02_imc.h5")))
+    expect_silent(cur_files <- loadImages(path, pattern = "_imc.tiff",
+                                          on_disk = TRUE, h5FilesPath = cur_path, 
+                                          BPPARAM = BiocParallel::bpparam()))
+    expect_s4_class(cur_files, "CytoImageList")
+    expect_equal(length(cur_files), 3L)
+    
+    expect_true(file.exists(file.path(cur_path, "E34_imc.h5")))
+    expect_true(file.exists(file.path(cur_path, "G01_imc.h5")))
+    expect_true(file.exists(file.path(cur_path, "J02_imc.h5")))
+})
+
+test_that("On disk parallelisation: getHDF5DumpDir works.", {
+    
+    skip_on_os(os = "windows")
+    
+    path <- system.file("extdata", package = "cytomapper")
+    single_file <- system.file("extdata/E34_mask.tiff",
+                               package = "cytomapper")
+    
+    cur_path <- HDF5Array::getHDF5DumpDir()
+    on.exit(unlink(cur_path))
+    
+    ## Parallelisation
+    expect_true(file.remove(file.path(cur_path, paste0(sub("\\.[^.]*$", "", 
+                                                           basename(single_file)), ".h5"))))
+    expect_silent(cur_file <- loadImages(single_file, on_disk = TRUE, 
+                                         h5FilesPath = cur_path, BPPARAM = BiocParallel::bpparam()))
+    expect_s4_class(cur_file, "CytoImageList")
+    expect_true(file.exists(file.path(cur_path, paste0(sub("\\.[^.]*$", "", 
+                                                           basename(single_file)), ".h5"))))
+    
+    expect_true(file.remove(file.path(cur_path, paste0(sub("\\.[^.]*$", "", 
+                                                           basename(single_file)), ".h5"))))
+    
+    ## Parallelisation
+    expect_true(file.remove(file.path(cur_path, "E34_imc.h5")))
+    expect_true(file.remove(file.path(cur_path, "G01_imc.h5")))
+    expect_true(file.remove(file.path(cur_path, "J02_imc.h5")))
+    expect_silent(cur_files <- loadImages(path, pattern = "_imc.tiff",
+                                          on_disk = TRUE, h5FilesPath = cur_path, 
+                                          BPPARAM = BiocParallel::bpparam()))
+    expect_s4_class(cur_files, "CytoImageList")
+    expect_equal(length(cur_files), 3L)
+    
+    expect_true(file.exists(file.path(cur_path, "E34_imc.h5")))
+    expect_true(file.exists(file.path(cur_path, "G01_imc.h5")))
+    expect_true(file.exists(file.path(cur_path, "J02_imc.h5")))
+    
+})
+
