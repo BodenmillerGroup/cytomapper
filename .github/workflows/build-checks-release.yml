@@ -9,7 +9,7 @@ on:
 jobs:
   R-CMD-check:
     runs-on: ubuntu-latest
-    container: rocker/r-ver:4.1.0
+    container: rocker/r-ver:4.2
 
     steps:
       - uses: actions/checkout@v2
@@ -31,8 +31,8 @@ jobs:
       - name: Install dependencies
         run: |
          install.packages("BiocManager")
-         install.packages("https://cran.rstudio.com/src/contrib/matrixStats_0.61.0.tar.gz")
          remotes::install_deps(dependencies = TRUE, repos = BiocManager::repositories(), Ncpu = 2L)
+         BiocManager::install("matrixStats", force = TRUE)
         shell: Rscript {0}
         
       - name: Find PhantomJS path
