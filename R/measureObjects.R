@@ -4,7 +4,8 @@
 #' \code{measureObjects} function computes intensity features (also referred to
 #' as basic features; e.g. mean intensity), shape features (e.g. area), moment
 #' features (e.g. position) and haralick features. These features are returned
-#' in form of a \linkS4class{SingleCellExperiment} object.
+#' in form of a \linkS4class{SingleCellExperiment} or 
+#' \linkS4class{SpatialExperiment} object.
 #'
 #' @param mask a \code{\linkS4class{CytoImageList}} object containing single-channel
 #' \code{\linkS4class{Image}} or \code{\linkS4class{HDF5Array}} objects.
@@ -15,13 +16,16 @@
 #' objects, where each channel indicates the measured pixel intensities.
 #' @param img_id character specifying the \code{mcols(image)} and
 #' \code{mcols(mask)} entry, in which the image IDs are stored.
+#' @param return_as single character specifying the class of the returned object.
+#' This is either \code{"sce"} to return a \code{SingleCellExperiment} (default)
+#' or \code{"spe"} to return a \code{SpatialExperiment} object. 
 #' @param feature_types character vector or string indicating which features to
 #' compute. Needs to contain \code{"basic"}. Optionally, \code{"shape"},
 #' \code{"moment"} and \code{"haralick"} are allowed. Default \code{"basic"},
 #' \code{"shape"} and \code{"moment"}.
 #' @param basic_feature string indicating which intensity measurement per object
 #' and channel should be used to populate the \code{counts(x)} slot; where
-#' \code{x} is the returned \code{SingleCellExperiment} object. Default
+#' \code{x} is the returned object. Default
 #' \code{"mean"} but \code{"sd"}, \code{"mad"} and \code{"q*"} allowed. Here,
 #' \code{*} indicates the computed quantile (see \code{basic_quantiles}).
 #' @param basic_quantiles numeric vector or single number indicating which
@@ -53,18 +57,20 @@
 #' See \code{\linkS4class{MulticoreParam}} for information on how to use multiple
 #' cores for parallelised processing.
 #'
-#' @return A \linkS4class{SingleCellExperiment} object (see details)
+#' @return A \linkS4class{SingleCellExperiment} or 
+#' \linkS4class{SpatialExperiment} object (see details)
 #'
-#' @section The returned \linkS4class{SingleCellExperiment} objects:
-#' The returned SingleCellExperiment object \code{sce} contains a single assay.
-#' This assay contains individual objects in columns and channels in rows. Each
-#' entry summarises the intensities per object and channel. This summary
-#' statistic is typically the mean intensity per object and channel. However,
-#' other summary statistics can be computed. When the mean intensity per object
-#' and channel is computed (default), the assay is accessible via
-#' \code{counts(sce)}. Otherwise, the assay needs to be accessed via
-#' \code{assay(sce, "counts_*")}, where \code{*} indicates the argument to
-#' \code{basic_feature}.
+#' @section The returned objects:
+#' By default, a \code{SingleCellExperiment} object is returned. When setting
+#' \code{return_as = "spe"}, the returned object is of class
+#' \code{SpatialExperiment}. The returned object contains a single assay. This
+#' assay contains individual objects in columns and channels in rows. Each entry
+#' summarises the intensities per object and channel. This summary statistic is
+#' typically the mean intensity per object and channel. However, other summary
+#' statistics can be computed. When the mean intensity per object and channel is
+#' computed (default), the assay is accessible via \code{counts(sce)}.
+#' Otherwise, the assay needs to be accessed via \code{assay(sce, "counts_*")},
+#' where \code{*} indicates the argument to \code{basic_feature}.
 #'
 #' The \code{colData(x)} entry is populated by the computed shape, moment and
 #' haralick features per object. The prefix of the feature names indicate
@@ -118,10 +124,12 @@
 #' @importFrom S4Vectors DataFrame
 #' @importFrom SingleCellExperiment int_metadata
 #' @importFrom SummarizedExperiment colData<- assayNames<-
+#' @importFrom SpatialExperiment spatialCoords<- SpatialExperiment
 #' @importClassesFrom SingleCellExperiment SingleCellExperiment
 measureObjects <- function(mask,
                            image,
                            img_id,
+                           return_as = c("sce", "spe"),
                            feature_types = c("basic", "shape", "moment"),
                            basic_feature = "mean",
                            basic_quantiles = NULL,
@@ -139,6 +147,8 @@ measureObjects <- function(mask,
     .valid.features(feature_types, basic_feature, shape_feature, moment_feature,
                     haralick_feature, basic_quantiles,
                     haralick_nbins, haralick_scales)
+    
+    return_as <- match.arg(return_as)
 
     # Define channelNames if not set
     if (is.null(channelNames(image))) {
@@ -199,29 +209,40 @@ measureObjects <- function(mask,
             cur_coldata <- cbind(cur_coldata, cur_haralick)
         }
 
-        # Generate SCE object
-        assay_name <- ifelse(basic_feature == "mean", "counts", paste0("counts_", basic_feature))
-        cur_sce <- SingleCellExperiment(assays = list(counts = t(cur_basic)))
-        assayNames(cur_sce) <- assay_name
-        colData(cur_sce) <- cur_coldata
+        # Generate object
+        assay_name <- ifelse(basic_feature == "mean", "counts", 
+                             paste0("counts_", basic_feature))
+        if (return_as == "sce") {
+            cur_object <- SingleCellExperiment(assays = list(counts = t(cur_basic)))
+            assayNames(cur_object) <- assay_name
+            colData(cur_object) <- cur_coldata
+        } else {
+            cur_object <- SpatialExperiment(assays = list(counts = t(cur_basic)))
+            assayNames(cur_object) <- assay_name
+            if (all(c("m.cx", "m.cy") %in% names(cur_coldata))) {
+                spatialCoords(cur_object) <- as.matrix(cur_coldata[,c("m.cx", "m.cy")])  
+                cur_coldata <- cur_coldata[,!names(cur_coldata) %in% c("m.cx", "m.cy")]
+            } 
+            cur_coldata$sample_id <- cur_coldata[,img_id]
+            colData(cur_object) <- cur_coldata
+        }
 
-        return(cur_sce)
+        return(cur_object)
 
     }, mask, image, as.list(mcols(mask)[,img_id]), BPPARAM = BPPARAM)
 
-    sce <- do.call("cbind", cur_out)
+    object <- do.call("cbind", cur_out)
     
-    cur_colData <- colData(sce)
+    cur_colData <- colData(object)
+    cur_df <- cbind(mcols(image), mcols(mask))
+    cur_df <- cur_df[,unique(names(cur_df)), drop=FALSE]
     cur_colData <- merge(as.data.frame(cur_colData), 
-                         as.data.frame(mcols(image)), 
+                         as.data.frame(cur_df), 
                          by = img_id, sort = FALSE)
-    cur_colData <- merge(as.data.frame(cur_colData), 
-                         as.data.frame(mcols(mask)), 
-                         by = img_id, sort = FALSE)
-    colData(sce) <- cur_colData
+    colData(object) <- as(cur_colData, "DataFrame")
     
     # Avoid duplication of internal metadata
-    int_metadata(sce) <- int_metadata(cur_out[[1]])
+    int_metadata(object) <- int_metadata(cur_out[[1]])
 
-    return(sce)
+    return(object)
 }

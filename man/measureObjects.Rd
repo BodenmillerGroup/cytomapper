@@ -8,6 +8,7 @@ measureObjects(
   mask,
   image,
   img_id,
+  return_as = c("sce", "spe"),
   feature_types = c("basic", "shape", "moment"),
   basic_feature = "mean",
   basic_quantiles = NULL,
@@ -32,6 +33,10 @@ objects, where each channel indicates the measured pixel intensities.}
 \item{img_id}{character specifying the \code{mcols(image)} and
 \code{mcols(mask)} entry, in which the image IDs are stored.}
 
+\item{return_as}{single character specifying the class of the returned object.
+This is either \code{"sce"} to return a \code{SingleCellExperiment} (default)
+or \code{"spe"} to return a \code{SpatialExperiment} object.}
+
 \item{feature_types}{character vector or string indicating which features to
 compute. Needs to contain \code{"basic"}. Optionally, \code{"shape"},
 \code{"moment"} and \code{"haralick"} are allowed. Default \code{"basic"},
@@ -39,7 +44,7 @@ compute. Needs to contain \code{"basic"}. Optionally, \code{"shape"},
 
 \item{basic_feature}{string indicating which intensity measurement per object
 and channel should be used to populate the \code{counts(x)} slot; where
-\code{x} is the returned \code{SingleCellExperiment} object. Default
+\code{x} is the returned object. Default
 \code{"mean"} but \code{"sd"}, \code{"mad"} and \code{"q*"} allowed. Here,
 \code{*} indicates the computed quantile (see \code{basic_quantiles}).}
 
@@ -79,26 +84,29 @@ See \code{\linkS4class{MulticoreParam}} for information on how to use multiple
 cores for parallelised processing.}
 }
 \value{
-A \linkS4class{SingleCellExperiment} object (see details)
+A \linkS4class{SingleCellExperiment} or 
+\linkS4class{SpatialExperiment} object (see details)
 }
 \description{
 For each object (e.g. cell) identified by segmentation, the
 \code{measureObjects} function computes intensity features (also referred to
 as basic features; e.g. mean intensity), shape features (e.g. area), moment
 features (e.g. position) and haralick features. These features are returned
-in form of a \linkS4class{SingleCellExperiment} object.
+in form of a \linkS4class{SingleCellExperiment} or 
+\linkS4class{SpatialExperiment} object.
 }
-\section{The returned \linkS4class{SingleCellExperiment} objects}{
+\section{The returned objects}{
 
-The returned SingleCellExperiment object \code{sce} contains a single assay.
-This assay contains individual objects in columns and channels in rows. Each
-entry summarises the intensities per object and channel. This summary
-statistic is typically the mean intensity per object and channel. However,
-other summary statistics can be computed. When the mean intensity per object
-and channel is computed (default), the assay is accessible via
-\code{counts(sce)}. Otherwise, the assay needs to be accessed via
-\code{assay(sce, "counts_*")}, where \code{*} indicates the argument to
-\code{basic_feature}.
+By default, a \code{SingleCellExperiment} object is returned. When setting
+\code{return_as = "spe"}, the returned object is of class
+\code{SpatialExperiment}. The returned object contains a single assay. This
+assay contains individual objects in columns and channels in rows. Each entry
+summarises the intensities per object and channel. This summary statistic is
+typically the mean intensity per object and channel. However, other summary
+statistics can be computed. When the mean intensity per object and channel is
+computed (default), the assay is accessible via \code{counts(sce)}.
+Otherwise, the assay needs to be accessed via \code{assay(sce, "counts_*")},
+where \code{*} indicates the argument to \code{basic_feature}.
 
 The \code{colData(x)} entry is populated by the computed shape, moment and
 haralick features per object. The prefix of the feature names indicate
