@@ -116,6 +116,7 @@
 #' @importFrom EBImage computeFeatures.basic computeFeatures.shape computeFeatures.moment computeFeatures.haralick
 #' @importFrom BiocParallel SerialParam bpmapply
 #' @importFrom S4Vectors DataFrame
+#' @importFrom SingleCellExperiment int_metadata
 #' @importFrom SummarizedExperiment colData<- assayNames<-
 #' @importClassesFrom SingleCellExperiment SingleCellExperiment
 measureObjects <- function(mask,
@@ -209,6 +210,18 @@ measureObjects <- function(mask,
     }, mask, image, as.list(mcols(mask)[,img_id]), BPPARAM = BPPARAM)
 
     sce <- do.call("cbind", cur_out)
+    
+    cur_colData <- colData(sce)
+    cur_colData <- merge(as.data.frame(cur_colData), 
+                         as.data.frame(mcols(image)), 
+                         by = img_id, sort = FALSE)
+    cur_colData <- merge(as.data.frame(cur_colData), 
+                         as.data.frame(mcols(mask)), 
+                         by = img_id, sort = FALSE)
+    colData(sce) <- cur_colData
+    
+    # Avoid duplication of internal metadata
+    int_metadata(sce) <- int_metadata(cur_out[[1]])
 
     return(sce)
 }
