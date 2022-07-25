@@ -1,5 +1,5 @@
 Package: cytomapper
-Version: 1.9.0
+Version: 1.9.1
 Title: Visualization of highly multiplexed imaging data in R
 Description: 
     Highly multiplexed imaging acquires the single-cell expression of
@@ -29,6 +29,7 @@ Depends:
     SingleCellExperiment,
     methods
 Imports:
+    SpatialExperiment,
     S4Vectors,
     BiocParallel,
     HDF5Array,
@@ -63,5 +64,5 @@ biocViews: ImmunoOncology, Software, SingleCell, OneChannel, TwoChannel, Multipl
 VignetteBuilder: knitr
 URL: https://github.com/BodenmillerGroup/cytomapper
 BugReports: https://github.com/BodenmillerGroup/cytomapper/issues
-RoxygenNote: 7.1.2
+RoxygenNote: 7.2.1
 Encoding: UTF-8

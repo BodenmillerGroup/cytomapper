@@ -168,3 +168,6 @@ Changes in version 1.7.1 (2021-12-28):
 Changes in version 1.7.2 (2022-04-20):
 + Fixes for next release
 
+Changes in version 1.9.1 (2022-07-24):
++ measureObjects function transfers mcols of images and masks to colData(sce)
++ allow returned object to be of SpatialExperiment

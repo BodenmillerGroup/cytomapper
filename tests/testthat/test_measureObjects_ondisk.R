@@ -45,7 +45,7 @@ test_that("measureObjects: defaults work", {
     # colData entries
     expect_equal(names(colData(sce)),
                  c("ImageNb", "object_id", "s.area", "s.radius.mean",
-                   "m.cx", "m.cy", "m.majoraxis", "m.eccentricity"))
+                   "m.cx", "m.cy", "m.majoraxis", "m.eccentricity", "ImageName"))
     area <- c(table(pancreasMasks[[1]])[-1],
                 table(pancreasMasks[[2]])[-1],
                 table(pancreasMasks[[3]])[-1])
@@ -70,23 +70,23 @@ test_that("measureObjects: defaults work", {
     sce <- measureObjects(cur_Masks, cur_Images, img_id = "ImageNb",
                           feature_types = "basic")
     expect_equal(names(colData(sce)),
-                 c("ImageNb", "object_id"))
+                 c("ImageNb", "object_id", "ImageName"))
     sce <- measureObjects(cur_Masks, cur_Images, img_id = "ImageNb",
                           feature_types = c("basic", "shape"))
     expect_equal(names(colData(sce)),
-                 c("ImageNb", "object_id", "s.area", "s.radius.mean"))
+                 c("ImageNb", "object_id", "s.area", "s.radius.mean", "ImageName"))
     sce <- measureObjects(cur_Masks, cur_Images, img_id = "ImageNb",
                           feature_types = c("basic", "shape", "moment"))
     expect_equal(names(colData(sce)),
                  c("ImageNb", "object_id", "s.area", "s.radius.mean",
-                   "m.cx", "m.cy", "m.majoraxis", "m.eccentricity"))
+                   "m.cx", "m.cy", "m.majoraxis", "m.eccentricity", "ImageName"))
     sce <- measureObjects(cur_Masks, cur_Images, img_id = "ImageNb",
                           feature_types = c("basic", "shape", "moment", "haralick"),
                           haralick_feature = "ent.s1")
     expect_equal(names(colData(sce)),
                  c("ImageNb", "object_id", "s.area", "s.radius.mean",
                    "m.cx", "m.cy", "m.majoraxis", "m.eccentricity",
-                   "H3.h.ent.s1", "CD99.h.ent.s1", "PIN.h.ent.s1", "CD8a.h.ent.s1", "CDH.h.ent.s1"))
+                   "H3.h.ent.s1", "CD99.h.ent.s1", "PIN.h.ent.s1", "CD8a.h.ent.s1", "CDH.h.ent.s1", "ImageName"))
     expect_equal(sce$H3.h.ent.s1[20:30],
                  c(0.92239897, 0.18210610, 0.00000000, 0.28466019, 0.24327757, 0.28306235, 0.31983314, 0.26878196, 0.05829775, 0.00000000, 0.54267473),
                  tolerance = 0.0001)
@@ -107,18 +107,18 @@ test_that("measureObjects: defaults work", {
                           feature_types = c("basic", "moment"))
     expect_equal(names(colData(sce)),
                  c("ImageNb", "object_id",
-                   "m.cx", "m.cy", "m.majoraxis", "m.eccentricity"))
+                   "m.cx", "m.cy", "m.majoraxis", "m.eccentricity", "ImageName"))
     sce <- measureObjects(cur_Masks, cur_Images, img_id = "ImageNb",
                           feature_types = c("moment", "basic"))
     expect_equal(names(colData(sce)),
                  c("ImageNb", "object_id",
-                   "m.cx", "m.cy", "m.majoraxis", "m.eccentricity"))
+                   "m.cx", "m.cy", "m.majoraxis", "m.eccentricity", "ImageName"))
     sce <- measureObjects(pancreasMasks, cur_Images, img_id = "ImageNb",
                           feature_types = c("basic", "haralick"),
                           haralick_feature = "ent.s1")
     expect_equal(names(colData(sce)),
                  c("ImageNb", "object_id",
-                   "H3.h.ent.s1", "CD99.h.ent.s1", "PIN.h.ent.s1", "CD8a.h.ent.s1", "CDH.h.ent.s1"))
+                   "H3.h.ent.s1", "CD99.h.ent.s1", "PIN.h.ent.s1", "CD8a.h.ent.s1", "CDH.h.ent.s1", "ImageName"))
 
     # Parallelisable
     expect_silent(sce.1 <- measureObjects(cur_Masks, cur_Images, img_id = "ImageNb",
@@ -232,7 +232,7 @@ test_that("measureObjects: different settings work", {
     # Shape features
     expect_silent(sce <- measureObjects(cur_Masks, cur_Images, img_id = "ImageNb", feature_types = c("basic", "shape"),
                                         shape_feature = c('area', 'perimeter', 'radius.mean', 'radius.sd', 'radius.max', 'radius.min')))
-    expect_equal(names(colData(sce)), c("ImageNb", "object_id", "s.area", "s.perimeter", "s.radius.mean", "s.radius.sd", "s.radius.min", "s.radius.max"))
+    expect_equal(names(colData(sce)), c("ImageNb", "object_id", "s.area", "s.perimeter", "s.radius.mean", "s.radius.sd", "s.radius.min", "s.radius.max", "ImageName"))
 
     expect_equal(sce$s.perimeter[40:50], c(28, 39, 25, 10, 16, 15, 13, 22, 31, 37, 5))
     expect_equal(sce$s.radius.sd[40:50], c(0.6381883, 1.2634757, 0.5599216, 0.5707716, 0.6687795, 0.4334581, 0.7503223, 0.4679423, 0.7259625, 0.8618819, 0.2850134), tolerance = 0.00001)
@@ -242,7 +242,7 @@ test_that("measureObjects: different settings work", {
     # Moment features
     expect_silent(sce <- measureObjects(cur_Masks, cur_Images, img_id = "ImageNb", feature_types = c("basic", "moment"),
                                         moment_feature = c('cx', 'cy', 'majoraxis', 'eccentricity', 'theta')))
-    expect_equal(names(colData(sce)), c("ImageNb", "object_id", "m.cx", "m.cy", "m.majoraxis", "m.eccentricity", "m.theta"))
+    expect_equal(names(colData(sce)), c("ImageNb", "object_id", "m.cx", "m.cy", "m.majoraxis", "m.eccentricity", "m.theta", "ImageName"))
 
     expect_equal(sce$m.theta[40:50], c(0.60960841, -0.04246836, -0.68045282, 1.57079633, 0.89866183, -1.11289559, -1.10737273, -0.96767979, 1.53796956, -0.09403954, -1.24904577))
 
@@ -253,7 +253,7 @@ test_that("measureObjects: different settings work", {
     features <- c("asm.s1", "con.s1", "cor.s1", "var.s1", "idm.s1", "sav.s1", "sva.s1", "sen.s1", "ent.s1", "dva.s1", "den.s1", "f12.s1", "f13.s1", "asm.s2", "con.s2", "cor.s2", "var.s2", "idm.s2", "sav.s2", "sva.s2", "sen.s2", "ent.s2", "dva.s2", "den.s2", "f12.s2", "f13.s2")
     features <- paste0("h.", features)
     features <- paste0(rep(channelNames(pancreasImages), each = length(features)), ".", features)
-    features <- c("ImageNb", "object_id", features)
+    features <- c("ImageNb", "object_id", features, "ImageName")
 
     expect_equal(names(colData(sce)), features)
 
@@ -276,7 +276,7 @@ test_that("measureObjects: different settings work", {
     features <- c("asm.s1", "con.s1", "cor.s1", "var.s1", "idm.s1", "sav.s1", "sva.s1", "sen.s1", "ent.s1", "dva.s1", "den.s1", "f12.s1", "f13.s1", "asm.s4", "con.s4", "cor.s4", "var.s4", "idm.s4", "sav.s4", "sva.s4", "sen.s4", "ent.s4", "dva.s4", "den.s4", "f12.s4", "f13.s4")
     features <- paste0("h.", features)
     features <- paste0(rep(channelNames(pancreasImages), each = length(features)), ".", features)
-    features <- c("ImageNb", "object_id", features)
+    features <- c("ImageNb", "object_id", features, "ImageName")
 
     expect_equal(names(colData(sce)), features)
 
@@ -299,7 +299,7 @@ test_that("measureObjects: different settings work", {
     features <- c("asm.s1", "con.s1", "cor.s1", "var.s1", "idm.s1", "sav.s1", "sva.s1", "sen.s1", "ent.s1", "dva.s1", "den.s1", "f12.s1", "f13.s1", "asm.s2", "con.s2", "cor.s2", "var.s2", "idm.s2", "sav.s2", "sva.s2", "sen.s2", "ent.s2", "dva.s2", "den.s2", "f12.s2", "f13.s2")
     features <- paste0("h.", features)
     features <- paste0(rep(channelNames(pancreasImages), each = length(features)), ".", features)
-    features <- c("ImageNb", "object_id", features)
+    features <- c("ImageNb", "object_id", features, "ImageName")
 
     expect_equal(names(colData(sce)), features)
 
@@ -322,7 +322,7 @@ test_that("measureObjects: different settings work", {
     features <- c("asm.s1", "ent.s2")
     features <- paste0("h.", features)
     features <- paste0(rep(channelNames(pancreasImages), each = length(features)), ".", features)
-    features <- c("ImageNb", "object_id", features)
+    features <- c("ImageNb", "object_id", features, "ImageName")
 
     expect_equal(names(colData(sce)), features)
 
