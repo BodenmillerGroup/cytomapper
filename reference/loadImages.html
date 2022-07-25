@@ -20,7 +20,7 @@ one image per slot. Supported file extensions are: '.tiff', '.tif', '.png',
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">cytomapper</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="">1.9.0</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="">1.9.1</span>
       </span>
     </div>
 
@@ -69,15 +69,15 @@ one image per slot. Supported file extensions are: '.tiff', '.tif', '.png',
     </div>
 
     <div id="ref-usage">
-    <div class="sourceCode"><pre class="sourceCode r"><code><span class="fu">loadImages</span><span class="op">(</span>
-  <span class="va">x</span>,
-  pattern <span class="op">=</span> <span class="cn">NULL</span>,
-  on_disk <span class="op">=</span> <span class="cn">FALSE</span>,
-  h5FilesPath <span class="op">=</span> <span class="cn">NULL</span>,
-  name <span class="op">=</span> <span class="cn">NULL</span>,
-  BPPARAM <span class="op">=</span> <span class="fu">SerialParam</span><span class="op">(</span><span class="op">)</span>,
-  <span class="va">...</span>
-<span class="op">)</span></code></pre></div>
+    <div class="sourceCode"><pre class="sourceCode r"><code><span><span class="fu">loadImages</span><span class="op">(</span></span>
+<span>  <span class="va">x</span>,</span>
+<span>  pattern <span class="op">=</span> <span class="cn">NULL</span>,</span>
+<span>  on_disk <span class="op">=</span> <span class="cn">FALSE</span>,</span>
+<span>  h5FilesPath <span class="op">=</span> <span class="cn">NULL</span>,</span>
+<span>  name <span class="op">=</span> <span class="cn">NULL</span>,</span>
+<span>  BPPARAM <span class="op">=</span> <span class="fu">SerialParam</span><span class="op">(</span><span class="op">)</span>,</span>
+<span>  <span class="va">...</span></span>
+<span><span class="op">)</span></span></code></pre></div>
     </div>
 
     <div id="arguments">
@@ -95,6 +95,8 @@ individual file.</p></dd>
 
 
 </dl></dd>
+
+
 <dt>pattern</dt>
 <dd><p>Character inputs of the following form:</p><dl><dt>A single character</dt>
 <dd><p>A pattern to search for in the specified path
@@ -106,30 +108,43 @@ file names in the specified path.</p></dd>
 
 
 </dl></dd>
+
+
 <dt>on_disk</dt>
 <dd><p>Logical indicating if images in form of
 HDF5Array objects (as .h5 files) should be stored on disk
 rather than in memory.</p></dd>
+
+
 <dt>h5FilesPath</dt>
 <dd><p>path to where the .h5 files for on disk representation
 are stored. This path needs to be defined when <code>on_disk = TRUE</code>.
 When files should only temporarily be stored on disk, please set
 <code>h5FilesPath = getHDF5DumpDir()</code></p></dd>
+
+
 <dt>name</dt>
 <dd><p>(if reading in .h5 files) a single character, a character vector
 of length equal to the length of x or NULL. See details for how to set 
 <code>name</code>.</p></dd>
+
+
 <dt>BPPARAM</dt>
 <dd><p>parameters for parallelised reading in of images. 
 This is only recommended for very large images. 
 See <code>MulticoreParam</code> for information on how to use multiple
 cores for parallelised processing.</p></dd>
+
+
 <dt>...</dt>
 <dd><p>arguments passed to the <code><a href="https://rdrr.io/pkg/EBImage/man/io.html" class="external-link">readImage</a></code> function.</p></dd>
+
 </dl></div>
     <div id="value">
     <h2>Value</h2>
-    <p>A <a href="CytoImageList.html">CytoImageList</a> object</p>
+    
+
+<p>A <a href="CytoImageList.html">CytoImageList</a> object</p>
     </div>
     <div id="reading-in-bit-integer-images">
     <h2>Reading in 16-bit integer images</h2>
@@ -176,35 +191,35 @@ the images/datasets are not read into memory when stored in .h5 files.</p>
 
     <div id="ref-examples">
     <h2>Examples</h2>
-    <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span class="co"># Providing a single file</span></span>
-<span class="r-in"><span class="va">single.image</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/system.file.html" class="external-link">system.file</a></span><span class="op">(</span><span class="st">"extdata/E34_mask.tiff"</span>, package <span class="op">=</span> <span class="st">"cytomapper"</span><span class="op">)</span></span>
-<span class="r-in"><span class="va">single.image</span> <span class="op">&lt;-</span> <span class="fu">loadImages</span><span class="op">(</span><span class="va">single.image</span><span class="op">)</span></span>
-<span class="r-in"></span>
-<span class="r-in"><span class="co"># Providing a path and pattern</span></span>
-<span class="r-in"><span class="va">path.to.images</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/system.file.html" class="external-link">system.file</a></span><span class="op">(</span><span class="st">"extdata"</span>, package <span class="op">=</span> <span class="st">"cytomapper"</span><span class="op">)</span></span>
-<span class="r-in"><span class="va">image.list</span> <span class="op">&lt;-</span> <span class="fu">loadImages</span><span class="op">(</span><span class="va">path.to.images</span>, pattern <span class="op">=</span> <span class="st">"mask.tiff"</span><span class="op">)</span></span>
-<span class="r-in"></span>
-<span class="r-in"><span class="co"># Providing multiple patterns</span></span>
-<span class="r-in"><span class="fu"><a href="https://rdrr.io/r/utils/data.html" class="external-link">data</a></span><span class="op">(</span><span class="va">pancreasSCE</span><span class="op">)</span></span>
-<span class="r-in"><span class="va">path.to.images</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/system.file.html" class="external-link">system.file</a></span><span class="op">(</span><span class="st">"extdata"</span>, package <span class="op">=</span> <span class="st">"cytomapper"</span><span class="op">)</span></span>
-<span class="r-in"><span class="va">image.list</span> <span class="op">&lt;-</span> <span class="fu">loadImages</span><span class="op">(</span><span class="va">path.to.images</span>, pattern <span class="op">=</span> <span class="va">pancreasSCE</span><span class="op">$</span><span class="va">MaskName</span><span class="op">)</span></span>
-<span class="r-in"></span>
-<span class="r-in"><span class="co"># Providing multiple files</span></span>
-<span class="r-in"><span class="va">list.images</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/list.files.html" class="external-link">list.files</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/system.file.html" class="external-link">system.file</a></span><span class="op">(</span><span class="st">"extdata"</span>, package <span class="op">=</span> <span class="st">"cytomapper"</span><span class="op">)</span>,</span>
-<span class="r-in">                            pattern <span class="op">=</span> <span class="st">"_mask.tiff"</span>, full.names <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></span>
-<span class="r-in"><span class="va">image.list</span> <span class="op">&lt;-</span> <span class="fu">loadImages</span><span class="op">(</span><span class="va">list.images</span><span class="op">)</span></span>
-<span class="r-in"></span>
-<span class="r-in"><span class="co"># On disk representation</span></span>
-<span class="r-in"><span class="va">path.to.images</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/system.file.html" class="external-link">system.file</a></span><span class="op">(</span><span class="st">"extdata"</span>, package <span class="op">=</span> <span class="st">"cytomapper"</span><span class="op">)</span></span>
-<span class="r-in"><span class="va">image.list</span> <span class="op">&lt;-</span> <span class="fu">loadImages</span><span class="op">(</span><span class="va">path.to.images</span>, pattern <span class="op">=</span> <span class="st">"mask.tiff"</span>,</span>
-<span class="r-in">                            on_disk <span class="op">=</span> <span class="cn">TRUE</span>, </span>
-<span class="r-in">                            h5FilesPath <span class="op">=</span> <span class="fu">HDF5Array</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/HDF5Array/man/dump-management.html" class="external-link">getHDF5DumpDir</a></span><span class="op">(</span><span class="op">)</span><span class="op">)</span></span>
-<span class="r-in">                            </span>
-<span class="r-in"><span class="co"># Parallel processing</span></span>
-<span class="r-in"><span class="va">path.to.images</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/system.file.html" class="external-link">system.file</a></span><span class="op">(</span><span class="st">"extdata"</span>, package <span class="op">=</span> <span class="st">"cytomapper"</span><span class="op">)</span></span>
-<span class="r-in"><span class="va">image.list</span> <span class="op">&lt;-</span> <span class="fu">loadImages</span><span class="op">(</span><span class="va">path.to.images</span>, pattern <span class="op">=</span> <span class="st">"mask.tiff"</span>,</span>
-<span class="r-in">                            BPPARAM <span class="op">=</span> <span class="fu">BiocParallel</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/BiocParallel/man/MulticoreParam-class.html" class="external-link">MulticoreParam</a></span><span class="op">(</span><span class="op">)</span><span class="op">)</span></span>
-<span class="r-in"></span>
+    <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span><span class="co"># Providing a single file</span></span></span>
+<span class="r-in"><span><span class="va">single.image</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/system.file.html" class="external-link">system.file</a></span><span class="op">(</span><span class="st">"extdata/E34_mask.tiff"</span>, package <span class="op">=</span> <span class="st">"cytomapper"</span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="va">single.image</span> <span class="op">&lt;-</span> <span class="fu">loadImages</span><span class="op">(</span><span class="va">single.image</span><span class="op">)</span></span></span>
+<span class="r-in"><span></span></span>
+<span class="r-in"><span><span class="co"># Providing a path and pattern</span></span></span>
+<span class="r-in"><span><span class="va">path.to.images</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/system.file.html" class="external-link">system.file</a></span><span class="op">(</span><span class="st">"extdata"</span>, package <span class="op">=</span> <span class="st">"cytomapper"</span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="va">image.list</span> <span class="op">&lt;-</span> <span class="fu">loadImages</span><span class="op">(</span><span class="va">path.to.images</span>, pattern <span class="op">=</span> <span class="st">"mask.tiff"</span><span class="op">)</span></span></span>
+<span class="r-in"><span></span></span>
+<span class="r-in"><span><span class="co"># Providing multiple patterns</span></span></span>
+<span class="r-in"><span><span class="fu"><a href="https://rdrr.io/r/utils/data.html" class="external-link">data</a></span><span class="op">(</span><span class="va">pancreasSCE</span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="va">path.to.images</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/system.file.html" class="external-link">system.file</a></span><span class="op">(</span><span class="st">"extdata"</span>, package <span class="op">=</span> <span class="st">"cytomapper"</span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="va">image.list</span> <span class="op">&lt;-</span> <span class="fu">loadImages</span><span class="op">(</span><span class="va">path.to.images</span>, pattern <span class="op">=</span> <span class="va">pancreasSCE</span><span class="op">$</span><span class="va">MaskName</span><span class="op">)</span></span></span>
+<span class="r-in"><span></span></span>
+<span class="r-in"><span><span class="co"># Providing multiple files</span></span></span>
+<span class="r-in"><span><span class="va">list.images</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/list.files.html" class="external-link">list.files</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/system.file.html" class="external-link">system.file</a></span><span class="op">(</span><span class="st">"extdata"</span>, package <span class="op">=</span> <span class="st">"cytomapper"</span><span class="op">)</span>,</span></span>
+<span class="r-in"><span>                            pattern <span class="op">=</span> <span class="st">"_mask.tiff"</span>, full.names <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="va">image.list</span> <span class="op">&lt;-</span> <span class="fu">loadImages</span><span class="op">(</span><span class="va">list.images</span><span class="op">)</span></span></span>
+<span class="r-in"><span></span></span>
+<span class="r-in"><span><span class="co"># On disk representation</span></span></span>
+<span class="r-in"><span><span class="va">path.to.images</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/system.file.html" class="external-link">system.file</a></span><span class="op">(</span><span class="st">"extdata"</span>, package <span class="op">=</span> <span class="st">"cytomapper"</span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="va">image.list</span> <span class="op">&lt;-</span> <span class="fu">loadImages</span><span class="op">(</span><span class="va">path.to.images</span>, pattern <span class="op">=</span> <span class="st">"mask.tiff"</span>,</span></span>
+<span class="r-in"><span>                            on_disk <span class="op">=</span> <span class="cn">TRUE</span>, </span></span>
+<span class="r-in"><span>                            h5FilesPath <span class="op">=</span> <span class="fu">HDF5Array</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/HDF5Array/man/dump-management.html" class="external-link">getHDF5DumpDir</a></span><span class="op">(</span><span class="op">)</span><span class="op">)</span></span></span>
+<span class="r-in"><span>                            </span></span>
+<span class="r-in"><span><span class="co"># Parallel processing</span></span></span>
+<span class="r-in"><span><span class="va">path.to.images</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/system.file.html" class="external-link">system.file</a></span><span class="op">(</span><span class="st">"extdata"</span>, package <span class="op">=</span> <span class="st">"cytomapper"</span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="va">image.list</span> <span class="op">&lt;-</span> <span class="fu">loadImages</span><span class="op">(</span><span class="va">path.to.images</span>, pattern <span class="op">=</span> <span class="st">"mask.tiff"</span>,</span></span>
+<span class="r-in"><span>                            BPPARAM <span class="op">=</span> <span class="fu">BiocParallel</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/BiocParallel/man/MulticoreParam-class.html" class="external-link">MulticoreParam</a></span><span class="op">(</span><span class="op">)</span><span class="op">)</span></span></span>
+<span class="r-in"><span></span></span>
 </code></pre></div>
     </div>
   </div>
@@ -219,7 +234,7 @@ the images/datasets are not read into memory when stored in .h5 files.</p>
 </div>
 
 <div class="pkgdown">
-  <p></p><p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.3.</p>
+  <p></p><p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.6.</p>
 </div>
 
       </footer></div>

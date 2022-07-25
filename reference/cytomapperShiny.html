@@ -19,7 +19,7 @@ corresponding images."><!-- mathjax --><script src="https://cdnjs.cloudflare.com
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">cytomapper</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="">1.9.0</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="">1.9.1</span>
       </span>
     </div>
 
@@ -67,41 +67,54 @@ corresponding images.</p>
     </div>
 
     <div id="ref-usage">
-    <div class="sourceCode"><pre class="sourceCode r"><code><span class="fu">cytomapperShiny</span><span class="op">(</span>
-  <span class="va">object</span>,
-  mask <span class="op">=</span> <span class="cn">NULL</span>,
-  image <span class="op">=</span> <span class="cn">NULL</span>,
-  cell_id <span class="op">=</span> <span class="cn">NULL</span>,
-  img_id <span class="op">=</span> <span class="cn">NULL</span>,
-  <span class="va">...</span>
-<span class="op">)</span></code></pre></div>
+    <div class="sourceCode"><pre class="sourceCode r"><code><span><span class="fu">cytomapperShiny</span><span class="op">(</span></span>
+<span>  <span class="va">object</span>,</span>
+<span>  mask <span class="op">=</span> <span class="cn">NULL</span>,</span>
+<span>  image <span class="op">=</span> <span class="cn">NULL</span>,</span>
+<span>  cell_id <span class="op">=</span> <span class="cn">NULL</span>,</span>
+<span>  img_id <span class="op">=</span> <span class="cn">NULL</span>,</span>
+<span>  <span class="va">...</span></span>
+<span><span class="op">)</span></span></code></pre></div>
     </div>
 
     <div id="arguments">
     <h2>Arguments</h2>
     <dl><dt>object</dt>
 <dd><p>a <code><a href="https://rdrr.io/pkg/SingleCellExperiment/man/SingleCellExperiment.html" class="external-link">SingleCellExperiment</a></code> object.</p></dd>
+
+
 <dt>mask</dt>
 <dd><p>(optional) a <code><a href="CytoImageList.html">CytoImageList</a></code> containing
 single-channel <code><a href="https://rdrr.io/pkg/EBImage/man/Image.html" class="external-link">Image</a></code> objects.</p></dd>
+
+
 <dt>image</dt>
 <dd><p>(optional) a <code><a href="CytoImageList.html">CytoImageList</a></code> object containing
 single or multi-channel <code><a href="https://rdrr.io/pkg/EBImage/man/Image.html" class="external-link">Image</a></code> objects.</p></dd>
+
+
 <dt>cell_id</dt>
 <dd><p>character specifying the <code>colData(object)</code> entry, in which
 the integer cell IDs are stored. These IDs should match the integer pixel
 values in the segmentation mask object (<code>mask</code>).</p></dd>
+
+
 <dt>img_id</dt>
 <dd><p>character specifying the <code>colData(object)</code> and
 <code>mcols(mask)</code> and/or <code>mcols(image)</code> entry, 
 in which the image IDs are stored.</p></dd>
+
+
 <dt>...</dt>
 <dd><p>parameters passed to the <code><a href="plotCells.html">plotCells</a></code> or
 <code><a href="plotPixels.html">plotPixels</a></code> function.</p></dd>
+
 </dl></div>
     <div id="value">
     <h2>Value</h2>
-    <p>A Shiny app object for hierarchical gating of cells</p>
+    
+
+<p>A Shiny app object for hierarchical gating of cells</p>
     </div>
     <div id="user-inputs">
     <h2>User inputs</h2>
@@ -201,27 +214,27 @@ plotting functions</p></div>
 
     <div id="ref-examples">
     <h2>Examples</h2>
-    <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span class="co">## Only run this example in interactive R sessions</span></span>
-<span class="r-in"><span class="kw">if</span> <span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/interactive.html" class="external-link">interactive</a></span><span class="op">(</span><span class="op">)</span><span class="op">)</span> <span class="op">{</span></span>
-<span class="r-in">   <span class="co"># Load example data sets</span></span>
-<span class="r-in">   <span class="fu"><a href="https://rdrr.io/r/utils/data.html" class="external-link">data</a></span><span class="op">(</span><span class="st">"pancreasSCE"</span><span class="op">)</span></span>
-<span class="r-in">   <span class="fu"><a href="https://rdrr.io/r/utils/data.html" class="external-link">data</a></span><span class="op">(</span><span class="st">"pancreasImages"</span><span class="op">)</span></span>
-<span class="r-in">   <span class="fu"><a href="https://rdrr.io/r/utils/data.html" class="external-link">data</a></span><span class="op">(</span><span class="st">"pancreasMasks"</span><span class="op">)</span></span>
-<span class="r-in"></span>
-<span class="r-in">   <span class="co"># Use shiny with SCE object, images and masks</span></span>
-<span class="r-in">   <span class="fu">cytomapperShiny</span><span class="op">(</span>object <span class="op">=</span> <span class="va">pancreasSCE</span>, mask <span class="op">=</span> <span class="va">pancreasMasks</span>, </span>
-<span class="r-in">                 image <span class="op">=</span> <span class="va">pancreasImages</span>, cell_id <span class="op">=</span> <span class="st">"CellNb"</span>, </span>
-<span class="r-in">                 img_id <span class="op">=</span> <span class="st">"ImageNb"</span><span class="op">)</span></span>
-<span class="r-in"></span>
-<span class="r-in">   <span class="co"># Use shiny with SCE object and masks</span></span>
-<span class="r-in">   <span class="fu">cytomapperShiny</span><span class="op">(</span>object <span class="op">=</span> <span class="va">pancreasSCE</span>, mask <span class="op">=</span> <span class="va">pancreasMasks</span>,</span>
-<span class="r-in">                 cell_id <span class="op">=</span> <span class="st">"CellNb"</span>, img_id <span class="op">=</span> <span class="st">"ImageNb"</span><span class="op">)</span></span>
-<span class="r-in"></span>
-<span class="r-in">   <span class="co"># Use shiny with SCE object only</span></span>
-<span class="r-in">   <span class="fu">cytomapperShiny</span><span class="op">(</span>object <span class="op">=</span> <span class="va">pancreasSCE</span>,</span>
-<span class="r-in">                 cell_id <span class="op">=</span> <span class="st">"CellNb"</span>, img_id <span class="op">=</span> <span class="st">"ImageNb"</span><span class="op">)</span></span>
-<span class="r-in"><span class="op">}</span></span>
-<span class="r-in"></span>
+    <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span><span class="co">## Only run this example in interactive R sessions</span></span></span>
+<span class="r-in"><span><span class="kw">if</span> <span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/interactive.html" class="external-link">interactive</a></span><span class="op">(</span><span class="op">)</span><span class="op">)</span> <span class="op">{</span></span></span>
+<span class="r-in"><span>   <span class="co"># Load example data sets</span></span></span>
+<span class="r-in"><span>   <span class="fu"><a href="https://rdrr.io/r/utils/data.html" class="external-link">data</a></span><span class="op">(</span><span class="st">"pancreasSCE"</span><span class="op">)</span></span></span>
+<span class="r-in"><span>   <span class="fu"><a href="https://rdrr.io/r/utils/data.html" class="external-link">data</a></span><span class="op">(</span><span class="st">"pancreasImages"</span><span class="op">)</span></span></span>
+<span class="r-in"><span>   <span class="fu"><a href="https://rdrr.io/r/utils/data.html" class="external-link">data</a></span><span class="op">(</span><span class="st">"pancreasMasks"</span><span class="op">)</span></span></span>
+<span class="r-in"><span></span></span>
+<span class="r-in"><span>   <span class="co"># Use shiny with SCE object, images and masks</span></span></span>
+<span class="r-in"><span>   <span class="fu">cytomapperShiny</span><span class="op">(</span>object <span class="op">=</span> <span class="va">pancreasSCE</span>, mask <span class="op">=</span> <span class="va">pancreasMasks</span>, </span></span>
+<span class="r-in"><span>                 image <span class="op">=</span> <span class="va">pancreasImages</span>, cell_id <span class="op">=</span> <span class="st">"CellNb"</span>, </span></span>
+<span class="r-in"><span>                 img_id <span class="op">=</span> <span class="st">"ImageNb"</span><span class="op">)</span></span></span>
+<span class="r-in"><span></span></span>
+<span class="r-in"><span>   <span class="co"># Use shiny with SCE object and masks</span></span></span>
+<span class="r-in"><span>   <span class="fu">cytomapperShiny</span><span class="op">(</span>object <span class="op">=</span> <span class="va">pancreasSCE</span>, mask <span class="op">=</span> <span class="va">pancreasMasks</span>,</span></span>
+<span class="r-in"><span>                 cell_id <span class="op">=</span> <span class="st">"CellNb"</span>, img_id <span class="op">=</span> <span class="st">"ImageNb"</span><span class="op">)</span></span></span>
+<span class="r-in"><span></span></span>
+<span class="r-in"><span>   <span class="co"># Use shiny with SCE object only</span></span></span>
+<span class="r-in"><span>   <span class="fu">cytomapperShiny</span><span class="op">(</span>object <span class="op">=</span> <span class="va">pancreasSCE</span>,</span></span>
+<span class="r-in"><span>                 cell_id <span class="op">=</span> <span class="st">"CellNb"</span>, img_id <span class="op">=</span> <span class="st">"ImageNb"</span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="op">}</span></span></span>
+<span class="r-in"><span></span></span>
 </code></pre></div>
     </div>
   </div>
@@ -236,7 +249,7 @@ plotting functions</p></div>
 </div>
 
 <div class="pkgdown">
-  <p></p><p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.3.</p>
+  <p></p><p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.6.</p>
 </div>
 
       </footer></div>

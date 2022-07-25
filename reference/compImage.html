@@ -18,7 +18,7 @@ of multi-channel images using a non-negative least squares approach."><!-- mathj
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">cytomapper</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="">1.9.0</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="">1.9.1</span>
       </span>
     </div>
 
@@ -65,7 +65,7 @@ of multi-channel images using a non-negative least squares approach.</p>
     </div>
 
     <div id="ref-usage">
-    <div class="sourceCode"><pre class="sourceCode r"><code><span class="fu">compImage</span><span class="op">(</span><span class="va">object</span>, <span class="va">sm</span>, overwrite <span class="op">=</span> <span class="cn">FALSE</span>, BPPARAM <span class="op">=</span> <span class="fu">SerialParam</span><span class="op">(</span><span class="op">)</span><span class="op">)</span></code></pre></div>
+    <div class="sourceCode"><pre class="sourceCode r"><code><span><span class="fu">compImage</span><span class="op">(</span><span class="va">object</span>, <span class="va">sm</span>, overwrite <span class="op">=</span> <span class="cn">FALSE</span>, BPPARAM <span class="op">=</span> <span class="fu">SerialParam</span><span class="op">(</span><span class="op">)</span><span class="op">)</span></span></code></pre></div>
     </div>
 
     <div id="arguments">
@@ -75,22 +75,31 @@ of multi-channel images using a non-negative least squares approach.</p>
 intensities for all channels. The <code>channelNames</code> must be in the form
 of <code>(mt)(mass)Di</code> (e.g. <code>Sm152Di</code> for Samarium isotope with the
 atomic mass 152) and match with the column names in <code>sm</code>.</p></dd>
+
+
 <dt>sm</dt>
 <dd><p>numeric matrix containing the spillover estimated between channels.
 The column names must be of the form <code>(mt)(mass)Di</code> (e.g.
 <code>Sm152Di</code> for Samarium isotope with the atomic mass 152) and match to
 the <code>channelNames</code> of <code>object</code>.</p></dd>
+
+
 <dt>overwrite</dt>
 <dd><p>(for images stored on disk) should the original image array
 be overwritten by the compensated image array? By default (<code>overwrite
 = FALSE</code>), a new entry called "XYZ_comp" will be written to the .h5  file
 (see below).</p></dd>
+
+
 <dt>BPPARAM</dt>
 <dd><p>parameters for parallelised processing.</p></dd>
+
 </dl></div>
     <div id="value">
     <h2>Value</h2>
-    <p>returns the compensated pixel intensities in form of a 
+    
+
+<p>returns the compensated pixel intensities in form of a 
 <code>CytoImageList</code> object.</p>
     </div>
     <div id="the-input-object">
@@ -132,24 +141,24 @@ and Imaging Mass Cytometry., Cell Systems 2018 6(5):612-620.e5</a></p>
 
     <div id="ref-examples">
     <h2>Examples</h2>
-    <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span class="fu"><a href="https://rdrr.io/r/utils/data.html" class="external-link">data</a></span><span class="op">(</span><span class="st">"pancreasImages"</span><span class="op">)</span></span>
-<span class="r-in"></span>
-<span class="r-in"><span class="co"># Generate example spillover matrix</span></span>
-<span class="r-in"><span class="va">metals</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"Dy161Di"</span>, <span class="st">"Dy162Di"</span>, <span class="st">"Dy163Di"</span>, <span class="st">"Dy164Di"</span>, <span class="st">"Ho165Di"</span><span class="op">)</span></span>
-<span class="r-in"><span class="va">sm</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/matrix.html" class="external-link">matrix</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">1</span>, <span class="fl">0.033</span>, <span class="fl">0.01</span>, <span class="fl">0.007</span>, <span class="fl">0</span>,</span>
-<span class="r-in">               <span class="fl">0.016</span>, <span class="fl">1</span>, <span class="fl">0.051</span>, <span class="fl">0.01</span>, <span class="fl">0</span>,</span>
-<span class="r-in">               <span class="fl">0.004</span>, <span class="fl">0.013</span>, <span class="fl">1</span>, <span class="fl">0.023</span>, <span class="fl">0</span>,</span>
-<span class="r-in">               <span class="fl">0.005</span>, <span class="fl">0.008</span>, <span class="fl">0.029</span>, <span class="fl">1</span>, <span class="fl">0.006</span>,</span>
-<span class="r-in">               <span class="fl">0</span>, <span class="fl">0</span>, <span class="fl">0</span>, <span class="fl">0.001</span>, <span class="fl">1</span><span class="op">)</span>, byrow <span class="op">=</span> <span class="cn">TRUE</span>,</span>
-<span class="r-in">             ncol <span class="op">=</span> <span class="fl">5</span>, nrow <span class="op">=</span> <span class="fl">5</span>, </span>
-<span class="r-in">             dimnames <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span><span class="va">metals</span>, <span class="va">metals</span><span class="op">)</span><span class="op">)</span></span>
-<span class="r-in">             </span>
-<span class="r-in"><span class="co"># Rename channels - just used as example</span></span>
-<span class="r-in"><span class="fu"><a href="CytoImageList-naming.html">channelNames</a></span><span class="op">(</span><span class="va">pancreasImages</span><span class="op">)</span> <span class="op">&lt;-</span> <span class="va">metals</span></span>
-<span class="r-in"></span>
-<span class="r-in"><span class="co"># Perform channel spillover</span></span>
-<span class="r-in"><span class="va">comp_images</span> <span class="op">&lt;-</span> <span class="fu">compImage</span><span class="op">(</span><span class="va">pancreasImages</span>, <span class="va">sm</span><span class="op">)</span> </span>
-<span class="r-in"></span>
+    <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span><span class="fu"><a href="https://rdrr.io/r/utils/data.html" class="external-link">data</a></span><span class="op">(</span><span class="st">"pancreasImages"</span><span class="op">)</span></span></span>
+<span class="r-in"><span></span></span>
+<span class="r-in"><span><span class="co"># Generate example spillover matrix</span></span></span>
+<span class="r-in"><span><span class="va">metals</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"Dy161Di"</span>, <span class="st">"Dy162Di"</span>, <span class="st">"Dy163Di"</span>, <span class="st">"Dy164Di"</span>, <span class="st">"Ho165Di"</span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="va">sm</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/matrix.html" class="external-link">matrix</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">1</span>, <span class="fl">0.033</span>, <span class="fl">0.01</span>, <span class="fl">0.007</span>, <span class="fl">0</span>,</span></span>
+<span class="r-in"><span>               <span class="fl">0.016</span>, <span class="fl">1</span>, <span class="fl">0.051</span>, <span class="fl">0.01</span>, <span class="fl">0</span>,</span></span>
+<span class="r-in"><span>               <span class="fl">0.004</span>, <span class="fl">0.013</span>, <span class="fl">1</span>, <span class="fl">0.023</span>, <span class="fl">0</span>,</span></span>
+<span class="r-in"><span>               <span class="fl">0.005</span>, <span class="fl">0.008</span>, <span class="fl">0.029</span>, <span class="fl">1</span>, <span class="fl">0.006</span>,</span></span>
+<span class="r-in"><span>               <span class="fl">0</span>, <span class="fl">0</span>, <span class="fl">0</span>, <span class="fl">0.001</span>, <span class="fl">1</span><span class="op">)</span>, byrow <span class="op">=</span> <span class="cn">TRUE</span>,</span></span>
+<span class="r-in"><span>             ncol <span class="op">=</span> <span class="fl">5</span>, nrow <span class="op">=</span> <span class="fl">5</span>, </span></span>
+<span class="r-in"><span>             dimnames <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span><span class="va">metals</span>, <span class="va">metals</span><span class="op">)</span><span class="op">)</span></span></span>
+<span class="r-in"><span>             </span></span>
+<span class="r-in"><span><span class="co"># Rename channels - just used as example</span></span></span>
+<span class="r-in"><span><span class="fu"><a href="CytoImageList-naming.html">channelNames</a></span><span class="op">(</span><span class="va">pancreasImages</span><span class="op">)</span> <span class="op">&lt;-</span> <span class="va">metals</span></span></span>
+<span class="r-in"><span></span></span>
+<span class="r-in"><span><span class="co"># Perform channel spillover</span></span></span>
+<span class="r-in"><span><span class="va">comp_images</span> <span class="op">&lt;-</span> <span class="fu">compImage</span><span class="op">(</span><span class="va">pancreasImages</span>, <span class="va">sm</span><span class="op">)</span> </span></span>
+<span class="r-in"><span></span></span>
 </code></pre></div>
     </div>
   </div>
@@ -164,7 +173,7 @@ and Imaging Mass Cytometry., Cell Systems 2018 6(5):612-620.e5</a></p>
 </div>
 
 <div class="pkgdown">
-  <p></p><p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.3.</p>
+  <p></p><p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.6.</p>
 </div>
 
       </footer></div>

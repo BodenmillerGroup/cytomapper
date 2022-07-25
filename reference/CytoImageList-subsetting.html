@@ -18,7 +18,7 @@ entries in a CytoImageList object."><!-- mathjax --><script src="https://cdnjs.c
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">cytomapper</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="">1.9.0</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="">1.9.1</span>
       </span>
     </div>
 
@@ -69,16 +69,23 @@ entries in a <code><a href="CytoImageList.html">CytoImageList</a></code> object.
     <h2>Arguments</h2>
     <dl><dt>x, y</dt>
 <dd><p><code>CytoImageList</code> objects</p></dd>
+
+
 <dt>i</dt>
 <dd><p>integer, logical, character or vector of such indicating which
 element(s) to replace or extract</p></dd>
+
+
 <dt>value</dt>
 <dd><p>a <code>CytoImageList</code> or <code><a href="https://rdrr.io/pkg/EBImage/man/Image.html" class="external-link">Image</a></code>
 object</p></dd>
+
 </dl></div>
     <div id="value">
     <h2>Value</h2>
-    <p>A CytoImageList object</p>
+    
+
+<p>A CytoImageList object</p>
     </div>
     <div id="setting-and-getting-images">
     <h2>Setting and getting images</h2>
@@ -173,93 +180,93 @@ location where the merged images are stored on disk.</p></dd>
 
     <div id="ref-examples">
     <h2>Examples</h2>
-    <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span class="fu"><a href="https://rdrr.io/r/utils/data.html" class="external-link">data</a></span><span class="op">(</span><span class="st">"pancreasImages"</span><span class="op">)</span></span>
-<span class="r-in"></span>
-<span class="r-in"><span class="co"># Get images</span></span>
-<span class="r-in"><span class="fu">getImages</span><span class="op">(</span><span class="va">pancreasImages</span>, <span class="fl">1</span><span class="op">)</span></span>
+    <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span><span class="fu"><a href="https://rdrr.io/r/utils/data.html" class="external-link">data</a></span><span class="op">(</span><span class="st">"pancreasImages"</span><span class="op">)</span></span></span>
+<span class="r-in"><span></span></span>
+<span class="r-in"><span><span class="co"># Get images</span></span></span>
+<span class="r-in"><span><span class="fu">getImages</span><span class="op">(</span><span class="va">pancreasImages</span>, <span class="fl">1</span><span class="op">)</span></span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> CytoImageList containing 1 image(s)</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> names(1): E34_imc </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> Each image contains 5 channel(s)</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> channelNames(5): H3 CD99 PIN CD8a CDH </span>
-<span class="r-in"><span class="fu">getImages</span><span class="op">(</span><span class="va">pancreasImages</span>, <span class="st">"E34_imc"</span><span class="op">)</span></span>
+<span class="r-in"><span><span class="fu">getImages</span><span class="op">(</span><span class="va">pancreasImages</span>, <span class="st">"E34_imc"</span><span class="op">)</span></span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> CytoImageList containing 1 image(s)</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> names(1): E34_imc </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> Each image contains 5 channel(s)</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> channelNames(5): H3 CD99 PIN CD8a CDH </span>
-<span class="r-in"><span class="fu">getImages</span><span class="op">(</span><span class="va">pancreasImages</span>, <span class="fl">1</span><span class="op">:</span><span class="fl">2</span><span class="op">)</span></span>
+<span class="r-in"><span><span class="fu">getImages</span><span class="op">(</span><span class="va">pancreasImages</span>, <span class="fl">1</span><span class="op">:</span><span class="fl">2</span><span class="op">)</span></span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> CytoImageList containing 2 image(s)</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> names(2): E34_imc G01_imc </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> Each image contains 5 channel(s)</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> channelNames(5): H3 CD99 PIN CD8a CDH </span>
-<span class="r-in"><span class="fu">getImages</span><span class="op">(</span><span class="va">pancreasImages</span>, <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"E34_imc"</span>, <span class="st">"G01_imc"</span><span class="op">)</span><span class="op">)</span></span>
+<span class="r-in"><span><span class="fu">getImages</span><span class="op">(</span><span class="va">pancreasImages</span>, <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"E34_imc"</span>, <span class="st">"G01_imc"</span><span class="op">)</span><span class="op">)</span></span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> CytoImageList containing 2 image(s)</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> names(2): E34_imc G01_imc </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> Each image contains 5 channel(s)</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> channelNames(5): H3 CD99 PIN CD8a CDH </span>
-<span class="r-in"><span class="fu">getImages</span><span class="op">(</span><span class="va">pancreasImages</span>, <span class="fu"><a href="https://rdrr.io/r/base/grep.html" class="external-link">grepl</a></span><span class="op">(</span><span class="st">"E34_imc"</span>, <span class="fu"><a href="https://rdrr.io/r/base/names.html" class="external-link">names</a></span><span class="op">(</span><span class="va">pancreasImages</span><span class="op">)</span><span class="op">)</span><span class="op">)</span></span>
+<span class="r-in"><span><span class="fu">getImages</span><span class="op">(</span><span class="va">pancreasImages</span>, <span class="fu"><a href="https://rdrr.io/r/base/grep.html" class="external-link">grepl</a></span><span class="op">(</span><span class="st">"E34_imc"</span>, <span class="fu"><a href="https://rdrr.io/r/base/names.html" class="external-link">names</a></span><span class="op">(</span><span class="va">pancreasImages</span><span class="op">)</span><span class="op">)</span><span class="op">)</span></span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> CytoImageList containing 1 image(s)</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> names(1): E34_imc </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> Each image contains 5 channel(s)</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> channelNames(5): H3 CD99 PIN CD8a CDH </span>
-<span class="r-in"></span>
-<span class="r-in"><span class="co"># Set images</span></span>
-<span class="r-in"><span class="fu">setImages</span><span class="op">(</span><span class="va">pancreasImages</span>, <span class="fl">1</span><span class="op">)</span> <span class="op">&lt;-</span> <span class="va">pancreasImages</span><span class="op">[</span><span class="fl">1</span><span class="op">]</span></span>
-<span class="r-in"><span class="fu">setImages</span><span class="op">(</span><span class="va">pancreasImages</span>, <span class="st">"J02_imc"</span><span class="op">)</span> <span class="op">&lt;-</span> <span class="va">pancreasImages</span><span class="op">[</span><span class="fl">1</span><span class="op">]</span></span>
-<span class="r-in"><span class="fu">setImages</span><span class="op">(</span><span class="va">pancreasImages</span>, <span class="st">"J02_imc"</span><span class="op">)</span> <span class="op">&lt;-</span> <span class="cn">NULL</span></span>
-<span class="r-in"></span>
-<span class="r-in"><span class="co"># Get channels</span></span>
-<span class="r-in"><span class="fu">getChannels</span><span class="op">(</span><span class="va">pancreasImages</span>, <span class="fl">1</span><span class="op">)</span></span>
+<span class="r-in"><span></span></span>
+<span class="r-in"><span><span class="co"># Set images</span></span></span>
+<span class="r-in"><span><span class="fu">setImages</span><span class="op">(</span><span class="va">pancreasImages</span>, <span class="fl">1</span><span class="op">)</span> <span class="op">&lt;-</span> <span class="va">pancreasImages</span><span class="op">[</span><span class="fl">1</span><span class="op">]</span></span></span>
+<span class="r-in"><span><span class="fu">setImages</span><span class="op">(</span><span class="va">pancreasImages</span>, <span class="st">"J02_imc"</span><span class="op">)</span> <span class="op">&lt;-</span> <span class="va">pancreasImages</span><span class="op">[</span><span class="fl">1</span><span class="op">]</span></span></span>
+<span class="r-in"><span><span class="fu">setImages</span><span class="op">(</span><span class="va">pancreasImages</span>, <span class="st">"J02_imc"</span><span class="op">)</span> <span class="op">&lt;-</span> <span class="cn">NULL</span></span></span>
+<span class="r-in"><span></span></span>
+<span class="r-in"><span><span class="co"># Get channels</span></span></span>
+<span class="r-in"><span><span class="fu">getChannels</span><span class="op">(</span><span class="va">pancreasImages</span>, <span class="fl">1</span><span class="op">)</span></span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> CytoImageList containing 2 image(s)</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> names(2): E34_imc G01_imc </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> Each image contains 1 channel(s)</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> channelNames(1): H3 </span>
-<span class="r-in"><span class="fu">getChannels</span><span class="op">(</span><span class="va">pancreasImages</span>, <span class="st">"CD99"</span><span class="op">)</span></span>
+<span class="r-in"><span><span class="fu">getChannels</span><span class="op">(</span><span class="va">pancreasImages</span>, <span class="st">"CD99"</span><span class="op">)</span></span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> CytoImageList containing 2 image(s)</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> names(2): E34_imc G01_imc </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> Each image contains 1 channel(s)</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> channelNames(1): CD99 </span>
-<span class="r-in"><span class="fu">getChannels</span><span class="op">(</span><span class="va">pancreasImages</span>, <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"CD99"</span>, <span class="st">"PIN"</span><span class="op">)</span><span class="op">)</span></span>
+<span class="r-in"><span><span class="fu">getChannels</span><span class="op">(</span><span class="va">pancreasImages</span>, <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"CD99"</span>, <span class="st">"PIN"</span><span class="op">)</span><span class="op">)</span></span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> CytoImageList containing 2 image(s)</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> names(2): E34_imc G01_imc </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> Each image contains 2 channel(s)</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> channelNames(2): CD99 PIN </span>
-<span class="r-in"></span>
-<span class="r-in"><span class="co"># Set channels</span></span>
-<span class="r-in"><span class="va">channel1</span> <span class="op">&lt;-</span> <span class="fu">getChannels</span><span class="op">(</span><span class="va">pancreasImages</span>, <span class="fl">1</span><span class="op">)</span></span>
-<span class="r-in"><span class="fu">setChannels</span><span class="op">(</span><span class="va">pancreasImages</span>, <span class="fl">1</span><span class="op">)</span> <span class="op">&lt;-</span> <span class="va">channel1</span></span>
-<span class="r-in"><span class="va">channelPIN</span> <span class="op">&lt;-</span> <span class="fu">getChannels</span><span class="op">(</span><span class="va">pancreasImages</span>, <span class="st">"PIN"</span><span class="op">)</span></span>
-<span class="r-in"><span class="fu">setChannels</span><span class="op">(</span><span class="va">pancreasImages</span>, <span class="st">"CD8a"</span><span class="op">)</span> <span class="op">&lt;-</span> <span class="va">channelPIN</span></span>
-<span class="r-in"><span class="fu">setChannels</span><span class="op">(</span><span class="va">pancreasImages</span>, <span class="st">"CD8a"</span><span class="op">)</span> <span class="op">&lt;-</span> <span class="cn">NULL</span></span>
-<span class="r-in"></span>
-<span class="r-in"><span class="co"># Merge images</span></span>
-<span class="r-in"><span class="fu"><a href="https://rdrr.io/r/utils/data.html" class="external-link">data</a></span><span class="op">(</span><span class="st">"pancreasImages"</span><span class="op">)</span></span>
-<span class="r-in"><span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="va">pancreasImages</span><span class="op">[</span><span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">1</span>,<span class="fl">3</span><span class="op">)</span><span class="op">]</span>, <span class="va">pancreasImages</span><span class="op">[</span><span class="fl">2</span><span class="op">]</span><span class="op">)</span></span>
+<span class="r-in"><span></span></span>
+<span class="r-in"><span><span class="co"># Set channels</span></span></span>
+<span class="r-in"><span><span class="va">channel1</span> <span class="op">&lt;-</span> <span class="fu">getChannels</span><span class="op">(</span><span class="va">pancreasImages</span>, <span class="fl">1</span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="fu">setChannels</span><span class="op">(</span><span class="va">pancreasImages</span>, <span class="fl">1</span><span class="op">)</span> <span class="op">&lt;-</span> <span class="va">channel1</span></span></span>
+<span class="r-in"><span><span class="va">channelPIN</span> <span class="op">&lt;-</span> <span class="fu">getChannels</span><span class="op">(</span><span class="va">pancreasImages</span>, <span class="st">"PIN"</span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="fu">setChannels</span><span class="op">(</span><span class="va">pancreasImages</span>, <span class="st">"CD8a"</span><span class="op">)</span> <span class="op">&lt;-</span> <span class="va">channelPIN</span></span></span>
+<span class="r-in"><span><span class="fu">setChannels</span><span class="op">(</span><span class="va">pancreasImages</span>, <span class="st">"CD8a"</span><span class="op">)</span> <span class="op">&lt;-</span> <span class="cn">NULL</span></span></span>
+<span class="r-in"><span></span></span>
+<span class="r-in"><span><span class="co"># Merge images</span></span></span>
+<span class="r-in"><span><span class="fu"><a href="https://rdrr.io/r/utils/data.html" class="external-link">data</a></span><span class="op">(</span><span class="st">"pancreasImages"</span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="va">pancreasImages</span><span class="op">[</span><span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">1</span>,<span class="fl">3</span><span class="op">)</span><span class="op">]</span>, <span class="va">pancreasImages</span><span class="op">[</span><span class="fl">2</span><span class="op">]</span><span class="op">)</span></span></span>
 <span class="r-err co"><span class="r-pr">#&gt;</span> <span class="error">Error:</span> subscript contains out-of-bounds indices</span>
-<span class="r-in"></span>
-<span class="r-in"><span class="co"># Merge channels</span></span>
-<span class="r-in"><span class="va">channel12</span> <span class="op">&lt;-</span> <span class="fu">getChannels</span><span class="op">(</span><span class="va">pancreasImages</span>, <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">1</span>,<span class="fl">2</span><span class="op">)</span><span class="op">)</span></span>
-<span class="r-in"><span class="va">channel34</span> <span class="op">&lt;-</span> <span class="fu">getChannels</span><span class="op">(</span><span class="va">pancreasImages</span>, <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">3</span>,<span class="fl">4</span><span class="op">)</span><span class="op">)</span></span>
-<span class="r-in"><span class="fu">mergeChannels</span><span class="op">(</span><span class="va">channel12</span>, <span class="va">channel34</span><span class="op">)</span></span>
+<span class="r-in"><span></span></span>
+<span class="r-in"><span><span class="co"># Merge channels</span></span></span>
+<span class="r-in"><span><span class="va">channel12</span> <span class="op">&lt;-</span> <span class="fu">getChannels</span><span class="op">(</span><span class="va">pancreasImages</span>, <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">1</span>,<span class="fl">2</span><span class="op">)</span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="va">channel34</span> <span class="op">&lt;-</span> <span class="fu">getChannels</span><span class="op">(</span><span class="va">pancreasImages</span>, <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">3</span>,<span class="fl">4</span><span class="op">)</span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="fu">mergeChannels</span><span class="op">(</span><span class="va">channel12</span>, <span class="va">channel34</span><span class="op">)</span></span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> CytoImageList containing 2 image(s)</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> names(2): E34_imc G01_imc </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> Each image contains 4 channel(s)</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> channelNames(4): H3 CD99 PIN CDH </span>
-<span class="r-in"></span>
-<span class="r-in"><span class="co"># Merge channels on disk</span></span>
-<span class="r-in"><span class="va">cur_images</span> <span class="op">&lt;-</span> <span class="fu"><a href="CytoImageList.html">CytoImageList</a></span><span class="op">(</span><span class="va">pancreasImages</span>,</span>
-<span class="r-in">                     on_disk <span class="op">=</span> <span class="cn">TRUE</span>, </span>
-<span class="r-in">                     h5FilesPath <span class="op">=</span> <span class="fu">HDF5Array</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/HDF5Array/man/dump-management.html" class="external-link">getHDF5DumpDir</a></span><span class="op">(</span><span class="op">)</span><span class="op">)</span></span>
-<span class="r-in"><span class="va">channel12</span> <span class="op">&lt;-</span> <span class="fu">getChannels</span><span class="op">(</span><span class="va">cur_images</span>, <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">1</span>,<span class="fl">2</span><span class="op">)</span><span class="op">)</span></span>
-<span class="r-in"><span class="va">channel34</span> <span class="op">&lt;-</span> <span class="fu">getChannels</span><span class="op">(</span><span class="va">cur_images</span>, <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">3</span>,<span class="fl">4</span><span class="op">)</span><span class="op">)</span></span>
-<span class="r-in"></span>
-<span class="r-in"><span class="co"># This will overwrite the initial .h5 files</span></span>
-<span class="r-in"><span class="fu">mergeChannels</span><span class="op">(</span><span class="va">channel12</span>, <span class="va">channel34</span>,</span>
-<span class="r-in">                h5FilesPath <span class="op">=</span> <span class="fu">HDF5Array</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/HDF5Array/man/dump-management.html" class="external-link">getHDF5DumpDir</a></span><span class="op">(</span><span class="op">)</span><span class="op">)</span></span>
+<span class="r-in"><span></span></span>
+<span class="r-in"><span><span class="co"># Merge channels on disk</span></span></span>
+<span class="r-in"><span><span class="va">cur_images</span> <span class="op">&lt;-</span> <span class="fu"><a href="CytoImageList.html">CytoImageList</a></span><span class="op">(</span><span class="va">pancreasImages</span>,</span></span>
+<span class="r-in"><span>                     on_disk <span class="op">=</span> <span class="cn">TRUE</span>, </span></span>
+<span class="r-in"><span>                     h5FilesPath <span class="op">=</span> <span class="fu">HDF5Array</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/HDF5Array/man/dump-management.html" class="external-link">getHDF5DumpDir</a></span><span class="op">(</span><span class="op">)</span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="va">channel12</span> <span class="op">&lt;-</span> <span class="fu">getChannels</span><span class="op">(</span><span class="va">cur_images</span>, <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">1</span>,<span class="fl">2</span><span class="op">)</span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="va">channel34</span> <span class="op">&lt;-</span> <span class="fu">getChannels</span><span class="op">(</span><span class="va">cur_images</span>, <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">3</span>,<span class="fl">4</span><span class="op">)</span><span class="op">)</span></span></span>
+<span class="r-in"><span></span></span>
+<span class="r-in"><span><span class="co"># This will overwrite the initial .h5 files</span></span></span>
+<span class="r-in"><span><span class="fu">mergeChannels</span><span class="op">(</span><span class="va">channel12</span>, <span class="va">channel34</span>,</span></span>
+<span class="r-in"><span>                h5FilesPath <span class="op">=</span> <span class="fu">HDF5Array</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/HDF5Array/man/dump-management.html" class="external-link">getHDF5DumpDir</a></span><span class="op">(</span><span class="op">)</span><span class="op">)</span></span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> CytoImageList containing 2 image(s)</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> names(2): E34_imc G01_imc </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> Each image contains 4 channel(s)</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> channelNames(4): H3 CD99 PIN CDH </span>
-<span class="r-in"></span>
+<span class="r-in"><span></span></span>
 </code></pre></div>
     </div>
   </div>
@@ -274,7 +281,7 @@ location where the merged images are stored on disk.</p></dd>
 </div>
 
 <div class="pkgdown">
-  <p></p><p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.3.</p>
+  <p></p><p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.6.</p>
 </div>
 
       </footer></div>

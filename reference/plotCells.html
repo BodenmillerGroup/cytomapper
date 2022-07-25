@@ -19,7 +19,7 @@ colour cells by marker expression or metadata."><!-- mathjax --><script src="htt
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">cytomapper</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="">1.9.0</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="">1.9.1</span>
       </span>
     </div>
 
@@ -67,17 +67,17 @@ colour cells by marker expression or metadata.</p>
     </div>
 
     <div id="ref-usage">
-    <div class="sourceCode"><pre class="sourceCode r"><code><span class="fu">plotCells</span><span class="op">(</span>
-  <span class="va">mask</span>,
-  object <span class="op">=</span> <span class="cn">NULL</span>,
-  cell_id <span class="op">=</span> <span class="cn">NULL</span>,
-  img_id <span class="op">=</span> <span class="cn">NULL</span>,
-  colour_by <span class="op">=</span> <span class="cn">NULL</span>,
-  outline_by <span class="op">=</span> <span class="cn">NULL</span>,
-  exprs_values <span class="op">=</span> <span class="st">"counts"</span>,
-  colour <span class="op">=</span> <span class="cn">NULL</span>,
-  <span class="va">...</span>
-<span class="op">)</span></code></pre></div>
+    <div class="sourceCode"><pre class="sourceCode r"><code><span><span class="fu">plotCells</span><span class="op">(</span></span>
+<span>  <span class="va">mask</span>,</span>
+<span>  object <span class="op">=</span> <span class="cn">NULL</span>,</span>
+<span>  cell_id <span class="op">=</span> <span class="cn">NULL</span>,</span>
+<span>  img_id <span class="op">=</span> <span class="cn">NULL</span>,</span>
+<span>  colour_by <span class="op">=</span> <span class="cn">NULL</span>,</span>
+<span>  outline_by <span class="op">=</span> <span class="cn">NULL</span>,</span>
+<span>  exprs_values <span class="op">=</span> <span class="st">"counts"</span>,</span>
+<span>  colour <span class="op">=</span> <span class="cn">NULL</span>,</span>
+<span>  <span class="va">...</span></span>
+<span><span class="op">)</span></span></code></pre></div>
     </div>
 
     <div id="arguments">
@@ -86,28 +86,42 @@ colour cells by marker expression or metadata.</p>
 <dd><p>a <code><a href="CytoImageList.html">CytoImageList</a></code> containing single-channel
 <code><a href="https://rdrr.io/pkg/EBImage/man/Image.html" class="external-link">Image</a></code> objects (see section 'Segmentation mask object'
 below).</p></dd>
+
+
 <dt>object</dt>
 <dd><p>a <code><a href="https://rdrr.io/pkg/SingleCellExperiment/man/SingleCellExperiment.html" class="external-link">SingleCellExperiment</a></code> object.</p></dd>
+
+
 <dt>cell_id</dt>
 <dd><p>character specifying the <code>colData(object)</code> entry, in
 which the integer cell IDs are stored. These IDs should match the integer
 pixel values in the segmentation mask object.</p></dd>
+
+
 <dt>img_id</dt>
 <dd><p>character specifying the <code>colData(object)</code> and
 <code>mcols(mask)</code> entry, in which the image IDs are stored (see section
 'Linking the <code>SingleCellExperiment</code> and <code>CytoImageList</code> object'
 below)</p></dd>
+
+
 <dt>colour_by</dt>
 <dd><p>character or character vector specifying the features
 (<code>rownames(object)</code>) or metadata (<code>colData(object)</code> entry) used
 to colour individual cells. Cells can be coloured by single
 <code>colData(object)</code> entries or by up to six features.</p></dd>
+
+
 <dt>outline_by</dt>
 <dd><p>single character indicating the <code>colData(object)</code>
 entry by which to outline individual cells.</p></dd>
+
+
 <dt>exprs_values</dt>
 <dd><p>single character indicating which <code>assay(object)</code>
 entry to use when visualizing feature counts.</p></dd>
+
+
 <dt>colour</dt>
 <dd><p>a list with names matching the entries to <code>colour_by</code>
 and/or <code>outline_by</code>. When setting the colour for continous features,
@@ -115,12 +129,17 @@ at least two colours need to be provided indicating the colours for minimum
 and maximum values. When colouring discrete vectors, a colour for each
 unique entry needs to be provided (see section 'Setting the colours' and
 examples)</p></dd>
+
+
 <dt>...</dt>
 <dd><p>Further arguments passed to <code>?"<a href="plotting-param.html">plotting-param</a>"</code></p></dd>
+
 </dl></div>
     <div id="value">
     <h2>Value</h2>
-    <p>a list if <code>return_images</code> and/or <code>return_plot</code> is TRUE
+    
+
+<p>a list if <code>return_images</code> and/or <code>return_plot</code> is TRUE
 (see <code>?"<a href="plotting-param.html">plotting-param</a>"</code>).</p><ul><li><p><code>plot</code>: a single plot object (<code>display = "all"</code>) or a list
 of plot objects (<code>display = "single"</code>)</p></li>
 <li><p><code>images</code>: a <code>SimpleList</code> object containing
@@ -206,50 +225,50 @@ plotting.</p>
 
     <div id="ref-examples">
     <h2>Examples</h2>
-    <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span class="fu"><a href="https://rdrr.io/r/utils/data.html" class="external-link">data</a></span><span class="op">(</span><span class="va">pancreasMasks</span><span class="op">)</span></span>
-<span class="r-in"><span class="fu"><a href="https://rdrr.io/r/utils/data.html" class="external-link">data</a></span><span class="op">(</span><span class="va">pancreasSCE</span><span class="op">)</span></span>
-<span class="r-in"></span>
-<span class="r-in"><span class="co"># Visualize the masks</span></span>
-<span class="r-in"><span class="fu">plotCells</span><span class="op">(</span><span class="va">pancreasMasks</span><span class="op">)</span></span>
+    <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span><span class="fu"><a href="https://rdrr.io/r/utils/data.html" class="external-link">data</a></span><span class="op">(</span><span class="va">pancreasMasks</span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="fu"><a href="https://rdrr.io/r/utils/data.html" class="external-link">data</a></span><span class="op">(</span><span class="va">pancreasSCE</span><span class="op">)</span></span></span>
+<span class="r-in"><span></span></span>
+<span class="r-in"><span><span class="co"># Visualize the masks</span></span></span>
+<span class="r-in"><span><span class="fu">plotCells</span><span class="op">(</span><span class="va">pancreasMasks</span><span class="op">)</span></span></span>
 <span class="r-plt img"><img src="plotCells-1.png" alt="" width="700" height="433"></span>
-<span class="r-in"></span>
-<span class="r-in"><span class="co"># Colour the masks based on averaged expression</span></span>
-<span class="r-in"><span class="fu">plotCells</span><span class="op">(</span><span class="va">pancreasMasks</span>, object <span class="op">=</span> <span class="va">pancreasSCE</span>, img_id <span class="op">=</span> <span class="st">"ImageNb"</span>,</span>
-<span class="r-in">            cell_id <span class="op">=</span> <span class="st">"CellNb"</span>, colour_by <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"CD99"</span>, <span class="st">"CDH"</span><span class="op">)</span><span class="op">)</span></span>
+<span class="r-in"><span></span></span>
+<span class="r-in"><span><span class="co"># Colour the masks based on averaged expression</span></span></span>
+<span class="r-in"><span><span class="fu">plotCells</span><span class="op">(</span><span class="va">pancreasMasks</span>, object <span class="op">=</span> <span class="va">pancreasSCE</span>, img_id <span class="op">=</span> <span class="st">"ImageNb"</span>,</span></span>
+<span class="r-in"><span>            cell_id <span class="op">=</span> <span class="st">"CellNb"</span>, colour_by <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"CD99"</span>, <span class="st">"CDH"</span><span class="op">)</span><span class="op">)</span></span></span>
 <span class="r-plt img"><img src="plotCells-2.png" alt="" width="700" height="433"></span>
-<span class="r-in"></span>
-<span class="r-in"><span class="co"># Colour the masks based on metadata</span></span>
-<span class="r-in"><span class="fu">plotCells</span><span class="op">(</span><span class="va">pancreasMasks</span>, object <span class="op">=</span> <span class="va">pancreasSCE</span>, img_id <span class="op">=</span> <span class="st">"ImageNb"</span>,</span>
-<span class="r-in">            cell_id <span class="op">=</span> <span class="st">"CellNb"</span>, colour_by <span class="op">=</span> <span class="st">"CellType"</span><span class="op">)</span></span>
+<span class="r-in"><span></span></span>
+<span class="r-in"><span><span class="co"># Colour the masks based on metadata</span></span></span>
+<span class="r-in"><span><span class="fu">plotCells</span><span class="op">(</span><span class="va">pancreasMasks</span>, object <span class="op">=</span> <span class="va">pancreasSCE</span>, img_id <span class="op">=</span> <span class="st">"ImageNb"</span>,</span></span>
+<span class="r-in"><span>            cell_id <span class="op">=</span> <span class="st">"CellNb"</span>, colour_by <span class="op">=</span> <span class="st">"CellType"</span><span class="op">)</span></span></span>
 <span class="r-plt img"><img src="plotCells-3.png" alt="" width="700" height="433"></span>
-<span class="r-in"></span>
-<span class="r-in"><span class="co"># Outline the masks based on metadata</span></span>
-<span class="r-in"><span class="fu">plotCells</span><span class="op">(</span><span class="va">pancreasMasks</span>, object <span class="op">=</span> <span class="va">pancreasSCE</span>, img_id <span class="op">=</span> <span class="st">"ImageNb"</span>,</span>
-<span class="r-in">            cell_id <span class="op">=</span> <span class="st">"CellNb"</span>, colour_by <span class="op">=</span> <span class="st">"CD99"</span>,</span>
-<span class="r-in">            outline_by <span class="op">=</span> <span class="st">"CellType"</span><span class="op">)</span></span>
+<span class="r-in"><span></span></span>
+<span class="r-in"><span><span class="co"># Outline the masks based on metadata</span></span></span>
+<span class="r-in"><span><span class="fu">plotCells</span><span class="op">(</span><span class="va">pancreasMasks</span>, object <span class="op">=</span> <span class="va">pancreasSCE</span>, img_id <span class="op">=</span> <span class="st">"ImageNb"</span>,</span></span>
+<span class="r-in"><span>            cell_id <span class="op">=</span> <span class="st">"CellNb"</span>, colour_by <span class="op">=</span> <span class="st">"CD99"</span>,</span></span>
+<span class="r-in"><span>            outline_by <span class="op">=</span> <span class="st">"CellType"</span><span class="op">)</span></span></span>
 <span class="r-plt img"><img src="plotCells-4.png" alt="" width="700" height="433"></span>
-<span class="r-in"></span>
-<span class="r-in"><span class="co"># Colour the masks based on arcsinh-transformed expression</span></span>
-<span class="r-in"><span class="fu">plotCells</span><span class="op">(</span><span class="va">pancreasMasks</span>, object <span class="op">=</span> <span class="va">pancreasSCE</span>, img_id <span class="op">=</span> <span class="st">"ImageNb"</span>,</span>
-<span class="r-in">            cell_id <span class="op">=</span> <span class="st">"CellNb"</span>, colour_by <span class="op">=</span> <span class="st">"CD99"</span>,</span>
-<span class="r-in">            exprs_values <span class="op">=</span> <span class="st">"exprs"</span><span class="op">)</span></span>
+<span class="r-in"><span></span></span>
+<span class="r-in"><span><span class="co"># Colour the masks based on arcsinh-transformed expression</span></span></span>
+<span class="r-in"><span><span class="fu">plotCells</span><span class="op">(</span><span class="va">pancreasMasks</span>, object <span class="op">=</span> <span class="va">pancreasSCE</span>, img_id <span class="op">=</span> <span class="st">"ImageNb"</span>,</span></span>
+<span class="r-in"><span>            cell_id <span class="op">=</span> <span class="st">"CellNb"</span>, colour_by <span class="op">=</span> <span class="st">"CD99"</span>,</span></span>
+<span class="r-in"><span>            exprs_values <span class="op">=</span> <span class="st">"exprs"</span><span class="op">)</span></span></span>
 <span class="r-plt img"><img src="plotCells-5.png" alt="" width="700" height="433"></span>
-<span class="r-in"></span>
-<span class="r-in"><span class="co"># Subset the images</span></span>
-<span class="r-in"><span class="va">cur_images</span> <span class="op">&lt;-</span> <span class="fu"><a href="CytoImageList-subsetting.html">getImages</a></span><span class="op">(</span><span class="va">pancreasMasks</span>, <span class="fl">1</span><span class="op">:</span><span class="fl">2</span><span class="op">)</span></span>
-<span class="r-in"><span class="fu">plotCells</span><span class="op">(</span><span class="va">cur_images</span>, object <span class="op">=</span> <span class="va">pancreasSCE</span>, img_id <span class="op">=</span> <span class="st">"ImageNb"</span>,</span>
-<span class="r-in">            cell_id <span class="op">=</span> <span class="st">"CellNb"</span>, colour_by <span class="op">=</span> <span class="st">"CD99"</span><span class="op">)</span></span>
+<span class="r-in"><span></span></span>
+<span class="r-in"><span><span class="co"># Subset the images</span></span></span>
+<span class="r-in"><span><span class="va">cur_images</span> <span class="op">&lt;-</span> <span class="fu"><a href="CytoImageList-subsetting.html">getImages</a></span><span class="op">(</span><span class="va">pancreasMasks</span>, <span class="fl">1</span><span class="op">:</span><span class="fl">2</span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="fu">plotCells</span><span class="op">(</span><span class="va">cur_images</span>, object <span class="op">=</span> <span class="va">pancreasSCE</span>, img_id <span class="op">=</span> <span class="st">"ImageNb"</span>,</span></span>
+<span class="r-in"><span>            cell_id <span class="op">=</span> <span class="st">"CellNb"</span>, colour_by <span class="op">=</span> <span class="st">"CD99"</span><span class="op">)</span></span></span>
 <span class="r-plt img"><img src="plotCells-6.png" alt="" width="700" height="433"></span>
-<span class="r-in"></span>
-<span class="r-in"><span class="co"># Set colour</span></span>
-<span class="r-in"><span class="fu">plotCells</span><span class="op">(</span><span class="va">pancreasMasks</span>, object <span class="op">=</span> <span class="va">pancreasSCE</span>, img_id <span class="op">=</span> <span class="st">"ImageNb"</span>,</span>
-<span class="r-in">            cell_id <span class="op">=</span> <span class="st">"CellNb"</span>, colour_by <span class="op">=</span> <span class="st">"CD99"</span>, outline_by <span class="op">=</span> <span class="st">"CellType"</span>,</span>
-<span class="r-in">            colour <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span>CD99 <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"black"</span>, <span class="st">"red"</span><span class="op">)</span>,</span>
-<span class="r-in">                            CellType <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span>celltype_A <span class="op">=</span> <span class="st">"blue"</span>,</span>
-<span class="r-in">                                        celltype_B <span class="op">=</span> <span class="st">"green"</span>,</span>
-<span class="r-in">                                        celltype_C <span class="op">=</span> <span class="st">"red"</span><span class="op">)</span><span class="op">)</span><span class="op">)</span></span>
+<span class="r-in"><span></span></span>
+<span class="r-in"><span><span class="co"># Set colour</span></span></span>
+<span class="r-in"><span><span class="fu">plotCells</span><span class="op">(</span><span class="va">pancreasMasks</span>, object <span class="op">=</span> <span class="va">pancreasSCE</span>, img_id <span class="op">=</span> <span class="st">"ImageNb"</span>,</span></span>
+<span class="r-in"><span>            cell_id <span class="op">=</span> <span class="st">"CellNb"</span>, colour_by <span class="op">=</span> <span class="st">"CD99"</span>, outline_by <span class="op">=</span> <span class="st">"CellType"</span>,</span></span>
+<span class="r-in"><span>            colour <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span>CD99 <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"black"</span>, <span class="st">"red"</span><span class="op">)</span>,</span></span>
+<span class="r-in"><span>                            CellType <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span>celltype_A <span class="op">=</span> <span class="st">"blue"</span>,</span></span>
+<span class="r-in"><span>                                        celltype_B <span class="op">=</span> <span class="st">"green"</span>,</span></span>
+<span class="r-in"><span>                                        celltype_C <span class="op">=</span> <span class="st">"red"</span><span class="op">)</span><span class="op">)</span><span class="op">)</span></span></span>
 <span class="r-plt img"><img src="plotCells-7.png" alt="" width="700" height="433"></span>
-<span class="r-in"></span>
+<span class="r-in"><span></span></span>
 </code></pre></div>
     </div>
   </div>
@@ -264,7 +283,7 @@ plotting.</p>
 </div>
 
 <div class="pkgdown">
-  <p></p><p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.3.</p>
+  <p></p><p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.6.</p>
 </div>
 
       </footer></div>

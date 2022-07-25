@@ -33,7 +33,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">cytomapper</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="">1.9.0</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="">1.9.1</span>
       </span>
     </div>
 
@@ -84,7 +84,7 @@
       Department for Quantitative Biomedicine, University of Zurich<br><a class="author_email" href="mailto:#"></a><a href="mailto:nils.eling@dqbm.uzh.ch" class="email">nils.eling@dqbm.uzh.ch</a>
       </address>
                   
-            <h4 data-toc-skip class="date">2 May 2022</h4>
+            <h4 data-toc-skip class="date">25 July 2022</h4>
       
       <small class="dont-index">Source: <a href="https://github.com/BodenmillerGroup/cytomapper/blob/HEAD/vignettes/cytomapper_ondisk.Rmd" class="external-link"><code>vignettes/cytomapper_ondisk.Rmd</code></a></small>
       <div class="hidden name"><code>cytomapper_ondisk.Rmd</code></div>
@@ -107,37 +107,37 @@
 </h2>
 <p>The <code>loadImages</code> function takes extra arguments to specify if images should be stored on disk (<code>on_disk</code>) and where to store them (<code>h5FilesPath</code>). When images should be stored for longer than the current R session, the <code>h5FilesPath</code> needs to be set to a permanent directory. The <code>HDF5Array</code> package provides the <code>getHDF5DumpDir</code> function, which initialize a temporary directory, which will be deleted once the session closes. This is what we will use here for demonstration purposes.</p>
 <div class="sourceCode" id="cb1"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://bioconductor.org/packages/HDF5Array" class="external-link">HDF5Array</a></span><span class="op">)</span>
-
-<span class="co"># Define output directory</span>
-<span class="va">cur_dir</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/pkg/HDF5Array/man/dump-management.html" class="external-link">getHDF5DumpDir</a></span><span class="op">(</span><span class="op">)</span>
-
-<span class="va">path.to.images</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/system.file.html" class="external-link">system.file</a></span><span class="op">(</span><span class="st">"extdata"</span>, package <span class="op">=</span> <span class="st">"cytomapper"</span><span class="op">)</span>
-<span class="va">image.list</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/loadImages.html">loadImages</a></span><span class="op">(</span><span class="va">path.to.images</span>, pattern <span class="op">=</span> <span class="st">"mask.tiff"</span>,
-                             on_disk <span class="op">=</span> <span class="cn">TRUE</span>, h5FilesPath <span class="op">=</span> <span class="va">cur_dir</span><span class="op">)</span>
-
-<span class="co"># Show list</span>
-<span class="va">image.list</span></code></pre></div>
-<pre><code><span class="co">## CytoImageList containing 3 image(s)</span>
-<span class="co">## names(3): E34_mask G01_mask J02_mask </span>
-<span class="co">## Each image contains 1 channel</span></code></pre>
+<code class="sourceCode R"><span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://bioconductor.org/packages/HDF5Array" class="external-link">HDF5Array</a></span><span class="op">)</span></span>
+<span></span>
+<span><span class="co"># Define output directory</span></span>
+<span><span class="va">cur_dir</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/pkg/HDF5Array/man/dump-management.html" class="external-link">getHDF5DumpDir</a></span><span class="op">(</span><span class="op">)</span></span>
+<span></span>
+<span><span class="va">path.to.images</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/system.file.html" class="external-link">system.file</a></span><span class="op">(</span><span class="st">"extdata"</span>, package <span class="op">=</span> <span class="st">"cytomapper"</span><span class="op">)</span></span>
+<span><span class="va">image.list</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/loadImages.html">loadImages</a></span><span class="op">(</span><span class="va">path.to.images</span>, pattern <span class="op">=</span> <span class="st">"mask.tiff"</span>,</span>
+<span>                             on_disk <span class="op">=</span> <span class="cn">TRUE</span>, h5FilesPath <span class="op">=</span> <span class="va">cur_dir</span><span class="op">)</span></span>
+<span></span>
+<span><span class="co"># Show list</span></span>
+<span><span class="va">image.list</span></span></code></pre></div>
+<pre><code><span><span class="co">## CytoImageList containing 3 image(s)</span></span>
+<span><span class="co">## names(3): E34_mask G01_mask J02_mask </span></span>
+<span><span class="co">## Each image contains 1 channel</span></span></code></pre>
 <div class="sourceCode" id="cb3"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="co"># Scale images</span>
-<span class="va">image.list</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/CytoImageList-manipulation.html">scaleImages</a></span><span class="op">(</span><span class="va">image.list</span>, value <span class="op">=</span> <span class="fl">2</span><span class="op">^</span><span class="fl">16</span> <span class="op">-</span> <span class="fl">1</span><span class="op">)</span>
-<span class="va">image.list</span><span class="op">$</span><span class="va">E34_mask</span></code></pre></div>
-<pre><code><span class="co">## &lt;100 x 100&gt; matrix of class DelayedMatrix and type "double":</span>
-<span class="co">##          [,1]   [,2]   [,3] ...  [,99] [,100]</span>
-<span class="co">##   [1,]    824    824    824   .   1265   1265</span>
-<span class="co">##   [2,]    824    824    824   .   1265      0</span>
-<span class="co">##   [3,]    824    824    824   .      0      0</span>
-<span class="co">##   [4,]    824    824    824   .      0   1295</span>
-<span class="co">##   [5,]    824    824    824   .      0   1295</span>
-<span class="co">##    ...      .      .      .   .      .      .</span>
-<span class="co">##  [96,]    835      0    876   .      0      0</span>
-<span class="co">##  [97,]    835      0    876   .      0      0</span>
-<span class="co">##  [98,]    835      0    876   .   1293   1293</span>
-<span class="co">##  [99,]      0      0    876   .   1293   1293</span>
-<span class="co">## [100,]      0      0      0   .   1293   1293</span></code></pre>
+<code class="sourceCode R"><span><span class="co"># Scale images</span></span>
+<span><span class="va">image.list</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/CytoImageList-manipulation.html">scaleImages</a></span><span class="op">(</span><span class="va">image.list</span>, value <span class="op">=</span> <span class="fl">2</span><span class="op">^</span><span class="fl">16</span> <span class="op">-</span> <span class="fl">1</span><span class="op">)</span></span>
+<span><span class="va">image.list</span><span class="op">$</span><span class="va">E34_mask</span></span></code></pre></div>
+<pre><code><span><span class="co">## &lt;100 x 100&gt; matrix of class DelayedMatrix and type "double":</span></span>
+<span><span class="co">##          [,1]   [,2]   [,3] ...  [,99] [,100]</span></span>
+<span><span class="co">##   [1,]    824    824    824   .   1265   1265</span></span>
+<span><span class="co">##   [2,]    824    824    824   .   1265      0</span></span>
+<span><span class="co">##   [3,]    824    824    824   .      0      0</span></span>
+<span><span class="co">##   [4,]    824    824    824   .      0   1295</span></span>
+<span><span class="co">##   [5,]    824    824    824   .      0   1295</span></span>
+<span><span class="co">##    ...      .      .      .   .      .      .</span></span>
+<span><span class="co">##  [96,]    835      0    876   .      0      0</span></span>
+<span><span class="co">##  [97,]    835      0    876   .      0      0</span></span>
+<span><span class="co">##  [98,]    835      0    876   .   1293   1293</span></span>
+<span><span class="co">##  [99,]      0      0    876   .   1293   1293</span></span>
+<span><span class="co">## [100,]      0      0      0   .   1293   1293</span></span></code></pre>
 <p>This function call reads in the .tiff images before writing them as .h5 files to the indicated directory. It generates a <code>CytoImageList</code> object that contains <code>HDF5Array</code> or <code>DelayedArray</code> objects (instead of <code>Image</code> objects) in each slot, which references the data in the .h5 files. The name of the array within the .h5 file is automatically set as the original filename and cannot be changed easily from within R. Writing the images to disk is slow and therefore less efficient compared to keeping images in memory. However, when working with hundreds of images in parallel, all images remain accessible from within the R session if they are stored on disk. In conclusion: when working with small image sets it is recommended reading them into memory (<code>on_disk = FALSE</code>, default), while large image sets should be written to disk (<code>on_disk = TRUE</code>). When reading in the same images multiple times, the .h5 files will always be replaced.</p>
 <p>Please follow the <a href="https://bioconductor.org/packages/release/bioc/vignettes/cytomapper/inst/doc/cytomapper.html" class="external-link">main vignette</a> for instructions on how to work with multi-channel images in R.</p>
 </div>
@@ -146,88 +146,88 @@
 </h2>
 <p>Existing <code>CytoImageList</code> objects, which contain individual <code>Image</code> objects in memory can be converted into <code>CytoImageList</code> objects storing <code>DelayedArray</code> or <code>HDF5Array</code> objects on disk. For this the following function calls can be used:</p>
 <div class="sourceCode" id="cb5"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="fu"><a href="https://rdrr.io/r/utils/data.html" class="external-link">data</a></span><span class="op">(</span><span class="st">"pancreasImages"</span><span class="op">)</span>
-
-<span class="va">pancreasImages_onDisk</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/CytoImageList.html">CytoImageList</a></span><span class="op">(</span><span class="va">pancreasImages</span>,
-                                        on_disk <span class="op">=</span> <span class="cn">TRUE</span>, 
-                                        h5FilesPath <span class="op">=</span> <span class="va">cur_dir</span><span class="op">)</span>
-
-<span class="co"># Image object</span>
-<span class="va">pancreasImages</span><span class="op">$</span><span class="va">E34_imc</span></code></pre></div>
-<pre><code><span class="co">## Image </span>
-<span class="co">##   colorMode    : Grayscale </span>
-<span class="co">##   storage.mode : double </span>
-<span class="co">##   dim          : 100 100 5 </span>
-<span class="co">##   frames.total : 5 </span>
-<span class="co">##   frames.render: 5 </span>
-<span class="co">## </span>
-<span class="co">## imageData(object)[1:5,1:6,1]</span>
-<span class="co">##           [,1]      [,2]         [,3]      [,4]         [,5]         [,6]</span>
-<span class="co">## [1,] 2.2357869 0.2537275 1.269632e+00 0.9991982 1.990020e+00 0.000000e+00</span>
-<span class="co">## [2,] 2.8855283 1.9900196 2.264642e+00 0.0000000 1.410924e+00 5.654589e-16</span>
-<span class="co">## [3,] 3.4009433 0.9950098 9.950098e-01 2.1800663 4.152935e-17 1.990020e+00</span>
-<span class="co">## [4,] 3.2238317 3.1750760 1.128341e+00 4.4866042 7.371460e-16 0.000000e+00</span>
-<span class="co">## [5,] 0.9987666 1.9900196 2.644036e-15 0.0000000 0.000000e+00 1.523360e+00</span></code></pre>
+<code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/utils/data.html" class="external-link">data</a></span><span class="op">(</span><span class="st">"pancreasImages"</span><span class="op">)</span></span>
+<span></span>
+<span><span class="va">pancreasImages_onDisk</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/CytoImageList.html">CytoImageList</a></span><span class="op">(</span><span class="va">pancreasImages</span>,</span>
+<span>                                        on_disk <span class="op">=</span> <span class="cn">TRUE</span>, </span>
+<span>                                        h5FilesPath <span class="op">=</span> <span class="va">cur_dir</span><span class="op">)</span></span>
+<span></span>
+<span><span class="co"># Image object</span></span>
+<span><span class="va">pancreasImages</span><span class="op">$</span><span class="va">E34_imc</span></span></code></pre></div>
+<pre><code><span><span class="co">## Image </span></span>
+<span><span class="co">##   colorMode    : Grayscale </span></span>
+<span><span class="co">##   storage.mode : double </span></span>
+<span><span class="co">##   dim          : 100 100 5 </span></span>
+<span><span class="co">##   frames.total : 5 </span></span>
+<span><span class="co">##   frames.render: 5 </span></span>
+<span><span class="co">## </span></span>
+<span><span class="co">## imageData(object)[1:5,1:6,1]</span></span>
+<span><span class="co">##           [,1]      [,2]         [,3]      [,4]         [,5]         [,6]</span></span>
+<span><span class="co">## [1,] 2.2357869 0.2537275 1.269632e+00 0.9991982 1.990020e+00 0.000000e+00</span></span>
+<span><span class="co">## [2,] 2.8855283 1.9900196 2.264642e+00 0.0000000 1.410924e+00 5.654589e-16</span></span>
+<span><span class="co">## [3,] 3.4009433 0.9950098 9.950098e-01 2.1800663 4.152935e-17 1.990020e+00</span></span>
+<span><span class="co">## [4,] 3.2238317 3.1750760 1.128341e+00 4.4866042 7.371460e-16 0.000000e+00</span></span>
+<span><span class="co">## [5,] 0.9987666 1.9900196 2.644036e-15 0.0000000 0.000000e+00 1.523360e+00</span></span></code></pre>
 <div class="sourceCode" id="cb7"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="co"># HDF5Array object</span>
-<span class="va">pancreasImages_onDisk</span><span class="op">$</span><span class="va">E34_imc</span></code></pre></div>
-<pre><code><span class="co">## &lt;100 x 100 x 5&gt; array of class HDF5Array and type "double":</span>
-<span class="co">## ,,H3</span>
-<span class="co">##             [,1]      [,2]      [,3] ...     [,99]    [,100]</span>
-<span class="co">##   [1,] 2.2357869 0.2537275 1.2696325   .  7.265561  1.975094</span>
-<span class="co">##   [2,] 2.8855283 1.9900196 2.2646422   .  2.985029  2.885528</span>
-<span class="co">##    ...         .         .         .   .         .         .</span>
-<span class="co">##  [99,]  2.985029  3.636569 22.976585   . 25.371881 12.045588</span>
-<span class="co">## [100,]  3.061645  2.985029  1.990020   . 13.353615  5.636652</span>
-<span class="co">## </span>
-<span class="co">## ...</span>
-<span class="co">## </span>
-<span class="co">## ,,CDH</span>
-<span class="co">##             [,1]      [,2]      [,3] ...    [,99]   [,100]</span>
-<span class="co">##   [1,]  0.940284 19.651394 43.284626   . 2.704231 0.000000</span>
-<span class="co">##   [2,]  8.393239 29.353861 22.249359   . 7.345311 5.781126</span>
-<span class="co">##    ...         .         .         .   .        .        .</span>
-<span class="co">##  [99,] 0.9897148 7.3378549 0.0000000   . 0.000000 1.667201</span>
-<span class="co">## [100,] 5.8091230 2.2515676 1.9969171   . 4.344125 0.000000</span></code></pre>
+<code class="sourceCode R"><span><span class="co"># HDF5Array object</span></span>
+<span><span class="va">pancreasImages_onDisk</span><span class="op">$</span><span class="va">E34_imc</span></span></code></pre></div>
+<pre><code><span><span class="co">## &lt;100 x 100 x 5&gt; array of class HDF5Array and type "double":</span></span>
+<span><span class="co">## ,,H3</span></span>
+<span><span class="co">##             [,1]      [,2]      [,3] ...     [,99]    [,100]</span></span>
+<span><span class="co">##   [1,] 2.2357869 0.2537275 1.2696325   .  7.265561  1.975094</span></span>
+<span><span class="co">##   [2,] 2.8855283 1.9900196 2.2646422   .  2.985029  2.885528</span></span>
+<span><span class="co">##    ...         .         .         .   .         .         .</span></span>
+<span><span class="co">##  [99,]  2.985029  3.636569 22.976585   . 25.371881 12.045588</span></span>
+<span><span class="co">## [100,]  3.061645  2.985029  1.990020   . 13.353615  5.636652</span></span>
+<span><span class="co">## </span></span>
+<span><span class="co">## ...</span></span>
+<span><span class="co">## </span></span>
+<span><span class="co">## ,,CDH</span></span>
+<span><span class="co">##             [,1]      [,2]      [,3] ...    [,99]   [,100]</span></span>
+<span><span class="co">##   [1,]  0.940284 19.651394 43.284626   . 2.704231 0.000000</span></span>
+<span><span class="co">##   [2,]  8.393239 29.353861 22.249359   . 7.345311 5.781126</span></span>
+<span><span class="co">##    ...         .         .         .   .        .        .</span></span>
+<span><span class="co">##  [99,] 0.9897148 7.3378549 0.0000000   . 0.000000 1.667201</span></span>
+<span><span class="co">## [100,] 5.8091230 2.2515676 1.9969171   . 4.344125 0.000000</span></span></code></pre>
 <div class="sourceCode" id="cb9"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="co"># Seed of HDF5Array object</span>
-<span class="fu"><a href="https://rdrr.io/pkg/DelayedArray/man/showtree.html" class="external-link">seed</a></span><span class="op">(</span><span class="va">pancreasImages_onDisk</span><span class="op">$</span><span class="va">E34_imc</span><span class="op">)</span></code></pre></div>
-<pre><code><span class="co">## An object of class "HDF5ArraySeed"</span>
-<span class="co">## Slot "filepath":</span>
-<span class="co">## [1] "/private/var/folders/24/8k48jl6d249_n_qfxwsl6xvm0000gn/T/RtmpOyXODf/HDF5Array_dump/E34_imc.h5"</span>
-<span class="co">## </span>
-<span class="co">## Slot "name":</span>
-<span class="co">## [1] "/E34_imc"</span>
-<span class="co">## </span>
-<span class="co">## Slot "as_sparse":</span>
-<span class="co">## [1] FALSE</span>
-<span class="co">## </span>
-<span class="co">## Slot "type":</span>
-<span class="co">## [1] NA</span>
-<span class="co">## </span>
-<span class="co">## Slot "dim":</span>
-<span class="co">## [1] 100 100   5</span>
-<span class="co">## </span>
-<span class="co">## Slot "chunkdim":</span>
-<span class="co">## [1] 100 100   5</span>
-<span class="co">## </span>
-<span class="co">## Slot "first_val":</span>
-<span class="co">## [1] 2.235787</span></code></pre>
+<code class="sourceCode R"><span><span class="co"># Seed of HDF5Array object</span></span>
+<span><span class="fu"><a href="https://rdrr.io/pkg/DelayedArray/man/showtree.html" class="external-link">seed</a></span><span class="op">(</span><span class="va">pancreasImages_onDisk</span><span class="op">$</span><span class="va">E34_imc</span><span class="op">)</span></span></code></pre></div>
+<pre><code><span><span class="co">## An object of class "HDF5ArraySeed"</span></span>
+<span><span class="co">## Slot "filepath":</span></span>
+<span><span class="co">## [1] "/private/var/folders/24/8k48jl6d249_n_qfxwsl6xvm0000gn/T/RtmpCDbbu1/HDF5Array_dump/E34_imc.h5"</span></span>
+<span><span class="co">## </span></span>
+<span><span class="co">## Slot "name":</span></span>
+<span><span class="co">## [1] "/E34_imc"</span></span>
+<span><span class="co">## </span></span>
+<span><span class="co">## Slot "as_sparse":</span></span>
+<span><span class="co">## [1] FALSE</span></span>
+<span><span class="co">## </span></span>
+<span><span class="co">## Slot "type":</span></span>
+<span><span class="co">## [1] NA</span></span>
+<span><span class="co">## </span></span>
+<span><span class="co">## Slot "dim":</span></span>
+<span><span class="co">## [1] 100 100   5</span></span>
+<span><span class="co">## </span></span>
+<span><span class="co">## Slot "chunkdim":</span></span>
+<span><span class="co">## [1] 100 100   5</span></span>
+<span><span class="co">## </span></span>
+<span><span class="co">## Slot "first_val":</span></span>
+<span><span class="co">## [1] 2.235787</span></span></code></pre>
 <div class="sourceCode" id="cb11"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="co"># Size in memory</span>
-<span class="fu"><a href="https://rdrr.io/r/base/format.html" class="external-link">format</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/utils/object.size.html" class="external-link">object.size</a></span><span class="op">(</span><span class="va">pancreasImages</span><span class="op">)</span>, units <span class="op">=</span> <span class="st">"auto"</span><span class="op">)</span></code></pre></div>
-<pre><code><span class="co">## [1] "1.2 Mb"</span></code></pre>
+<code class="sourceCode R"><span><span class="co"># Size in memory</span></span>
+<span><span class="fu"><a href="https://rdrr.io/r/base/format.html" class="external-link">format</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/utils/object.size.html" class="external-link">object.size</a></span><span class="op">(</span><span class="va">pancreasImages</span><span class="op">)</span>, units <span class="op">=</span> <span class="st">"auto"</span><span class="op">)</span></span></code></pre></div>
+<pre><code><span><span class="co">## [1] "1.2 Mb"</span></span></code></pre>
 <div class="sourceCode" id="cb13"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="fu"><a href="https://rdrr.io/r/base/format.html" class="external-link">format</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/utils/object.size.html" class="external-link">object.size</a></span><span class="op">(</span><span class="va">pancreasImages_onDisk</span><span class="op">)</span>, units <span class="op">=</span> <span class="st">"auto"</span><span class="op">)</span></code></pre></div>
-<pre><code><span class="co">## [1] "12.1 Kb"</span></code></pre>
+<code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/base/format.html" class="external-link">format</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/utils/object.size.html" class="external-link">object.size</a></span><span class="op">(</span><span class="va">pancreasImages_onDisk</span><span class="op">)</span>, units <span class="op">=</span> <span class="st">"auto"</span><span class="op">)</span></span></code></pre></div>
+<pre><code><span><span class="co">## [1] "12.1 Kb"</span></span></code></pre>
 <p>Images can also be moved back to in memory representation:</p>
 <div class="sourceCode" id="cb15"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="va">pancreasImages_inMemory</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/CytoImageList.html">CytoImageList</a></span><span class="op">(</span><span class="va">pancreasImages_onDisk</span>,
-                                        on_disk <span class="op">=</span> <span class="cn">FALSE</span><span class="op">)</span>
-
-<span class="co"># Compare the image data to the original representation</span>
-<span class="fu"><a href="https://rdrr.io/r/base/identical.html" class="external-link">identical</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">as.list</a></span><span class="op">(</span><span class="va">pancreasImages_inMemory</span><span class="op">)</span>, <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">as.list</a></span><span class="op">(</span><span class="va">pancreasImages</span><span class="op">)</span><span class="op">)</span></code></pre></div>
-<pre><code><span class="co">## [1] TRUE</span></code></pre>
+<code class="sourceCode R"><span><span class="va">pancreasImages_inMemory</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/CytoImageList.html">CytoImageList</a></span><span class="op">(</span><span class="va">pancreasImages_onDisk</span>,</span>
+<span>                                        on_disk <span class="op">=</span> <span class="cn">FALSE</span><span class="op">)</span></span>
+<span></span>
+<span><span class="co"># Compare the image data to the original representation</span></span>
+<span><span class="fu"><a href="https://rdrr.io/r/base/identical.html" class="external-link">identical</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">as.list</a></span><span class="op">(</span><span class="va">pancreasImages_inMemory</span><span class="op">)</span>, <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">as.list</a></span><span class="op">(</span><span class="va">pancreasImages</span><span class="op">)</span><span class="op">)</span></span></code></pre></div>
+<pre><code><span><span class="co">## [1] TRUE</span></span></code></pre>
 </div>
 <div class="section level2">
 <h2 id="Functionality">Effects on package functionality<a class="anchor" aria-label="anchor" href="#Functionality"></a>
@@ -235,149 +235,173 @@
 <p>While most functions of the <code>cytomapper</code> package natively support images stored on disk, there are three exceptions: the <code>normalize</code>, <code>setChannels</code> and <code>mergeChannels</code> functions.</p>
 <p>The <code>normalize</code> function will store the normalized images as a second dataset in the same .h5 file as the original data.</p>
 <div class="sourceCode" id="cb17"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="co"># Size of object in memory</span>
-<span class="fu"><a href="https://rdrr.io/r/base/format.html" class="external-link">format</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/utils/object.size.html" class="external-link">object.size</a></span><span class="op">(</span><span class="va">pancreasImages_onDisk</span><span class="op">)</span>, units <span class="op">=</span> <span class="st">"auto"</span><span class="op">)</span></code></pre></div>
-<pre><code><span class="co">## [1] "12.1 Kb"</span></code></pre>
+<code class="sourceCode R"><span><span class="co"># Size of object in memory</span></span>
+<span><span class="fu"><a href="https://rdrr.io/r/base/format.html" class="external-link">format</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/utils/object.size.html" class="external-link">object.size</a></span><span class="op">(</span><span class="va">pancreasImages_onDisk</span><span class="op">)</span>, units <span class="op">=</span> <span class="st">"auto"</span><span class="op">)</span></span></code></pre></div>
+<pre><code><span><span class="co">## [1] "12.1 Kb"</span></span></code></pre>
 <div class="sourceCode" id="cb19"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="co"># Size of object on disk in kB</span>
-<span class="fu"><a href="https://rdrr.io/r/base/file.info.html" class="external-link">file.info</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/paste.html" class="external-link">paste0</a></span><span class="op">(</span><span class="va">cur_dir</span>, <span class="st">"/E34_imc.h5"</span><span class="op">)</span><span class="op">)</span><span class="op">[</span>,<span class="st">"size"</span><span class="op">]</span> <span class="op">/</span> <span class="fl">1000</span></code></pre></div>
-<pre><code><span class="co">## [1] 148.147</span></code></pre>
+<code class="sourceCode R"><span><span class="co"># Size of object on disk in kB</span></span>
+<span><span class="fu"><a href="https://rdrr.io/r/base/file.info.html" class="external-link">file.info</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/paste.html" class="external-link">paste0</a></span><span class="op">(</span><span class="va">cur_dir</span>, <span class="st">"/E34_imc.h5"</span><span class="op">)</span><span class="op">)</span><span class="op">[</span>,<span class="st">"size"</span><span class="op">]</span> <span class="op">/</span> <span class="fl">1000</span></span></code></pre></div>
+<pre><code><span><span class="co">## [1] 148.147</span></span></code></pre>
 <div class="sourceCode" id="cb21"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="va">pancreasImages_norm</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/CytoImageList-manipulation.html">normalize</a></span><span class="op">(</span><span class="va">pancreasImages_onDisk</span><span class="op">)</span>
-
-<span class="fu"><a href="https://rdrr.io/pkg/DelayedArray/man/showtree.html" class="external-link">seed</a></span><span class="op">(</span><span class="va">pancreasImages_norm</span><span class="op">$</span><span class="va">E34_imc</span><span class="op">)</span></code></pre></div>
-<pre><code><span class="co">## An object of class "HDF5ArraySeed"</span>
-<span class="co">## Slot "filepath":</span>
-<span class="co">## [1] "/private/var/folders/24/8k48jl6d249_n_qfxwsl6xvm0000gn/T/RtmpOyXODf/HDF5Array_dump/E34_imc.h5"</span>
-<span class="co">## </span>
-<span class="co">## Slot "name":</span>
-<span class="co">## [1] "/E34_imc_norm"</span>
-<span class="co">## </span>
-<span class="co">## Slot "as_sparse":</span>
-<span class="co">## [1] FALSE</span>
-<span class="co">## </span>
-<span class="co">## Slot "type":</span>
-<span class="co">## [1] NA</span>
-<span class="co">## </span>
-<span class="co">## Slot "dim":</span>
-<span class="co">## [1] 100 100   5</span>
-<span class="co">## </span>
-<span class="co">## Slot "chunkdim":</span>
-<span class="co">## [1] 100 100   5</span>
-<span class="co">## </span>
-<span class="co">## Slot "first_val":</span>
-<span class="co">## [1] 0.01235403</span></code></pre>
+<code class="sourceCode R"><span><span class="va">pancreasImages_norm</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/CytoImageList-manipulation.html">normalize</a></span><span class="op">(</span><span class="va">pancreasImages_onDisk</span><span class="op">)</span></span>
+<span></span>
+<span><span class="fu"><a href="https://rdrr.io/pkg/DelayedArray/man/showtree.html" class="external-link">seed</a></span><span class="op">(</span><span class="va">pancreasImages_norm</span><span class="op">$</span><span class="va">E34_imc</span><span class="op">)</span></span></code></pre></div>
+<pre><code><span><span class="co">## An object of class "HDF5ArraySeed"</span></span>
+<span><span class="co">## Slot "filepath":</span></span>
+<span><span class="co">## [1] "/private/var/folders/24/8k48jl6d249_n_qfxwsl6xvm0000gn/T/RtmpCDbbu1/HDF5Array_dump/E34_imc.h5"</span></span>
+<span><span class="co">## </span></span>
+<span><span class="co">## Slot "name":</span></span>
+<span><span class="co">## [1] "/E34_imc_norm"</span></span>
+<span><span class="co">## </span></span>
+<span><span class="co">## Slot "as_sparse":</span></span>
+<span><span class="co">## [1] FALSE</span></span>
+<span><span class="co">## </span></span>
+<span><span class="co">## Slot "type":</span></span>
+<span><span class="co">## [1] NA</span></span>
+<span><span class="co">## </span></span>
+<span><span class="co">## Slot "dim":</span></span>
+<span><span class="co">## [1] 100 100   5</span></span>
+<span><span class="co">## </span></span>
+<span><span class="co">## Slot "chunkdim":</span></span>
+<span><span class="co">## [1] 100 100   5</span></span>
+<span><span class="co">## </span></span>
+<span><span class="co">## Slot "first_val":</span></span>
+<span><span class="co">## [1] 0.01235403</span></span></code></pre>
 <div class="sourceCode" id="cb23"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="co"># Size of object in memory</span>
-<span class="fu"><a href="https://rdrr.io/r/base/format.html" class="external-link">format</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/utils/object.size.html" class="external-link">object.size</a></span><span class="op">(</span><span class="va">pancreasImages_norm</span><span class="op">)</span>, units <span class="op">=</span> <span class="st">"auto"</span><span class="op">)</span></code></pre></div>
-<pre><code><span class="co">## [1] "12.1 Kb"</span></code></pre>
+<code class="sourceCode R"><span><span class="co"># Size of object in memory</span></span>
+<span><span class="fu"><a href="https://rdrr.io/r/base/format.html" class="external-link">format</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/utils/object.size.html" class="external-link">object.size</a></span><span class="op">(</span><span class="va">pancreasImages_norm</span><span class="op">)</span>, units <span class="op">=</span> <span class="st">"auto"</span><span class="op">)</span></span></code></pre></div>
+<pre><code><span><span class="co">## [1] "12.1 Kb"</span></span></code></pre>
 <div class="sourceCode" id="cb25"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="co"># Size of object on disk in kB</span>
-<span class="fu"><a href="https://rdrr.io/r/base/file.info.html" class="external-link">file.info</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/paste.html" class="external-link">paste0</a></span><span class="op">(</span><span class="va">cur_dir</span>, <span class="st">"/E34_imc.h5"</span><span class="op">)</span><span class="op">)</span><span class="op">[</span>,<span class="st">"size"</span><span class="op">]</span> <span class="op">/</span> <span class="fl">1000</span></code></pre></div>
-<pre><code><span class="co">## [1] 414.936</span></code></pre>
+<code class="sourceCode R"><span><span class="co"># Size of object on disk in kB</span></span>
+<span><span class="fu"><a href="https://rdrr.io/r/base/file.info.html" class="external-link">file.info</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/paste.html" class="external-link">paste0</a></span><span class="op">(</span><span class="va">cur_dir</span>, <span class="st">"/E34_imc.h5"</span><span class="op">)</span><span class="op">)</span><span class="op">[</span>,<span class="st">"size"</span><span class="op">]</span> <span class="op">/</span> <span class="fl">1000</span></span></code></pre></div>
+<pre><code><span><span class="co">## [1] 414.936</span></span></code></pre>
 <p>As we can see, the size in memory does not increase when normalizing images. However, the size on disk increases since a second, normalized dataset is stored in the .h5 file. The original dataset can be overwritten by setting <code>overwrite = TRUE</code> to save space on disk. This will however break the links to the original data in all R objects. It is therefore recommended leaving the default <code>overwrite = FALSE</code>. Furthermore, the normalization of images stored on disk is slower compared to normalizing images in memory since normalized images need to be written to disk.</p>
 <p>The <code>setChannels</code> function replaces the same channels in all images by a user defined channel. There is no problem with this when keeping images in memory. However, the <code>DelayedArray</code> framework stores the replacement value in subassignemt operations in memory. This means that when using the <code>setChannels</code> function, the size of the object increases in memory usage:</p>
 <div class="sourceCode" id="cb27"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="va">cur_Images1</span> <span class="op">&lt;-</span> <span class="va">pancreasImages_onDisk</span>
-<span class="va">cur_Images2</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/CytoImageList-subsetting.html">getChannels</a></span><span class="op">(</span><span class="va">pancreasImages_onDisk</span>, <span class="fl">2</span><span class="op">)</span>
-<span class="fu"><a href="../reference/CytoImageList-naming.html">channelNames</a></span><span class="op">(</span><span class="va">cur_Images2</span><span class="op">)</span> <span class="op">&lt;-</span> <span class="st">"CD99_2"</span>
-
-<span class="fu">setChannels</span><span class="op">(</span><span class="va">cur_Images1</span>, <span class="fl">1</span><span class="op">)</span> <span class="op">&lt;-</span> <span class="va">cur_Images2</span>
-<span class="fu"><a href="https://rdrr.io/r/base/format.html" class="external-link">format</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/utils/object.size.html" class="external-link">object.size</a></span><span class="op">(</span><span class="va">cur_Images1</span><span class="op">)</span>, units <span class="op">=</span> <span class="st">"auto"</span><span class="op">)</span></code></pre></div>
-<pre><code><span class="co">## [1] "27.7 Kb"</span></code></pre>
+<code class="sourceCode R"><span><span class="va">cur_Images1</span> <span class="op">&lt;-</span> <span class="va">pancreasImages_onDisk</span></span>
+<span><span class="va">cur_Images2</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/CytoImageList-subsetting.html">getChannels</a></span><span class="op">(</span><span class="va">pancreasImages_onDisk</span>, <span class="fl">2</span><span class="op">)</span></span>
+<span><span class="fu"><a href="../reference/CytoImageList-naming.html">channelNames</a></span><span class="op">(</span><span class="va">cur_Images2</span><span class="op">)</span> <span class="op">&lt;-</span> <span class="st">"CD99_2"</span></span>
+<span></span>
+<span><span class="fu">setChannels</span><span class="op">(</span><span class="va">cur_Images1</span>, <span class="fl">1</span><span class="op">)</span> <span class="op">&lt;-</span> <span class="va">cur_Images2</span></span>
+<span><span class="fu"><a href="https://rdrr.io/r/base/format.html" class="external-link">format</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/utils/object.size.html" class="external-link">object.size</a></span><span class="op">(</span><span class="va">cur_Images1</span><span class="op">)</span>, units <span class="op">=</span> <span class="st">"auto"</span><span class="op">)</span></span></code></pre></div>
+<pre><code><span><span class="co">## [1] "27.7 Kb"</span></span></code></pre>
 <p>The <code>mergeChannels</code> function merges multiple user-defined channels. As this operation creates a completely new image object, one needs to store the merged channels in a different location:</p>
 <div class="sourceCode" id="cb29"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="va">channels1</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/CytoImageList-subsetting.html">getChannels</a></span><span class="op">(</span><span class="va">pancreasImages_onDisk</span>, <span class="fl">1</span><span class="op">:</span><span class="fl">2</span><span class="op">)</span>
-<span class="va">channels2</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/CytoImageList-subsetting.html">getChannels</a></span><span class="op">(</span><span class="va">pancreasImages_onDisk</span>, <span class="fl">3</span><span class="op">:</span><span class="fl">4</span><span class="op">)</span>
-
-<span class="fu"><a href="https://rdrr.io/r/base/files2.html" class="external-link">dir.create</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/file.path.html" class="external-link">file.path</a></span><span class="op">(</span><span class="va">cur_dir</span>, <span class="st">"test"</span><span class="op">)</span><span class="op">)</span>
-<span class="va">cur_path_2</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/file.path.html" class="external-link">file.path</a></span><span class="op">(</span><span class="va">cur_dir</span>, <span class="st">"test"</span><span class="op">)</span>
-
-<span class="va">channels3</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/CytoImageList-subsetting.html">mergeChannels</a></span><span class="op">(</span><span class="va">channels1</span>, <span class="va">channels2</span>,
-                            h5FilesPath <span class="op">=</span> <span class="va">cur_path_2</span><span class="op">)</span>
-
-<span class="fu"><a href="https://rdrr.io/pkg/DelayedArray/man/showtree.html" class="external-link">seed</a></span><span class="op">(</span><span class="va">channels3</span><span class="op">$</span><span class="va">E34_imc</span><span class="op">)</span></code></pre></div>
-<pre><code><span class="co">## An object of class "HDF5ArraySeed"</span>
-<span class="co">## Slot "filepath":</span>
-<span class="co">## [1] "/private/var/folders/24/8k48jl6d249_n_qfxwsl6xvm0000gn/T/RtmpOyXODf/HDF5Array_dump/test/E34_imc.h5"</span>
-<span class="co">## </span>
-<span class="co">## Slot "name":</span>
-<span class="co">## [1] "/E34_imc"</span>
-<span class="co">## </span>
-<span class="co">## Slot "as_sparse":</span>
-<span class="co">## [1] FALSE</span>
-<span class="co">## </span>
-<span class="co">## Slot "type":</span>
-<span class="co">## [1] NA</span>
-<span class="co">## </span>
-<span class="co">## Slot "dim":</span>
-<span class="co">## [1] 100 100   4</span>
-<span class="co">## </span>
-<span class="co">## Slot "chunkdim":</span>
-<span class="co">## [1] 100 100   4</span>
-<span class="co">## </span>
-<span class="co">## Slot "first_val":</span>
-<span class="co">## [1] 2.235787</span></code></pre>
+<code class="sourceCode R"><span><span class="va">channels1</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/CytoImageList-subsetting.html">getChannels</a></span><span class="op">(</span><span class="va">pancreasImages_onDisk</span>, <span class="fl">1</span><span class="op">:</span><span class="fl">2</span><span class="op">)</span></span>
+<span><span class="va">channels2</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/CytoImageList-subsetting.html">getChannels</a></span><span class="op">(</span><span class="va">pancreasImages_onDisk</span>, <span class="fl">3</span><span class="op">:</span><span class="fl">4</span><span class="op">)</span></span>
+<span></span>
+<span><span class="fu"><a href="https://rdrr.io/r/base/files2.html" class="external-link">dir.create</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/file.path.html" class="external-link">file.path</a></span><span class="op">(</span><span class="va">cur_dir</span>, <span class="st">"test"</span><span class="op">)</span><span class="op">)</span></span>
+<span><span class="va">cur_path_2</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/file.path.html" class="external-link">file.path</a></span><span class="op">(</span><span class="va">cur_dir</span>, <span class="st">"test"</span><span class="op">)</span></span>
+<span></span>
+<span><span class="va">channels3</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/CytoImageList-subsetting.html">mergeChannels</a></span><span class="op">(</span><span class="va">channels1</span>, <span class="va">channels2</span>,</span>
+<span>                            h5FilesPath <span class="op">=</span> <span class="va">cur_path_2</span><span class="op">)</span></span>
+<span></span>
+<span><span class="fu"><a href="https://rdrr.io/pkg/DelayedArray/man/showtree.html" class="external-link">seed</a></span><span class="op">(</span><span class="va">channels3</span><span class="op">$</span><span class="va">E34_imc</span><span class="op">)</span></span></code></pre></div>
+<pre><code><span><span class="co">## An object of class "HDF5ArraySeed"</span></span>
+<span><span class="co">## Slot "filepath":</span></span>
+<span><span class="co">## [1] "/private/var/folders/24/8k48jl6d249_n_qfxwsl6xvm0000gn/T/RtmpCDbbu1/HDF5Array_dump/test/E34_imc.h5"</span></span>
+<span><span class="co">## </span></span>
+<span><span class="co">## Slot "name":</span></span>
+<span><span class="co">## [1] "/E34_imc"</span></span>
+<span><span class="co">## </span></span>
+<span><span class="co">## Slot "as_sparse":</span></span>
+<span><span class="co">## [1] FALSE</span></span>
+<span><span class="co">## </span></span>
+<span><span class="co">## Slot "type":</span></span>
+<span><span class="co">## [1] NA</span></span>
+<span><span class="co">## </span></span>
+<span><span class="co">## Slot "dim":</span></span>
+<span><span class="co">## [1] 100 100   4</span></span>
+<span><span class="co">## </span></span>
+<span><span class="co">## Slot "chunkdim":</span></span>
+<span><span class="co">## [1] 100 100   4</span></span>
+<span><span class="co">## </span></span>
+<span><span class="co">## Slot "first_val":</span></span>
+<span><span class="co">## [1] 2.235787</span></span></code></pre>
 </div>
 <div class="section level2">
 <h2 id="session-info">Session info<a class="anchor" aria-label="anchor" href="#session-info"></a>
 </h2>
-<pre><code><span class="co">## R version 4.2.0 (2022-04-22)</span>
-<span class="co">## Platform: x86_64-apple-darwin17.0 (64-bit)</span>
-<span class="co">## Running under: macOS Big Sur/Monterey 10.16</span>
-<span class="co">## </span>
-<span class="co">## Matrix products: default</span>
-<span class="co">## BLAS:   /Library/Frameworks/R.framework/Versions/4.2/Resources/lib/libRblas.0.dylib</span>
-<span class="co">## LAPACK: /Library/Frameworks/R.framework/Versions/4.2/Resources/lib/libRlapack.dylib</span>
-<span class="co">## </span>
-<span class="co">## locale:</span>
-<span class="co">## [1] en_US.UTF-8/en_US.UTF-8/en_US.UTF-8/C/en_US.UTF-8/en_US.UTF-8</span>
-<span class="co">## </span>
-<span class="co">## attached base packages:</span>
-<span class="co">## [1] stats4    stats     graphics  grDevices utils     datasets  methods  </span>
-<span class="co">## [8] base     </span>
-<span class="co">## </span>
-<span class="co">## other attached packages:</span>
-<span class="co">##  [1] HDF5Array_1.24.0            rhdf5_2.40.0               </span>
-<span class="co">##  [3] DelayedArray_0.22.0         Matrix_1.4-1               </span>
-<span class="co">##  [5] cytomapper_1.9.0            SingleCellExperiment_1.18.0</span>
-<span class="co">##  [7] SummarizedExperiment_1.26.1 Biobase_2.56.0             </span>
-<span class="co">##  [9] GenomicRanges_1.48.0        GenomeInfoDb_1.32.1        </span>
-<span class="co">## [11] IRanges_2.30.0              S4Vectors_0.34.0           </span>
-<span class="co">## [13] BiocGenerics_0.42.0         MatrixGenerics_1.8.0       </span>
-<span class="co">## [15] matrixStats_0.62.0          EBImage_4.38.0             </span>
-<span class="co">## [17] BiocStyle_2.24.0           </span>
-<span class="co">## </span>
-<span class="co">## loaded via a namespace (and not attached):</span>
-<span class="co">##  [1] bitops_1.0-7           fs_1.5.2               RColorBrewer_1.1-3    </span>
-<span class="co">##  [4] rprojroot_2.0.3        tools_4.2.0            bslib_0.3.1           </span>
-<span class="co">##  [7] svgPanZoom_0.3.4       utf8_1.2.2             R6_2.5.1              </span>
-<span class="co">## [10] vipor_0.4.5            colorspace_2.0-3       raster_3.5-15         </span>
-<span class="co">## [13] rhdf5filters_1.8.0     sp_1.4-7               gridExtra_2.3         </span>
-<span class="co">## [16] compiler_4.2.0         textshaping_0.3.6      cli_3.3.0             </span>
-<span class="co">## [19] desc_1.4.1             bookdown_0.26          sass_0.4.1            </span>
-<span class="co">## [22] scales_1.2.0           nnls_1.4               pkgdown_2.0.3         </span>
-<span class="co">## [25] systemfonts_1.0.4      stringr_1.4.0          digest_0.6.29         </span>
-<span class="co">## [28] tiff_0.1-11            fftwtools_0.9-11       svglite_2.1.0         </span>
-<span class="co">## [31] rmarkdown_2.14         XVector_0.36.0         jpeg_0.1-9            </span>
-<span class="co">## [34] pkgconfig_2.0.3        htmltools_0.5.2        fastmap_1.1.0         </span>
-<span class="co">## [37] htmlwidgets_1.5.4      rlang_1.0.2            shiny_1.7.1           </span>
-<span class="co">## [40] jquerylib_0.1.4        jsonlite_1.8.0         BiocParallel_1.30.0   </span>
-<span class="co">## [43] RCurl_1.98-1.6         magrittr_2.0.3         GenomeInfoDbData_1.2.8</span>
-<span class="co">## [46] Rcpp_1.0.8.3           ggbeeswarm_0.6.0       munsell_0.5.0         </span>
-<span class="co">## [49] Rhdf5lib_1.18.0        fansi_1.0.3            viridis_0.6.2         </span>
-<span class="co">## [52] abind_1.4-5            terra_1.5-21           lifecycle_1.0.1       </span>
-<span class="co">## [55] stringi_1.7.6          yaml_2.3.5             zlibbioc_1.42.0       </span>
-<span class="co">## [58] grid_4.2.0             parallel_4.2.0         promises_1.2.0.1      </span>
-<span class="co">## [61] shinydashboard_0.7.2   crayon_1.5.1           lattice_0.20-45       </span>
-<span class="co">## [64] locfit_1.5-9.5         knitr_1.39             pillar_1.7.0          </span>
-<span class="co">## [67] codetools_0.2-18       glue_1.6.2             evaluate_0.15         </span>
-<span class="co">## [70] BiocManager_1.30.17    png_0.1-7              vctrs_0.4.1           </span>
-<span class="co">## [73] httpuv_1.6.5           gtable_0.3.0           purrr_0.3.4           </span>
-<span class="co">## [76] cachem_1.0.6           ggplot2_3.3.5          xfun_0.30             </span>
-<span class="co">## [79] mime_0.12              xtable_1.8-4           later_1.3.0           </span>
-<span class="co">## [82] viridisLite_0.4.0      ragg_1.2.2             tibble_3.1.6          </span>
-<span class="co">## [85] beeswarm_0.4.0         memoise_2.0.1          ellipsis_0.3.2</span></code></pre>
+<pre><code><span><span class="co">## R version 4.2.1 (2022-06-23)</span></span>
+<span><span class="co">## Platform: x86_64-apple-darwin17.0 (64-bit)</span></span>
+<span><span class="co">## Running under: macOS Big Sur ... 10.16</span></span>
+<span><span class="co">## </span></span>
+<span><span class="co">## Matrix products: default</span></span>
+<span><span class="co">## BLAS:   /Library/Frameworks/R.framework/Versions/4.2/Resources/lib/libRblas.0.dylib</span></span>
+<span><span class="co">## LAPACK: /Library/Frameworks/R.framework/Versions/4.2/Resources/lib/libRlapack.dylib</span></span>
+<span><span class="co">## </span></span>
+<span><span class="co">## locale:</span></span>
+<span><span class="co">## [1] en_US.UTF-8/en_US.UTF-8/en_US.UTF-8/C/en_US.UTF-8/en_US.UTF-8</span></span>
+<span><span class="co">## </span></span>
+<span><span class="co">## attached base packages:</span></span>
+<span><span class="co">## [1] stats4    stats     graphics  grDevices utils     datasets  methods  </span></span>
+<span><span class="co">## [8] base     </span></span>
+<span><span class="co">## </span></span>
+<span><span class="co">## other attached packages:</span></span>
+<span><span class="co">##  [1] HDF5Array_1.24.1            rhdf5_2.40.0               </span></span>
+<span><span class="co">##  [3] DelayedArray_0.22.0         Matrix_1.4-1               </span></span>
+<span><span class="co">##  [5] cytomapper_1.9.1            SingleCellExperiment_1.18.0</span></span>
+<span><span class="co">##  [7] SummarizedExperiment_1.26.1 Biobase_2.56.0             </span></span>
+<span><span class="co">##  [9] GenomicRanges_1.48.0        GenomeInfoDb_1.32.2        </span></span>
+<span><span class="co">## [11] IRanges_2.30.0              S4Vectors_0.34.0           </span></span>
+<span><span class="co">## [13] BiocGenerics_0.42.0         MatrixGenerics_1.8.1       </span></span>
+<span><span class="co">## [15] matrixStats_0.62.0          EBImage_4.38.0             </span></span>
+<span><span class="co">## [17] BiocStyle_2.24.0           </span></span>
+<span><span class="co">## </span></span>
+<span><span class="co">## loaded via a namespace (and not attached):</span></span>
+<span><span class="co">##   [1] SpatialExperiment_1.6.0   ggbeeswarm_0.6.0         </span></span>
+<span><span class="co">##   [3] colorspace_2.0-3          rjson_0.2.21             </span></span>
+<span><span class="co">##   [5] ellipsis_0.3.2            rprojroot_2.0.3          </span></span>
+<span><span class="co">##   [7] scuttle_1.6.2             XVector_0.36.0           </span></span>
+<span><span class="co">##   [9] fftwtools_0.9-11          fs_1.5.2                 </span></span>
+<span><span class="co">##  [11] fansi_1.0.3               codetools_0.2-18         </span></span>
+<span><span class="co">##  [13] R.methodsS3_1.8.2         sparseMatrixStats_1.8.0  </span></span>
+<span><span class="co">##  [15] cachem_1.0.6              knitr_1.39               </span></span>
+<span><span class="co">##  [17] jsonlite_1.8.0            png_0.1-7                </span></span>
+<span><span class="co">##  [19] R.oo_1.25.0               shinydashboard_0.7.2     </span></span>
+<span><span class="co">##  [21] shiny_1.7.2               BiocManager_1.30.18      </span></span>
+<span><span class="co">##  [23] compiler_4.2.1            dqrng_0.3.0              </span></span>
+<span><span class="co">##  [25] assertthat_0.2.1          fastmap_1.1.0            </span></span>
+<span><span class="co">##  [27] svgPanZoom_0.3.4          limma_3.52.2             </span></span>
+<span><span class="co">##  [29] cli_3.3.0                 later_1.3.0              </span></span>
+<span><span class="co">##  [31] htmltools_0.5.3           tools_4.2.1              </span></span>
+<span><span class="co">##  [33] gtable_0.3.0              glue_1.6.2               </span></span>
+<span><span class="co">##  [35] GenomeInfoDbData_1.2.8    dplyr_1.0.9              </span></span>
+<span><span class="co">##  [37] Rcpp_1.0.9                raster_3.5-21            </span></span>
+<span><span class="co">##  [39] jquerylib_0.1.4           pkgdown_2.0.6            </span></span>
+<span><span class="co">##  [41] vctrs_0.4.1               rhdf5filters_1.8.0       </span></span>
+<span><span class="co">##  [43] svglite_2.1.0             DelayedMatrixStats_1.18.0</span></span>
+<span><span class="co">##  [45] xfun_0.31                 stringr_1.4.0            </span></span>
+<span><span class="co">##  [47] beachmat_2.12.0           mime_0.12                </span></span>
+<span><span class="co">##  [49] lifecycle_1.0.1           terra_1.5-34             </span></span>
+<span><span class="co">##  [51] edgeR_3.38.1              zlibbioc_1.42.0          </span></span>
+<span><span class="co">##  [53] scales_1.2.0              ragg_1.2.2               </span></span>
+<span><span class="co">##  [55] promises_1.2.0.1          parallel_4.2.1           </span></span>
+<span><span class="co">##  [57] RColorBrewer_1.1-3        yaml_2.3.5               </span></span>
+<span><span class="co">##  [59] gridExtra_2.3             memoise_2.0.1            </span></span>
+<span><span class="co">##  [61] ggplot2_3.3.6             sass_0.4.2               </span></span>
+<span><span class="co">##  [63] stringi_1.7.8             desc_1.4.1               </span></span>
+<span><span class="co">##  [65] tiff_0.1-11               BiocParallel_1.30.3      </span></span>
+<span><span class="co">##  [67] rlang_1.0.4               pkgconfig_2.0.3          </span></span>
+<span><span class="co">##  [69] systemfonts_1.0.4         bitops_1.0-7             </span></span>
+<span><span class="co">##  [71] evaluate_0.15             lattice_0.20-45          </span></span>
+<span><span class="co">##  [73] purrr_0.3.4               Rhdf5lib_1.18.2          </span></span>
+<span><span class="co">##  [75] htmlwidgets_1.5.4         tidyselect_1.1.2         </span></span>
+<span><span class="co">##  [77] magrittr_2.0.3            bookdown_0.27            </span></span>
+<span><span class="co">##  [79] R6_2.5.1                  nnls_1.4                 </span></span>
+<span><span class="co">##  [81] magick_2.7.3              generics_0.1.3           </span></span>
+<span><span class="co">##  [83] DBI_1.1.3                 pillar_1.8.0             </span></span>
+<span><span class="co">##  [85] sp_1.5-0                  abind_1.4-5              </span></span>
+<span><span class="co">##  [87] RCurl_1.98-1.7            tibble_3.1.8             </span></span>
+<span><span class="co">##  [89] DropletUtils_1.16.0       utf8_1.2.2               </span></span>
+<span><span class="co">##  [91] rmarkdown_2.14            viridis_0.6.2            </span></span>
+<span><span class="co">##  [93] jpeg_0.1-9                locfit_1.5-9.6           </span></span>
+<span><span class="co">##  [95] grid_4.2.1                digest_0.6.29            </span></span>
+<span><span class="co">##  [97] xtable_1.8-4              httpuv_1.6.5             </span></span>
+<span><span class="co">##  [99] R.utils_2.12.0            textshaping_0.3.6        </span></span>
+<span><span class="co">## [101] munsell_0.5.0             viridisLite_0.4.0        </span></span>
+<span><span class="co">## [103] beeswarm_0.4.0            vipor_0.4.5              </span></span>
+<span><span class="co">## [105] bslib_0.4.0</span></span></code></pre>
 </div>
 <div class="section level2">
 <h2 id="references">References<a class="anchor" aria-label="anchor" href="#references"></a>
@@ -402,7 +426,7 @@
 
 <div class="pkgdown">
   <p></p>
-<p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.3.</p>
+<p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.6.</p>
 </div>
 
       </footer>

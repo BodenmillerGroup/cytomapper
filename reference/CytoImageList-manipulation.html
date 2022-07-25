@@ -19,7 +19,7 @@ containing one or multiple channels."><!-- mathjax --><script src="https://cdnjs
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">cytomapper</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="">1.9.0</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="">1.9.1</span>
       </span>
     </div>
 
@@ -69,7 +69,9 @@ containing one or multiple channels.</p>
 
     <div id="value">
     <h2>Value</h2>
-    <p>A CytoImageList object containing the manipulated Images.</p>
+    
+
+<p>A CytoImageList object containing the manipulated Images.</p>
     </div>
     <div id="image-scaling">
     <h2>Image scaling</h2>
@@ -123,12 +125,12 @@ per image or across all images (default).</p></dd>
 
 <dt><code>ft</code>:</dt>
 <dd><p>Numeric vector of 2 values, target minimum and maximum
-intensity values after normalization (see <code><a href="https://rdrr.io/pkg/EBImage/man/normalize.html" class="external-link">normalize</a></code>).</p></dd>
+intensity values after normalization (see <code><a href="https://rdrr.io/pkg/BiocGenerics/man/normalize.html" class="external-link">normalize</a></code>).</p></dd>
 
 <dt><code>inputRange</code>:</dt>
 <dd><p>Numeric vector of 2 values, sets the absolute
 clipping range of the input intensity values (see
-<code><a href="https://rdrr.io/pkg/EBImage/man/normalize.html" class="external-link">normalize</a></code>). Alternatively a names list where each
+<code><a href="https://rdrr.io/pkg/BiocGenerics/man/normalize.html" class="external-link">normalize</a></code>). Alternatively a names list where each
 entry corresponds to a channel-specific clipping range.</p></dd>
 
 <dt><code>overwrite</code>:</dt>
@@ -143,7 +145,7 @@ a new entry called "XYZ_norm" to the .h5 file.</p></dd>
 </dl></div>
     <div id="see-also">
     <h2>See also</h2>
-    <div class="dont-index"><p><code><a href="https://rdrr.io/pkg/EBImage/man/normalize.html" class="external-link">normalize</a></code> for details on Image normalization</p></div>
+    <div class="dont-index"><p><code><a href="https://rdrr.io/pkg/BiocGenerics/man/normalize.html" class="external-link">normalize</a></code> for details on Image normalization</p></div>
     </div>
     <div id="author">
     <h2>Author</h2>
@@ -152,39 +154,39 @@ a new entry called "XYZ_norm" to the .h5 file.</p></dd>
 
     <div id="ref-examples">
     <h2>Examples</h2>
-    <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span class="fu"><a href="https://rdrr.io/r/utils/data.html" class="external-link">data</a></span><span class="op">(</span><span class="va">pancreasImages</span><span class="op">)</span></span>
-<span class="r-in"></span>
-<span class="r-in"><span class="co"># Scale images to create segmentation masks</span></span>
-<span class="r-in"><span class="va">cur_files</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/list.files.html" class="external-link">list.files</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/system.file.html" class="external-link">system.file</a></span><span class="op">(</span><span class="st">"extdata"</span>, package <span class="op">=</span> <span class="st">"cytomapper"</span><span class="op">)</span>,</span>
-<span class="r-in">                        pattern <span class="op">=</span> <span class="st">"mask.tiff"</span>, full.names <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></span>
-<span class="r-in"><span class="va">x</span> <span class="op">&lt;-</span> <span class="fu"><a href="loadImages.html">loadImages</a></span><span class="op">(</span><span class="va">cur_files</span><span class="op">)</span></span>
-<span class="r-in"><span class="co"># Error when running plotCells(x)</span></span>
-<span class="r-in"><span class="co"># Therefore scale to account for 16 bit encoding</span></span>
-<span class="r-in"><span class="va">x</span> <span class="op">&lt;-</span> <span class="fu">scaleImages</span><span class="op">(</span><span class="va">x</span>, <span class="fl">2</span><span class="op">^</span><span class="fl">16</span> <span class="op">-</span> <span class="fl">1</span><span class="op">)</span></span>
-<span class="r-in"><span class="fu"><a href="plotCells.html">plotCells</a></span><span class="op">(</span><span class="va">x</span><span class="op">)</span></span>
+    <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span><span class="fu"><a href="https://rdrr.io/r/utils/data.html" class="external-link">data</a></span><span class="op">(</span><span class="va">pancreasImages</span><span class="op">)</span></span></span>
+<span class="r-in"><span></span></span>
+<span class="r-in"><span><span class="co"># Scale images to create segmentation masks</span></span></span>
+<span class="r-in"><span><span class="va">cur_files</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/list.files.html" class="external-link">list.files</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/system.file.html" class="external-link">system.file</a></span><span class="op">(</span><span class="st">"extdata"</span>, package <span class="op">=</span> <span class="st">"cytomapper"</span><span class="op">)</span>,</span></span>
+<span class="r-in"><span>                        pattern <span class="op">=</span> <span class="st">"mask.tiff"</span>, full.names <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="va">x</span> <span class="op">&lt;-</span> <span class="fu"><a href="loadImages.html">loadImages</a></span><span class="op">(</span><span class="va">cur_files</span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="co"># Error when running plotCells(x)</span></span></span>
+<span class="r-in"><span><span class="co"># Therefore scale to account for 16 bit encoding</span></span></span>
+<span class="r-in"><span><span class="va">x</span> <span class="op">&lt;-</span> <span class="fu">scaleImages</span><span class="op">(</span><span class="va">x</span>, <span class="fl">2</span><span class="op">^</span><span class="fl">16</span> <span class="op">-</span> <span class="fl">1</span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="fu"><a href="plotCells.html">plotCells</a></span><span class="op">(</span><span class="va">x</span><span class="op">)</span></span></span>
 <span class="r-plt img"><img src="CytoImageList-manipulation-1.png" alt="" width="700" height="433"></span>
-<span class="r-in"></span>
-<span class="r-in"><span class="co"># Default normalization</span></span>
-<span class="r-in"><span class="va">x</span> <span class="op">&lt;-</span> <span class="fu">normalize</span><span class="op">(</span><span class="va">pancreasImages</span><span class="op">)</span></span>
-<span class="r-in"><span class="fu"><a href="plotPixels.html">plotPixels</a></span><span class="op">(</span><span class="va">x</span>, colour_by <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"H3"</span>, <span class="st">"CD99"</span><span class="op">)</span><span class="op">)</span></span>
+<span class="r-in"><span></span></span>
+<span class="r-in"><span><span class="co"># Default normalization</span></span></span>
+<span class="r-in"><span><span class="va">x</span> <span class="op">&lt;-</span> <span class="fu">normalize</span><span class="op">(</span><span class="va">pancreasImages</span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="fu"><a href="plotPixels.html">plotPixels</a></span><span class="op">(</span><span class="va">x</span>, colour_by <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"H3"</span>, <span class="st">"CD99"</span><span class="op">)</span><span class="op">)</span></span></span>
 <span class="r-plt img"><img src="CytoImageList-manipulation-2.png" alt="" width="700" height="433"></span>
-<span class="r-in"></span>
-<span class="r-in"><span class="co"># Setting the clipping range</span></span>
-<span class="r-in"><span class="va">x</span> <span class="op">&lt;-</span> <span class="fu">normalize</span><span class="op">(</span><span class="va">x</span>, inputRange <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">0</span>, <span class="fl">0.9</span><span class="op">)</span><span class="op">)</span></span>
-<span class="r-in"><span class="fu"><a href="plotPixels.html">plotPixels</a></span><span class="op">(</span><span class="va">x</span>, colour_by <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"H3"</span>, <span class="st">"CD99"</span><span class="op">)</span><span class="op">)</span></span>
+<span class="r-in"><span></span></span>
+<span class="r-in"><span><span class="co"># Setting the clipping range</span></span></span>
+<span class="r-in"><span><span class="va">x</span> <span class="op">&lt;-</span> <span class="fu">normalize</span><span class="op">(</span><span class="va">x</span>, inputRange <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">0</span>, <span class="fl">0.9</span><span class="op">)</span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="fu"><a href="plotPixels.html">plotPixels</a></span><span class="op">(</span><span class="va">x</span>, colour_by <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"H3"</span>, <span class="st">"CD99"</span><span class="op">)</span><span class="op">)</span></span></span>
 <span class="r-plt img"><img src="CytoImageList-manipulation-3.png" alt="" width="700" height="433"></span>
-<span class="r-in"></span>
-<span class="r-in"><span class="co"># Setting the clipping range per channel</span></span>
-<span class="r-in"><span class="va">x</span> <span class="op">&lt;-</span> <span class="fu">normalize</span><span class="op">(</span><span class="va">pancreasImages</span>,</span>
-<span class="r-in">                inputRange <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span>H3 <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">0</span>, <span class="fl">70</span><span class="op">)</span>, CD99 <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">0</span>, <span class="fl">100</span><span class="op">)</span><span class="op">)</span><span class="op">)</span></span>
-<span class="r-in"><span class="fu"><a href="plotPixels.html">plotPixels</a></span><span class="op">(</span><span class="va">x</span>, colour_by <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"H3"</span>, <span class="st">"CD99"</span><span class="op">)</span><span class="op">)</span></span>
+<span class="r-in"><span></span></span>
+<span class="r-in"><span><span class="co"># Setting the clipping range per channel</span></span></span>
+<span class="r-in"><span><span class="va">x</span> <span class="op">&lt;-</span> <span class="fu">normalize</span><span class="op">(</span><span class="va">pancreasImages</span>,</span></span>
+<span class="r-in"><span>                inputRange <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span>H3 <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">0</span>, <span class="fl">70</span><span class="op">)</span>, CD99 <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">0</span>, <span class="fl">100</span><span class="op">)</span><span class="op">)</span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="fu"><a href="plotPixels.html">plotPixels</a></span><span class="op">(</span><span class="va">x</span>, colour_by <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"H3"</span>, <span class="st">"CD99"</span><span class="op">)</span><span class="op">)</span></span></span>
 <span class="r-plt img"><img src="CytoImageList-manipulation-4.png" alt="" width="700" height="433"></span>
-<span class="r-in"></span>
-<span class="r-in"><span class="co"># Normalizing per image</span></span>
-<span class="r-in"><span class="va">x</span> <span class="op">&lt;-</span> <span class="fu">normalize</span><span class="op">(</span><span class="va">pancreasImages</span>, separateImages <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></span>
-<span class="r-in"><span class="fu"><a href="plotPixels.html">plotPixels</a></span><span class="op">(</span><span class="va">x</span>, colour_by <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"H3"</span>, <span class="st">"CD99"</span><span class="op">)</span><span class="op">)</span></span>
+<span class="r-in"><span></span></span>
+<span class="r-in"><span><span class="co"># Normalizing per image</span></span></span>
+<span class="r-in"><span><span class="va">x</span> <span class="op">&lt;-</span> <span class="fu">normalize</span><span class="op">(</span><span class="va">pancreasImages</span>, separateImages <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="fu"><a href="plotPixels.html">plotPixels</a></span><span class="op">(</span><span class="va">x</span>, colour_by <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"H3"</span>, <span class="st">"CD99"</span><span class="op">)</span><span class="op">)</span></span></span>
 <span class="r-plt img"><img src="CytoImageList-manipulation-5.png" alt="" width="700" height="433"></span>
-<span class="r-in"></span>
+<span class="r-in"><span></span></span>
 </code></pre></div>
     </div>
   </div>
@@ -199,7 +201,7 @@ a new entry called "XYZ_norm" to the .h5 file.</p></dd>
 </div>
 
 <div class="pkgdown">
-  <p></p><p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.3.</p>
+  <p></p><p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.6.</p>
 </div>
 
       </footer></div>

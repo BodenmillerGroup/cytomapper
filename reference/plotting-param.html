@@ -19,7 +19,7 @@ plotted images."><!-- mathjax --><script src="https://cdnjs.cloudflare.com/ajax/
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">cytomapper</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="">1.9.0</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="">1.9.1</span>
       </span>
     </div>
 
@@ -75,9 +75,13 @@ that are not contained in the SingleCellExperiment object will be coloured
 based on <code>missing_colour</code>. In the <code><a href="plotPixels.html">plotPixels</a></code> function,
 <code>missing_colour</code> defines the outline of the cells if <code>outline_by</code>
 is not set.</p></dd>
+
+
 <dt>background_colour</dt>
 <dd><p>(only <code><a href="plotCells.html">plotCells</a></code>) a single character
 specifying a valid colour that is set as the background of the image.</p></dd>
+
+
 <dt>scale_bar</dt>
 <dd><p>a list specifying features of the scale bar. One or multiple
 of the following entries are supported:</p><ul><li><p><code>length</code>: numeric length in pixels (default 20% of the largest
@@ -97,6 +101,8 @@ margin between image boundary and the scale bar (default c(10,10)).</p></li>
 single number specifying the image for which the scale bar should be
 displayed (default "all").</p></li>
 </ul><p>Plotting of the scale bar is suppressed if set to <code>NULL</code>.</p></dd>
+
+
 <dt>image_title</dt>
 <dd><p>a list specifying features of the image titles. One or
 multiple of the following entries are supported:</p><ul><li><p><code>text</code>: character vector of image titles. Same length as the
@@ -112,6 +118,8 @@ margin between image boundary and the image title (default c(10,10)).</p></li>
 (default 1, see <code><a href="https://rdrr.io/r/graphics/par.html" class="external-link">par</a></code> for details)</p></li>
 <li><p><code>cex</code>: numeric value indicating the size of the image title.</p></li>
 </ul><p>Plotting of the image title is suppressed if set to <code>NULL</code>.</p></dd>
+
+
 <dt>save_plot</dt>
 <dd><p>a list specifying how to save the plot. One or multiple
 of the following entries are supported:</p><ul><li><p><code>filename</code>: single character specifying a valid file name.
@@ -127,14 +135,20 @@ text. The <code>scale</code> parameter can be set to increase the resolution of
 the image while keeping the text size constant (default 1 but can be
 increased for optimal results).</p></li>
 </ul></dd>
+
+
 <dt>return_plot</dt>
 <dd><p>logical indicating whether to return the plot (see
 <code><a href="https://rdrr.io/r/grDevices/recordplot.html" class="external-link">recordPlot</a></code> for more infos).</p></dd>
+
+
 <dt>return_images</dt>
 <dd><p>logical indicating whether to return the coloured images
 in form of a <code>SimpleList</code> object. Each entry to this
 list is a three-colour <code><a href="https://rdrr.io/pkg/EBImage/man/Image.html" class="external-link">Image</a></code> object. However, the
 image title and scale bar are not retained.</p></dd>
+
+
 <dt>legend</dt>
 <dd><p>a list specifying features of the legend. One or multiple
 of the following entries are supported:</p><ul><li><p><code>colour_by.title.font</code>: numeric entry specifying the font of the
@@ -158,32 +172,45 @@ specifying the size of the legend for features specified by
 <li><p><code>margin</code>: numeric value indicating the margin (in pixels) between 
 the legends and the outer boundary (default 2)</p></li>
 </ul><p>Plotting of the legend is suppressed if set to <code>NULL</code>.</p></dd>
+
+
 <dt>margin</dt>
 <dd><p>numeric value indicating the gap (in pixels) between 
 individual images (default 0).</p></dd>
+
+
 <dt>thick</dt>
 <dd><p>logical indicating whether cell borders should be drawn as
 thick lines (default <code>FALSE</code>).</p></dd>
+
+
 <dt>display</dt>
 <dd><p>one of two possible values: "all" or "single". When set to
 "all", all images are displayed at once in a grid-like fashion. When
 set to "single", individual images are plotted in single graphics devices.
 The second option is useful when saving individual images in pdf format or
 when displaying in Rmarkdown files.</p></dd>
+
+
 <dt>scale</dt>
 <dd><p>logical indicating whether to scale each feature individually to
 its minimum/maximum across the SingleCellExperiment object (see
 <code><a href="plotCells.html">plotCells</a></code>) or across all displayed images (see
 <code><a href="plotCells.html">plotCells</a></code>). If set to <code>FALSE</code> each value is displayed
 relative to the maximum of all selected features.</p></dd>
+
+
 <dt>interpolate</dt>
 <dd><p>a logical indicating whether to apply
 linear interpolation to the image when drawing (see
 <code><a href="https://rdrr.io/r/graphics/rasterImage.html" class="external-link">rasterImage</a></code>) (default TRUE).</p></dd>
+
 </dl></div>
     <div id="value">
     <h2>Value</h2>
-    <p>a list if <code>return_images</code> and/or <code>return_plot</code> is TRUE.</p><ul><li><p><code>plot</code>: a single plot object (<code>display = "all"</code>) or a list
+    
+
+<p>a list if <code>return_images</code> and/or <code>return_plot</code> is TRUE.</p><ul><li><p><code>plot</code>: a single plot object (<code>display = "all"</code>) or a list
 of plot objects (<code>display = "single"</code>)</p></li>
 <li><p><code>images</code>: a <code>SimpleList</code> object containing
 three-colour <code><a href="https://rdrr.io/pkg/EBImage/man/Image.html" class="external-link">Image</a></code> objects.</p></li>
@@ -201,97 +228,97 @@ for the main plotting functions</p></div>
 
     <div id="ref-examples">
     <h2>Examples</h2>
-    <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span class="fu"><a href="https://rdrr.io/r/utils/data.html" class="external-link">data</a></span><span class="op">(</span><span class="st">"pancreasImages"</span><span class="op">)</span></span>
-<span class="r-in"><span class="fu"><a href="https://rdrr.io/r/utils/data.html" class="external-link">data</a></span><span class="op">(</span><span class="st">"pancreasMasks"</span><span class="op">)</span></span>
-<span class="r-in"><span class="fu"><a href="https://rdrr.io/r/utils/data.html" class="external-link">data</a></span><span class="op">(</span><span class="st">"pancreasSCE"</span><span class="op">)</span></span>
-<span class="r-in"></span>
-<span class="r-in"><span class="co"># Setting missing colour</span></span>
-<span class="r-in"><span class="fu"><a href="plotCells.html">plotCells</a></span><span class="op">(</span><span class="va">pancreasMasks</span>, missing_colour <span class="op">=</span> <span class="st">"blue"</span><span class="op">)</span></span>
+    <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span><span class="fu"><a href="https://rdrr.io/r/utils/data.html" class="external-link">data</a></span><span class="op">(</span><span class="st">"pancreasImages"</span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="fu"><a href="https://rdrr.io/r/utils/data.html" class="external-link">data</a></span><span class="op">(</span><span class="st">"pancreasMasks"</span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="fu"><a href="https://rdrr.io/r/utils/data.html" class="external-link">data</a></span><span class="op">(</span><span class="st">"pancreasSCE"</span><span class="op">)</span></span></span>
+<span class="r-in"><span></span></span>
+<span class="r-in"><span><span class="co"># Setting missing colour</span></span></span>
+<span class="r-in"><span><span class="fu"><a href="plotCells.html">plotCells</a></span><span class="op">(</span><span class="va">pancreasMasks</span>, missing_colour <span class="op">=</span> <span class="st">"blue"</span><span class="op">)</span></span></span>
 <span class="r-plt img"><img src="plotting-param-1.png" alt="" width="700" height="433"></span>
-<span class="r-in"></span>
-<span class="r-in"><span class="co"># Setting background colour</span></span>
-<span class="r-in"><span class="fu"><a href="plotCells.html">plotCells</a></span><span class="op">(</span><span class="va">pancreasMasks</span>, background_colour <span class="op">=</span> <span class="st">"blue"</span><span class="op">)</span></span>
+<span class="r-in"><span></span></span>
+<span class="r-in"><span><span class="co"># Setting background colour</span></span></span>
+<span class="r-in"><span><span class="fu"><a href="plotCells.html">plotCells</a></span><span class="op">(</span><span class="va">pancreasMasks</span>, background_colour <span class="op">=</span> <span class="st">"blue"</span><span class="op">)</span></span></span>
 <span class="r-plt img"><img src="plotting-param-2.png" alt="" width="700" height="433"></span>
-<span class="r-in"></span>
-<span class="r-in"><span class="co"># Setting the scale bar</span></span>
-<span class="r-in"><span class="fu"><a href="plotCells.html">plotCells</a></span><span class="op">(</span><span class="va">pancreasMasks</span>, scale_bar <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span>length <span class="op">=</span> <span class="fl">10</span>,</span>
-<span class="r-in">                                        cex <span class="op">=</span> <span class="fl">2</span>,</span>
-<span class="r-in">                                        lwidth <span class="op">=</span> <span class="fl">10</span>,</span>
-<span class="r-in">                                        colour <span class="op">=</span> <span class="st">"red"</span>,</span>
-<span class="r-in">                                        position <span class="op">=</span> <span class="st">"bottomleft"</span>,</span>
-<span class="r-in">                                        margin <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">5</span>,<span class="fl">5</span><span class="op">)</span>,</span>
-<span class="r-in">                                        frame <span class="op">=</span> <span class="fl">3</span><span class="op">)</span><span class="op">)</span></span>
+<span class="r-in"><span></span></span>
+<span class="r-in"><span><span class="co"># Setting the scale bar</span></span></span>
+<span class="r-in"><span><span class="fu"><a href="plotCells.html">plotCells</a></span><span class="op">(</span><span class="va">pancreasMasks</span>, scale_bar <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span>length <span class="op">=</span> <span class="fl">10</span>,</span></span>
+<span class="r-in"><span>                                        cex <span class="op">=</span> <span class="fl">2</span>,</span></span>
+<span class="r-in"><span>                                        lwidth <span class="op">=</span> <span class="fl">10</span>,</span></span>
+<span class="r-in"><span>                                        colour <span class="op">=</span> <span class="st">"red"</span>,</span></span>
+<span class="r-in"><span>                                        position <span class="op">=</span> <span class="st">"bottomleft"</span>,</span></span>
+<span class="r-in"><span>                                        margin <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">5</span>,<span class="fl">5</span><span class="op">)</span>,</span></span>
+<span class="r-in"><span>                                        frame <span class="op">=</span> <span class="fl">3</span><span class="op">)</span><span class="op">)</span></span></span>
 <span class="r-plt img"><img src="plotting-param-3.png" alt="" width="700" height="433"></span>
-<span class="r-in"></span>
-<span class="r-in"><span class="co"># Setting the image title</span></span>
-<span class="r-in"><span class="fu"><a href="plotCells.html">plotCells</a></span><span class="op">(</span><span class="va">pancreasMasks</span>,</span>
-<span class="r-in">            image_title <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span>text <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"image1"</span>, <span class="st">"image2"</span>, <span class="st">"image3"</span><span class="op">)</span>,</span>
-<span class="r-in">                                position <span class="op">=</span> <span class="st">"topleft"</span>,</span>
-<span class="r-in">                                colour <span class="op">=</span> <span class="st">"blue"</span>,</span>
-<span class="r-in">                                margin <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">0</span>,<span class="fl">5</span><span class="op">)</span>,</span>
-<span class="r-in">                                font <span class="op">=</span> <span class="fl">2</span>,</span>
-<span class="r-in">                                cex <span class="op">=</span> <span class="fl">2</span><span class="op">)</span><span class="op">)</span></span>
+<span class="r-in"><span></span></span>
+<span class="r-in"><span><span class="co"># Setting the image title</span></span></span>
+<span class="r-in"><span><span class="fu"><a href="plotCells.html">plotCells</a></span><span class="op">(</span><span class="va">pancreasMasks</span>,</span></span>
+<span class="r-in"><span>            image_title <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span>text <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"image1"</span>, <span class="st">"image2"</span>, <span class="st">"image3"</span><span class="op">)</span>,</span></span>
+<span class="r-in"><span>                                position <span class="op">=</span> <span class="st">"topleft"</span>,</span></span>
+<span class="r-in"><span>                                colour <span class="op">=</span> <span class="st">"blue"</span>,</span></span>
+<span class="r-in"><span>                                margin <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">0</span>,<span class="fl">5</span><span class="op">)</span>,</span></span>
+<span class="r-in"><span>                                font <span class="op">=</span> <span class="fl">2</span>,</span></span>
+<span class="r-in"><span>                                cex <span class="op">=</span> <span class="fl">2</span><span class="op">)</span><span class="op">)</span></span></span>
 <span class="r-plt img"><img src="plotting-param-4.png" alt="" width="700" height="433"></span>
-<span class="r-in"></span>
-<span class="r-in"><span class="co"># Return plot</span></span>
-<span class="r-in"><span class="va">cur_out</span> <span class="op">&lt;-</span> <span class="fu"><a href="plotPixels.html">plotPixels</a></span><span class="op">(</span><span class="va">pancreasImages</span>, return_plot <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></span>
+<span class="r-in"><span></span></span>
+<span class="r-in"><span><span class="co"># Return plot</span></span></span>
+<span class="r-in"><span><span class="va">cur_out</span> <span class="op">&lt;-</span> <span class="fu"><a href="plotPixels.html">plotPixels</a></span><span class="op">(</span><span class="va">pancreasImages</span>, return_plot <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></span></span>
 <span class="r-plt img"><img src="plotting-param-5.png" alt="" width="700" height="433"></span>
-<span class="r-in"><span class="va">cur_out</span><span class="op">$</span><span class="va">plot</span></span>
+<span class="r-in"><span><span class="va">cur_out</span><span class="op">$</span><span class="va">plot</span></span></span>
 <span class="r-plt img"><img src="plotting-param-6.png" alt="" width="700" height="433"></span>
-<span class="r-in"></span>
-<span class="r-in"><span class="co"># Return images</span></span>
-<span class="r-in"><span class="va">cur_out</span> <span class="op">&lt;-</span> <span class="fu"><a href="plotPixels.html">plotPixels</a></span><span class="op">(</span><span class="va">pancreasImages</span>, return_images <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></span>
-<span class="r-in"><span class="va">cur_out</span><span class="op">$</span><span class="va">images</span></span>
+<span class="r-in"><span></span></span>
+<span class="r-in"><span><span class="co"># Return images</span></span></span>
+<span class="r-in"><span><span class="va">cur_out</span> <span class="op">&lt;-</span> <span class="fu"><a href="plotPixels.html">plotPixels</a></span><span class="op">(</span><span class="va">pancreasImages</span>, return_images <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="va">cur_out</span><span class="op">$</span><span class="va">images</span></span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> List of length 3</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> names(3): E34_imc G01_imc J02_imc</span>
-<span class="r-in"></span>
-<span class="r-in"><span class="co"># Setting the legend</span></span>
-<span class="r-in"><span class="fu"><a href="plotCells.html">plotCells</a></span><span class="op">(</span><span class="va">pancreasMasks</span>, object <span class="op">=</span> <span class="va">pancreasSCE</span>,</span>
-<span class="r-in">            img_id <span class="op">=</span> <span class="st">"ImageNb"</span>, cell_id <span class="op">=</span> <span class="st">"CellNb"</span>,</span>
-<span class="r-in">            colour_by <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"CD99"</span>, <span class="st">"CDH"</span><span class="op">)</span>,</span>
-<span class="r-in">            outline_by <span class="op">=</span> <span class="st">"CellType"</span>,</span>
-<span class="r-in">            legend <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span>colour_by.title.font <span class="op">=</span> <span class="fl">0.5</span>,</span>
-<span class="r-in">                        colour_by.title.cex <span class="op">=</span> <span class="fl">0.5</span>,</span>
-<span class="r-in">                        colour_by.labels.cex <span class="op">=</span> <span class="fl">0.5</span>,</span>
-<span class="r-in">                        outline_by.legend.cex <span class="op">=</span> <span class="fl">0.5</span>,</span>
-<span class="r-in">                        margin <span class="op">=</span> <span class="fl">0</span><span class="op">)</span><span class="op">)</span></span>
+<span class="r-in"><span></span></span>
+<span class="r-in"><span><span class="co"># Setting the legend</span></span></span>
+<span class="r-in"><span><span class="fu"><a href="plotCells.html">plotCells</a></span><span class="op">(</span><span class="va">pancreasMasks</span>, object <span class="op">=</span> <span class="va">pancreasSCE</span>,</span></span>
+<span class="r-in"><span>            img_id <span class="op">=</span> <span class="st">"ImageNb"</span>, cell_id <span class="op">=</span> <span class="st">"CellNb"</span>,</span></span>
+<span class="r-in"><span>            colour_by <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"CD99"</span>, <span class="st">"CDH"</span><span class="op">)</span>,</span></span>
+<span class="r-in"><span>            outline_by <span class="op">=</span> <span class="st">"CellType"</span>,</span></span>
+<span class="r-in"><span>            legend <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span>colour_by.title.font <span class="op">=</span> <span class="fl">0.5</span>,</span></span>
+<span class="r-in"><span>                        colour_by.title.cex <span class="op">=</span> <span class="fl">0.5</span>,</span></span>
+<span class="r-in"><span>                        colour_by.labels.cex <span class="op">=</span> <span class="fl">0.5</span>,</span></span>
+<span class="r-in"><span>                        outline_by.legend.cex <span class="op">=</span> <span class="fl">0.5</span>,</span></span>
+<span class="r-in"><span>                        margin <span class="op">=</span> <span class="fl">0</span><span class="op">)</span><span class="op">)</span></span></span>
 <span class="r-plt img"><img src="plotting-param-7.png" alt="" width="700" height="433"></span>
-<span class="r-in"></span>
-<span class="r-in"><span class="co"># Setting the margin between images</span></span>
-<span class="r-in"><span class="fu"><a href="plotPixels.html">plotPixels</a></span><span class="op">(</span><span class="va">pancreasImages</span>, margin <span class="op">=</span> <span class="fl">3</span><span class="op">)</span></span>
+<span class="r-in"><span></span></span>
+<span class="r-in"><span><span class="co"># Setting the margin between images</span></span></span>
+<span class="r-in"><span><span class="fu"><a href="plotPixels.html">plotPixels</a></span><span class="op">(</span><span class="va">pancreasImages</span>, margin <span class="op">=</span> <span class="fl">3</span><span class="op">)</span></span></span>
 <span class="r-plt img"><img src="plotting-param-8.png" alt="" width="700" height="433"></span>
-<span class="r-in"></span>
-<span class="r-in"><span class="co"># Thick outlines</span></span>
-<span class="r-in"><span class="fu"><a href="plotCells.html">plotCells</a></span><span class="op">(</span><span class="va">pancreasMasks</span>, object <span class="op">=</span> <span class="va">pancreasSCE</span>,</span>
-<span class="r-in">            img_id <span class="op">=</span> <span class="st">"ImageNb"</span>, cell_id <span class="op">=</span> <span class="st">"CellNb"</span>,</span>
-<span class="r-in">            colour_by <span class="op">=</span> <span class="st">"CD99"</span>,</span>
-<span class="r-in">            outline_by <span class="op">=</span> <span class="st">"CellType"</span>,</span>
-<span class="r-in">            thick <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></span>
+<span class="r-in"><span></span></span>
+<span class="r-in"><span><span class="co"># Thick outlines</span></span></span>
+<span class="r-in"><span><span class="fu"><a href="plotCells.html">plotCells</a></span><span class="op">(</span><span class="va">pancreasMasks</span>, object <span class="op">=</span> <span class="va">pancreasSCE</span>,</span></span>
+<span class="r-in"><span>            img_id <span class="op">=</span> <span class="st">"ImageNb"</span>, cell_id <span class="op">=</span> <span class="st">"CellNb"</span>,</span></span>
+<span class="r-in"><span>            colour_by <span class="op">=</span> <span class="st">"CD99"</span>,</span></span>
+<span class="r-in"><span>            outline_by <span class="op">=</span> <span class="st">"CellType"</span>,</span></span>
+<span class="r-in"><span>            thick <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></span></span>
 <span class="r-plt img"><img src="plotting-param-9.png" alt="" width="700" height="433"></span>
-<span class="r-in"></span>
-<span class="r-in"><span class="co"># Displaying individual images</span></span>
-<span class="r-in"><span class="fu"><a href="plotPixels.html">plotPixels</a></span><span class="op">(</span><span class="va">pancreasImages</span>, display <span class="op">=</span> <span class="st">"single"</span><span class="op">)</span></span>
+<span class="r-in"><span></span></span>
+<span class="r-in"><span><span class="co"># Displaying individual images</span></span></span>
+<span class="r-in"><span><span class="fu"><a href="plotPixels.html">plotPixels</a></span><span class="op">(</span><span class="va">pancreasImages</span>, display <span class="op">=</span> <span class="st">"single"</span><span class="op">)</span></span></span>
 <span class="r-plt img"><img src="plotting-param-10.png" alt="" width="700" height="433"></span>
 <span class="r-plt img"><img src="plotting-param-11.png" alt="" width="700" height="433"></span>
 <span class="r-plt img"><img src="plotting-param-12.png" alt="" width="700" height="433"></span>
 <span class="r-plt img"><img src="plotting-param-13.png" alt="" width="700" height="433"></span>
-<span class="r-in"></span>
-<span class="r-in"><span class="co"># Supress scaling</span></span>
-<span class="r-in"><span class="fu"><a href="plotPixels.html">plotPixels</a></span><span class="op">(</span><span class="va">pancreasImages</span>, colour_by <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"CD99"</span>, <span class="st">"PIN"</span><span class="op">)</span>,</span>
-<span class="r-in">            scale <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></span>
+<span class="r-in"><span></span></span>
+<span class="r-in"><span><span class="co"># Supress scaling</span></span></span>
+<span class="r-in"><span><span class="fu"><a href="plotPixels.html">plotPixels</a></span><span class="op">(</span><span class="va">pancreasImages</span>, colour_by <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"CD99"</span>, <span class="st">"PIN"</span><span class="op">)</span>,</span></span>
+<span class="r-in"><span>            scale <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></span></span>
 <span class="r-plt img"><img src="plotting-param-14.png" alt="" width="700" height="433"></span>
-<span class="r-in"><span class="fu"><a href="plotPixels.html">plotPixels</a></span><span class="op">(</span><span class="va">pancreasImages</span>, colour_by <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"CD99"</span>, <span class="st">"PIN"</span><span class="op">)</span>,</span>
-<span class="r-in">            scale <span class="op">=</span> <span class="cn">FALSE</span><span class="op">)</span></span>
+<span class="r-in"><span><span class="fu"><a href="plotPixels.html">plotPixels</a></span><span class="op">(</span><span class="va">pancreasImages</span>, colour_by <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"CD99"</span>, <span class="st">"PIN"</span><span class="op">)</span>,</span></span>
+<span class="r-in"><span>            scale <span class="op">=</span> <span class="cn">FALSE</span><span class="op">)</span></span></span>
 <span class="r-plt img"><img src="plotting-param-15.png" alt="" width="700" height="433"></span>
-<span class="r-in"></span>
-<span class="r-in"><span class="co"># Suppress interpolation</span></span>
-<span class="r-in"><span class="fu"><a href="plotPixels.html">plotPixels</a></span><span class="op">(</span><span class="va">pancreasImages</span>, colour_by <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"CD99"</span>, <span class="st">"PIN"</span><span class="op">)</span>,</span>
-<span class="r-in">            interpolate <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></span>
+<span class="r-in"><span></span></span>
+<span class="r-in"><span><span class="co"># Suppress interpolation</span></span></span>
+<span class="r-in"><span><span class="fu"><a href="plotPixels.html">plotPixels</a></span><span class="op">(</span><span class="va">pancreasImages</span>, colour_by <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"CD99"</span>, <span class="st">"PIN"</span><span class="op">)</span>,</span></span>
+<span class="r-in"><span>            interpolate <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></span></span>
 <span class="r-plt img"><img src="plotting-param-16.png" alt="" width="700" height="433"></span>
-<span class="r-in"><span class="fu"><a href="plotPixels.html">plotPixels</a></span><span class="op">(</span><span class="va">pancreasImages</span>, colour_by <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"CD99"</span>, <span class="st">"PIN"</span><span class="op">)</span>,</span>
-<span class="r-in">            interpolate <span class="op">=</span> <span class="cn">FALSE</span><span class="op">)</span></span>
+<span class="r-in"><span><span class="fu"><a href="plotPixels.html">plotPixels</a></span><span class="op">(</span><span class="va">pancreasImages</span>, colour_by <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"CD99"</span>, <span class="st">"PIN"</span><span class="op">)</span>,</span></span>
+<span class="r-in"><span>            interpolate <span class="op">=</span> <span class="cn">FALSE</span><span class="op">)</span></span></span>
 <span class="r-plt img"><img src="plotting-param-17.png" alt="" width="700" height="433"></span>
-<span class="r-in"></span>
+<span class="r-in"><span></span></span>
 </code></pre></div>
     </div>
   </div>
@@ -306,7 +333,7 @@ for the main plotting functions</p></div>
 </div>
 
 <div class="pkgdown">
-  <p></p><p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.3.</p>
+  <p></p><p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.6.</p>
 </div>
 
       </footer></div>
