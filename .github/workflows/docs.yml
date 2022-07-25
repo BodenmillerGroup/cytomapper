@@ -29,6 +29,10 @@ jobs:
           path: ${{ env.R_LIBS_USER }}
           key: ${{ runner.os }}-${{ hashFiles('.github/R-version') }}-1-${{ hashFiles('.github/depends.Rds') }}
           restore-keys: ${{ runner.os }}-${{ hashFiles('.github/R-version') }}-1-
+          
+      - name: Install system dependecies
+        run: |
+          brew install harfbuzz fribidi cairo xquartz imagemagick gdal pkg-config proj
 
       - name: Install dependencies
         run: |
