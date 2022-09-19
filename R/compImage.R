@@ -70,6 +70,10 @@
 #' @importFrom nnls nnls
 compImage <- function(object, sm, overwrite = FALSE, BPPARAM = SerialParam()){
     
+    if (attr(class(object), "package") == "cytomapper") {
+        warning("Please update the CytoImageList object by calling 'updateObject(object)'")
+    }
+    
     .valid.compImage.input(object, sm)
     
     cur_channels <- channelNames(object)

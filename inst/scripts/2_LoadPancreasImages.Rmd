@@ -26,6 +26,8 @@ library(cytomapper)
 Here, a subset of 100 images from the pancreas IMC dataset is downloaded.
 
 ```{r load-images}
+options(timeout = 10000)
+
 # Download the zipped folder image and unzip it
 url.images <- ("https://data.mendeley.com/public-files/datasets/cydmwsfztj/files/b37054d2-d5d0-4c48-a001-81ff77136f41/file_downloaded")
 download.file(url.images, destfile = "ImageSubset.zip")

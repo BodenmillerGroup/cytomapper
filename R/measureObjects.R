@@ -139,6 +139,14 @@ measureObjects <- function(mask,
                            haralick_nbins = 32,
                            haralick_scales = c(1, 2),
                            BPPARAM = SerialParam()) {
+    
+    if (attr(class(mask), "package") == "cytomapper") {
+        warning("Please update the CytoImageList object by calling 'updateObject(mask)'")
+    }
+    
+    if (attr(class(image), "package") == "cytomapper") {
+        warning("Please update the CytoImageList object by calling 'updateObject(image)'")
+    }
 
     # Validity checks
     .valid.mask(mask, img_id = img_id)

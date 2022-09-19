@@ -27,6 +27,8 @@ library(cytomapper)
 Here, a subset of single-cell data, corresponding to 100 images from the full dataset is downloaded.
 
 ```{r download-cell-data}
+options(timeout = 10000)
+
 # Download the zipped folder image and unzip it
 url.cells <- ("https://data.mendeley.com/public-files/datasets/cydmwsfztj/files/f1e3b8dc-56be-4172-bbc4-3a6f9de97563/file_downloaded")
 download.file(url.cells, destfile = "CellSubset.zip")

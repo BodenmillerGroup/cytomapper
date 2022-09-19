@@ -109,6 +109,11 @@ NULL
 setMethod("scaleImages",
     signature = signature(object="CytoImageList"),
     definition = function(object, value){
+        
+        if (attr(class(object), "package") == "cytomapper") {
+            warning("Please update the CytoImageList object by calling 'updateObject(object)'")
+        }
+        
         if (!all(is.numeric(value))) {
             stop("'value' must be numeric.")
         }
@@ -131,6 +136,10 @@ setMethod("scaleImages",
 #' @importFrom EBImage combine abind
 normImages <- function(object, separateChannels = TRUE, separateImages = FALSE,
                 ft = c(0, 1), inputRange = NULL, overwrite = FALSE){
+    
+    if (attr(class(object), "package") == "cytomapper") {
+        warning("Please update the CytoImageList object by calling 'updateObject(object)'")
+    }
 
     if (!is.logical(separateChannels) ||
         length(separateChannels) > 1L ||

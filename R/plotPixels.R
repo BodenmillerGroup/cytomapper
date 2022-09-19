@@ -151,6 +151,15 @@ plotPixels <- function(
     bcg = NULL,
     colour = NULL,
     ...) {
+    
+    if (!is.null(mask) && attr(class(mask), "package") == "cytomapper") {
+        warning("Please update the CytoImageList object by calling 'updateObject(mask)'")
+    }
+    
+    if (attr(class(image), "package") == "cytomapper") {
+        warning("Please update the CytoImageList object by calling 'updateObject(image)'")
+    }
+    
     # Object checks
     .valid.image(image, img_id)
     if (!is.null(object)) {

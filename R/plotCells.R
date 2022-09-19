@@ -147,6 +147,10 @@ plotCells <- function(
     exprs_values = "counts",
     colour = NULL,
     ...) {
+    
+    if (attr(class(mask), "package") == "cytomapper") {
+        warning("Please update the CytoImageList object by calling 'updateObject(mask)'")
+    }
 
     # Object checks
     .valid.mask(mask, img_id)
