@@ -150,6 +150,7 @@ plotCells <- function(
     
     if (attr(class(mask), "package") == "cytomapper") {
         warning("Please update the CytoImageList object by calling 'updateObject(mask)'")
+        mask <- CytoImageList::updateObject(mask)
     }
 
     # Object checks

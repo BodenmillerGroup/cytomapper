@@ -112,6 +112,7 @@ setMethod("scaleImages",
         
         if (attr(class(object), "package") == "cytomapper") {
             warning("Please update the CytoImageList object by calling 'updateObject(object)'")
+            object <- CytoImageList::updateObject(object)
         }
         
         if (!all(is.numeric(value))) {
@@ -139,6 +140,7 @@ normImages <- function(object, separateChannels = TRUE, separateImages = FALSE,
     
     if (attr(class(object), "package") == "cytomapper") {
         warning("Please update the CytoImageList object by calling 'updateObject(object)'")
+        object <- CytoImageList::updateObject(object)
     }
 
     if (!is.logical(separateChannels) ||

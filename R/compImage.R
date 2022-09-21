@@ -72,6 +72,7 @@ compImage <- function(object, sm, overwrite = FALSE, BPPARAM = SerialParam()){
     
     if (attr(class(object), "package") == "cytomapper") {
         warning("Please update the CytoImageList object by calling 'updateObject(object)'")
+        object <- CytoImageList::updateObject(object)
     }
     
     .valid.compImage.input(object, sm)

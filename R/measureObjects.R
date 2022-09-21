@@ -142,10 +142,12 @@ measureObjects <- function(mask,
     
     if (attr(class(mask), "package") == "cytomapper") {
         warning("Please update the CytoImageList object by calling 'updateObject(mask)'")
+        mask <- CytoImageList::updateObject(mask)
     }
     
     if (attr(class(image), "package") == "cytomapper") {
         warning("Please update the CytoImageList object by calling 'updateObject(image)'")
+        image <- CytoImageList::updateObject(image)
     }
 
     # Validity checks
