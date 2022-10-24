@@ -33,7 +33,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">cytomapper</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="">1.9.1</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="">1.9.2</span>
       </span>
     </div>
 
@@ -75,24 +75,24 @@
 
       
 
-      </header><script src="cytomapper_files/accessible-code-block-0.0.1/empty-anchor.js"></script><div class="row">
+      </header><div class="row">
   <div class="col-md-9 contents">
     <div class="page-header toc-ignore">
       <h1 data-toc-skip>Visualization of imaging cytometry data in R</h1>
                         <h4 data-toc-skip class="author">Nils Eling</h4>
             <address class="author_afil">
-      Department for Quantitative Biomedicine, University of Zurich<br><a class="author_email" href="mailto:#"></a><a href="mailto:nils.eling@dqbm.uzh.ch" class="email">nils.eling@dqbm.uzh.ch</a>
+      Department for Quantitative Biomedicine, University of ZurichInstitute for Molecular Health Sciences, ETH Zurich<br><a class="author_email" href="mailto:#"></a><a href="mailto:nils.eling@dqbm.uzh.ch" class="email">nils.eling@dqbm.uzh.ch</a>
       </address>
                               <h4 data-toc-skip class="author">Nicolas Damond</h4>
             <address class="author_afil">
-      Department for Quantitative Biomedicine, University of Zurich<br><a class="author_email" href="mailto:#"></a><a href="mailto:nicolas.damond@dqbm.uzh.ch" class="email">nicolas.damond@dqbm.uzh.ch</a>
+      Department for Quantitative Biomedicine, University of ZurichInstitute for Molecular Health Sciences, ETH Zurich<br><a class="author_email" href="mailto:#"></a><a href="mailto:nicolas.damond@dqbm.uzh.ch" class="email">nicolas.damond@dqbm.uzh.ch</a>
       </address>
                               <h4 data-toc-skip class="author">Tobias Hoch</h4>
             <address class="author_afil">
-      Department for Quantitative Biomedicine, University of Zurich<br><a class="author_email" href="mailto:#"></a><a href="mailto:tobias.hoch@dqbm.uzh.ch" class="email">tobias.hoch@dqbm.uzh.ch</a>
+      Department for Quantitative Biomedicine, University of ZurichInstitute for Molecular Health Sciences, ETH Zurich<br><a class="author_email" href="mailto:#"></a><a href="mailto:tobias.hoch@dqbm.uzh.ch" class="email">tobias.hoch@dqbm.uzh.ch</a>
       </address>
                   
-            <h4 data-toc-skip class="date">25 July 2022</h4>
+            <h4 data-toc-skip class="date">24 October 2022</h4>
       
       <small class="dont-index">Source: <a href="https://github.com/BodenmillerGroup/cytomapper/blob/HEAD/vignettes/cytomapper.Rmd" class="external-link"><code>vignettes/cytomapper.Rmd</code></a></small>
       <div class="hidden name"><code>cytomapper.Rmd</code></div>
@@ -878,7 +878,7 @@ Plot customization example.
 <p>Nicolas created the first version of <code>cytomapper</code> (named <code>IMCMapper</code>). Nils and Nicolas implemented and maintain the package. Nils and Tobias implemented and maintain the <code>cytomapperShiny</code> function.</p>
 </div>
 <div class="section level2">
-<h2 id="session-info">Session info<a class="anchor" aria-label="anchor" href="#session-info"></a>
+<h2 class="unnumbered" id="session-info">Session info<a class="anchor" aria-label="anchor" href="#session-info"></a>
 </h2>
 <pre><code><span><span class="co">## R version 4.2.1 (2022-06-23)</span></span>
 <span><span class="co">## Platform: x86_64-apple-darwin17.0 (64-bit)</span></span>
@@ -897,96 +897,96 @@ Plot customization example.
 <span><span class="co">## </span></span>
 <span><span class="co">## other attached packages:</span></span>
 <span><span class="co">##  [1] ggplot2_3.3.6               cowplot_1.1.1              </span></span>
-<span><span class="co">##  [3] cytomapper_1.9.1            SingleCellExperiment_1.18.0</span></span>
+<span><span class="co">##  [3] cytomapper_1.9.2            SingleCellExperiment_1.18.1</span></span>
 <span><span class="co">##  [5] SummarizedExperiment_1.26.1 Biobase_2.56.0             </span></span>
-<span><span class="co">##  [7] GenomicRanges_1.48.0        GenomeInfoDb_1.32.2        </span></span>
-<span><span class="co">##  [9] IRanges_2.30.0              S4Vectors_0.34.0           </span></span>
+<span><span class="co">##  [7] GenomicRanges_1.48.0        GenomeInfoDb_1.32.4        </span></span>
+<span><span class="co">##  [9] IRanges_2.30.1              S4Vectors_0.34.0           </span></span>
 <span><span class="co">## [11] BiocGenerics_0.42.0         MatrixGenerics_1.8.1       </span></span>
 <span><span class="co">## [13] matrixStats_0.62.0          EBImage_4.38.0             </span></span>
 <span><span class="co">## [15] BiocStyle_2.24.0           </span></span>
 <span><span class="co">## </span></span>
 <span><span class="co">## loaded via a namespace (and not attached):</span></span>
-<span><span class="co">##   [1] SpatialExperiment_1.6.0   ggbeeswarm_0.6.0         </span></span>
+<span><span class="co">##   [1] SpatialExperiment_1.6.1   ggbeeswarm_0.6.0         </span></span>
 <span><span class="co">##   [3] colorspace_2.0-3          rjson_0.2.21             </span></span>
 <span><span class="co">##   [5] ellipsis_0.3.2            rprojroot_2.0.3          </span></span>
-<span><span class="co">##   [7] scuttle_1.6.2             XVector_0.36.0           </span></span>
+<span><span class="co">##   [7] scuttle_1.6.3             XVector_0.36.0           </span></span>
 <span><span class="co">##   [9] fftwtools_0.9-11          fs_1.5.2                 </span></span>
 <span><span class="co">##  [11] farver_2.1.1              fansi_1.0.3              </span></span>
 <span><span class="co">##  [13] codetools_0.2-18          R.methodsS3_1.8.2        </span></span>
 <span><span class="co">##  [15] sparseMatrixStats_1.8.0   cachem_1.0.6             </span></span>
-<span><span class="co">##  [17] knitr_1.39                jsonlite_1.8.0           </span></span>
+<span><span class="co">##  [17] knitr_1.40                jsonlite_1.8.3           </span></span>
 <span><span class="co">##  [19] png_0.1-7                 R.oo_1.25.0              </span></span>
 <span><span class="co">##  [21] shinydashboard_0.7.2      shiny_1.7.2              </span></span>
-<span><span class="co">##  [23] HDF5Array_1.24.1          BiocManager_1.30.18      </span></span>
+<span><span class="co">##  [23] HDF5Array_1.24.2          BiocManager_1.30.18      </span></span>
 <span><span class="co">##  [25] compiler_4.2.1            dqrng_0.3.0              </span></span>
-<span><span class="co">##  [27] assertthat_0.2.1          Matrix_1.4-1             </span></span>
+<span><span class="co">##  [27] assertthat_0.2.1          Matrix_1.5-1             </span></span>
 <span><span class="co">##  [29] fastmap_1.1.0             svgPanZoom_0.3.4         </span></span>
-<span><span class="co">##  [31] limma_3.52.2              cli_3.3.0                </span></span>
+<span><span class="co">##  [31] limma_3.52.4              cli_3.4.1                </span></span>
 <span><span class="co">##  [33] later_1.3.0               htmltools_0.5.3          </span></span>
-<span><span class="co">##  [35] tools_4.2.1               gtable_0.3.0             </span></span>
+<span><span class="co">##  [35] tools_4.2.1               gtable_0.3.1             </span></span>
 <span><span class="co">##  [37] glue_1.6.2                GenomeInfoDbData_1.2.8   </span></span>
-<span><span class="co">##  [39] dplyr_1.0.9               Rcpp_1.0.9               </span></span>
-<span><span class="co">##  [41] raster_3.5-21             jquerylib_0.1.4          </span></span>
-<span><span class="co">##  [43] pkgdown_2.0.6             vctrs_0.4.1              </span></span>
+<span><span class="co">##  [39] dplyr_1.0.10              Rcpp_1.0.9               </span></span>
+<span><span class="co">##  [41] raster_3.6-3              jquerylib_0.1.4          </span></span>
+<span><span class="co">##  [43] pkgdown_2.0.6             vctrs_0.5.0              </span></span>
 <span><span class="co">##  [45] rhdf5filters_1.8.0        svglite_2.1.0            </span></span>
-<span><span class="co">##  [47] DelayedMatrixStats_1.18.0 xfun_0.31                </span></span>
-<span><span class="co">##  [49] stringr_1.4.0             beachmat_2.12.0          </span></span>
-<span><span class="co">##  [51] mime_0.12                 lifecycle_1.0.1          </span></span>
-<span><span class="co">##  [53] terra_1.5-34              edgeR_3.38.1             </span></span>
-<span><span class="co">##  [55] zlibbioc_1.42.0           scales_1.2.0             </span></span>
-<span><span class="co">##  [57] ragg_1.2.2                promises_1.2.0.1         </span></span>
+<span><span class="co">##  [47] DelayedMatrixStats_1.18.2 xfun_0.34                </span></span>
+<span><span class="co">##  [49] stringr_1.4.1             beachmat_2.12.0          </span></span>
+<span><span class="co">##  [51] mime_0.12                 lifecycle_1.0.3          </span></span>
+<span><span class="co">##  [53] terra_1.6-17              edgeR_3.38.4             </span></span>
+<span><span class="co">##  [55] zlibbioc_1.42.0           scales_1.2.1             </span></span>
+<span><span class="co">##  [57] ragg_1.2.4                promises_1.2.0.1         </span></span>
 <span><span class="co">##  [59] parallel_4.2.1            rhdf5_2.40.0             </span></span>
-<span><span class="co">##  [61] RColorBrewer_1.1-3        yaml_2.3.5               </span></span>
+<span><span class="co">##  [61] RColorBrewer_1.1-3        yaml_2.3.6               </span></span>
 <span><span class="co">##  [63] gridExtra_2.3             memoise_2.0.1            </span></span>
 <span><span class="co">##  [65] sass_0.4.2                stringi_1.7.8            </span></span>
-<span><span class="co">##  [67] highr_0.9                 desc_1.4.1               </span></span>
-<span><span class="co">##  [69] tiff_0.1-11               BiocParallel_1.30.3      </span></span>
-<span><span class="co">##  [71] rlang_1.0.4               pkgconfig_2.0.3          </span></span>
+<span><span class="co">##  [67] highr_0.9                 desc_1.4.2               </span></span>
+<span><span class="co">##  [69] tiff_0.1-11               BiocParallel_1.30.4      </span></span>
+<span><span class="co">##  [71] rlang_1.0.6               pkgconfig_2.0.3          </span></span>
 <span><span class="co">##  [73] systemfonts_1.0.4         bitops_1.0-7             </span></span>
-<span><span class="co">##  [75] evaluate_0.15             lattice_0.20-45          </span></span>
-<span><span class="co">##  [77] purrr_0.3.4               Rhdf5lib_1.18.2          </span></span>
+<span><span class="co">##  [75] evaluate_0.17             lattice_0.20-45          </span></span>
+<span><span class="co">##  [77] purrr_0.3.5               Rhdf5lib_1.18.2          </span></span>
 <span><span class="co">##  [79] labeling_0.4.2            htmlwidgets_1.5.4        </span></span>
-<span><span class="co">##  [81] tidyselect_1.1.2          magrittr_2.0.3           </span></span>
-<span><span class="co">##  [83] bookdown_0.27             R6_2.5.1                 </span></span>
+<span><span class="co">##  [81] tidyselect_1.2.0          magrittr_2.0.3           </span></span>
+<span><span class="co">##  [83] bookdown_0.29             R6_2.5.1                 </span></span>
 <span><span class="co">##  [85] nnls_1.4                  magick_2.7.3             </span></span>
 <span><span class="co">##  [87] generics_0.1.3            DelayedArray_0.22.0      </span></span>
 <span><span class="co">##  [89] DBI_1.1.3                 withr_2.5.0              </span></span>
-<span><span class="co">##  [91] pillar_1.8.0              sp_1.5-0                 </span></span>
-<span><span class="co">##  [93] abind_1.4-5               RCurl_1.98-1.7           </span></span>
+<span><span class="co">##  [91] pillar_1.8.1              sp_1.5-0                 </span></span>
+<span><span class="co">##  [93] abind_1.4-5               RCurl_1.98-1.9           </span></span>
 <span><span class="co">##  [95] tibble_3.1.8              DropletUtils_1.16.0      </span></span>
-<span><span class="co">##  [97] utf8_1.2.2                rmarkdown_2.14           </span></span>
+<span><span class="co">##  [97] utf8_1.2.2                rmarkdown_2.17           </span></span>
 <span><span class="co">##  [99] viridis_0.6.2             jpeg_0.1-9               </span></span>
 <span><span class="co">## [101] locfit_1.5-9.6            grid_4.2.1               </span></span>
-<span><span class="co">## [103] digest_0.6.29             xtable_1.8-4             </span></span>
-<span><span class="co">## [105] httpuv_1.6.5              R.utils_2.12.0           </span></span>
+<span><span class="co">## [103] digest_0.6.30             xtable_1.8-4             </span></span>
+<span><span class="co">## [105] httpuv_1.6.6              R.utils_2.12.0           </span></span>
 <span><span class="co">## [107] textshaping_0.3.6         munsell_0.5.0            </span></span>
-<span><span class="co">## [109] viridisLite_0.4.0         beeswarm_0.4.0           </span></span>
+<span><span class="co">## [109] viridisLite_0.4.1         beeswarm_0.4.0           </span></span>
 <span><span class="co">## [111] vipor_0.4.5               bslib_0.4.0</span></span></code></pre>
 </div>
 <div class="section level2">
-<h2 id="references">References<a class="anchor" aria-label="anchor" href="#references"></a>
+<h2 class="unnumbered" id="references">References<a class="anchor" aria-label="anchor" href="#references"></a>
 </h2>
-<div id="refs" class="references">
-<div id="ref-angelo2014mibi">
-<p>Angelo, Michael, Sean C. Bendall, Rachel Finck, Matthew B. Hale, Chuck Hitzman, Alexander D. Borowsky, Richard M. Levenson, et al. 2014. “Multiplexed Ion Beam Imaging of Human Breast Tumors.” <em>Nature Medicine</em> 20 (4): 436–42.</p>
+<div id="refs" class="references csl-bib-body hanging-indent">
+<div id="ref-angelo2014mibi" class="csl-entry">
+Angelo, Michael, Sean C. Bendall, Rachel Finck, Matthew B. Hale, Chuck Hitzman, Alexander D. Borowsky, Richard M. Levenson, et al. 2014. <span>“Multiplexed Ion Beam Imaging of Human Breast Tumors.”</span> <em>Nature Medicine</em> 20 (4): 436–42.
 </div>
-<div id="ref-carpenter2006cellprofiler">
-<p>Carpenter, Anne E, Thouis R Jones, Michael R Lamprecht, Colin Clarke, In Han Kang, Ola Friman, David A Guertin, et al. 2006. “CellProfiler: Image Analysis Software for Identifying and Quantifying Cell Phenotypes.” <em>Genome Biology</em> 7: R100.</p>
+<div id="ref-carpenter2006cellprofiler" class="csl-entry">
+Carpenter, Anne E, Thouis R Jones, Michael R Lamprecht, Colin Clarke, In Han Kang, Ola Friman, David A Guertin, et al. 2006. <span>“CellProfiler: Image Analysis Software for Identifying and Quantifying Cell Phenotypes.”</span> <em>Genome Biology</em> 7: R100.
 </div>
-<div id="ref-damond2019pancreas">
-<p>Damond, Nicolas, Stefanie Engler, Vito R. T. Zanotelli, Denis Schapiro, Clive H. Wasserfall, Irina Kusmartseva, Harry S. Nick, et al. 2019. “A Map of Human Type 1 Diabetes Progression by Imaging Mass Cytometry.” <em>Cell Metabolism</em> 29 (3): 755–768.e5.</p>
+<div id="ref-damond2019pancreas" class="csl-entry">
+Damond, Nicolas, Stefanie Engler, Vito R. T. Zanotelli, Denis Schapiro, Clive H. Wasserfall, Irina Kusmartseva, Harry S. Nick, et al. 2019. <span>“A Map of Human Type 1 Diabetes Progression by Imaging Mass Cytometry.”</span> <em>Cell Metabolism</em> 29 (3): 755–768.e5.
 </div>
-<div id="ref-giesen2014imc">
-<p>Giesen, Charlotte, Hao A. O. Wang, Denis Schapiro, Nevena Zivanovic, Andrea Jacobs, Bodo Hattendorf, Peter J. Schüffler, et al. 2014. “Highly Multiplexed Imaging of Tumor Tissues with Subcellular Resolution by Mass Cytometry.” <em>Nature Methods</em> 11 (4): 417–22.</p>
+<div id="ref-giesen2014imc" class="csl-entry">
+Giesen, Charlotte, Hao A. O. Wang, Denis Schapiro, Nevena Zivanovic, Andrea Jacobs, Bodo Hattendorf, Peter J. Schüffler, et al. 2014. <span>“Highly Multiplexed Imaging of Tumor Tissues with Subcellular Resolution by Mass Cytometry.”</span> <em>Nature <span>M</span>ethods</em> 11 (4): 417–22.
 </div>
-<div id="ref-gut20184i">
-<p>Gut, Gabriele, Markus D Herrmann, and Lucas Pelkmans. 2018. “Multiplexed Protein Maps Link Subcellular Organization to Cellular States.” <em>Science</em> 361: 1–13.</p>
+<div id="ref-gut20184i" class="csl-entry">
+Gut, Gabriele, Markus D Herrmann, and Lucas Pelkmans. 2018. <span>“Multiplexed Protein Maps Link Subcellular Organization to Cellular States.”</span> <em>Science</em> 361: 1–13.
 </div>
-<div id="ref-lin2018cycif">
-<p>Lin, Jia-Ren, Benjamin Izar, Shu Wang, Clarence Yapp, Shaolin Mei, Parin M. Shah, Sandro Santagata, and Peter K. Sorger. 2018. “Highly Multiplexed Immunofluorescence Imaging of Human Tissues and Tumors Using T-Cycif and Conventional Optical Microscopes.” <em>eLife</em> 7: 1–46.</p>
+<div id="ref-lin2018cycif" class="csl-entry">
+Lin, Jia-Ren, Benjamin Izar, Shu Wang, Clarence Yapp, Shaolin Mei, Parin M. Shah, Sandro Santagata, and Peter K. Sorger. 2018. <span>“Highly Multiplexed Immunofluorescence Imaging of Human Tissues and Tumors Using t-CyCIF and Conventional Optical Microscopes.”</span> <em>eLife</em> 7: 1–46.
 </div>
-<div id="ref-mavropoulosimc">
-<p>Mavropoulos, Anastasia, Dongxia Lin, Ben Lam, Kuang-Jung Chang, Dwayne Bisgrove, and Olga Ornatsky. n.d. “Equivalence of Imaging Mass Cytometry and Immunofluorescence on Ffpe Tissue Sections.”</p>
+<div id="ref-mavropoulosimc" class="csl-entry">
+Mavropoulos, Anastasia, Dongxia Lin, Ben Lam, Kuang-Jung Chang, Dwayne Bisgrove, and Olga Ornatsky. n.d. <span>“Equivalence of Imaging Mass Cytometry and Immunofluorescence on FFPE Tissue Sections.”</span>
 </div>
 </div>
 </div>
