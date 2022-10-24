@@ -168,6 +168,11 @@ measureObjects <- function(mask,
                                                   basic.quantiles = basic_quantiles)
             cur_basic_ch[,grepl(basic_feature, colnames(cur_basic_ch))]
         })
+        
+        if (length(unique(cur_mask[cur_mask != 0])) == 1) {
+            cur_basic <- t(as.matrix(cur_basic))
+            rownames(cur_basic) <- unique(cur_mask[cur_mask != 0])
+        }
 
         cur_coldata <- DataFrame(img_id = rep(id, nrow(cur_basic)),
                                  object_id = as.numeric(rownames(cur_basic)))
@@ -177,6 +182,10 @@ measureObjects <- function(mask,
         if ("shape" %in% feature_types) {
             cur_shape <- computeFeatures.shape(as.array(cur_mask))
             cur_shape <- cur_shape[,sub("s.", "", colnames(cur_shape)) %in% shape_feature]
+            
+            if (length(unique(cur_mask[cur_mask != 0])) == 1) {
+                cur_shape <- t(as.matrix(cur_shape))
+            }
 
             cur_coldata <- cbind(cur_coldata, cur_shape)
         }
@@ -185,6 +194,10 @@ measureObjects <- function(mask,
         if ("moment" %in% feature_types) {
             cur_moment <- computeFeatures.moment(as.array(cur_mask))
             cur_moment <- cur_moment[,sub("m.", "", colnames(cur_moment)) %in% moment_feature]
+            
+            if (length(unique(cur_mask[cur_mask != 0])) == 1) {
+                cur_moment <- t(as.matrix(cur_moment))
+            }
 
             cur_coldata <- cbind(cur_coldata, cur_moment)
         }
@@ -196,7 +209,7 @@ measureObjects <- function(mask,
                                                             haralick.nbins = haralick_nbins,
                                                             haralick.scales = haralick_scales)
                 rownames(cur_haralick_ch) <- seq_len(nrow(cur_haralick_ch))
-                cur_haralick_ch <- cur_haralick_ch[rownames(cur_basic),]
+                cur_haralick_ch <- cur_haralick_ch[rownames(cur_basic),,drop=FALSE]
                 cur_haralick_ch <- cur_haralick_ch[,sub("h.", "", colnames(cur_haralick_ch)) %in% haralick_feature, drop = FALSE]
                 as.data.frame(cur_haralick_ch)
             })
