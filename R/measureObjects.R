@@ -166,16 +166,16 @@ measureObjects <- function(mask,
         cur_basic <- apply(as.array(cur_image), 3, function(x){
             cur_basic_ch <- computeFeatures.basic(x = as.array(cur_mask), ref = x,
                                                   basic.quantiles = basic_quantiles)
-            cur_basic_ch[,grepl(basic_feature, colnames(cur_basic_ch)),drop=FALSE]
+            cur_basic_ch[,grepl(basic_feature, colnames(cur_basic_ch))]
         })
         
-        if (is.null(dim(cur_basic))) {
+        if (length(unique(cur_mask[cur_mask != 0])) == 1) {
             cur_basic <- t(as.matrix(cur_basic))
-            rownames(cur_basic) <- rownames(cur_basic_ch)
+            rownames(cur_basic) <- unique(cur_mask[cur_mask != 0])
         }
 
         cur_coldata <- DataFrame(img_id = rep(id, nrow(cur_basic)),
-                                 object_id = as.numeric(rownames(cur_basic_ch)))
+                                 object_id = as.numeric(rownames(cur_basic)))
         names(cur_coldata)[1] <- img_id
 
         # Compute shape features
@@ -183,7 +183,7 @@ measureObjects <- function(mask,
             cur_shape <- computeFeatures.shape(as.array(cur_mask))
             cur_shape <- cur_shape[,sub("s.", "", colnames(cur_shape)) %in% shape_feature]
             
-            if (is.null(dim(cur_shape))) {
+            if (length(unique(cur_mask[cur_mask != 0])) == 1) {
                 cur_shape <- t(as.matrix(cur_shape))
             }
 
@@ -195,7 +195,7 @@ measureObjects <- function(mask,
             cur_moment <- computeFeatures.moment(as.array(cur_mask))
             cur_moment <- cur_moment[,sub("m.", "", colnames(cur_moment)) %in% moment_feature]
             
-            if (is.null(dim(cur_moment))) {
+            if (length(unique(cur_mask[cur_mask != 0])) == 1) {
                 cur_moment <- t(as.matrix(cur_moment))
             }
 
