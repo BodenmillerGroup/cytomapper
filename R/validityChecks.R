@@ -272,6 +272,7 @@
 }
 
 #' @importFrom S4Vectors isEmpty
+#' @importFrom CytoImageList channelNames
 .valid.colour_by <- function(colour_by, object, image,
         call.arg = c("plotCells", "plotPixels")){
     call.arg <- match.arg(call.arg)
