@@ -519,11 +519,11 @@
                 geom_violin(aes_(x = quote(sample),
                             y = as.name(input[[paste0("Marker_", cur_val)]])),
                             show.legend = FALSE) +
-                geom_quasirandom(aes_(x = quote(sample),
+                geom_point(aes_(x = quote(sample),
                                 y = as.name(input[[paste0("Marker_", 
                                                         cur_val)]])),
-                                show.legend = FALSE,
-                                groupOnX = TRUE) +
+                                show.legend = FALSE, position = position_jitter(seed = 42, 
+                                                                                width = 0.1)) +
                 xlab(input$sample) +
                 theme(axis.text.x = element_blank(),
                     panel.background = element_blank()) +
@@ -547,15 +547,23 @@
                     scale_colour_manual(values = c(`FALSE` = "black",
                                                     `TRUE` = "red"))
             } else {
-                p <- p +
-                    geom_quasirandom(aes_(x = quote(sample),
-                                        y = as.name(input[[paste0("Marker_", 
+                p <- ggplot(cur_df) +
+                    geom_violin(aes_(x = quote(sample),
+                                     y = as.name(input[[paste0("Marker_", cur_val)]])),
+                                show.legend = FALSE) +
+                    geom_point(aes_(x = quote(sample),
+                                          y = as.name(input[[paste0("Marker_", 
                                                                     cur_val)]]),
-                                        colour = quote(selected)),
-                                        show.legend = FALSE, data = cur_df,
-                                        groupOnX = TRUE) +
+                                          colour = quote(selected)),
+                                     show.legend = FALSE, position = position_jitter(seed = 42, 
+                                                                                     width = 0.1)) +
                     scale_colour_manual(values = c(`FALSE` = "black",
-                                                    `TRUE` = "red"))
+                                                   `TRUE` = "red")) +
+                    xlab(input$sample) +
+                    theme(axis.text.x = element_blank(),
+                          panel.background = element_blank()) +
+                    ylim(c(rValues$ranges[input[[paste0("Marker_", cur_val)]], 1],
+                           rValues$ranges[input[[paste0("Marker_", cur_val)]], 2]))
             }
 
         }
