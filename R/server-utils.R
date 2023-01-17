@@ -512,8 +512,7 @@
                 xlab(input$sample) +
                 theme(axis.text.x = element_blank(),
                         panel.background = element_blank()) +
-                ylim(c(rValues$ranges[input[[paste0("Marker_", cur_val)]], 1],
-                    rValues$ranges[input[[paste0("Marker_", cur_val)]], 2]))
+                ylim(c(0, rValues$ranges[input[[paste0("Marker_", cur_val)]], 2]))
         } else {
             p <- ggplot(cur_df) +
                 geom_violin(aes_(x = quote(sample),
@@ -527,8 +526,7 @@
                 xlab(input$sample) +
                 theme(axis.text.x = element_blank(),
                     panel.background = element_blank()) +
-                ylim(c(rValues$ranges[input[[paste0("Marker_", cur_val)]], 1],
-                        rValues$ranges[input[[paste0("Marker_", cur_val)]], 2]))
+                ylim(c(0, rValues$ranges[input[[paste0("Marker_", cur_val)]], 2] + 0.1))
         }
 
         if (!is.null(objValues[[paste0("object", iter + 1)]])) {
@@ -562,8 +560,7 @@
                     xlab(input$sample) +
                     theme(axis.text.x = element_blank(),
                           panel.background = element_blank()) +
-                    ylim(c(rValues$ranges[input[[paste0("Marker_", cur_val)]], 1],
-                           rValues$ranges[input[[paste0("Marker_", cur_val)]], 2]))
+                    ylim(c(0, rValues$ranges[input[[paste0("Marker_", cur_val)]], 2] + 0.1))
             }
 
         }
