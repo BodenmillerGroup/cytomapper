@@ -518,7 +518,7 @@
                         aes(x = !!sym("sample"),
                              y = !!sym(input[[paste0("Marker_", cur_val)]]))) +
                 geom_violin(show.legend = FALSE) +
-                geom_quasirandom(show.legend = FALSE) +
+                geom_quasirandom(show.legend = FALSE, dodge.width = NULL) +
                 xlab(input$sample) +
                 theme(axis.text.x = element_blank(),
                     panel.background = element_blank()) +
@@ -547,7 +547,8 @@
                                  y = !!sym(input[[paste0("Marker_", cur_val)]]))) +
                     geom_violin(show.legend = FALSE) +
                     geom_quasirandom(aes(colour = !!sym("selected")),
-                                    show.legend = FALSE) +
+                                    show.legend = FALSE, 
+                                    dodge.width = NULL) +
                     scale_colour_manual(values = c(`FALSE` = "black",
                                                    `TRUE` = "red")) +
                     xlab(input$sample) +
