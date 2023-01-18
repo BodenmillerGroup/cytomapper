@@ -446,8 +446,8 @@
         cur_df$sample <- input$sample
 
         p <- ggplot(cur_df) +
-            geom_point(aes_(as.name(input[[paste0("Marker_", cur_val)]]),
-                            as.name(input[[paste0("Marker_", cur_val + 1)]])),
+            geom_point(aes(!!sym(input[[paste0("Marker_", cur_val)]]),
+                           !!sym(input[[paste0("Marker_", cur_val + 1)]])),
                         show.legend = FALSE) +
             theme(panel.background = element_blank()) +
             ylim(c(rValues$ranges[input[[paste0("Marker_", cur_val + 1)]], 1],
@@ -463,9 +463,9 @@
                                             input$assay)))
             cur_df_1$sample <- input$sample
 
-            p <- p + geom_point(aes_(as.name(input[[paste0("Marker_", 
+            p <- p + geom_point(aes(!!sym(input[[paste0("Marker_", 
                                                             cur_val)]]),
-                                    as.name(input[[paste0("Marker_", 
+                                    !!sym(input[[paste0("Marker_", 
                                                             cur_val + 1)]])),
                                 show.legend = FALSE, data = cur_df_1, 
                                 colour = "red")
@@ -479,8 +479,8 @@
         cur_df[[input[[paste0("Marker_", cur_val + 1)]]]] <- 1
 
         p <- ggplot(cur_df) +
-            geom_blank(aes_(as.name(input[[paste0("Marker_", cur_val)]]),
-                            as.name(input[[paste0("Marker_", cur_val + 1)]])),
+            geom_blank(aes(!!sym(input[[paste0("Marker_", cur_val)]]),
+                           !!sym(input[[paste0("Marker_", cur_val + 1)]])),
                         show.legend = FALSE) +
             ylim(c(rValues$ranges[input[[paste0("Marker_", cur_val + 1)]], 1],
                 rValues$ranges[input[[paste0("Marker_", cur_val + 1)]], 2])) +
@@ -506,27 +506,24 @@
         # instead of violin plots
         if (nrow(cur_df) < 3) {
             p <- ggplot(cur_df) +
-                geom_point(aes_(x = quote(sample),
-                            y = as.name(input[[paste0("Marker_", cur_val)]])),
+                geom_point(aes(x = !!sym("sample"),
+                            y = !!sym(input[[paste0("Marker_", cur_val)]])),
                             show.legend = FALSE) +
                 xlab(input$sample) +
                 theme(axis.text.x = element_blank(),
                         panel.background = element_blank()) +
                 ylim(c(0, rValues$ranges[input[[paste0("Marker_", cur_val)]], 2]))
         } else {
-            p <- ggplot(cur_df) +
-                geom_violin(aes_(x = quote(sample),
-                            y = as.name(input[[paste0("Marker_", cur_val)]])),
-                            show.legend = FALSE) +
-                geom_point(aes_(x = quote(sample),
-                                y = as.name(input[[paste0("Marker_", 
-                                                        cur_val)]])),
-                                show.legend = FALSE, position = position_jitter(seed = 42, 
-                                                                                width = 0.1)) +
+            p <- ggplot(cur_df, 
+                        aes(x = !!sym("sample"),
+                             y = !!sym(input[[paste0("Marker_", cur_val)]]))) +
+                geom_violin(show.legend = FALSE) +
+                geom_quasirandom(show.legend = FALSE) +
                 xlab(input$sample) +
                 theme(axis.text.x = element_blank(),
                     panel.background = element_blank()) +
-                ylim(c(0, rValues$ranges[input[[paste0("Marker_", cur_val)]], 2] + 0.1))
+                ylim(c(rValues$ranges[input[[paste0("Marker_", cur_val)]], 1] - 0.1, 
+                       rValues$ranges[input[[paste0("Marker_", cur_val)]], 2] + 0.1))
         }
 
         if (!is.null(objValues[[paste0("object", iter + 1)]])) {
@@ -537,30 +534,27 @@
 
             if (nrow(cur_df) < 3) {
                 p <- p +
-                    geom_point(aes_(x = quote(sample),
-                                    y = as.name(input[[paste0("Marker_", 
+                    geom_point(aes(x = !!sym("sample"),
+                                    y = !!sym(input[[paste0("Marker_", 
                                                             cur_val)]]),
-                                    colour = quote(selected)),
+                                    colour = !!sym("selected")),
                                 show.legend = FALSE, data = cur_df) +
                     scale_colour_manual(values = c(`FALSE` = "black",
                                                     `TRUE` = "red"))
             } else {
-                p <- ggplot(cur_df) +
-                    geom_violin(aes_(x = quote(sample),
-                                     y = as.name(input[[paste0("Marker_", cur_val)]])),
-                                show.legend = FALSE) +
-                    geom_point(aes_(x = quote(sample),
-                                          y = as.name(input[[paste0("Marker_", 
-                                                                    cur_val)]]),
-                                          colour = quote(selected)),
-                                     show.legend = FALSE, position = position_jitter(seed = 42, 
-                                                                                     width = 0.1)) +
+                p <- ggplot(cur_df, 
+                            aes(x = !!sym("sample"),
+                                 y = !!sym(input[[paste0("Marker_", cur_val)]]))) +
+                    geom_violin(show.legend = FALSE) +
+                    geom_quasirandom(aes(colour = !!sym("selected")),
+                                    show.legend = FALSE) +
                     scale_colour_manual(values = c(`FALSE` = "black",
                                                    `TRUE` = "red")) +
                     xlab(input$sample) +
                     theme(axis.text.x = element_blank(),
                           panel.background = element_blank()) +
-                    ylim(c(0, rValues$ranges[input[[paste0("Marker_", cur_val)]], 2] + 0.1))
+                    ylim(c(rValues$ranges[input[[paste0("Marker_", cur_val)]], 1] - 0.1, 
+                           rValues$ranges[input[[paste0("Marker_", cur_val)]], 2] + 0.1))
             }
 
         }
@@ -573,8 +567,8 @@
         cur_df$sample <- 1
 
         p <- ggplot(cur_df) +
-            geom_blank(aes_(x = quote(sample),
-                            y = as.name(input[[paste0("Marker_", cur_val)]])),
+            geom_blank(aes(x = !!sym("sample"),
+                            y = !!sym(input[[paste0("Marker_", cur_val)]])),
                         show.legend = FALSE) +
             ylim(c(rValues$ranges[input[[paste0("Marker_", cur_val)]], 1],
                     rValues$ranges[input[[paste0("Marker_", cur_val)]], 2])) +
