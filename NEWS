@@ -174,3 +174,6 @@ Changes in version 1.9.1 (2022-07-24):
 
 Changes in version 1.9.2 (2022-10-24):
 + measureObjects accounts for single objects in images
+
+Changes in version 1.11.1 (2023-01-18):
++ Bug fix: replaced broken ggbeeswarm dependency
