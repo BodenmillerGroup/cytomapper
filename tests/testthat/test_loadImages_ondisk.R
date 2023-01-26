@@ -1,3 +1,15 @@
+build_single_channels <- function(CIL, tempdir) {
+    
+    lapply(seq_along(CIL), function(x){
+        dir.create(file.path(tempdir, names(CIL)[x]), showWarnings = FALSE)
+        for (i in channelNames(CIL)) {
+            EBImage::writeImage(as.array(CIL[[x]][,,i]) / ((2^16) - 1),
+                                files = file.path(tempdir, names(CIL)[x], paste0(i, ".tiff")),
+                                bits.per.sample = 16L)
+        }
+    })
+}
+
 test_that("On disk: loadImages function reads in correct objects on disk.", {
   path <- system.file("extdata", package = "cytomapper")
   single_file <- system.file("extdata/E34_mask.tiff",
@@ -77,6 +89,42 @@ test_that("On disk: loadImages function reads in correct objects on disk.", {
   expect_true(file.remove(file.path(cur_path, "E34_mask.h5")))
   expect_true(file.remove(file.path(cur_path, "G01_mask.h5")))
   expect_true(file.remove(file.path(cur_path, "J02_mask.h5")))
+  
+  # Single-channel
+  multi_files <- list.files(system.file("extdata", package = "cytomapper"),
+                            pattern = "imc.tiff", full.names = TRUE)
+  
+  cur_files <- loadImages(multi_files)
+  channelNames(cur_files) <- c("c1", "c2", "c3", "c4", "c5")
+  
+  build_single_channels(cur_files, tempdir = cur_path)
+  
+  CIL <- loadImages(cur_path, pattern = "_imc$", single_channel = TRUE, 
+                    as.is = TRUE, on_disk = TRUE, h5FilesPath = cur_path)
+  cur_files <- endoapply(cur_files, floor)
+  
+  expect_true(file.exists(file.path(cur_path, "E34_imc.h5")))
+  expect_true(file.exists(file.path(cur_path, "G01_imc.h5")))
+  expect_true(file.exists(file.path(cur_path, "J02_imc.h5")))
+  
+  expect_s4_class(CIL$E34_imc, "DelayedArray")
+  
+  expect_equal(as.array(CIL$E34_imc), as.array(cur_files$E34_imc))
+  expect_equal(as.array(CIL$G01_imc), as.array(cur_files$G01_imc))
+  expect_equal(as.array(CIL$J02_imc), as.array(cur_files$J02_imc))
+  
+  expect_true(file.remove(file.path(cur_path, "E34_imc.h5")))
+  expect_true(file.remove(file.path(cur_path, "G01_imc.h5")))
+  expect_true(file.remove(file.path(cur_path, "J02_imc.h5")))
+  
+  CIL <- loadImages(file.path(cur_path, "E34_imc"), single_channel = TRUE, 
+                    as.is = TRUE, on_disk = TRUE, h5FilesPath = cur_path)
+  
+  expect_s4_class(CIL$E34_imc, "DelayedArray")
+  
+  expect_equal(as.array(CIL$E34_imc), as.array(cur_files$E34_imc))
+  
+  expect_true(file.remove(file.path(cur_path, "E34_imc.h5")))
 })
 
 test_that("On disk: getHDF5DumpDir works.", {
@@ -183,7 +231,7 @@ test_that("On disk parallelisation: loadImages function reads in correct objects
                                                            basename(single_file)), ".h5"))))
     
     ## Parallelisation
-    expect_true(file.remove(file.path(cur_path, "E34_imc.h5")))
+    #expect_true(file.remove(file.path(cur_path, "E34_imc.h5")))
     expect_silent(cur_files <- loadImages(path, pattern = "_imc.tiff",
                                           on_disk = TRUE, h5FilesPath = cur_path, 
                                           BPPARAM = BiocParallel::bpparam()))
