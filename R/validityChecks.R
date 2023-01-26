@@ -1,115 +1,156 @@
 #' @importFrom tools file_ext
-.valid.loadImage.input <- function(x, pattern, name){
+.valid.loadImage.input <- function(x, pattern, single_channel, name){
 
     # Check if input is character
     if(!is.character(x)){
         stop("Please provide a string input indicating a single file\n",
             ", a path or a vector of files.")
     }
-
-    # Further checks depending on length of object
-    if(length(x) == 1){
-        if(!file.exists(x)){
-
-            stop("The provided file or path does not exist.\n",
-            "Make sure the file or path is accessible\n",
-            "from the current location.")
-
-        }
-
-        if(dir.exists(x) && is.null(pattern)){
-
-            # Check if path only contains images
-            exten <- file_ext(list.files(x))
-
-            if(sum(!(unique(exten) %in% c("jpeg", "png", "tiff",
-                                            "tif", "jpg", "h5"))) > 0){
-                stop("The provided path contains file-types other than\n",
-                    "'jpeg', 'tiff', 'png' or 'h5'.\n",
-                    "Please provide a correct regular expression\n",
-                    "in the 'pattern' argument to select correct images.")
-            }
-
-            message("All files in the provided location will be read in.")
-            out <- list.files(x, full.names = TRUE)
-
-        } else if (dir.exists(x) && !is.null(pattern)) {
-            # Check pattern
-            if (!is.character(pattern) && !is.factor(pattern)) {
-                stop("Please provide a single character,\n",
-                        "character vector or factor as pattern input.")
-            }
-
-            out <- list.files(x, full.names = TRUE)
-
-            # Since more than regular expressions can be given to pattern,
-            # we need to perform selection manually
-            if(length(pattern) == 1){
-                out <- out[grepl(pattern, out)]
-            } else {
-                # Build pattern for grep function
-                pattern <- unique(pattern)
-
-                out <- out[grepl(paste(pattern, collapse = "|"), out)]
-            }
-
-            # Check if any of the files contain the pattern
-            if(length(out) == 0){
-                stop("The pattern does not match any\n",
-                    "of the files in the provided directory.")
-            }
-
-            # Check if all of the files are of the supported format
-            exten <- file_ext(out)
-
-            if(sum(!(unique(exten) %in% c("jpeg", "png", "tiff",
-                                        "tif", "jpg", "h5"))) > 0){
-                stop("The provided path contains file-types other than\n",
-                    "'jpeg', 'tiff', 'png' or 'h5'.\n",
-                    "Please provide a correct regular expression\n",
-                    "in the 'pattern' argument to select correct images.")
-            }
-
-        } else {
-            cur_ext <- file_ext(x)
-            if(!(cur_ext %in% c("jpeg", "png", "tiff", "tif", "jpg", "h5"))){
-                stop("The provided file is not of type ",
-                    "'jpeg', 'tiff', 'png' or 'h5'.\n",
-                    "Other image types are not supported.")
-            }
-            out <- x
-        }
+    
+    if (length(single_channel) != 1) {
+        stop("'single_channel' needs to be a single logical.")
     } else {
-        # Check if files exists
-        cur_check <- file.exists(x)
-        if(sum(!cur_check) > 0){
-            stop("One or multiple files do not exist.\n",
-                "Please correct the input.")
+        if (!is.logical(single_channel)) {
+            stop("'single_channel' needs to be a single logical.")
         }
-
-        # Check if files are os supported format
-        exten <- file_ext(x)
-        cur_test <- unique(exten) %in% c("jpeg", "png", "tiff", 
-                                         "tif", "jpg", "h5")
-        if(sum(!cur_test) > 0){
-            stop("The files are of type other than ",
-                 "'jpeg', 'tiff', 'png' or 'h5'.\n",
-                "Please only provide files of the supported file-type.")
-        }
-
-        out <- x
-
     }
     
-    # Check name argument
-    if (!is.null(name)) {
-        if (!all(is.character(name))) {
-            stop("Argument 'name' must be of type character.")
+    if (single_channel) {
+        if (length(x) != 1) {
+            stop("Setting 'single_channel' requires 'x' to be a single path.")
+        }
+        if (!dir.exists(x)) {
+            stop("Setting 'single_channel' requires 'x' to be a single path.")
+        }
+        cur_x <- list.files(x, pattern = pattern, full.names = TRUE)
+        if (all(dir.exists(cur_x))) {
+            out <- cur_x
+            lapply(cur_x, function(y){
+                exten <- file_ext(list.files(y))
+                cur_test <- unique(exten) %in% c("jpeg", "png", "tiff", 
+                                                 "tif", "jpg")
+                if (length(cur_test) != 1 | sum(!cur_test) > 0) {
+                    stop("The files are of type other than ",
+                         "'jpeg', 'tiff', 'png' or different file types are mixed.")
+                }
+            })
+        } else {
+            out <- x
+
+            exten <- file_ext(list.files(x))
+            cur_test <- unique(exten) %in% c("jpeg", "png", "tiff", 
+                                            "tif", "jpg")
+            if (length(cur_test) != 1 | sum(!cur_test) > 0) {
+                stop("The files are of type other than ",
+                        "'jpeg', 'tiff', 'png' or different file types are mixed.")
+            }
+        }
+
+    } else {
+        # Further checks depending on length of object
+        if (length(x) == 1) {
+            if (!file.exists(x)) {
+                
+                stop("The provided file or path does not exist.\n",
+                     "Make sure the file or path is accessible\n",
+                     "from the current location.")
+                
+            }
+            
+            if (dir.exists(x) && is.null(pattern)) {
+                
+                # Check if path only contains images
+                exten <- file_ext(list.files(x))
+                
+                if (sum(!(unique(exten) %in% c("jpeg", "png", "tiff",
+                                               "tif", "jpg", "h5"))) > 0) {
+                    stop("The provided path contains file-types other than\n",
+                         "'jpeg', 'tiff', 'png' or 'h5'.\n",
+                         "Please provide a correct regular expression\n",
+                         "in the 'pattern' argument to select correct images.")
+                }
+                
+                message("All files in the provided location will be read in.")
+                out <- list.files(x, full.names = TRUE)
+                
+            } else if (dir.exists(x) && !is.null(pattern)) {
+                # Check pattern
+                if (!is.character(pattern) && !is.factor(pattern)) {
+                    stop("Please provide a single character,\n",
+                         "character vector or factor as pattern input.")
+                }
+                
+                out <- list.files(x, full.names = TRUE)
+                
+                # Since more than regular expressions can be given to pattern,
+                # we need to perform selection manually
+                if(length(pattern) == 1){
+                    out <- out[grepl(pattern, out)]
+                } else {
+                    # Build pattern for grep function
+                    pattern <- unique(pattern)
+                    
+                    out <- out[grepl(paste(pattern, collapse = "|"), out)]
+                }
+                
+                # Check if any of the files contain the pattern
+                if(length(out) == 0){
+                    stop("The pattern does not match any\n",
+                         "of the files in the provided directory.")
+                }
+                
+                # Check if all of the files are of the supported format
+                exten <- file_ext(out)
+                
+                if(sum(!(unique(exten) %in% c("jpeg", "png", "tiff",
+                                              "tif", "jpg", "h5"))) > 0){
+                    stop("The provided path contains file-types other than\n",
+                         "'jpeg', 'tiff', 'png' or 'h5'.\n",
+                         "Please provide a correct regular expression\n",
+                         "in the 'pattern' argument to select correct images.")
+                }
+                
+            } else {
+                cur_ext <- file_ext(x)
+                if(!(cur_ext %in% c("jpeg", "png", "tiff", "tif", "jpg", "h5"))){
+                    stop("The provided file is not of type ",
+                         "'jpeg', 'tiff', 'png' or 'h5'.\n",
+                         "Other image types are not supported.")
+                }
+                out <- x
+            }
+        } else {
+            # Check if files exists
+            cur_check <- file.exists(x)
+            if(sum(!cur_check) > 0){
+                stop("One or multiple files do not exist.\n",
+                     "Please correct the input.")
+            }
+            
+            # Check if files are os supported format
+            exten <- file_ext(x)
+            cur_test <- unique(exten) %in% c("jpeg", "png", "tiff", 
+                                             "tif", "jpg", "h5")
+            if(sum(!cur_test) > 0){
+                stop("The files are of type other than ",
+                     "'jpeg', 'tiff', 'png' or 'h5'.\n",
+                     "Please only provide files of the supported file-type.")
+            }
+            
+            out <- x
+            
         }
         
-        if (length(name) != 1 && length(name) != length(out)) {
-            stop("Length of 'name' must either be 1 or the same length as ",
-                 "the number of files read in.")
+        # Check name argument
+        if (!is.null(name)) {
+            if (!all(is.character(name))) {
+                stop("Argument 'name' must be of type character.")
+            }
+            
+            if (length(name) != 1 && length(name) != length(out)) {
+                stop("Length of 'name' must either be 1 or the same length as ",
+                     "the number of files read in.")
+            }
         }
     }
     

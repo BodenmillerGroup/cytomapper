@@ -8,38 +8,38 @@ test_that("loadImage validity check is correct.", {
     expect_error(.valid.loadImage.input(x = 1),
                  regexp = "Please provide a string input indicating a single file\n, a path or a vector of files.",
                  fixed = TRUE)
-    expect_error(.valid.loadImage.input(x = "test.png"),
+    expect_error(.valid.loadImage.input(x = "test.png", single_channel = FALSE),
                  regexp = "The provided file or path does not exist.\nMake sure the file or path is accessible\nfrom the current location.",
                  fixed = TRUE)
-    expect_error(.valid.loadImage.input(x = cur_dir, pattern = NULL),
+    expect_error(.valid.loadImage.input(x = cur_dir, pattern = NULL, single_channel = FALSE),
                  regexp = "The provided path contains file-types other than\n'jpeg', 'tiff', 'png' or 'h5'.\nPlease provide a correct regular expression\nin the 'pattern' argument to select correct images.",
                  fixed = TRUE)
-    expect_error(.valid.loadImage.input(x = cur_dir, pattern = 1),
+    expect_error(.valid.loadImage.input(x = cur_dir, pattern = 1, single_channel = FALSE),
                  regexp = "Please provide a single character,\ncharacter vector or factor as pattern input.",
                  fixed = TRUE)
-    expect_error(.valid.loadImage.input(x = cur_dir, pattern = 1),
+    expect_error(.valid.loadImage.input(x = cur_dir, pattern = 1, single_channel = FALSE),
                  regexp = "Please provide a single character,\ncharacter vector or factor as pattern input.",
                  fixed = TRUE)
-    expect_error(.valid.loadImage.input(x = cur_dir, pattern = "test"),
+    expect_error(.valid.loadImage.input(x = cur_dir, pattern = "test", single_channel = FALSE),
                  regexp = "The pattern does not match any\nof the files in the provided directory.",
                  fixed = TRUE)
-    expect_error(.valid.loadImage.input(x = cur_dir, pattern = "PancreasData"),
+    expect_error(.valid.loadImage.input(x = cur_dir, pattern = "PancreasData", single_channel = FALSE),
                  regexp = "The provided path contains file-types other than\n'jpeg', 'tiff', 'png' or 'h5'.\nPlease provide a correct regular expression\nin the 'pattern' argument to select correct images.",
                  fixed = TRUE)
-    expect_error(.valid.loadImage.input(x = cur_file),
+    expect_error(.valid.loadImage.input(x = cur_file, single_channel = FALSE),
                  regexp = "The provided file is not of type 'jpeg', 'tiff', 'png' or 'h5'.\nOther image types are not supported.",
                  fixed = TRUE)
     
     cur_files <- list.files(system.file("scripts",
                             package = "cytomapper"))
-    expect_error(.valid.loadImage.input(x = cur_files),
+    expect_error(.valid.loadImage.input(x = cur_files, single_channel = FALSE),
                  regexp = "One or multiple files do not exist.\nPlease correct the input.",
                  fixed = TRUE)
     
     cur_files <- list.files(system.file("scripts",
                                         package = "cytomapper"),
                             full.names = TRUE)
-    expect_error(.valid.loadImage.input(x = cur_files),
+    expect_error(.valid.loadImage.input(x = cur_files, single_channel = FALSE),
                  regexp = "The files are of type other than 'jpeg', 'tiff', 'png' or 'h5'.\nPlease only provide files of the supported file-type.",
                  fixed = TRUE)
     
@@ -47,30 +47,30 @@ test_that("loadImage validity check is correct.", {
     # Works
     cur_dir <- system.file("extdata", package = "cytomapper")
     cur_file <- system.file("extdata/E34_imc.tiff", package = "cytomapper")
-    expect_silent(cur_out <- .valid.loadImage.input(x = cur_file, name = NULL))  
+    expect_silent(cur_out <- .valid.loadImage.input(x = cur_file, name = NULL, single_channel = FALSE))  
     expect_true(file.exists(cur_out))
     expect_equal(basename(cur_out), "E34_imc.tiff")
-    expect_message(cur_out <- .valid.loadImage.input(x = cur_dir, pattern = NULL, name = NULL), regexp = "All files in the provided location will be read in.")  
+    expect_message(cur_out <- .valid.loadImage.input(x = cur_dir, pattern = NULL, name = NULL, single_channel = FALSE), regexp = "All files in the provided location will be read in.")  
     expect_true(all(file.exists(cur_out)))
     expect_equal(basename(cur_out), c("E34_imc.tiff", "E34_mask.tiff", "G01_imc.tiff", "G01_mask.tiff", "J02_imc.tiff", "J02_mask.tiff"))
-    expect_silent(cur_out <- .valid.loadImage.input(x = cur_dir, pattern = ".tiff", name = NULL))  
+    expect_silent(cur_out <- .valid.loadImage.input(x = cur_dir, pattern = ".tiff", name = NULL, single_channel = FALSE))  
     expect_true(all(file.exists(cur_out)))
     expect_equal(basename(cur_out), c("E34_imc.tiff", "E34_mask.tiff", "G01_imc.tiff", "G01_mask.tiff", "J02_imc.tiff", "J02_mask.tiff"))
-    expect_silent(cur_out <- .valid.loadImage.input(x = cur_dir, pattern = "_imc", name = NULL))  
+    expect_silent(cur_out <- .valid.loadImage.input(x = cur_dir, pattern = "_imc", name = NULL, single_channel = FALSE))  
     expect_true(all(file.exists(cur_out)))
     expect_equal(basename(cur_out), c("E34_imc.tiff", "G01_imc.tiff", "J02_imc.tiff"))
-    expect_silent(cur_out <- .valid.loadImage.input(x = cur_dir, pattern = c("G01_imc", "E34_imc"), name = NULL))  
+    expect_silent(cur_out <- .valid.loadImage.input(x = cur_dir, pattern = c("G01_imc", "E34_imc"), name = NULL, single_channel = FALSE))  
     expect_true(all(file.exists(cur_out)))
     expect_equal(basename(cur_out), c("E34_imc.tiff", "G01_imc.tiff"))
-    expect_silent(cur_out <- .valid.loadImage.input(x = cur_dir, pattern = factor(c("G01_imc", "E34_imc")), name = NULL))  
+    expect_silent(cur_out <- .valid.loadImage.input(x = cur_dir, pattern = factor(c("G01_imc", "E34_imc")), name = NULL, single_channel = FALSE))  
     expect_true(all(file.exists(cur_out)))
     expect_equal(basename(cur_out), c("E34_imc.tiff", "G01_imc.tiff"))
-    expect_silent(cur_out <- .valid.loadImage.input(x = cur_dir, pattern = factor(c("G01_imc", "G01_imc", "E34_imc", "E34_imc")), name = NULL))  
+    expect_silent(cur_out <- .valid.loadImage.input(x = cur_dir, pattern = factor(c("G01_imc", "G01_imc", "E34_imc", "E34_imc")), name = NULL, single_channel = FALSE))  
     expect_true(all(file.exists(cur_out)))
     expect_equal(basename(cur_out), c("E34_imc.tiff", "G01_imc.tiff"))
     cur_files <- list.files(system.file("extdata",
                                         package = "cytomapper"), full.names = TRUE)
-    expect_silent(cur_out <- .valid.loadImage.input(x = cur_files, name = NULL))  
+    expect_silent(cur_out <- .valid.loadImage.input(x = cur_files, name = NULL, single_channel = FALSE))  
     expect_true(all(file.exists(cur_out)))
     expect_equal(basename(cur_out), c("E34_imc.tiff", "E34_mask.tiff", "G01_imc.tiff", "G01_mask.tiff", "J02_imc.tiff", "J02_mask.tiff"))
 })
