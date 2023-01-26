@@ -20,7 +20,7 @@ one image per slot. Supported file extensions are: '.tiff', '.tif', '.png',
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">cytomapper</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="">1.11.1</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="">1.11.2</span>
       </span>
     </div>
 
@@ -72,6 +72,7 @@ one image per slot. Supported file extensions are: '.tiff', '.tif', '.png',
     <div class="sourceCode"><pre class="sourceCode r"><code><span><span class="fu">loadImages</span><span class="op">(</span></span>
 <span>  <span class="va">x</span>,</span>
 <span>  pattern <span class="op">=</span> <span class="cn">NULL</span>,</span>
+<span>  single_channel <span class="op">=</span> <span class="cn">FALSE</span>,</span>
 <span>  on_disk <span class="op">=</span> <span class="cn">FALSE</span>,</span>
 <span>  h5FilesPath <span class="op">=</span> <span class="cn">NULL</span>,</span>
 <span>  name <span class="op">=</span> <span class="cn">NULL</span>,</span>
@@ -108,6 +109,13 @@ file names in the specified path.</p></dd>
 
 
 </dl></dd>
+
+
+<dt>single_channel</dt>
+<dd><p>logical indicating if each file per folder contains
+a single channel. These files will be read in and stitched together to
+form a single multi-channel image. For this, <code>x</code> needs to be a single
+path either containing individual files or sub-paths containing those.</p></dd>
 
 
 <dt>on_disk</dt>
