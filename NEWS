@@ -177,3 +177,6 @@ Changes in version 1.9.2 (2022-10-24):
 
 Changes in version 1.11.1 (2023-01-18):
 + Bug fix: set default dodge.width = NULL for geom_quasirandom
+
+Changes in version 1.11.2 (2023-02-02):
++ Bug fix: measureObjects internally sets the correct channel names
