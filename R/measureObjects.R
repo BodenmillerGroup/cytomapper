@@ -152,7 +152,12 @@ measureObjects <- function(mask,
 
     # Define channelNames if not set
     if (is.null(channelNames(image))) {
-        channelNames(image) <- paste0("ch", seq_len(dim(image[[1]])[3]))
+        if (length(dim(image[[1]])) == 2) {
+            ch_no <- 1
+        } else {
+            ch_no <- dim(image[[1]])[3]
+        }
+        channelNames(image) <- paste0("ch", seq_len(ch_no))
     }
 
     # Define quantiles
