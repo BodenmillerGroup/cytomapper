@@ -7,6 +7,7 @@
 loadImages(
   x,
   pattern = NULL,
+  single_channel = FALSE,
   on_disk = FALSE,
   h5FilesPath = NULL,
   name = NULL,
@@ -30,6 +31,11 @@ individual file.}
 \item{A character vector}{Unique entries are matched against
 file names in the specified path.}
 }}
+
+\item{single_channel}{logical indicating if each file per folder contains
+a single channel. These files will be read in and stitched together to
+form a single multi-channel image. For this, \code{x} needs to be a single
+path either containing individual files or sub-paths containing those.}
 
 \item{on_disk}{Logical indicating if images in form of
 \linkS4class{HDF5Array} objects (as .h5 files) should be stored on disk

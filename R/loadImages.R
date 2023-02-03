@@ -21,6 +21,10 @@
 #' \item{A character vector}{Unique entries are matched against
 #' file names in the specified path.}
 #' }
+#' @param single_channel logical indicating if each file per folder contains
+#' a single channel. These files will be read in and stitched together to
+#' form a single multi-channel image. For this, \code{x} needs to be a single
+#' path either containing individual files or sub-paths containing those.
 #' @param on_disk Logical indicating if images in form of
 #' \linkS4class{HDF5Array} objects (as .h5 files) should be stored on disk
 #' rather than in memory.
@@ -103,12 +107,18 @@
 #' @importFrom BiocParallel bplapply SerialParam
 #' @importFrom HDF5Array writeHDF5Array HDF5Array
 #' @importFrom DelayedArray DelayedArray
-#' @importFrom EBImage imageData
-loadImages <- function(x, pattern = NULL, on_disk = FALSE, h5FilesPath = NULL, 
-                       name = NULL, BPPARAM = SerialParam(), ...) {
+#' @importFrom EBImage imageData readImage
+loadImages <- function(x, 
+                        pattern = NULL, 
+                        single_channel = FALSE,
+                        on_disk = FALSE, 
+                        h5FilesPath = NULL, 
+                        name = NULL, 
+                        BPPARAM = SerialParam(), 
+                        ...) {
 
     # Validity checks
-    x <- .valid.loadImage.input(x, pattern, name)
+    x <- .valid.loadImage.input(x, pattern, single_channel, name)
 
     if (length(name) > 1) {
         names(name) <- x
@@ -120,43 +130,48 @@ loadImages <- function(x, pattern = NULL, on_disk = FALSE, h5FilesPath = NULL,
     
     # Read in images
     cur_list <- bplapply(x, function(y){
-            
-            if (file_ext(y) == "h5") {
-                if (is.null(name)) {
-                    cur_name <- sub("\\.[^.]*$", "", basename(y))
-                } else if (length(name) > 1) {
-                    cur_name <- name[y]
-                } else {
-                    cur_name <- name
-                }
-            
-                DelayedArray(HDF5Array(y, name = cur_name))
-                
-            } else {
-                cur_img <- EBImage::readImage(y, ..., names = NULL)
         
+        if (file_ext(y) == "h5") {
+            if (is.null(name)) {
+                cur_name <- sub("\\.[^.]*$", "", basename(y))
+            } else if (length(name) > 1) {
+                cur_name <- name[y]
+            } else {
+                cur_name <- name
+            }
+                    
+            DelayedArray(HDF5Array(y, name = cur_name))
+                    
+            } else {
+                if (single_channel) {
+                    cur_img <- readImage(list.files(y, full.names = TRUE), ..., 
+                                         names = NULL)
+                } else {
+                    cur_img <- readImage(y, ..., names = NULL)
+                }
+                    
                 if (on_disk) {
-                
+                        
                     if (is.null(h5FilesPath)) {
                         stop("When storing the images on disk, please specify a 'h5FilesPath'. \n",
-                            "You can use 'h5FilesPath = getHDF5DumpDir()' to temporarily store the images.\n",
-                            "If doing so, .h5 files will be deleted once the R session ends.")
+                             "You can use 'h5FilesPath = getHDF5DumpDir()' to temporarily store the images.\n",
+                             "If doing so, .h5 files will be deleted once the R session ends.")
                     }
-                
+                        
                     # Build filename
                     cur_name <- sub("\\.[^.]*$", "", basename(y))
                     cur_file <- file.path(h5FilesPath, paste0(cur_name, ".h5"))
-                
+                    
                     # Check if file already exists
                     # If so, delete them
                     if (file.exists(cur_file)) {
                         file.remove(cur_file)
                     }
-                
+                        
                     writeHDF5Array(DelayedArray(imageData(cur_img)), 
-                                filepath = cur_file,
-                                name = cur_name,
-                                with.dimnames = TRUE)
+                                   filepath = cur_file,
+                                   name = cur_name,
+                                   with.dimnames = TRUE)
                 } else {
                     cur_img
                 }
@@ -165,6 +180,11 @@ loadImages <- function(x, pattern = NULL, on_disk = FALSE, h5FilesPath = NULL,
     
     names(cur_list) <- sub("\\.[^.]*$", "", basename(x))
     out <- CytoImageList(cur_list, on_disk = on_disk, h5FilesPath = h5FilesPath)
+    
+    if (single_channel) {
+        channel_names <- sub("\\.[^.]*$", "", basename(list.files(x[1])))
+        channelNames(out) <- channel_names
+    }
 
     return(out)
 }

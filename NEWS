@@ -180,3 +180,6 @@ Changes in version 1.11.1 (2023-01-18):
 
 Changes in version 1.11.2 (2023-02-02):
 + Bug fix: measureObjects internally sets the correct channel names
+
+Changes in version 1.11.3 (2023-01-23):
++ loadImages: added option to read in single-channel images to multi-channel
