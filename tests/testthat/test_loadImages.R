@@ -1,3 +1,15 @@
+build_single_channels <- function(CIL, tempdir) {
+
+    lapply(seq_along(CIL), function(x){
+        dir.create(file.path(tempdir, names(CIL)[x]), showWarnings = FALSE)
+        for (i in channelNames(CIL)) {
+            EBImage::writeImage(as.array(CIL[[x]][,,i]) / ((2^16) - 1),
+                            files = file.path(tempdir, names(CIL)[x], paste0(i, ".tiff")),
+                            bits.per.sample = 16L)
+        }
+    })
+}
+
 test_that("loadImages function reads in correct objects.", {
   path <- system.file("extdata", package = "cytomapper")
   single_file <- system.file("extdata/E34_mask.tiff",
@@ -75,6 +87,25 @@ test_that("loadImages function reads in correct objects.", {
   
   expect_silent(plotPixels(cur_file))
   
+  # Single-channel
+  testdir <- tempdir()
+  on.exit(unlink(testdir))
+  
+  multi_files <- list.files(system.file("extdata", package = "cytomapper"),
+                            pattern = "imc.tiff", full.names = TRUE)
+  
+  cur_files <- loadImages(multi_files)
+  channelNames(cur_files) <- c("c1", "c2", "c3", "c4", "c5")
+  
+  build_single_channels(cur_files, tempdir = testdir)
+  
+  CIL <- loadImages(testdir, pattern = "_imc$", single_channel = TRUE, as.is = TRUE)
+  cur_files <- endoapply(cur_files, floor)
+  expect_equal(CIL, cur_files)
+  
+  CIL <- loadImages(file.path(testdir, "E34_imc"), single_channel = TRUE, as.is = TRUE)
+  expect_equal(CIL, cur_files["E34_imc"])
+  
   # Test name
   expect_silent(cur_file <- loadImages(paste0(cur_path, "/E34_imc.h5"), name = "E34_imc"))
   
@@ -93,6 +124,7 @@ test_that("loadImages function reads in correct objects.", {
   
   expect_silent(plotPixels(cur_files_3))
   
+  
   # Error
   expect_error(cur_files_2 <- loadImages(cur_path, pattern = "_imc.h5", name = 1),
                regexp = "Argument 'name' must be of type character.",
@@ -100,5 +132,20 @@ test_that("loadImages function reads in correct objects.", {
   
   expect_error(cur_files_2 <- loadImages(cur_path, pattern = "_imc.h5", name = c("E34_imc_norm", "G01_imc_norm")),
                regexp = "Length of 'name' must either be 1 or the same length as the number of files read in.",
+               fixed = TRUE)
+  expect_error(cur_files <- loadImages(testdir, pattern = "_imc$", single_channel = 1),
+               regexp = "'single_channel' needs to be a single logical.",
+               fixed = TRUE)
+  expect_error(cur_files <- loadImages(testdir, pattern = "_imc$", single_channel = 1),
+               regexp = "'single_channel' needs to be a single logical.",
+               fixed = TRUE)
+  expect_error(cur_files <- loadImages(testdir, pattern = "_imc$", single_channel = c(2,3)),
+               regexp = "'single_channel' needs to be a single logical.",
+               fixed = TRUE)
+  expect_error(cur_files <- loadImages(list.files(testdir), pattern = "_imc$", single_channel = TRUE),
+               regexp = "Setting 'single_channel' requires 'x' to be a single path.",
+               fixed = TRUE)
+  expect_error(cur_files <- loadImages(testdir, single_channel = TRUE),
+               regexp = "The files are of type other than 'jpeg', 'tiff', 'png' or different file types are mixed.",
                fixed = TRUE)
  })

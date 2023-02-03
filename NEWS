@@ -172,5 +172,17 @@ Changes in version 1.9.1 (2022-07-24):
 + measureObjects function transfers mcols of images and masks to colData(sce)
 + allow returned object to be of SpatialExperiment
 
-Changes in version 1.9.2 (2022-09-16):
+Changes in version 1.9.2 (2022-10-24):
++ measureObjects accounts for single objects in images
+
+Changes in version 1.11.1 (2023-01-18):
++ Bug fix: set default dodge.width = NULL for geom_quasirandom
+
+Changes in version 1.11.2 (2023-02-02):
++ Bug fix: measureObjects internally sets the correct channel names
+
+Changes in version 1.11.3 (2023-01-23):
++ loadImages: added option to read in single-channel images to multi-channel
+
+Changes in version 1.11.4 (2023-02-03):
 + Removed CytoImageList into own package

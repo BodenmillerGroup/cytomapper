@@ -13,7 +13,7 @@
                 text = textInput(inputId = "labelCellsBy",
                             label = "Cell label",
                             value = "Cell-Type"),
-                icon = icon(""),
+                icon = icon(NULL),
                 status = "info"
             ),
             notificationItem(
@@ -23,7 +23,7 @@
                     style = paste0("background-color: #3C8DBC; color: white; ",
                                     "border-color: #7EA6F8")
                 ),
-                icon = icon(""),
+                icon = icon(NULL),
                 status = "info"
             ),
             type = "notification",
@@ -38,7 +38,7 @@
                     style = paste0("background-color: #3C8DBC; color: white; ",
                                     "border-color: #3C8DBC")
                 ),
-                icon = icon(""),
+                icon = icon(NULL),
                 status = "info"
             ),
             notificationItem(
@@ -48,7 +48,7 @@
                     style = paste0("background-color: #3C8DBC; color: white; ",
                                     "border-color: #3C8DBC")
                 ),
-                icon = icon(""),
+                icon = icon(NULL),
                 status = "info"
             ),
             type = "tasks",
