@@ -1,0 +1,41 @@
+---
+title: "Zarr support for cytomapper"
+date: "`r BiocStyle::doc_date()`"
+package: "`r BiocStyle::pkg_ver('cytomapper')`"
+author:
+- name: Nils Eling
+  affiliation: 
+  - Department for Quantitative Biomedicine, University of Zurich
+  - Institute for Molecular Health Sciences, ETH Zurich
+  email: nils.eling@dqbm.uzh.ch
+output:
+    BiocStyle::html_document:
+        toc_float: yes
+bibliography: library.bib
+abstract: |
+    TODO
+vignette: |
+    %\VignetteIndexEntry{"On disk storage of images"}
+    %\VignetteEngine{knitr::rmarkdown}
+    %\VignetteEncoding{UTF-8}
+---
+
+```{r, echo=FALSE, results="hide"}
+knitr::opts_chunk$set(error=FALSE, warning=FALSE, message=FALSE,
+                        fig.retina = 0.75, crop = NULL)
+library(BiocStyle)
+```
+
+```{r library, echo=FALSE}
+library(cytomapper)
+```
+
+# Zarr
+
+```{r}
+library(Rarr)
+
+test <- Rarr::read_zarr_array("~/Github/spatialdata-notebooks/notebooks/developers_resources/storage_format/multiple_elements.zarr/images/blobs_image/0/")
+
+test <- Rarr::
+```
