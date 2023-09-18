@@ -33,9 +33,5 @@ library(cytomapper)
 # Zarr
 
 ```{r}
-library(Rarr)
 
-test <- Rarr::read_zarr_array("~/Github/spatialdata-notebooks/notebooks/developers_resources/storage_format/multiple_elements.zarr/images/blobs_image/0/")
-
-test <- Rarr::
 ```
