@@ -36,7 +36,7 @@ readZARR(
 
 \item{t}{TODO}
 
-\item{fov_name}{TODO}
+\item{fov_names}{TODO}
 }
 \value{
 A \linkS4class{CytoImageList} object

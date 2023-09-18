@@ -23,6 +23,8 @@
 #' @author Nils Eling (\email{nils.eling@@dqbm.uzh.ch}),
 #'
 #' @export
+#' @importFrom jsonlite fromJSON
+#' @importFrom Rarr read_zarr_array zarr_overview
 readZARR <- function(file,
                      type = c("omengff", "spatialdata"),
                      what = c("images", "masks"),
@@ -62,13 +64,41 @@ readZARR <- function(file,
             
             cur_names <- file.path(file, "images", fov_names, resolution)
             
+            # Read in metadata
+            cur_meta <- lapply(file.path(file, "images", fov_names),
+                               function(cur_m) {
+                                   return(fromJSON(file.path(cur_m, ".zattrs")))
+                               })
+            
+            cur_channels <- lapply(cur_meta, function(cur_m){
+                if ("omero" %in% names(cur_meta)) {
+                    return(cur_meta$omero$channels$label)
+                } else if ("channels_metadata" %in% names(cur_meta)) {
+                    return(cur_meta$channels_metadata$channels$label)
+                } 
+            })
+            
+            if (length(unique(cur_channels)) > 1) {
+                stop("Channel names need to match across images.")
+            }
+            
         } else if (type == "omengff") {
             if (is.null(resolution)) {
                 resolution <- list.files(file, pattern = paste(seq(0, 10), collapse = "|"))
                 resolution <- resolution[length(resolution)]
             }
             
+            fov_names <- sub("\\.[^.]*$", "", basename(file))
+            
             cur_names <- file.path(file, resolution)
+            
+            cur_meta <- fromJSON(file.path(file, ".zattrs"))
+            
+            if ("omero" %in% names(cur_meta)) {
+                cur_channels <- cur_meta$omero$channels$label
+            } else if ("channels_metadata" %in% names(cur_meta)) {
+                cur_channels <- cur_meta$channels_metadata$channels$label
+            } 
         }
         
         cur_out <- lapply(cur_names, function(cur_name){
@@ -94,6 +124,13 @@ readZARR <- function(file,
         names(cur_out) <- fov_names
         
         cur_CIL <- CytoImageList(cur_out)
+        
+        # Set channelNames
+        if (exists("cur_channels")) {
+            channelNames(cur_CIL) <- cur_channels
+        } else {
+            channelNames(cur_CIL) <- as.character(seq_len(dim(cur_CIL[[1]])[3]))
+        }
         
         return(cur_CIL)
     } else if (what == "masks") {

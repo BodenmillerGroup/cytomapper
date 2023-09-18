@@ -35,4 +35,7 @@ library(cytomapper)
 ```{r}
 images <- readZARR("~/Github/spatialdata-notebooks/notebooks/developers_resources/storage_format/multiple_elements.zarr/", 
                    type = "spatialdata", what = "images")
+
+#images <- readZARR("~/Desktop/5514375.zarr/", 
+#                   type = "omengff", what = "images")
 ```
