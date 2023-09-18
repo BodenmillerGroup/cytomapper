@@ -4,8 +4,16 @@
 #' @description
 #' Reads in data from a ZARR file
 #'
-#' @param file
-#' @param 
+#' @param file TODO
+#' @param type TODO
+#' @param what TODO
+#' @param resolution TODO
+#' @param x TODO
+#' @param y TODO
+#' @param c TODO
+#' @param z TODO
+#' @param t TODO
+#' @param fov_names TODO
 #'
 #' @return A \linkS4class{CytoImageList} object
 #' 
@@ -19,9 +27,12 @@ readZARR <- function(file,
                      type = c("omengff", "spatialdata"),
                      what = c("images", "masks"),
                      resolution = NULL,
+                     x = NULL,
+                     y = NULL,
+                     c = NULL,
                      z = 1,
                      t = 1,
-                     fov_name = NULL) {
+                     fov_names = NULL) {
     
     # Check if file is spatialData or OME-NGFF
     #.valid.readZARR.input(file)
@@ -29,30 +40,49 @@ readZARR <- function(file,
     type <- match.arg(type)
     what <- match.arg(what)
     
-    if (type == "spatialdata") {
-        if (is.null(fov_name)) {
-            fov_name <- list.files(file.path(file, "images"))[1]
-        }
-    
-        cur_out <- lapply(fov_name, function(x){
+    if (what == "images") {
+        if (type == "spatialdata") {
+            if (is.null(fov_names)) {
+                fov_names <- list.files(file.path(file, "images"))[1]
+            }
             
             if (is.null(resolution)) {
-                cur_res <- list.files(file.path(file, "images", x))
-                cur_res <- cur_res[length(cur_res)]
+                if (length(fov_names) > 1) {
+                    resolution <- lapply(file.path(file, "images", fov_names), 
+                                         function(cur_name) {
+                                             cur_res <- list.files(cur_name)
+                                             return(cur_res[length(cur_res)])
+                                         })
+                    resolution <- unlist(resolution)
+                } else {
+                    resolution <- list.files(file.path(file, "images", fov_names))
+                    resolution <- resolution[length(resolution)]
+                }
             }
+            
+            cur_names <- file.path(file, "images", fov_names, resolution)
+            
+        } else if (type == "omengff") {
+            if (is.null(resolution)) {
+                resolution <- list.files(file, pattern = paste(seq(0, 10), collapse = "|"))
+                resolution <- resolution[length(resolution)]
+            }
+            
+            cur_names <- file.path(file, resolution)
+        }
         
-            cur_name <- file.path(file, "images", x, cur_res)
+        cur_out <- lapply(cur_names, function(cur_name){
             
             # Create index
             cur_zarr <- zarr_overview(cur_name, as_data_frame = TRUE)
             cur_dim <- cur_zarr$dim[[1]]
             
             if (length(cur_dim) == 3) {
-                cur_ind <- list(NULL, NULL, NULL)
+                cur_ind <- list(c, y, x)
             } else if (length(cur_dim) == 4) {
-                cur_ind <- list(NULL, NULL, NULL, z)
+                cur_ind <- list(z, c, y,  x)
             } else if (length(cur_dim) == 5) {
-                cur_ind <- list(NULL, NULL, NULL, z, t)
+                cur_ind <- list(t, z, c, y, x)
             }
             
             cur_arr <- read_zarr_array(cur_name, index = cur_ind)
@@ -60,7 +90,14 @@ readZARR <- function(file,
             
             return(cur_arr)
         })
-    
+        
+        names(cur_out) <- fov_names
+        
+        cur_CIL <- CytoImageList(cur_out)
+        
+        return(cur_CIL)
+    } else if (what == "masks") {
+        
     }
-    
+
 }

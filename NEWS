@@ -183,3 +183,6 @@ Changes in version 1.11.2 (2023-02-02):
 
 Changes in version 1.11.3 (2023-01-23):
 + loadImages: added option to read in single-channel images to multi-channel
+
+Changes in version 1.13.1 (2023-09-18):
++ readZARR function to read in images and masks from ZARR archives
