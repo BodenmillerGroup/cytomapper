@@ -33,14 +33,24 @@ library(zellkonverter)
 
 # SpatialData
 
-```{r}
+```{r, eval=FALSE}
 images <- readImagesFromZARR("~/Github/spatialdata-notebooks/notebooks/developers_resources/storage_format/multiple_elements.zarr/", 
                    type = "spatialdata")
 
-images <- readImagesFromZARR("https://uk1s3.embassy.ebi.ac.uk/idr/zarr/v0.4/idr0052A/5514375.zarr", 
-                   type = "omengff")
+images <- readImagesFromZARR("https://dl01.irc.ugent.be/spatial/mibitof/data.zarr/", 
+                   type = "spatialdata")
 
 ```
 
-
 # OME NGFF
+
+```{r,eval=FALSE}
+images <- readImagesFromZARR("https://uk1s3.embassy.ebi.ac.uk/idr/zarr/v0.4/idr0052A/5514375.zarr", 
+                   type = "omengff")
+
+images <- readImagesFromZARR("~/Desktop/5514375.zarr/", 
+                   type = "omengff", z = 10, t = 10)
+
+plotPixels(images, colour_by = c("NCAPD2", "DNA", "NEG_Dextran"))
+```
+

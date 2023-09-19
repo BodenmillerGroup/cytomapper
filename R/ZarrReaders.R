@@ -24,6 +24,7 @@
 #' @export
 #' @importFrom jsonlite fromJSON
 #' @importFrom Rarr read_zarr_array zarr_overview
+#' @importFrom stringr str_split
 readImagesFromZARR <- function(file,
                      type = c("omengff", "spatialdata"),
                      resolution = NULL,
@@ -115,8 +116,6 @@ readImagesFromZARR <- function(file,
         
         cur_names <- file.path(file, resolution)
         
-        cur_meta <- fromJSON(file.path(file, ".zattrs"))
-        
         if ("omero" %in% names(cur_meta)) {
             cur_channels <- cur_meta$omero$channels$label
         } else if ("channels_metadata" %in% names(cur_meta)) {
@@ -124,9 +123,9 @@ readImagesFromZARR <- function(file,
         } 
         
         if ("coordinateTransformations" %in% names(cur_meta$multiscales)) {
-            return(cur_meta$multiscales$coordinateTransformations[[1]]$input$axes[[1]]$name)
+            cur_index <- cur_meta$multiscales$coordinateTransformations[[1]]$input$axes[[1]]$name
         } else {
-            return(cur_meta$multiscales$axes[[1]]$name)
+            cur_index <- cur_meta$multiscales$axes[[1]]$name
         } 
     }
     
@@ -139,8 +138,13 @@ readImagesFromZARR <- function(file,
         names(cur_ind) <-  c("t", "c", "z", "y", "x")
         cur_ind <- cur_ind[cur_index]
         
+        cur_perm <- c("x", "y", "c", "z", "t")
+        cur_perm <- match(cur_perm, cur_index)
+        cur_perm <- cur_perm[!is.na(cur_perm)]
+        
         cur_arr <- read_zarr_array(cur_name, index = cur_ind)
-        cur_arr <- Image(aperm(cur_arr, rev(seq_along(dim(cur_arr)))))
+        cur_arr <- aperm(cur_arr, cur_perm)
+        cur_arr <- Image(array(cur_arr, dim = dim(cur_arr)[seq_len(3)]))
         
         return(cur_arr)
     })
