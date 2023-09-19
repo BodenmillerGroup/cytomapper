@@ -60,8 +60,9 @@ readImagesFromZARR <- function(file,
                                      })
                 resolution <- unlist(resolution)
             } else {
-                resolution <- list.files(file.path(file, "images", fov_names))
-                resolution <- resolution[length(resolution)]
+                resolution <- fromJSON(file.path(file, "images", fov_names, ".zattrs"))
+                resolution <- cur_res$multiscales$datasets[[1]]$path
+                resolution <- sort(resolution)[length(resolution)]
             }
         }
         
