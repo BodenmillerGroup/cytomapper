@@ -1,12 +1,11 @@
 #' @title Read data from ZARR files
-#' @name readZARR
+#' @name readImagesFromZARR
 #'
 #' @description
 #' Reads in data from a ZARR file
 #'
 #' @param file TODO
 #' @param type TODO
-#' @param what TODO
 #' @param resolution TODO
 #' @param x TODO
 #' @param y TODO
@@ -25,6 +24,7 @@
 #' @export
 #' @importFrom jsonlite fromJSON
 #' @importFrom Rarr read_zarr_array zarr_overview
+#' @importFrom stringr str_split
 readImagesFromZARR <- function(file,
                      type = c("omengff", "spatialdata"),
                      resolution = NULL,
@@ -39,24 +39,31 @@ readImagesFromZARR <- function(file,
     #.valid.readZARR.input(file)
     
     type <- match.arg(type)
-    what <- match.arg(what)
     
     if (type == "spatialdata") {
+        
+        cur_meta <- fromJSON(file.path(file, "zmetadata"))
+        cur_img_meta <- str_split(names(cur_meta$metadata), "/", simplify = TRUE)
+        cur_img_meta <- cur_img_meta[cur_img_meta[,1] == "images" & !grepl("^\\.", cur_img_meta[,2]),]
+        cur_fov_names <- unique(cur_img_meta[,2])
+        
         if (is.null(fov_names)) {
-            fov_names <- list.files(file.path(file, "images"))[1]
+            fov_names <- cur_fov_names[1]
         }
         
         if (is.null(resolution)) {
             if (length(fov_names) > 1) {
                 resolution <- lapply(file.path(file, "images", fov_names), 
                                      function(cur_name) {
-                                         cur_res <- list.files(cur_name)
-                                         return(cur_res[length(cur_res)])
+                                         cur_res <- fromJSON(file.path(cur_name, ".zattrs"))
+                                         cur_res <- cur_res$multiscales$datasets[[1]]$path
+                                         return(sort(cur_res)[length(cur_res)])
                                      })
                 resolution <- unlist(resolution)
             } else {
-                resolution <- list.files(file.path(file, "images", fov_names))
-                resolution <- resolution[length(resolution)]
+                resolution <- fromJSON(file.path(file, "images", fov_names, ".zattrs"))
+                resolution <- resolution$multiscales$datasets[[1]]$path
+                resolution <- sort(resolution)[length(resolution)]
             }
         }
         
@@ -69,10 +76,10 @@ readImagesFromZARR <- function(file,
                            })
         
         cur_channels <- lapply(cur_meta, function(cur_m){
-            if ("omero" %in% names(cur_meta)) {
-                return(cur_meta$omero$channels$label)
-            } else if ("channels_metadata" %in% names(cur_meta)) {
-                return(cur_meta$channels_metadata$channels$label)
+            if ("omero" %in% names(cur_m)) {
+                return(cur_m$omero$channels$label)
+            } else if ("channels_metadata" %in% names(cur_m)) {
+                return(cur_m$channels_metadata$channels$label)
             } 
         })
         
@@ -80,41 +87,64 @@ readImagesFromZARR <- function(file,
             stop("Channel names need to match across images.")
         }
         
+        cur_channels <- unlist(unique(cur_channels))
+        
+        cur_index <- lapply(cur_meta, function(cur_m){
+            if ("coordinateTransformations" %in% names(cur_m$multiscales)) {
+                return(cur_m$multiscales$coordinateTransformations[[1]]$input$axes[[1]]$name)
+            } else {
+                return(cur_m$multiscales$axes[[1]]$name)
+            } 
+        })
+        
+        if (length(unique(cur_index)) > 1) {
+            stop("Dimensions need to match across images.")
+        }
+        
+        cur_index <- unlist(unique(cur_index))
+        
     } else if (type == "omengff") {
+        
+        cur_meta <- fromJSON(file.path(file, ".zattrs"))
+        
         if (is.null(resolution)) {
-            resolution <- list.files(file, pattern = paste(seq(0, 10), collapse = "|"))
-            resolution <- resolution[length(resolution)]
+            resolution <- cur_meta$multiscales$datasets[[1]]$path
+            resolution <- sort(resolution)[length(resolution)]
         }
         
         fov_names <- sub("\\.[^.]*$", "", basename(file))
         
         cur_names <- file.path(file, resolution)
         
-        cur_meta <- fromJSON(file.path(file, ".zattrs"))
-        
         if ("omero" %in% names(cur_meta)) {
             cur_channels <- cur_meta$omero$channels$label
         } else if ("channels_metadata" %in% names(cur_meta)) {
             cur_channels <- cur_meta$channels_metadata$channels$label
         } 
+        
+        if ("coordinateTransformations" %in% names(cur_meta$multiscales)) {
+            cur_index <- cur_meta$multiscales$coordinateTransformations[[1]]$input$axes[[1]]$name
+        } else {
+            cur_index <- cur_meta$multiscales$axes[[1]]$name
+        } 
     }
+    
+    message("Resolution of the image: ", resolution)
+    message("Channels of the image: ", cur_channels)
     
     cur_out <- lapply(cur_names, function(cur_name){
         
-        # Create index
-        cur_zarr <- zarr_overview(cur_name, as_data_frame = TRUE)
-        cur_dim <- cur_zarr$dim[[1]]
+        cur_ind <- list(t, c, z, y, x)
+        names(cur_ind) <-  c("t", "c", "z", "y", "x")
+        cur_ind <- cur_ind[cur_index]
         
-        if (length(cur_dim) == 3) {
-            cur_ind <- list(c, y, x)
-        } else if (length(cur_dim) == 4) {
-            cur_ind <- list(z, c, y,  x)
-        } else if (length(cur_dim) == 5) {
-            cur_ind <- list(t, z, c, y, x)
-        }
+        cur_perm <- c("x", "y", "c", "z", "t")
+        cur_perm <- match(cur_perm, cur_index)
+        cur_perm <- cur_perm[!is.na(cur_perm)]
         
         cur_arr <- read_zarr_array(cur_name, index = cur_ind)
-        cur_arr <- Image(aperm(cur_arr, rev(seq_along(dim(cur_arr)))))
+        cur_arr <- aperm(cur_arr, cur_perm)
+        cur_arr <- Image(array(cur_arr, dim = dim(cur_arr)[seq_len(3)]))
         
         return(cur_arr)
     })
