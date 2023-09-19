@@ -61,7 +61,7 @@ readImagesFromZARR <- function(file,
                 resolution <- unlist(resolution)
             } else {
                 resolution <- fromJSON(file.path(file, "images", fov_names, ".zattrs"))
-                resolution <- cur_res$multiscales$datasets[[1]]$path
+                resolution <- resolution$multiscales$datasets[[1]]$path
                 resolution <- sort(resolution)[length(resolution)]
             }
         }
@@ -103,9 +103,12 @@ readImagesFromZARR <- function(file,
         cur_index <- unlist(unique(cur_index))
         
     } else if (type == "omengff") {
+        
+        cur_meta <- fromJSON(file.path(file, ".zattrs"))
+        
         if (is.null(resolution)) {
-            resolution <- list.files(file, pattern = paste(seq(0, 10), collapse = "|"))
-            resolution <- resolution[length(resolution)]
+            resolution <- cur_meta$multiscales$datasets[[1]]$path
+            resolution <- sort(resolution)[length(resolution)]
         }
         
         fov_names <- sub("\\.[^.]*$", "", basename(file))
