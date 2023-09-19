@@ -69,16 +69,32 @@ readImagesFromZARR <- function(file,
                            })
         
         cur_channels <- lapply(cur_meta, function(cur_m){
-            if ("omero" %in% names(cur_meta)) {
-                return(cur_meta$omero$channels$label)
-            } else if ("channels_metadata" %in% names(cur_meta)) {
-                return(cur_meta$channels_metadata$channels$label)
+            if ("omero" %in% names(cur_m)) {
+                return(cur_m$omero$channels$label)
+            } else if ("channels_metadata" %in% names(cur_m)) {
+                return(cur_m$channels_metadata$channels$label)
             } 
         })
         
         if (length(unique(cur_channels)) > 1) {
             stop("Channel names need to match across images.")
         }
+        
+        cur_channels <- unlist(unique(cur_channels))
+        
+        cur_index <- lapply(cur_meta, function(cur_m){
+            if ("coordinateTransformations" %in% names(cur_m$multiscales)) {
+                return(cur_m$multiscales$coordinateTransformations[[1]]$input$axes[[1]]$name)
+            } else {
+                return(cur_m$multiscales$axes[[1]]$name)
+            } 
+        })
+        
+        if (length(unique(cur_index)) > 1) {
+            stop("Dimensions need to match across images.")
+        }
+        
+        cur_index <- unlist(unique(cur_index))
         
     } else if (type == "omengff") {
         if (is.null(resolution)) {
@@ -97,6 +113,12 @@ readImagesFromZARR <- function(file,
         } else if ("channels_metadata" %in% names(cur_meta)) {
             cur_channels <- cur_meta$channels_metadata$channels$label
         } 
+        
+        if ("coordinateTransformations" %in% names(cur_meta$multiscales)) {
+            return(cur_meta$multiscales$coordinateTransformations[[1]]$input$axes[[1]]$name)
+        } else {
+            return(cur_meta$multiscales$axes[[1]]$name)
+        } 
     }
     
     cur_out <- lapply(cur_names, function(cur_name){
@@ -105,13 +127,9 @@ readImagesFromZARR <- function(file,
         cur_zarr <- zarr_overview(cur_name, as_data_frame = TRUE)
         cur_dim <- cur_zarr$dim[[1]]
         
-        if (length(cur_dim) == 3) {
-            cur_ind <- list(c, y, x)
-        } else if (length(cur_dim) == 4) {
-            cur_ind <- list(z, c, y,  x)
-        } else if (length(cur_dim) == 5) {
-            cur_ind <- list(t, z, c, y, x)
-        }
+        cur_ind <- list(t, c, z, y, x)
+        names(cur_ind) <-  c("t", "c", "z", "y", "x")
+        cur_ind <- cur_ind[cur_index]
         
         cur_arr <- read_zarr_array(cur_name, index = cur_ind)
         cur_arr <- Image(aperm(cur_arr, rev(seq_along(dim(cur_arr)))))
