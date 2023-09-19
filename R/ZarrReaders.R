@@ -40,16 +40,23 @@ readImagesFromZARR <- function(file,
     type <- match.arg(type)
     
     if (type == "spatialdata") {
+        
+        cur_meta <- fromJSON(file.path(file, "zmetadata"))
+        cur_img_meta <- str_split(names(cur_meta$metadata), "/", simplify = TRUE)
+        cur_img_meta <- cur_img_meta[cur_img_meta[,1] == "images" & !grepl("^\\.", cur_img_meta[,2]),]
+        cur_fov_names <- unique(cur_img_meta[,2])
+        
         if (is.null(fov_names)) {
-            fov_names <- list.files(file.path(file, "images"))[1]
+            fov_names <- cur_fov_names[1]
         }
         
         if (is.null(resolution)) {
             if (length(fov_names) > 1) {
                 resolution <- lapply(file.path(file, "images", fov_names), 
                                      function(cur_name) {
-                                         cur_res <- list.files(cur_name)
-                                         return(cur_res[length(cur_res)])
+                                         cur_res <- fromJSON(file.path(cur_name, ".zattrs"))
+                                         cur_res <- cur_res$multiscales$datasets[[1]]$path
+                                         return(sort(cur_res)[length(cur_res)])
                                      })
                 resolution <- unlist(resolution)
             } else {
