@@ -1,8 +1,8 @@
-#' @title Read data from ZARR files
+#' @title Read masks from ZARR files
 #' @name readZARR
 #'
 #' @description
-#' Reads in data from a ZARR file
+#' Reads in masks from a ZARR file
 #'
 #' @param file TODO
 #' @param type TODO
@@ -40,25 +40,33 @@ readMasksFromZARR <- function(file,
     #.valid.readZARR.input(file)
     
     type <- match.arg(type)
-
-    #browser()
     
     if (type == "spatialdata") {
-        if (is.null(fov_names)) {
-            fov_names <- list.files(file.path(file, "labels"))[1]
+      
+      cur_meta <- fromJSON(file.path(file, "zmetadata"))
+      cur_points_meta <- str_split(names(cur_meta$metadata), "/", simplify = TRUE)
+      cur_points_meta <- cur_points_meta[cur_points_meta[,1] == "labels" & !grepl("^\\.", cur_points_meta[,2]),]
+      
+      cur_fov_names <- unique(cur_points_meta[,2])
+      
+      if (is.null(fov_names)) {
+            fov_names <- cur_fov_names[1]
         }
         
         if (is.null(resolution)) {
             if (length(fov_names) > 1) {
                 resolution <- lapply(file.path(file, "labels", fov_names), 
                                      function(cur_name) {
-                                         cur_res <- list.files(cur_name)
-                                         return(cur_res[length(cur_res)])
+                                       cur_res <- fromJSON(file.path(cur_name, ".zattrs"))
+                                       cur_res <- cur_res$multiscales$datasets[[1]]$path
+                                       return(sort(cur_res)[length(cur_res)])
                                      })
+                
                 resolution <- unlist(resolution)
-            } else {
-                resolution <- list.files(file.path(file, "labels", fov_names))
-                resolution <- resolution[length(resolution)]
+                } else {
+                resolution <- fromJSON(file.path(file, "labels", fov_names, ".zattrs"))
+                resolution <- resolution$multiscales$datasets[[1]]$path
+                resolution <- sort(resolution)[length(resolution)]
             }
         }
         
@@ -87,38 +95,38 @@ readMasksFromZARR <- function(file,
     } else if (type == "omengff") {
       
         if (is.null(resolution)) {
-            resolution <- list.files(file, pattern = paste(seq(0, 10), collapse = "|"))
-            resolution <- resolution[length(resolution)]
+          cur_res <- fromJSON(file.path(file, "labels/Cell/.zattrs"))
+          cur_res <- cur_res$multiscales$datasets[[1]]$path
+          resolution <- cur_res[length(cur_res)]
+          resolution <- unlist(resolution)
         }
-        
+      
         fov_names <- sub("\\.[^.]*$", "", basename(file))
         
-        cur_names <- file.path(file, resolution)
+        cur_names <- file.path(file, "labels/Cell", resolution)
         
-        cur_meta <- fromJSON(file.path(file, ".zattrs"))
+        cur_meta <- fromJSON(file.path(file, "labels/Cell/.zattrs"))
         
-        # if ("omero" %in% names(cur_meta)) {
-        #     cur_channels <- cur_meta$omero$channels$label
-        # } else if ("channels_metadata" %in% names(cur_meta)) {
-        #     cur_channels <- cur_meta$channels_metadata$channels$label
-        # } 
+        cur_index <- if ("coordinateTransformations" %in% names(cur_meta$multiscales)) {
+            cur_meta$multiscales$coordinateTransformations[[1]]$input$axes[[1]]$name
+          } else {
+            cur_meta$multiscales$axes[[1]]$name
+          } 
     }
     
     message("Resolution of the image: ", resolution)
 
     cur_out <- lapply(cur_names, function(cur_name){
-        
         cur_ind <- list(t, c, z, y, x)
         names(cur_ind) <-  c("t", "c", "z", "y", "x")
         cur_ind <- cur_ind[cur_index]
         
         cur_arr <- read_zarr_array(cur_name, index = cur_ind)
+        
         cur_arr <- Image(aperm(cur_arr, rev(seq_along(dim(cur_arr)))))
         
         return(cur_arr)
     })
-    
-    #browser()
     
     names(cur_out) <- fov_names
     
