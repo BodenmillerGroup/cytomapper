@@ -28,6 +28,7 @@ library(BiocStyle)
 
 ```{r library, echo=FALSE}
 library(cytomapper)
+library(basilisk)
 library(zellkonverter)
 ```
 
@@ -37,20 +38,45 @@ library(zellkonverter)
 images <- readImagesFromZARR("~/Github/spatialdata-notebooks/notebooks/developers_resources/storage_format/multiple_elements.zarr/", 
                    type = "spatialdata")
 
-images <- readImagesFromZARR("https://dl01.irc.ugent.be/spatial/mibitof/data.zarr/", 
+masks <- readMasksFromZARR("~/Github/spatialdata-notebooks/notebooks/developers_resources/storage_format/multiple_elements.zarr/", 
                    type = "spatialdata")
 
+mcols(images) <- mcols(masks) <- DataFrame(image = names(images))
+
+plotPixels(images, mask = masks, colour_by = c("0", "1", "2"), img_id = "image")
+
+images <- readImagesFromZARR("https://dl01.irc.ugent.be/spatial/mibitof/data.zarr/", 
+                   type = "spatialdata", resolution = "0")
+
+masks <- readMasksFromZARR("https://dl01.irc.ugent.be/spatial/mibitof/data.zarr/", 
+                   type = "spatialdata", resolution = "0")
+
+mcols(images) <- mcols(masks) <- DataFrame(image = names(images))
+
+plotPixels(images, mask = masks, colour_by = c("0", "1", "2"), img_id = "image")
 ```
 
 # OME NGFF
 
 ```{r,eval=FALSE}
 images <- readImagesFromZARR("https://uk1s3.embassy.ebi.ac.uk/idr/zarr/v0.4/idr0052A/5514375.zarr", 
-                   type = "omengff")
+                   type = "omengff", resolution = "0", z = 2, t = 1)
+
+masks <- readMasksFromZARR("https://uk1s3.embassy.ebi.ac.uk/idr/zarr/v0.4/idr0052A/5514375.zarr",
+                           type = "omengff", resolution = "0", z = 2, t = 1)
+
+mcols(images) <- mcols(masks) <- DataFrame(image = names(images))
+
+plotPixels(images, mask = masks, img_id = "image", colour_by = c("NCAPD2", "DNA", "NEG_Dextran"))
 
 images <- readImagesFromZARR("~/Desktop/5514375.zarr/", 
-                   type = "omengff", z = 10, t = 10)
+                   type = "omengff", resolution = "0", z = 3, t = 1)
 
-plotPixels(images, colour_by = c("NCAPD2", "DNA", "NEG_Dextran"))
+masks <- readMasksFromZARR("~/Desktop/5514375.zarr/",
+                           type = "omengff", resolution = "0", z = 3, t = 1)
+
+mcols(images) <- mcols(masks) <- DataFrame(image = names(images))
+
+plotPixels(images, mask = masks, img_id = "image", colour_by = c("NCAPD2", "DNA", "NEG_Dextran"))
 ```
 
