@@ -1,12 +1,11 @@
 #' @title Read data from ZARR files
-#' @name readZARR
+#' @name readImagesFromZARR
 #'
 #' @description
 #' Reads in data from a ZARR file
 #'
 #' @param file TODO
 #' @param type TODO
-#' @param what TODO
 #' @param resolution TODO
 #' @param x TODO
 #' @param y TODO
@@ -39,7 +38,6 @@ readImagesFromZARR <- function(file,
     #.valid.readZARR.input(file)
     
     type <- match.arg(type)
-    what <- match.arg(what)
     
     if (type == "spatialdata") {
         if (is.null(fov_names)) {
@@ -120,6 +118,9 @@ readImagesFromZARR <- function(file,
             return(cur_meta$multiscales$axes[[1]]$name)
         } 
     }
+    
+    message("Resolution of the image: ", resolution)
+    message("Channels of the image: ", cur_channels)
     
     cur_out <- lapply(cur_names, function(cur_name){
         

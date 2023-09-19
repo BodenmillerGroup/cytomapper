@@ -28,14 +28,19 @@ library(BiocStyle)
 
 ```{r library, echo=FALSE}
 library(cytomapper)
+library(zellkonverter)
 ```
 
-# Zarr
+# SpatialData
 
 ```{r}
-images <- readZARR("~/Github/spatialdata-notebooks/notebooks/developers_resources/storage_format/multiple_elements.zarr/", 
-                   type = "spatialdata", what = "images")
+images <- readImagesFromZARR("~/Github/spatialdata-notebooks/notebooks/developers_resources/storage_format/multiple_elements.zarr/", 
+                   type = "spatialdata")
 
-#images <- readZARR("~/Desktop/5514375.zarr/", 
-#                   type = "omengff", what = "images")
+images <- readImagesFromZARR("https://uk1s3.embassy.ebi.ac.uk/idr/zarr/v0.4/idr0052A/5514375.zarr", 
+                   type = "omengff")
+
 ```
+
+
+# OME NGFF
