@@ -123,10 +123,6 @@ readImagesFromZARR <- function(file,
     
     cur_out <- lapply(cur_names, function(cur_name){
         
-        # Create index
-        cur_zarr <- zarr_overview(cur_name, as_data_frame = TRUE)
-        cur_dim <- cur_zarr$dim[[1]]
-        
         cur_ind <- list(t, c, z, y, x)
         names(cur_ind) <-  c("t", "c", "z", "y", "x")
         cur_ind <- cur_ind[cur_index]
