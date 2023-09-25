@@ -1,0 +1,82 @@
+---
+title: "Zarr support for cytomapper"
+date: "`r BiocStyle::doc_date()`"
+package: "`r BiocStyle::pkg_ver('cytomapper')`"
+author:
+- name: Nils Eling
+  affiliation: 
+  - Department for Quantitative Biomedicine, University of Zurich
+  - Institute for Molecular Health Sciences, ETH Zurich
+  email: nils.eling@dqbm.uzh.ch
+output:
+    BiocStyle::html_document:
+        toc_float: yes
+bibliography: library.bib
+abstract: |
+    TODO
+vignette: |
+    %\VignetteIndexEntry{"On disk storage of images"}
+    %\VignetteEngine{knitr::rmarkdown}
+    %\VignetteEncoding{UTF-8}
+---
+
+```{r, echo=FALSE, results="hide"}
+knitr::opts_chunk$set(error=FALSE, warning=FALSE, message=FALSE,
+                        fig.retina = 0.75, crop = NULL)
+library(BiocStyle)
+```
+
+```{r library, echo=FALSE}
+library(cytomapper)
+library(basilisk)
+library(zellkonverter)
+```
+
+# SpatialData
+
+```{r, eval=FALSE}
+images <- readImagesFromZARR("~/Github/spatialdata-notebooks/notebooks/developers_resources/storage_format/multiple_elements.zarr/", 
+                   type = "spatialdata")
+
+masks <- readMasksFromZARR("~/Github/spatialdata-notebooks/notebooks/developers_resources/storage_format/multiple_elements.zarr/", 
+                   type = "spatialdata")
+
+mcols(images) <- mcols(masks) <- DataFrame(image = names(images))
+
+plotPixels(images, mask = masks, colour_by = c("0", "1", "2"), img_id = "image")
+
+images <- readImagesFromZARR("https://dl01.irc.ugent.be/spatial/mibitof/data.zarr/", 
+                   type = "spatialdata", resolution = "0")
+
+masks <- readMasksFromZARR("https://dl01.irc.ugent.be/spatial/mibitof/data.zarr/", 
+                   type = "spatialdata", resolution = "0")
+
+mcols(images) <- mcols(masks) <- DataFrame(image = names(images))
+
+plotPixels(images, mask = masks, colour_by = c("0", "1", "2"), img_id = "image")
+```
+
+# OME NGFF
+
+```{r,eval=FALSE}
+images <- readImagesFromZARR("https://uk1s3.embassy.ebi.ac.uk/idr/zarr/v0.4/idr0052A/5514375.zarr", 
+                   type = "omengff", resolution = "0", z = 2, t = 1)
+
+masks <- readMasksFromZARR("https://uk1s3.embassy.ebi.ac.uk/idr/zarr/v0.4/idr0052A/5514375.zarr",
+                           type = "omengff", resolution = "0", z = 2, t = 1)
+
+mcols(images) <- mcols(masks) <- DataFrame(image = names(images))
+
+plotPixels(images, mask = masks, img_id = "image", colour_by = c("NCAPD2", "DNA", "NEG_Dextran"))
+
+images <- readImagesFromZARR("~/Desktop/5514375.zarr/", 
+                   type = "omengff", resolution = "0", z = 3, t = 1)
+
+masks <- readMasksFromZARR("~/Desktop/5514375.zarr/",
+                           type = "omengff", resolution = "0", z = 3, t = 1)
+
+mcols(images) <- mcols(masks) <- DataFrame(image = names(images))
+
+plotPixels(images, mask = masks, img_id = "image", colour_by = c("NCAPD2", "DNA", "NEG_Dextran"))
+```
+
