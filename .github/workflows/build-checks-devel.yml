@@ -2,9 +2,9 @@ name: build-checks-devel
 
 on:
   push:
-    branches: [ master ]
+    branches: [ devel ]
   pull_request:
-    branches: [ master ]
+    branches: [ devel ]
 
 jobs:
   R-CMD-check:
