@@ -185,4 +185,4 @@ Changes in version 1.11.3 (2023-01-23):
 + loadImages: added option to read in single-channel images to multi-channel
 
 Changes in version 1.13.1 (2023-09-26):
-+ loadImages: fixed pattern argument to only test on the actual files and not the path
++ loadImages: fixed pattern argument to only test on the actual files and not the path.
