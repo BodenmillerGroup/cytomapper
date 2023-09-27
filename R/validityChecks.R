@@ -81,16 +81,17 @@
                 }
                 
                 out <- list.files(x, full.names = TRUE)
+                tmp_names <- list.files(x, full.names = FALSE)
                 
                 # Since more than regular expressions can be given to pattern,
                 # we need to perform selection manually
                 if(length(pattern) == 1){
-                    out <- out[grepl(pattern, out)]
+                    out <- out[grepl(pattern, tmp_names)]
                 } else {
                     # Build pattern for grep function
                     pattern <- unique(pattern)
                     
-                    out <- out[grepl(paste(pattern, collapse = "|"), out)]
+                    out <- out[grepl(paste(pattern, collapse = "|"), tmp_names)]
                 }
                 
                 # Check if any of the files contain the pattern
