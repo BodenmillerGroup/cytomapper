@@ -33,7 +33,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">cytomapper</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="">1.13.1</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="">1.15.1</span>
       </span>
     </div>
 
@@ -86,7 +86,7 @@ ZurichInstitute for Molecular Health Sciences, ETH
 Zurich<br><a class="author_email" href="mailto:#"></a><a href="mailto:nils.eling@dqbm.uzh.ch" class="email">nils.eling@dqbm.uzh.ch</a>
       </address>
                   
-            <h4 data-toc-skip class="date">27 September 2023</h4>
+            <h4 data-toc-skip class="date">13 December 2023</h4>
       
       <small class="dont-index">Source: <a href="https://github.com/BodenmillerGroup/cytomapper/blob/HEAD/vignettes/cytomapper_ondisk.Rmd" class="external-link"><code>vignettes/cytomapper_ondisk.Rmd</code></a></small>
       <div class="hidden name"><code>cytomapper_ondisk.Rmd</code></div>
@@ -109,8 +109,8 @@ Zurich<br><a class="author_email" href="mailto:#"></a><a href="mailto:nils.eling
 <div class="section level2">
 <h2 id="Introduction">Introduction<a class="anchor" aria-label="anchor" href="#Introduction"></a>
 </h2>
-<p><em><a href="https://bioconductor.org/packages/3.17/HDF5Array" class="external-link">HDF5Array</a></em>
-and <em><a href="https://bioconductor.org/packages/3.17/DelayedArray" class="external-link">DelayedArray</a></em>
+<p><em><a href="https://bioconductor.org/packages/3.18/HDF5Array" class="external-link">HDF5Array</a></em>
+and <em><a href="https://bioconductor.org/packages/3.18/DelayedArray" class="external-link">DelayedArray</a></em>
 are convenient Bioconductor packages to work with arrays “on disk”
 instead of “in memory”. The <code>cytomapper</code> package builds upon
 these tools to allow storing image data on disk. While this facilitates
@@ -238,7 +238,7 @@ calls can be used:</p>
 <span><span class="fu"><a href="https://rdrr.io/pkg/DelayedArray/man/showtree.html" class="external-link">seed</a></span><span class="op">(</span><span class="va">pancreasImages_onDisk</span><span class="op">$</span><span class="va">E34_imc</span><span class="op">)</span></span></code></pre></div>
 <pre><code><span><span class="co">## An object of class "HDF5ArraySeed"</span></span>
 <span><span class="co">## Slot "filepath":</span></span>
-<span><span class="co">## [1] "/private/var/folders/24/8k48jl6d249_n_qfxwsl6xvm0000gn/T/RtmpbN57ib/HDF5Array_dump/E34_imc.h5"</span></span>
+<span><span class="co">## [1] "/private/var/folders/3s/vfzpb5r51gs6y328rmlgzm7c0000gn/T/RtmpRgbQWR/HDF5Array_dump/E34_imc.h5"</span></span>
 <span><span class="co">## </span></span>
 <span><span class="co">## Slot "name":</span></span>
 <span><span class="co">## [1] "/E34_imc"</span></span>
@@ -296,7 +296,7 @@ as a second dataset in the same .h5 file as the original data.</p>
 <span><span class="fu"><a href="https://rdrr.io/pkg/DelayedArray/man/showtree.html" class="external-link">seed</a></span><span class="op">(</span><span class="va">pancreasImages_norm</span><span class="op">$</span><span class="va">E34_imc</span><span class="op">)</span></span></code></pre></div>
 <pre><code><span><span class="co">## An object of class "HDF5ArraySeed"</span></span>
 <span><span class="co">## Slot "filepath":</span></span>
-<span><span class="co">## [1] "/private/var/folders/24/8k48jl6d249_n_qfxwsl6xvm0000gn/T/RtmpbN57ib/HDF5Array_dump/E34_imc.h5"</span></span>
+<span><span class="co">## [1] "/private/var/folders/3s/vfzpb5r51gs6y328rmlgzm7c0000gn/T/RtmpRgbQWR/HDF5Array_dump/E34_imc.h5"</span></span>
 <span><span class="co">## </span></span>
 <span><span class="co">## Slot "name":</span></span>
 <span><span class="co">## [1] "/E34_imc_norm"</span></span>
@@ -362,7 +362,7 @@ needs to store the merged channels in a different location:</p>
 <span><span class="fu"><a href="https://rdrr.io/pkg/DelayedArray/man/showtree.html" class="external-link">seed</a></span><span class="op">(</span><span class="va">channels3</span><span class="op">$</span><span class="va">E34_imc</span><span class="op">)</span></span></code></pre></div>
 <pre><code><span><span class="co">## An object of class "HDF5ArraySeed"</span></span>
 <span><span class="co">## Slot "filepath":</span></span>
-<span><span class="co">## [1] "/private/var/folders/24/8k48jl6d249_n_qfxwsl6xvm0000gn/T/RtmpbN57ib/HDF5Array_dump/test/E34_imc.h5"</span></span>
+<span><span class="co">## [1] "/private/var/folders/3s/vfzpb5r51gs6y328rmlgzm7c0000gn/T/RtmpRgbQWR/HDF5Array_dump/test/E34_imc.h5"</span></span>
 <span><span class="co">## </span></span>
 <span><span class="co">## Slot "name":</span></span>
 <span><span class="co">## [1] "/E34_imc"</span></span>
@@ -385,7 +385,7 @@ needs to store the merged channels in a different location:</p>
 <div class="section level2">
 <h2 class="unnumbered" id="session-info">Session info<a class="anchor" aria-label="anchor" href="#session-info"></a>
 </h2>
-<pre><code><span><span class="co">## R version 4.3.1 (2023-06-16)</span></span>
+<pre><code><span><span class="co">## R version 4.3.2 (2023-10-31)</span></span>
 <span><span class="co">## Platform: x86_64-apple-darwin20 (64-bit)</span></span>
 <span><span class="co">## Running under: macOS Monterey 12.6.9</span></span>
 <span><span class="co">## </span></span>
@@ -404,70 +404,49 @@ needs to store the merged channels in a different location:</p>
 <span><span class="co">## [8] base     </span></span>
 <span><span class="co">## </span></span>
 <span><span class="co">## other attached packages:</span></span>
-<span><span class="co">##  [1] HDF5Array_1.28.1            rhdf5_2.44.0               </span></span>
-<span><span class="co">##  [3] DelayedArray_0.26.7         S4Arrays_1.0.6             </span></span>
-<span><span class="co">##  [5] abind_1.4-5                 Matrix_1.5-4.1             </span></span>
-<span><span class="co">##  [7] cytomapper_1.13.1           SingleCellExperiment_1.22.0</span></span>
-<span><span class="co">##  [9] SummarizedExperiment_1.30.2 Biobase_2.60.0             </span></span>
-<span><span class="co">## [11] GenomicRanges_1.52.0        GenomeInfoDb_1.36.3        </span></span>
-<span><span class="co">## [13] IRanges_2.34.1              S4Vectors_0.38.2           </span></span>
-<span><span class="co">## [15] BiocGenerics_0.46.0         MatrixGenerics_1.12.3      </span></span>
-<span><span class="co">## [17] matrixStats_1.0.0           EBImage_4.42.0             </span></span>
-<span><span class="co">## [19] BiocStyle_2.28.1           </span></span>
+<span><span class="co">##  [1] HDF5Array_1.30.0            rhdf5_2.46.1               </span></span>
+<span><span class="co">##  [3] DelayedArray_0.28.0         SparseArray_1.2.2          </span></span>
+<span><span class="co">##  [5] S4Arrays_1.2.0              abind_1.4-5                </span></span>
+<span><span class="co">##  [7] Matrix_1.6-1.1              cytomapper_1.15.1          </span></span>
+<span><span class="co">##  [9] SingleCellExperiment_1.24.0 SummarizedExperiment_1.32.0</span></span>
+<span><span class="co">## [11] Biobase_2.62.0              GenomicRanges_1.54.1       </span></span>
+<span><span class="co">## [13] GenomeInfoDb_1.38.1         IRanges_2.36.0             </span></span>
+<span><span class="co">## [15] S4Vectors_0.40.2            BiocGenerics_0.48.1        </span></span>
+<span><span class="co">## [17] MatrixGenerics_1.14.0       matrixStats_1.2.0          </span></span>
+<span><span class="co">## [19] EBImage_4.44.0              BiocStyle_2.30.0           </span></span>
 <span><span class="co">## </span></span>
 <span><span class="co">## loaded via a namespace (and not attached):</span></span>
-<span><span class="co">##   [1] bitops_1.0-7              gridExtra_2.3            </span></span>
-<span><span class="co">##   [3] rlang_1.1.1               magrittr_2.0.3           </span></span>
-<span><span class="co">##   [5] svgPanZoom_0.3.4          shinydashboard_0.7.2     </span></span>
-<span><span class="co">##   [7] compiler_4.3.1            DelayedMatrixStats_1.22.6</span></span>
-<span><span class="co">##   [9] png_0.1-8                 systemfonts_1.0.4        </span></span>
-<span><span class="co">##  [11] fftwtools_0.9-11          vctrs_0.6.3              </span></span>
-<span><span class="co">##  [13] stringr_1.5.0             pkgconfig_2.0.3          </span></span>
-<span><span class="co">##  [15] SpatialExperiment_1.10.0  crayon_1.5.2             </span></span>
-<span><span class="co">##  [17] fastmap_1.1.1             magick_2.8.0             </span></span>
-<span><span class="co">##  [19] XVector_0.40.0            ellipsis_0.3.2           </span></span>
-<span><span class="co">##  [21] scuttle_1.10.2            utf8_1.2.3               </span></span>
-<span><span class="co">##  [23] promises_1.2.1            rmarkdown_2.25           </span></span>
-<span><span class="co">##  [25] ggbeeswarm_0.7.2          ragg_1.2.5               </span></span>
-<span><span class="co">##  [27] purrr_1.0.2               xfun_0.40                </span></span>
-<span><span class="co">##  [29] zlibbioc_1.46.0           cachem_1.0.8             </span></span>
-<span><span class="co">##  [31] beachmat_2.16.0           jsonlite_1.8.7           </span></span>
-<span><span class="co">##  [33] later_1.3.1               rhdf5filters_1.12.1      </span></span>
-<span><span class="co">##  [35] Rhdf5lib_1.22.1           BiocParallel_1.34.2      </span></span>
-<span><span class="co">##  [37] terra_1.7-46              jpeg_0.1-10              </span></span>
-<span><span class="co">##  [39] tiff_0.1-11               parallel_4.3.1           </span></span>
-<span><span class="co">##  [41] R6_2.5.1                  bslib_0.5.1              </span></span>
-<span><span class="co">##  [43] stringi_1.7.12            RColorBrewer_1.1-3       </span></span>
-<span><span class="co">##  [45] limma_3.56.2              jquerylib_0.1.4          </span></span>
-<span><span class="co">##  [47] Rcpp_1.0.11               bookdown_0.35            </span></span>
-<span><span class="co">##  [49] knitr_1.44                R.utils_2.12.2           </span></span>
-<span><span class="co">##  [51] nnls_1.5                  httpuv_1.6.11            </span></span>
-<span><span class="co">##  [53] tidyselect_1.2.0          viridis_0.6.4            </span></span>
-<span><span class="co">##  [55] yaml_2.3.7                codetools_0.2-19         </span></span>
-<span><span class="co">##  [57] lattice_0.21-8            tibble_3.2.1             </span></span>
-<span><span class="co">##  [59] shiny_1.7.5               evaluate_0.21            </span></span>
-<span><span class="co">##  [61] desc_1.4.2                pillar_1.9.0             </span></span>
-<span><span class="co">##  [63] BiocManager_1.30.22       generics_0.1.3           </span></span>
-<span><span class="co">##  [65] sp_2.0-0                  rprojroot_2.0.3          </span></span>
-<span><span class="co">##  [67] RCurl_1.98-1.12           ggplot2_3.4.3            </span></span>
-<span><span class="co">##  [69] sparseMatrixStats_1.12.2  munsell_0.5.0            </span></span>
-<span><span class="co">##  [71] scales_1.2.1              xtable_1.8-4             </span></span>
-<span><span class="co">##  [73] glue_1.6.2                tools_4.3.1              </span></span>
-<span><span class="co">##  [75] locfit_1.5-9.8            fs_1.6.3                 </span></span>
-<span><span class="co">##  [77] grid_4.3.1                DropletUtils_1.20.0      </span></span>
-<span><span class="co">##  [79] edgeR_3.42.4              colorspace_2.1-0         </span></span>
-<span><span class="co">##  [81] GenomeInfoDbData_1.2.10   raster_3.6-23            </span></span>
-<span><span class="co">##  [83] beeswarm_0.4.0            vipor_0.4.5              </span></span>
-<span><span class="co">##  [85] cli_3.6.1                 textshaping_0.3.6        </span></span>
-<span><span class="co">##  [87] fansi_1.0.4               viridisLite_0.4.2        </span></span>
-<span><span class="co">##  [89] svglite_2.1.1             dplyr_1.1.3              </span></span>
-<span><span class="co">##  [91] gtable_0.3.4              R.methodsS3_1.8.2        </span></span>
-<span><span class="co">##  [93] sass_0.4.7                digest_0.6.33            </span></span>
-<span><span class="co">##  [95] dqrng_0.3.1               rjson_0.2.21             </span></span>
-<span><span class="co">##  [97] htmlwidgets_1.6.2         memoise_2.0.1            </span></span>
-<span><span class="co">##  [99] htmltools_0.5.6           pkgdown_2.0.7            </span></span>
-<span><span class="co">## [101] R.oo_1.25.0               lifecycle_1.0.3          </span></span>
-<span><span class="co">## [103] mime_0.12</span></span></code></pre>
+<span><span class="co">##  [1] bitops_1.0-7             gridExtra_2.3            rlang_1.1.2             </span></span>
+<span><span class="co">##  [4] magrittr_2.0.3           svgPanZoom_0.3.4         shinydashboard_0.7.2    </span></span>
+<span><span class="co">##  [7] compiler_4.3.2           png_0.1-8                systemfonts_1.0.5       </span></span>
+<span><span class="co">## [10] fftwtools_0.9-11         vctrs_0.6.5              stringr_1.5.1           </span></span>
+<span><span class="co">## [13] pkgconfig_2.0.3          SpatialExperiment_1.12.0 crayon_1.5.2            </span></span>
+<span><span class="co">## [16] fastmap_1.1.1            magick_2.8.1             XVector_0.42.0          </span></span>
+<span><span class="co">## [19] ellipsis_0.3.2           utf8_1.2.4               promises_1.2.1          </span></span>
+<span><span class="co">## [22] rmarkdown_2.25           ggbeeswarm_0.7.2         ragg_1.2.7              </span></span>
+<span><span class="co">## [25] purrr_1.0.2              xfun_0.41                zlibbioc_1.48.0         </span></span>
+<span><span class="co">## [28] cachem_1.0.8             jsonlite_1.8.8           later_1.3.2             </span></span>
+<span><span class="co">## [31] rhdf5filters_1.14.1      Rhdf5lib_1.24.1          BiocParallel_1.36.0     </span></span>
+<span><span class="co">## [34] jpeg_0.1-10              tiff_0.1-12              terra_1.7-55            </span></span>
+<span><span class="co">## [37] parallel_4.3.2           R6_2.5.1                 bslib_0.6.1             </span></span>
+<span><span class="co">## [40] stringi_1.8.3            RColorBrewer_1.1-3       jquerylib_0.1.4         </span></span>
+<span><span class="co">## [43] Rcpp_1.0.11              bookdown_0.37            knitr_1.45              </span></span>
+<span><span class="co">## [46] httpuv_1.6.13            nnls_1.5                 tidyselect_1.2.0        </span></span>
+<span><span class="co">## [49] viridis_0.6.4            yaml_2.3.8               codetools_0.2-19        </span></span>
+<span><span class="co">## [52] lattice_0.21-9           tibble_3.2.1             shiny_1.8.0             </span></span>
+<span><span class="co">## [55] evaluate_0.23            desc_1.4.3               pillar_1.9.0            </span></span>
+<span><span class="co">## [58] BiocManager_1.30.22      generics_0.1.3           sp_2.1-2                </span></span>
+<span><span class="co">## [61] RCurl_1.98-1.13          ggplot2_3.4.4            munsell_0.5.0           </span></span>
+<span><span class="co">## [64] scales_1.3.0             xtable_1.8-4             glue_1.6.2              </span></span>
+<span><span class="co">## [67] tools_4.3.2              locfit_1.5-9.8           fs_1.6.3                </span></span>
+<span><span class="co">## [70] grid_4.3.2               colorspace_2.1-0         GenomeInfoDbData_1.2.11 </span></span>
+<span><span class="co">## [73] raster_3.6-26            beeswarm_0.4.0           vipor_0.4.5             </span></span>
+<span><span class="co">## [76] cli_3.6.2                textshaping_0.3.7        fansi_1.0.6             </span></span>
+<span><span class="co">## [79] viridisLite_0.4.2        svglite_2.1.3            dplyr_1.1.4             </span></span>
+<span><span class="co">## [82] gtable_0.3.4             sass_0.4.8               digest_0.6.33           </span></span>
+<span><span class="co">## [85] rjson_0.2.21             htmlwidgets_1.6.4        memoise_2.0.1           </span></span>
+<span><span class="co">## [88] htmltools_0.5.7          pkgdown_2.0.7            lifecycle_1.0.4         </span></span>
+<span><span class="co">## [91] mime_0.12</span></span></code></pre>
 </div>
 <div class="section level2">
 <h2 id="references">References<a class="anchor" aria-label="anchor" href="#references"></a>
