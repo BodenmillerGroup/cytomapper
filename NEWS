@@ -189,3 +189,6 @@ Changes in version 1.13.1 (2023-09-26):
 
 Changes in version 1.15.1 (2023-12-10):
 + the unit tests for compImage have now been adjusted to account for correct spillover induction
+
+Changes in version 1.15.2 (2023-12-13):
++ change of package maintenance to Lasse Meyer
