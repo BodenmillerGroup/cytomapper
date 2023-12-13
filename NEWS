@@ -186,3 +186,6 @@ Changes in version 1.11.3 (2023-01-23):
 
 Changes in version 1.13.1 (2023-09-26):
 + loadImages: fixed pattern argument to only test on the actual files and not the path.
+
+Changes in version 1.15.1 (2023-12-10):
++ the unit tests for compImage have now been adjusted to account for correct spillover induction
