@@ -15,7 +15,7 @@ Description:
     cell-level information (expression and/or metadata) on segmentation masks 
     and 3. gating and visualisation of single cells.
 Authors@R: 
-    c(person("Nils", "Eling", role = c("aut", "cre"), 
+    c(person("Nils", "Eling", role = c("aut"), 
       email = "nils.eling@dqbm.uzh.ch",
       comment = c(ORCID = "0000-0002-4711-1176")),
       person("Nicolas", "Damond", role = c("aut"), 
