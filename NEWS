@@ -192,3 +192,6 @@ Changes in version 1.15.1 (2023-12-10):
 
 Changes in version 1.15.2 (2023-12-13):
 + change of package maintenance to Lasse Meyer
+
+Changes in version 1.15.3 (2023-12-15):
++ Bug fix: empty gates now return an empty object rather than the previous object

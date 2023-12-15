@@ -379,6 +379,10 @@
     if (is.null(objValues[[paste0("object", iter)]])) {
         return(NULL)
     }
+    
+    if (ncol(objValues[[paste0("object", iter)]]) == 0) {
+        return(NULL)
+    }
 
     # Build data frame
     cur_df <- as.data.frame(t(assay(objValues[[paste0("object", iter)]], 
@@ -428,11 +432,11 @@
         objValues[[paste0("object", iter + 1)]] <- 
             next_obj[,cur_selection$selected_]
     } else {
-        # Set next object to NULL
-        objValues[[paste0("object", iter + 1)]] <- NULL
+        # Save empty object
+        objValues[[paste0("object", iter + 1)]] <- next_obj[,cur_selection$selected_]
 
         # Clear all following objects
-        .clearObjects(objValues, iter)
+        .clearObjects(objValues, iter + 1)
     }
 
 }
@@ -441,10 +445,12 @@
 .plotScatter <- function(input, rValues, objValues, iter, cur_val){
 
     if (!is.null(objValues[[paste0("object", iter)]])) {
+        if (ncol(objValues[[paste0("object", iter)]]) > 0) {
+        
         cur_df <- as.data.frame(t(assay(objValues[[paste0("object", iter)]],
                                         input$assay)))
         cur_df$sample <- input$sample
-
+    
         p <- ggplot(cur_df) +
             geom_point(aes(!!sym(input[[paste0("Marker_", cur_val)]]),
                            !!sym(input[[paste0("Marker_", cur_val + 1)]])),
@@ -456,19 +462,22 @@
             xlim(c(rValues$ranges[input[[paste0("Marker_", cur_val)]], 1],
                     rValues$ranges[input[[paste0("Marker_", cur_val)]], 2]))
 
-        if (!is.null(objValues[[paste0("object", iter + 1)]])) {
+        if (!is.null(objValues[[paste0("object", iter + 1)]]) ) {
+            if (ncol(objValues[[paste0("object", iter + 1)]]) > 0) {
 
-            cur_df_1 <- as.data.frame(t(assay(objValues[[paste0("object", 
-                                                                iter + 1)]],
-                                            input$assay)))
-            cur_df_1$sample <- input$sample
+                cur_df_1 <- as.data.frame(t(assay(objValues[[paste0("object", 
+                                                                    iter + 1)]],
+                                                input$assay)))
+                cur_df_1$sample <- input$sample
 
-            p <- p + geom_point(aes(!!sym(input[[paste0("Marker_", 
+                p <- p + geom_point(aes(!!sym(input[[paste0("Marker_", 
                                                             cur_val)]]),
                                     !!sym(input[[paste0("Marker_", 
                                                             cur_val + 1)]])),
                                 show.legend = FALSE, data = cur_df_1, 
                                 colour = "red")
+            }
+        }
         }
 
     } else {
@@ -497,6 +506,7 @@
 .plotViolin <- function(input, rValues, objValues, iter, cur_val, cell_id){
 
     if (!is.null(objValues[[paste0("object", iter)]])) {
+        if (ncol(objValues[[paste0("object", iter)]]) > 0) {
 
         cur_df <- as.data.frame(t(assay(objValues[[paste0("object", iter)]],
                                         input$assay)))
@@ -527,37 +537,40 @@
         }
 
         if (!is.null(objValues[[paste0("object", iter + 1)]])) {
+            if (ncol(objValues[[paste0("object", iter + 1)]]) > 0) {
 
-            cur_df$selected <- 
-                colData(objValues[[paste0("object", iter)]])[,cell_id] %in%
-                colData(objValues[[paste0("object", iter + 1)]])[,cell_id]
+                cur_df$selected <- 
+                    colData(objValues[[paste0("object", iter)]])[,cell_id] %in%
+                    colData(objValues[[paste0("object", iter + 1)]])[,cell_id]
 
-            if (nrow(cur_df) < 3) {
-                p <- p +
-                    geom_point(aes(x = !!sym("sample"),
+                if (nrow(cur_df) < 3) {
+                    p <- p +
+                     geom_point(aes(x = !!sym("sample"),
                                     y = !!sym(input[[paste0("Marker_", 
                                                             cur_val)]]),
-                                    colour = !!sym("selected")),
-                                show.legend = FALSE, data = cur_df) +
-                    scale_colour_manual(values = c(`FALSE` = "black",
+                                     colour = !!sym("selected")),
+                                   show.legend = FALSE, data = cur_df) +
+                     scale_colour_manual(values = c(`FALSE` = "black",
                                                     `TRUE` = "red"))
-            } else {
-                p <- ggplot(cur_df, 
-                            aes(x = !!sym("sample"),
-                                 y = !!sym(input[[paste0("Marker_", cur_val)]]))) +
-                    geom_violin(show.legend = FALSE) +
-                    geom_quasirandom(aes(colour = !!sym("selected")),
-                                    show.legend = FALSE, 
-                                    dodge.width = NULL) +
-                    scale_colour_manual(values = c(`FALSE` = "black",
-                                                   `TRUE` = "red")) +
-                    xlab(input$sample) +
-                    theme(axis.text.x = element_blank(),
-                          panel.background = element_blank()) +
-                    ylim(c(rValues$ranges[input[[paste0("Marker_", cur_val)]], 1] - 0.1, 
-                           rValues$ranges[input[[paste0("Marker_", cur_val)]], 2] + 0.1))
+                    } else {
+                    p <- ggplot(cur_df, 
+                                aes(x = !!sym("sample"),
+                                     y = !!sym(input[[paste0("Marker_", cur_val)]]))) +
+                        geom_violin(show.legend = FALSE) +
+                        geom_quasirandom(aes(colour = !!sym("selected")),
+                                        show.legend = FALSE, 
+                                        dodge.width = NULL) +
+                        scale_colour_manual(values = c(`FALSE` = "black",
+                                                       `TRUE` = "red")) +
+                        xlab(input$sample) +
+                        theme(axis.text.x = element_blank(),
+                              panel.background = element_blank()) +
+                        ylim(c(rValues$ranges[input[[paste0("Marker_", cur_val)]], 1] - 0.1, 
+                               rValues$ranges[input[[paste0("Marker_", cur_val)]], 2] + 0.1))
+                }
             }
 
+        }
         }
 
     } else {
@@ -772,14 +785,16 @@
 
         cur_mask <- mask[mcols(mask)[,img_id] == input$sample]
 
-        if (unique(mcols(cur_mask)[,img_id]) != 
-            unique(colData(cur_object)[,img_id])) {
-            return(NULL)
+        if (ncol(cur_object) > 0) {
+            if (unique(mcols(cur_mask)[,img_id]) != 
+                unique(colData(cur_object)[,img_id])) {
+                return(NULL)
+            }
         }
-
+        
         if (is.null(image)) {
             
-            if (cur_ln == 1) {
+            if (cur_ln == 1 | ncol(cur_object) == 0) {
                 suppressMessages(svgPanZoom(stringSVG(
                     plotCells(mask = cur_mask,
                                 legend = NULL,
@@ -812,7 +827,7 @@
             cur_image <- image[mcols(image)[,img_id] == input$sample]
             
             
-            if (cur_ln == 1) {
+            if (cur_ln == 1 | ncol(cur_object) == 0) {
                 suppressMessages(svgPanZoom(stringSVG(
                     plotPixels(image = cur_image,
                                 colour_by = cur_markers,
@@ -856,8 +871,10 @@
             cur_object <- reactiveValuesToList(objValues)
             cur_object <- cur_object[!unlist(lapply(cur_object, is.null))]
             cur_object <- cur_object[[paste0("object", length(cur_object))]]
-
-            cur_object$cytomapper_CellLabel <- input$labelCellsBy
+            
+            if (ncol(cur_object) > 0) {
+                cur_object$cytomapper_CellLabel <- input$labelCellsBy
+            }
 
             # Add session info
             metadata(cur_object)$cytomapper_SessionInfo <- sessionInfo()
