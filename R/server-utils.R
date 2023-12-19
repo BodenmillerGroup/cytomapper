@@ -175,7 +175,7 @@
 
         # Reset gates and objects
         .clearObjects(objValues, iter = 1)
-        .clearBrush(input, session, iter = 1)
+        .clearBrush(input, session, iter = 0)
 
     }, ignoreInit = TRUE)
 
@@ -198,7 +198,7 @@
 
         # Reset gates and objects
         .clearObjects(objValues, iter = 1)
-        .clearBrush(input, session, iter = 1)
+        .clearBrush(input, session, iter = 0)
     })
 
     # Marker change observer - change tab if markers change
@@ -444,8 +444,8 @@
 # Scatter plot helpers
 .plotScatter <- function(input, rValues, objValues, iter, cur_val){
 
-    if (!is.null(objValues[[paste0("object", iter)]])) {
-        if (ncol(objValues[[paste0("object", iter)]]) > 0) {
+    if (!is.null(objValues[[paste0("object", iter)]]) & 
+        isTRUE(ncol(objValues[[paste0("object", iter)]]) > 0)) {
         
         cur_df <- as.data.frame(t(assay(objValues[[paste0("object", iter)]],
                                         input$assay)))
@@ -478,7 +478,6 @@
                                 colour = "red")
             }
         }
-        }
 
     } else {
 
@@ -505,8 +504,8 @@
 # Violin plot helper
 .plotViolin <- function(input, rValues, objValues, iter, cur_val, cell_id){
 
-    if (!is.null(objValues[[paste0("object", iter)]])) {
-        if (ncol(objValues[[paste0("object", iter)]]) > 0) {
+    if (!is.null(objValues[[paste0("object", iter)]]) & 
+        isTRUE(ncol(objValues[[paste0("object", iter)]]) > 0)) {
 
         cur_df <- as.data.frame(t(assay(objValues[[paste0("object", iter)]],
                                         input$assay)))
@@ -570,7 +569,6 @@
                 }
             }
 
-        }
         }
 
     } else {
