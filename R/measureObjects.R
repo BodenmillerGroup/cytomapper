@@ -254,8 +254,8 @@ measureObjects <- function(mask,
     cur_colData <- colData(object)
     cur_df <- cbind(mcols(image), mcols(mask))
     cur_df <- cur_df[,unique(names(cur_df)), drop=FALSE]
-    cur_colData <- merge(as.data.frame(cur_colData), 
-                         as.data.frame(cur_df), 
+    cur_colData <- merge(as.data.frame(as.matrix(cur_colData)), 
+                         as.data.frame(as.matrix(cur_df)), 
                          by = img_id, sort = FALSE)
     colData(object) <- as(cur_colData, "DataFrame")
     
