@@ -143,6 +143,9 @@ Nils Eling, Nicolas Damond, Tobias Hoch, Bernd Bodenmiller (2020). cytomapper: a
 
 [Tobias Hoch](https://github.com/toobiwankenobi)
 
+## Maintainer
+
+[Lasse Meyer](https://github.com/lassedochreden)
 
 ## References
 
