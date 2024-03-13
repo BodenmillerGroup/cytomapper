@@ -78,13 +78,13 @@
 #' haralick (\code{h.}) features. Default features are the following:
 #'
 #' \itemize{
-#' \item{s.area}{object size in pixels}
-#' \item{s.radius.mean}{mean object radius in pixels}
-#' \item{m.cx}{x centroid position of object}
-#' \item{m.cy}{y centroid position of object}
-#' \item{m.majoraxis}{major axis length in pixels of elliptical fit}
-#' \item{m.eccentricity}{elliptical eccentricity. 1 meaning straight line and 0
-#' meaning circle.}
+#' \item s.area - object size in pixels
+#' \item s.radius.mean - mean object radius in pixels
+#' \item m.cx - x centroid position of object
+#' \item m.cy - y centroid position of object
+#' \item m.majoraxis - major axis length in pixels of elliptical fit
+#' \item m.eccentricity - elliptical eccentricity. 1 meaning straight line and 0
+#' meaning circle.
 #' }
 #'
 #' @section Computing quantiles:
@@ -254,8 +254,8 @@ measureObjects <- function(mask,
     cur_colData <- colData(object)
     cur_df <- cbind(mcols(image), mcols(mask))
     cur_df <- cur_df[,unique(names(cur_df)), drop=FALSE]
-    cur_colData <- merge(as.data.frame(cur_colData), 
-                         as.data.frame(cur_df), 
+    cur_colData <- merge(as.data.frame(as.matrix(cur_colData)), 
+                         as.data.frame(as.matrix(cur_df)), 
                          by = img_id, sort = FALSE)
     colData(object) <- as(cur_colData, "DataFrame")
     

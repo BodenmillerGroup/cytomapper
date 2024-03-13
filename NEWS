@@ -192,3 +192,6 @@ Changes in version 1.15.1 (2023-12-10):
 
 Changes in version 1.15.2 (2023-12-13):
 + change of package maintenance to Lasse Meyer
+
+Changes in version 1.15.3 (2024-03-13):
++ measureObject fixes for Bioc 3.19 release
