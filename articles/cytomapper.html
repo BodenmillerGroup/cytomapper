@@ -33,7 +33,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">cytomapper</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="">1.15.3</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="">1.15.4</span>
       </span>
     </div>
 
@@ -101,7 +101,7 @@ ZurichInstitute for Molecular Health Sciences, ETH
 Zurich<br><a class="author_email" href="mailto:#"></a><a href="mailto:tobias.hoch@dqbm.uzh.ch" class="email">tobias.hoch@dqbm.uzh.ch</a>
       </address>
                   
-            <h4 data-toc-skip class="date">13 March 2024</h4>
+            <h4 data-toc-skip class="date">21 March 2024</h4>
       
       <small class="dont-index">Source: <a href="https://github.com/BodenmillerGroup/cytomapper/blob/HEAD/vignettes/cytomapper.Rmd" class="external-link"><code>vignettes/cytomapper.Rmd</code></a></small>
       <div class="hidden name"><code>cytomapper.Rmd</code></div>
@@ -564,32 +564,32 @@ stored in <code>colData(sce)</code>:</p>
 <div class="sourceCode" id="cb49"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu">colData</span><span class="op">(</span><span class="va">sce</span><span class="op">)</span></span></code></pre></div>
 <pre><code><span><span class="co">## DataFrame with 362 rows and 8 columns</span></span>
-<span><span class="co">##         ImageNb   object_id      s.area    s.radius.mean             m.cx</span></span>
-<span><span class="co">##     &lt;character&gt; &lt;character&gt; &lt;character&gt;      &lt;character&gt;      &lt;character&gt;</span></span>
-<span><span class="co">## 1             1         824          55 3.93042402372495 6.21818181818182</span></span>
-<span><span class="co">## 2             1         835           9 1.67054458360957 94.4444444444444</span></span>
-<span><span class="co">## 3             1         839          17  2.4799356506422 46.2352941176471</span></span>
-<span><span class="co">## 4             1         844          13 2.31966091925686 33.9230769230769</span></span>
-<span><span class="co">## 5             1         847          87 4.92716958045682 83.4137931034483</span></span>
-<span><span class="co">## ...         ...         ...         ...              ...              ...</span></span>
-<span><span class="co">## 358           3        4165          10 1.34997675171882             35.3</span></span>
-<span><span class="co">## 359           3        4167          34 3.09718254764917 52.0882352941176</span></span>
-<span><span class="co">## 360           3        4173           1                0                1</span></span>
-<span><span class="co">## 361           3        4190           2              0.5             21.5</span></span>
-<span><span class="co">## 362           3        4209          12 1.60131815610507             79.5</span></span>
-<span><span class="co">##                 m.cy      m.majoraxis    m.eccentricity</span></span>
-<span><span class="co">##          &lt;character&gt;      &lt;character&gt;       &lt;character&gt;</span></span>
-<span><span class="co">## 1   2.96363636363636 12.1765876303875 0.863513217955927</span></span>
-<span><span class="co">## 2   1.22222222222222 8.28708682149756 0.985033858104587</span></span>
-<span><span class="co">## 3   1.70588235294118 10.5988572767333 0.977839168565906</span></span>
-<span><span class="co">## 4   1.30769230769231 11.0343832579437 0.985930025367219</span></span>
-<span><span class="co">## 5   4.66666666666667 13.1428328145546 0.570827356147255</span></span>
-<span><span class="co">## ...              ...              ...               ...</span></span>
-<span><span class="co">## 358               99 4.08496000909025 0.514302157608914</span></span>
-<span><span class="co">## 359 98.7647058823529 11.0795817499451 0.932568604791399</span></span>
-<span><span class="co">## 360              100                0                 0</span></span>
-<span><span class="co">## 361              100                2                 1</span></span>
-<span><span class="co">## 362 99.3333333333333 5.53774924194582 0.842700971600099</span></span></code></pre>
+<span><span class="co">##         ImageNb object_id    s.area s.radius.mean      m.cx      m.cy</span></span>
+<span><span class="co">##     &lt;character&gt; &lt;numeric&gt; &lt;numeric&gt;     &lt;numeric&gt; &lt;numeric&gt; &lt;numeric&gt;</span></span>
+<span><span class="co">## 1             1       824        55       3.93042   6.21818   2.96364</span></span>
+<span><span class="co">## 2             1       835         9       1.67054  94.44444   1.22222</span></span>
+<span><span class="co">## 3             1       839        17       2.47994  46.23529   1.70588</span></span>
+<span><span class="co">## 4             1       844        13       2.31966  33.92308   1.30769</span></span>
+<span><span class="co">## 5             1       847        87       4.92717  83.41379   4.66667</span></span>
+<span><span class="co">## ...         ...       ...       ...           ...       ...       ...</span></span>
+<span><span class="co">## 358           3      4165        10       1.34998   35.3000   99.0000</span></span>
+<span><span class="co">## 359           3      4167        34       3.09718   52.0882   98.7647</span></span>
+<span><span class="co">## 360           3      4173         1       0.00000    1.0000  100.0000</span></span>
+<span><span class="co">## 361           3      4190         2       0.50000   21.5000  100.0000</span></span>
+<span><span class="co">## 362           3      4209        12       1.60132   79.5000   99.3333</span></span>
+<span><span class="co">##     m.majoraxis m.eccentricity</span></span>
+<span><span class="co">##       &lt;numeric&gt;      &lt;numeric&gt;</span></span>
+<span><span class="co">## 1      12.17659       0.863513</span></span>
+<span><span class="co">## 2       8.28709       0.985034</span></span>
+<span><span class="co">## 3      10.59886       0.977839</span></span>
+<span><span class="co">## 4      11.03438       0.985930</span></span>
+<span><span class="co">## 5      13.14283       0.570827</span></span>
+<span><span class="co">## ...         ...            ...</span></span>
+<span><span class="co">## 358     4.08496       0.514302</span></span>
+<span><span class="co">## 359    11.07958       0.932569</span></span>
+<span><span class="co">## 360     0.00000       0.000000</span></span>
+<span><span class="co">## 361     2.00000       1.000000</span></span>
+<span><span class="co">## 362     5.53775       0.842701</span></span></code></pre>
 </div>
 </div>
 <div class="section level2">
@@ -1350,48 +1350,70 @@ package. Nils and Tobias implemented and maintain the
 <span><span class="co">## </span></span>
 <span><span class="co">## other attached packages:</span></span>
 <span><span class="co">##  [1] ggplot2_3.5.0               cowplot_1.1.3              </span></span>
-<span><span class="co">##  [3] cytomapper_1.15.3           SingleCellExperiment_1.24.0</span></span>
-<span><span class="co">##  [5] SummarizedExperiment_1.32.0 Biobase_2.62.0             </span></span>
-<span><span class="co">##  [7] GenomicRanges_1.54.1        GenomeInfoDb_1.38.7        </span></span>
-<span><span class="co">##  [9] IRanges_2.36.0              S4Vectors_0.40.2           </span></span>
-<span><span class="co">## [11] BiocGenerics_0.48.1         MatrixGenerics_1.14.0      </span></span>
-<span><span class="co">## [13] matrixStats_1.2.0           EBImage_4.44.0             </span></span>
-<span><span class="co">## [15] BiocStyle_2.30.0           </span></span>
+<span><span class="co">##  [3] cytomapper_1.15.4           SingleCellExperiment_1.22.0</span></span>
+<span><span class="co">##  [5] SummarizedExperiment_1.30.2 Biobase_2.60.0             </span></span>
+<span><span class="co">##  [7] GenomicRanges_1.52.1        GenomeInfoDb_1.36.4        </span></span>
+<span><span class="co">##  [9] IRanges_2.34.1              S4Vectors_0.38.2           </span></span>
+<span><span class="co">## [11] BiocGenerics_0.46.0         MatrixGenerics_1.12.3      </span></span>
+<span><span class="co">## [13] matrixStats_1.2.0           EBImage_4.42.0             </span></span>
+<span><span class="co">## [15] BiocStyle_2.28.1           </span></span>
 <span><span class="co">## </span></span>
 <span><span class="co">## loaded via a namespace (and not attached):</span></span>
-<span><span class="co">##  [1] bitops_1.0-7             gridExtra_2.3            rlang_1.1.3             </span></span>
-<span><span class="co">##  [4] magrittr_2.0.3           svgPanZoom_0.3.4         shinydashboard_0.7.2    </span></span>
-<span><span class="co">##  [7] compiler_4.3.3           png_0.1-8                systemfonts_1.0.6       </span></span>
-<span><span class="co">## [10] fftwtools_0.9-11         vctrs_0.6.5              pkgconfig_2.0.3         </span></span>
-<span><span class="co">## [13] SpatialExperiment_1.12.0 crayon_1.5.2             fastmap_1.1.1           </span></span>
-<span><span class="co">## [16] magick_2.8.3             XVector_0.42.0           ellipsis_0.3.2          </span></span>
-<span><span class="co">## [19] labeling_0.4.3           utf8_1.2.4               promises_1.2.1          </span></span>
-<span><span class="co">## [22] rmarkdown_2.26           ggbeeswarm_0.7.2         ragg_1.2.7              </span></span>
-<span><span class="co">## [25] purrr_1.0.2              xfun_0.42                zlibbioc_1.48.0         </span></span>
-<span><span class="co">## [28] cachem_1.0.8             jsonlite_1.8.8           highr_0.10              </span></span>
-<span><span class="co">## [31] later_1.3.2              rhdf5filters_1.14.1      DelayedArray_0.28.0     </span></span>
-<span><span class="co">## [34] Rhdf5lib_1.24.2          BiocParallel_1.36.0      jpeg_0.1-10             </span></span>
-<span><span class="co">## [37] tiff_0.1-12              terra_1.7-71             parallel_4.3.3          </span></span>
-<span><span class="co">## [40] R6_2.5.1                 bslib_0.6.1              RColorBrewer_1.1-3      </span></span>
-<span><span class="co">## [43] jquerylib_0.1.4          Rcpp_1.0.12              bookdown_0.38           </span></span>
-<span><span class="co">## [46] knitr_1.45               httpuv_1.6.14            Matrix_1.6-5            </span></span>
-<span><span class="co">## [49] nnls_1.5                 tidyselect_1.2.1         viridis_0.6.5           </span></span>
-<span><span class="co">## [52] abind_1.4-5              yaml_2.3.8               codetools_0.2-19        </span></span>
-<span><span class="co">## [55] lattice_0.22-5           tibble_3.2.1             withr_3.0.0             </span></span>
-<span><span class="co">## [58] shiny_1.8.0              evaluate_0.23            desc_1.4.3              </span></span>
-<span><span class="co">## [61] pillar_1.9.0             BiocManager_1.30.22      generics_0.1.3          </span></span>
-<span><span class="co">## [64] sp_2.1-3                 RCurl_1.98-1.14          munsell_0.5.0           </span></span>
-<span><span class="co">## [67] scales_1.3.0             xtable_1.8-4             glue_1.7.0              </span></span>
-<span><span class="co">## [70] tools_4.3.3              locfit_1.5-9.9           fs_1.6.3                </span></span>
-<span><span class="co">## [73] rhdf5_2.46.1             grid_4.3.3               colorspace_2.1-0        </span></span>
-<span><span class="co">## [76] GenomeInfoDbData_1.2.11  raster_3.6-26            beeswarm_0.4.0          </span></span>
-<span><span class="co">## [79] HDF5Array_1.30.1         vipor_0.4.7              cli_3.6.2               </span></span>
-<span><span class="co">## [82] textshaping_0.3.7        fansi_1.0.6              viridisLite_0.4.2       </span></span>
-<span><span class="co">## [85] S4Arrays_1.2.1           svglite_2.1.3            dplyr_1.1.4             </span></span>
-<span><span class="co">## [88] gtable_0.3.4             sass_0.4.8               digest_0.6.35           </span></span>
-<span><span class="co">## [91] SparseArray_1.2.4        farver_2.1.1             rjson_0.2.21            </span></span>
-<span><span class="co">## [94] htmlwidgets_1.6.4        memoise_2.0.1            htmltools_0.5.7         </span></span>
-<span><span class="co">## [97] pkgdown_2.0.7            lifecycle_1.0.4          mime_0.12</span></span></code></pre>
+<span><span class="co">##   [1] bitops_1.0-7              gridExtra_2.3            </span></span>
+<span><span class="co">##   [3] rlang_1.1.3               magrittr_2.0.3           </span></span>
+<span><span class="co">##   [5] svgPanZoom_0.3.4          shinydashboard_0.7.2     </span></span>
+<span><span class="co">##   [7] compiler_4.3.3            DelayedMatrixStats_1.22.6</span></span>
+<span><span class="co">##   [9] png_0.1-8                 systemfonts_1.0.6        </span></span>
+<span><span class="co">##  [11] fftwtools_0.9-11          vctrs_0.6.5              </span></span>
+<span><span class="co">##  [13] pkgconfig_2.0.3           SpatialExperiment_1.10.0 </span></span>
+<span><span class="co">##  [15] crayon_1.5.2              fastmap_1.1.1            </span></span>
+<span><span class="co">##  [17] magick_2.8.3              XVector_0.40.0           </span></span>
+<span><span class="co">##  [19] ellipsis_0.3.2            labeling_0.4.3           </span></span>
+<span><span class="co">##  [21] scuttle_1.10.3            utf8_1.2.4               </span></span>
+<span><span class="co">##  [23] promises_1.2.1            rmarkdown_2.26           </span></span>
+<span><span class="co">##  [25] ggbeeswarm_0.7.2          ragg_1.3.0               </span></span>
+<span><span class="co">##  [27] purrr_1.0.2               xfun_0.42                </span></span>
+<span><span class="co">##  [29] zlibbioc_1.46.0           cachem_1.0.8             </span></span>
+<span><span class="co">##  [31] beachmat_2.16.0           jsonlite_1.8.8           </span></span>
+<span><span class="co">##  [33] highr_0.10                later_1.3.2              </span></span>
+<span><span class="co">##  [35] rhdf5filters_1.12.1       DelayedArray_0.26.7      </span></span>
+<span><span class="co">##  [37] Rhdf5lib_1.22.1           BiocParallel_1.34.2      </span></span>
+<span><span class="co">##  [39] terra_1.7-71              jpeg_0.1-10              </span></span>
+<span><span class="co">##  [41] tiff_0.1-12               parallel_4.3.3           </span></span>
+<span><span class="co">##  [43] R6_2.5.1                  bslib_0.6.1              </span></span>
+<span><span class="co">##  [45] RColorBrewer_1.1-3        limma_3.56.2             </span></span>
+<span><span class="co">##  [47] jquerylib_0.1.4           Rcpp_1.0.12              </span></span>
+<span><span class="co">##  [49] bookdown_0.38             knitr_1.45               </span></span>
+<span><span class="co">##  [51] R.utils_2.12.3            nnls_1.5                 </span></span>
+<span><span class="co">##  [53] httpuv_1.6.14             Matrix_1.6-5             </span></span>
+<span><span class="co">##  [55] tidyselect_1.2.1          viridis_0.6.5            </span></span>
+<span><span class="co">##  [57] abind_1.4-5               yaml_2.3.8               </span></span>
+<span><span class="co">##  [59] codetools_0.2-19          lattice_0.22-5           </span></span>
+<span><span class="co">##  [61] tibble_3.2.1              withr_3.0.0              </span></span>
+<span><span class="co">##  [63] shiny_1.8.0               evaluate_0.23            </span></span>
+<span><span class="co">##  [65] desc_1.4.3                pillar_1.9.0             </span></span>
+<span><span class="co">##  [67] BiocManager_1.30.22       generics_0.1.3           </span></span>
+<span><span class="co">##  [69] sp_2.1-3                  RCurl_1.98-1.14          </span></span>
+<span><span class="co">##  [71] sparseMatrixStats_1.12.2  munsell_0.5.0            </span></span>
+<span><span class="co">##  [73] scales_1.3.0              xtable_1.8-4             </span></span>
+<span><span class="co">##  [75] glue_1.7.0                tools_4.3.3              </span></span>
+<span><span class="co">##  [77] locfit_1.5-9.9            fs_1.6.3                 </span></span>
+<span><span class="co">##  [79] rhdf5_2.44.0              grid_4.3.3               </span></span>
+<span><span class="co">##  [81] DropletUtils_1.20.0       edgeR_3.42.4             </span></span>
+<span><span class="co">##  [83] colorspace_2.1-0          GenomeInfoDbData_1.2.10  </span></span>
+<span><span class="co">##  [85] raster_3.6-26             beeswarm_0.4.0           </span></span>
+<span><span class="co">##  [87] HDF5Array_1.28.1          vipor_0.4.7              </span></span>
+<span><span class="co">##  [89] cli_3.6.2                 textshaping_0.3.7        </span></span>
+<span><span class="co">##  [91] fansi_1.0.6               viridisLite_0.4.2        </span></span>
+<span><span class="co">##  [93] S4Arrays_1.0.6            svglite_2.1.3            </span></span>
+<span><span class="co">##  [95] dplyr_1.1.4               gtable_0.3.4             </span></span>
+<span><span class="co">##  [97] R.methodsS3_1.8.2         sass_0.4.9               </span></span>
+<span><span class="co">##  [99] digest_0.6.35             dqrng_0.3.2              </span></span>
+<span><span class="co">## [101] farver_2.1.1              rjson_0.2.21             </span></span>
+<span><span class="co">## [103] htmlwidgets_1.6.4         memoise_2.0.1            </span></span>
+<span><span class="co">## [105] htmltools_0.5.7           pkgdown_2.0.7            </span></span>
+<span><span class="co">## [107] R.oo_1.26.0               lifecycle_1.0.4          </span></span>
+<span><span class="co">## [109] mime_0.12</span></span></code></pre>
 </div>
 <div class="section level2">
 <h2 class="unnumbered" id="references">References<a class="anchor" aria-label="anchor" href="#references"></a>
