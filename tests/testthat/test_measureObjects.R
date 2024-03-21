@@ -237,6 +237,11 @@ test_that("measureObjects: defaults work", {
                                        feature_types = c("basic", "haralick"), haralick_feature = c("var.s1", "test"), haralick_scales = c(1, 3)),
                  regexp = "Only haralick features of type asm.s1, con.s1, cor.s1, var.s1, idm.s1, sav.s1, sva.s1, sen.s1, ent.s1, dva.s1, den.s1, f12.s1, f13.s1, asm.s3, con.s3, cor.s3, var.s3, idm.s3, sav.s3, sva.s3, sen.s3, ent.s3, dva.s3, den.s3, f12.s3, f13.s3 allowed.",
                  fixed = TRUE)
+    
+    # Test for character img_id
+    expect_silent(sce <- measureObjects(pancreasMasks, pancreasImages, img_id = "ImageName"))
+    expect_true(is.numeric(sce$object_id))
+    expect_equal(sce$object_id[1:10], c(824, 835, 839, 844, 847, 853, 859, 864, 865, 872))
 })
 
 test_that("measureObjects: different settings work", {
