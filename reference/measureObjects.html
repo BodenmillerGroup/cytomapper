@@ -3,12 +3,12 @@
 measureObjects function computes intensity features (also referred to
 as basic features; e.g. mean intensity), shape features (e.g. area), moment
 features (e.g. position) and haralick features. These features are returned
-in form of a SingleCellExperiment or 
+in form of a SingleCellExperiment or
 SpatialExperiment object."><!-- mathjax --><script src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/MathJax.js" integrity="sha256-nvJJv9wWKEm88qvoQl9ekL2J+k/RWIsaSScxxlsrv8k=" crossorigin="anonymous"></script><script src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/config/TeX-AMS-MML_HTMLorMML.js" integrity="sha256-84DKXVJXs0/F8OTMzX4UR909+jtl4G7SPypPavF+GfA=" crossorigin="anonymous"></script><!--[if lt IE 9]>
 <script src="https://oss.maxcdn.com/html5shiv/3.7.3/html5shiv.min.js"></script>
 <script src="https://oss.maxcdn.com/respond/1.4.2/respond.min.js"></script>
 <![endif]--></head><body data-spy="scroll" data-target="#toc">
-    
+
 
     <div class="container template-reference-topic">
       <header><div class="navbar navbar-default navbar-fixed-top" role="navigation">
@@ -22,7 +22,7 @@ SpatialExperiment object."><!-- mathjax --><script src="https://cdnjs.cloudflare
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">cytomapper</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="">1.17.0</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="">1.21.0</span>
       </span>
     </div>
 
@@ -36,7 +36,7 @@ SpatialExperiment object."><!-- mathjax --><script src="https://cdnjs.cloudflare
 <li class="dropdown">
   <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
     Articles
-     
+
     <span class="caret"></span>
   </a>
   <ul class="dropdown-menu" role="menu"><li>
@@ -46,20 +46,20 @@ SpatialExperiment object."><!-- mathjax --><script src="https://cdnjs.cloudflare
       </ul><ul class="nav navbar-nav navbar-right"><li>
   <a href="https://github.com/BodenmillerGroup/cytomapper/" class="external-link">
     <span class="fab fa-github fa-lg"></span>
-     
+
   </a>
 </li>
       </ul></div><!--/.nav-collapse -->
   </div><!--/.container -->
 </div><!--/.navbar -->
 
-      
+
 
       </header><div class="row">
   <div class="col-md-9 contents">
     <div class="page-header">
     <h1>Compute morphological and intensity features from objects on images.</h1>
-    <small class="dont-index">Source: <a href="https://github.com/BodenmillerGroup/cytomapper/blob/HEAD/R/measureObjects.R" class="external-link"><code>R/measureObjects.R</code></a></small>
+    <small class="dont-index">Source: <a href="https://github.com/BodenmillerGroup/cytomapper/blob/devel/R/measureObjects.R" class="external-link"><code>R/measureObjects.R</code></a></small>
     <div class="hidden name"><code>measureObjects.Rd</code></div>
     </div>
 
@@ -68,7 +68,7 @@ SpatialExperiment object."><!-- mathjax --><script src="https://cdnjs.cloudflare
 <code>measureObjects</code> function computes intensity features (also referred to
 as basic features; e.g. mean intensity), shape features (e.g. area), moment
 features (e.g. position) and haralick features. These features are returned
-in form of a <a href="https://rdrr.io/pkg/SingleCellExperiment/man/SingleCellExperiment.html" class="external-link">SingleCellExperiment</a> or 
+in form of a <a href="https://rdrr.io/pkg/SingleCellExperiment/man/SingleCellExperiment.html" class="external-link">SingleCellExperiment</a> or
 SpatialExperiment object.</p>
     </div>
 
@@ -92,38 +92,40 @@ SpatialExperiment object.</p>
 
     <div id="arguments">
     <h2>Arguments</h2>
-    <dl><dt>mask</dt>
+
+
+<dl><dt id="arg-mask">mask<a class="anchor" aria-label="anchor" href="#arg-mask"></a></dt>
 <dd><p>a <code><a href="CytoImageList.html">CytoImageList</a></code> object containing single-channel
 <code><a href="https://rdrr.io/pkg/EBImage/man/Image.html" class="external-link">Image</a></code> or <code>HDF5Array</code> objects.
 Segmentation masks must contain integer pixel values where groups of
 pixels correspond to objects.</p></dd>
 
 
-<dt>image</dt>
+<dt id="arg-image">image<a class="anchor" aria-label="anchor" href="#arg-image"></a></dt>
 <dd><p>a <code><a href="CytoImageList.html">CytoImageList</a></code> object containing single or
 multi-channel <code><a href="https://rdrr.io/pkg/EBImage/man/Image.html" class="external-link">Image</a></code> or <code>HDF5Array</code>
 objects, where each channel indicates the measured pixel intensities.</p></dd>
 
 
-<dt>img_id</dt>
+<dt id="arg-img-id">img_id<a class="anchor" aria-label="anchor" href="#arg-img-id"></a></dt>
 <dd><p>character specifying the <code>mcols(image)</code> and
 <code>mcols(mask)</code> entry, in which the image IDs are stored.</p></dd>
 
 
-<dt>return_as</dt>
+<dt id="arg-return-as">return_as<a class="anchor" aria-label="anchor" href="#arg-return-as"></a></dt>
 <dd><p>single character specifying the class of the returned object.
 This is either <code>"sce"</code> to return a <code>SingleCellExperiment</code> (default)
 or <code>"spe"</code> to return a <code>SpatialExperiment</code> object.</p></dd>
 
 
-<dt>feature_types</dt>
+<dt id="arg-feature-types">feature_types<a class="anchor" aria-label="anchor" href="#arg-feature-types"></a></dt>
 <dd><p>character vector or string indicating which features to
 compute. Needs to contain <code>"basic"</code>. Optionally, <code>"shape"</code>,
 <code>"moment"</code> and <code>"haralick"</code> are allowed. Default <code>"basic"</code>,
 <code>"shape"</code> and <code>"moment"</code>.</p></dd>
 
 
-<dt>basic_feature</dt>
+<dt id="arg-basic-feature">basic_feature<a class="anchor" aria-label="anchor" href="#arg-basic-feature"></a></dt>
 <dd><p>string indicating which intensity measurement per object
 and channel should be used to populate the <code>counts(x)</code> slot; where
 <code>x</code> is the returned object. Default
@@ -131,12 +133,12 @@ and channel should be used to populate the <code>counts(x)</code> slot; where
 <code>*</code> indicates the computed quantile (see <code>basic_quantiles</code>).</p></dd>
 
 
-<dt>basic_quantiles</dt>
+<dt id="arg-basic-quantiles">basic_quantiles<a class="anchor" aria-label="anchor" href="#arg-basic-quantiles"></a></dt>
 <dd><p>numeric vector or single number indicating which
 quantiles to compute. Default none.</p></dd>
 
 
-<dt>shape_feature</dt>
+<dt id="arg-shape-feature">shape_feature<a class="anchor" aria-label="anchor" href="#arg-shape-feature"></a></dt>
 <dd><p>string or character vector specifying which shape
 features to compute. Default <code>"area"</code> and <code>"radius.mean"</code>.
 Allowed entries are: <code>"area"</code>, <code>"perimeter"</code>,
@@ -144,7 +146,7 @@ Allowed entries are: <code>"area"</code>, <code>"perimeter"</code>,
 <code>"radius.min"</code>.</p></dd>
 
 
-<dt>moment_feature</dt>
+<dt id="arg-moment-feature">moment_feature<a class="anchor" aria-label="anchor" href="#arg-moment-feature"></a></dt>
 <dd><p>string or character vector indicating which moment
 features to compute. Default <code>"cx"</code>, <code>"cy"</code>, <code>"majoraxis"</code>,
 and <code>"eccentricity"</code>. Other allowed features are <code>"theta"</code>. Here
@@ -153,7 +155,7 @@ incorporating pixel intensities. Therefore, <code>"cx"</code> and <code>"cy"</co
 the x and y coordinates of the cell centroids.</p></dd>
 
 
-<dt>haralick_feature</dt>
+<dt id="arg-haralick-feature">haralick_feature<a class="anchor" aria-label="anchor" href="#arg-haralick-feature"></a></dt>
 <dd><p>string or character vector indicating which haralick
 features to compute. Default none. Allowed are the 13 haralick features:
 <code>"asm"</code>, <code>"con"</code>, <code>"cor"</code>, <code>"var"</code>, <code>"idm"</code>,
@@ -161,20 +163,20 @@ features to compute. Default none. Allowed are the 13 haralick features:
 <code>"den"</code>, <code>"f12"</code>, <code>"f13"</code></p></dd>
 
 
-<dt>haralick_nbins</dt>
+<dt id="arg-haralick-nbins">haralick_nbins<a class="anchor" aria-label="anchor" href="#arg-haralick-nbins"></a></dt>
 <dd><p>an integer indicating the number of bins used to
 compute the haralick matrix. Pixel intensities are binned in
 <code>haralick_nbins</code> discrete gray levels before computing the haralick
 matrix.</p></dd>
 
 
-<dt>haralick_scales</dt>
+<dt id="arg-haralick-scales">haralick_scales<a class="anchor" aria-label="anchor" href="#arg-haralick-scales"></a></dt>
 <dd><p>an integer vector indicating the number of scales
 (distance at which to consider neighbouring pixels) to use to compute the
 haralick features.</p></dd>
 
 
-<dt>BPPARAM</dt>
+<dt id="arg-bpparam">BPPARAM<a class="anchor" aria-label="anchor" href="#arg-bpparam"></a></dt>
 <dd><p>parameters for parallelised processing of images.
 See <code>MulticoreParam</code> for information on how to use multiple
 cores for parallelised processing.</p></dd>
@@ -182,14 +184,12 @@ cores for parallelised processing.</p></dd>
 </dl></div>
     <div id="value">
     <h2>Value</h2>
-    
-
-<p>A <a href="https://rdrr.io/pkg/SingleCellExperiment/man/SingleCellExperiment.html" class="external-link">SingleCellExperiment</a> or 
+    <p>A <a href="https://rdrr.io/pkg/SingleCellExperiment/man/SingleCellExperiment.html" class="external-link">SingleCellExperiment</a> or
 SpatialExperiment object (see details)</p>
     </div>
     <div id="the-returned-objects">
     <h2>The returned objects</h2>
-    
+
 
 <p>By default, a <code>SingleCellExperiment</code> object is returned. When setting
 <code>return_as = "spe"</code>, the returned object is of class
@@ -215,7 +215,7 @@ meaning circle.</p></li>
 </ul></div>
     <div id="computing-quantiles">
     <h2>Computing quantiles</h2>
-    
+
 
 <p>Sometimes it can be useful to describe the summarised pixel intensity per
 object and channel not in terms of the mean but some quantile of the pixel
@@ -292,15 +292,15 @@ for more discussion on the haralick features</p></div>
 </div>
 
 <div class="pkgdown">
-  <p></p><p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.9.</p>
+  <p></p><p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.1.3.</p>
 </div>
 
       </footer></div>
 
-  
 
 
-  
+
+
 
   </body></html>
 

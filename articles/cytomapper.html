@@ -12,14 +12,13 @@
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.12.1/css/v4-shims.min.css" integrity="sha256-wZjR52fzng1pJHwx4aV2AO3yyTOXrcDW7jBpJtTwVxw=" crossorigin="anonymous">
 <!-- clipboard.js --><script src="https://cdnjs.cloudflare.com/ajax/libs/clipboard.js/2.0.6/clipboard.min.js" integrity="sha256-inc5kl9MA1hkeYUt+EC3BhlIgyp/2jDIyBLS6k3UxPI=" crossorigin="anonymous"></script><!-- headroom.js --><script src="https://cdnjs.cloudflare.com/ajax/libs/headroom/0.11.0/headroom.min.js" integrity="sha256-AsUX4SJE1+yuDu5+mAVzJbuYNPHj/WroHuZ8Ir/CkE0=" crossorigin="anonymous"></script><script src="https://cdnjs.cloudflare.com/ajax/libs/headroom/0.11.0/jQuery.headroom.min.js" integrity="sha256-ZX/yNShbjqsohH1k95liqY9Gd8uOiE1S4vZc+9KQ1K4=" crossorigin="anonymous"></script><!-- pkgdown --><link href="../pkgdown.css" rel="stylesheet">
 <script src="../pkgdown.js"></script><meta property="og:title" content="Visualization of imaging cytometry data in R">
-<meta property="og:description" content="cytomapper">
 <!-- mathjax --><script src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/MathJax.js" integrity="sha256-nvJJv9wWKEm88qvoQl9ekL2J+k/RWIsaSScxxlsrv8k=" crossorigin="anonymous"></script><script src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/config/TeX-AMS-MML_HTMLorMML.js" integrity="sha256-84DKXVJXs0/F8OTMzX4UR909+jtl4G7SPypPavF+GfA=" crossorigin="anonymous"></script><!--[if lt IE 9]>
 <script src="https://oss.maxcdn.com/html5shiv/3.7.3/html5shiv.min.js"></script>
 <script src="https://oss.maxcdn.com/respond/1.4.2/respond.min.js"></script>
 <![endif]-->
 </head>
 <body data-spy="scroll" data-target="#toc">
-    
+
 
     <div class="container template-article">
       <header><div class="navbar navbar-default navbar-fixed-top" role="navigation">
@@ -33,7 +32,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">cytomapper</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="">1.17.0</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="">1.21.0</span>
       </span>
     </div>
 
@@ -48,7 +47,7 @@
 <li class="dropdown">
   <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
     Articles
-     
+
     <span class="caret"></span>
   </a>
   <ul class="dropdown-menu" role="menu">
@@ -62,7 +61,7 @@
 <li>
   <a href="https://github.com/BodenmillerGroup/cytomapper/" class="external-link">
     <span class="fab fa-github fa-lg"></span>
-     
+
   </a>
 </li>
       </ul>
@@ -73,7 +72,7 @@
 </div>
 <!--/.navbar -->
 
-      
+
 
       </header><div class="row">
   <div class="col-md-9 contents">
@@ -101,9 +100,9 @@ ZurichInstitute for Molecular Health Sciences, ETH
 Zurich<br><a class="author_email" href="mailto:#"></a><a href="mailto:tobias.hoch@dqbm.uzh.ch" class="email">tobias.hoch@dqbm.uzh.ch</a>
       </address>
                   
-            <h4 data-toc-skip class="date">25 June 2024</h4>
+            <h4 data-toc-skip class="date">27 May 2025</h4>
       
-      <small class="dont-index">Source: <a href="https://github.com/BodenmillerGroup/cytomapper/blob/HEAD/vignettes/cytomapper.Rmd" class="external-link"><code>vignettes/cytomapper.Rmd</code></a></small>
+      <small class="dont-index">Source: <a href="https://github.com/BodenmillerGroup/cytomapper/blob/devel/vignettes/cytomapper.Rmd" class="external-link"><code>vignettes/cytomapper.Rmd</code></a></small>
       <div class="hidden name"><code>cytomapper.Rmd</code></div>
 
     </div>
@@ -143,9 +142,10 @@ optionally segmentation masks can be displayed using
 <p>IMC <span class="citation">(Giesen et al. 2014)</span> is a
 multiplexed imaging cytometry approach to measure spatial protein
 abundance. In IMC, tissue sections are stained with a mix of around 40
-metal-conjugated antibodies prior to laser ablation with <span class="math inline">\(1\mu{}m\)</span> resolution. The ablated material
-is transferred to a mass cytometer for time-of-flight detection of the
-metal ions [<span class="citation">Giesen et al. (2014)</span>]<span class="citation">(Mavropoulos et al., n.d.)</span>. In that way,
+metal-conjugated antibodies prior to laser ablation with
+<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mn>1</mn><mi>μ</mi><mrow></mrow><mi>m</mi></mrow><annotation encoding="application/x-tex">1\mu{}m</annotation></semantics></math>
+resolution. The ablated material is transferred to a mass cytometer for
+time-of-flight detection of the metal ions [<span class="citation">Giesen et al. (2014)</span>]<span class="citation">(Mavropoulos et al., n.d.)</span>. In that way,
 hundreds of images (usually with an image size of around 1mm x 1mm) can
 be generated in a reasonable amount of time <span class="citation">(Damond et al. 2019)</span>.</p>
 <p>Raw IMC data are computationally processed using a segmentation
@@ -157,7 +157,7 @@ image-level meta information.</p>
 <p>Cell-level expression and metadata can be processed and read into a
 <code>SingleCellExperiment</code> class object. For more information on
 the <code>SingleCellExperiment</code> object and how to create it,
-please see the <em><a href="https://bioconductor.org/packages/3.19/SingleCellExperiment" class="external-link">SingleCellExperiment</a></em>
+please see the <em><a href="https://bioconductor.org/packages/3.21/SingleCellExperiment" class="external-link">SingleCellExperiment</a></em>
 package and the <a href="https://bioconductor.org/books/release/OSCA/data-infrastructure.html" class="external-link">Orchestrating
 Single-Cell Analysis with Bioconductor</a> workflow. Furthermore, the
 <code>cytomapper</code> package provides the <a href="#measureObjects">measureObjects</a> function that generates a
@@ -237,7 +237,7 @@ information</a> section. Also refer to the <a href="#measureObjects">measureObje
 <div class="section level2">
 <h2 id="DataFormats">Data formats<a class="anchor" aria-label="anchor" href="#DataFormats"></a>
 </h2>
-<p>The <code>cytomapper</code> package combines objects of the <em><a href="https://bioconductor.org/packages/3.19/SingleCellExperiment" class="external-link">SingleCellExperiment</a></em>
+<p>The <code>cytomapper</code> package combines objects of the <em><a href="https://bioconductor.org/packages/3.21/SingleCellExperiment" class="external-link">SingleCellExperiment</a></em>
 class and the <code>CytoImageList</code> class (provided in
 <code>cytomapper</code>) to visualize cell- and pixel-level
 information.</p>
@@ -288,17 +288,20 @@ object need to be accessible via:</p>
 refer to the section <a href="#CytoImageList">The CytoImageList
 object</a>. For more information on the
 <code>SingleCellExperiment</code> object and how to create it, please
-see the <em><a href="https://bioconductor.org/packages/3.19/SingleCellExperiment" class="external-link">SingleCellExperiment</a></em>
+see the <em><a href="https://bioconductor.org/packages/3.21/SingleCellExperiment" class="external-link">SingleCellExperiment</a></em>
 package and the <a href="https://osca.bioconductor.org/data-infrastructure.html#the-singlecellexperiment-class" class="external-link">Orchestrating
 Single-Cell Analysis with Bioconductor</a> workflow.</p>
 <div class="section level3">
 <h3 id="ToyData">The provided toy dataset<a class="anchor" aria-label="anchor" href="#ToyData"></a>
 </h3>
 <p>For visualization purposes, the <code>cytomapper</code> package
-provides a toy dataset containing 3 images of <span class="math inline">\(100\mu{m}\)</span> x <span class="math inline">\(100\mu{m}\)</span> dimensions (100 x 100 pixels).
-The dataset contains 362 segmented cells and the expression values for 5
-proteins: H3, CD99, PIN, CD8a, and CDH It represents a small subset of
-the data presented in <a href="https://www.cell.com/cell-metabolism/fulltext/S1550-4131(18)30691-0?_returnURL=https%3A%2F%2Flinkinghub.elsevier.com%2Fretrieve%2Fpii%2FS1550413118306910%3Fshowall%3Dtrue" class="external-link">A
+provides a toy dataset containing 3 images of
+<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mn>100</mn><mi>μ</mi><mi>m</mi></mrow><annotation encoding="application/x-tex">100\mu{m}</annotation></semantics></math>
+x
+<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mn>100</mn><mi>μ</mi><mi>m</mi></mrow><annotation encoding="application/x-tex">100\mu{m}</annotation></semantics></math>
+dimensions (100 x 100 pixels). The dataset contains 362 segmented cells
+and the expression values for 5 proteins: H3, CD99, PIN, CD8a, and CDH
+It represents a small subset of the data presented in <a href="https://www.cell.com/cell-metabolism/fulltext/S1550-4131(18)30691-0?_returnURL=https%3A%2F%2Flinkinghub.elsevier.com%2Fretrieve%2Fpii%2FS1550413118306910%3Fshowall%3Dtrue" class="external-link">A
 Map of Human Type 1 Diabetes Progression by Imaging Mass
 Cytometry</a>.</p>
 <p>This dataset was generated using imaging mass cytometry <span class="citation">(Giesen et al. 2014)</span>. Raw output files (in .mcd
@@ -598,7 +601,7 @@ stored in <code>colData(sce)</code>:</p>
 <p>The <code>cytomapper</code> package provides a new
 <code>CytoImageList</code> class, which inherits from the <a href="https://rdrr.io/bioc/S4Vectors/man/SimpleList-class.html" class="external-link"><code>SimpleList</code>
 class</a>. Each entry to the <code>CytoImageList</code> object is an
-<code>Image</code> class object defined in the <em><a href="https://bioconductor.org/packages/3.19/EBImage" class="external-link">EBImage</a></em>
+<code>Image</code> class object defined in the <em><a href="https://bioconductor.org/packages/3.21/EBImage" class="external-link">EBImage</a></em>
 package. A <code>CytoImageList</code> object is restricted to the
 following entries:</p>
 <ul>
@@ -807,12 +810,12 @@ paragraph.</p>
 <h3 id="looping">Looping<a class="anchor" aria-label="anchor" href="#looping"></a>
 </h3>
 <p>To perform custom operations on each individual entry to a
-<code>CytoImageList</code> object, the <em><a href="https://bioconductor.org/packages/3.19/S4Vectors" class="external-link">S4Vectors</a></em>
+<code>CytoImageList</code> object, the <em><a href="https://bioconductor.org/packages/3.21/S4Vectors" class="external-link">S4Vectors</a></em>
 package provides the <code>endoapply</code> function. While the
 <code>lapply</code> function returns a <code>list</code> object, the
 <code>endoapply</code> function provides an object of the same class of
 the input object.</p>
-<p>This allows the user to apply all functions provided by the <em><a href="https://bioconductor.org/packages/3.19/EBImage" class="external-link">EBImage</a></em>
+<p>This allows the user to apply all functions provided by the <em><a href="https://bioconductor.org/packages/3.21/EBImage" class="external-link">EBImage</a></em>
 package to individual entries within the <code>CytoImageList</code>
 object:</p>
 <div class="sourceCode" id="cb85"><pre class="downlit sourceCode r">
@@ -844,7 +847,7 @@ normalization.</p>
 </h3>
 <p>The <code>normalize</code> function provided in the
 <code>cytomapper</code> package internally calls the
-<code>normalize</code> function of the <em><a href="https://bioconductor.org/packages/3.19/EBImage" class="external-link">EBImage</a></em>
+<code>normalize</code> function of the <em><a href="https://bioconductor.org/packages/3.21/EBImage" class="external-link">EBImage</a></em>
 package. The main difference between the two functions is the option to
 scale per image or globally in the <code>cytomapper</code> package (see
 <code><a href="../reference/CytoImageList-manipulation.html">?'normalize,CytoImageList-method'</a></code>).</p>
@@ -1090,8 +1093,9 @@ the individual entries, please refer to the <code>scale_bar</code>
 section in <code><a href="../reference/plotting-param.html">?'plotting-param'</a></code>.</p>
 <p><strong>Of note:</strong> By default, the length of the scale bar is
 defined in number of pixels. Therefore, the user needs to know the
-length (e.g. in <span class="math inline">\(\mu{m}\)</span>) to label
-the scale bar correctly.</p>
+length (e.g. in
+<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>μ</mi><mi>m</mi></mrow><annotation encoding="application/x-tex">\mu{m}</annotation></semantics></math>)
+to label the scale bar correctly.</p>
 <p>The image titles can be set using the <code>image_title</code>
 parameter. Also here, the user needs to provide a named list with one or
 multiple of follwing entries: <code>text</code>, <code>position</code>,
@@ -1330,13 +1334,13 @@ package. Nils and Tobias implemented and maintain the
 <div class="section level2">
 <h2 class="unnumbered" id="session-info">Session info<a class="anchor" aria-label="anchor" href="#session-info"></a>
 </h2>
-<pre><code><span><span class="co">## R version 4.4.1 (2024-06-14)</span></span>
+<pre><code><span><span class="co">## R version 4.5.0 (2025-04-11)</span></span>
 <span><span class="co">## Platform: aarch64-apple-darwin20</span></span>
-<span><span class="co">## Running under: macOS Sonoma 14.5</span></span>
+<span><span class="co">## Running under: macOS Sonoma 14.7.5</span></span>
 <span><span class="co">## </span></span>
 <span><span class="co">## Matrix products: default</span></span>
-<span><span class="co">## BLAS:   /Library/Frameworks/R.framework/Versions/4.4-arm64/Resources/lib/libRblas.0.dylib </span></span>
-<span><span class="co">## LAPACK: /Library/Frameworks/R.framework/Versions/4.4-arm64/Resources/lib/libRlapack.dylib;  LAPACK version 3.12.0</span></span>
+<span><span class="co">## BLAS:   /Library/Frameworks/R.framework/Versions/4.5-arm64/Resources/lib/libRblas.0.dylib </span></span>
+<span><span class="co">## LAPACK: /Library/Frameworks/R.framework/Versions/4.5-arm64/Resources/lib/libRlapack.dylib;  LAPACK version 3.12.1</span></span>
 <span><span class="co">## </span></span>
 <span><span class="co">## locale:</span></span>
 <span><span class="co">## [1] en_US.UTF-8/en_US.UTF-8/en_US.UTF-8/C/en_US.UTF-8/en_US.UTF-8</span></span>
@@ -1349,49 +1353,47 @@ package. Nils and Tobias implemented and maintain the
 <span><span class="co">## [8] base     </span></span>
 <span><span class="co">## </span></span>
 <span><span class="co">## other attached packages:</span></span>
-<span><span class="co">##  [1] ggplot2_3.5.1               cowplot_1.1.3              </span></span>
-<span><span class="co">##  [3] cytomapper_1.17.0           SingleCellExperiment_1.24.0</span></span>
-<span><span class="co">##  [5] SummarizedExperiment_1.32.0 Biobase_2.62.0             </span></span>
-<span><span class="co">##  [7] GenomicRanges_1.54.1        GenomeInfoDb_1.38.8        </span></span>
-<span><span class="co">##  [9] IRanges_2.36.0              S4Vectors_0.40.2           </span></span>
-<span><span class="co">## [11] BiocGenerics_0.48.1         MatrixGenerics_1.14.0      </span></span>
-<span><span class="co">## [13] matrixStats_1.3.0           EBImage_4.44.0             </span></span>
-<span><span class="co">## [15] BiocStyle_2.30.0           </span></span>
+<span><span class="co">##  [1] ggplot2_3.5.2               cowplot_1.1.3              </span></span>
+<span><span class="co">##  [3] cytomapper_1.21.0           SingleCellExperiment_1.30.1</span></span>
+<span><span class="co">##  [5] SummarizedExperiment_1.38.1 Biobase_2.68.0             </span></span>
+<span><span class="co">##  [7] GenomicRanges_1.60.0        GenomeInfoDb_1.44.0        </span></span>
+<span><span class="co">##  [9] IRanges_2.42.0              S4Vectors_0.46.0           </span></span>
+<span><span class="co">## [11] BiocGenerics_0.54.0         generics_0.1.4             </span></span>
+<span><span class="co">## [13] MatrixGenerics_1.20.0       matrixStats_1.5.0          </span></span>
+<span><span class="co">## [15] EBImage_4.50.0              BiocStyle_2.36.0           </span></span>
 <span><span class="co">## </span></span>
 <span><span class="co">## loaded via a namespace (and not attached):</span></span>
-<span><span class="co">##  [1] bitops_1.0-7             gridExtra_2.3            rlang_1.1.4             </span></span>
-<span><span class="co">##  [4] magrittr_2.0.3           svgPanZoom_0.3.4         shinydashboard_0.7.2    </span></span>
-<span><span class="co">##  [7] compiler_4.4.1           png_0.1-8                systemfonts_1.1.0       </span></span>
+<span><span class="co">##  [1] bitops_1.0-9             gridExtra_2.3            rlang_1.1.6             </span></span>
+<span><span class="co">##  [4] magrittr_2.0.3           svgPanZoom_0.3.4         shinydashboard_0.7.3    </span></span>
+<span><span class="co">##  [7] compiler_4.5.0           png_0.1-8                systemfonts_1.2.3       </span></span>
 <span><span class="co">## [10] fftwtools_0.9-11         vctrs_0.6.5              pkgconfig_2.0.3         </span></span>
-<span><span class="co">## [13] SpatialExperiment_1.12.0 crayon_1.5.3             fastmap_1.2.0           </span></span>
-<span><span class="co">## [16] magick_2.8.3             XVector_0.42.0           labeling_0.4.3          </span></span>
-<span><span class="co">## [19] utf8_1.2.4               promises_1.3.0           rmarkdown_2.27          </span></span>
-<span><span class="co">## [22] ggbeeswarm_0.7.2         ragg_1.3.2               purrr_1.0.2             </span></span>
-<span><span class="co">## [25] xfun_0.45                zlibbioc_1.48.2          cachem_1.1.0            </span></span>
-<span><span class="co">## [28] jsonlite_1.8.8           highr_0.11               later_1.3.2             </span></span>
-<span><span class="co">## [31] rhdf5filters_1.14.1      DelayedArray_0.28.0      Rhdf5lib_1.24.2         </span></span>
-<span><span class="co">## [34] BiocParallel_1.36.0      jpeg_0.1-10              tiff_0.1-12             </span></span>
-<span><span class="co">## [37] terra_1.7-78             parallel_4.4.1           R6_2.5.1                </span></span>
-<span><span class="co">## [40] bslib_0.7.0              RColorBrewer_1.1-3       jquerylib_0.1.4         </span></span>
-<span><span class="co">## [43] Rcpp_1.0.12              bookdown_0.39            knitr_1.47              </span></span>
-<span><span class="co">## [46] httpuv_1.6.15            Matrix_1.7-0             nnls_1.5                </span></span>
-<span><span class="co">## [49] tidyselect_1.2.1         abind_1.4-5              yaml_2.3.8              </span></span>
-<span><span class="co">## [52] viridis_0.6.5            codetools_0.2-20         lattice_0.22-6          </span></span>
-<span><span class="co">## [55] tibble_3.2.1             withr_3.0.0              shiny_1.8.1.1           </span></span>
-<span><span class="co">## [58] evaluate_0.24.0          desc_1.4.3               pillar_1.9.0            </span></span>
-<span><span class="co">## [61] BiocManager_1.30.23      generics_0.1.3           sp_2.1-4                </span></span>
-<span><span class="co">## [64] RCurl_1.98-1.14          munsell_0.5.1            scales_1.3.0            </span></span>
-<span><span class="co">## [67] xtable_1.8-4             glue_1.7.0               tools_4.4.1             </span></span>
-<span><span class="co">## [70] locfit_1.5-9.10          fs_1.6.4                 rhdf5_2.46.1            </span></span>
-<span><span class="co">## [73] grid_4.4.1               colorspace_2.1-0         GenomeInfoDbData_1.2.11 </span></span>
-<span><span class="co">## [76] raster_3.6-26            beeswarm_0.4.0           HDF5Array_1.30.1        </span></span>
-<span><span class="co">## [79] vipor_0.4.7              cli_3.6.3                textshaping_0.4.0       </span></span>
-<span><span class="co">## [82] fansi_1.0.6              viridisLite_0.4.2        S4Arrays_1.2.1          </span></span>
-<span><span class="co">## [85] svglite_2.1.3            dplyr_1.1.4              gtable_0.3.5            </span></span>
-<span><span class="co">## [88] sass_0.4.9               digest_0.6.36            SparseArray_1.2.4       </span></span>
-<span><span class="co">## [91] farver_2.1.2             rjson_0.2.21             htmlwidgets_1.6.4       </span></span>
-<span><span class="co">## [94] memoise_2.0.1            htmltools_0.5.8.1        pkgdown_2.0.9           </span></span>
-<span><span class="co">## [97] lifecycle_1.0.4          mime_0.12</span></span></code></pre>
+<span><span class="co">## [13] SpatialExperiment_1.18.1 crayon_1.5.3             fastmap_1.2.0           </span></span>
+<span><span class="co">## [16] magick_2.8.6             XVector_0.48.0           labeling_0.4.3          </span></span>
+<span><span class="co">## [19] promises_1.3.2           rmarkdown_2.29           UCSC.utils_1.4.0        </span></span>
+<span><span class="co">## [22] ggbeeswarm_0.7.2         ragg_1.4.0               xfun_0.52               </span></span>
+<span><span class="co">## [25] cachem_1.1.0             jsonlite_2.0.0           later_1.4.2             </span></span>
+<span><span class="co">## [28] rhdf5filters_1.20.0      DelayedArray_0.34.1      Rhdf5lib_1.30.0         </span></span>
+<span><span class="co">## [31] BiocParallel_1.42.0      jpeg_0.1-11              tiff_0.1-12             </span></span>
+<span><span class="co">## [34] terra_1.8-50             parallel_4.5.0           R6_2.6.1                </span></span>
+<span><span class="co">## [37] bslib_0.9.0              RColorBrewer_1.1-3       jquerylib_0.1.4         </span></span>
+<span><span class="co">## [40] Rcpp_1.0.14              bookdown_0.43            knitr_1.50              </span></span>
+<span><span class="co">## [43] httpuv_1.6.16            Matrix_1.7-3             nnls_1.6                </span></span>
+<span><span class="co">## [46] tidyselect_1.2.1         abind_1.4-8              yaml_2.3.10             </span></span>
+<span><span class="co">## [49] viridis_0.6.5            codetools_0.2-20         lattice_0.22-6          </span></span>
+<span><span class="co">## [52] tibble_3.2.1             withr_3.0.2              shiny_1.10.0            </span></span>
+<span><span class="co">## [55] evaluate_1.0.3           desc_1.4.3               pillar_1.10.2           </span></span>
+<span><span class="co">## [58] BiocManager_1.30.25      sp_2.2-0                 RCurl_1.98-1.17         </span></span>
+<span><span class="co">## [61] scales_1.4.0             xtable_1.8-4             glue_1.8.0              </span></span>
+<span><span class="co">## [64] tools_4.5.0              locfit_1.5-9.12          fs_1.6.6                </span></span>
+<span><span class="co">## [67] rhdf5_2.52.0             grid_4.5.0               GenomeInfoDbData_1.2.14 </span></span>
+<span><span class="co">## [70] raster_3.6-32            beeswarm_0.4.0           HDF5Array_1.36.0        </span></span>
+<span><span class="co">## [73] vipor_0.4.7              cli_3.6.5                textshaping_1.0.1       </span></span>
+<span><span class="co">## [76] S4Arrays_1.8.0           viridisLite_0.4.2        svglite_2.2.1           </span></span>
+<span><span class="co">## [79] dplyr_1.1.4              gtable_0.3.6             sass_0.4.10             </span></span>
+<span><span class="co">## [82] digest_0.6.37            SparseArray_1.8.0        rjson_0.2.23            </span></span>
+<span><span class="co">## [85] htmlwidgets_1.6.4        farver_2.1.2             htmltools_0.5.8.1       </span></span>
+<span><span class="co">## [88] pkgdown_2.1.3            lifecycle_1.0.4          h5mread_1.0.1           </span></span>
+<span><span class="co">## [91] httr_1.4.7               mime_0.13</span></span></code></pre>
 </div>
 <div class="section level2">
 <h2 class="unnumbered" id="references">References<a class="anchor" aria-label="anchor" href="#references"></a>
@@ -1445,9 +1447,7 @@ Cytometry and Immunofluorescence on FFPE Tissue Sections.”</span>
 
   <div class="col-md-3 hidden-xs hidden-sm" id="pkgdown-sidebar">
 
-        <nav id="toc" data-toggle="toc"><h2 data-toc-skip>Contents</h2>
-    </nav>
-</div>
+      </div>
 
 </div>
 
@@ -1460,16 +1460,16 @@ Cytometry and Immunofluorescence on FFPE Tissue Sections.”</span>
 
 <div class="pkgdown">
   <p></p>
-<p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.9.</p>
+<p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.1.3.</p>
 </div>
 
       </footer>
 </div>
 
-  
 
 
-  
+
+
 
   </body>
 </html>
