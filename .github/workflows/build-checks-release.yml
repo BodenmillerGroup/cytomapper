@@ -9,10 +9,10 @@ on:
 jobs:
   R-CMD-check:
     runs-on: ubuntu-latest
-    container: rocker/r-ver:4.2
+    container: rocker/r-ver:latest
 
     steps:
-      - uses: actions/checkout@v2
+      - uses: actions/checkout@v4
 
       - name: Query dependencies
         run: |
@@ -40,7 +40,7 @@ jobs:
         run: |
           echo "::set-output name=path::$(Rscript -e 'cat(shinytest:::phantom_paths()[[1]])')"
       - name: Cache PhantomJS
-        uses: actions/cache@v2
+        uses: actions/cache@v4
         with:
           path: ${{ steps.phantomjs.outputs.path }}
           key: ${{ matrix.config.os }}-phantomjs
