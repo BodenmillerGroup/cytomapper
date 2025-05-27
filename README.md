@@ -3,8 +3,9 @@
 # cytomapper
 
 <!-- badges: start -->
-[![codecov](https://codecov.io/gh/BodenmillerGroup/cytomapper/branch/master/graph/badge.svg)](https://codecov.io/gh/BodenmillerGroup/cytomapper)
-[![docs](https://github.com/BodenmillerGroup/cytomapper/workflows/docs/badge.svg?branch=master)](https://github.com/BodenmillerGroup/cytomapper/actions?query=workflow%3Adocs)
+
+[![docs](https://github.com/BodenmillerGroup/cytomapper/actions/workflows/docs.yml/badge.svg)](https://github.com/BodenmillerGroup/cytomapper/actions/workflows/docs.yml) [![codecov](https://codecov.io/gh/BodenmillerGroup/cytomapper/branch/devel/graph/badge.svg)](https://app.codecov.io/gh/BodenmillerGroup/cytomapper/tree/devel)
+
 <!-- badges: end -->
 
 R/Bioconductor package to spatially visualize pixel- and cell-level information obtained from highly multiplexed imaging.
