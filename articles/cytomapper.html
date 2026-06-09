@@ -32,7 +32,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">cytomapper</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="">1.21.0</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="">1.25.0</span>
       </span>
     </div>
 
@@ -100,7 +100,7 @@ ZurichInstitute for Molecular Health Sciences, ETH
 Zurich<br><a class="author_email" href="mailto:#"></a><a href="mailto:tobias.hoch@dqbm.uzh.ch" class="email">tobias.hoch@dqbm.uzh.ch</a>
       </address>
                   
-            <h4 data-toc-skip class="date">27 May 2025</h4>
+            <h4 data-toc-skip class="date">9 June 2026</h4>
       
       <small class="dont-index">Source: <a href="https://github.com/BodenmillerGroup/cytomapper/blob/devel/vignettes/cytomapper.Rmd" class="external-link"><code>vignettes/cytomapper.Rmd</code></a></small>
       <div class="hidden name"><code>cytomapper.Rmd</code></div>
@@ -135,10 +135,9 @@ example, these instructions display imaging mass cytometry (IMC) data.
 However, other imaging cytometry approaches including multiplexed ion
 beam imaging (MIBI) <span class="citation">(Angelo et al. 2014)</span>,
 tissue-based cyclic immunofluorescence (t-CyCIF) <span class="citation">(Lin et al. 2018)</span> and iterative indirect
-immunofluorescence imaging (4i) <span class="citation">(Gut, Herrmann,
-and Pelkmans 2018)</span>, which produce pixel-level intensities and
-optionally segmentation masks can be displayed using
-<code>cytomapper</code>.</p>
+immunofluorescence imaging (4i) <span class="citation">(Gut et al.
+2018)</span>, which produce pixel-level intensities and optionally
+segmentation masks can be displayed using <code>cytomapper</code>.</p>
 <p>IMC <span class="citation">(Giesen et al. 2014)</span> is a
 multiplexed imaging cytometry approach to measure spatial protein
 abundance. In IMC, tissue sections are stained with a mix of around 40
@@ -157,7 +156,7 @@ image-level meta information.</p>
 <p>Cell-level expression and metadata can be processed and read into a
 <code>SingleCellExperiment</code> class object. For more information on
 the <code>SingleCellExperiment</code> object and how to create it,
-please see the <em><a href="https://bioconductor.org/packages/3.21/SingleCellExperiment" class="external-link">SingleCellExperiment</a></em>
+please see the <em><a href="https://bioconductor.org/packages/3.23/SingleCellExperiment" class="external-link">SingleCellExperiment</a></em>
 package and the <a href="https://bioconductor.org/books/release/OSCA/data-infrastructure.html" class="external-link">Orchestrating
 Single-Cell Analysis with Bioconductor</a> workflow. Furthermore, the
 <code>cytomapper</code> package provides the <a href="#measureObjects">measureObjects</a> function that generates a
@@ -207,7 +206,7 @@ intensities representing the ion counts for five proteins can be
 displayed using the <code>plotPixels</code> function:</p>
 <div class="sourceCode" id="cb2"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="../reference/plotPixels.html">plotPixels</a></span><span class="op">(</span>image <span class="op">=</span> <span class="va">pancreasImages</span>, colour_by <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"H3"</span>, <span class="st">"CD99"</span>, <span class="st">"CDH"</span><span class="op">)</span><span class="op">)</span></span></code></pre></div>
-<p><img src="cytomapper_files/figure-html/quickstart-plotPixels-1.png" width="700"></p>
+<p><img src="cytomapper_files/figure-html/quickstart-plotPixels-1.png" class="r-plt" alt="" width="700"></p>
 <p>For more details on image normalization, cell outlining, and other
 pixel-level manipulations, refer to the <a href="#PixelInfo">Plotting
 pixel information</a> section.</p>
@@ -222,12 +221,12 @@ when no other parameters are specified.</p>
 <code class="sourceCode R"><span><span class="fu"><a href="../reference/plotCells.html">plotCells</a></span><span class="op">(</span>mask <span class="op">=</span> <span class="va">pancreasMasks</span>, object <span class="op">=</span> <span class="va">pancreasSCE</span>,</span>
 <span>            cell_id <span class="op">=</span> <span class="st">"CellNb"</span>, img_id <span class="op">=</span> <span class="st">"ImageNb"</span>, colour_by <span class="op">=</span> <span class="st">"CD99"</span>,</span>
 <span>            outline_by <span class="op">=</span> <span class="st">"CellType"</span><span class="op">)</span></span></code></pre></div>
-<p><img src="cytomapper_files/figure-html/quickstart-plotCells-2-1.png" width="700"></p>
+<p><img src="cytomapper_files/figure-html/quickstart-plotCells-2-1.png" class="r-plt" alt="" width="700"></p>
 <div class="sourceCode" id="cb4"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="../reference/plotCells.html">plotCells</a></span><span class="op">(</span>mask <span class="op">=</span> <span class="va">pancreasMasks</span>, object <span class="op">=</span> <span class="va">pancreasSCE</span>,</span>
 <span>            cell_id <span class="op">=</span> <span class="st">"CellNb"</span>, img_id <span class="op">=</span> <span class="st">"ImageNb"</span>, </span>
 <span>            colour_by <span class="op">=</span> <span class="st">"CellType"</span><span class="op">)</span></span></code></pre></div>
-<p><img src="cytomapper_files/figure-html/quickstart-plotCells-2-2.png" width="700"></p>
+<p><img src="cytomapper_files/figure-html/quickstart-plotCells-2-2.png" class="r-plt" alt="" width="700"></p>
 <p>For more information on the data formats and requirements, refer to
 the following section. More details on the <code>plotCells</code>
 function are provided in the <a href="#CellInfo">Plotting cell
@@ -237,7 +236,7 @@ information</a> section. Also refer to the <a href="#measureObjects">measureObje
 <div class="section level2">
 <h2 id="DataFormats">Data formats<a class="anchor" aria-label="anchor" href="#DataFormats"></a>
 </h2>
-<p>The <code>cytomapper</code> package combines objects of the <em><a href="https://bioconductor.org/packages/3.21/SingleCellExperiment" class="external-link">SingleCellExperiment</a></em>
+<p>The <code>cytomapper</code> package combines objects of the <em><a href="https://bioconductor.org/packages/3.23/SingleCellExperiment" class="external-link">SingleCellExperiment</a></em>
 class and the <code>CytoImageList</code> class (provided in
 <code>cytomapper</code>) to visualize cell- and pixel-level
 information.</p>
@@ -288,7 +287,7 @@ object need to be accessible via:</p>
 refer to the section <a href="#CytoImageList">The CytoImageList
 object</a>. For more information on the
 <code>SingleCellExperiment</code> object and how to create it, please
-see the <em><a href="https://bioconductor.org/packages/3.21/SingleCellExperiment" class="external-link">SingleCellExperiment</a></em>
+see the <em><a href="https://bioconductor.org/packages/3.23/SingleCellExperiment" class="external-link">SingleCellExperiment</a></em>
 package and the <a href="https://osca.bioconductor.org/data-infrastructure.html#the-singlecellexperiment-class" class="external-link">Orchestrating
 Single-Cell Analysis with Bioconductor</a> workflow.</p>
 <div class="section level3">
@@ -601,7 +600,7 @@ stored in <code>colData(sce)</code>:</p>
 <p>The <code>cytomapper</code> package provides a new
 <code>CytoImageList</code> class, which inherits from the <a href="https://rdrr.io/bioc/S4Vectors/man/SimpleList-class.html" class="external-link"><code>SimpleList</code>
 class</a>. Each entry to the <code>CytoImageList</code> object is an
-<code>Image</code> class object defined in the <em><a href="https://bioconductor.org/packages/3.21/EBImage" class="external-link">EBImage</a></em>
+<code>Image</code> class object defined in the <em><a href="https://bioconductor.org/packages/3.23/EBImage" class="external-link">EBImage</a></em>
 package. A <code>CytoImageList</code> object is restricted to the
 following entries:</p>
 <ul>
@@ -810,12 +809,12 @@ paragraph.</p>
 <h3 id="looping">Looping<a class="anchor" aria-label="anchor" href="#looping"></a>
 </h3>
 <p>To perform custom operations on each individual entry to a
-<code>CytoImageList</code> object, the <em><a href="https://bioconductor.org/packages/3.21/S4Vectors" class="external-link">S4Vectors</a></em>
+<code>CytoImageList</code> object, the <em><a href="https://bioconductor.org/packages/3.23/S4Vectors" class="external-link">S4Vectors</a></em>
 package provides the <code>endoapply</code> function. While the
 <code>lapply</code> function returns a <code>list</code> object, the
 <code>endoapply</code> function provides an object of the same class of
 the input object.</p>
-<p>This allows the user to apply all functions provided by the <em><a href="https://bioconductor.org/packages/3.21/EBImage" class="external-link">EBImage</a></em>
+<p>This allows the user to apply all functions provided by the <em><a href="https://bioconductor.org/packages/3.23/EBImage" class="external-link">EBImage</a></em>
 package to individual entries within the <code>CytoImageList</code>
 object:</p>
 <div class="sourceCode" id="cb85"><pre class="downlit sourceCode r">
@@ -847,7 +846,7 @@ normalization.</p>
 </h3>
 <p>The <code>normalize</code> function provided in the
 <code>cytomapper</code> package internally calls the
-<code>normalize</code> function of the <em><a href="https://bioconductor.org/packages/3.21/EBImage" class="external-link">EBImage</a></em>
+<code>normalize</code> function of the <em><a href="https://bioconductor.org/packages/3.23/EBImage" class="external-link">EBImage</a></em>
 package. The main difference between the two functions is the option to
 scale per image or globally in the <code>cytomapper</code> package (see
 <code><a href="../reference/CytoImageList-manipulation.html">?'normalize,CytoImageList-method'</a></code>).</p>
@@ -871,7 +870,7 @@ all channels.</p>
 <span><span class="va">cur_images</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/CytoImageList-manipulation.html">normalize</a></span><span class="op">(</span><span class="va">pancreasImages</span><span class="op">)</span></span>
 <span><span class="va">cur_images</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/CytoImageList-manipulation.html">normalize</a></span><span class="op">(</span><span class="va">cur_images</span>, inputRange <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">0</span>, <span class="fl">0.9</span><span class="op">)</span><span class="op">)</span></span>
 <span><span class="fu"><a href="../reference/plotPixels.html">plotPixels</a></span><span class="op">(</span><span class="va">cur_images</span>, colour_by <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"H3"</span>, <span class="st">"CD99"</span>, <span class="st">"CDH"</span><span class="op">)</span><span class="op">)</span></span></code></pre></div>
-<p><img src="cytomapper_files/figure-html/normalize-clippingrange-1.png" width="700"></p>
+<p><img src="cytomapper_files/figure-html/normalize-clippingrange-1.png" class="r-plt" alt="" width="700"></p>
 <p>Alternatively, channel-specific clipping can be performed:</p>
 <div class="sourceCode" id="cb89"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co"># Channel-wise clipping</span></span>
@@ -909,7 +908,7 @@ factor.</p>
 <span>            colour_by <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"H3"</span>, <span class="st">"CD99"</span>, <span class="st">"CDH"</span><span class="op">)</span>,</span>
 <span>            bcg <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span>CD99 <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">0</span>,<span class="fl">2</span>,<span class="fl">1</span><span class="op">)</span>,</span>
 <span>                        CDH <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">0</span>,<span class="fl">2</span>,<span class="fl">1</span><span class="op">)</span><span class="op">)</span><span class="op">)</span></span></code></pre></div>
-<p><img src="cytomapper_files/figure-html/bcg-pixels-1.png" width="700"></p>
+<p><img src="cytomapper_files/figure-html/bcg-pixels-1.png" class="r-plt" alt="" width="700"></p>
 </div>
 <div class="section level3">
 <h3 id="Outlining">Outlining<a class="anchor" aria-label="anchor" href="#Outlining"></a>
@@ -929,7 +928,7 @@ provided:</p>
 <span>            cell_id <span class="op">=</span> <span class="st">"CellNb"</span>,</span>
 <span>            colour_by <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"H3"</span>, <span class="st">"CD99"</span>, <span class="st">"CDH"</span><span class="op">)</span>,</span>
 <span>            outline_by <span class="op">=</span> <span class="st">"CellType"</span><span class="op">)</span></span></code></pre></div>
-<p><img src="cytomapper_files/figure-html/outline-1-pixels-1.png" width="700"></p>
+<p><img src="cytomapper_files/figure-html/outline-1-pixels-1.png" class="r-plt" alt="" width="700"></p>
 </div>
 <div class="section level3">
 <h3 id="subsetting">Subsetting<a class="anchor" aria-label="anchor" href="#subsetting"></a>
@@ -939,7 +938,7 @@ functions:</p>
 <div class="sourceCode" id="cb92"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">cur_images</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/CytoImageList-subsetting.html">getImages</a></span><span class="op">(</span><span class="va">pancreasImages</span>, <span class="st">"J02_imc"</span><span class="op">)</span></span>
 <span><span class="fu"><a href="../reference/plotPixels.html">plotPixels</a></span><span class="op">(</span><span class="va">cur_images</span>, colour_by <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"H3"</span>, <span class="st">"CD99"</span>, <span class="st">"CDH"</span><span class="op">)</span><span class="op">)</span></span></code></pre></div>
-<p><img src="cytomapper_files/figure-html/subsetting-pixels-1.png" width="700"></p>
+<p><img src="cytomapper_files/figure-html/subsetting-pixels-1.png" class="r-plt" alt="" width="700"></p>
 <p>For further information on subsetting functionality, please refer to
 the <a href="#accessors">Accessors</a> section.</p>
 </div>
@@ -997,7 +996,7 @@ arcsinh-transformed raw expression counts.</p>
 <span>            img_id <span class="op">=</span> <span class="st">"ImageNb"</span>, cell_id <span class="op">=</span> <span class="st">"CellNb"</span>,</span>
 <span>            colour_by <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"CD8a"</span>, <span class="st">"PIN"</span><span class="op">)</span>,</span>
 <span>            exprs_values <span class="op">=</span> <span class="st">"exprs"</span><span class="op">)</span></span></code></pre></div>
-<p><img src="cytomapper_files/figure-html/exprs_values-cells-1.png" width="700"></p>
+<p><img src="cytomapper_files/figure-html/exprs_values-cells-1.png" class="r-plt" alt="" width="700"></p>
 </div>
 <div class="section level3">
 <h3 id="outlining">Outlining<a class="anchor" aria-label="anchor" href="#outlining"></a>
@@ -1034,7 +1033,7 @@ entry needs to be specified in form of a named vector.</p>
 <span>                        CellType <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span>celltype_A <span class="op">=</span> <span class="st">"blue"</span>,</span>
 <span>                                    celltype_B <span class="op">=</span> <span class="st">"green"</span>,</span>
 <span>                                    celltype_C <span class="op">=</span> <span class="st">"yellow"</span><span class="op">)</span><span class="op">)</span><span class="op">)</span></span></code></pre></div>
-<p><img src="cytomapper_files/figure-html/colour-cells-1.png" width="700"></p>
+<p><img src="cytomapper_files/figure-html/colour-cells-1.png" class="r-plt" alt="" width="700"></p>
 </div>
 </div>
 <div class="section level2">
@@ -1061,7 +1060,7 @@ the cells retained in the object:</p>
 <span>            img_id <span class="op">=</span> <span class="st">"ImageNb"</span>, cell_id <span class="op">=</span> <span class="st">"CellNb"</span>,</span>
 <span>            colour_by <span class="op">=</span> <span class="st">"CellType"</span>,</span>
 <span>            colour <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span>CellType <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span>celltype_A <span class="op">=</span> <span class="st">"red"</span><span class="op">)</span><span class="op">)</span><span class="op">)</span></span></code></pre></div>
-<p><img src="cytomapper_files/figure-html/subsetting-SCE-1.png" width="700"></p>
+<p><img src="cytomapper_files/figure-html/subsetting-SCE-1.png" class="r-plt" alt="" width="700"></p>
 <p>This feature is also helpful when visualising individual images. By
 default, the legend will contain all metadata levels even those that are
 not contained in the selected image. By subsetting the
@@ -1187,7 +1186,7 @@ borders on large images.</p>
 <span>            margin <span class="op">=</span> <span class="fl">2</span>,</span>
 <span>            thick <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></span></code></pre></div>
 <div class="figure">
-<img src="cytomapper_files/figure-html/customization-1.png" alt="Plot customization example." width="700"><p class="caption">
+<img src="cytomapper_files/figure-html/customization-1.png" class="r-plt" alt="Plot customization example." width="700"><p class="caption">
 Plot customization example.
 </p>
 </div>
@@ -1218,17 +1217,17 @@ blue) <code>Image</code> objects.</p>
 <code class="sourceCode R"><span><span class="va">cur_out</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/plotPixels.html">plotPixels</a></span><span class="op">(</span><span class="va">pancreasImages</span>, colour_by <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"H3"</span>, <span class="st">"CD99"</span>, <span class="st">"CDH"</span><span class="op">)</span>,</span>
 <span>                return_plot <span class="op">=</span> <span class="cn">TRUE</span>, return_images <span class="op">=</span> <span class="cn">TRUE</span>, </span>
 <span>                display <span class="op">=</span> <span class="st">"single"</span><span class="op">)</span></span></code></pre></div>
-<p><img src="cytomapper_files/figure-html/return_plot-1.png" width="700"><img src="cytomapper_files/figure-html/return_plot-2.png" width="700"><img src="cytomapper_files/figure-html/return_plot-3.png" width="700"><img src="cytomapper_files/figure-html/return_plot-4.png" width="700"></p>
+<p><img src="cytomapper_files/figure-html/return_plot-1.png" class="r-plt" alt="" width="700"><img src="cytomapper_files/figure-html/return_plot-2.png" class="r-plt" alt="" width="700"><img src="cytomapper_files/figure-html/return_plot-3.png" class="r-plt" alt="" width="700"><img src="cytomapper_files/figure-html/return_plot-4.png" class="r-plt" alt="" width="700"></p>
 <p>The returned plot objects now allows the plotting of individual
 images:</p>
 <div class="sourceCode" id="cb98"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">cur_out</span><span class="op">$</span><span class="va">plot</span><span class="op">$</span><span class="va">E34_imc</span></span></code></pre></div>
-<p><img src="cytomapper_files/figure-html/return_plot-2-1.png" width="700"></p>
+<p><img src="cytomapper_files/figure-html/return_plot-2-1.png" class="r-plt" alt="" width="700"></p>
 <p>Furthermore, the user can directly plot the coloured images from the
 returned <code>SimpleList</code> object:</p>
 <div class="sourceCode" id="cb99"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/graphics/plot.default.html" class="external-link">plot</a></span><span class="op">(</span><span class="va">cur_out</span><span class="op">$</span><span class="va">images</span><span class="op">$</span><span class="va">G01_imc</span><span class="op">)</span></span></code></pre></div>
-<p><img src="cytomapper_files/figure-html/return_images-1.png" width="700"></p>
+<p><img src="cytomapper_files/figure-html/return_images-1.png" class="r-plt" alt="" width="700"></p>
 <p>However, when plotting solely the coloured images, the image title
 and scale bar will be lost.</p>
 </div>
@@ -1249,12 +1248,12 @@ larger figures.</p>
 <span><span class="va">g2</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/plotCells.html">plotCells</a></span><span class="op">(</span><span class="va">pancreasMasks</span>, object <span class="op">=</span> <span class="va">pancreasSCE</span>,</span>
 <span>            img_id <span class="op">=</span> <span class="st">"ImageNb"</span>, cell_id <span class="op">=</span> <span class="st">"CellNb"</span>,</span>
 <span>            colour_by <span class="op">=</span> <span class="st">"CellType"</span>, return_plot <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></span></code></pre></div>
-<p><img src="cytomapper_files/figure-html/plot-integration-1.png" width="700"></p>
+<p><img src="cytomapper_files/figure-html/plot-integration-1.png" class="r-plt" alt="" width="700"></p>
 <div class="sourceCode" id="cb101"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">g2</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://wilkelab.org/cowplot/reference/ggdraw.html" class="external-link">ggdraw</a></span><span class="op">(</span><span class="va">g2</span><span class="op">$</span><span class="va">plot</span>, clip <span class="op">=</span> <span class="st">"on"</span><span class="op">)</span></span>
 <span></span>
 <span><span class="fu"><a href="https://wilkelab.org/cowplot/reference/plot_grid.html" class="external-link">plot_grid</a></span><span class="op">(</span><span class="va">g1</span>, <span class="va">g2</span><span class="op">)</span></span></code></pre></div>
-<p><img src="cytomapper_files/figure-html/plot-integration-2.png" width="700"></p>
+<p><img src="cytomapper_files/figure-html/plot-integration-2.png" class="r-plt" alt="" width="700"></p>
 </div>
 <div class="section level2">
 <h2 id="saving-images">Saving images<a class="anchor" aria-label="anchor" href="#saving-images"></a>
@@ -1334,13 +1333,13 @@ package. Nils and Tobias implemented and maintain the
 <div class="section level2">
 <h2 class="unnumbered" id="session-info">Session info<a class="anchor" aria-label="anchor" href="#session-info"></a>
 </h2>
-<pre><code><span><span class="co">## R version 4.5.0 (2025-04-11)</span></span>
-<span><span class="co">## Platform: aarch64-apple-darwin20</span></span>
-<span><span class="co">## Running under: macOS Sonoma 14.7.5</span></span>
+<pre><code><span><span class="co">## R version 4.6.0 (2026-04-24)</span></span>
+<span><span class="co">## Platform: aarch64-apple-darwin23</span></span>
+<span><span class="co">## Running under: macOS Sequoia 15.7.7</span></span>
 <span><span class="co">## </span></span>
 <span><span class="co">## Matrix products: default</span></span>
-<span><span class="co">## BLAS:   /Library/Frameworks/R.framework/Versions/4.5-arm64/Resources/lib/libRblas.0.dylib </span></span>
-<span><span class="co">## LAPACK: /Library/Frameworks/R.framework/Versions/4.5-arm64/Resources/lib/libRlapack.dylib;  LAPACK version 3.12.1</span></span>
+<span><span class="co">## BLAS:   /Library/Frameworks/R.framework/Versions/4.6/Resources/lib/libRblas.0.dylib </span></span>
+<span><span class="co">## LAPACK: /Library/Frameworks/R.framework/Versions/4.6/Resources/lib/libRlapack.dylib;  LAPACK version 3.12.1</span></span>
 <span><span class="co">## </span></span>
 <span><span class="co">## locale:</span></span>
 <span><span class="co">## [1] en_US.UTF-8/en_US.UTF-8/en_US.UTF-8/C/en_US.UTF-8/en_US.UTF-8</span></span>
@@ -1353,73 +1352,68 @@ package. Nils and Tobias implemented and maintain the
 <span><span class="co">## [8] base     </span></span>
 <span><span class="co">## </span></span>
 <span><span class="co">## other attached packages:</span></span>
-<span><span class="co">##  [1] ggplot2_3.5.2               cowplot_1.1.3              </span></span>
-<span><span class="co">##  [3] cytomapper_1.21.0           SingleCellExperiment_1.30.1</span></span>
-<span><span class="co">##  [5] SummarizedExperiment_1.38.1 Biobase_2.68.0             </span></span>
-<span><span class="co">##  [7] GenomicRanges_1.60.0        GenomeInfoDb_1.44.0        </span></span>
-<span><span class="co">##  [9] IRanges_2.42.0              S4Vectors_0.46.0           </span></span>
-<span><span class="co">## [11] BiocGenerics_0.54.0         generics_0.1.4             </span></span>
-<span><span class="co">## [13] MatrixGenerics_1.20.0       matrixStats_1.5.0          </span></span>
-<span><span class="co">## [15] EBImage_4.50.0              BiocStyle_2.36.0           </span></span>
+<span><span class="co">##  [1] ggplot2_4.0.3               cowplot_1.2.0              </span></span>
+<span><span class="co">##  [3] cytomapper_1.25.0           SingleCellExperiment_1.34.0</span></span>
+<span><span class="co">##  [5] SummarizedExperiment_1.42.0 Biobase_2.72.0             </span></span>
+<span><span class="co">##  [7] GenomicRanges_1.64.0        Seqinfo_1.2.0              </span></span>
+<span><span class="co">##  [9] IRanges_2.46.0              S4Vectors_0.50.1           </span></span>
+<span><span class="co">## [11] BiocGenerics_0.58.1         generics_0.1.4             </span></span>
+<span><span class="co">## [13] MatrixGenerics_1.24.0       matrixStats_1.5.0          </span></span>
+<span><span class="co">## [15] EBImage_4.54.0              BiocStyle_2.40.0           </span></span>
 <span><span class="co">## </span></span>
 <span><span class="co">## loaded via a namespace (and not attached):</span></span>
-<span><span class="co">##  [1] bitops_1.0-9             gridExtra_2.3            rlang_1.1.6             </span></span>
-<span><span class="co">##  [4] magrittr_2.0.3           svgPanZoom_0.3.4         shinydashboard_0.7.3    </span></span>
-<span><span class="co">##  [7] compiler_4.5.0           png_0.1-8                systemfonts_1.2.3       </span></span>
-<span><span class="co">## [10] fftwtools_0.9-11         vctrs_0.6.5              pkgconfig_2.0.3         </span></span>
-<span><span class="co">## [13] SpatialExperiment_1.18.1 crayon_1.5.3             fastmap_1.2.0           </span></span>
-<span><span class="co">## [16] magick_2.8.6             XVector_0.48.0           labeling_0.4.3          </span></span>
-<span><span class="co">## [19] promises_1.3.2           rmarkdown_2.29           UCSC.utils_1.4.0        </span></span>
-<span><span class="co">## [22] ggbeeswarm_0.7.2         ragg_1.4.0               xfun_0.52               </span></span>
-<span><span class="co">## [25] cachem_1.1.0             jsonlite_2.0.0           later_1.4.2             </span></span>
-<span><span class="co">## [28] rhdf5filters_1.20.0      DelayedArray_0.34.1      Rhdf5lib_1.30.0         </span></span>
-<span><span class="co">## [31] BiocParallel_1.42.0      jpeg_0.1-11              tiff_0.1-12             </span></span>
-<span><span class="co">## [34] terra_1.8-50             parallel_4.5.0           R6_2.6.1                </span></span>
-<span><span class="co">## [37] bslib_0.9.0              RColorBrewer_1.1-3       jquerylib_0.1.4         </span></span>
-<span><span class="co">## [40] Rcpp_1.0.14              bookdown_0.43            knitr_1.50              </span></span>
-<span><span class="co">## [43] httpuv_1.6.16            Matrix_1.7-3             nnls_1.6                </span></span>
-<span><span class="co">## [46] tidyselect_1.2.1         abind_1.4-8              yaml_2.3.10             </span></span>
-<span><span class="co">## [49] viridis_0.6.5            codetools_0.2-20         lattice_0.22-6          </span></span>
-<span><span class="co">## [52] tibble_3.2.1             withr_3.0.2              shiny_1.10.0            </span></span>
-<span><span class="co">## [55] evaluate_1.0.3           desc_1.4.3               pillar_1.10.2           </span></span>
-<span><span class="co">## [58] BiocManager_1.30.25      sp_2.2-0                 RCurl_1.98-1.17         </span></span>
-<span><span class="co">## [61] scales_1.4.0             xtable_1.8-4             glue_1.8.0              </span></span>
-<span><span class="co">## [64] tools_4.5.0              locfit_1.5-9.12          fs_1.6.6                </span></span>
-<span><span class="co">## [67] rhdf5_2.52.0             grid_4.5.0               GenomeInfoDbData_1.2.14 </span></span>
-<span><span class="co">## [70] raster_3.6-32            beeswarm_0.4.0           HDF5Array_1.36.0        </span></span>
-<span><span class="co">## [73] vipor_0.4.7              cli_3.6.5                textshaping_1.0.1       </span></span>
-<span><span class="co">## [76] S4Arrays_1.8.0           viridisLite_0.4.2        svglite_2.2.1           </span></span>
-<span><span class="co">## [79] dplyr_1.1.4              gtable_0.3.6             sass_0.4.10             </span></span>
-<span><span class="co">## [82] digest_0.6.37            SparseArray_1.8.0        rjson_0.2.23            </span></span>
-<span><span class="co">## [85] htmlwidgets_1.6.4        farver_2.1.2             htmltools_0.5.8.1       </span></span>
-<span><span class="co">## [88] pkgdown_2.1.3            lifecycle_1.0.4          h5mread_1.0.1           </span></span>
-<span><span class="co">## [91] httr_1.4.7               mime_0.13</span></span></code></pre>
+<span><span class="co">##  [1] bitops_1.0-9             gridExtra_2.3            rlang_1.2.0             </span></span>
+<span><span class="co">##  [4] magrittr_2.0.5           svgPanZoom_0.3.4         shinydashboard_0.7.3    </span></span>
+<span><span class="co">##  [7] otel_0.2.0               compiler_4.6.0           png_0.1-9               </span></span>
+<span><span class="co">## [10] systemfonts_1.3.2        fftwtools_0.9-11         vctrs_0.7.3             </span></span>
+<span><span class="co">## [13] pkgconfig_2.0.3          SpatialExperiment_1.22.0 fastmap_1.2.0           </span></span>
+<span><span class="co">## [16] magick_2.9.1             XVector_0.52.0           labeling_0.4.3          </span></span>
+<span><span class="co">## [19] promises_1.5.0           rmarkdown_2.31           ggbeeswarm_0.7.3        </span></span>
+<span><span class="co">## [22] ragg_1.5.2               xfun_0.58                cachem_1.1.0            </span></span>
+<span><span class="co">## [25] jsonlite_2.0.0           later_1.4.8              rhdf5filters_1.24.0     </span></span>
+<span><span class="co">## [28] DelayedArray_0.38.2      Rhdf5lib_2.0.0           BiocParallel_1.46.0     </span></span>
+<span><span class="co">## [31] jpeg_0.1-11              tiff_0.1-12              terra_1.9-27            </span></span>
+<span><span class="co">## [34] parallel_4.6.0           R6_2.6.1                 bslib_0.11.0            </span></span>
+<span><span class="co">## [37] RColorBrewer_1.1-3       jquerylib_0.1.4          Rcpp_1.1.1-1.1          </span></span>
+<span><span class="co">## [40] bookdown_0.46            knitr_1.51               httpuv_1.6.17           </span></span>
+<span><span class="co">## [43] Matrix_1.7-5             nnls_1.6                 tidyselect_1.2.1        </span></span>
+<span><span class="co">## [46] abind_1.4-8              yaml_2.3.12              viridis_0.6.5           </span></span>
+<span><span class="co">## [49] codetools_0.2-20         lattice_0.22-9           tibble_3.3.1            </span></span>
+<span><span class="co">## [52] shiny_1.13.0             withr_3.0.2              S7_0.2.2                </span></span>
+<span><span class="co">## [55] evaluate_1.0.5           desc_1.4.3               pillar_1.11.1           </span></span>
+<span><span class="co">## [58] BiocManager_1.30.27      sp_2.2-1                 RCurl_1.98-1.19         </span></span>
+<span><span class="co">## [61] scales_1.4.0             xtable_1.8-8             glue_1.8.1              </span></span>
+<span><span class="co">## [64] tools_4.6.0              locfit_1.5-9.12          fs_2.1.0                </span></span>
+<span><span class="co">## [67] rhdf5_2.56.0             grid_4.6.0               raster_3.6-32           </span></span>
+<span><span class="co">## [70] beeswarm_0.4.0           HDF5Array_1.40.0         vipor_0.4.7             </span></span>
+<span><span class="co">## [73] cli_3.6.6                textshaping_1.0.5        S4Arrays_1.12.0         </span></span>
+<span><span class="co">## [76] viridisLite_0.4.3        svglite_2.2.2            dplyr_1.2.1             </span></span>
+<span><span class="co">## [79] gtable_0.3.6             sass_0.4.10              digest_0.6.39           </span></span>
+<span><span class="co">## [82] SparseArray_1.12.2       rjson_0.2.23             htmlwidgets_1.6.4       </span></span>
+<span><span class="co">## [85] farver_2.1.2             htmltools_0.5.9          pkgdown_2.2.0           </span></span>
+<span><span class="co">## [88] lifecycle_1.0.5          h5mread_1.4.0            mime_0.13</span></span></code></pre>
 </div>
 <div class="section level2">
 <h2 class="unnumbered" id="references">References<a class="anchor" aria-label="anchor" href="#references"></a>
 </h2>
-<div id="refs" class="references csl-bib-body hanging-indent" entry-spacing="0">
+<div id="refs" class="references csl-bib-body hanging-indent">
 <div id="ref-angelo2014mibi" class="csl-entry">
-Angelo, Michael, Sean C. Bendall, Rachel Finck, Matthew B. Hale, Chuck
-Hitzman, Alexander D. Borowsky, Richard M. Levenson, et al. 2014.
+Angelo, Michael, Sean C. Bendall, Rachel Finck, et al. 2014.
 <span>“Multiplexed Ion Beam Imaging of Human Breast Tumors.”</span>
 <em>Nature Medicine</em> 20 (4): 436–42.
 </div>
 <div id="ref-carpenter2006cellprofiler" class="csl-entry">
-Carpenter, Anne E, Thouis R Jones, Michael R Lamprecht, Colin Clarke, In
-Han Kang, Ola Friman, David A Guertin, et al. 2006. <span>“CellProfiler:
-Image Analysis Software for Identifying and Quantifying Cell
-Phenotypes.”</span> <em>Genome Biology</em> 7: R100.
+Carpenter, Anne E, Thouis R Jones, Michael R Lamprecht, et al. 2006.
+<span>“CellProfiler: Image Analysis Software for Identifying and
+Quantifying Cell Phenotypes.”</span> <em>Genome Biology</em> 7: R100.
 </div>
 <div id="ref-damond2019pancreas" class="csl-entry">
-Damond, Nicolas, Stefanie Engler, Vito R. T. Zanotelli, Denis Schapiro,
-Clive H. Wasserfall, Irina Kusmartseva, Harry S. Nick, et al. 2019.
+Damond, Nicolas, Stefanie Engler, Vito R. T. Zanotelli, et al. 2019.
 <span>“A Map of Human Type 1 Diabetes Progression by Imaging Mass
 Cytometry.”</span> <em>Cell Metabolism</em> 29 (3): 755–768.e5.
 </div>
 <div id="ref-giesen2014imc" class="csl-entry">
-Giesen, Charlotte, Hao A. O. Wang, Denis Schapiro, Nevena Zivanovic,
-Andrea Jacobs, Bodo Hattendorf, Peter J. Schüffler, et al. 2014.
+Giesen, Charlotte, Hao A. O. Wang, Denis Schapiro, et al. 2014.
 <span>“Highly Multiplexed Imaging of Tumor Tissues with Subcellular
 Resolution by Mass Cytometry.”</span> <em>Nature
 <span>M</span>ethods</em> 11 (4): 417–22.
@@ -1430,16 +1424,15 @@ Gut, Gabriele, Markus D Herrmann, and Lucas Pelkmans. 2018.
 Cellular States.”</span> <em>Science</em> 361: 1–13.
 </div>
 <div id="ref-lin2018cycif" class="csl-entry">
-Lin, Jia-Ren, Benjamin Izar, Shu Wang, Clarence Yapp, Shaolin Mei, Parin
-M. Shah, Sandro Santagata, and Peter K. Sorger. 2018. <span>“Highly
+Lin, Jia-Ren, Benjamin Izar, Shu Wang, et al. 2018. <span>“Highly
 Multiplexed Immunofluorescence Imaging of Human Tissues and Tumors Using
 t-CyCIF and Conventional Optical Microscopes.”</span> <em>eLife</em> 7:
 1–46.
 </div>
 <div id="ref-mavropoulosimc" class="csl-entry">
 Mavropoulos, Anastasia, Dongxia Lin, Ben Lam, Kuang-Jung Chang, Dwayne
-Bisgrove, and Olga Ornatsky. n.d. <span>“Equivalence of Imaging Mass
-Cytometry and Immunofluorescence on FFPE Tissue Sections.”</span>
+Bisgrove, and Olga Ornatsky. n.d. <em>Equivalence of Imaging Mass
+Cytometry and Immunofluorescence on FFPE Tissue Sections</em>.
 </div>
 </div>
 </div>
@@ -1460,7 +1453,7 @@ Cytometry and Immunofluorescence on FFPE Tissue Sections.”</span>
 
 <div class="pkgdown">
   <p></p>
-<p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.1.3.</p>
+<p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.2.0.</p>
 </div>
 
       </footer>
