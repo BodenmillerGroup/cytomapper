@@ -39,8 +39,10 @@ jobs:
       - name: Find PhantomJS path
         id: phantomjs
         run: |
-          echo "path=$(Rscript -e 'cat(shinytest:::phantom_paths()[[1]])')" >> "$GITHUB_OUTPUT"
+          PHANTOM_PATH=$(Rscript -e 'if (requireNamespace("shinytest", quietly = TRUE)) cat(shinytest:::phantom_paths()[[1]])' 2>/dev/null || true)
+          echo "path=$PHANTOM_PATH" >> "$GITHUB_OUTPUT"
       - name: Cache PhantomJS
+        if: steps.phantomjs.outputs.path != ''
         uses: actions/cache@v4
         with:
           path: ${{ steps.phantomjs.outputs.path }}
