@@ -18,8 +18,6 @@ setClass(
 # Validity checks
 #' @importFrom S4Vectors setValidity2
 #' @importFrom EBImage colorMode
-S4Vectors:::setValidity2(Class = "CytoImageList", .ImageList_validity)
-
 .ImageList_validity <- function(object) {
 
     msg <- NULL
@@ -69,6 +67,8 @@ S4Vectors:::setValidity2(Class = "CytoImageList", .ImageList_validity)
 
     return(TRUE)
 }
+
+S4Vectors:::setValidity2(Class = "CytoImageList", .ImageList_validity)
 
 
 
