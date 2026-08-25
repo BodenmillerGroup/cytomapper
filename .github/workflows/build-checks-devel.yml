@@ -51,8 +51,8 @@ jobs:
       - name: Install PhantomJS
         run: >
           Rscript
-          -e "if (!shinytest::dependenciesInstalled()) shinytest::installDependencies()"
-        
+          -e "if (requireNamespace('shinytest', quietly = TRUE) && !shinytest::dependenciesInstalled()) shinytest::installDependencies()"
+
       - name: Check
         run: |
           install.packages("rcmdcheck")          
